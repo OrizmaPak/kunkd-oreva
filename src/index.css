@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: "Recoleta";
+    src: url("/public/fonts/RecoletaAlt-Bold.woff");
+  }
+
+  @font-face {
+    font-family: "Hanken-Grotest";
+    src: url("/public/fonts/HankenGrotesk-Bold.ttf");
+  }
