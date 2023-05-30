@@ -31,7 +31,7 @@ const ParentSignupLayout = ({
   active,
 }: {
   children: React.ReactNode;
-  active: number;
+  active?: number;
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
@@ -63,9 +63,7 @@ const ParentSignupLayout = ({
           )
         )}
       </div>
-      <div className="bg-red-600 w-full h-full ">
-        <FormWrapper>{children}</FormWrapper>
-      </div>
+      <div className="bg-white w-full h-full ">{children}</div>
     </div>
   );
 };

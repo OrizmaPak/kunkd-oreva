@@ -19,6 +19,9 @@ import SchoolVerification from "./pages/SchoolVerification/SchoolVerification";
 import KundaKidsUnlimited from "./pages/KundaKidsUnlimited/KundaKidsUnlimited";
 import ParentSignup from "./pages/ParentSignup/ParentSignup";
 import SchoolCongrtulations from "@/pages/SchoolCongratulations/SchoolCongratulations";
+import SecureAccount from "./pages/SecureAccount/SecureAccount";
+import MakePayment from "./pages/MakePayment/MakePayment";
+import Unlimited from "./pages/KundaKidsUnlimited2/Unlimited";
 
 function App() {
   return (
@@ -56,6 +59,10 @@ function App() {
             <Route path="parentsignup" element={<ParentSignup />}></Route>
             <Route path="parentsignup" element={<ParentSignup />}></Route>
             <Route path="parentsignup" element={<ParentSignup />}></Route>
+            <Route path="secureaccount" element={<SecureAccount />}></Route>
+            <Route path="makepayment" element={<MakePayment />}></Route>
+            <Route path="packages" element={<Unlimited />}></Route>
+
             <Route
               path="schoolcongratulations"
               element={<SchoolCongrtulations />}
