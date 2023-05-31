@@ -1,6 +1,6 @@
 import ParentSignupLayout from "@/common/ParentSignupLayout";
 import ParentSignupDetails from "./ParentSignupDetails";
-import { STEP_1, STEP_2, STEP_3, STEP_4 } from "@/utils/constants";
+import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
 import ParentEnterOTP from "./ParentEnterOTP";
 import ParentCongratulations from "./ParentCongratulations";
 import { useState } from "react";
@@ -16,6 +16,7 @@ const ParentSignup = () => {
         {activeStep === STEP_1 ? (
           <ParentSignupDetails onSubmit={() => handleNext(STEP_2)} />
         ) : null}
+
         {activeStep === STEP_2 ? (
           <ParentEnterOTP
             onSubmit={() => {

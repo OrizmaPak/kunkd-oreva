@@ -17,9 +17,12 @@ const HomeHeader = () => {
         <Link to="/parents">
           <span>Parents</span>
         </Link>
-
-        <span>Schools</span>
-        <span>About Us</span>
+        <Link to="/schools">
+          <span>Schools</span>
+        </Link>
+        <Link to="/aboutus">
+          <span>About Us</span>
+        </Link>
         <span>Shop</span>
         <span>| EN </span>
       </div>

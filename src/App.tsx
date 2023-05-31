@@ -22,6 +22,8 @@ import SchoolCongrtulations from "@/pages/SchoolCongratulations/SchoolCongratula
 import SecureAccount from "./pages/SecureAccount/SecureAccount";
 import MakePayment from "./pages/MakePayment/MakePayment";
 import Unlimited from "./pages/KundaKidsUnlimited2/Unlimited";
+import Schools from "./pages/Schools/Schools";
+import AboutUs from "./pages/AboutUs/AboutUs";
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
             <Route element={<Layout />}>
               <Route index element={<Home />}></Route>
               <Route path="parents" element={<Parents />}></Route>
+              <Route path="schools" element={<Schools />}></Route>
+              <Route path="aboutus" element={<AboutUs />}></Route>
             </Route>
             <Route path="login" element={<Login />}></Route>
             <Route path="forgotpassword" element={<ForgotPassword />}></Route>
