@@ -1,0 +1,44 @@
+// import Card from "./Card";
+// import SavingCard from "./@'/ser";
+import { DataType } from "./NewlyRegisteredUser";
+import { CardProps } from "./Card";
+type Props = {
+  data?: DataType[];
+  header?: string;
+  action?: () => void;
+  actiontitle?: string;
+  isTitled?: boolean;
+  card?: (props: DataType) => React.ReactNode;
+};
+const CardScreen = ({
+  data,
+  header,
+  action,
+  actiontitle,
+  isTitled,
+  card,
+}: Props) => {
+  return (
+    <div className=" mx-20 mt-4 ">
+      <div className="flex justify-between mb-8 ">
+        <span className="font-bold text-[20px] font-Recoleta ">{header}</span>
+        <button onClick={action} className=" text-[#8530C1] text-lg">
+          {actiontitle}
+        </button>
+      </div>
+      <div
+        className="overflow-auto  no-scrollbar "
+        style={{ maxHeight: "500px" }}
+      >
+        <div className="grid grid-flow-col  gap-10 mb-14  ">
+          {data?.map((data, index) => {
+            return card ? card(data) : null;
+            // <Card key={index} image={data?.image} title={data?.title} />
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CardScreen;

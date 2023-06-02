@@ -3,11 +3,26 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: "Recoleta";
-    src: url("/public/fonts/RecoletaAlt-Bold.woff");
-  }
+  font-family: "Recoleta";
+  src: url("/public/fonts/RecoletaAlt-Bold.woff");
+}
 
-  @font-face {
-    font-family: "Hanken-Grotest";
-    src: url("/public/fonts/HankenGrotesk-Bold.ttf");
+@font-face {
+  font-family: "Hanken-Grotest";
+  src: url("/public/fonts/HankenGrotesk-Bold.ttf");
+}
+
+@layer utilities {
+  @variants responsive {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
   }
+}
