@@ -1,4 +1,4 @@
-import Puplis from "@/assets/pupils.svg";
+import Pupils from "@/assets/pupils.svg";
 import ServiceCard from "./ServiceCard";
 import { CardTypes } from "../Home/ClientCard";
 import Service1 from "@/assets/service1.svg";
@@ -65,7 +65,7 @@ const Serviceontent = () => {
           captivate and inspire your child's love for reading.
         </p>
         <div className="mt-8">
-          <img src={Puplis} alt="pupils" />
+          <img src={Pupils} alt="pupils" />
         </div>
       </div>
     </div>

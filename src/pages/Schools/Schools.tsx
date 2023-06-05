@@ -1,4 +1,3 @@
-import React from "react";
 import Hero from "./Hero";
 import PowerWebApp from "./PowerWebApp";
 import TrackNdMonitor from "./TrackNdMonitor";

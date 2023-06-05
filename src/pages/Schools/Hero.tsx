@@ -1,4 +1,3 @@
-import React from "react";
 import SchHero1 from "@/assets/schhero1.svg";
 import SchHero2 from "@/assets/schhero2.svg";
 import SchHero3 from "@/assets/schhero3.svg";

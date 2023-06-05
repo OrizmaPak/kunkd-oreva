@@ -10,7 +10,7 @@ import Button from "@/components/Button";
 
 const UserHeader = () => {
   return (
-    <div className="flex font-[500] py-4 text-[16px] px-[130px] justify-between items-center bg-white z-50 gap-4  ">
+    <div className="flex font-[500] py-4 text-[16px] px-[130px] justify-between items-center bg-white z-50 gap-4  h- h-[8vh] ">
       <Link to="/">
         <div>
           <img

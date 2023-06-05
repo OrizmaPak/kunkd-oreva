@@ -1,20 +1,21 @@
 import React from "react";
-import Wrapper from "@/pages/User/NewlyRegisterUser/Wrapper";
+import Wrapper from "@/common/User/Wrapper";
 import Hero from "@/pages/Library/LibraryNotPaid/Hero";
 import CategoriesCard from "@/pages/Library/LibraryNotPaid/CategoriesCard";
 import musicIcon from "@/assets/musicIcon.svg";
 import videoIcon from "@/assets/videoicon.svg";
 import BookIcon from "@/assets/bookicon.svg";
-import CardScreen from "@/pages/User/NewlyRegisterUser/CardScreen";
-import Card from "@/pages/User/NewlyRegisterUser/Card";
+import CardScreen from "@/common/User/CardScreen";
+import Card from "@/common/User/Card";
 import { data } from "@/pages/User/NewlyRegisterUser/NewlyRegisteredUser";
 import { DataType } from "@/pages/User/NewlyRegisterUser/NewlyRegisteredUser";
-import AdsButton from "@/pages/User/NewlyRegisterUser/AdsButton";
+import AdsButton from "@/common/User/AdsButton";
+import Banner from "@/assets/Banner4.svg";
 const LibraryPaid = () => {
   return (
     <div>
       <Wrapper>
-        <Hero />
+        <Hero image={Banner} />
         <hr className="my-14 mx-[200px]" />
 
         <div>

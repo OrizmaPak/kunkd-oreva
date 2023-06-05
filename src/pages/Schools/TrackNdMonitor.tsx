@@ -1,4 +1,3 @@
-import React from "react";
 import Stat from "@/pages/Home/Stat";
 import TrackNdMonitorContent from "./TrackNdMonitorContent";
 

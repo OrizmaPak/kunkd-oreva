@@ -1,6 +1,6 @@
 // import Card from "./Card";
 // import SavingCard from "./@'/ser";
-import { DataType } from "./NewlyRegisteredUser";
+import { DataType } from "../../pages/User/NewlyRegisterUser/NewlyRegisteredUser";
 import { CardProps } from "./Card";
 type Props = {
   data?: DataType[];

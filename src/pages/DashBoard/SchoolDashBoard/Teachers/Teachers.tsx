@@ -1,0 +1,200 @@
+import ArrowDown from "@/assets/arrowdown.svg";
+import Button from "@/components/Button";
+import PlutIcon from "@/assets/plusIcon.svg";
+import Rectangle from "@/assets/Rectangle.svg";
+import Chiks from "@/assets/chiks.svg";
+import Jessica from "@/assets/jessica.svg";
+import Grease from "@/assets/grease.svg";
+import Blxst from "@/assets/blxst.svg";
+import Godwin from "@/assets/godwin.svg";
+import Mitchel from "@/assets/godwin.svg";
+import Pemela from "@/assets/pamela.svg";
+import Spa from "@/assets/spa.svg";
+import Bella from "@/assets/bella.svg";
+import { Pagination } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { Modal } from "@mantine/core";
+import { useState } from "react";
+import NewTeacher from "./NewTeacher";
+import Profile from "./Profile";
+import Row from "./Row";
+
+export const data = [
+  {
+    classCode: "A",
+    classs: "Green",
+    id: 1,
+    name: "Chiks Olowo",
+    email: "chiks@pamers.school",
+    gender: "Female",
+    image: Chiks,
+  },
+  {
+    classCode: "C",
+    classs: "Purple",
+    id: 2,
+    name: "Jessica Deji",
+    email: "jessica@pamers.school",
+    gender: "Female",
+    image: Jessica,
+  },
+  {
+    classCode: "C",
+    classs: "Black",
+    id: 3,
+    name: "Grease Kemma",
+    email: "grease@pamers.school",
+    gender: "Male",
+    image: Grease,
+  },
+  {
+    classCode: "D",
+    classs: "Yellow",
+    id: 4,
+    name: "Blxst Ojo",
+    email: "blxst@pamers.school",
+    gender: "Female",
+    image: Blxst,
+  },
+  {
+    classCode: "E",
+    classs: "Indingo",
+    id: 5,
+    name: "Godwin Oshodi",
+    email: "godwin@pamers.school",
+    gender: "Maale",
+    image: Godwin,
+  },
+  {
+    classCode: "F",
+    classs: "Blue",
+    id: 6,
+    name: "Mitchel Obi",
+    email: "mitchel@pamers.school",
+    gender: "Male",
+    image: Mitchel,
+  },
+  {
+    classCode: "G",
+    classs: "White",
+    id: 7,
+    name: "Pamela Azunda",
+    email: "pamela@pamers.school",
+    gender: "Male",
+    image: Pemela,
+  },
+  {
+    classCode: "H",
+    classs: "Pink",
+    id: 8,
+    name: "spa Chine",
+    email: "chiks@pamers.school",
+    gender: "Male",
+    image: Spa,
+  },
+  {
+    classCode: "I",
+    classs: "Red",
+    id: 9,
+    name: "Bella Pepple",
+    email: "chiks@pamers.school",
+    gender: "Male",
+    image: Bella,
+  },
+];
+
+const Teachers = () => {
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const [currentClicked, setCucrrentClicked] = useState(0);
+  console.log(currentClicked);
+  const currentClickedData = data.find((el) => el.id == currentClicked);
+  return (
+    <div>
+      <Modal radius={"xl"} size="xl" opened={opened} onClose={close} centered>
+        {currentClickedData ? (
+          <Profile
+            name={currentClickedData?.name}
+            image={currentClickedData.image}
+            email={currentClickedData.email}
+          />
+        ) : null}
+      </Modal>
+
+      <div className="h-full  rounded-3xl p-4 bg-white">
+        <div className="grid grid-cols-3 justify-center items-center w-full px-8 ">
+          <div>
+            <h1 className="text-[25px] font-bold">Teacher (35)</h1>
+          </div>
+          <div className="flex gap-2">
+            <span>Sort by</span>
+            <span>Newest</span>
+            <img src={ArrowDown} alt="Arrowdown" />
+          </div>
+          <div className="flex gap-3">
+            <Button size="sm" varient="outlined">
+              <span className="flex  justify-between items-center gap-2">
+                <img src={PlutIcon} alt="" />
+                <span className="text-[#8530C1]">Create class</span>
+              </span>
+            </Button>
+
+            <NewTeacher />
+          </div>
+        </div>
+
+        <div>
+          <div className="grid  grid-cols-[100px_1fr_1fr_150px_150px] mt-5  px-8">
+            <div className="flex justify-start items-center ">
+              <span className=" ">
+                <img src={Rectangle} alt="" />
+              </span>
+            </div>
+            <div className=" ">Name</div>
+            <div className="">Email</div>
+            <div className="">Gender</div>
+            <div className="flex justify-end   items-center">
+              <span>Actions</span>{" "}
+            </div>
+          </div>
+          <hr className="my-4 mx-8" />
+        </div>
+        <div>
+          {data &&
+            data.map((data, index) => {
+              return (
+                <Row
+                  onClick={() => {
+                    open();
+                    setCucrrentClicked(data.id);
+                  }}
+                  key={index}
+                  {...data}
+                />
+              );
+            })}
+        </div>
+      </div>
+      <div>
+        <div className="flex  justify-between mt-2 px-4">
+          <span>
+            Showing <span className="text-[#8530C1]"> 1-9 </span> from
+            <span className="text-[#8530C1]"> 35 </span> data
+          </span>
+          <Pagination
+            total={10}
+            styles={() => ({
+              control: {
+                "&[data-active]": {
+                  backgroundColor: "#8530C1",
+                },
+              },
+            })}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Teachers;

@@ -1,4 +1,3 @@
-import React from "react";
 import Pupils from "@/assets/pupils.svg";
 
 const Empower = () => {
