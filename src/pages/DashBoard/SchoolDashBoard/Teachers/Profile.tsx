@@ -4,10 +4,12 @@ const Profile = ({
   name,
   image,
   email,
+  handleClick,
 }: {
   name: string;
   image: string;
   email: string;
+  handleClick: () => void;
 }) => {
   return (
     <div className="p-3">
@@ -55,9 +57,12 @@ const Profile = ({
       </div>
       <div className="flex justify-end gap-4 ">
         <button className="p-4 px-10 bg-red-200 text-red-600 rounded-full">
-          Suspend
+          Cancel
         </button>
-        <button className="p-4 px-10 bg-red-600 text-white rounded-full">
+        <button
+          onClick={handleClick}
+          className="p-4 px-10 bg-red-600 text-white rounded-full"
+        >
           Remove
         </button>
       </div>

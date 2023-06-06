@@ -10,7 +10,7 @@ const NewStudent = () => {
     <>
       <Button onClick={toggle} size="sm" varient="filled">
         <span className="flex  justify-between items-center gap-2">
-          <img src={StudentIcon} alt="student icon" />
+          <img src={StudentIcon} alt="student icon" className="w-[30px]" />
           <span>Add new Student</span>
         </span>
       </Button>

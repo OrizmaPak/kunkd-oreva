@@ -18,6 +18,8 @@ import { useState } from "react";
 import NewTeacher from "./NewTeacher";
 import Profile from "./Profile";
 import Row from "./Row";
+import { STEP_1, STEP_2 } from "@/utils/constants";
+import ConfirmDelete from "./ConfirmDelete";
 
 export const data = [
   {
@@ -105,20 +107,38 @@ export const data = [
 
 const Teachers = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const [modalStep, setModalStep] = useState(STEP_1);
+  const handleClick = () => {
+    setModalStep(STEP_2);
+  };
 
   const [currentClicked, setCucrrentClicked] = useState(0);
   console.log(currentClicked);
   const currentClickedData = data.find((el) => el.id == currentClicked);
   return (
     <div>
-      <Modal radius={"xl"} size="xl" opened={opened} onClose={close} centered>
-        {currentClickedData ? (
-          <Profile
-            name={currentClickedData?.name}
-            image={currentClickedData.image}
-            email={currentClickedData.email}
-          />
-        ) : null}
+      <Modal
+        radius={"xl"}
+        size="xl"
+        opened={opened}
+        onClose={close}
+        closeButtonProps={{
+          size: "xl",
+        }}
+        centered
+      >
+        {modalStep === STEP_1 ? (
+          currentClickedData ? (
+            <Profile
+              name={currentClickedData?.name}
+              image={currentClickedData.image}
+              email={currentClickedData.email}
+              handleClick={handleClick}
+            />
+          ) : null
+        ) : (
+          <ConfirmDelete />
+        )}
       </Modal>
 
       <div className="h-full  rounded-3xl p-4 bg-white">

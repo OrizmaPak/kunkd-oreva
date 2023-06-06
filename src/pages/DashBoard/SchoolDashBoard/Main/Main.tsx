@@ -28,10 +28,10 @@ const Main = () => {
             <Card title="Students" image={StudentIcon} amount="241" />
             <Card title="Quiz" image={QuizIcon} amount="48" />
           </div>
-          <div className="p-4 bg-white rounded-3xl h-[470px] ">
+          <div className="px-4 bg-white rounded-3xl h-[470px] mt-2 ">
             <LineChart />
-            <ActiveTeacher />
           </div>
+          <ActiveTeacher />
         </div>
         <div className="basis- basis-2/4  h-full">
           <Chart />

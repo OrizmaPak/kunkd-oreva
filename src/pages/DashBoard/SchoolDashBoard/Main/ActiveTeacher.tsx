@@ -26,9 +26,9 @@ const data = [
 
 const ActiveTeacher = () => {
   return (
-    <div className="p-4 bg-white rounded-3xl mt-8">
+    <div className="p-4 bg-white rounded-3xl mt-4">
       <div className="flex justify-between">
-        <h1 className="text-[20px] font-bold">Top Class Reading</h1>
+        <h1 className="text-[20px] font-bold">Active Teacher</h1>
       </div>
 
       <div className="grid grid-cols-3 mt-1">

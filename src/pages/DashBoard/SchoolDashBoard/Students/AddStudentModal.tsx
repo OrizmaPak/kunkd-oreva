@@ -16,7 +16,16 @@ const AddStudentModal = ({
     setModalStep(STEP_2);
   };
   return (
-    <Modal radius={"xl"} size="xl" opened={opened} onClose={toggle} centered>
+    <Modal
+      radius={"xl"}
+      size="xl"
+      opened={opened}
+      onClose={toggle}
+      closeButtonProps={{
+        size: "xl",
+      }}
+      centered
+    >
       {modalStep === STEP_1 && (
         <AddTeacherForm handleContinue={handleContinue} />
       )}

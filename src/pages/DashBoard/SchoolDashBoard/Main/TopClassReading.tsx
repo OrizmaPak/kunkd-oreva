@@ -61,7 +61,7 @@ const Row = ({
   grade: string;
 }) => {
   return (
-    <div className="flex justify-between items-center my-1">
+    <div className="flex justify-between items-center my-2">
       <span className="flex gap-2 items-center justify-center">
         <img src={image} alt="image" className="w-[30px]" />
         <span>{grade}</span>
