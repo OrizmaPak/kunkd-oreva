@@ -22,7 +22,7 @@ const TopSubCategories = () => {
   return (
     <div className="p-4 bg-white rounded-3xl mt-3">
       <div className="flex justify-between">
-        <h1 className="text-[20px] font-bold">Top Class Reading</h1>
+        <h1 className="text-[20px] font-bold">Top Sub Categories</h1>
         <button>Views</button>
       </div>
       <div>
@@ -47,7 +47,7 @@ const Row = ({
   isPositive: boolean;
 }) => {
   return (
-    <div className="flex justify-between my-1">
+    <div className="flex justify-between my-2">
       <p>{title}</p>
       <p>
         {isPositive ? (

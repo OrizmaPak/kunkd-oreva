@@ -28,7 +28,7 @@ const BedTimeStories = () => {
           <div className="flex justify-center items-center">
             <div className="grid grid-cols-4 gap-8 px-24 py-10">
               {data?.map((dat, index) => {
-                return <Card key={index} {...dat} size={300} />;
+                return <Card key={index} clickable {...dat} size={300} />;
               })}
             </div>
           </div>

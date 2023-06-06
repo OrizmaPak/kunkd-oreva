@@ -11,7 +11,7 @@ const Header = (props: Props) => {
     <div>
       <div className="grid grid-cols-3 justify-center items-center w-full px-8 ">
         <div className="flex justify-items-center items-center gap-8">
-          <span onClick={() => navigate(-1)}>
+          <span onClick={() => navigate(-1)} className=" hover:cursor-pointer">
             <img src={LessThanIcon} alt="" className="" />
           </span>
           <h1 className="text-[25px] font-bold"> Students profile</h1>

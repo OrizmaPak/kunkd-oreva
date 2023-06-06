@@ -27,7 +27,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: "Chart.js Bar Chart",
+      text: "Learning Hours",
     },
   },
 };
@@ -38,9 +38,9 @@ export const data = {
   labels,
   datasets: [
     {
-      label: "Dataset 1",
+      label: "Hours",
       data: [6, 6, 3, 6, 4, 7, 9],
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
+      backgroundColor: "rgba(133, 48, 193, 1)",
     },
     // {
     //   label: "Dataset 2",
@@ -58,7 +58,7 @@ const LearningHour = () => {
   return (
     <div className="bg-white rounded-3xl py-2 px-4 mt-4">
       <div className="flex justify-between">
-        <h1 className="text-[20px] font-bold">Total Content</h1>
+        <h1 className="text-[20px] font-bold">Learning Hours</h1>
         <div>
           <DateRadio
             onChange={(value: string) => {

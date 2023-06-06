@@ -5,15 +5,21 @@ export type CardProps = {
   title?: string;
   size?: number;
   id?: string;
+  clickable?: boolean;
 };
 
-const Card = ({ title, image, size, id }: CardProps) => {
+const Card = ({ title, image, size, id, clickable }: CardProps) => {
   const navigate = useNavigate();
   const goto = () => {
+    if (!clickable) return;
     navigate(`../stories1/${id}`, { state: { image, title, size } });
   };
   return (
-    <div onClick={goto} style={{ width: `${size ? size : ""}px` }}>
+    <div
+      onClick={goto}
+      className="w-[200px]"
+      style={{ width: `${size ? size : ""}px` }}
+    >
       <span>
         <img
           src={image}

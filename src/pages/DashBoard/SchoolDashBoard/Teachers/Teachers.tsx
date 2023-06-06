@@ -23,6 +23,8 @@ import ConfirmDelete from "./ConfirmDelete";
 
 export const data = [
   {
+    noOfTeacher: 15,
+    noOfStudents: 23,
     classCode: "A",
     classs: "Green",
     id: 1,
@@ -32,6 +34,8 @@ export const data = [
     image: Chiks,
   },
   {
+    noOfTeacher: 5,
+    noOfStudents: 43,
     classCode: "C",
     classs: "Purple",
     id: 2,
@@ -41,6 +45,8 @@ export const data = [
     image: Jessica,
   },
   {
+    noOfTeacher: 6,
+    noOfStudents: 23,
     classCode: "C",
     classs: "Black",
     id: 3,
@@ -50,6 +56,8 @@ export const data = [
     image: Grease,
   },
   {
+    noOfTeacher: 1,
+    noOfStudents: 26,
     classCode: "D",
     classs: "Yellow",
     id: 4,
@@ -59,6 +67,8 @@ export const data = [
     image: Blxst,
   },
   {
+    noOfTeacher: 6,
+    noOfStudents: 38,
     classCode: "E",
     classs: "Indingo",
     id: 5,
@@ -68,6 +78,8 @@ export const data = [
     image: Godwin,
   },
   {
+    noOfTeacher: 2,
+    noOfStudents: 29,
     classCode: "F",
     classs: "Blue",
     id: 6,
@@ -77,6 +89,8 @@ export const data = [
     image: Mitchel,
   },
   {
+    noOfTeacher: 5,
+    noOfStudents: 41,
     classCode: "G",
     classs: "White",
     id: 7,
@@ -86,6 +100,8 @@ export const data = [
     image: Pemela,
   },
   {
+    noOfTeacher: 3,
+    noOfStudents: 53,
     classCode: "H",
     classs: "Pink",
     id: 8,
@@ -95,6 +111,8 @@ export const data = [
     image: Spa,
   },
   {
+    noOfTeacher: 1,
+    noOfStudents: 33,
     classCode: "I",
     classs: "Red",
     id: 9,
@@ -119,12 +137,10 @@ const Teachers = () => {
     <div>
       <Modal
         radius={"xl"}
-        size="xl"
+        size="lg"
         opened={opened}
         onClose={close}
-        closeButtonProps={{
-          size: "xl",
-        }}
+        closeButtonProps={{ size: "lg" }}
         centered
       >
         {modalStep === STEP_1 ? (
@@ -187,6 +203,7 @@ const Teachers = () => {
                   onClick={() => {
                     open();
                     setCucrrentClicked(data.id);
+                    setModalStep(STEP_1);
                   }}
                   key={index}
                   {...data}

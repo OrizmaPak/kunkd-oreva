@@ -39,29 +39,47 @@ const Profile = ({
           </div>
         </div>
       </div>
-
-      <div className="p-4 bg-white rounded-3xl mt-3 border border-gray-400  w-60 my-5">
-        <div className="flex justify-between">
-          <h1 className="text-[20px] font-bold">Total Time Spent</h1>
+      <div className="flex gap-4 justify-between">
+        <div className="p-4 bg-white rounded-3xl mt-3 border border-[rgba(243, 218, 255, 1)]  w-60 my-5 flex-grow">
+          <div className="flex justify-between">
+            <h1 className="text-[20px] font-bold">Total Time Spent</h1>
+          </div>
+          <div>
+            <h1 className="text-[25px] font-bold">1,970</h1>
+            <p className="flex justify-between ">
+              <span>Minutes</span>
+              <span className="flex">
+                <img src={PositiveArrow} alt="Positive arrow" />
+                <span className="text-green-600">3.9%</span>
+              </span>
+            </p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-[25px] font-bold">1,970</h1>
-          <p className="flex justify-between ">
-            <span>Minutes</span>
-            <span className="flex">
-              <img src={PositiveArrow} alt="Positive arrow" />
-              <span className="text-green-600">3.9%</span>
-            </span>
-          </p>
+
+        <div className="p-4 bg-white rounded-3xl mt-3 border border-[rgba(243, 218, 255, 1)]  w-60 my-5 flex-grow">
+          <div className="flex justify-between">
+            <h1 className="text-[20px] font-bold">Total Time Spent</h1>
+          </div>
+          <div>
+            <h1 className="text-[25px] font-bold">1,970</h1>
+            <p className="flex justify-between ">
+              <span>Minutes</span>
+              <span className="flex">
+                <img src={PositiveArrow} alt="Positive arrow" />
+                <span className="text-green-600">3.9%</span>
+              </span>
+            </p>
+          </div>
         </div>
       </div>
-      <div className="flex justify-end gap-4 ">
-        <button className="p-4 px-10 bg-red-200 text-red-600 rounded-full">
+
+      <div className="flex  gap-4 ">
+        <button className="p-4 px-10 bg-red-200 text-red-600 rounded-full flex-grow">
           Cancel
         </button>
         <button
           onClick={handleClick}
-          className="p-4 px-10 bg-red-600 text-white rounded-full"
+          className="p-4 px-10 bg-red-600 text-white rounded-full flex-grow"
         >
           Remove
         </button>

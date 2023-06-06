@@ -1,12 +1,10 @@
-import React from "react";
-
 const ConfirmDelete = () => {
   return (
     <div>
-      <h1 className="font-bold text-[25px] mt-4 text-center">
+      <h1 className="font-bold text-[30px] mt-8 text-center">
         Are you sure you want to delete this profile
       </h1>
-      <p className="text-center mb-8 ">
+      <p className="text-center mb-10 ">
         If you delete this profile you can't rcover it
       </p>
 
