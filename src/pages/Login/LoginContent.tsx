@@ -3,13 +3,37 @@ import Apple from "@/assets/apple2.svg";
 import Facebook from "@/assets/facebook.svg";
 import Google from "@/assets/googleicon2.svg";
 import InputFormat from "../../common/InputFormat";
-import PasswordIcon from "@/assets/passwordIcon.svg";
 import EmailLogo from "@/assets/emaillogo.svg";
+import PasswordIcon from "@/assets/passwordIcon.svg";
 import PasswordEye from "@/assets/passwordeye.svg";
 import Cancel from "@/assets/Cancel.svg";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormData } from "@/common/User/FormValidation/Schema";
+import { z, ZodType } from "zod";
 
 const LoginContent = () => {
+  const schema: ZodType<FormData> = z.object({
+    email: z.string().email(),
+    password: z
+      .string()
+      .min(4, { message: "Password must be at least 4 characters long" })
+      .max(20, { message: "Password must not exceed 20 characters" }),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  console.log("--- errors", errors);
+  const submitData = (data: FormData) => {
+    console.log("testing");
+    console.log("It is working", data);
+  };
+
   return (
     <div className="w-[100%] max-w-[500px] mx-auto relative">
       <Link to="/">
@@ -25,20 +49,26 @@ const LoginContent = () => {
         <p className="text-[15px] text-[#A7A7A7] font-Hanken">
           Welcome back! please enter your details{" "}
         </p>
-        <form>
+        <form onSubmit={handleSubmit(submitData)}>
           <p className="my-8">
-            <InputFormat
-              type="text"
-              placeholder="Email"
-              leftIcon={<img src={EmailLogo} alt="pasword icon" />}
-            />
+            {
+              <InputFormat
+                type="text"
+                placeholder="Email"
+                reg={register("email")}
+                leftIcon={<img src={EmailLogo} alt="pasword icon" />}
+                errorMsg={errors.email?.message}
+              />
+            }
           </p>
           <p className="my-4">
             <InputFormat
               type="password"
               placeholder="password"
+              reg={register("password")}
               leftIcon={<img src={PasswordIcon} alt="pasword icon" />}
               rightIcon={<img src={PasswordEye} alt="paswordeye icon" />}
+              errorMsg={errors.password?.message}
             />
           </p>
           <p className="flex justify-end mb-8 text-[#8530C1] font-bold">
@@ -46,7 +76,9 @@ const LoginContent = () => {
               <button>Forgot password?</button>
             </Link>
           </p>
-          <Button size="full">Login</Button>
+          <Button type="submit" size="full">
+            Login
+          </Button>
           <p className="flex justify-center mt-8 text-[#8530C1] font-bold underline">
             <button>Sign In as Student</button>
           </p>

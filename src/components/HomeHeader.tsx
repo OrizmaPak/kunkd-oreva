@@ -52,7 +52,14 @@ const HomeHeader = () => {
         >
           <span>About Us</span>
         </NavLink>
-        <span>Shop</span>
+        <NavLink
+          to="/shop"
+          className={({ isActive }) =>
+            isActive ? " text-[#8530C1]" : "text-black"
+          }
+        >
+          <span>Shop</span>
+        </NavLink>
         <span>| EN </span>
       </div>
 

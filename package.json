@@ -13,6 +13,7 @@
     "@chakra-ui/react": "^2.6.1",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
+    "@hookform/resolvers": "^3.1.0",
     "@mantine/core": "^6.0.13",
     "@mantine/dropzone": "^6.0.13",
     "@mantine/hooks": "^6.0.13",
@@ -21,10 +22,12 @@
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.44.3",
     "react-icons": "^4.8.0",
     "react-router-dom": "^6.11.2",
     "react-slick": "^0.29.0",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

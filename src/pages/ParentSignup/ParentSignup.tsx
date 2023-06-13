@@ -32,7 +32,7 @@ const ParentSignup = () => {
             }}
           />
         ) : null}
-        <div className="flex gap-2 justify-center mt-10">
+        <div className="flex gap-2 justify-center absolute bottom-20 left-[1150px] ">
           <div
             className={`w-4 h-4 rounded-full ${
               activeStep === STEP_1

@@ -16,7 +16,7 @@ const MakePaymentContent = ({ onSubmit }: { onSubmit: () => void }) => {
   return (
     <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">
       <Link to="/">
-        <span className="absolute right-[-150px] top-[-40px]">
+        <span className="absolute right-[-150px] top-[40px]">
           <img src={Cancel} alt="cancel" />
         </span>
       </Link>

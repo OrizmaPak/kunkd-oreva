@@ -2,18 +2,37 @@
 import Cancel from "@/assets/Cancel.svg";
 // import InputFormat from '@/pages/Login/InputFormat'
 import Button from "@/components/Button";
-import { HStack, PinInput, PinInputField } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { PinInput, Group } from "@mantine/core";
+import { useState } from "react";
 import { FormEvent } from "react";
 import FormWrapper from "@/common/FormWrapper";
 // import { useForm, SubmitHandler } from "react-hook-form";
 
 const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    onSubmit();
-    // Form submission logic here
+  const [pinValue, setPinValue] = useState("");
+
+  const handlePinChange = (value: string) => {
+    setPinValue(value);
+    // console.log(value);
   };
+
+  const submitData = () => {
+    console.log("It is working");
+    console.log(pinValue);
+    if (pinValue.length < 4) {
+      console.log(pinValue.length);
+      return;
+    } else {
+      onSubmit();
+    }
+  };
+
+  // const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+
+  //   // Form submission logic here
+  // };
   return (
     <FormWrapper>
       <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">
@@ -28,24 +47,19 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
           <p className="text-[15px] text-[#A7A7A7] font-Hanken">
             A code has been sent to your email, enter to verify your account.
           </p>
-          <form onSubmit={handleSubmit}>
-            <div className="mt-8 flex justify-center items-center">
-              <HStack>
-                <PinInput size="lg" otp>
-                  <PinInputField />
-                  <PinInputField />
-                  <PinInputField />
-                  <PinInputField />
-                </PinInput>
-              </HStack>
-            </div>
+          {/* <form> */}
+          <div className="mt-8 flex justify-center items-center relative">
+            <Group position="center">
+              <PinInput value={pinValue} onChange={handlePinChange} />
+            </Group>
+          </div>
 
-            <p className="mt-10">
-              <Button size="full" type="submit">
-                Login
-              </Button>
-            </p>
-          </form>
+          <p className="mt-10">
+            <Button onClick={submitData} size="full" type="submit">
+              Login
+            </Button>
+          </p>
+          {/* </form> */}
           <p className="mt-2 text-center text-[] text-gray-400 ">
             <span>Don't hava an account? </span>
             <button

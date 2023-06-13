@@ -42,9 +42,9 @@ const ParentSignupLayout = ({
   };
 
   return (
-    <div className="flex w-full  h-screen">
+    <div className="flex w-full  h-screen  ease-in-out transition-all transition-slowest ease">
       <div
-        className={`bg-[#F9F5FC] w-full h-full bas ${
+        className={`  ease-in-out transition-all  duration-500   bg-[#F9F5FC] w-full h-full bas ${
           !isOpen ? "basis-[150px]" : "basis-1/3"
         } pt-8 px-8`}
       >
@@ -89,7 +89,7 @@ const SigninDash = ({
         <h1
           className={`text-[20] ${
             active ? "opacity-100" : "opacity-50"
-          } font-bold`}
+          } font-bold text-[18px] `}
         >
           {title}
         </h1>

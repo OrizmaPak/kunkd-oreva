@@ -5,7 +5,7 @@ const Hero = () => {
   return (
     <div className="bg-[rgba(237,28,36,0.06);] pt-14">
       <div className="max-w-[1200px] w-full mx-auto ">
-        <h1 className="font-bold font-Recoleta text-center text-[40px]">
+        <h1 className="font-bold font-Recoleta text-center text-[60px] mt-20 ">
           We are Kunda Kids
         </h1>
         <p className=" leading-8  text-center mb-20">

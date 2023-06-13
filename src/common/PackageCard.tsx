@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 type Props = {
   recommended?: boolean;
   title?: React.ReactNode;
@@ -51,7 +53,7 @@ const PackageCard = ({
         <div className=" flex flex-col ">
           {content.map((item, index) => (
             <div className="mt-5 " key={index}>
-              <p className="text-sm ">{item}</p>
+              <p className="text-sm my-5">{item}</p>
             </div>
           ))}
         </div>
@@ -62,7 +64,7 @@ const PackageCard = ({
           {content.map((item, index) => (
             <div className="mt-7" key={index}>
               <p className=" flex justify-center items-center">
-                <img src={item} alt="icon" className="w-[10px]" />
+                <img src={item} alt="icon" className="w-[10px] my-5" />
               </p>
             </div>
           ))}
@@ -71,9 +73,11 @@ const PackageCard = ({
 
       {btn && (
         <div className="flex justify-center items-center">
-          <button className="mt-8 bg-[#E7D4F4] text-[#8530C1] p-3 rounded-2xl">
-            {btn}
-          </button>
+          <Link to="/makepayment">
+            <button className="mt-8 bg-[#E7D4F4] text-[#8530C1] p-3 rounded-2xl">
+              {btn}
+            </button>
+          </Link>
         </div>
       )}
     </div>

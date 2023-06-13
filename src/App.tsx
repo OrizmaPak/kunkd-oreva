@@ -21,9 +21,10 @@ import ParentSignup from "./pages/ParentSignup/ParentSignup";
 import SchoolCongrtulations from "@/pages/SchoolCongratulations/SchoolCongratulations";
 import SecureAccount from "./pages/SecureAccount/SecureAccount";
 import MakePayment from "./pages/MakePayment/MakePayment";
-import Unlimited from "./pages/KundaKidsUnlimited2/Unlimited";
+import ChoosePlan from "./pages/ChoosePlan/ChoosePlan";
 import Schools from "./pages/Schools/Schools";
 import AboutUs from "./pages/AboutUs/AboutUs";
+import Shop from "@/pages/Shop/Shop";
 // import SchoolMainDashBoard from "./pages/DashBoard/SchoolDashBoard/SchoolMainDashboard";
 import UserHeader from "./common/User/UserHeader";
 import NewlyRegisteredUser from "./pages/User/NewlyRegisterUser/NewlyRegisteredUser";
@@ -45,18 +46,33 @@ import Classes from "@/pages/DashBoard/SchoolDashBoard/Classes/Classes";
 import Students from "@/pages/DashBoard/SchoolDashBoard/Students/Students";
 import StudentProfile from "@/pages/DashBoard/SchoolDashBoard/Students/Profile";
 // import Setting from "./common/User/DashBoard/Setting"
+import TeacherLayout from "@/common/User/DashBoard/Teachers/TeacherLayout";
+import TStudents from "@/pages/DashBoard/TeacherDashboard/Students/Students";
+import TClasses from "@/pages/DashBoard/TeacherDashboard/Classes/Classes";
+import TSettings from "@/pages/DashBoard/TeacherDashboard/Settings/Settings";
+import TMain from "@/pages/DashBoard/TeacherDashboard/Main/Main";
+import SettingsLayout from "./pages/Settings/SettingsLayout";
+import Profile from "./pages/Settings/Profile";
+import PaymentMethod from "./pages/Settings/PaymentMethod";
+import Notification from "./pages/Settings/Notification";
+import SubscriptionPlan from "./pages/Settings/Subscriptionplan";
+
 function App() {
   return (
     <BrowserRouter>
       <div className="App ">
         <Routes>
+          {/* Routes Before Login */}
           <Route path="/">
             <Route element={<Layout />}>
               <Route index element={<Home />}></Route>
               <Route path="parents" element={<Parents />}></Route>
               <Route path="schools" element={<Schools />}></Route>
               <Route path="aboutus" element={<AboutUs />}></Route>
+              <Route path="shop" element={<Shop />}></Route>
             </Route>
+
+            {/* Routes After  login */}
             <Route element={<Layout2 />}>
               <Route
                 path="newlyregistereduser"
@@ -68,7 +84,7 @@ function App() {
                 element={<ExistingUserNotPaid />}
               ></Route>
 
-              <Route path="paidUser" element={<PaidUser />}></Route>
+              <Route path="paiduser" element={<PaidUser />}></Route>
               <Route path="librarynotpaid" element={<LibraryNotPaid />}></Route>
               <Route path="librarypaid" element={<LibraryPaid />}></Route>
               <Route path="stories" element={<Stories />}></Route>
@@ -78,7 +94,9 @@ function App() {
               <Route path="progressreport" element={<ProgressReport />}></Route>
             </Route>
 
+            {/* Dasboard Routes */}
             <Route element={<Layout3 />}>
+              {/* School Dashboard */}
               <Route path="schooldashboard/*" element={<SchoolLayout />}>
                 <Route index element={<Main />}></Route>
                 <Route path="teacher" element={<Teachers />}></Route>
@@ -91,6 +109,29 @@ function App() {
                 </Route>
                 <Route path="classes" element={<Classes />}></Route>
                 <Route path="setting" element={<Setting />}></Route>
+              </Route>
+
+              {/* Teacher Dashboard */}
+              <Route path="teacherdashboard/*" element={<TeacherLayout />}>
+                <Route index element={<TMain />}></Route>
+                <Route path="student/*">
+                  <Route index element={<TStudents />} />
+                </Route>
+                <Route path="classes" element={<TClasses />}></Route>
+                <Route path="setting" element={<TSettings />}></Route>
+              </Route>
+
+              {/* Seetings */}
+
+              <Route path="settings/*" element={<SettingsLayout />}>
+                <Route index element={<Profile />}></Route>
+                <Route path="paymentmethod" element={<PaymentMethod />}></Route>
+                <Route
+                  path="subscriptionplan"
+                  element={<SubscriptionPlan />}
+                ></Route>
+                <Route path="notification" element={<Notification />}></Route>
+                <Route path="paymentmethod" element={<PaymentMethod />}></Route>
               </Route>
             </Route>
 
@@ -122,7 +163,7 @@ function App() {
             <Route path="parentsignup" element={<ParentSignup />}></Route>
             <Route path="secureaccount" element={<SecureAccount />}></Route>
             <Route path="makepayment" element={<MakePayment />}></Route>
-            <Route path="packages" element={<Unlimited />}></Route>
+            <Route path="packages" element={<ChoosePlan />}></Route>
             {/* <Route path="schoolmaindashboard" element={<SchoolMainDashBoard />}></Route> */}
 
             <Route

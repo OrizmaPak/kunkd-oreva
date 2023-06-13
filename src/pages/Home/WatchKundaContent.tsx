@@ -2,6 +2,12 @@ import GooglePlay from "./GooglePlay";
 import AppleStore from "./AppleStore";
 import VideoCard from "@/components/VideoCard";
 import Phones from "@/assets/phones.svg";
+import Lines from "@/assets/lines.svg";
+import Zigzag from "@/assets/zigzag2.svg";
+import RoundP from "@/assets/roundpurpple.svg";
+import RoundR from "@/assets/Ellipse 59.svg";
+import RoundY from "@/assets/Ellipse 57.svg";
+import ZagR from "@/assets/ZagR.svg";
 
 const WatchKundaContent = () => {
   return (
@@ -10,8 +16,41 @@ const WatchKundaContent = () => {
         {/* <div className="bg-cover bg-center  w-full bg-red-500 matt h-[300px] " style={{ backgroundImage: `url(${ThirdWave})` }}/> */}
 
         <img src={Phones} alt="" className="z-[50] mt-[-500px] w-[70%]" />
+
+        {/* <div> */}
+        <img
+          src={Lines}
+          alt="lines"
+          className="absolute left-[0px]  transform rotate-180  "
+        />
+        <img
+          src={Zigzag}
+          alt="zigzag"
+          className="absolute  bottom-[950px]  left-40"
+        />
+        <img
+          src={RoundP}
+          alt="zigzag"
+          className="absolute  bottom-[900px]  left-[900px]"
+        />
+        <img
+          src={RoundR}
+          alt="zigzag"
+          className="absolute  bottom-[950px]  left-[1700px]"
+        />
+        <img
+          src={RoundY}
+          alt="zigzag"
+          className="absolute  bottom-[0px]  left-[650px]"
+        />
+        <img
+          src={ZagR}
+          alt="zigzag"
+          className="absolute  bottom-[0px]  left-[1500px]"
+        />
+        {/* </div> */}
       </div>
-      <div className="mt-14">
+      {/* <div className="mt-14">
         <h1 className="text-4xl font-bold text-black text-center font-Secondary">
           Download App Now
         </h1>
@@ -19,10 +58,10 @@ const WatchKundaContent = () => {
           <GooglePlay />
           <AppleStore />
         </div>
-      </div>
+      </div> */}
 
-      <div className=" max-w-[1000px] mx-auto text-center text-black mt-28 text-[18px] mb-14 leading-10">
-        <h1 className="text-4xl font-bold mb-10  font-Secondary">
+      <div className=" max-w-[1000px] mx-auto text-center text-black mt-28 text-[18px] mb-14  mleading-10">
+        <h1 className="text-4xl font-bold mb-10 mt-60  font-Secondary">
           Watch Kunda And Friends
         </h1>
 

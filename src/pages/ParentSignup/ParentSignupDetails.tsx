@@ -5,13 +5,37 @@ import Cancel from "@/assets/Cancel.svg";
 import { Link } from "react-router-dom";
 import { FormEvent } from "react";
 import FormWrapper from "@/common/FormWrapper";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormData } from "@/common/User/FormValidation/Schema";
+import { z, ZodType } from "zod";
 
 const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const schema: ZodType<FormData> = z.object({
+    name: z
+      .string()
+      .min(4, { message: "Name must be at least 4 characters long" })
+      .max(20, { message: "Name must not exceed 20 characters" }),
+    address: z
+      .string()
+      .min(4, { message: "Address must be at least 4 characters long" })
+      .max(40, { message: "Address must not exceed 30 characters" }),
+    email: z.string().email(),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const submitData = (data: FormData) => {
+    console.log("testing");
+    console.log("It is working", data);
     onSubmit();
-    // Form submission logic here
+    //  navigate("/schoolverification");
   };
+
   return (
     <FormWrapper>
       <div className="w-[100%] max-w-[500px] mx-auto relative">
@@ -28,18 +52,30 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
           <p className="text-[15px] text-[#A7A7A7] font-Hanken">
             Start learning and reading without restrictions.{" "}
           </p>
-          <form className="mt-8" onSubmit={handleSubmit}>
+          <form className="mt-8" onSubmit={handleSubmit(submitData)}>
             <p className="my-8">
-              <InputFormat type="text" placeholder="Your name" />
+              <InputFormat
+                type="text"
+                placeholder="Your name"
+                reg={register("name")}
+                errorMsg={errors.name?.message}
+              />
             </p>
             <p className="my-8">
-              <InputFormat type="text" placeholder="House address" />
+              <InputFormat
+                type="text"
+                placeholder="House address"
+                reg={register("address")}
+                errorMsg={errors.address?.message}
+              />
             </p>
             <p className="my-8">
               <InputFormat
                 type="text"
                 placeholder="Email"
                 leftIcon={<img src={EmailLogo} alt="pasword icon" />}
+                reg={register("email")}
+                errorMsg={errors.email?.message}
               />
             </p>
 

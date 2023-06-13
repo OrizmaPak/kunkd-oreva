@@ -1,5 +1,6 @@
 import Button from "@/components/Button";
 import Congrats from "@/assets/congrats.svg";
+import { Link } from "react-router-dom";
 
 const PaymentCompletedContent = ({ onSubmit }: { onSubmit: () => void }) => {
   return (
@@ -16,7 +17,9 @@ const PaymentCompletedContent = ({ onSubmit }: { onSubmit: () => void }) => {
           <p className="text-[15px] text-[#A7A7A7] text-center mt-4 mb-16 font-Hanken">
             Payment receipt has been sent to your email address
           </p>
-          <Button size="full">Continue</Button>
+          <Link to="/paiduser">
+            <Button size="full">Continue</Button>
+          </Link>
         </div>
       </div>
     </div>
