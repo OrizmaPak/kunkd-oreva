@@ -5,7 +5,7 @@ import Service1 from "@/assets/service1.svg";
 import Service2 from "@/assets/service2.svg";
 import Service3 from "@/assets/service3.svg";
 import LadyBg from "@/assets/ladyBg.svg";
-import MacBok from "@/assets/MacBook Pro 16.svg";
+import MacBok from "@/assets/MacBook1.svg";
 import KundaApp from "./KundaApp";
 
 const Serviceontent = () => {
@@ -35,7 +35,7 @@ const Serviceontent = () => {
   return (
     <div className="relative">
       <div className="flex items-center justify-center">
-        <img src={MacBok} alt="" className=" z-[50] mt-[-400px]" />
+        <img src={MacBok} alt="" className=" z-[50] mt-[-300px] mb-[100px]" />
       </div>
 
       <div className="max-w-[1000px] mx-auto text-center">

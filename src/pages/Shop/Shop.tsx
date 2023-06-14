@@ -16,6 +16,7 @@ import Hero from "./Hero";
 import NewRelease from "./NewRelease";
 import AfricanHsitory from "./AfricanHistory";
 import BookTrailer from "./BookTrailer";
+import PaymentType from "./PaymentType";
 
 const datas = [
   {
@@ -92,6 +93,7 @@ const Shop = () => {
       <NewRelease data={datas} />
       <AfricanHsitory data={datas} />
       <BookTrailer />
+      <PaymentType />
     </div>
   );
 };

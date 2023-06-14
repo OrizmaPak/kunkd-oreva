@@ -68,6 +68,11 @@ function App() {
               <Route index element={<Home />}></Route>
               <Route path="parents" element={<Parents />}></Route>
               <Route path="schools" element={<Schools />}></Route>
+              {/* <Route path="aboutus" element={<AboutUs />}></Route>
+              <Route path="shop" element={<Shop />}></Route> */}
+            </Route>
+
+            <Route element={<LayoutNoNewLetter />}>
               <Route path="aboutus" element={<AboutUs />}></Route>
               <Route path="shop" element={<Shop />}></Route>
             </Route>
@@ -185,6 +190,17 @@ const Layout = () => {
       <HomeHeader />
       <Outlet />
       <HomeNewsLetter />
+      <HomeFooter />
+    </>
+  );
+};
+
+const LayoutNoNewLetter = () => {
+  return (
+    <>
+      <HomeHeader />
+      <Outlet />
+
       <HomeFooter />
     </>
   );

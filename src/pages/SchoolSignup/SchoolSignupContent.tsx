@@ -22,7 +22,7 @@ const SchoolSignupContent = () => {
     address: z
       .string()
       .min(4, { message: "Address must be at least 4 characters long" })
-      .max(40, { message: "Address must not exceed 20 characters" }),
+      .max(50, { message: "Address must not exceed 40 characters" }),
     contactName: z
       .string()
       .min(4, { message: "Contact name must be at least 4 characters long" })

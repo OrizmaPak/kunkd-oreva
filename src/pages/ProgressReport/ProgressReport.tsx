@@ -7,8 +7,13 @@ import BookIcon from "@/assets/svgbook.svg";
 import Chart from "./Chart";
 import { data, DataType } from "../User/NewlyRegisterUser/NewlyRegisteredUser";
 import ProgressCard from "./ProgressCard";
+import ProgressAction from "./ProgressAction";
+import { useState } from "react";
+import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
 
 const ProgressReport = () => {
+  const [displaySectio, setDisplaySection] = useState<number>(STEP_1);
+
   return (
     <div>
       <Wrapper>
@@ -24,9 +29,13 @@ const ProgressReport = () => {
           <div className="py-10 px-24">
             <Chart />
           </div>
+
+          <div>
+            <ProgressAction />
+          </div>
           <div className="p-8 grid grid-cols-3 gap-4 gap-x-14">
             {data &&
-              data.map((data, index) => {
+              data.slice(5).map((data, index) => {
                 return <ProgressCard key={index} {...data} />;
               })}
           </div>

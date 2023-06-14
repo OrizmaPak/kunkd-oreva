@@ -8,7 +8,7 @@ const HeroContentContent = () => {
       <div>
         <div className="absolute top-40  left-40">
           <p className="font-bold text-[40px] text-[#8530C1] font-Secondary">
-            Introducing Kunda Kids{" "}
+            Introducing Kunda Kids
           </p>
           <h1 className="text-[70px] font-bold   font-Recoleta">
             Empowering your child's <br /> reading journey

@@ -3,6 +3,7 @@ import Hero from "./Hero";
 import Mission from "./Mission";
 import Vision from "./Vision";
 import OurTeam from "./OurTeam";
+import Question from "./Question";
 
 const AboutUs = () => {
   return (
@@ -11,6 +12,7 @@ const AboutUs = () => {
       <Mission />
       <Vision />
       <OurTeam />
+      <Question />
     </div>
   );
 };

@@ -33,9 +33,13 @@ const LoginCarousel = () => {
   ];
   const settings = {
     infinite: true,
-    speed: 500,
+    // speed: 500,
+    fade: true,
     slidesToShow: 1,
     slidesToScroll: 1,
+    autoplay: true,
+    speed: 3000,
+    autoplaySpeed: 5000,
     arrows: false,
     dots: false,
     beforeChange: (...rest: number[]) => setActiveDot(rest[1]),
@@ -56,13 +60,13 @@ const LoginCarousel = () => {
             {/* <button onClick={()=>sliderRef?.current?.slickPrev()} className='absolute z-10 -left-8 top-[45%] hover:text-white bg-[#ffff] hover:bg-[#8530C1] rounded-full p-1'>
           <BsChevronLeft  />
           </button> */}
-            <button
+            {/* <button
               onClick={() => sliderRef?.current?.slickNext()}
               className="absolute z-10 right-8 top-[85%] hover:text-white bg-[#ffff]  rounded-full p-1"
             >
               <img src={ArrowCaro} alt="arrow" />
-            </button>
-            <div className="flex gap-2 bottom-6 left-20 absolute z-50">
+            </button> */}
+            <div className="flex gap-2 bottom-6 left-[270px] absolute z-50">
               <CustomDot
                 handleSet={() => {
                   sliderRef?.current?.slickGoTo(0);
@@ -86,7 +90,6 @@ const LoginCarousel = () => {
               {carouselData.map((el) => {
                 return (
                   <div>
-                    {" "}
                     <CarouselCard
                       className={el.className}
                       title={el.title}

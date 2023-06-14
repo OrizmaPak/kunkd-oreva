@@ -1,5 +1,5 @@
 import LadyBackground from "@/assets/lady2.svg";
-import Mac from "@/assets/mac2.svg";
+import Mac from "@/assets/MacBook1.svg";
 import MacBg from "@/assets/macbackground.svg";
 
 const TrackNdMonitorContent = () => {
@@ -14,7 +14,7 @@ const TrackNdMonitorContent = () => {
         <br /> areas for improvement, and tailor instructions accordingly.
       </p>
 
-      <div className="relative">
+      <div className="relative overflow-hidden mt-40">
         <div className="  ml-40">
           <img src={LadyBackground} alt="teacher" />
         </div>
@@ -24,7 +24,11 @@ const TrackNdMonitorContent = () => {
             alt="mac bg "
             className="absolute top-[-25px] right-0"
           />
-          <img src={Mac} alt="mac" className="absolute top-0 right-0" />
+          <img
+            src={Mac}
+            alt="mac"
+            className="absolute top-[50px] right-[-100px] w-[40%]"
+          />
         </div>
       </div>
     </div>

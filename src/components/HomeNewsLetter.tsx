@@ -17,7 +17,6 @@ const HomeNewsLetter = () => {
           <span className="absolute right-2 top-1 ">
             <Button size="sm">Subscribe</Button>
           </span>
-          <img src={emailLogo} alt="" className="absolute top-5 left-2" />
         </h1>
       </form>
     </div>

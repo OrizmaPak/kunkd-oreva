@@ -123,7 +123,7 @@ const ShopBooks = () => {
         </div>
 
         <div className="max-w-[800px] mx-auto leading-8 text-center">
-          <h1 className="pt-8 text-3xl font-bold ">
+          <h1 className="pt-8 text-3xl font-bold my-4 ">
             What Our Client's Have To say
           </h1>
           <p>
@@ -209,6 +209,23 @@ const ShopBooks = () => {
             color: ${arrowStyles["&:hover"].color};
             border-radius : 50%;
           }
+           .slick-dots {
+      // : 20px; /* Adjust the position of the dots as needed */
+    }
+
+    .slick-dots li button:before {
+      font-size: 16px; /* Increase the font size of the dots */
+      line-height: 1; /* Adjust the line height of the dots */
+      width: 16px; /* Increase the width of the dots */
+      height: 16px; /* Increase the height of the dots */
+      
+    }
+    .slick-dots li button:before {
+      color: #8530C1; /* Set the background color of the active dot */
+    }
+    .slick-dots li.slick-active button:before{
+      color: #8530C1;
+    }
         `}
           </style>
           {/* <ClientCard name='Bolu Watife' location='Lagos Nigeria' image={client1} story=' Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.'/> */}

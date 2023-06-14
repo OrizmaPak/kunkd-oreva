@@ -9,7 +9,7 @@ const HomeHeader = () => {
   };
 
   return (
-    <div className="flex font-[500] py-4 text-[16px] px-[120px] justify-between items-center bg-white z-50">
+    <div className="flex font-[500] py-4 text-[16px] px-[120px] justify-between items-center bg-white  fixed w-full z-[100]">
       <NavLink
         to="/"
         className={({ isActive }) => (isActive ? "" : "text-black")}
