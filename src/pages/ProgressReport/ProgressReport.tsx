@@ -5,7 +5,10 @@ import musicIcon from "@/assets/svgmusic.svg";
 import videoIcon from "@/assets/svgvideo.svg";
 import BookIcon from "@/assets/svgbook.svg";
 import Chart from "./Chart";
-import { data, DataType } from "../User/NewlyRegisterUser/NewlyRegisteredUser";
+import {
+  data,
+  DataType,
+} from "../AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import ProgressCard from "./ProgressCard";
 import ProgressAction from "./ProgressAction";
 import { useState } from "react";

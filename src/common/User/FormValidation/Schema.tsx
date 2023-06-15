@@ -7,4 +7,8 @@ export type FormData = {
   address?: string;
   contactName?: string;
   pin?: string;
+  confirmPassword?: string;
+  fullName?: string;
+  schoolCode?: string;
+  selectSchool?: string;
 };

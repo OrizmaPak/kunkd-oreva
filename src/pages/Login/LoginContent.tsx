@@ -12,6 +12,23 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { z, ZodType } from "zod";
+import { Modal } from "@mantine/core";
+import { STEP_1, STEP_2 } from "@/utils/constants";
+import { useDisclosure } from "@mantine/hooks";
+import { useState } from "react";
+import StudentLoginModal from "./StudentLoginModal";
+import TeacherLoginModal from "./TeacherLoginModal";
+
+const users = [
+  {
+    email: "jimatth222@gmail.com",
+    isTeacher: "true",
+  },
+  {
+    email: "kizito222@gmail.com",
+    isStudent: "true",
+  },
+];
 
 const LoginContent = () => {
   const schema: ZodType<FormData> = z.object({
@@ -28,14 +45,37 @@ const LoginContent = () => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
+  const [opened, { open, close }] = useDisclosure(false);
+  const [modalStep, setModalStep] = useState(STEP_1);
   console.log("--- errors", errors);
+
   const submitData = (data: FormData) => {
-    console.log("testing");
     console.log("It is working", data);
+    const user = users.find((el) => el.email === data.email);
+    if (user?.isTeacher) {
+      setModalStep(STEP_1);
+    }
+    if (user?.isStudent) {
+      setModalStep(STEP_2);
+    }
+    open();
   };
 
   return (
     <div className="w-[100%] max-w-[500px] mx-auto relative">
+      <Modal
+        radius={"xl"}
+        size="lg"
+        opened={opened}
+        onClose={close}
+        withCloseButton={false}
+        centered
+      >
+        {modalStep === STEP_1 && <TeacherLoginModal />}
+
+        {modalStep === STEP_2 && <StudentLoginModal />}
+      </Modal>
+
       <Link to="/">
         <span className="absolute">
           <img src={Cancel} alt="cancel" />

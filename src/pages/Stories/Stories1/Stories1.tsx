@@ -3,7 +3,7 @@ import Wrapper from "../../../common/User/Wrapper";
 import StoriesNav from "./StoriesNav";
 import Poster1 from "@/assets/Chisom.svg";
 import { useParams, useLocation } from "react-router-dom";
-import { DataType } from "@/pages/User/NewlyRegisterUser/NewlyRegisteredUser";
+import { DataType } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import SideMenu from "./SideMenu";
 
 export type StoriesType = {

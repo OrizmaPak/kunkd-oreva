@@ -1,6 +1,6 @@
 // import Card from "./Card";
 // import SavingCard from "./@'/ser";
-import { DataType } from "../../pages/User/NewlyRegisterUser/NewlyRegisteredUser";
+import { DataType } from "../../pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import { CardProps } from "./Card";
 type Props = {
   data?: DataType[];
@@ -30,7 +30,7 @@ const CardScreen = ({
         className="overflow-auto  no-scrollbar "
         style={{ maxHeight: "500px" }}
       >
-        <div className="grid grid-flow-col  gap-10 mb-14  ">
+        <div className="grid grid-flow-col  gap-5 mb-14  ">
           {data?.map((data, index) => {
             return card ? card(data) : null;
             // <Card key={index} image={data?.image} title={data?.title} />

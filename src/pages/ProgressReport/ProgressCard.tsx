@@ -1,6 +1,6 @@
 import { Progress } from "@mantine/core";
 
-import { DataType } from "../User/NewlyRegisterUser/NewlyRegisteredUser";
+import { DataType } from "../AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 const ProgressCard = ({
   image,
   isCompleted,

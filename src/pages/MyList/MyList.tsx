@@ -3,7 +3,7 @@ import InnerWrapper from "../../common/User/InnerWrapper";
 import Header from "./Header";
 import AdsButton from "../../common/User/AdsButton";
 import EmptyList from "./EmptyList";
-import { data } from "../User/NewlyRegisterUser/NewlyRegisteredUser";
+import { data } from "../AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import DataList from "./DataList";
 
 const MyList = () => {

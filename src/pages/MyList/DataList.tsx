@@ -1,4 +1,4 @@
-import { DataType } from "../User/NewlyRegisterUser/NewlyRegisteredUser";
+import { DataType } from "../AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import Card from "../../common/User/Card";
 type Props = {
   data: DataType[];

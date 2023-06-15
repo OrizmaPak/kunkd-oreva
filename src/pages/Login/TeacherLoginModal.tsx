@@ -37,19 +37,18 @@ const TeacherLoginModal = () => {
   return (
     <div>
       <div>
-        <h1>Welcome </h1>
-        <p>daniel@pampers.school</p>
+        <h1 className="text-center font-bold text-[25px]">Welcome </h1>
+        <p className="text-center">daniel@pampers.school</p>
       </div>
 
       <div>
-        <h1>Create password</h1>
+        <h1 className="font-bold text-[20px]">Create password</h1>
         <p>create a password that you dont't use for other websites</p>
         <form onSubmit={handleSubmit(submitData)}>
-          <div>
+          <div className="my-2">
             <label htmlFor="password">Enter New Password</label>
             <InputFormat
               type="password"
-              placeholder="password"
               reg={register("password")}
               leftIcon={<img src={PasswordIcon} alt="pasword icon" />}
               rightIcon={<img src={PasswordEye} alt="paswordeye icon" />}
@@ -57,11 +56,10 @@ const TeacherLoginModal = () => {
             />
           </div>
 
-          <div>
+          <div className="my-2">
             <label htmlFor="confirmpassword">Confirm Password</label>
             <InputFormat
               type="password"
-              placeholder="password"
               reg={register("confirmPassword")}
               leftIcon={<img src={PasswordIcon} alt="pasword icon" />}
               rightIcon={<img src={PasswordEye} alt="paswordeye icon" />}
