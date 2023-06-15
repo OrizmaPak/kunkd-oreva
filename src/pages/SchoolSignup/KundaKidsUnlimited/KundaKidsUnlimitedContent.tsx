@@ -1,9 +1,10 @@
 import Marked from "@/assets/marked.svg";
 import Cancel from "@/assets/Cancel.svg";
 import GreaterIcon from "@/assets/greatericon.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const KundaKidsUnlimitedContent = () => {
+  const navigate = useNavigate();
   const customArray1 = [
     "Newsletter",
     "Booking",
@@ -63,10 +64,13 @@ const KundaKidsUnlimitedContent = () => {
           <img src={Cancel} alt="Cancle" className="absolute top-10 right-24" />
         </span>
       </Link>
-      <span className="absolute right-24 bottom-14 flex gap-4">
+      <button
+        onClick={() => navigate("/newlyregistereduser")}
+        className="absolute right-24 bottom-14 flex gap-4"
+      >
         <p className="text-[18px] font-Hanken font-bold">Continue free </p>
         <img src={GreaterIcon} alt="greater icon" />
-      </span>
+      </button>
     </div>
   );
 };

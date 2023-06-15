@@ -1,8 +1,9 @@
 import Button from "./Button";
 import Logo from "@/assets/KundaLogo.svg";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const HomeHeader = () => {
+  const navigate = useNavigate();
   const activeLinkStyle = {
     fontWeight: "bold",
     color: "#8530C1",
@@ -67,7 +68,9 @@ const HomeHeader = () => {
         <NavLink to="login">
           <span className="text-[#8530C1] cursor-pointer">Login</span>
         </NavLink>
-        <Button size="md">Enroll</Button>
+        <Button onClick={() => navigate("/signup")} size="md">
+          Enroll
+        </Button>
       </div>
     </div>
   );

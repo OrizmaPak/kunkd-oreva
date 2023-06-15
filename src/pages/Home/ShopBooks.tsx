@@ -114,9 +114,9 @@ const ShopBooks = () => {
                 </p>
                 <p className="font-bold text-[30px] mt-8">₦2,900.00 NGN</p>
                 <p className="mb-10">Tax incuded</p>
-                {/* <button className="bg-white text-[#447ADC] p-3  px-24 rounded-full">
-            Add to cart
-          </button> */}
+                <button className="bg-white text-[#8530C1] p-3  px-24 rounded-full">
+                  Add to cart
+                </button>
               </div>
             </div>
           </div>

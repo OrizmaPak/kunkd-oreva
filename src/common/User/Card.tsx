@@ -24,7 +24,7 @@ const Card = ({ title, image, size, id, clickable }: CardProps) => {
         <img
           src={image}
           alt="image"
-          style={{ width: `${size ? size : ""}px` }}
+          style={{ width: `${size ? size : "350px"}px` }}
         />
       </span>
       {title ? (

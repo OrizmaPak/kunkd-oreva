@@ -11,11 +11,11 @@ import Earniing2card from "@/assets/earniing2card.svg";
 import Earningcard from "@/assets/earningcard.svg";
 import Mamacard from "@/assets/mamacard.svg";
 import Puffcard from "@/assets/puffcard.svg";
-import CardScreen from "../../../../common/User/CardScreen";
-import AdsButton from "../../../../common/User/AdsButton";
-import Card from "../../../../common/User/Card";
-import Wrapper from "../../../../common/User/Wrapper";
-import InnerWrapper from "../../../../common/User/InnerWrapper";
+import CardScreen from "@/common/User/CardScreen";
+import AdsButton from "@/common/User/AdsButton";
+import Card from "@/common/User/Card";
+import Wrapper from "@/common/User/Wrapper";
+import InnerWrapper from "@/common/User/InnerWrapper";
 
 export type DataType = {
   title?: string;
@@ -98,9 +98,9 @@ const NewlyRegisteredUser = () => {
     // <div className=" w-full rounded-[35px] bg-white h-full mx-auto   ">
     <Wrapper>
       <InnerWrapper>
-        <Hero banner={Banner} username="Emma" userimage={userImage} />
+        <Hero />
         <CardScreen
-          data={data?.map((el) => ({ ...el, title: "" }))}
+          data={data?.slice(1, 7).map((el) => ({ ...el, title: "" }))}
           header="New & Trending"
           actiontitle="View all"
           isTitled={false}
@@ -115,7 +115,7 @@ const NewlyRegisteredUser = () => {
         />
         <AdsButton />
         <CardScreen
-          data={data?.map((el) => ({ ...el, title: "" }))}
+          data={data?.slice(1, 7).map((el) => ({ ...el, title: "" }))}
           header="Recommended For You"
           isTitled={false}
           card={(props: DataType) => <Card {...props} />}

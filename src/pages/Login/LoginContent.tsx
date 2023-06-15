@@ -17,7 +17,7 @@ import { STEP_1, STEP_2 } from "@/utils/constants";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import StudentLoginModal from "./StudentLoginModal";
-import TeacherLoginModal from "./TeacherLoginModal";
+import TeacherLoginModal, { CongratulationsModal } from "./TeacherLoginModal";
 
 const users = [
   {
@@ -45,8 +45,12 @@ const LoginContent = () => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const [opened, { open, close }] = useDisclosure(false);
+  const [opened1, { open: open1, close: close1 }] = useDisclosure(false);
+  const [opened2, { open: open2, close: close2 }] = useDisclosure(false);
+
   const [modalStep, setModalStep] = useState(STEP_1);
+  const [studentModal, setStudentModal] = useState(false);
+  const [teacherModal, setTeacherModal] = useState(false);
   console.log("--- errors", errors);
 
   const submitData = (data: FormData) => {
@@ -54,11 +58,13 @@ const LoginContent = () => {
     const user = users.find((el) => el.email === data.email);
     if (user?.isTeacher) {
       setModalStep(STEP_1);
+      setTeacherModal(true);
+      open1();
     }
     if (user?.isStudent) {
-      setModalStep(STEP_2);
+      setStudentModal(true);
+      open2();
     }
-    open();
   };
 
   return (
@@ -66,14 +72,26 @@ const LoginContent = () => {
       <Modal
         radius={"xl"}
         size="lg"
-        opened={opened}
-        onClose={close}
+        opened={opened1}
+        onClose={close1}
         withCloseButton={false}
         centered
       >
-        {modalStep === STEP_1 && <TeacherLoginModal />}
+        {teacherModal && modalStep === STEP_1 && (
+          <TeacherLoginModal onContinue={() => setModalStep(STEP_2)} />
+        )}
+        {teacherModal && modalStep === STEP_2 && <CongratulationsModal />}
+      </Modal>
 
-        {modalStep === STEP_2 && <StudentLoginModal />}
+      <Modal
+        radius={"xl"}
+        size="lg"
+        opened={opened2}
+        onClose={close2}
+        withCloseButton={false}
+        centered
+      >
+        {studentModal && <StudentLoginModal />}
       </Modal>
 
       <Link to="/">

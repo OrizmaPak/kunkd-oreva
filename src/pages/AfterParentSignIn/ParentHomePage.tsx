@@ -33,7 +33,15 @@ const ParentHomePage = () => {
       <Wrapper>
         <InnerWrapper>
           <Modal
-            title={<img src={LessDownIcon} alt="cancel button" />}
+            title={
+              currentStep > 0 && (
+                <img
+                  src={LessDownIcon}
+                  onClick={() => setCurrentStep(currentStep - 1)}
+                  alt="cancel button"
+                />
+              )
+            }
             opened={opened}
             onClose={close}
             centered

@@ -6,8 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { z, ZodType } from "zod";
 import Button from "@/components/Button";
+import { useNavigate } from "react-router-dom";
 
 const StudentLoginModal = () => {
+  const navigate = useNavigate();
   const schema: ZodType<FormData> = z.object({
     fullName: z
       .string()
@@ -41,20 +43,21 @@ const StudentLoginModal = () => {
         <h1 className="text-center font-bold font-Recoleta text-[25px]">
           Enter Login Details
         </h1>
-        <p className="text-center"> Input your login details</p>
+        <p className="text-center mb-10"> Input your login details</p>
       </div>
 
-      <div>
+      <div className="px-10">
         <form onSubmit={handleSubmit(submitData)}>
-          <div className="my-5">
+          <div className="mt-5 mb-10">
             <InputFormat
               type="text"
+              placeholder="Enter full name"
               reg={register("fullName")}
               errorMsg={errors.fullName?.message}
             />
           </div>
 
-          <div className="my-5">
+          <div className="mb-10">
             <InputFormat
               type="text"
               placeholder="Enter school code"
@@ -63,7 +66,7 @@ const StudentLoginModal = () => {
             />
           </div>
 
-          <div className="my-5">
+          <div className="mb-10">
             <select
               {...register("selectSchool")}
               id=""
@@ -76,7 +79,12 @@ const StudentLoginModal = () => {
             </select>
             {errors.selectSchool && <span>{errors.selectSchool.message}</span>}
           </div>
-          <Button type="submit">Continue</Button>
+
+          <div className="mb-10">
+            <Button onClick={() => navigate("/parenthomepage")} type="submit">
+              Continue
+            </Button>
+          </div>
         </form>
       </div>
     </div>

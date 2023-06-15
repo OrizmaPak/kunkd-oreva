@@ -8,7 +8,7 @@ import OptionButton from "./OptionButton";
 import Checked from "@/assets/Checked.svg";
 import UnChecked from "@/assets/uncheck.svg";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const options = [
   {
@@ -24,6 +24,7 @@ const options = [
 ];
 
 const SignContent = () => {
+  const navigate = useNavigate();
   const [to, setTo] = useState("");
 
   const handleClick = () => {
@@ -78,12 +79,13 @@ const SignContent = () => {
           </Button>
         </div>
         <p className="mt-2 text-center text-[] text-gray-400 ">
-          <span>Don't hava an account? </span>
+          <span>Already signed up? </span>
           <button
+            onClick={() => navigate("/login")}
             className="mt-8 text-[#8530C1] font-bold
               "
           >
-            Sign up
+            Login
           </button>
         </p>
       </div>
