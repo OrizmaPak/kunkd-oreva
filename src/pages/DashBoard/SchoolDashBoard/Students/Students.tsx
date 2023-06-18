@@ -7,9 +7,7 @@ import Row from "./Row";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "@mantine/core";
 
-type Props = {};
-
-const Students = (props: Props) => {
+const Students = () => {
   const navigate = useNavigate();
   return (
     <div>
@@ -67,7 +65,7 @@ const Students = (props: Props) => {
           styles={() => ({
             control: {
               "&[data-active]": {
-                backgroundColor: "#8530C1",
+                backgroundColor: "#8530C1 !important",
               },
             },
           })}

@@ -46,9 +46,9 @@ const ParentHomePage = () => {
             onClose={close}
             centered
             size="lg"
-            closeButtonProps={{
-              size: "xl",
-            }}
+            radius={"xl"}
+            closeOnClickOutside={false}
+            withCloseButton={false}
           >
             {currentStep === STEP_1 && (
               <WelcomeModal onContinue={() => setCurrentStep(STEP_2)} />

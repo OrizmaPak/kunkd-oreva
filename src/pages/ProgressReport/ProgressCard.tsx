@@ -1,6 +1,7 @@
 import { Progress } from "@mantine/core";
 
 import { DataType } from "../AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
+import Button from "@/components/Button";
 const ProgressCard = ({
   image,
   isCompleted,
@@ -16,7 +17,7 @@ const ProgressCard = ({
         <h1 className="my-4 font-Recoleta font-bold text-[20px]">{title}</h1>
         <div className=" w-full">
           {isCompleted ? (
-            <button className="p-4 bg-[#2BB457] rounded-3xl">Completed</button>
+            <Button size="md">Completed</Button>
           ) : (
             <div className="flex justify-center items-center gap-4">
               <span>{range}%</span>

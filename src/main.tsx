@@ -4,12 +4,15 @@ import App from "./App.tsx";
 import "./index.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import { MantineProvider } from "@mantine/core";
+import { UserProvider } from "./Context/StateProvider.tsx";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     {/* <ChakraProvider> */}
     <MantineProvider withGlobalStyles withNormalizeCSS>
-      <App />
+      <UserProvider>
+        <App />
+      </UserProvider>
     </MantineProvider>
     {/* </ChakraProvider> */}
   </React.StrictMode>

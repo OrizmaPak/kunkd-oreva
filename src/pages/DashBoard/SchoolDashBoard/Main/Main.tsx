@@ -1,43 +1,39 @@
-import SchoolLayout from "@/common/User/DashBoard/School/SchoolLayout";
 import TeacherIcon from "@/assets/teacher3.svg";
 import StudentIcon from "@/assets/student3.svg";
 import QuizIcon from "@/assets/quizicon.svg";
 import Card from "./Card";
-import Chart from "./Chart";
-import TotalTimeSpent from "./TotalTimeSpent";
-import TopClassReading from "./TopClassReading";
-import TopSubCategories from "./TopSubCategories";
+import ClassLeaderboard from "./ClassLeaderboard";
 import LineChart from "./LineChart";
-import ActiveTeacher from "./ActiveTeacher";
+import StudentLeaderboard from "./StudentLeaderboard";
 import ArrowDown from "@/assets/arrowdown.svg";
+import ProgressLog from "../Students/Profile/ProgressLog";
 
 const Main = () => {
   return (
     <div>
+      <div className="flex justify-between">
+        <div>
+          <h1 className="text-[25px] font-bold pl-4">Overview</h1>
+        </div>
+        <div className="flex justify-end px-8 gap-2 items-center">
+          <span className="text-[#8530C1]">Last 7 days:</span>
+          <span className="flex gap-2 justify-center items-center">
+            <span> May 21 May 28 2023</span>
+            <img src={ArrowDown} alt="Arrowdown" className="w-4" />
+          </span>
+        </div>
+      </div>
       <div className="flex  h-full gap-5">
-        <div className="ba basis-full  h-full">
-          <div className="flex justify-end px-8 gap-2">
-            <span className="text-[#8530C1]">Last 7 days:</span>
-            <span className="flex gap-2">
-              <span> May 21 May 28 2023</span>{" "}
-              <img src={ArrowDown} alt="Arrowdown" />
-            </span>
-          </div>
+        <div className=" basis-full  h-full">
           <div className="flex gap-8 items-center justify-center py-2">
             <Card title="Teachers" image={TeacherIcon} amount="450" />
             <Card title="Students" image={StudentIcon} amount="241" />
-            <Card title="Quiz" image={QuizIcon} amount="48" />
           </div>
-          <div className="px-4 bg-white rounded-3xl h-[470px] mt-2 ">
-            <LineChart />
-          </div>
-          <ActiveTeacher />
+          <StudentLeaderboard />
         </div>
         <div className="basis- basis-2/4  h-full">
-          <Chart />
-          <TotalTimeSpent />
-          <TopClassReading />
-          <TopSubCategories />
+          <ProgressLog />
+          <ClassLeaderboard />
         </div>
       </div>
     </div>

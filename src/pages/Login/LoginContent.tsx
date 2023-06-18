@@ -7,7 +7,7 @@ import EmailLogo from "@/assets/emaillogo.svg";
 import PasswordIcon from "@/assets/passwordIcon.svg";
 import PasswordEye from "@/assets/passwordeye.svg";
 import Cancel from "@/assets/Cancel.svg";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
@@ -18,19 +18,29 @@ import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import StudentLoginModal from "./StudentLoginModal";
 import TeacherLoginModal, { CongratulationsModal } from "./TeacherLoginModal";
+import { userContext } from "@/Context/StateProvider";
 
 const users = [
   {
     email: "jimatth222@gmail.com",
-    isTeacher: "true",
+    userType: "school",
   },
   {
     email: "kizito222@gmail.com",
-    isStudent: "true",
+    isCreatePassword: true,
+    userType: "teacher",
+  },
+  {
+    email: "mat222@gmail.com",
+    isCreatePassword: false,
+    userType: "teacher",
   },
 ];
 
 const LoginContent = () => {
+  const [{ userType, email }, dispatch] = userContext();
+  console.log("testing one", userType, email);
+  const navigate = useNavigate();
   const schema: ZodType<FormData> = z.object({
     email: z.string().email(),
     password: z
@@ -49,21 +59,28 @@ const LoginContent = () => {
   const [opened2, { open: open2, close: close2 }] = useDisclosure(false);
 
   const [modalStep, setModalStep] = useState(STEP_1);
-  const [studentModal, setStudentModal] = useState(false);
+  // const [studentModal, setStudentModal] = useState(false);
   const [teacherModal, setTeacherModal] = useState(false);
   console.log("--- errors", errors);
 
   const submitData = (data: FormData) => {
     console.log("It is working", data);
+
     const user = users.find((el) => el.email === data.email);
-    if (user?.isTeacher) {
-      setModalStep(STEP_1);
-      setTeacherModal(true);
-      open1();
+    user &&
+      dispatch({
+        type: "LOGIN",
+        payload: { email: user.email, userType: user.userType },
+      });
+    if (user?.userType === "school") {
+      navigate("/newlyregistereduser");
     }
-    if (user?.isStudent) {
-      setStudentModal(true);
-      open2();
+    if (user?.userType === "teacher" && user.isCreatePassword) {
+      navigate("/newlyregistereduser");
+    }
+    if (user?.userType === "teacher" && !user.isCreatePassword) {
+      open1();
+      setTeacherModal(true);
     }
   };
 
@@ -91,7 +108,7 @@ const LoginContent = () => {
         withCloseButton={false}
         centered
       >
-        {studentModal && <StudentLoginModal />}
+        <StudentLoginModal />
       </Modal>
 
       <Link to="/">
@@ -138,7 +155,9 @@ const LoginContent = () => {
             Login
           </Button>
           <p className="flex justify-center mt-8 text-[#8530C1] font-bold underline">
-            <button>Sign In as Student</button>
+            <button type="button" onClick={() => open2()}>
+              Sign In as Student
+            </button>
           </p>
         </form>
         <p className="flex items-center justify-items-center py-8 gap-3  text-gray-400 font-400">

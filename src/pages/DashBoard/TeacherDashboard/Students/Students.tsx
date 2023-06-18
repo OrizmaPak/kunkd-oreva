@@ -55,7 +55,7 @@ const Students = () => {
           styles={() => ({
             control: {
               "&[data-active]": {
-                backgroundColor: "#8530C1",
+                backgroundColor: "#8530C1 !important",
               },
             },
           })}

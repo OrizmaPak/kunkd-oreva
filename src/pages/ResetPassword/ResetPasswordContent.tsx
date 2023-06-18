@@ -1,11 +1,28 @@
-// import EmailLogo from '@/assets/emaillogo.svg'
 import Cancel from "@/assets/Cancel.svg";
-// import InputFormat from '@/pages/Login/InputFormat'
+import { PinInput, Group } from "@mantine/core";
 import Button from "@/components/Button";
-import { HStack, PinInput, PinInputField } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
-const ResetPasswordContent = () => {
+const ResetPasswordContent = ({ onSubmit }: { onSubmit: () => void }) => {
+  const [pinValue, setPinValue] = useState("");
+
+  const handlePinChange = (value: string) => {
+    setPinValue(value);
+    // console.log(value);
+  };
+
+  const submitData = () => {
+    console.log("It is working");
+    console.log(pinValue);
+    if (pinValue.length < 4) {
+      console.log(pinValue.length);
+      return;
+    } else {
+      onSubmit();
+    }
+  };
+
   return (
     <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">
       <Link to="/">
@@ -17,19 +34,13 @@ const ResetPasswordContent = () => {
         <span></span>
         <h1 className="font-bold text-[40px] font-Recoleta">Reset password</h1>
         <p className="text-[15px] text-[#A7A7A7] font-Hanken">
-          Forgot your password? Dont't worry enter your email to reset your
-          current password
+          Enter the reset code that was sent to your email.
         </p>
         <form>
           <div className="mt-8 flex justify-center items-center">
-            <HStack>
-              <PinInput size="lg" otp>
-                <PinInputField />
-                <PinInputField />
-                <PinInputField />
-                <PinInputField />
-              </PinInput>
-            </HStack>
+            <Group position="center">
+              <PinInput value={pinValue} onChange={handlePinChange} />
+            </Group>
           </div>
 
           <p className="mt-10">

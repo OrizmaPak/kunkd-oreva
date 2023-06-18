@@ -8,7 +8,7 @@ import RecentQuiz from "./RecentQuiz";
 import MyTeacher from "./MyTeacher";
 import TopSubCategories from "./TopSubCategories";
 import Assignment from "./Assignments/";
-import TotalContent from "./TotalContent";
+import ProgressLog from "./ProgressLog";
 import LearningHour from "./LearningHour";
 
 type Props = {};
@@ -50,7 +50,7 @@ const index = (props: Props) => {
         </div>
 
         <div className=" basis-2/3   h-[100%] ">
-          <TotalContent />
+          <ProgressLog />
           <LearningHour />
         </div>
       </div>

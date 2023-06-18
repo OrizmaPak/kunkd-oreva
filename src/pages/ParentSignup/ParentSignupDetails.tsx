@@ -53,22 +53,22 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
             Start learning and reading without restrictions.{" "}
           </p>
           <form className="mt-8" onSubmit={handleSubmit(submitData)}>
-            <p className="my-8">
+            <p className="my-8 flex gap-2">
               <InputFormat
                 type="text"
-                placeholder="Your name"
+                placeholder="First Name"
                 reg={register("name")}
                 errorMsg={errors.name?.message}
               />
-            </p>
-            <p className="my-8">
+
               <InputFormat
                 type="text"
-                placeholder="House address"
+                placeholder="Last Name"
                 reg={register("address")}
                 errorMsg={errors.address?.message}
               />
             </p>
+
             <p className="my-8">
               <InputFormat
                 type="text"

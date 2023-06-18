@@ -2,9 +2,29 @@ import EmailLogo from "@/assets/emaillogo.svg";
 import Cancel from "@/assets/Cancel.svg";
 import InputFormat from "@/common/InputFormat";
 import Button from "@/components/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormData } from "@/common/User/FormValidation/Schema";
+import { z, ZodType } from "zod";
 
 const ForgotPasswordContent = () => {
+  const navigate = useNavigate();
+  const schema: ZodType<FormData> = z.object({
+    email: z.string().email(),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const submitData = (data: FormData) => {
+    console.log("It is working", data);
+    navigate("/resetpassword");
+  };
+
   return (
     <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">
       <Link to="/">
@@ -21,16 +41,20 @@ const ForgotPasswordContent = () => {
           Forgot your password? Dont't worry enter your email to reset your
           current password
         </p>
-        <form className="mt-8">
+        <form onSubmit={handleSubmit(submitData)} className="mt-8">
           <InputFormat
-            type="password"
-            placeholder="password"
-            leftIcon={<img src={EmailLogo} alt="pasword icon" />}
+            type="email"
+            placeholder="email"
+            reg={register("email")}
+            errorMsg={errors.email?.message}
+            leftIcon={<img src={EmailLogo} alt="email icon" />}
           />
           <p className="mt-10">
-            <Link to="/resetpassword">
-              <Button size="full">Login</Button>
-            </Link>
+            {/* <Link to="/resetpassword"> */}
+            <Button type="submit" size="full">
+              Get verification code
+            </Button>
+            {/* </Link> */}
           </p>
         </form>
         <p className="mt-2 text-center text-[] text-gray-400 ">

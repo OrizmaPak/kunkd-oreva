@@ -1,17 +1,43 @@
 import { Link } from "react-router-dom";
 import Logo from "@/assets/KundaLogo.svg";
-import BadgeIcon from "@/assets/badge.svg";
-import BatteryIcon from "@/assets/battery.svg";
 import BellIcon from "@/assets/bellicon.svg";
 import UserIcon from "@/assets/usericon.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
 import SearchIcon from "@/assets/searchicon.svg";
 import { Menu } from "@mantine/core";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useDisclosure } from "@mantine/hooks";
+import { Modal } from "@mantine/core";
+import EnterPassCode from "@/pages/DashBoard/SchoolDashBoard/Main/EnterPassCode";
+import { userContext } from "@/Context/StateProvider";
+
 const SchoolHeader = () => {
+  const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
+
+  const [{ email, userType }, dispatch] = userContext();
+  const handleDashboard = () => {
+    console.log("usertype", userType);
+    if (userType === "teacher") {
+      navigate("../teacherdashboard");
+    }
+    if (userType === "school") {
+      open();
+    }
+  };
   return (
     <div className="flex font-[500] py-4 text-[16px] px-[130px] justify-between items-center bg-white z-50 gap-4  h- h-[8vh] ">
+      <Modal
+        opened={opened}
+        onClose={close}
+        centered
+        size="lg"
+        radius={"xl"}
+        closeOnClickOutside={false}
+        withCloseButton={false}
+      >
+        <EnterPassCode onSubmit={close} />
+      </Modal>
       <div className="flex items-center gap-20">
         <Link to="/">
           <div>
@@ -26,10 +52,38 @@ const SchoolHeader = () => {
         </Link>
 
         <div className="flex gap-14">
-          <button>Home</button>
-          <button>Library</button>
-          <button>My List</button>
-          <button>Progress Report</button>
+          <NavLink
+            to="/newlyregistereduser"
+            className={({ isActive }) =>
+              isActive ? " text-[#8530C1]" : "text-black"
+            }
+          >
+            <button>Home</button>
+          </NavLink>
+          <NavLink
+            to="/librarynotpaid"
+            className={({ isActive }) =>
+              isActive ? " text-[#8530C1]" : "text-black"
+            }
+          >
+            <button>Library</button>
+          </NavLink>
+          <NavLink
+            to="/mylist"
+            className={({ isActive }) =>
+              isActive ? " text-[#8530C1]" : "text-black"
+            }
+          >
+            <button>My List</button>
+          </NavLink>
+          <NavLink
+            to="/progressreport"
+            className={({ isActive }) =>
+              isActive ? " text-[#8530C1]" : "text-black"
+            }
+          >
+            <button>Progress Report</button>
+          </NavLink>
         </div>
       </div>
 
@@ -97,10 +151,10 @@ const SchoolHeader = () => {
                 View Profile
               </button>
               <button
-                onClick={() => navigate("../schooldashboard")}
+                onClick={handleDashboard}
                 className="p-2 px-14  hover:cursor-pointer hover:bg-slate-300 hover:text-[#8530C1]"
               >
-                Dashboard
+                Admin
               </button>
               <button className="p-2 px-14  hover:cursor-pointer hover:bg-slate-300 hover:text-[#8530C1]">
                 Setting

@@ -37,7 +37,7 @@ import BedTimeStories from "./pages/Stories/BedTimeStories";
 import Stories1 from "./pages/Stories/Stories1/Stories1";
 import MyList from "./pages/MyList/MyList";
 import ProgressReport from "./pages/ProgressReport/ProgressReport";
-import SchoolDashboardHeader from "./common/User/DashBoard/School/SchoolDashBoardHeader";
+import SchoolDashboardHeader from "@/common/User/DashBoard/School/SchoolDashboardHeader";
 import Main from "@/pages/DashBoard/SchoolDashBoard/Main/Main";
 import SchoolLayout from "./common/User/DashBoard/School/SchoolLayout";
 import Setting from "@/pages/DashBoard/SchoolDashBoard/Settings/Settings";
@@ -78,7 +78,7 @@ function App() {
               <Route path="shop" element={<Shop />}></Route>
             </Route>
 
-            {/* Routes for School After  login */}
+            {/* Routes for School Teaher After  login */}
             <Route element={<Layout2 />}>
               <Route
                 path="newlyregistereduser"
@@ -96,6 +96,21 @@ function App() {
               <Route path="stories1/:id" element={<Stories1 />}></Route>
               <Route path="mylist" element={<MyList />}></Route>
               <Route path="progressreport" element={<ProgressReport />}></Route>
+
+              {/* ///////////////////////////// */}
+              <Route path="schooldashboard/*" element={<SchoolLayout />}>
+                <Route index element={<Main />}></Route>
+                <Route path="teacher" element={<Teachers />}></Route>
+                <Route path="student/*">
+                  <Route index element={<Students />} />
+                  <Route
+                    path="profile/:studentId"
+                    element={<StudentProfile />}
+                  ></Route>
+                </Route>
+                <Route path="classes" element={<Classes />}></Route>
+                <Route path="setting" element={<Setting />}></Route>
+              </Route>
             </Route>
 
             {/* Routes for Parent After Login */}
@@ -113,7 +128,7 @@ function App() {
             {/* Dasboard Routes */}
             <Route element={<Layout3 />}>
               {/* School Dashboard */}
-              <Route path="schooldashboard/*" element={<SchoolLayout />}>
+              {/* <Route path="schooldashboard/*" element={<SchoolLayout />}>
                 <Route index element={<Main />}></Route>
                 <Route path="teacher" element={<Teachers />}></Route>
                 <Route path="student/*">
@@ -125,7 +140,7 @@ function App() {
                 </Route>
                 <Route path="classes" element={<Classes />}></Route>
                 <Route path="setting" element={<Setting />}></Route>
-              </Route>
+              </Route> */}
 
               {/* Teacher Dashboard */}
               <Route path="teacherdashboard/*" element={<TeacherLayout />}>

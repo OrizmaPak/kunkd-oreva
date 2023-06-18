@@ -4,7 +4,7 @@ import {
 } from "../AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import ProgressCard from "./ProgressCard";
 
-const Ongoing = () => {
+const All = () => {
   return (
     <div>
       <div className="p-8 grid grid-cols-3 gap-4 gap-x-14">
@@ -17,4 +17,4 @@ const Ongoing = () => {
   );
 };
 
-export default Ongoing;
+export default All;

@@ -5,10 +5,10 @@ const ConfirmDelete = () => {
         Are you sure you want to delete this profile
       </h1>
       <p className="text-center mb-10 ">
-        If you delete this profile you can't rcover it
+        If you delete this profile you can't recover it
       </p>
 
-      <div className="flex justify-end gap-4 ">
+      <div className="flex justify-end gap-4 mb-5 px-5">
         <button className="p-4 px-10 bg-red-200 text-red-600 rounded-full flex-grow">
           Cancel
         </button>

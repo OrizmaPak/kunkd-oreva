@@ -1,11 +1,43 @@
 import React from "react";
+import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
 
-const ProgressAction = () => {
+const ProgressAction = ({
+  active,
+  onClick,
+}: {
+  active: number;
+  onClick: (val: number) => void;
+}) => {
   return (
-    <div className="rounded-full w-full flex max-w-[800px] mx-auto bg-gray-300 ">
-      <button className="bg-[#8530C1] flex-grow p-4 rounded-full">All</button>
-      <button className="flex-grow">Ongoing</button>
-      <button className="flex-grow">Completed</button>
+    <div className="rounded-full w-[1450px] flex mx-auto     bg-gray-300  my-16">
+      <button
+        onClick={() => {
+          onClick(STEP_1), console.log(active);
+        }}
+        className={`${
+          active === STEP_1 ? "bg-[#8530C1] text-white " : ""
+        } flex-grow p-4 rounded-full`}
+      >
+        All
+      </button>
+      <button
+        onClick={() => {
+          onClick(STEP_2), console.log(active);
+        }}
+        className={`${
+          active === STEP_2 ? "bg-[#8530C1]  text-white " : ""
+        } flex-grow p-4 rounded-full`}
+      >
+        Ongoing
+      </button>
+      <button
+        onClick={() => onClick(STEP_3)}
+        className={`${
+          active === STEP_3 ? "bg-[#8530C1]  text-white " : ""
+        } flex-grow p-4 rounded-full`}
+      >
+        Completed
+      </button>
     </div>
   );
 };

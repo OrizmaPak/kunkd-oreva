@@ -39,7 +39,7 @@ const Profile = ({
           </div>
         </div>
       </div>
-      <div className="flex gap-4 justify-between">
+      {/* <div className="flex gap-4 justify-between">
         <div className="p-4 bg-white rounded-3xl mt-3 border border-[rgba(243, 218, 255, 1)]  w-60 my-5 flex-grow">
           <div className="flex justify-between">
             <h1 className="text-[20px] font-bold">Total Time Spent</h1>
@@ -71,12 +71,12 @@ const Profile = ({
             </p>
           </div>
         </div>
-      </div>
+      </div> */}
 
-      <div className="flex  gap-4 ">
-        <button className="p-4 px-10 bg-red-200 text-red-600 rounded-full flex-grow">
+      <div className="flex  gap-4  justify-center my-10 px-28">
+        {/* <button className="p-4 px-10 bg-red-200 text-red-600 rounded-full flex-grow">
           Cancel
-        </button>
+        </button> */}
         <button
           onClick={handleClick}
           className="p-4 px-10 bg-red-600 text-white rounded-full flex-grow"

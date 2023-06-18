@@ -74,7 +74,7 @@ export const data = [
     id: 5,
     name: "Godwin Oshodi",
     email: "godwin@pamers.school",
-    gender: "Maale",
+    gender: "Male",
     image: Godwin,
   },
   {
@@ -223,7 +223,7 @@ const Teachers = () => {
             styles={() => ({
               control: {
                 "&[data-active]": {
-                  backgroundColor: "#8530C1",
+                  backgroundColor: "#8530C1 !important",
                 },
               },
             })}

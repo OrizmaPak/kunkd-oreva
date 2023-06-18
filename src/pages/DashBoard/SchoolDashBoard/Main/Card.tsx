@@ -10,9 +10,9 @@ const Card = ({
   amount: string;
 }) => {
   return (
-    <div className="flex p-3 gap-6 rounded-3xl bg-white w-[250px] flex-grow">
+    <div className="flex p-3 gap-12 rounded-3xl bg-white w-[250px] flex-grow mx-10">
       <div className="">
-        <img src={image} alt="image " className="w-[60px]" />
+        <img src={image} alt="image " className="w-[100px]" />
       </div>
       <div className="flex flex-col">
         <span>{title}</span>

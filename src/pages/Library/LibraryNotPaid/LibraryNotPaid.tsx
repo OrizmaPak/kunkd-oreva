@@ -12,6 +12,35 @@ import { DataType } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/Newly
 import AdsButton from "@/common/User/AdsButton";
 import Banner from "@/assets/Banner4.svg";
 import InnerWrapper from "@/common/User/InnerWrapper";
+import Yoruba from "@/assets/yoruba.svg";
+import Igbo from "@/assets/Igbo.svg";
+import Twi from "@/assets/twi.svg";
+import Luganda from "@/assets/Luganda.svg";
+import Kiswahili from "@/assets/Kiswahili.svg";
+
+const languageData = [
+  {
+    image: Yoruba,
+    title: "Yoruba",
+  },
+
+  {
+    image: Twi,
+    title: "Twi",
+  },
+  {
+    image: Luganda,
+    title: "Luganda",
+  },
+  {
+    image: Kiswahili,
+    title: "Kiswahili",
+  },
+  {
+    image: Igbo,
+    title: "Igbo",
+  },
+];
 const LibraryNotPaid = () => {
   return (
     <div>
@@ -34,7 +63,7 @@ const LibraryNotPaid = () => {
           </div>
 
           <CardScreen
-            data={data?.map((el) => ({ ...el, title: "" }))}
+            data={data?.slice(1, 7).map((el) => ({ ...el }))}
             card={(props: DataType) => <Card {...props} />}
             header="Stories"
             actiontitle="View View all"
@@ -43,7 +72,7 @@ const LibraryNotPaid = () => {
           <AdsButton />
 
           <CardScreen
-            data={data?.map((el) => ({ ...el, title: "" }))}
+            data={data?.slice(1, 7).map((el) => ({ ...el }))}
             card={(props: DataType) => <Card {...props} />}
             header="Audio books"
             actiontitle="View View all"
@@ -51,7 +80,7 @@ const LibraryNotPaid = () => {
           />
 
           <CardScreen
-            data={data?.map((el) => ({ ...el, title: "" }))}
+            data={languageData}
             card={(props: DataType) => <Card {...props} />}
             header="African Languages"
             actiontitle="View View all"

@@ -3,22 +3,15 @@ import MusicBg from "@/assets/musicbg.svg";
 import VideoBg from "@/assets/videobg.svg";
 import QuizBg from "@/assets/quizbg.svg";
 import DateRadio from "@/pages/DashBoard/SchoolDashBoard/Main/Dwmy";
-const TotalContent = () => {
+const ProgressLog = () => {
   return (
-    <div className="bg-white rounded-3xl px-8 py-4">
+    <div className="bg-white rounded-3xl px-8 py-4 pb-6">
       <div>
-        <div className="flex justify-between">
-          <h1 className="text-[20px] font-bold">Total Content</h1>
-          <div>
-            <DateRadio
-              onChange={(value: string) => {
-                console.log(value);
-              }}
-            />
-          </div>
+        <div className="flex justify-between my-5">
+          <h1 className="text-[20px] font-bold">Progress Log</h1>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-5">
         <Card image={Bookbg} title="Stories" total="38" />
         <Card image={MusicBg} title="Audiobooks" total="42" />
         <Card image={VideoBg} title="Videos" total="71" />
@@ -28,7 +21,7 @@ const TotalContent = () => {
   );
 };
 
-export default TotalContent;
+export default ProgressLog;
 
 const Card = ({
   image,

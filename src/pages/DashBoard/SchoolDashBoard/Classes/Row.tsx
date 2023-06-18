@@ -6,7 +6,7 @@ const Row = ({
   noOfStudents,
   classCode,
   noOfTeacher,
-  name,
+  title,
   gender,
   email,
   onClick,
@@ -15,7 +15,7 @@ const Row = ({
   noOfStudents?: number;
   classCode?: string;
   noOfTeacher?: number;
-  name?: string;
+  title?: string;
   gender?: string;
   email?: string;
   id?: number;
@@ -23,18 +23,15 @@ const Row = ({
 }) => {
   return (
     <div className="  hover:cursor-pointer my-4">
-      <div>
-        <div
-          onClick={onClick}
-          className="grid  grid-cols-[100px_300px_1fr_1fr_1fr_150px] mt-2  px-8 py-2"
-        >
+      <div onClick={onClick}>
+        <div className="grid  grid-cols-[100px_300px_1fr_1fr_1fr_150px] mt-2  px-8 py-2">
           <div className="flex justify-start items-center ">
             <span className=" ">
               <img src={Rectangle} alt="" />
             </span>
           </div>
           <div className="flex items-center justify-start gap-2 ">
-            <span>{name}</span>
+            <span>{title}</span>
           </div>
           <div className="flex justify-start items-center ">{noOfStudents}</div>
           <div className="flex justify-start items-center ">{classCode}</div>
