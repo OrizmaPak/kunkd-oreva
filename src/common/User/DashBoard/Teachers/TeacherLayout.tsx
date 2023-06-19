@@ -11,6 +11,9 @@ import SchoolLogo from "@/assets/schlogo.svg";
 import Arrow from "@/assets/greatericon.svg";
 import { Outlet } from "react-router-dom";
 import { useMatch, useNavigate } from "react-router-dom";
+import { useDisclosure } from "@mantine/hooks";
+import { Modal } from "@mantine/core";
+import LogoutModal from "@/pages/DashBoard/SchoolDashBoard/LogoutModal";
 
 const routeBaseUrl = "/teacherdashboard";
 const links = [
@@ -28,45 +31,61 @@ const links = [
     icon: StudentIcon,
     hasSub: true,
   },
-  {
-    label: "Classes",
-    href: "classes",
-    route: routeBaseUrl + "/classes",
-    icon: ClassesIcon,
-  },
-  {
-    label: "Setting",
-    href: "setting",
-    route: routeBaseUrl + "/setting",
-    icon: SettingIcon,
-  },
+  // {
+  //   label: "Classes",
+  //   href: "classes",
+  //   route: routeBaseUrl + "/classes",
+  //   icon: ClassesIcon,
+  // },
+  // {
+  //   label: "Setting",
+  //   href: "setting",
+  //   route: routeBaseUrl + "/setting",
+  //   icon: SettingIcon,
+  // },
 ];
 const TeacherLayout = () => {
+  const [opened, { open, close }] = useDisclosure(false);
   return (
-    <div className="w-full  bg-[#EBEFF3]  px-[100px] py-[15px] h-[100%]  ">
-      <div className="flex h-[calc(100vh-50px-8vh)]  gap-8">
-        <div className="basis-1/5 bg-white h-full rounded-[40px] px-7 flex  flex-col pb-4 ">
-          <div className="flex-grow-1 flex-1">
-            {links.slice(0, 4).map((link) => (
-              <NavButton
-                key={link.label}
-                title={link.label}
-                href={link.href}
-                route={link.route}
-                icon={<img src={link.icon} alt="icon" />}
-              />
-            ))}
-            <hr className="my-10" />
+    <>
+      <Modal
+        radius={"xl"}
+        size="lg"
+        opened={opened}
+        onClose={close}
+        closeButtonProps={{ size: "lg" }}
+        centered
+      >
+        <LogoutModal onCloseModal={() => close()} />
+      </Modal>
 
-            <DasboardButton
-              title="Logout"
-              icon={<img src={LogoutIcon} alt="icon" />}
-            />
+      <div className="w-full  bg-[#EBEFF3]  px-[100px] py-[15px] h-[100%]  ">
+        <div className="flex h-[calc(100vh-50px-8vh)]  gap-8">
+          <div className="basis-1/5 bg-white h-full rounded-[40px] px-7 flex  flex-col pb-4 ">
+            <div className="flex-grow-1 flex-1">
+              {links.slice(0, 4).map((link) => (
+                <NavButton
+                  key={link.label}
+                  title={link.label}
+                  href={link.href}
+                  route={link.route}
+                  icon={<img src={link.icon} alt="icon" />}
+                />
+              ))}
+              <hr className="my-10" />
+            </div>
+            <div>
+              <DasboardButton
+                onClick={() => open()}
+                title="Logout"
+                icon={<img src={LogoutIcon} alt="icon" />}
+              />
+            </div>
           </div>
+          <div className="basis-full  h-full">{<Outlet />}</div>
         </div>
-        <div className="basis-full  h-full">{<Outlet />}</div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -89,14 +108,14 @@ const DasboardButton = ({
         console.log("testing");
         onClick();
       }}
-      className={`px-4 py-3  rounded-3xl flex items-center gap-8 w-full ${
+      className={`px-4 py-4  rounded-3xl flex items-center gap-8 w-full ${
         active
           ? "bg-[#8530c1] text-white"
           : "hover:bg-[#8530C1] hover:text-white"
       }  my-4`}
     >
       <span>{icon}</span>
-      <span>{title}</span>
+      <span className={`${title === "Logout" && "text-red-600"}`}>{title}</span>
     </button>
   );
 };

@@ -11,6 +11,9 @@ import SchoolLogo from "@/assets/schlogo.svg";
 import Arrow from "@/assets/greatericon.svg";
 import { Outlet } from "react-router-dom";
 import { useMatch, useNavigate } from "react-router-dom";
+import { useDisclosure } from "@mantine/hooks";
+import { Modal } from "@mantine/core";
+import LogoutModal from "@/pages/DashBoard/SchoolDashBoard/LogoutModal";
 
 const routeBaseUrl = "/schooldashboard";
 const links = [
@@ -41,55 +44,68 @@ const links = [
     route: routeBaseUrl + "/classes",
     icon: ClassesIcon,
   },
-  {
-    label: "Setting",
-    href: "setting",
-    route: routeBaseUrl + "/setting",
-    icon: SettingIcon,
-  },
+  // {
+  //   label: "Setting",
+  //   href: "setting",
+  //   route: routeBaseUrl + "/setting",
+  //   icon: SettingIcon,
+  // },
 ];
 const SchoolLayout = () => {
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const navigate = useNavigate();
   return (
-    <div className="w-full  bg-[#EBEFF3]  px-[100px] py-[15px] h-[100%]  ">
-      <div className="flex h-[calc(100vh-50px-8vh)]  gap-8">
-        <div className="basis-1/5 bg-white h-full rounded-[40px] px-7 flex  flex-col pb-4 ">
-          <div className="flex-grow-1 flex-1">
-            <Header
-              icon1={<img src={SchoolLogo} alt="icon" />}
-              title="Pampers Schools"
-              icon2={<img src={Arrow} alt="icon" />}
-            />
-            {links.slice(0, 4).map((link) => (
-              <NavButton
-                key={link.label}
-                title={link.label}
-                href={link.href}
-                route={link.route}
-                icon={<img src={link.icon} alt="icon" />}
+    <>
+      <Modal
+        radius={"xl"}
+        size="lg"
+        opened={opened}
+        onClose={close}
+        closeButtonProps={{ size: "lg" }}
+        centered
+      >
+        <LogoutModal onCloseModal={() => close()} />
+      </Modal>
+
+      <div className="w-full  bg-[#EBEFF3]  px-[100px] py-[15px] h-[100%]  ">
+        <div className="flex h-[calc(100vh-50px-8vh)]  gap-8">
+          <div className="basis-1/5 bg-white h-full rounded-[40px] px-7 flex  flex-col pb-4 ">
+            <div className="flex-grow-1 flex-1">
+              <Header
+                icon1={<img src={SchoolLogo} alt="icon" />}
+                title="Pampers Schools"
+                icon2={<img src={Arrow} alt="icon" />}
               />
-            ))}
-            <hr className="my-10" />
+              {links.slice(0, 4).map((link) => (
+                <NavButton
+                  key={link.label}
+                  title={link.label}
+                  href={link.href}
+                  route={link.route}
+                  icon={<img src={link.icon} alt="icon" />}
+                />
+              ))}
+              {/* <hr className="my-10" />
             <NavButton
               title={links[links.length - 1].label}
               href={links[links.length - 1].href}
               route={links[links.length - 1].route}
               icon={<img src={links[links.length - 1].icon} alt="icon" />}
-            />
-
-            <DasboardButton
-              title="Logout"
-              icon={<img src={LogoutIcon} alt="icon" />}
-            />
+            /> */}
+            </div>
+            <div>
+              <DasboardButton
+                onClick={() => open()}
+                title="Logout"
+                icon={<img src={LogoutIcon} alt="icon" />}
+              />
+            </div>
           </div>
-          <div>
-            <button className="p-4 rounded-full border border-[#8530C1] w-full">
-              Upgrage Plan
-            </button>
-          </div>
+          <div className="basis-full  h-full">{<Outlet />}</div>
         </div>
-        <div className="basis-full  h-full">{<Outlet />}</div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -116,7 +132,7 @@ const DasboardButton = ({
       }  my-4`}
     >
       <span>{icon}</span>
-      <span>{title}</span>
+      <span className={`${title === "Logout" && "text-red-600"}`}>{title}</span>
     </button>
   );
 };

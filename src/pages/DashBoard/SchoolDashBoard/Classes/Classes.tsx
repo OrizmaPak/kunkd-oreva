@@ -20,6 +20,7 @@ import { Modal } from "@mantine/core";
 import Grade from "./Grade";
 import { useState } from "react";
 import EditClassTeachers from "./EditClassTeachers";
+import AddNewClass from "./AddNewClass";
 
 export const data = [
   {
@@ -144,7 +145,13 @@ export const data = [
 
 const Classes = () => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [modalStep, setModalStep] = useState(STEP_1);
+  const [editOpened, { open: editOpen, close: editClose }] =
+    useDisclosure(false);
+
+  const [newClass, { open: newClassOpen, close: newClassClose }] =
+    useDisclosure(false);
+
+  // const [modalStep, setModalStep] = useState(STEP_1);
   const handleClick = () => {
     close();
   };
@@ -163,17 +170,35 @@ const Classes = () => {
         closeButtonProps={{ size: "lg" }}
         centered
       >
-        {modalStep === STEP_1 ? (
-          currentClickedData ? (
-            <Grade
-              {...currentClickedData}
-              onEdit={() => setModalStep(STEP_2)}
-              handleClick={handleClick}
-            />
-          ) : null
-        ) : (
-          <EditClassTeachers />
+        {currentClickedData && (
+          <Grade
+            {...currentClickedData}
+            onEdit={() => (editOpen(), close())}
+            handleClick={handleClick}
+          />
         )}
+      </Modal>
+
+      <Modal
+        radius={"xl"}
+        size="lg"
+        opened={newClass}
+        onClose={newClassClose}
+        closeButtonProps={{ size: "lg" }}
+        centered
+      >
+        <AddNewClass />
+      </Modal>
+
+      <Modal
+        radius={"xl"}
+        size="md"
+        opened={editOpened}
+        onClose={editClose}
+        closeButtonProps={{ size: "lg" }}
+        centered
+      >
+        {currentClickedData && <EditClassTeachers {...currentClickedData} />}
       </Modal>
 
       <div className="h-full  rounded-3xl p-4 bg-white">
@@ -187,7 +212,7 @@ const Classes = () => {
             <img src={ArrowDown} alt="Arrowdown" />
           </div>
           <div className="flex justify-center">
-            <Button size="sm">
+            <Button onClick={() => newClassOpen()} size="md">
               <span className="flex  justify-end items-end gap-2">
                 <img src={ClassesIcon} alt="" />
                 <span>Create class</span>

@@ -13,12 +13,12 @@ const NewTeacher = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 1 }}
       >
         <Button onClick={toggle} size="sm" varient="filled">
           <span className="flex  justify-between items-center gap-2">
             <img src={AddTeacherIcon} alt="" />
-            <span>Add new teacher</span>
+            <span className="py-1">Add new teacher</span>
           </span>
         </Button>
         {opened ? <AddTeacherModal opened={opened} toggle={toggle} /> : null}

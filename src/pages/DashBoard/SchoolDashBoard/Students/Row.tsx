@@ -22,11 +22,11 @@ const Row = ({
   onClick?: () => void;
 }) => {
   return (
-    <div className="  hover:cursor-pointer">
+    <div className="  hover:cursor-pointer my-3">
       <div>
         <div
           onClick={onClick}
-          className="grid   grid-cols-[100px_1fr_250px_250px_250px_150px] mt-2  px-8"
+          className="grid   grid-cols-[100px_1fr_250px_250px_150px] mt-2  px-8"
         >
           <div className="flex justify-start items-center ">
             <span className=" ">
@@ -40,7 +40,6 @@ const Row = ({
             <span>{name}</span>
           </div>
           <div className="flex justify-start items-center ">{classs}</div>
-          <div className="flex justify-start items-center ">{classCode}</div>
           <div className="flex justify-start items-center ">{gender}</div>
           <div className="flex justify-end  gap-4  items-center">
             <span>

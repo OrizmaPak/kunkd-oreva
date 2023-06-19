@@ -1,7 +1,52 @@
-const EditClassTeachers = () => {
+import DeleteIcon from "@/assets/deleteicon.svg";
+import ArrowDown from "@/assets/arrowdown.svg";
+import Button from "@/components/Button";
+
+const EditClassTeachers = ({
+  image1,
+  image2,
+  name1,
+  name2,
+}: {
+  image1?: string;
+  image2?: string;
+  name1?: string;
+  name2?: string;
+}) => {
   return (
-    <div>
-      <h1>Edit class teacher</h1>
+    <div className="px-10">
+      <h1 className="text-center font-bold font-Recoleta text-[25px]">
+        Edit class teacher
+      </h1>
+      <div>
+        <div>
+          <p className="flex  justify-between my-8 ">
+            <p className="flex  justify-center items-center">
+              <img src={DeleteIcon} alt="deleteIcon" />
+              <p className="flex justify-center items-center ml-5 gap-2">
+                <img src={image1} alt="image1" />
+                <span>{name1}</span>
+              </p>
+            </p>
+            <img src={ArrowDown} alt="arrowdown" />
+          </p>
+          {name2 && (
+            <p className="flex  justify-between  my-8">
+              <p className="flex  justify-center items-center">
+                <img src={DeleteIcon} alt="deleteIcon" />
+                <p className="flex justify-center items-center ml-5 gap-2">
+                  <img src={image2} alt="image1" />
+                  <span>{name2}</span>
+                </p>
+              </p>
+              <img src={ArrowDown} alt="arrowdown" />
+            </p>
+          )}
+        </div>
+      </div>
+      <p className="px-10 my-10">
+        <Button>Save</Button>
+      </p>
     </div>
   );
 };

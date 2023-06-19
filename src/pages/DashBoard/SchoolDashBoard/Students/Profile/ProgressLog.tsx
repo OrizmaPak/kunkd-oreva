@@ -11,7 +11,7 @@ const ProgressLog = () => {
           <h1 className="text-[20px] font-bold">Progress Log</h1>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-2 gap-3">
         <Card image={Bookbg} title="Stories" total="38" />
         <Card image={MusicBg} title="Audiobooks" total="42" />
         <Card image={VideoBg} title="Videos" total="71" />

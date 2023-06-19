@@ -2,10 +2,11 @@ import Teacher1 from "@/assets/usericon.svg";
 import Teacher2 from "@/assets/Male01.svg";
 import Teacher3 from "@/assets/Female03.svg";
 import Teacher4 from "@/assets/male03.svg";
-import { data } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";
+// import { dashboardData } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";
 import { Pagination } from "@mantine/core";
+import { DashBoardDataType } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";
 
-const ActiveTeacher = () => {
+const StudentLeaderboard = ({ data }: { data: DashBoardDataType[] }) => {
   return (
     <div className="p-4 bg-white rounded-3xl mt-4 px-8">
       <div className="flex justify-between">
@@ -23,7 +24,7 @@ const ActiveTeacher = () => {
 
       <div>
         {data &&
-          data.slice(1).map((data, index) => {
+          data.map((data, index) => {
             return <Row key={index} {...data} />;
           })}
       </div>
@@ -49,7 +50,7 @@ const ActiveTeacher = () => {
   );
 };
 
-export default ActiveTeacher;
+export default StudentLeaderboard;
 
 const Row = ({
   image,
@@ -64,7 +65,7 @@ const Row = ({
 }) => {
   return (
     <div>
-      <div className="grid grid-cols-3 justify-between items-center my-2">
+      <div className="grid grid-cols-3 justify-between items-center my-4">
         <span className="flex gap-2 items-center justify-start">
           <img src={image} alt="image" className="w-[30px]" />
           <span>{name}</span>

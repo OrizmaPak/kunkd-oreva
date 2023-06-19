@@ -21,7 +21,18 @@ import Row from "./Row";
 import { STEP_1, STEP_2 } from "@/utils/constants";
 import ConfirmDelete from "./ConfirmDelete";
 
-export const data = [
+export type DashBoardDataType = {
+  noOfTeacher: number;
+  noOfStudents: number;
+  classCode: string;
+  classs: string;
+  id: number;
+  name: string;
+  email: string;
+  gender: string;
+  image: string;
+};
+export const dashboardData = [
   {
     noOfTeacher: 15,
     noOfStudents: 23,
@@ -43,6 +54,28 @@ export const data = [
     email: "jessica@pamers.school",
     gender: "Female",
     image: Jessica,
+  },
+  {
+    noOfTeacher: 5,
+    noOfStudents: 43,
+    classCode: "C",
+    classs: "Purple",
+    id: 2,
+    name: "Jessica Deji",
+    email: "jessica@pamers.school",
+    gender: "Female",
+    image: Jessica,
+  },
+  {
+    noOfTeacher: 6,
+    noOfStudents: 23,
+    classCode: "C",
+    classs: "Black",
+    id: 3,
+    name: "Grease Kemma",
+    email: "grease@pamers.school",
+    gender: "Male",
+    image: Grease,
   },
   {
     noOfTeacher: 6,
@@ -132,7 +165,9 @@ const Teachers = () => {
 
   const [currentClicked, setCucrrentClicked] = useState(0);
   console.log(currentClicked);
-  const currentClickedData = data.find((el) => el.id == currentClicked);
+  const currentClickedData = dashboardData.find(
+    (el) => el.id == currentClicked
+  );
   return (
     <div>
       <Modal
@@ -162,19 +197,12 @@ const Teachers = () => {
           <div>
             <h1 className="text-[25px] font-bold">Teacher (35)</h1>
           </div>
-          <div className="flex gap-2">
-            <span>Sort by</span>
+          <div className="flex gap-2 justify-center font-bold">
+            <span className="text-[#8530C1] ">Sort by</span>
             <span>Newest</span>
             <img src={ArrowDown} alt="Arrowdown" />
           </div>
-          <div className="flex gap-3">
-            <Button size="sm" varient="outlined">
-              <span className="flex  justify-between items-center gap-2">
-                <img src={PlutIcon} alt="" />
-                <span className="text-[#8530C1]">Create class</span>
-              </span>
-            </Button>
-
+          <div className="flex gap-3 justify-end">
             <NewTeacher />
           </div>
         </div>
@@ -196,8 +224,8 @@ const Teachers = () => {
           <hr className="my-4 mx-8" />
         </div>
         <div>
-          {data &&
-            data.map((data, index) => {
+          {dashboardData &&
+            dashboardData.slice(1, 10).map((data, index) => {
               return (
                 <Row
                   onClick={() => {

@@ -7,6 +7,7 @@ import LineChart from "./LineChart";
 import StudentLeaderboard from "./StudentLeaderboard";
 import ArrowDown from "@/assets/arrowdown.svg";
 import ProgressLog from "../Students/Profile/ProgressLog";
+import { DashBoardDataType, dashboardData } from "../Teachers/Teachers";
 
 const Main = () => {
   return (
@@ -29,7 +30,9 @@ const Main = () => {
             <Card title="Teachers" image={TeacherIcon} amount="450" />
             <Card title="Students" image={StudentIcon} amount="241" />
           </div>
-          <StudentLeaderboard />
+          <StudentLeaderboard
+            data={dashboardData.slice(1, 7).map((el) => el)}
+          />
         </div>
         <div className="basis- basis-2/4  h-full">
           <ProgressLog />

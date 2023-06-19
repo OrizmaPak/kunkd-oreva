@@ -1,5 +1,3 @@
-import DateRadio from "@/pages/DashBoard/SchoolDashBoard/Main/Dwmy";
-
 import PositiveArrow from "@/assets/positiveArrow.svg";
 
 const TotalTimeSpent = () => {
@@ -7,17 +5,10 @@ const TotalTimeSpent = () => {
     <div className="p-4 bg-white rounded-3xl mt-3">
       <div className="flex justify-between">
         <h1 className="text-[20px] font-bold">Total Time Spent</h1>
-        <div>
-          <DateRadio
-            onChange={(value: string) => {
-              console.log(value);
-            }}
-          />
-        </div>
       </div>
-      <div>
+      <div className="mt-4">
         <h1 className="text-[40px] font-bold">1,970</h1>
-        <p className="flex justify-between ">
+        <p className="flex justify-between mt-2 ">
           <span>Minutes</span>
           <span className="flex">
             <img src={PositiveArrow} alt="Positive arrow" />

@@ -2,7 +2,7 @@ import ArrowDown from "@/assets/arrowdown.svg";
 import Rectangle from "@/assets/Rectangle.svg";
 import Button from "@/components/Button";
 import NewStudent from "./NewStudent";
-import { data } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";
+import { dashboardData } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";
 import Row from "./Row";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "@mantine/core";
@@ -12,21 +12,18 @@ const Students = () => {
   return (
     <div>
       <div className="h-full  rounded-3xl p-4 bg-white">
-        <div className="grid grid-cols-3 justify-center items-center w-full px-8 ">
+        <div className="grid grid-cols-2 justify-center items-center w-full px-8 ">
           <div>
             <h1 className="text-[25px] font-bold">Students (35)</h1>
           </div>
-          <div className="flex gap-2">
-            <span>Sort by</span>
+          <div className="flex gap-2 justify-end ">
+            <span className="text-[#8530C1]">Sort by</span>
             <span>Newest</span>
             <img src={ArrowDown} alt="Arrowdown" />
           </div>
-          <div className="flex justify-end items-end">
-            <NewStudent />
-          </div>
         </div>
 
-        <div className="grid  grid-cols-[100px_1fr_250px_250px_250px_150px] mt-5  px-8">
+        <div className="grid  grid-cols-[100px_1fr_250px_250px_150px] mt-5  px-8">
           <div className="flex justify-start items-center ">
             <span className=" ">
               <img src={Rectangle} alt="" />
@@ -34,7 +31,6 @@ const Students = () => {
           </div>
           <div className=" ">Name</div>
           <div className="">Class</div>
-          <div className="">Class Code</div>
           <div className="">Gender</div>
           <div className="flex justify-end   items-center">
             <span>Actions</span>{" "}
@@ -43,8 +39,8 @@ const Students = () => {
 
         <hr className="my-4 mx-8" />
         <div>
-          {data &&
-            data.map((data, index) => {
+          {dashboardData &&
+            dashboardData.slice(1, 10).map((data, index) => {
               return (
                 <Row
                   key={index}

@@ -18,7 +18,7 @@ const Row = ({
   onClick: () => void;
 }) => {
   return (
-    <div className="  hover:cursor-pointer">
+    <div className="  hover:cursor-pointer my-3">
       <div>
         <div
           onClick={onClick}

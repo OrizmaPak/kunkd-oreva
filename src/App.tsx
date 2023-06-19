@@ -147,6 +147,10 @@ function App() {
                 <Route index element={<TMain />}></Route>
                 <Route path="student/*">
                   <Route index element={<TStudents />} />
+                  <Route
+                    path="profile/:studentId"
+                    element={<StudentProfile />}
+                  ></Route>
                 </Route>
                 <Route path="classes" element={<TClasses />}></Route>
                 <Route path="setting" element={<TSettings />}></Route>

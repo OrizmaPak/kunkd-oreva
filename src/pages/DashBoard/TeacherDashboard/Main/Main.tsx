@@ -6,6 +6,9 @@ import Card from "./Card";
 import TotalTimeSpent from "./TotalTimeSpent";
 import MyStudents from "./MyStudents";
 import TopSubCategories from "./TopSubCategories";
+import StudentLeaderboard from "../../SchoolDashBoard/Main/StudentLeaderboard";
+import { dashboardData } from "../../SchoolDashBoard/Teachers/Teachers";
+import ProgressLog from "../../SchoolDashBoard/Students/Profile/ProgressLog";
 
 const Main = () => {
   return (
@@ -19,16 +22,22 @@ const Main = () => {
           </span>
         </div>
         <div>
-          <Barchart />
-          <TopContents />
+          {/* <Barchart /> */}
+          {/* <TopContents /> */}
+          <StudentLeaderboard
+            data={dashboardData.slice(1, 9).map((el) => el)}
+          />
         </div>
       </div>
 
       <div className=" basis-2/3 h-full ">
         <Card image={StudentIcon} title="Students" amount="37" />
+        <div className="mt-3">
+          <ProgressLog />
+        </div>
         <TotalTimeSpent />
-        <MyStudents />
-        <TopSubCategories />
+        {/* <MyStudents /> */}
+        {/* <TopSubCategories /> */}
       </div>
     </div>
   );

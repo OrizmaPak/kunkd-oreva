@@ -13,7 +13,6 @@ const Profile = ({
 }) => {
   return (
     <div className="p-3">
-      <p className="font-bold font-Recoleta text-[25px] mb-5">Profile</p>
       <div className="flex gap-4">
         <div>
           <img src={image} alt="image" className="w-[250px]" />
