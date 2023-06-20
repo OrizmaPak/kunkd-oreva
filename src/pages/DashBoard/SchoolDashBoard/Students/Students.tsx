@@ -6,11 +6,26 @@ import { dashboardData } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teache
 import Row from "./Row";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "@mantine/core";
+import DeleteProfile from "../Teachers/DeleteProfile";
+import { useDisclosure } from "@mantine/hooks";
+import { Modal } from "@mantine/core";
 
 const Students = () => {
+  const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
   return (
     <div>
+      <Modal
+        radius={"xl"}
+        size="lg"
+        opened={opened}
+        onClose={close}
+        closeButtonProps={{ size: "lg" }}
+        centered
+      >
+        <DeleteProfile onCancel={close} />
+      </Modal>
+
       <div className="h-full  rounded-3xl p-4 bg-white">
         <div className="grid grid-cols-2 justify-center items-center w-full px-8 ">
           <div>
@@ -23,7 +38,7 @@ const Students = () => {
           </div>
         </div>
 
-        <div className="grid  grid-cols-[100px_1fr_250px_250px_150px] mt-5  px-8">
+        <div className="grid  grid-cols-[100px_1fr_250px_250px_150px] mt-5 text-gray-400  px-8">
           <div className="flex justify-start items-center ">
             <span className=" ">
               <img src={Rectangle} alt="" />
@@ -46,6 +61,7 @@ const Students = () => {
                   key={index}
                   onClick={() => navigate("profile/" + data.id)}
                   {...data}
+                  onDeleteProfile={open}
                 />
               );
             })}

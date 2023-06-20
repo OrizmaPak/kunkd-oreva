@@ -18,8 +18,9 @@ import { useState } from "react";
 import NewTeacher from "./NewTeacher";
 import Profile from "./Profile";
 import Row from "./Row";
-import { STEP_1, STEP_2 } from "@/utils/constants";
-import ConfirmDelete from "./ConfirmDelete";
+import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
+import DeleteProfile from "./DeleteProfile";
+import EditAssignedClass from "./EditAssignedClass";
 
 export type DashBoardDataType = {
   noOfTeacher: number;
@@ -178,18 +179,18 @@ const Teachers = () => {
         closeButtonProps={{ size: "lg" }}
         centered
       >
-        {modalStep === STEP_1 ? (
-          currentClickedData ? (
-            <Profile
-              name={currentClickedData?.name}
-              image={currentClickedData.image}
-              email={currentClickedData.email}
-              handleClick={handleClick}
-            />
-          ) : null
-        ) : (
-          <ConfirmDelete />
+        {modalStep === STEP_1 && currentClickedData && (
+          <Profile
+            name={currentClickedData?.name}
+            image={currentClickedData.image}
+            email={currentClickedData.email}
+            handleClick={handleClick}
+            onEdit={() => setModalStep(STEP_3)}
+          />
         )}
+        {modalStep === STEP_2 && <DeleteProfile onCancel={close} />}
+
+        {modalStep === STEP_3 && <EditAssignedClass onClose={close} />}
       </Modal>
 
       <div className="h-full  rounded-3xl p-4 bg-white">
@@ -208,15 +209,15 @@ const Teachers = () => {
         </div>
 
         <div>
-          <div className="grid  grid-cols-[100px_1fr_1fr_150px_150px] mt-5  px-8">
-            <div className="flex justify-start items-center ">
+          <div className="grid  grid-cols-[100px_1fr_1fr_150px_150px] mt-5  text-gray-400 px-8">
+            <div className="flex justify-start items-center">
               <span className=" ">
                 <img src={Rectangle} alt="" />
               </span>
             </div>
-            <div className=" ">Name</div>
-            <div className="">Email</div>
-            <div className="">Gender</div>
+            <div>Name</div>
+            <div>Email</div>
+            <div>Gender</div>
             <div className="flex justify-end   items-center">
               <span>Actions</span>{" "}
             </div>

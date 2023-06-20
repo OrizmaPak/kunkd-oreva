@@ -17,11 +17,18 @@ const data = [
     range: 50,
     date: "3rd June",
   },
+  {
+    title: "Chisom's Book Quis",
+    image: Chisom,
+    duration: "30 mins",
+    range: 50,
+    date: "3rd June",
+  },
 ];
 
 const index = () => {
   return (
-    <div className="mt-5 bg-white rounded-3xl mx-4">
+    <div className="mt-2 bg-white rounded-3xl ">
       <Header />
       {data.map((data, index) => {
         return <Row key={index} {...data} />;

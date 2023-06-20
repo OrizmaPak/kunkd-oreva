@@ -222,7 +222,7 @@ const Classes = () => {
         </div>
 
         <div>
-          <div className="grid  grid-cols-[100px_300px_1fr_1fr_1fr_150px] mt-5  px-8">
+          <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px] mt-5  px-8">
             <div className="flex justify-start items-center ">
               <span className=" ">
                 <img src={Rectangle} alt="" />
@@ -230,7 +230,6 @@ const Classes = () => {
             </div>
             <div className=" ">Name</div>
             <div className="">No of Students</div>
-            <div className="">Class Code</div>
             <div className="">No of Teachers</div>
             <div className="flex justify-end   items-center">
               <span>Actions</span>

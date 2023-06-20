@@ -14,6 +14,7 @@ import { useMatch, useNavigate } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
 import LogoutModal from "@/pages/DashBoard/SchoolDashBoard/LogoutModal";
+import SchoolIcon from "@/assets/schoolIcon.svg";
 
 const routeBaseUrl = "/schooldashboard";
 const links = [
@@ -68,12 +69,12 @@ const SchoolLayout = () => {
         <LogoutModal onCloseModal={() => close()} />
       </Modal>
 
-      <div className="w-full  bg-[#EBEFF3]  px-[100px] py-[15px] h-[100%]  ">
+      <div className="w-full  bg-[#FFF7FD]  px-[100px] py-[15px] h-[100%]  ">
         <div className="flex h-[calc(100vh-50px-8vh)]  gap-8">
           <div className="basis-1/5 bg-white h-full rounded-[40px] px-7 flex  flex-col pb-4 ">
             <div className="flex-grow-1 flex-1">
               <Header
-                icon1={<img src={SchoolLogo} alt="icon" />}
+                icon1={<img src={SchoolIcon} alt="icon" className="w-[40px]" />}
                 title="Pampers Schools"
                 icon2={<img src={Arrow} alt="icon" />}
               />
@@ -125,7 +126,7 @@ const DasboardButton = ({
   return (
     <button
       onClick={onClick}
-      className={`px-4 py-3  rounded-3xl flex items-center gap-8 w-full ${
+      className={`px-4 py-3  rounded-3xl flex items-center gap-8 w-full my-8 ${
         active
           ? "bg-[#8530c1] text-white"
           : "hover:bg-[#8530C1] hover:text-white"
@@ -150,13 +151,8 @@ const Header = ({
     <div>
       <button className="px-4 mb-8 py-3  bg-[#EBEFF3]  rounded-3xl flex items-center justify-between gap-2 w-full   my-4">
         <span>{icon1}</span>
-        <span className="flex flex-col">
-          <span className="text-black">
-            <small> {title}</small>
-          </span>
-          <span className="text-gray-400">School</span>
-        </span>
-        <span>{icon2}</span>
+
+        <span className="text-[20px] font-bold">School Logo</span>
       </button>
     </div>
   );

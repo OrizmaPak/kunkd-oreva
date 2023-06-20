@@ -30,18 +30,18 @@ const index = (props: Props) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
     >
-      <div className="h-full  rounded-3xl p-4  flex flex-col">
-        <div className="mb-5">
+      <div className="h-full  rounded-3xl py-4   flex flex-col">
+        <div className="mb-2">
           <Header />
         </div>
 
         <div className="flex flex-grow gap-8">
           <div className=" basis-full  h-[100%] ">
-            <div className="mt-4 px-4">
+            <div className=" ">
               <ProfileCard {...currentData} />
             </div>
 
-            <div className="flex justify-center my-4 gap-10 px-4 ">
+            <div className="flex justify-center my-3 gap-4  ">
               <div className="flex-grow ">
                 <TotalTimeSpent />
               </div>
@@ -49,7 +49,7 @@ const index = (props: Props) => {
                 <RecentQuiz />
               </div>
             </div>
-            <div className="flex gap-10 justify-center px-5">
+            <div className="flex gap-4 my-3 justify-center ">
               <MyTeacher />
               <TopSubCategories />
             </div>

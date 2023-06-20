@@ -35,6 +35,11 @@ const users = [
     isCreatePassword: false,
     userType: "teacher",
   },
+  {
+    email: "tola222@gmail.com",
+    // isCreatePassword: false,
+    userType: "parent",
+  },
 ];
 
 const LoginContent = () => {
@@ -81,6 +86,9 @@ const LoginContent = () => {
     if (user?.userType === "teacher" && !user.isCreatePassword) {
       open1();
       setTeacherModal(true);
+    }
+    if (user?.userType === "parent") {
+      navigate("/returningparenthomepage");
     }
   };
 

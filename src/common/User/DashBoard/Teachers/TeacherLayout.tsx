@@ -14,6 +14,7 @@ import { useMatch, useNavigate } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
 import LogoutModal from "@/pages/DashBoard/SchoolDashBoard/LogoutModal";
+import Teacher01 from "@/assets/teacher01.svg";
 
 const routeBaseUrl = "/teacherdashboard";
 const links = [
@@ -59,7 +60,7 @@ const TeacherLayout = () => {
         <LogoutModal onCloseModal={() => close()} />
       </Modal>
 
-      <div className="w-full  bg-[#EBEFF3]  px-[100px] py-[15px] h-[100%]  ">
+      <div className="w-full  bg-[#FFF7FD]  px-[100px] py-[15px] h-[100%]  ">
         <div className="flex h-[calc(100vh-50px-8vh)]  gap-8">
           <div className="basis-1/5 bg-white h-full rounded-[40px] px-7 flex  flex-col pb-4 ">
             <div className="flex-grow-1 flex-1">
@@ -73,6 +74,12 @@ const TeacherLayout = () => {
                 />
               ))}
               <hr className="my-10" />
+
+              <TeacherProfile
+                name="Mitchel Mccarty"
+                email="mitchelmccarty@mail.com"
+                image={Teacher01}
+              />
             </div>
             <div>
               <DasboardButton
@@ -108,7 +115,7 @@ const DasboardButton = ({
         console.log("testing");
         onClick();
       }}
-      className={`px-4 py-4  rounded-3xl flex items-center gap-8 w-full ${
+      className={`px-4 py-4  rounded-3xl flex items-center gap-8 w-full my-8 ${
         active
           ? "bg-[#8530c1] text-white"
           : "hover:bg-[#8530C1] hover:text-white"
@@ -141,5 +148,27 @@ const NavButton = (props: {
       {...{ title, icon }}
       active={match ? true : false}
     />
+  );
+};
+
+const TeacherProfile = ({
+  image,
+  name,
+  email,
+}: {
+  image: string;
+  name: string;
+  email: string;
+}) => {
+  return (
+    <div className="mt-28">
+      <div className="flex justify-center items-center">
+        <img src={image} alt="image" />
+      </div>
+      <div className="text-center">
+        <p className="font-bold text-[20px]">{name}</p>
+        <p>{email}</p>
+      </div>
+    </div>
   );
 };

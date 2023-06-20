@@ -8,6 +8,10 @@ import ArrowDown from "@/assets/arrowdown.svg";
 import SearchIcon from "@/assets/searchicon.svg";
 import { Menu } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import Avatar1 from "@/assets/Avatar1.svg";
+import Avatar2 from "@/assets/Avatar2.svg";
+import Avatar3 from "@/assets/Avatar3.svg";
+import UserIcon2 from "@/assets/userIcon2.svg";
 
 const ParentHeader = () => {
   const navigate = useNavigate();
@@ -65,21 +69,35 @@ const ParentHeader = () => {
           </Menu.Target>
           <Menu.Dropdown>
             <div className="flex flex-col py-2 px-1">
-              <button className="p-2 px-14  hover:cursor-pointer hover:bg-slate-300 hover:text-[#8530C1]">
-                View Profile
-              </button>
-              <button
-                onClick={() => navigate("../schooldashboard")}
-                className="p-2 px-14  hover:cursor-pointer hover:bg-slate-300 hover:text-[#8530C1]"
-              >
-                Dashboard
-              </button>
-              <button className="p-2 px-14  hover:cursor-pointer hover:bg-slate-300 hover:text-[#8530C1]">
-                Setting
-              </button>
-              <button className="p-2 px-14  hover:cursor-pointer hover:bg-slate-300 text-red-500">
-                Log Out
-              </button>
+              <Menu.Item>
+                <button className="p-2 px-4 flex gap-2  items-center hover:cursor-pointer  hover:text-[#8530C1]">
+                  <img src={Avatar1} alt="avatar1" className="w-[25%]" />
+                  <span>Jake</span>
+                </button>
+              </Menu.Item>
+              <Menu.Item>
+                <button className="p-2 px-4 flex gap-2  items-center  hover:cursor-pointer  hover:text-[#8530C1]">
+                  <img src={Avatar2} alt="avatar1" className="w-[25%]" />
+                  <span>Mabel</span>
+                </button>
+              </Menu.Item>
+              <Menu.Item>
+                <button
+                  onClick={() => navigate("/parentaccount")}
+                  className="p-2 px-4 hover:cursor-pointer hover:text-[#8530C1] flex gap-2 items-center"
+                >
+                  <img src={UserIcon2} alt="userIcon" /> <span> Account</span>
+                </button>
+              </Menu.Item>
+              <hr />
+              <Menu.Item>
+                <button
+                  onClick={() => navigate("/")}
+                  className="p-2 px-4  hover:cursor-pointer  text-red-500"
+                >
+                  Log Out
+                </button>
+              </Menu.Item>
             </div>
           </Menu.Dropdown>
         </Menu>

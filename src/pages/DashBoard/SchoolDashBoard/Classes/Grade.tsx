@@ -60,7 +60,7 @@ const Grade = ({
             onClick={handleClick}
             className="py-3 px-5 bg-red-600 text-white rounded-full flex-grow"
           >
-            Remove
+            Delete class
           </button>
         </div>
       </div>

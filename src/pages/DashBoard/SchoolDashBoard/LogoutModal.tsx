@@ -22,7 +22,7 @@ const LogoutModal = ({ onCloseModal }: { onCloseModal: () => void }) => {
           Cancel
         </button>
         <button
-          onClick={() => navigate("/newlyregistereduser")}
+          onClick={() => navigate("/")}
           className="p-4 px-10 bg-red-600 text-white rounded-full flex-grow"
         >
           Logout

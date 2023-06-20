@@ -5,7 +5,7 @@ import QuizBg from "@/assets/quizbg.svg";
 import DateRadio from "@/pages/DashBoard/SchoolDashBoard/Main/Dwmy";
 const ProgressLog = () => {
   return (
-    <div className="bg-white rounded-3xl px-8 py-4 pb-6">
+    <div className="bg-white rounded-3xl px-4 py-2 pb-6">
       <div>
         <div className="flex justify-between my-5">
           <h1 className="text-[20px] font-bold">Progress Log</h1>

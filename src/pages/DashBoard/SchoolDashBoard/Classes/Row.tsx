@@ -4,7 +4,7 @@ import Rectangle from "@/assets/Rectangle.svg";
 
 const Row = ({
   noOfStudents,
-  classCode,
+
   noOfTeacher,
   title,
   gender,
@@ -13,7 +13,7 @@ const Row = ({
   id,
 }: {
   noOfStudents?: number;
-  classCode?: string;
+
   noOfTeacher?: number;
   title?: string;
   gender?: string;
@@ -22,9 +22,9 @@ const Row = ({
   onClick?: () => void;
 }) => {
   return (
-    <div className="  hover:cursor-pointer my-4">
+    <div className="  hover:cursor-pointer my-4 font-medium">
       <div onClick={onClick}>
-        <div className="grid  grid-cols-[100px_300px_1fr_1fr_1fr_150px] mt-2  px-8 py-2">
+        <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px] mt-2  px-8 py-2">
           <div className="flex justify-start items-center ">
             <span className=" ">
               <img src={Rectangle} alt="" />
@@ -34,7 +34,6 @@ const Row = ({
             <span>{title}</span>
           </div>
           <div className="flex justify-start items-center ">{noOfStudents}</div>
-          <div className="flex justify-start items-center ">{classCode}</div>
           <div className="flex justify-start items-center ">{noOfTeacher}</div>
           <div className="flex justify-end  gap-4  items-center">
             <span>

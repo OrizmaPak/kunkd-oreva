@@ -8,21 +8,21 @@ import { DashBoardDataType } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Te
 
 const StudentLeaderboard = ({ data }: { data: DashBoardDataType[] }) => {
   return (
-    <div className="p-4 bg-white rounded-3xl mt-4 px-8">
+    <div className="p-4 bg-white rounded-3xl mt-1 px-4">
       <div className="flex justify-between">
         <h1 className="text-[20px] font-bold font-Recoleta">
           Student Leaderboard
         </h1>
       </div>
 
-      <div className="grid grid-cols-3 mt-1">
+      <div className="grid grid-cols-3 mt-4 text-gray-400">
         <span>Name</span>
         <span className="flex justify-center">Class</span>
         <span className="flex justify-center">Gender</span>
       </div>
       <hr className="my-2" />
 
-      <div>
+      <div className="weight-700 font-medium">
         {data &&
           data.map((data, index) => {
             return <Row key={index} {...data} />;

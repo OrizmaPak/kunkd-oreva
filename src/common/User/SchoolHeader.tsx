@@ -10,6 +10,9 @@ import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
 import EnterPassCode from "@/pages/DashBoard/SchoolDashBoard/Main/EnterPassCode";
 import { userContext } from "@/Context/StateProvider";
+import Avatar1 from "@/assets/Avatar1.svg";
+import Avatar2 from "@/assets/Avatar2.svg";
+import UserIcon2 from "@/assets/userIcon2.svg";
 
 const SchoolHeader = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -53,7 +56,11 @@ const SchoolHeader = () => {
 
         <div className="flex gap-14">
           <NavLink
-            to="/newlyregistereduser"
+            to={
+              userType === "parent"
+                ? "returningparenthomepage"
+                : "/newlyregistereduser"
+            }
             className={({ isActive }) =>
               isActive ? " text-[#8530C1]" : "text-black"
             }
@@ -131,40 +138,101 @@ const SchoolHeader = () => {
           </span>
         </div>
 
-        <Menu>
-          <Menu.Target>
-            <div className="flex justify-center items-center gap-10  px-10 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
-              <img src={UserIcon} alt="user icon" className="w-[30px]" />
+        {userType === "parent" ? (
+          <Menu>
+            <Menu.Target>
+              <div className="flex justify-center items-center gap-10  px-10 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
+                <img src={UserIcon} alt="user icon" className="w-[30px]" />
 
-              <span>
-                <img
-                  src={ArrowDown}
-                  alt="arrow down icon"
-                  className="min-w-[17px]"
-                />
-              </span>
-            </div>
-          </Menu.Target>
-          <Menu.Dropdown>
-            <div className="flex flex-col py-2 px-1">
-              <button className="p-2 px-14  hover:cursor-pointer hover:bg-slate-300 hover:text-[#8530C1]">
-                View Profile
-              </button>
-              <button
-                onClick={handleDashboard}
-                className="p-2 px-14  hover:cursor-pointer hover:bg-slate-300 hover:text-[#8530C1]"
-              >
-                Admin
-              </button>
-              <button className="p-2 px-14  hover:cursor-pointer hover:bg-slate-300 hover:text-[#8530C1]">
-                Setting
-              </button>
-              <button className="p-2 px-14  hover:cursor-pointer hover:bg-slate-300 text-red-500">
-                Log Out
-              </button>
-            </div>
-          </Menu.Dropdown>
-        </Menu>
+                <span>
+                  <img
+                    src={ArrowDown}
+                    alt="arrow down icon"
+                    className="min-w-[17px]"
+                  />
+                </span>
+              </div>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <div className="flex flex-col py-2 px-1">
+                <Menu.Item>
+                  <button className="p-2 px-4 flex gap-2  items-center hover:cursor-pointer  hover:text-[#8530C1]">
+                    <img src={Avatar1} alt="avatar1" className="w-[25%]" />
+                    <span>Jake</span>
+                  </button>
+                </Menu.Item>
+                <Menu.Item>
+                  <button className="p-2 px-4 flex gap-2  items-center  hover:cursor-pointer  hover:text-[#8530C1]">
+                    <img src={Avatar2} alt="avatar1" className="w-[25%]" />
+                    <span>Mabel</span>
+                  </button>
+                </Menu.Item>
+                <Menu.Item>
+                  <button
+                    onClick={() => navigate("/parentaccount")}
+                    className="p-2 px-4 hover:cursor-pointer hover:text-[#8530C1] flex gap-2 items-center"
+                  >
+                    <img src={UserIcon2} alt="userIcon" /> <span> Account</span>
+                  </button>
+                </Menu.Item>
+                <hr />
+                <Menu.Item>
+                  <button
+                    onClick={() => navigate("/")}
+                    className="p-2 px-4  hover:cursor-pointer  text-red-500"
+                  >
+                    Log Out
+                  </button>
+                </Menu.Item>
+              </div>
+            </Menu.Dropdown>
+          </Menu>
+        ) : (
+          <Menu>
+            <Menu.Target>
+              <div className="flex justify-center items-center gap-10  px-10 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
+                <img src={UserIcon} alt="user icon" className="w-[30px]" />
+
+                <span>
+                  <img
+                    src={ArrowDown}
+                    alt="arrow down icon"
+                    className="min-w-[17px]"
+                  />
+                </span>
+              </div>
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              <div className="flex flex-col py-2 px-1">
+                <Menu.Item>
+                  <button
+                    onClick={handleDashboard}
+                    className="p-2 px-14  hover:cursor-pointer hover:text-[#8530C1]"
+                  >
+                    Admin
+                  </button>
+                </Menu.Item>
+                <Menu.Item>
+                  <button
+                    onClick={() => navigate("/parentaccount")}
+                    className="p-2 px-14  hover:cursor-pointer hover:text-[#8530C1]"
+                  >
+                    Account
+                  </button>
+                </Menu.Item>
+                <Menu.Item>
+                  <button
+                    onClick={() => navigate("/")}
+                    className="p-2 px-14  hover:cursor-pointer  text-red-500"
+                  >
+                    Sign out of Kunda kids
+                  </button>
+                </Menu.Item>
+              </div>
+            </Menu.Dropdown>
+          </Menu>
+        )}
       </div>
     </div>
   );

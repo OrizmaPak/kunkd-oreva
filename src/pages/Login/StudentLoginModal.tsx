@@ -81,7 +81,10 @@ const StudentLoginModal = () => {
           </div>
 
           <div className="mb-10">
-            <Button onClick={() => navigate("/parenthomepage")} type="submit">
+            <Button
+              onClick={() => navigate("/returningparenthomepage")}
+              type="submit"
+            >
               Continue
             </Button>
           </div>

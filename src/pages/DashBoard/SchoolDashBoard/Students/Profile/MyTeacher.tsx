@@ -2,7 +2,7 @@ import Grease from "@/assets/grease.svg";
 
 const MyTeacher = () => {
   return (
-    <div className="p-4 bg-white px-12 rounded-3xl flex-grow">
+    <div className="py-2 bg-white px-12 rounded-3xl flex-grow">
       <h1 className="font-bold text-[20px] mb-4">My Teacher</h1>
       <div className="flex gap-4">
         <p>

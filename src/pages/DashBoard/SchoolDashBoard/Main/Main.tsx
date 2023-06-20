@@ -24,9 +24,9 @@ const Main = () => {
           </span>
         </div>
       </div>
-      <div className="flex  h-full gap-5">
+      <div className="flex  h-full gap-4">
         <div className=" basis-full  h-full">
-          <div className="flex gap-8 items-center justify-center py-2">
+          <div className="flex gap-4 items-center justify-center py-2">
             <Card title="Teachers" image={TeacherIcon} amount="450" />
             <Card title="Students" image={StudentIcon} amount="241" />
           </div>

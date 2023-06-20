@@ -1,15 +1,18 @@
 import PositiveArrow from "@/assets/positiveArrow.svg";
+import BlcakPencil from "@/assets/blackPencilIcon.svg";
 
 const Profile = ({
   name,
   image,
   email,
   handleClick,
+  onEdit,
 }: {
   name: string;
   image: string;
   email: string;
   handleClick: () => void;
+  onEdit: () => void;
 }) => {
   return (
     <div className="p-3">
@@ -29,7 +32,10 @@ const Profile = ({
           <div className="flex gap-4">
             <p className="flex flex-col border-r-2  pr-4">
               <span>Assigned class</span>
-              <span className="font-bold">Purple</span>
+              <p onClick={onEdit} className="flex gap-2">
+                <span className="font-bold">Purple</span>
+                <img src={BlcakPencil} alt="pencil" />
+              </p>
             </p>
             <p className="flex flex-col">
               <span>No of students in class</span>

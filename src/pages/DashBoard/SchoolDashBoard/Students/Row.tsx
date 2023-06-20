@@ -11,6 +11,7 @@ const Row = ({
   email,
   id,
   classCode,
+  onDeleteProfile,
 }: {
   image: string;
   name: string;
@@ -20,20 +21,21 @@ const Row = ({
   classs: string;
   classCode?: string;
   onClick?: () => void;
+  onDeleteProfile: () => void;
 }) => {
   return (
-    <div className="  hover:cursor-pointer my-3">
+    <div className="  hover:cursor-pointer my-3 font-medium">
       <div>
-        <div
-          onClick={onClick}
-          className="grid   grid-cols-[100px_1fr_250px_250px_150px] mt-2  px-8"
-        >
+        <div className="grid   grid-cols-[100px_1fr_250px_250px_150px] mt-2  px-8">
           <div className="flex justify-start items-center ">
             <span className=" ">
               <img src={Rectangle} alt="" />
             </span>
           </div>
-          <div className="flex items-center justify-start gap-2 ">
+          <div
+            onClick={onClick}
+            className="flex items-center justify-start gap-4 "
+          >
             <span>
               <img src={image} alt="image" className=" w-[46px]" />
             </span>
@@ -45,7 +47,7 @@ const Row = ({
             <span>
               <img src={ToggleIcon} alt="" />
             </span>
-            <span>
+            <span onClick={onDeleteProfile}>
               <img src={DeleteIcon} alt="delete" />
             </span>
             <span></span>

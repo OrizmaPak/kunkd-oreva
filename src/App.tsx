@@ -51,14 +51,16 @@ import TStudents from "@/pages/DashBoard/TeacherDashboard/Students/Students";
 import TClasses from "@/pages/DashBoard/TeacherDashboard/Classes/Classes";
 import TSettings from "@/pages/DashBoard/TeacherDashboard/Settings/Settings";
 import TMain from "@/pages/DashBoard/TeacherDashboard/Main/Main";
-import SettingsLayout from "./pages/Settings/SettingsLayout";
-import Profile from "./pages/Settings/Profile";
-import PaymentMethod from "./pages/Settings/PaymentMethod";
-import Notification from "./pages/Settings/Notification";
-import SubscriptionPlan from "./pages/Settings/Subscriptionplan";
+import ParentAccountLayout from "./pages/ParentAccount/ParentAccountLayout";
+import Profile from "./pages/ParentAccount/Profile";
+import SettingPassword from "./pages/ParentAccount/AccountPassword";
+import Billing from "./pages/ParentAccount/Billing";
+import MyKids from "./pages/ParentAccount/MyKids";
+import SubscriptionPlan from "./pages/ParentAccount/Subscriptionplan";
 import SecureAdminPortal from "./pages/SchoolSignup/SecureAdminPortal/SecureAdminPortal";
 import ParentHeader from "@/common/User/ParentHeader";
 import ParentHomePage from "./pages/AfterParentSignIn/ParentHomePage";
+import ReturningParentHomePage from "./pages/AfterParentSignIn/ReturningParentHomePage";
 
 function App() {
   return (
@@ -96,6 +98,10 @@ function App() {
               <Route path="stories1/:id" element={<Stories1 />}></Route>
               <Route path="mylist" element={<MyList />}></Route>
               <Route path="progressreport" element={<ProgressReport />}></Route>
+              <Route
+                path="returningparenthomepage"
+                element={<ReturningParentHomePage />}
+              ></Route>
 
               {/* ///////////////////////////// */}
               <Route path="schooldashboard/*" element={<SchoolLayout />}>
@@ -111,11 +117,47 @@ function App() {
                 <Route path="classes" element={<Classes />}></Route>
                 <Route path="setting" element={<Setting />}></Route>
               </Route>
+
+              {/* Teacher Teacher Teacher Teacher DashBoard */}
+
+              <Route path="teacherdashboard/*" element={<TeacherLayout />}>
+                <Route index element={<TMain />}></Route>
+                <Route path="student/*">
+                  <Route index element={<TStudents />} />
+                  <Route
+                    path="profile/:studentId"
+                    element={<StudentProfile />}
+                  ></Route>
+                </Route>
+                <Route path="classes" element={<TClasses />}></Route>
+                <Route path="setting" element={<TSettings />}></Route>
+              </Route>
+
+              {/* Account */}
+              <Route path="parentaccount/*" element={<ParentAccountLayout />}>
+                <Route index element={<Profile />}></Route>
+                <Route path="mykids" element={<MyKids />}></Route>
+                {/* <Route path="paymentmethod" element={<PaymentMethod />}></Route> */}
+                <Route
+                  path="subscriptionplan"
+                  element={<SubscriptionPlan />}
+                ></Route>
+                <Route path="billing" element={<Billing />}></Route>
+                <Route
+                  path="accountpassword"
+                  element={<SettingPassword />}
+                ></Route>
+              </Route>
             </Route>
 
             {/* Routes for Parent After Login */}
             <Route element={<Layout4 />}>
               <Route path="parenthomepage" element={<ParentHomePage />}></Route>
+              <Route
+                path="returningparenthomepage"
+                element={<ReturningParentHomePage />}
+              ></Route>
+
               <Route path="librarynotpaid" element={<LibraryNotPaid />}></Route>
               <Route path="librarypaid" element={<LibraryPaid />}></Route>
               <Route path="stories" element={<Stories />}></Route>
@@ -143,7 +185,7 @@ function App() {
               </Route> */}
 
               {/* Teacher Dashboard */}
-              <Route path="teacherdashboard/*" element={<TeacherLayout />}>
+              {/* <Route path="teacherdashboard/*" element={<TeacherLayout />}>
                 <Route index element={<TMain />}></Route>
                 <Route path="student/*">
                   <Route index element={<TStudents />} />
@@ -154,20 +196,24 @@ function App() {
                 </Route>
                 <Route path="classes" element={<TClasses />}></Route>
                 <Route path="setting" element={<TSettings />}></Route>
-              </Route>
+              </Route> */}
 
               {/* Seetings */}
 
-              <Route path="settings/*" element={<SettingsLayout />}>
+              {/* <Route path="parentaccount/*" element={<ParentAccountLayout />}>
                 <Route index element={<Profile />}></Route>
-                <Route path="paymentmethod" element={<PaymentMethod />}></Route>
-                <Route
+                <Route path="mykids" element={<MyKids />}></Route>
+                {/* <Route path="paymentmethod" element={<PaymentMethod />}></Route> */}
+              {/* <Route
                   path="subscriptionplan"
                   element={<SubscriptionPlan />}
                 ></Route>
-                <Route path="notification" element={<Notification />}></Route>
-                <Route path="paymentmethod" element={<PaymentMethod />}></Route>
-              </Route>
+                <Route path="billing" element={<Billing />}></Route>
+                <Route
+                  path="accountpassword"
+                  element={<SettingPassword />}
+                ></Route>
+              </Route>  */}
             </Route>
 
             {/* Login and Signup Routes */}
