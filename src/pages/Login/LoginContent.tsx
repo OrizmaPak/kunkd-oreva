@@ -88,7 +88,7 @@ const LoginContent = () => {
       setTeacherModal(true);
     }
     if (user?.userType === "parent") {
-      navigate("/returningparenthomepage");
+      navigate("/selectprofile");
     }
   };
 

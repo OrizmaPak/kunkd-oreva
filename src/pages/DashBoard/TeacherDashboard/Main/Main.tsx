@@ -12,7 +12,7 @@ import ProgressLog from "../../SchoolDashBoard/Students/Profile/ProgressLog";
 
 const Main = () => {
   return (
-    <div>
+    <div className="h-full flex flex-col">
       <div className="flex justify-between px-8 gap-2">
         <h1 className="font-bold text-[30px] font-Recoleta">Overview</h1>
         <span className="flex gap-2 justify-center items-center">
@@ -21,25 +21,19 @@ const Main = () => {
           <img src={ArrowDown} alt="Arrowdown" className="w-4" />
         </span>
       </div>
-      <div className="h-full flex gap-5 ">
-        <div className=" basis-full  h-full">
-          <div>
-            {/* <Barchart /> */}
-            {/* <TopContents /> */}
-            <StudentLeaderboard
-              data={dashboardData.slice(1, 9).map((el) => el)}
-            />
-          </div>
+      <div className=" flex gap-5 flex-grow">
+        <div className=" basis-full flex-grow flex  ">
+          <StudentLeaderboard
+            data={dashboardData.slice(1, 9).map((el) => el)}
+          />
         </div>
 
-        <div className=" basis-2/3 h-full ">
+        <div className=" basis-2/4 flex flex-col ">
           <Card image={StudentIcon} title="Students" amount="37" />
-          <div className="mt-3">
-            <ProgressLog />
-          </div>
+
+          <ProgressLog />
+
           <TotalTimeSpent />
-          {/* <MyStudents /> */}
-          {/* <TopSubCategories /> */}
         </div>
       </div>
     </div>

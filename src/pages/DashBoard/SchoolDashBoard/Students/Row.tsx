@@ -24,7 +24,7 @@ const Row = ({
   onDeleteProfile: () => void;
 }) => {
   return (
-    <div className="  hover:cursor-pointer my-3 font-medium">
+    <div className="  hover:cursor-pointer flex-grow font-medium">
       <div>
         <div className="grid   grid-cols-[100px_1fr_250px_250px_150px] mt-2  px-8">
           <div className="flex justify-start items-center ">

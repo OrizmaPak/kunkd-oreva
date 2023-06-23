@@ -29,17 +29,17 @@ const arrayOfTopTeacher = [
 
 const ClassLeaderboard = () => {
   return (
-    <div className="p-4 bg-white rounded-3xl mt-3">
+    <div className="p-4 bg-white rounded-3xl flex flex-col flex-grow mt-3">
       <div className="flex justify-between">
         <h1 className="text-[20px] font-bold">Class Leaderboard</h1>
       </div>
 
-      <div className="flex justify-between my-2 ">
+      <div className="flex justify-between my-4 ">
         <span>Classes</span>
         <span>Teacher</span>
       </div>
       <hr className="my-3" />
-      <div>
+      <div className="flex flex-grow  flex-col">
         {arrayOfTopTeacher.map((data) => {
           return <Row {...data} />;
         })}
@@ -73,7 +73,7 @@ const Row = ({
   grade: string;
 }) => {
   return (
-    <div className="flex justify-between items-center my-3">
+    <div className="flex justify-between items-center  flex-grow">
       <span className="flex gap-2 items-center justify-center">
         <img src={image} alt="image" className="w-[30px]" />
         <span>{grade}</span>

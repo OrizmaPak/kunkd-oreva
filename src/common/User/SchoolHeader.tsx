@@ -29,7 +29,7 @@ const SchoolHeader = () => {
     }
   };
   return (
-    <div className="flex font-[500] py-4 text-[16px] px-[130px] justify-between items-center bg-white z-50 gap-4  h- h-[8vh] ">
+    <div className="flex  fixed top-0 w-full font-[500] py-4 text-[16px] px-[130px] justify-between items-center bg-white z-50 gap-4  h-[8vh] ">
       <Modal
         opened={opened}
         onClose={close}
@@ -40,6 +40,16 @@ const SchoolHeader = () => {
         withCloseButton={false}
       >
         <EnterPassCode onSubmit={close} />
+
+        <style>
+          {`
+         .mantine-kea9ny {
+            background-color: rgba(0, 0, 0, 0.9);
+          
+          }
+          
+                `}
+        </style>
       </Modal>
       <div className="flex items-center gap-20">
         <Link to="/">
@@ -57,9 +67,7 @@ const SchoolHeader = () => {
         <div className="flex gap-14">
           <NavLink
             to={
-              userType === "parent"
-                ? "returningparenthomepage"
-                : "/newlyregistereduser"
+              userType === "parent" ? "parenthomepage" : "/newlyregistereduser"
             }
             className={({ isActive }) =>
               isActive ? " text-[#8530C1]" : "text-black"
@@ -169,7 +177,7 @@ const SchoolHeader = () => {
                 </Menu.Item>
                 <Menu.Item>
                   <button
-                    onClick={() => navigate("/parentaccount")}
+                    onClick={() => navigate("/account")}
                     className="p-2 px-4 hover:cursor-pointer hover:text-[#8530C1] flex gap-2 items-center"
                   >
                     <img src={UserIcon2} alt="userIcon" /> <span> Account</span>
@@ -215,7 +223,7 @@ const SchoolHeader = () => {
                 </Menu.Item>
                 <Menu.Item>
                   <button
-                    onClick={() => navigate("/parentaccount")}
+                    onClick={() => navigate("/account")}
                     className="p-2 px-14  hover:cursor-pointer hover:text-[#8530C1]"
                   >
                     Account

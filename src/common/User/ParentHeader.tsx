@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Logo from "@/assets/KundaLogo.svg";
 import BadgeIcon from "@/assets/badge.svg";
 import BatteryIcon from "@/assets/battery.svg";
+import Avatar3 from "@/assets/Avatar3.svg";
 import BellIcon from "@/assets/bellicon.svg";
 import UserIcon from "@/assets/usericon.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
@@ -10,7 +11,6 @@ import { Menu } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import Avatar1 from "@/assets/Avatar1.svg";
 import Avatar2 from "@/assets/Avatar2.svg";
-import Avatar3 from "@/assets/Avatar3.svg";
 import UserIcon2 from "@/assets/userIcon2.svg";
 
 const ParentHeader = () => {
@@ -83,7 +83,7 @@ const ParentHeader = () => {
               </Menu.Item>
               <Menu.Item>
                 <button
-                  onClick={() => navigate("/parentaccount")}
+                  onClick={() => navigate("/account")}
                   className="p-2 px-4 hover:cursor-pointer hover:text-[#8530C1] flex gap-2 items-center"
                 >
                   <img src={UserIcon2} alt="userIcon" /> <span> Account</span>

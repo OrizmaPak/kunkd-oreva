@@ -33,6 +33,7 @@ const ProgressReport = () => {
                 <img src={SearchIcon} alt="SearchIcon " className="" />
               </span>
             </div>
+            <hr className="mx-20 my-4" />
             <div className="pt-5 pb-1 px-24">
               <Chart />
             </div>

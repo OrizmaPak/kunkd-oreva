@@ -56,7 +56,7 @@ export function BarChart() {
 
 const LearningHour = () => {
   return (
-    <div className="bg-white rounded-3xl py-2 px-4 mt-4">
+    <div className="bg-white rounded-3xl flex-grow py-2 px-4 mt-2">
       <div className="flex justify-between">
         <h1 className="text-[20px] font-bold">Learning Hours</h1>
       </div>

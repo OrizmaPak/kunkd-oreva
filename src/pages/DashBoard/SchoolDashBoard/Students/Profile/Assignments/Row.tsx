@@ -14,7 +14,7 @@ const Row = ({
   title?: string;
 }) => {
   return (
-    <div className="grid grid-cols-[70px_200px_1fr_1fr_150px] gap-5 px-8">
+    <div className="grid grid-cols-[70px_200px_1fr_1fr_150px] flex-grow  mb-1 gap-5 px-8">
       <p className="flex justify-center items-center">
         <img src={image} alt="image" className="w-[70px]" />
       </p>

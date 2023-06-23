@@ -51,16 +51,17 @@ import TStudents from "@/pages/DashBoard/TeacherDashboard/Students/Students";
 import TClasses from "@/pages/DashBoard/TeacherDashboard/Classes/Classes";
 import TSettings from "@/pages/DashBoard/TeacherDashboard/Settings/Settings";
 import TMain from "@/pages/DashBoard/TeacherDashboard/Main/Main";
-import ParentAccountLayout from "./pages/ParentAccount/ParentAccountLayout";
-import Profile from "./pages/ParentAccount/Profile";
-import SettingPassword from "./pages/ParentAccount/AccountPassword";
-import Billing from "./pages/ParentAccount/Billing";
-import MyKids from "./pages/ParentAccount/MyKids";
-import SubscriptionPlan from "./pages/ParentAccount/Subscriptionplan";
+import AccountLayout from "./pages/Account/AccountLayout";
+import Profile from "./pages/Account/Profile";
+import SettingPassword from "./pages/Account/AccountPassword";
+import Billing from "./pages/Account/Billing";
+import MyKids from "./pages/Account/MyKids";
+import SubscriptionPlan from "./pages/Account/Subscriptionplan";
 import SecureAdminPortal from "./pages/SchoolSignup/SecureAdminPortal/SecureAdminPortal";
 import ParentHeader from "@/common/User/ParentHeader";
 import ParentHomePage from "./pages/AfterParentSignIn/ParentHomePage";
-import ReturningParentHomePage from "./pages/AfterParentSignIn/ReturningParentHomePage";
+import SelectProfile from "./pages/AfterParentSignIn/SelectProfile";
+import ChildProfileSetUp from "./pages/AfterParentSignIn/ChildProfileSetUp";
 
 function App() {
   return (
@@ -98,10 +99,11 @@ function App() {
               <Route path="stories1/:id" element={<Stories1 />}></Route>
               <Route path="mylist" element={<MyList />}></Route>
               <Route path="progressreport" element={<ProgressReport />}></Route>
-              <Route
+              {/* <Route
                 path="returningparenthomepage"
                 element={<ReturningParentHomePage />}
-              ></Route>
+              ></Route> */}
+              <Route path="parenthomepage" element={<ParentHomePage />}></Route>
 
               {/* ///////////////////////////// */}
               <Route path="schooldashboard/*" element={<SchoolLayout />}>
@@ -134,10 +136,9 @@ function App() {
               </Route>
 
               {/* Account */}
-              <Route path="parentaccount/*" element={<ParentAccountLayout />}>
+              <Route path="account/*" element={<AccountLayout />}>
                 <Route index element={<Profile />}></Route>
                 <Route path="mykids" element={<MyKids />}></Route>
-                {/* <Route path="paymentmethod" element={<PaymentMethod />}></Route> */}
                 <Route
                   path="subscriptionplan"
                   element={<SubscriptionPlan />}
@@ -153,10 +154,10 @@ function App() {
             {/* Routes for Parent After Login */}
             <Route element={<Layout4 />}>
               <Route path="parenthomepage" element={<ParentHomePage />}></Route>
-              <Route
+              {/* <Route
                 path="returningparenthomepage"
                 element={<ReturningParentHomePage />}
-              ></Route>
+              ></Route> */}
 
               <Route path="librarynotpaid" element={<LibraryNotPaid />}></Route>
               <Route path="librarypaid" element={<LibraryPaid />}></Route>
@@ -168,53 +169,7 @@ function App() {
             </Route>
 
             {/* Dasboard Routes */}
-            <Route element={<Layout3 />}>
-              {/* School Dashboard */}
-              {/* <Route path="schooldashboard/*" element={<SchoolLayout />}>
-                <Route index element={<Main />}></Route>
-                <Route path="teacher" element={<Teachers />}></Route>
-                <Route path="student/*">
-                  <Route index element={<Students />} />
-                  <Route
-                    path="profile/:studentId"
-                    element={<StudentProfile />}
-                  ></Route>
-                </Route>
-                <Route path="classes" element={<Classes />}></Route>
-                <Route path="setting" element={<Setting />}></Route>
-              </Route> */}
-
-              {/* Teacher Dashboard */}
-              {/* <Route path="teacherdashboard/*" element={<TeacherLayout />}>
-                <Route index element={<TMain />}></Route>
-                <Route path="student/*">
-                  <Route index element={<TStudents />} />
-                  <Route
-                    path="profile/:studentId"
-                    element={<StudentProfile />}
-                  ></Route>
-                </Route>
-                <Route path="classes" element={<TClasses />}></Route>
-                <Route path="setting" element={<TSettings />}></Route>
-              </Route> */}
-
-              {/* Seetings */}
-
-              {/* <Route path="parentaccount/*" element={<ParentAccountLayout />}>
-                <Route index element={<Profile />}></Route>
-                <Route path="mykids" element={<MyKids />}></Route>
-                {/* <Route path="paymentmethod" element={<PaymentMethod />}></Route> */}
-              {/* <Route
-                  path="subscriptionplan"
-                  element={<SubscriptionPlan />}
-                ></Route>
-                <Route path="billing" element={<Billing />}></Route>
-                <Route
-                  path="accountpassword"
-                  element={<SettingPassword />}
-                ></Route>
-              </Route>  */}
-            </Route>
+            <Route element={<Layout3 />}></Route>
 
             {/* Login and Signup Routes */}
 
@@ -253,6 +208,12 @@ function App() {
             <Route path="secureaccount" element={<SecureAccount />}></Route>
             <Route path="makepayment" element={<MakePayment />}></Route>
             <Route path="packages" element={<ChoosePlan />}></Route>
+            <Route
+              path="childprofilesetup"
+              element={<ChildProfileSetUp />}
+            ></Route>
+
+            <Route path="selectprofile" element={<SelectProfile />}></Route>
             {/* <Route path="schoolmaindashboard" element={<SchoolMainDashBoard />}></Route> */}
           </Route>
         </Routes>

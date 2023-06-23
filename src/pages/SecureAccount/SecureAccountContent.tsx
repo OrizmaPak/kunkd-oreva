@@ -1,4 +1,4 @@
-import EmailLogo from "@/assets/emaillogo.svg";
+import PasswordIcon from "@/assets/passwordIcon.svg";
 import Cancel from "@/assets/Cancel.svg";
 import InputFormat from "@/common/InputFormat";
 import Button from "@/components/Button";
@@ -61,7 +61,7 @@ const SecureAccountContent = () => {
               <InputFormat
                 type="password"
                 placeholder="password"
-                leftIcon={<img src={EmailLogo} alt="pasword icon" />}
+                leftIcon={<img src={PasswordIcon} alt="pasword icon" />}
                 reg={register("password")}
                 errorMsg={errors.password?.message}
               />
@@ -71,7 +71,7 @@ const SecureAccountContent = () => {
               <InputFormat
                 type="password"
                 placeholder="Confirm password"
-                leftIcon={<img src={EmailLogo} alt="pasword icon" />}
+                leftIcon={<img src={PasswordIcon} alt="pasword icon" />}
                 reg={register("confirmPassword")}
                 errorMsg={errors.confirmPassword?.message}
               />

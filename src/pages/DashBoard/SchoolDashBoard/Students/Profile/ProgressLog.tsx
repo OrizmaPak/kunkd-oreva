@@ -5,13 +5,13 @@ import QuizBg from "@/assets/quizbg.svg";
 import DateRadio from "@/pages/DashBoard/SchoolDashBoard/Main/Dwmy";
 const ProgressLog = () => {
   return (
-    <div className="bg-white rounded-3xl px-4 py-2 pb-6">
+    <div className="bg-white flex flex-col  flex-grow rounded-3xl px-4 py-2 pb-6">
       <div>
-        <div className="flex justify-between my-5">
+        <div className="flex justify-between my-5 ">
           <h1 className="text-[20px] font-bold">Progress Log</h1>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3 flex-grow py-4 ">
         <Card image={Bookbg} title="Stories" total="38" />
         <Card image={MusicBg} title="Audiobooks" total="42" />
         <Card image={VideoBg} title="Videos" total="71" />

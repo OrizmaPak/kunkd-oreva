@@ -19,6 +19,14 @@ export const data = {
   ],
 };
 
+// const options = {
+//   responsive: true,
+//   maintainAspectRatio: false,
+//   // Adjust the size of the chart by modifying the following properties:
+//   width: 800,
+//   height: 800,
+// };
+
 function KundaChart() {
   return <Doughnut data={data} />;
 }

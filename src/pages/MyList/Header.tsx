@@ -17,15 +17,15 @@ const Header = () => {
 
       <div className="flex justify-between items-center p">
         <div className="flex gap-4 pb-4 pl-24">
-          <button className="bg-[#FBECFF] flex py-2 px-8 gap-4 rounded-full items-center justify-center">
+          <button className="bg-[#FBECFF] flex py-4 px-8 gap-4 rounded-full items-center justify-center">
             <img src={BookIcon} alt="" />
             <span className=" text-[#8530C1]">Stories</span>
           </button>
-          <button className="bg-[#FFEDEA] flex py-2 px-8 gap-4 rounded-full items-center justify-center">
+          <button className="bg-[#FFEDEA] flex py-4 px-8 gap-4 rounded-full items-center justify-center">
             <img src={musicIcon} alt="" />
             <span className="text-[#ED1C24]">Audiobooks</span>
           </button>
-          <button className=" bg-[#EBFFE8] flex py-2 px-8 gap-4 rounded-full items-center justify-center">
+          <button className=" bg-[#EBFFE8] flex py-4 px-8 gap-4 rounded-full items-center justify-center">
             <img src={videoIcon} alt="" />
             <span className="text-[#2BB457]">African Languages</span>
           </button>

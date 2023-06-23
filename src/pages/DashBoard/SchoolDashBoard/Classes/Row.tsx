@@ -22,7 +22,7 @@ const Row = ({
   onClick?: () => void;
 }) => {
   return (
-    <div className="  hover:cursor-pointer my-4 font-medium">
+    <div className="hover:cursor-pointer flex-grow font-medium">
       <div onClick={onClick}>
         <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px] mt-2  px-8 py-2">
           <div className="flex justify-start items-center ">

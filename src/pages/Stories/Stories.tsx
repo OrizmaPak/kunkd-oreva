@@ -5,10 +5,11 @@ import Card from "@/common/User/Card";
 import { data } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import { DataType } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import AdsButton from "@/common/User/AdsButton";
-import { Button } from "@chakra-ui/react";
 import Banner from "@/assets/banner5.svg";
 import Banner1 from "@/assets/banner6.svg";
 import InnerWrapper from "../../common/User/InnerWrapper";
+import Button from "@/components/Button";
+import GroupCard from "@/assets/groupcard.svg";
 
 const Stories = () => {
   return (
@@ -25,62 +26,68 @@ const Stories = () => {
           </div>
           <div className="flex justify-center items-center">
             <div className="flex flex-wrap justify-center items-center  max-w-[900px]  g gap-x-8 gap-y-4">
-              <Button size="md" variant="outline">
+              <button className="py-3 rounded-3xl px-6 bg-[#FFF7FD]">
                 Bedtime
-              </Button>
-              <Button size="md" variant="outline">
+              </button>
+              <button className="py-3 rounded-3xl px-6 bg-[#FFF7FD]">
                 Holidays and Celebration
-              </Button>
-              <Button size="md" variant="outline">
+              </button>
+              <button className="py-3 rounded-3xl px-6 bg-[#FFF7FD]">
                 Inventors
-              </Button>
-              <Button size="md" variant="outline">
+              </button>
+              <button className="py-3 rounded-3xl px-6 bg-[#FFF7FD]">
                 Life & Growing up
-              </Button>
-              <Button size="md" variant="outline">
+              </button>
+              <button className="py-3 rounded-3xl px-6 bg-[#FFF7FD]">
                 Folk Tales
-              </Button>
-              <Button size="md" variant="outline">
+              </button>
+              <button className="py-3 rounded-3xl px-6 bg-[#FFF7FD]">
                 Inspiring Leaders
-              </Button>
-              <Button size="md" variant="outline">
+              </button>
+              <button className="py-3 rounded-3xl px-6 bg-[#FFF7FD]">
                 Finance
-              </Button>
-              <Button size="md" variant="outline">
+              </button>
+              <button className="py-3 rounded-3xl px-6 bg-[#FFF7FD]">
                 Money smart
-              </Button>
-              <Button size="md" variant="outline">
+              </button>
+              <button className="py-3 rounded-3xl px-6 bg-[#FFF7FD]">
                 Fairy Tales
-              </Button>
-              <Button size="md" variant="outline">
+              </button>
+              <button className="py-3 rounded-3xl px-6 bg-[#FFF7FD]">
                 Sport
-              </Button>
+              </button>
             </div>
           </div>
 
           <CardScreen
-            data={data}
+            data={data.slice(1, 7)}
             card={(props: DataType) => <Card {...props} />}
             header="Stories we love"
             actiontitle="View View all"
             isTitled={true}
           />
 
-          <div className="h-[395px] mb-[50px]  object-cover">
+          <div
+            style={{
+              background:
+                "linear-gradient(280.43deg, #8530C1 0.5%, #000000 173.5%)",
+            }}
+            className="h-[495px] grid grid-cols-[700px_1fr] mb-[50px] max-w-[1500px] relative rounded-2xl mx-auto object-cover bg- "
+          >
             <img
-              src={Banner1}
-              alt="banner"
-              className=" w-full h-[395px] object-cover"
+              src={GroupCard}
+              alt="card "
+              className="absolute w-[700px] right-0 bottom-0 rounded-3xl "
             />
+            <div className="text-center text-white flex flex-col gap-3 justify-center items-center">
+              <h1 className="text-[30px] font-bold ">New Story Titles</h1>
+              <p className="mb-10">We published new audiobook just for you</p>
+              <Button size="md" color="black" backgroundColor="white">
+                See books
+              </Button>
+            </div>
+            <div></div>
           </div>
-
-          <CardScreen
-            data={data?.map((el) => ({ ...el, title: "" }))}
-            card={(props: DataType) => <Card {...props} />}
-            header="African Languages"
-            actiontitle="View View all"
-            isTitled={true}
-          />
 
           <div>
             <h1 className="mb-4 font-bold font-Recoleta mt-20 text-center text-[40px]">
@@ -92,7 +99,7 @@ const Stories = () => {
           </div>
 
           <CardScreen
-            data={data?.map((el) => ({ ...el, title: "" }))}
+            data={data.slice(1, 7)}
             card={(props: DataType) => <Card {...props} />}
             isTitled={true}
           />

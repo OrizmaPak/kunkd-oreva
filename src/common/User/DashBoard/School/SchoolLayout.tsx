@@ -26,14 +26,14 @@ const links = [
     icon: DasboardIcon,
   },
   {
-    label: "Teacher",
+    label: "Teachers",
     route: routeBaseUrl + "/teacher",
     href: "teacher",
     index: true,
     icon: TeacherIcon,
   },
   {
-    label: "Student",
+    label: "Students",
     href: "student",
     route: routeBaseUrl + "/student/*",
     icon: StudentIcon,
@@ -69,9 +69,9 @@ const SchoolLayout = () => {
         <LogoutModal onCloseModal={() => close()} />
       </Modal>
 
-      <div className="w-full  bg-[#FFF7FD]  px-[100px] py-[15px] h-[100%]  ">
-        <div className="flex h-[calc(100vh-50px-8vh)]  gap-8">
-          <div className="basis-1/5 bg-white h-full rounded-[40px] px-7 flex  flex-col pb-4 ">
+      <div className="w-full   bg-[#FFF7FD]  px-[100px] py-[15px] mt-[8vh] h-[92vh]  ">
+        <div className="flex h-[calc(100vh-50px-8vh)] gap-8">
+          <div className="basis-1/5 bg-white  h-[calc(100vh-50px-8vh)] rounded-[40px] px-7 flex  flex-col pb-4 ">
             <div className="flex-grow-1 flex-1">
               <Header
                 icon1={<img src={SchoolIcon} alt="icon" className="w-[40px]" />}
@@ -103,7 +103,10 @@ const SchoolLayout = () => {
               />
             </div>
           </div>
-          <div className="basis-full  h-full">{<Outlet />}</div>
+
+          <div className="basis-full   h-[calc(100vh-50px-8vh)]">
+            {<Outlet />}
+          </div>
         </div>
       </div>
     </>
@@ -138,7 +141,7 @@ const DasboardButton = ({
   );
 };
 
-const Header = ({
+export const Header = ({
   title,
   icon1,
   icon2,

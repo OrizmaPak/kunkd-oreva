@@ -9,7 +9,7 @@ const Wrapper = ({
 }) => {
   return (
     <div
-      className="w-full  bg-[#EBEFF3] px-[130px] py-[40px] h-[100%]  "
+      className="w-full  bg-[#EBEFF3] px-[130px] py-[20px] mt-[8vh] h-[100%]"
       style={{ backgroundColor: `${bgColor}` }}
     >
       {children}

@@ -14,7 +14,7 @@ const Students = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
   return (
-    <div>
+    <div className="h-full flex flex-col ">
       <Modal
         radius={"xl"}
         size="lg"
@@ -26,7 +26,7 @@ const Students = () => {
         <DeleteProfile onCancel={close} />
       </Modal>
 
-      <div className="h-full  rounded-3xl p-4 bg-white">
+      <div className=" flex-grow flex flex-col  rounded-3xl p-4 bg-white">
         <div className="grid grid-cols-2 justify-center items-center w-full px-8 ">
           <div>
             <h1 className="text-[25px] font-bold">Students (35)</h1>
@@ -53,7 +53,7 @@ const Students = () => {
         </div>
 
         <hr className="my-4 mx-8" />
-        <div>
+        <div className="flex flex-col flex-grow">
           {dashboardData &&
             dashboardData.slice(1, 10).map((data, index) => {
               return (

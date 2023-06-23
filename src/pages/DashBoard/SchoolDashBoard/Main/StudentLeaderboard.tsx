@@ -8,7 +8,7 @@ import { DashBoardDataType } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Te
 
 const StudentLeaderboard = ({ data }: { data: DashBoardDataType[] }) => {
   return (
-    <div className="p-4 bg-white rounded-3xl mt-1 px-4">
+    <div className="p-4 bg-white rounded-3xl mt-1 px-4 flex flex-col flex-grow">
       <div className="flex justify-between">
         <h1 className="text-[20px] font-bold font-Recoleta">
           Student Leaderboard
@@ -22,14 +22,14 @@ const StudentLeaderboard = ({ data }: { data: DashBoardDataType[] }) => {
       </div>
       <hr className="my-2" />
 
-      <div className="weight-700 font-medium">
+      <div className="weight-700 font-medium flex-grow flex flex-col">
         {data &&
           data.map((data, index) => {
             return <Row key={index} {...data} />;
           })}
       </div>
 
-      <div className="flex  justify-between mt-8 px- mb-6 ">
+      <div className="flex  justify-between mt-8 px- mb-4 ">
         <span>
           Showing <span className="text-[#8530C1]"> 1-9 </span> from
           <span className="text-[#8530C1]"> 35 </span> data
@@ -64,10 +64,10 @@ const Row = ({
   gender?: string;
 }) => {
   return (
-    <div>
-      <div className="grid grid-cols-3 justify-between items-center my-4">
+    <>
+      <div className="grid grid-cols-3 justify-between items-center flex-grow ">
         <span className="flex gap-2 items-center justify-start">
-          <img src={image} alt="image" className="w-[30px]" />
+          <img src={image} alt="image" className="" />
           <span>{name}</span>
         </span>
         <span className="flex justify-center">{classs}</span>
@@ -84,6 +84,6 @@ const Row = ({
         </div>
       </div>
       <hr />
-    </div>
+    </>
   );
 };
