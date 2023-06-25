@@ -107,6 +107,7 @@ const ChildProfileSetUp = () => {
           <ChildNameModal
             onContinue={() => setCurrentStep(STEP_3)}
             goBack={() => setCurrentStep(currentStep - 1)}
+            showGoBackIcon={true}
           />
         )}
         {currentStep === STEP_3 && (
@@ -162,9 +163,11 @@ export const WelcomeModal = ({ onContinue }: { onContinue: () => void }) => {
 export const ChildNameModal = ({
   onContinue,
   goBack,
+  showGoBackIcon,
 }: {
   onContinue: () => void;
   goBack: () => void;
+  showGoBackIcon: boolean;
 }) => {
   return (
     <motion.div
@@ -174,9 +177,11 @@ export const ChildNameModal = ({
       transition={{ duration: 0.3 }}
       className=" max-w-[600px] rounded-3xl w-[100%] py-10"
     >
-      <p onClick={goBack} className="pl-10 pb-10">
-        <img src={LessDOwnIcon} alt="lessdownIcon" />
-      </p>
+      {showGoBackIcon && (
+        <p onClick={goBack} className="pl-10 pb-10">
+          <img src={LessDOwnIcon} alt="lessdownIcon" />
+        </p>
+      )}
       <div className="px-14">
         <div>
           <h1 className="text-center font-bold text-[35px] font-Recoleta">

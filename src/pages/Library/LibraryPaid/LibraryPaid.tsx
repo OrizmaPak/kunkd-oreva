@@ -1,4 +1,3 @@
-import React from "react";
 import Wrapper from "@/common/User/Wrapper";
 import Hero from "@/pages/Library/LibraryNotPaid/Hero";
 import CategoriesCard from "@/pages/Library/LibraryNotPaid/CategoriesCard";
@@ -9,10 +8,13 @@ import CardScreen from "@/common/User/CardScreen";
 import Card from "@/common/User/Card";
 import { data } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import { DataType } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
-import AdsButton from "@/common/User/AdsButton";
+// import AdsButton from "@/common/User/AdsButton";
 import Banner from "@/assets/Banner4.svg";
 import InnerWrapper from "@/common/User/InnerWrapper";
+import { useNavigate } from "react-router-dom";
+
 const LibraryPaid = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <Wrapper>
@@ -27,9 +29,21 @@ const LibraryPaid = () => {
           </div>
           <div className="flex justify-center items-center">
             <div className="flex justify-center items-center gap-[150px]  ">
-              <CategoriesCard image={BookIcon} label="Stories" />
-              <CategoriesCard image={musicIcon} label="Audio books" />
-              <CategoriesCard image={videoIcon} label="African Language" />
+              <CategoriesCard
+                image={BookIcon}
+                label="Stories"
+                goTo={() => navigate("/stories")}
+              />
+              <CategoriesCard
+                image={musicIcon}
+                label="Audio books"
+                goTo={() => navigate("/audiobooks")}
+              />
+              <CategoriesCard
+                image={videoIcon}
+                label="African Language"
+                goTo={() => navigate("/africanlaguage")}
+              />
             </div>
           </div>
 

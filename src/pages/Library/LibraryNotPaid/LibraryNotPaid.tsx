@@ -1,4 +1,3 @@
-import React from "react";
 import Wrapper from "@/common/User/Wrapper";
 import Hero from "./Hero";
 import CategoriesCard from "./CategoriesCard";
@@ -17,6 +16,7 @@ import Igbo from "@/assets/Igbo.svg";
 import Twi from "@/assets/twi.svg";
 import Luganda from "@/assets/Luganda.svg";
 import Kiswahili from "@/assets/Kiswahili.svg";
+import { useNavigate } from "react-router-dom";
 
 const languageData = [
   {
@@ -42,6 +42,7 @@ const languageData = [
   },
 ];
 const LibraryNotPaid = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <Wrapper>
@@ -56,9 +57,21 @@ const LibraryNotPaid = () => {
           </div>
           <div className="flex justify-center items-center">
             <div className="flex justify-center items-center gap-[150px]  ">
-              <CategoriesCard image={BookIcon} label="Stories" />
-              <CategoriesCard image={musicIcon} label="Audio books" />
-              <CategoriesCard image={videoIcon} label="African Language" />
+              <CategoriesCard
+                image={BookIcon}
+                label="Stories"
+                goTo={() => navigate("stories")}
+              />
+              <CategoriesCard
+                image={musicIcon}
+                label="Audio books"
+                goTo={() => navigate("audiobooks")}
+              />
+              <CategoriesCard
+                image={videoIcon}
+                label="African Language"
+                goTo={() => navigate("africanlaguage")}
+              />
             </div>
           </div>
 
@@ -66,7 +79,7 @@ const LibraryNotPaid = () => {
             data={data?.slice(1, 7).map((el) => ({ ...el }))}
             card={(props: DataType) => <Card {...props} />}
             header="Stories"
-            actiontitle="View View all"
+            actiontitle="View all"
             isTitled={true}
           />
           <AdsButton />
@@ -75,7 +88,7 @@ const LibraryNotPaid = () => {
             data={data?.slice(1, 7).map((el) => ({ ...el }))}
             card={(props: DataType) => <Card {...props} />}
             header="Audio books"
-            actiontitle="View View all"
+            actiontitle="View all"
             isTitled={true}
           />
 
@@ -83,7 +96,7 @@ const LibraryNotPaid = () => {
             data={languageData}
             card={(props: DataType) => <Card {...props} />}
             header="African Languages"
-            actiontitle="View View all"
+            actiontitle="View all"
             isTitled={true}
           />
         </InnerWrapper>

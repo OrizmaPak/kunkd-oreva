@@ -12,7 +12,7 @@ import InnerWrapper from "../../common/User/InnerWrapper";
 const BedTimeStories = () => {
   return (
     <div>
-      <Wrapper>
+      <Wrapper bgColor="#fff7fd">
         <InnerWrapper>
           <Hero image={Banner} />
           <hr className="my-14 mx-[200px]" />

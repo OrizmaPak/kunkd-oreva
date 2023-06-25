@@ -75,6 +75,7 @@ const MyKids = () => {
             <ChildNameModal
               onContinue={() => setCurrentStep(STEP_2)}
               goBack={() => currentStep - 1}
+              showGoBackIcon={false}
             />
           )}
           {currentStep === STEP_2 && (

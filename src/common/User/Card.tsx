@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export type CardProps = {
   image?: string;
@@ -10,9 +10,10 @@ export type CardProps = {
 
 const Card = ({ title, image, size, id, clickable }: CardProps) => {
   const navigate = useNavigate();
+  const { id: storyType } = useParams();
   const goto = () => {
     if (!clickable) return;
-    navigate(`../stories1/${id}`, { state: { image, title, size } });
+    navigate(`../${storyType}/${id}`, { state: { image, title, size } });
   };
   return (
     <div
