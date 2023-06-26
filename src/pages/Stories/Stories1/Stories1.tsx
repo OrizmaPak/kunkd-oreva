@@ -351,6 +351,7 @@ const AudioControls = ({
 };
 
 const WelDone = () => {
+  const navigate = useNavigate();
   return (
     <div className=" h-full flex justify-center items-center">
       <div>
@@ -364,7 +365,10 @@ const WelDone = () => {
           </p>
         </div>
         <p className="flex flex-col gap-y-5 mt-16">
-          <button className="px-16 py-3 bg-[#8530C1] text-white rounded-2xl">
+          <button
+            onClick={() => navigate("quiz")}
+            className="px-16 py-3 bg-[#8530C1] text-white rounded-2xl"
+          >
             Take quiz
           </button>
           <button className="text-[18px]">Later</button>

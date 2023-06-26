@@ -28,7 +28,8 @@ import Earniing2card from "@/assets/earniing2card.svg";
 import Earningcard from "@/assets/earningcard.svg";
 import Mamacard from "@/assets/mamacard.svg";
 import Puffcard from "@/assets/puffcard.svg";
-import AudioBookOne from "@/audiobooks/ABC Song  Kunda Kids Nursery Rhymes & Kids Songs.mp3";
+import AudioBookOne from "@/audiobooks/QueenMoremi.mp3";
+import Quiz from "./Stories1/Quiz";
 
 export type StoriesType = {
   title?: string;
@@ -274,7 +275,7 @@ const Stories = () => {
               <Route path=":id" element={<Story />}></Route>
             </Route>
             <Route path=":story_type/:id" element={<Stories1 />}></Route>
-            <Route path=":story_type/:id/quiz" element={<>quize</>}></Route>
+            <Route path=":story_type/:id/quiz" element={<Quiz />}></Route>
           </Routes>
         </InnerWrapper>
       </Wrapper>
