@@ -1,5 +1,5 @@
 import Button from "./Button";
-import Logo from "@/assets/KundaLogo.svg";
+import KundaLogo from "@/assets/schoolIcon.svg";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const HomeHeader = () => {
@@ -10,13 +10,19 @@ const HomeHeader = () => {
   };
 
   return (
-    <div className="flex font-[500] py-4 text-[16px] px-[120px] justify-between items-center bg-white  fixed w-full z-[100]">
+    <div className="flex font-[500] py-2 text-[16px] px-[120px] justify-between items-center bg-white  fixed w-full z-[100]">
       <NavLink
         to="/"
         className={({ isActive }) => (isActive ? "" : "text-black")}
       >
         <div>
-          <img src={Logo} alt="logo" width="155.91px" height="35pxs" />
+          <img
+            src={KundaLogo}
+            alt="logo"
+            width="45.91px"
+            height="35pxs"
+            className="min-w-[45.91px]"
+          />
         </div>
       </NavLink>
 

@@ -13,6 +13,7 @@ import { userContext } from "@/Context/StateProvider";
 import Avatar1 from "@/assets/Avatar1.svg";
 import Avatar2 from "@/assets/Avatar2.svg";
 import UserIcon2 from "@/assets/userIcon2.svg";
+import KundaLogo from "@/assets/schoolIcon.svg";
 
 const SchoolHeader = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -55,11 +56,11 @@ const SchoolHeader = () => {
         <Link to="/">
           <div>
             <img
-              src={Logo}
+              src={KundaLogo}
               alt="logo"
-              width="155.91px"
+              width="60.91px"
               height="35pxs"
-              className="min-w-[155.91px]"
+              className="min-w-[60.91px]"
             />
           </div>
         </Link>

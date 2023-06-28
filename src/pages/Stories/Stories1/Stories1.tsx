@@ -92,9 +92,9 @@ const Stories1 = () => {
           )}
         </div>
         <div className="flex-grow flex  h-full ">
-          <div className="flex-grow bg-white mt-5 rounded-2xl">
+          <div className="flex-grow mt-5 rounded-2xl">
             {!isFinish ? (
-              <div className="flex h-full  gap-4 mt-5 flex-grow-1 flex-col ">
+              <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
                 {story && !startRead && (
                   <AboutPage
                     story={story}
@@ -192,7 +192,7 @@ const ReadPage = ({
   const [isReading, setIsReading] = useState(false);
 
   return (
-    <div className="flex bg-white py-16  rounded-3xl px-16">
+    <div className="flex py-16 bg-white  rounded-3xl px-16">
       <div className=" basis-3/4 flex  items-center">
         <img src={story.image} alt="image" className="w-[400px]" />
       </div>
@@ -236,7 +236,7 @@ const BookPagination = ({ setIsFinish }: { setIsFinish: () => void }) => {
   };
   return (
     <div>
-      <div className="flex  justify-between  items-center">
+      <div className="flex  justify-between   items-center">
         <span className="flex gap-2">
           <p>Pages 5 </p>
           <img src={ArrowDown} alt="arrow" className="w-[15px]" />
@@ -321,7 +321,7 @@ const AudioControls = ({
         ref={audioRef}
         src={audio}
       ></audio>
-      <div className="flex justify-end rounded-full gap-10 px-20 py-4 bg-[#FBECFF] items-center ">
+      <div className="flex justify-end rounded-full h-[60px] gap-10 px-20 py-4 bg-[#FBECFF] items-center ">
         <button onClick={handeSkip10("backward")}>
           <img src={FastBackward} alt="backward" />
         </button>
@@ -340,7 +340,7 @@ const AudioControls = ({
         <div className="flex items-end">
           <button
             onClick={setIsFinish}
-            className=" px-10 bg-green-700 text-[16px] py-2  text-white  rounded-3xl ml-10"
+            className=" px-14 bg-green-700 text-[16px] py-4 h-[60px] text-white  rounded-full ml-10"
           >
             Finish
           </button>
@@ -353,7 +353,7 @@ const AudioControls = ({
 const WelDone = () => {
   const navigate = useNavigate();
   return (
-    <div className=" h-full flex justify-center items-center">
+    <div className=" h-full flex justify-center bg-white rounded-3xl items-center">
       <div>
         <p className="flex justify-center items-center">
           <img src={Congrats} alt="congrats" className="w-[200px]" />

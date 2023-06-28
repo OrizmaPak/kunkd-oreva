@@ -289,6 +289,7 @@ const Story = () => {
   return (
     <>
       <div>
+        <hr className="my-20 mx-[200px]" />
         <h1 className="text-center font-bold text-[30px] font-Recoleta mt-10 ">
           {params?.id?.toString()} Stories
         </h1>
@@ -318,7 +319,7 @@ const BrowseGenre = () => {
   const navigate = useNavigate();
   return (
     <>
-      <hr className="my-14 mx-[200px]" />
+      <hr className="my-20 mx-[200px]" />
 
       <div>
         <h1 className="text-center font-bold text-[30px] font-Recoleta my-10 ">

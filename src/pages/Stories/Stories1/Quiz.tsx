@@ -243,7 +243,7 @@ const GoodRemarkMsg = () => {
   };
   return (
     <>
-      <div className="relative flex-grow">
+      <div className="relative flex-grow bg-white">
         <img
           src={RemarkBg}
           alt=""

@@ -55,6 +55,8 @@ import SecureAdminPortal from "./pages/SchoolSignup/SecureAdminPortal/SecureAdmi
 import ParentHomePage from "./pages/AfterParentSignIn/ParentHomePage";
 import SelectProfile from "./pages/AfterParentSignIn/SelectProfile";
 import ChildProfileSetUp from "./pages/AfterParentSignIn/ChildProfileSetUp";
+import AudioBooks from "@/pages/AudioBooks/AudioBooks";
+import AfricanLanguages from "@/pages/AfricanLanguages/AfricanLanguages";
 
 function App() {
   return (
@@ -89,6 +91,11 @@ function App() {
               <Route path="librarynotpaid/*">
                 <Route index element={<LibraryNotPaid />}></Route>
                 <Route path="stories/*" element={<Stories />}></Route>
+                <Route path="audiobooks/*" element={<AudioBooks />}></Route>
+                <Route
+                  path="africanlanguages/*"
+                  element={<AfricanLanguages />}
+                ></Route>
               </Route>
               <Route path="librarypaid" element={<LibraryPaid />}></Route>
               {/* <Route path="stories" element={<Stories />}></Route> */}

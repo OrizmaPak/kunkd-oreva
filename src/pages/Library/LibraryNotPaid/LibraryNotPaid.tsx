@@ -48,7 +48,7 @@ const LibraryNotPaid = () => {
       <Wrapper>
         <InnerWrapper>
           <Hero image={Banner} />
-          <hr className="my-14 mx-[200px]" />
+          <hr className="my-20 mx-[200px]" />
 
           <div>
             <h1 className="text-center font-bold text-[30px] font-Recoleta my-10 ">
@@ -70,7 +70,7 @@ const LibraryNotPaid = () => {
               <CategoriesCard
                 image={videoIcon}
                 label="African Language"
-                goTo={() => navigate("africanlaguage")}
+                goTo={() => navigate("africanlanguages")}
               />
             </div>
           </div>
