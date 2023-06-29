@@ -59,7 +59,7 @@ export type StoriesType = {
 export const africanLanguagesData: StoriesType[] = [
   {
     title: "Bedtime Stories",
-    videoBook: VideoBook,
+    videoBook: "https://www.youtube.com/watch?v=VzAo9xQjzZ0",
     image: Chisomcard,
     range: 56,
     id: "1",
@@ -77,7 +77,7 @@ export const africanLanguagesData: StoriesType[] = [
   {
     title: "Fairy Tails Stories",
     image: Gorillacard,
-    videoBook: VideoBook,
+    videoBook: "https://www.youtube.com/watch?v=VzAo9xQjzZ0",
     range: 80,
     id: "2",
     lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
@@ -94,7 +94,7 @@ export const africanLanguagesData: StoriesType[] = [
   {
     title: "Money Smarts",
     image: Mamacard,
-    videoBook: VideoBook,
+    videoBook: "https://www.youtube.com/watch?v=VzAo9xQjzZ0",
     range: 86,
     lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "3",
@@ -111,7 +111,7 @@ export const africanLanguagesData: StoriesType[] = [
   {
     title: "Sports",
     image: Puffcard,
-    videoBook: VideoBook,
+    videoBook: "https://www.youtube.com/watch?v=VzAo9xQjzZ0",
     range: 56,
     lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "4",
@@ -128,7 +128,7 @@ export const africanLanguagesData: StoriesType[] = [
   {
     title: " Leaders",
     image: Chisomcard,
-    videoBook: VideoBook,
+    videoBook: "https://www.youtube.com/watch?v=VzAo9xQjzZ0",
     range: 70,
     lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "5",
@@ -145,7 +145,7 @@ export const africanLanguagesData: StoriesType[] = [
   {
     title: "Inspiring Leaders",
     image: Earniing2card,
-    videoBook: VideoBook,
+    videoBook: "https://www.youtube.com/watch?v=VzAo9xQjzZ0",
     range: 56,
     lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "6",
@@ -162,7 +162,7 @@ export const africanLanguagesData: StoriesType[] = [
   {
     title: "Inspiring Leaders",
     image: Earningcard,
-    videoBook: VideoBook,
+    videoBook: "https://www.youtube.com/watch?v=VzAo9xQjzZ0",
     range: 66,
     lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "7",
@@ -179,7 +179,7 @@ export const africanLanguagesData: StoriesType[] = [
   {
     title: "Sports",
     image: Dancercard,
-    videoBook: VideoBook,
+    videoBook: "https://www.youtube.com/watch?v=VzAo9xQjzZ0",
     range: 90,
     lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "8",
@@ -196,7 +196,7 @@ export const africanLanguagesData: StoriesType[] = [
   {
     title: "Afam",
     image: Afamcard,
-    videoBook: VideoBook,
+    videoBook: "https://www.youtube.com/watch?v=VzAo9xQjzZ0",
     range: 36,
     lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "9",
@@ -213,7 +213,7 @@ export const africanLanguagesData: StoriesType[] = [
   {
     title: "African Leaders",
     image: Africancard,
-    videoBook: VideoBook,
+    videoBook: "https://www.youtube.com/watch?v=VzAo9xQjzZ0",
     range: 56,
     lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "10",
@@ -230,7 +230,8 @@ export const africanLanguagesData: StoriesType[] = [
   {
     title: " Leaders",
     image: Caterpillercard,
-    videoBook: VideoBook,
+    videoBook:
+      "blob:https://www.youtube.com/c51ca6f1-9572-43f0-8509-b0f0f415f2a3",
     range: 86,
     lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "11",
