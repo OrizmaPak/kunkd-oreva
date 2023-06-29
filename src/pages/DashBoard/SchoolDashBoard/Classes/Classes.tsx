@@ -8,7 +8,7 @@ import { Pagination } from "@mantine/core";
 import Chiks from "@/assets/chiks.svg";
 import Jessica from "@/assets/jessica.svg";
 import Grease from "@/assets/grease.svg";
-import Blxst from "@/assets/blxst.svg";
+import Blxst from "@/assets/Blxst.svg";
 import Godwin from "@/assets/godwin.svg";
 import Mitchel from "@/assets/godwin.svg";
 import Pemela from "@/assets/pamela.svg";
