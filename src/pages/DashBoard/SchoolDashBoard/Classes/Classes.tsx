@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import ArrowDown from "@/assets/arrowdown.svg";
 import ClassesIcon from "@/assets/classes.svg";
-import Rectangle from "@/assets/rectange.svg";
+import Rectangle from "@/assets/Rectangle.svg";
 // import { data } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";
 import Row from "./Row";
 import { Pagination } from "@mantine/core";
