@@ -1,17 +1,12 @@
 import { Progress } from "@mantine/core";
 import StoriesNav from "./StoriesNav";
-import {
-  Location,
-  useParams,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
-import { storiesData, StoriesType } from "../Stories";
+import { useParams, useNavigate } from "react-router-dom";
+import { storiesData } from "../Stories";
 import { useState } from "react";
 import RemarkBg from "@/assets/remarkbg.svg";
 import RemarkIcon from "@/assets/remarkIcon.svg";
 import Button from "@/components/Button";
-import { ThemeIcon, RingProgress, Text, Center } from "@mantine/core";
+import { RingProgress, Text } from "@mantine/core";
 import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
 type ObjAnsQuestionType = {
   question: string;
@@ -318,7 +313,7 @@ const QuestionPagination = ({
 };
 
 const GoodRemarkMsg = ({ setShowResult }: { setShowResult: () => void }) => {
-  const location = useLocation();
+  // const location = useLocation();
 
   const refreshPage = () => {
     window.location.reload();

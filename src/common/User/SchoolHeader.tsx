@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import Logo from "@/assets/KundaLogo.svg";
 import BellIcon from "@/assets/bellicon.svg";
 import UserIcon from "@/assets/usericon.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
@@ -19,7 +18,7 @@ const SchoolHeader = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
 
-  const [{ email, userType }, dispatch] = userContext();
+  const [{ userType }] = userContext();
   const handleDashboard = () => {
     console.log("usertype", userType);
     if (userType === "teacher") {
