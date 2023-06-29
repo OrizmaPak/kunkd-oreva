@@ -5,7 +5,6 @@ import Button from "@/components/Button";
 import { Link } from "react-router-dom";
 import { PinInput, Group } from "@mantine/core";
 import { useState } from "react";
-import { FormEvent } from "react";
 import FormWrapper from "@/common/FormWrapper";
 // import { useForm, SubmitHandler } from "react-hook-form";
 

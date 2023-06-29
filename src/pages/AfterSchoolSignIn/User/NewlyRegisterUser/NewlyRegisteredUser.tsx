@@ -1,5 +1,4 @@
 import Hero from "./Hero";
-
 import Chisomcard from "@/assets/Chisomcard.svg";
 import Gorillacard from "@/assets/Gorillacard.svg";
 import Afamcard from "@/assets/afamcard.svg";

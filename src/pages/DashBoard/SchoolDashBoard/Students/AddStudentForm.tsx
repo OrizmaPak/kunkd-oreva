@@ -1,8 +1,6 @@
 import Button from "@/components/Button";
 import InputFormat from "@/common/InputFormat";
 import EmailIcon from "@/assets/emaillogo.svg";
-import PasswordIcon from "@/assets/passwordIcon.svg";
-import PasswordEye from "@/assets/passwordeye.svg";
 
 const AddStudentForm = ({ handleContinue }: { handleContinue: () => void }) => {
   return (

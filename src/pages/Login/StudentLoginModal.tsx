@@ -1,6 +1,4 @@
 import InputFormat from "@/common/InputFormat";
-import PasswordIcon from "@/assets/passwordIcon.svg";
-import PasswordEye from "@/assets/passwordeye.svg";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";

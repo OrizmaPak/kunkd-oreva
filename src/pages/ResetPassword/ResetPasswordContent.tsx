@@ -4,7 +4,7 @@ import Button from "@/components/Button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-const ResetPasswordContent = ({ onSubmit }: { onSubmit: () => void }) => {
+const ResetPasswordContent = ({ onSubmit }: { onSubmit?: () => void }) => {
   const [pinValue, setPinValue] = useState("");
 
   const handlePinChange = (value: string) => {
@@ -19,7 +19,7 @@ const ResetPasswordContent = ({ onSubmit }: { onSubmit: () => void }) => {
       console.log(pinValue.length);
       return;
     } else {
-      onSubmit();
+      if (onSubmit) onSubmit();
     }
   };
 
@@ -36,7 +36,7 @@ const ResetPasswordContent = ({ onSubmit }: { onSubmit: () => void }) => {
         <p className="text-[15px] text-[#A7A7A7] font-Hanken">
           Enter the reset code that was sent to your email.
         </p>
-        <form>
+        <form onSubmit={submitData}>
           <div className="mt-8 flex justify-center items-center">
             <Group position="center">
               <PinInput value={pinValue} onChange={handlePinChange} />

@@ -1,11 +1,9 @@
 import ArrowDown from "@/assets/arrowdown.svg";
-import NewStudent from "../NewStudent";
 import LessThanIcon from "@/assets/lessthanIcon.svg";
 import StudentIcon from "@/assets/studentIcon.svg";
 
-type Props = {};
-import { Navigation, useNavigate } from "react-router-dom";
-const Header = (props: Props) => {
+import { useNavigate } from "react-router-dom";
+const Header = () => {
   const navigate = useNavigate();
   return (
     <div>
