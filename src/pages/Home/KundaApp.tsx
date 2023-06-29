@@ -2,6 +2,7 @@ import Wave2 from "@/assets/secondwave.svg";
 import Zigzag1 from "@/assets/zizag.svg";
 import OutLineZero from "@/assets/outlineZero.svg";
 import FilledZero from "@/assets/filledZero.svg";
+import React from "react";
 
 type Props = {
   children?: React.ReactNode;

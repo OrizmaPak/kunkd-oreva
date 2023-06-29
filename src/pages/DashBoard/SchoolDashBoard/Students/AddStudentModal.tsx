@@ -1,6 +1,6 @@
 import { Modal } from "@mantine/core";
 import { STEP_1, STEP_2 } from "@/utils/constants";
-import AddTeacherForm from "./AddStudentForm";
+import AddStudentForm from "./AddStudentForm";
 import UploadPicture from "./UploadPicture";
 import { useState } from "react";
 
@@ -27,7 +27,7 @@ const AddStudentModal = ({
       centered
     >
       {modalStep === STEP_1 && (
-        <AddTeacherForm handleContinue={handleContinue} />
+        <AddStudentForm handleContinue={handleContinue} />
       )}
 
       {modalStep === STEP_2 && <UploadPicture />}

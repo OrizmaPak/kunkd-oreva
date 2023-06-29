@@ -1,12 +1,13 @@
 // 1. Create a component that consumes the `useRadio`
 import {
   HStack,
-  Radio,
   Box,
   useRadioGroup,
   useRadio,
   UseRadioProps,
 } from "@chakra-ui/react";
+import React from "react";
+
 function RadioCard(props: UseRadioProps & { children: React.ReactNode }) {
   const { getInputProps, getRadioProps } = useRadio(props);
 

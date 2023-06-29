@@ -1,6 +1,6 @@
 import { UseFormRegisterReturn } from "react-hook-form";
 import ErrorIcon from "@/assets/errorIcon.svg";
-import { Img } from "@chakra-ui/react";
+import React from "react";
 
 type Props = {
   type?: "text" | "password" | "email" | "number" | "date";

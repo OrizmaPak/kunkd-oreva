@@ -15,6 +15,7 @@ const AddTeacherModal = ({
   const handleContinue = () => {
     setModalStep(STEP_2);
   };
+
   return (
     <Modal
       radius={"xl"}

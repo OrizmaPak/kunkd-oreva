@@ -1,18 +1,16 @@
-import { Img } from "@chakra-ui/react";
-import UserIcon from "@/assets/usericon.svg";
 import DasboardIcon from "@/assets/Dashboard.svg";
 import TeacherIcon from "@/assets/teacher.svg";
 import StudentIcon from "@/assets/student.svg";
 import ClassesIcon from "@/assets/classes.svg";
-import SettingIcon from "@/assets/searchicon.svg";
 import LogoutIcon from "@/assets/logout.svg";
-import SchoolLogo from "@/assets/schlogo.svg";
 import Arrow from "@/assets/greatericon.svg";
 import { Outlet } from "react-router-dom";
 import { useMatch, useNavigate } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
 import LogoutModal from "@/pages/DashBoard/SchoolDashBoard/LogoutModal";
+import React from "react";
+
 import SchoolIcon from "@/assets/schoolIcon.svg";
 
 const routeBaseUrl = "/schooldashboard";
@@ -54,7 +52,7 @@ const links = [
 const SchoolLayout = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   return (
     <>
       <Modal
@@ -141,9 +139,7 @@ const DasboardButton = ({
 };
 
 export const Header = ({
-  title,
   icon1,
-  icon2,
 }: {
   title: string;
   icon1: React.ReactNode;

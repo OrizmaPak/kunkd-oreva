@@ -1,9 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import AfricanLanguagesNav from "./AfricanLanguagesNav";
 import { africanLanguagesData } from "./AfricanLanguages";
-import { useEffect, useState, useRef } from "react";
-import PlayIcon from "@/assets/play.svg";
-import { Divider } from "@chakra-ui/react";
+import { useState } from "react";
+
 import SaveIcon from "@/assets/saveIcon.svg";
 import ShareIcon from "@/assets/shareIcon.svg";
 import Congrats from "@/assets/congrats.svg";
@@ -69,7 +68,7 @@ const VideoPlayer = () => {
             </h1>
             <div>
               {africanLanguagesData.slice(1, 6).map((data, index) => (
-                <RecommendedVideoCard {...data} />
+                <RecommendedVideoCard key={index} {...data} />
               ))}
             </div>
           </div>

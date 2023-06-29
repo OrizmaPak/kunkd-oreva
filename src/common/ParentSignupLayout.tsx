@@ -1,8 +1,7 @@
 import Checked from "@/assets/Checked.svg";
 import Cancel2 from "@/assets/cancel2.svg";
 import Hambuger from "@/assets/hambuger.svg";
-import FormWrapper from "@/common/FormWrapper";
-
+import React from "react";
 import { useState } from "react";
 const signinDashboardData = [
   {
@@ -98,7 +97,7 @@ const SigninDash = ({
     </div>
   );
 };
-const SigninDashIonsOnly = ({ active }: { active?: boolean }) => {
+const SigninDashIonsOnly = ({}: { active?: boolean }) => {
   return (
     <div className="mb-20">
       <img src={Checked} alt="roundmark" />

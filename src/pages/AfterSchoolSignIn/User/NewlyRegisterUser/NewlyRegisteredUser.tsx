@@ -1,6 +1,5 @@
 import Hero from "./Hero";
-import Banner from "@/assets/banner1.svg";
-import userImage from "@/assets/userimage1.svg";
+
 import Chisomcard from "@/assets/Chisomcard.svg";
 import Gorillacard from "@/assets/Gorillacard.svg";
 import Afamcard from "@/assets/afamcard.svg";

@@ -8,7 +8,6 @@ const Row = ({
   gender,
   email,
   onClick,
-  id,
 }: {
   image: string;
   name: string;
@@ -23,7 +22,7 @@ const Row = ({
         <div className="grid  grid-cols-[100px_1fr_1fr_150px_150px] mt-2  px-8">
           <div className="flex justify-start items-center ">
             <span className=" ">
-              <img src={Rectangle} alt="" />
+              <img src={Rectangle} alt="image" />
             </span>
           </div>
           <div
@@ -31,7 +30,7 @@ const Row = ({
             className="flex items-center justify-start gap-2 "
           >
             <span>
-              <img src={image} alt="" />
+              <img src={image} alt="image" />
             </span>
             <span>{name}</span>
           </div>
@@ -39,7 +38,7 @@ const Row = ({
           <div className="flex justify-start items-center ">{gender}</div>
           <div className="flex justify-end  gap-4  items-center">
             <span>
-              <img src={ToggleIcon} alt="" />
+              <img src={ToggleIcon} alt="image" />
             </span>
             <span>
               <img src={DeleteIcon} alt="delete" />

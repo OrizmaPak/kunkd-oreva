@@ -1,7 +1,8 @@
 // import Card from "./Card";
 // import SavingCard from "./@'/ser";
 import { DataType } from "../../pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
-import { CardProps } from "./Card";
+import React from "react";
+
 type Props = {
   data?: DataType[];
   header?: string;
@@ -10,14 +11,7 @@ type Props = {
   isTitled?: boolean;
   card?: (props: DataType) => React.ReactNode;
 };
-const CardScreen = ({
-  data,
-  header,
-  action,
-  actiontitle,
-  isTitled,
-  card,
-}: Props) => {
+const CardScreen = ({ data, header, action, actiontitle, card }: Props) => {
   return (
     <div className=" mx-20 mt-4 ">
       <div className="flex justify-between mb-8 ">
@@ -31,7 +25,7 @@ const CardScreen = ({
         style={{ maxHeight: "500px" }}
       >
         <div className="grid grid-flow-col  gap-5 mb-14  ">
-          {data?.map((data, index) => {
+          {data?.map((data) => {
             return card ? card(data) : null;
             // <Card key={index} image={data?.image} title={data?.title} />
           })}

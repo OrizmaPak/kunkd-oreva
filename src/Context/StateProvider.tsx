@@ -1,6 +1,7 @@
 import { useContext, useReducer, createContext } from "react";
 import reducer, { userInitialState } from "./Reducer";
 import type { Dispatch, State } from "./Reducer";
+import React from "react";
 
 type ContextType = [State, Dispatch];
 const UserContext = createContext<ContextType>([userInitialState, () => {}]);

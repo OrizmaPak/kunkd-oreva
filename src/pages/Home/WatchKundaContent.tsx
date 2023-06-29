@@ -1,5 +1,3 @@
-import GooglePlay from "./GooglePlay";
-import AppleStore from "./AppleStore";
 import VideoCard from "@/components/VideoCard";
 import Phones from "@/assets/phones.svg";
 import Lines from "@/assets/lines.svg";
@@ -46,7 +44,7 @@ const WatchKundaContent = () => {
         <img
           src={ZagR}
           alt="zigzag"
-          className="absolute  bottom-[0px]  left-[1500px]"
+          className="absolute  bottom-[0px]  left-[0px]"
         />
         {/* </div> */}
       </div>

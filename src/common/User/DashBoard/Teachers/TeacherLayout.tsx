@@ -1,12 +1,8 @@
-import { Img } from "@chakra-ui/react";
-import UserIcon from "@/assets/usericon.svg";
 import DasboardIcon from "@/assets/Dashboard.svg";
-import TeacherIcon from "@/assets/teacher.svg";
+
 import StudentIcon from "@/assets/student.svg";
-import ClassesIcon from "@/assets/classes.svg";
-import SettingIcon from "@/assets/searchicon.svg";
+
 import LogoutIcon from "@/assets/logout.svg";
-import SchoolLogo from "@/assets/schlogo.svg";
 import Arrow from "@/assets/greatericon.svg";
 import { Outlet } from "react-router-dom";
 import { useMatch, useNavigate } from "react-router-dom";
@@ -16,6 +12,7 @@ import LogoutModal from "@/pages/DashBoard/SchoolDashBoard/LogoutModal";
 import Teacher01 from "@/assets/teacher01.svg";
 import SchoolIcon from "@/assets/schoolIcon.svg";
 import { Header } from "@/common/User/DashBoard/School/SchoolLayout";
+import React from "react";
 
 const routeBaseUrl = "/teacherdashboard";
 const links = [

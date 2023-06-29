@@ -1,22 +1,12 @@
 import Wrapper from "@/common/User/Wrapper";
 import Hero from "@/pages/Library/LibraryNotPaid/Hero";
-import CardScreen from "@/common/User/CardScreen";
-import Card, { CardProps } from "@/common/User/Card";
+import { CardProps } from "@/common/User/Card";
 // import { data } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 // import { DataType } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
-import AdsButton from "@/common/User/AdsButton";
-import Banner from "@/assets/banner5.svg";
-import Banner1 from "@/assets/banner6.svg";
+
 import InnerWrapper from "../../common/User/InnerWrapper";
-import Button from "@/components/Button";
-import GroupCard from "@/assets/groupcard.svg";
-import {
-  Route,
-  Routes,
-  useNavigate,
-  useParams,
-  Outlet,
-} from "react-router-dom";
+
+import { Route, Routes, useNavigate } from "react-router-dom";
 // import BookLayout from "./BookLayout";
 import Chisomcard from "@/assets/Chisomcard.svg";
 import Gorillacard from "@/assets/Gorillacard.svg";
@@ -28,11 +18,8 @@ import Earniing2card from "@/assets/earniing2card.svg";
 import Earningcard from "@/assets/earningcard.svg";
 import Mamacard from "@/assets/mamacard.svg";
 import Puffcard from "@/assets/puffcard.svg";
-import AudioBookOne from "@/audiobooks/QueenMoremi.mp3";
 import AfricanBanner from "@/assets/africanlanBanner.svg";
-import TimeIcon from "@/assets/timeIcon.svg";
-import PlayIcon from "@/assets/play.svg";
-import Slider from "react-slick";
+
 import Yoruba from "@/assets/yoruba.svg";
 import Igbo from "@/assets/Igbo.svg";
 import Twi from "@/assets/twi.svg";
@@ -40,7 +27,6 @@ import Luganda from "@/assets/Luganda.svg";
 import Kiswahili from "@/assets/Kiswahili.svg";
 import Videos from "./Videos";
 import VideoPlayer from "./VideoPlayer";
-import VideoBook from "@/videobooks/video1.mp4";
 import Quiz from "./Quiz";
 
 export type StoriesType = {
@@ -247,38 +233,38 @@ export const africanLanguagesData: StoriesType[] = [
   },
 ];
 
-const subButtons = [
-  {
-    name: " Bedtime",
-  },
-  {
-    name: "Holidays and Celebration",
-  },
-  {
-    name: " Inventors",
-  },
-  {
-    name: " Life & Growing up",
-  },
-  {
-    name: "Folk Tales",
-  },
-  {
-    name: " Inspiring Leaders",
-  },
-  {
-    name: "Finance",
-  },
-  {
-    name: "Money smart",
-  },
-  {
-    name: "Fairy Tales",
-  },
-  {
-    name: "Sport",
-  },
-];
+// const subButtons = [
+//   {
+//     name: " Bedtime",
+//   },
+//   {
+//     name: "Holidays and Celebration",
+//   },
+//   {
+//     name: " Inventors",
+//   },
+//   {
+//     name: " Life & Growing up",
+//   },
+//   {
+//     name: "Folk Tales",
+//   },
+//   {
+//     name: " Inspiring Leaders",
+//   },
+//   {
+//     name: "Finance",
+//   },
+//   {
+//     name: "Money smart",
+//   },
+//   {
+//     name: "Fairy Tales",
+//   },
+//   {
+//     name: "Sport",
+//   },
+// ];
 
 const languageData = [
   {
@@ -303,14 +289,14 @@ const languageData = [
     title: "Igbo",
   },
 ];
-const MainStoriesLayout = () => {
-  return (
-    <>
-      <Hero image={AfricanBanner} />
-      <Outlet />
-    </>
-  );
-};
+// const MainStoriesLayout = () => {
+//   return (
+//     <>
+//       <Hero image={AfricanBanner} />
+//       <Outlet />
+//     </>
+//   );
+// };
 
 const AfricanLanguagess = () => {
   return (
@@ -331,7 +317,7 @@ const AfricanLanguagess = () => {
 export default AfricanLanguagess;
 
 const LanguagesVideo = () => {
-  const params = useParams();
+  // const params = useParams();
   return (
     <>
       {/* <div className="bg-white rounded-3xl"> */}
@@ -361,9 +347,9 @@ const LanguagesVideo = () => {
   );
 };
 
-export const VideoCard = ({ title, image, size, id }: CardProps) => {
+export const VideoCard = ({ title, image, size }: CardProps) => {
   const navigate = useNavigate();
-  const { id: storyType } = useParams();
+  // const { id: storyType } = useParams();
   const goto = () => {
     if (title) {
       navigate(title?.trim().toLocaleLowerCase());

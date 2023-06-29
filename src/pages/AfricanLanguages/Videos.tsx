@@ -22,7 +22,7 @@ const Videos = () => {
         <hr className="my-16 mx-20" />
         <div className="grid grid-cols-5 gap-5 px-20 mt-10">
           {africanLanguagesData.map((data, index) => (
-            <Card clickable {...data} />
+            <Card key={index} clickable {...data} />
           ))}
         </div>
       </div>

@@ -1,3 +1,5 @@
+import React from "react";
+
 const sizes = {
   md: "px-10 py-3",
   sm: "px-4 py-2",

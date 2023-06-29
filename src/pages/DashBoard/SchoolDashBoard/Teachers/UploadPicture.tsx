@@ -1,10 +1,11 @@
 import Button from "@/components/Button";
 import { useState } from "react";
-import { Text, Image, SimpleGrid } from "@mantine/core";
+import { Text } from "@mantine/core";
 import { Dropzone, FileWithPath } from "@mantine/dropzone";
 
 import DragIcon from "@/assets/draganddropicon.svg";
 import CameraIcon from "@/assets/cameralogo.svg";
+import { motion } from "framer-motion";
 
 const UploadPicture = () => {
   const [files, setFiles] = useState<FileWithPath[]>([]);
@@ -26,33 +27,42 @@ const UploadPicture = () => {
   });
 
   return (
-    <div className="px-5">
-      <h1 className="font-bold font-Recoleta text-center text-[30px] my-3">
-        Upload Profile Picture
-      </h1>
-      <Dropzone onDrop={setFiles}>
-        <Text align="center">
-          <div className="flex gap-4">
-            <span className="flex-grow ">
-              <p className="w-[250px]">
-                {files && previews}
-                {files.length < 1 && <img src={DragIcon} alt="drag and drop" />}
-              </p>
-            </span>
-            <span className="flex-grow flex flex-col justify-center items-center">
-              <span className="font-bold">
-                Drop your photo here
-                <span className="text-[#8530C1]"> or Select a file</span>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 1 }}
+    >
+      <div className="px-5">
+        <h1 className="font-bold font-Recoleta text-center text-[30px] my-3">
+          Upload Profile Picture
+        </h1>
+        <Dropzone onDrop={setFiles}>
+          <Text align="center">
+            <div className="flex gap-4">
+              <span className="flex-grow ">
+                <p className="w-[250px]">
+                  {files && previews}
+                  {files.length < 1 && (
+                    <img src={DragIcon} alt="drag and drop" />
+                  )}
+                </p>
               </span>
-              <span>Supports: JPG, PNG.</span>
-            </span>
-          </div>
-        </Text>
-      </Dropzone>
-      <div className="max-w-[70%] mx-auto my-4">
-        <Button>Create Profile</Button>
+              <span className="flex-grow flex flex-col justify-center items-center">
+                <span className="font-bold">
+                  Drop your photo here
+                  <span className="text-[#8530C1]"> or Select a file</span>
+                </span>
+                <span>Supports: JPG, PNG.</span>
+              </span>
+            </div>
+          </Text>
+        </Dropzone>
+        <div className="max-w-[70%] mx-auto my-4">
+          <Button>Create Profile</Button>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

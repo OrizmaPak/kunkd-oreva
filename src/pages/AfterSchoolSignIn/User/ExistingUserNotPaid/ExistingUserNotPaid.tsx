@@ -1,8 +1,6 @@
 import { data, DataType } from "../NewlyRegisterUser/NewlyRegisteredUser";
 import Wrapper from "../../../../common/User/Wrapper";
 import Hero from "../NewlyRegisterUser/Hero";
-import Banner2 from "@/assets/Banner2.svg";
-import userImage from "@/assets/userimage1.svg";
 import CardScreen from "../../../../common/User/CardScreen";
 import Card from "../../../../common/User/Card";
 import CardNdRange from "../../../../common/User/CardNdRange";

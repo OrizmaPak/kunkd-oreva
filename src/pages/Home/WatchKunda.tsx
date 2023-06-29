@@ -1,4 +1,5 @@
 import LineGruoped from "@/assets/linegrouped.svg";
+import React from "react";
 
 type Props = {
   children?: React.ReactNode;

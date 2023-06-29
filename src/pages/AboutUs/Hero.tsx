@@ -1,4 +1,3 @@
-import Button from "@/components/Button";
 import Pupils2 from "@/assets/pupils2.svg";
 
 const Hero = () => {

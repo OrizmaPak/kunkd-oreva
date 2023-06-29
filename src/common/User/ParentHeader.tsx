@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import Logo from "@/assets/KundaLogo.svg";
-import BadgeIcon from "@/assets/badge.svg";
-import BatteryIcon from "@/assets/battery.svg";
-import Avatar3 from "@/assets/Avatar3.svg";
+
 import BellIcon from "@/assets/bellicon.svg";
 import UserIcon from "@/assets/usericon.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
