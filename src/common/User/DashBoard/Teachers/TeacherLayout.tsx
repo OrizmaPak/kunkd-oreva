@@ -1,4 +1,4 @@
-import DasboardIcon from "@/assets/Dashboard.svg";
+import DasboardIcon from "@/assets/adminIcon.svg";
 
 import StudentIcon from "@/assets/student.svg";
 
