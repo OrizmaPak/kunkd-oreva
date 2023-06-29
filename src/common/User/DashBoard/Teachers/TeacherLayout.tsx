@@ -1,5 +1,4 @@
 import { Img } from "@chakra-ui/react";
-import React from "react";
 import UserIcon from "@/assets/usericon.svg";
 import DasboardIcon from "@/assets/Dashboard.svg";
 import TeacherIcon from "@/assets/teacher.svg";

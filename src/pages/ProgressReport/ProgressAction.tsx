@@ -1,4 +1,3 @@
-import React from "react";
 import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
 
 const ProgressAction = ({

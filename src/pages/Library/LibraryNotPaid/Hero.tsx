@@ -1,4 +1,3 @@
-import React from "react";
 import Banner from "@/assets/Banner4.svg";
 
 const Hero = ({ image }: { image: string }) => {

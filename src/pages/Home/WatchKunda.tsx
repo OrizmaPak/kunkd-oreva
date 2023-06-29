@@ -1,4 +1,3 @@
-import React from "react";
 import LineGruoped from "@/assets/linegrouped.svg";
 
 type Props = {

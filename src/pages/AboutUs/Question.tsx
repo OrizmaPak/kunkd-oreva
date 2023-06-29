@@ -1,5 +1,3 @@
-import React from "react";
-
 const Question = () => {
   return (
     <div className="text-white bg-[#8530C1] p-28 text-center my-40   ">

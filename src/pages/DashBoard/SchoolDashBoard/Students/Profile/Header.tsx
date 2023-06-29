@@ -1,4 +1,3 @@
-import React from "react";
 import ArrowDown from "@/assets/arrowdown.svg";
 import NewStudent from "../NewStudent";
 import LessThanIcon from "@/assets/lessthanIcon.svg";

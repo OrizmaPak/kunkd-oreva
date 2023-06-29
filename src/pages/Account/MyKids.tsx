@@ -1,4 +1,3 @@
-import React from "react";
 import Avatar1 from "@/assets/Avatar1.svg";
 import Avatar2 from "@/assets/Avatar2.svg";
 import Avatar3 from "@/assets/Avatar3.svg";

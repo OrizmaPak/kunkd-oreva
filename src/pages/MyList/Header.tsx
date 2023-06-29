@@ -1,4 +1,3 @@
-import React from "react";
 import SearchIcon from "@/assets/searchicon.svg";
 import musicIcon from "@/assets/svgmusic.svg";
 import videoIcon from "@/assets/svgvideo.svg";

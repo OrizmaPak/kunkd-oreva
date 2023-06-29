@@ -1,4 +1,3 @@
-import React from "react";
 import { data, DataType } from "../NewlyRegisterUser/NewlyRegisteredUser";
 import Wrapper from "../../../../common/User/Wrapper";
 import Hero from "../NewlyRegisterUser/Hero";
@@ -14,7 +13,7 @@ const ExistingUserNotPaid = () => {
   return (
     <Wrapper>
       <InnerWrapper>
-        <Hero banner={Banner2} username="Emma" userimage={userImage} />
+        <Hero />
         <CardScreen
           data={data?.map((el) => ({ ...el, title: "" }))}
           header="New & Trending"

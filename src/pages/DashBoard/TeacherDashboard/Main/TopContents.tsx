@@ -1,4 +1,3 @@
-import React from "react";
 import PieChart from "@/pages/ProgressReport/PieChart";
 import DateRadio from "@/pages/DashBoard/SchoolDashBoard/Main/Dwmy";
 import Bookbg from "@/assets/bookicon.svg";

@@ -1,4 +1,3 @@
-import React from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import ErrorIcon from "@/assets/errorIcon.svg";
 import { Img } from "@chakra-ui/react";

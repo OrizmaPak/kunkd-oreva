@@ -1,4 +1,3 @@
-import React from "react";
 import { useParams } from "react-router-dom";
 import AfricanLanguagesNav from "./AfricanLanguagesNav";
 import { africanLanguagesData } from "./AfricanLanguages";

@@ -1,4 +1,3 @@
-import React from "react";
 import { data, DataType } from "../NewlyRegisterUser/NewlyRegisteredUser";
 import Wrapper from "../../../../common/User/Wrapper";
 import Hero from "../NewlyRegisterUser/Hero";

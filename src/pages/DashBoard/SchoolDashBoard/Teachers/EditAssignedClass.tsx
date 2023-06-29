@@ -1,6 +1,4 @@
 import Button from "@/components/Button";
-import React from "react";
-
 const EditAssignedClass = ({ onClose }: { onClose: () => void }) => {
   return (
     <div className="px-20">

@@ -1,5 +1,3 @@
-import React from "react";
-
 const AdsButton = () => {
   return (
     <div>

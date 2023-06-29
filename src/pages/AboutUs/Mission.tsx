@@ -1,4 +1,3 @@
-import React from "react";
 import DadBoy from "@/assets/dadboy.svg";
 
 const Mission = () => {
