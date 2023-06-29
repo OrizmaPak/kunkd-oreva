@@ -1,4 +1,3 @@
-import PlusIcon from "@/assets/plusIcon2.svg";
 import InputFormat from "@/common/InputFormat";
 import Button from "@/components/Button";
 import { motion } from "framer-motion";

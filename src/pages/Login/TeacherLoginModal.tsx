@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Congrat from "@/assets/congrats.svg";
 
 const TeacherLoginModal = ({ onContinue }: { onContinue: () => void }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const schema: ZodType<FormData> = z
     .object({
       password: z

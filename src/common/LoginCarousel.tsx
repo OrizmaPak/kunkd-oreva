@@ -2,11 +2,9 @@ import { useRef, useState } from "react";
 import ParentalCtrl from "@/assets/PARENTAL-CONTROL 1.svg";
 import LearnImage1 from "@/assets/learnimage1.svg";
 import LearnImage2 from "@/assets/learnimage2.svg";
-import ArrowCaro from "@/assets/arrowcaro.svg";
 
 import CarouselCard from "./CarouselCard";
 import Slider from "react-slick";
-import { BsChevronRight, BsChevronLeft } from "react-icons/bs";
 const LoginCarousel = () => {
   const [activeDot, setActiveDot] = useState(0);
 

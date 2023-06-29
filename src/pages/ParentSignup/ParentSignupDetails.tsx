@@ -3,7 +3,6 @@ import InputFormat from "@/common/InputFormat";
 import EmailLogo from "@/assets/emaillogo.svg";
 import Cancel from "@/assets/Cancel.svg";
 import { Link } from "react-router-dom";
-import { FormEvent } from "react";
 import FormWrapper from "@/common/FormWrapper";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

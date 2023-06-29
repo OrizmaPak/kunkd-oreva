@@ -1,6 +1,5 @@
 import ArrowDown from "@/assets/arrowdown.svg";
-import Button from "@/components/Button";
-import PlutIcon from "@/assets/plusIcon.svg";
+
 import Rectangle from "@/assets/Rectangle.svg";
 import Chiks from "@/assets/chiks.svg";
 import Jessica from "@/assets/jessica.svg";

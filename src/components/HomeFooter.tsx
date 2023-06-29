@@ -1,4 +1,3 @@
-import React from 'react'
 import Logo from '@/assets/KundaLogo.svg'
 import facebook from '@/assets/facebook.svg'
 import insta from '@/assets/insta.svg'

@@ -20,7 +20,6 @@ import {
 } from "@/pages/AfterParentSignIn/ChildProfileSetUp";
 import { STEP_1, STEP_2, STEP_3, STEP_4 } from "@/utils/constants";
 import { useState } from "react";
-import LessDownIcon from "@/assets/lessthanIcon.svg";
 import { motion } from "framer-motion";
 
 const kidsData = [

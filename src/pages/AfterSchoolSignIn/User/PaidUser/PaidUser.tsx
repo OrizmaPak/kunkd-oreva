@@ -1,12 +1,10 @@
 import { data, DataType } from "../NewlyRegisterUser/NewlyRegisteredUser";
 import Wrapper from "../../../../common/User/Wrapper";
 import Hero from "../NewlyRegisterUser/Hero";
-import Banner3 from "@/assets/Banner3.svg";
-import userImage from "@/assets/userimage1.svg";
+
 import CardScreen from "../../../../common/User/CardScreen";
 import Card from "../../../../common/User/Card";
 import CardNdRange from "../../../../common/User/CardNdRange";
-import AdsButton from "../../../../common/User/AdsButton";
 import InnerWrapper from "../../../../common/User/InnerWrapper";
 
 const PaidUser = () => {

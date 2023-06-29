@@ -4,10 +4,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 const HomeHeader = () => {
   const navigate = useNavigate();
-  const activeLinkStyle = {
-    fontWeight: "bold",
-    color: "#8530C1",
-  };
 
   return (
     <div className="flex font-[500] py-2 text-[16px] px-[120px] justify-between items-center bg-white  fixed w-full z-[100]">

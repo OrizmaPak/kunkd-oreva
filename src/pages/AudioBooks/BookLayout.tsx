@@ -1,22 +1,16 @@
-import StoriesNav from "@/pages/Stories/Stories1/StoriesNav";
-import Poster1 from "@/assets/Chisom.svg";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
-import Button from "@/components/Button";
+import { useParams, useLocation } from "react-router-dom";
 import { audioBooksData, StoriesType } from "./AudioBooks";
 import CardScreen from "@/common/User/CardScreen";
 import Card from "@/common/User/Card";
 import Bookmark from "@/assets/Bookmark.svg";
-import ArrowDown from "@/assets/arrowdown.svg";
-import PreviousIcon from "@/assets/chevrondown.svg";
-import NextIcon from "@/assets/chevronup.svg";
+
 import React, { useState, useRef, useEffect } from "react";
 import FastForward from "@/assets/fastforward.svg";
 import FastBackward from "@/assets/fastbackward.svg";
 import PauseIcon from "@/assets/pause.svg";
 import PlayIcon from "@/assets/play.svg";
 import VolumeIcon from "@/assets/volumeIcon.svg";
-import { progress } from "framer-motion";
-import { Progress, Loader } from "@mantine/core";
+
 import ExportIcon from "@/assets/exportIcon.svg";
 import AudioBooksNav from "./AudioBooksNav";
 
@@ -177,7 +171,7 @@ const AboutPage = ({
 };
 
 const ReadPage = ({ story }: { story: StoriesType }) => {
-  const [isReading, setIsReading] = useState(false);
+  // const [isReading, setIsReading] = useState(false);
 
   return (
     <div className="flex bg-[#fff7fd] py-5 gap-16 rounded-3xl ">
@@ -203,7 +197,7 @@ const ReadPage = ({ story }: { story: StoriesType }) => {
 const AudioControls = ({ audio }: { audio?: string }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [ended, setEnded] = useState(false);
+  // const [ended, setEnded] = useState(false);
   const progressBar = useRef<HTMLInputElement>(null);
   const [currentTTime, setCurrentTTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -213,7 +207,7 @@ const AudioControls = ({ audio }: { audio?: string }) => {
   const handlePlayControl = () => {
     const audioCon = audioRef.current;
     console.log("audio played", audioCon);
-    setEnded(false);
+    // setEnded(false);
     setIsPlaying(!isPlaying);
     if (audioCon && !audioCon.paused) {
       return audioCon.pause();
@@ -223,7 +217,7 @@ const AudioControls = ({ audio }: { audio?: string }) => {
 
   const handeSkip10 = (direction: "forward" | "backward") => () => {
     const audioCon = audioRef.current;
-    setEnded(false);
+    // setEnded(false);
     const duration = audioCon?.duration || 0;
     const currentTime = audioCon?.currentTime || 0;
 
@@ -307,7 +301,7 @@ const AudioControls = ({ audio }: { audio?: string }) => {
           }}
           onEnded={() => {
             setIsPlaying(false);
-            setEnded(true);
+            // setEnded(true);
           }}
           ref={audioRef}
           src={audio}

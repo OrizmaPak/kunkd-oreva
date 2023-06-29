@@ -35,15 +35,13 @@ import MyList from "./pages/MyList/MyList";
 import ProgressReport from "./pages/ProgressReport/ProgressReport";
 import Main from "@/pages/DashBoard/SchoolDashBoard/Main/Main";
 import SchoolLayout from "./common/User/DashBoard/School/SchoolLayout";
-import Setting from "@/pages/DashBoard/SchoolDashBoard/Settings/Settings";
 import Teachers from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";
 import Classes from "@/pages/DashBoard/SchoolDashBoard/Classes/Classes";
 import Students from "@/pages/DashBoard/SchoolDashBoard/Students/Students";
 import StudentProfile from "@/pages/DashBoard/SchoolDashBoard/Students/Profile";
 import TeacherLayout from "@/common/User/DashBoard/Teachers/TeacherLayout";
 import TStudents from "@/pages/DashBoard/TeacherDashboard/Students/Students";
-import TClasses from "@/pages/DashBoard/TeacherDashboard/Classes/Classes";
-import TSettings from "@/pages/DashBoard/TeacherDashboard/Settings/Settings";
+// import TClasses from "@/pages/DashBoard/TeacherDashboard/Classes/Classes";
 import TMain from "@/pages/DashBoard/TeacherDashboard/Main/Main";
 import AccountLayout from "./pages/Account/AccountLayout";
 import Profile from "./pages/Account/Profile";
@@ -117,7 +115,7 @@ function App() {
                   ></Route>
                 </Route>
                 <Route path="classes" element={<Classes />}></Route>
-                <Route path="setting" element={<Setting />}></Route>
+                {/* <Route path="setting" element={<Setting />}></Route> */}
               </Route>
               {/* Teacher Teacher Teacher Teacher DashBoard */}
 
@@ -130,8 +128,7 @@ function App() {
                     element={<StudentProfile />}
                   ></Route>
                 </Route>
-                <Route path="classes" element={<TClasses />}></Route>
-                <Route path="setting" element={<TSettings />}></Route>
+                {/* <Route path="classes" element={<TClasses />}></Route> */}
               </Route>
 
               {/* Account */}

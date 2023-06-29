@@ -1,5 +1,5 @@
 import NextIcon from "@/assets/nexticon.svg";
-import { space } from "@chakra-ui/react";
+// import { space } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 const AfricanLanguagesNav = ({
   category,
@@ -13,7 +13,6 @@ const AfricanLanguagesNav = ({
   quiz?: string;
 }) => {
   const navigate = useNavigate();
-  const { lan_type } = useParams();
   return (
     <div className="py-4 rounded-full bg-white gap-8 flex px-8">
       <div

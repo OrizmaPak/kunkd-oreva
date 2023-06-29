@@ -1,7 +1,4 @@
-import {
-  data,
-  DataType,
-} from "../AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
+import { data } from "../AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import ProgressCard from "./ProgressCard";
 
 const All = () => {

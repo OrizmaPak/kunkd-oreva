@@ -1,7 +1,6 @@
 import Lulu from "@/assets/LuluLearns.svg";
 import Astronaut from "@/assets/AstronautstothemooN.svg";
 import Afam from "@/assets/Afam-04 1.svg";
-import AisforAfrica from "@/assets/AisforAfrica.svg";
 import Sara from "@/assets/Sarai_s-Culture-Day.svg";
 import QueenMoremi from "@/assets/Queen-Moremi.svg";
 import QueenYaa from "@/assets/Queen-Yaa.svg";

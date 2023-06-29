@@ -6,7 +6,6 @@ import Service2 from "@/assets/service2.svg";
 import Service3 from "@/assets/service3.svg";
 import LadyBg from "@/assets/ladyBg.svg";
 import MacBok from "@/assets/MacBook1.svg";
-import KundaApp from "./KundaApp";
 
 const Serviceontent = () => {
   const servicesData: CardTypes[] = [

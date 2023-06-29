@@ -1,5 +1,4 @@
 import Button from "@/components/Button";
-import SamOwen from "@/assets/Male14.svg";
 import EditPencil from "@/assets/editPencil.svg";
 import Starr from "@/assets/starr.svg";
 import { motion } from "framer-motion";
@@ -24,14 +23,14 @@ const data = {
   city: "Leeds East london",
 };
 
-const data2 = {
-  image: SamOwen,
-  name: "Samuel Owen",
-  email: "samuelowen@gmail.com",
-  phone: "+1442023052906",
-  country: "United Kingdom",
-  city: "Leeds East london",
-};
+// const data2 = {
+//   image: SamOwen,
+//   name: "Samuel Owen",
+//   email: "samuelowen@gmail.com",
+//   phone: "+1442023052906",
+//   country: "United Kingdom",
+//   city: "Leeds East london",
+// };
 
 const schData = {
   schbg: SchoolBg,
@@ -43,7 +42,7 @@ const schData = {
 };
 
 const Profile = () => {
-  const [{ email, userType }, dispatch] = userContext();
+  const [{ userType }] = userContext();
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -66,7 +65,6 @@ export default Profile;
 const Card = ({
   image,
   email,
-  onclick,
   name,
 }: {
   image?: string;

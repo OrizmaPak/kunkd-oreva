@@ -1,6 +1,5 @@
 import { useParams, Navigate } from "react-router-dom";
 import Header from "./Header";
-import { useState } from "react";
 import { dashboardData } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";
 import ProfileCard from "./ProfileCard";
 import TotalTimeSpent from "./TotalTimeSpent";
@@ -12,8 +11,7 @@ import ProgressLog from "./ProgressLog";
 import LearningHour from "./LearningHour";
 import { motion } from "framer-motion";
 
-type Props = {};
-const index = (props: Props) => {
+const index = () => {
   const params = useParams();
   // const [currentClicked, setCurrentClicked] = useState(0);
   const id = params.studentId;

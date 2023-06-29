@@ -1,9 +1,7 @@
 import Wrapper from "../../common/User/Wrapper";
 import InnerWrapper from "../../common/User/InnerWrapper";
 import SearchIcon from "@/assets/searchicon.svg";
-import musicIcon from "@/assets/svgmusic.svg";
-import videoIcon from "@/assets/svgvideo.svg";
-import BookIcon from "@/assets/svgbook.svg";
+
 import Chart from "./Chart";
 import All from "./All";
 import { Pagination } from "@mantine/core";
@@ -19,7 +17,7 @@ const ProgressReport = () => {
 
   const [currentStep, setCurrentStep] = useState(STEP_1);
   console.log(currentStep);
-  const [activePage, setPage] = useState(1);
+  // const [activePage, setPage] = useState(1);
   return (
     <div>
       <Wrapper>

@@ -1,7 +1,6 @@
 import HeroContent from "./HeroContent";
 import Hero from "../Home/Hero";
 import Stat from "../Home/Stat";
-import StatContent from "./StatContent";
 import KundaParent from "../Home/KundaApp";
 import KundaParentContent from "./KundaParentContent";
 import Service from "../Home/WatchKunda";

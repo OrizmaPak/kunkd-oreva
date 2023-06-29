@@ -1,4 +1,3 @@
-import Button from "@/components/Button";
 import BigCartCard from "./BigCartCard";
 
 const Hero = () => {

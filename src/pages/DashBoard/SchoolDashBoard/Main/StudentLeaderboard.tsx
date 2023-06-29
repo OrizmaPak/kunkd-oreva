@@ -1,7 +1,3 @@
-import Teacher1 from "@/assets/usericon.svg";
-import Teacher2 from "@/assets/Male01.svg";
-import Teacher3 from "@/assets/Female03.svg";
-import Teacher4 from "@/assets/male03.svg";
 // import { dashboardData } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";
 import { Pagination } from "@mantine/core";
 import { DashBoardDataType } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";

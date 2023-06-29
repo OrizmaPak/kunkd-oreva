@@ -1,12 +1,8 @@
 import { Link } from "react-router-dom";
 import Logo from "@/assets/KundaLogo.svg";
-import BadgeIcon from "@/assets/badge.svg";
-import BatteryIcon from "@/assets/battery.svg";
 import BellIcon from "@/assets/bellicon.svg";
 import UserIcon from "@/assets/usericon.svg";
-import ArrowDown from "@/assets/arrowdown.svg";
 import SearchIcon from "@/assets/searchicon.svg";
-import Button from "@/components/Button";
 
 const SchoolDashboardHeader = () => {
   return (

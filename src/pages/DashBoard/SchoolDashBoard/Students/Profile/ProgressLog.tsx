@@ -2,7 +2,6 @@ import Bookbg from "@/assets/bookbg.svg";
 import MusicBg from "@/assets/musicbg.svg";
 import VideoBg from "@/assets/videobg.svg";
 import QuizBg from "@/assets/quizbg.svg";
-import DateRadio from "@/pages/DashBoard/SchoolDashBoard/Main/Dwmy";
 const ProgressLog = () => {
   return (
     <div className="bg-white flex flex-col  flex-grow rounded-3xl px-4 py-2 pb-6">

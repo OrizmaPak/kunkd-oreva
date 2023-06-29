@@ -1,11 +1,7 @@
 import ArrowDown from "@/assets/arrowdown.svg";
-import Barchart from "./Barchart";
-import TopContents from "./TopContents";
 import StudentIcon from "@/assets/student3.svg";
 import Card from "./Card";
 import TotalTimeSpent from "./TotalTimeSpent";
-import MyStudents from "./MyStudents";
-import TopSubCategories from "./TopSubCategories";
 import StudentLeaderboard from "../../SchoolDashBoard/Main/StudentLeaderboard";
 import { dashboardData } from "../../SchoolDashBoard/Teachers/Teachers";
 import ProgressLog from "../../SchoolDashBoard/Students/Profile/ProgressLog";

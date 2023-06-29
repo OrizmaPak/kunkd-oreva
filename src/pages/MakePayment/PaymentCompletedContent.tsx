@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import Congrats from "@/assets/congrats.svg";
 import { Link } from "react-router-dom";
 
-const PaymentCompletedContent = ({ onSubmit }: { onSubmit: () => void }) => {
+const PaymentCompletedContent = ({}: { onSubmit: () => void }) => {
   return (
     <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">
       <div className="w-[100%]  my-auto ">

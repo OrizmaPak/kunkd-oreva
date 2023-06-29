@@ -1,5 +1,3 @@
-import ShopCard from "./ShopCard";
-import ShopCard1 from "@/assets/Chisom.svg";
 import WaveThree from "@/assets/wavethree.svg";
 import client1 from "@/assets/client.svg";
 import Slider from "react-slick";
@@ -13,23 +11,22 @@ import RoundG from "@/assets/Ellipse 56.svg";
 import RoundR from "@/assets/Ellipse 59.svg";
 import ZagB from "@/assets/zag3.svg";
 import RoundY from "@/assets/Ellipse 57.svg";
-import RoundP from "@/assets/roundpurpple.svg";
 
 import SixB from "@/assets/six.svg";
 
 import ClientCard from "./ClientCard";
 
 const ShopBooks = () => {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    arrows: false,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-  };
+  // const settings = {
+  //   dots: true,
+  //   infinite: true,
+  //   speed: 500,
+  //   slidesToShow: 1,
+  //   arrows: false,
+  //   slidesToScroll: 1,
+  //   autoplay: true,
+  //   autoplaySpeed: 2000,
+  // };
 
   var settings2 = {
     className: "center",

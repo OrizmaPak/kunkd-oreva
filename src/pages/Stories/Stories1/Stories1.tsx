@@ -1,5 +1,4 @@
 import StoriesNav from "./StoriesNav";
-import Poster1 from "@/assets/Chisom.svg";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Button from "@/components/Button";
 import { storiesData, StoriesType } from "../Stories";
@@ -9,7 +8,7 @@ import Bookmark from "@/assets/Bookmark.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
 import PreviousIcon from "@/assets/chevrondown.svg";
 import NextIcon from "@/assets/chevronup.svg";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import FastForward from "@/assets/fastforward.svg";
 import FastBackward from "@/assets/fastbackward.svg";
 import PauseIcon from "@/assets/pause.svg";
@@ -310,7 +309,7 @@ const AudioControls = ({
     }
   };
   // const { story_type, id } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   return (
     <div className="flex justify-center ">
       <audio

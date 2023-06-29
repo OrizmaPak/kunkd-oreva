@@ -9,7 +9,7 @@ const EnterPassCode = ({ onSubmit }: { onSubmit: () => void }) => {
   const navigate = useNavigate();
   const [pinValue, setPinValue] = useState("");
 
-  const [{ email, userType }, dispatch] = userContext();
+  const [{ userType }] = userContext();
   const goToSchoolDashboard = () => {
     console.log("usertype", userType);
     if (userType === "school") {

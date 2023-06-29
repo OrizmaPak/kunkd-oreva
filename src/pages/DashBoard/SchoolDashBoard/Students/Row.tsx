@@ -8,9 +8,6 @@ const Row = ({
   name,
   gender,
   onClick = () => {},
-  email,
-  id,
-  classCode,
   onDeleteProfile,
 }: {
   image: string;

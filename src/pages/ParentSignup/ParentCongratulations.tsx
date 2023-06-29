@@ -3,7 +3,7 @@ import Congrats from "@/assets/congrats.svg";
 import FormWrapper from "@/common/FormWrapper";
 import { Link } from "react-router-dom";
 
-const ParentCongratulations = ({ onSubmit }: { onSubmit: () => void }) => {
+const ParentCongratulations = ({}: { onSubmit: () => void }) => {
   return (
     <FormWrapper>
       <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">

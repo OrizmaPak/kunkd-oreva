@@ -1,4 +1,3 @@
-import PositiveArrow from "@/assets/positiveArrow.svg";
 import EditPencil from "@/assets/editPencil.svg";
 import { motion } from "framer-motion";
 

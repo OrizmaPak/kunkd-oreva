@@ -3,7 +3,6 @@ import Cancel from "@/assets/Cancel.svg";
 import Button from "@/components/Button";
 import { PinInput, Group } from "@mantine/core";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

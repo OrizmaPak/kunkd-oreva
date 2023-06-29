@@ -1,13 +1,8 @@
 import Wrapper from "@/common/User/Wrapper";
 import Hero from "@/pages/Library/LibraryNotPaid/Hero";
-import CardScreen from "@/common/User/CardScreen";
 import Card from "@/common/User/Card";
 import { data } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
-import { DataType } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
-import AdsButton from "@/common/User/AdsButton";
-import { Button } from "@chakra-ui/react";
 import Banner from "@/assets/banner5.svg";
-import Banner1 from "@/assets/banner6.svg";
 import InnerWrapper from "../../common/User/InnerWrapper";
 const BedTimeStories = () => {
   return (

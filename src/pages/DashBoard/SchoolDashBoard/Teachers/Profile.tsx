@@ -1,4 +1,3 @@
-import PositiveArrow from "@/assets/positiveArrow.svg";
 import BlcakPencil from "@/assets/blackPencilIcon.svg";
 
 const Profile = ({

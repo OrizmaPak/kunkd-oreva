@@ -1,13 +1,11 @@
 import TeacherIcon from "@/assets/teacher3.svg";
 import StudentIcon from "@/assets/student3.svg";
-import QuizIcon from "@/assets/quizicon.svg";
 import Card from "./Card";
 import ClassLeaderboard from "./ClassLeaderboard";
-import LineChart from "./LineChart";
 import StudentLeaderboard from "./StudentLeaderboard";
 import ArrowDown from "@/assets/arrowdown.svg";
 import ProgressLog from "../Students/Profile/ProgressLog";
-import { DashBoardDataType, dashboardData } from "../Teachers/Teachers";
+import { dashboardData } from "../Teachers/Teachers";
 
 const Main = () => {
   return (

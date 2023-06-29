@@ -49,7 +49,7 @@ const links = [
 ];
 
 const SettingsLayout = () => {
-  const [{ email, userType }, dispatch] = userContext();
+  const [{ userType }] = userContext();
   const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
   return (
@@ -114,7 +114,7 @@ export default SettingsLayout;
 
 const SideMenuButton = ({
   name,
-  href,
+
   route,
   onClick,
 }: {

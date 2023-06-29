@@ -7,10 +7,8 @@ const Row = ({
 
   noOfTeacher,
   title,
-  gender,
-  email,
+
   onClick,
-  id,
 }: {
   noOfStudents?: number;
 

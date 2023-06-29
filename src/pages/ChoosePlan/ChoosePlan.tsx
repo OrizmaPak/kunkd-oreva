@@ -1,7 +1,5 @@
 import ParentSignupLayout from "@/common/ParentSignupLayout";
-import { useState } from "react";
 import MomthPackage from "@/pages/ChoosePlan/ChoosePlanContent";
-import YearPackage from "@/pages/ChoosePlan/YearPackage";
 import Cancel from "@/assets/Cancel.svg";
 import { Link } from "react-router-dom";
 

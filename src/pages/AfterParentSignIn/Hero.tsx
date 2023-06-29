@@ -1,5 +1,4 @@
 import Banner1 from "@/assets/banner1.svg";
-import Banner2 from "@/assets/banner2.svg";
 
 type Props = {
   //   banner: string;

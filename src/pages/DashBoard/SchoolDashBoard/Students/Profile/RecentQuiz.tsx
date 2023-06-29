@@ -1,4 +1,3 @@
-import Chisom from "@/assets/Chisom.svg";
 import FoodFight from "@/assets/kojocard.svg";
 
 const RecentQuiz = ({}) => {

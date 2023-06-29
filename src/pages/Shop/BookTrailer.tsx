@@ -32,7 +32,7 @@ const BookTrailer = () => {
     autoplay: true,
     slideToScroll: 1,
     speed: 500,
-    beforeChange: (init: number, index: number) => {
+    beforeChange: (index: number) => {
       console.log("--- index", index);
       setActive(index);
     },

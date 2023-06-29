@@ -7,7 +7,7 @@ import EmailLogo from "@/assets/emaillogo.svg";
 import PasswordIcon from "@/assets/passwordIcon.svg";
 import PasswordEye from "@/assets/passwordeye.svg";
 import Cancel from "@/assets/Cancel.svg";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";

@@ -14,7 +14,7 @@ import Mitchel from "@/assets/godwin.svg";
 import Pemela from "@/assets/pamela.svg";
 import Spa from "@/assets/spa.svg";
 import Bella from "@/assets/bella.svg";
-import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
+// import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
 import Grade from "./Grade";
