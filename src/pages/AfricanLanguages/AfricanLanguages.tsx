@@ -1,7 +1,7 @@
 import Wrapper from "@/common/User/Wrapper";
 import Hero from "@/pages/Library/LibraryNotPaid/Hero";
 import CardScreen from "@/common/User/CardScreen";
-import Card from "@/common/User/Card";
+import Card, { CardProps } from "@/common/User/Card";
 // import { data } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 // import { DataType } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import AdsButton from "@/common/User/AdsButton";
@@ -38,6 +38,10 @@ import Igbo from "@/assets/Igbo.svg";
 import Twi from "@/assets/twi.svg";
 import Luganda from "@/assets/Luganda.svg";
 import Kiswahili from "@/assets/Kiswahili.svg";
+import Videos from "./Videos";
+import VideoPlayer from "./VideoPlayer";
+import VideoBook from "@/videobooks/video1.mp4";
+import Quiz from "./Quiz";
 
 export type StoriesType = {
   title?: string;
@@ -49,15 +53,17 @@ export type StoriesType = {
   aboutAuthor?: string;
   overView?: string;
   content?: string;
-  audioBook?: string;
+  videoBook?: string;
+  lanType?: string[];
 };
-export const audioBooksData: StoriesType[] = [
+export const africanLanguagesData: StoriesType[] = [
   {
     title: "Bedtime Stories",
-    audioBook: AudioBookOne,
+    videoBook: VideoBook,
     image: Chisomcard,
     range: 56,
     id: "1",
+    lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     genre: ["Bedtime", "Inventors", "Folk Tales"],
     author: "Dele and Louisa Olatuyi",
     aboutAuthor:
@@ -71,9 +77,10 @@ export const audioBooksData: StoriesType[] = [
   {
     title: "Fairy Tails Stories",
     image: Gorillacard,
-    audioBook: AudioBookOne,
+    videoBook: VideoBook,
     range: 80,
     id: "2",
+    lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     genre: ["Life & Growing up", "Inventors", "Inspiring Leaders"],
     author: "Dele and Louisa Olatuyi",
     aboutAuthor:
@@ -87,8 +94,9 @@ export const audioBooksData: StoriesType[] = [
   {
     title: "Money Smarts",
     image: Mamacard,
-    audioBook: AudioBookOne,
+    videoBook: VideoBook,
     range: 86,
+    lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "3",
     genre: ["Life & Growing up", "Fairy Tales", "Inspiring Leaders"],
     author: "Dele and Louisa Olatuyi",
@@ -103,8 +111,9 @@ export const audioBooksData: StoriesType[] = [
   {
     title: "Sports",
     image: Puffcard,
-    audioBook: AudioBookOne,
+    videoBook: VideoBook,
     range: 56,
+    lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "4",
     genre: ["Bedtime", "Fairy Tales", "Folk Tales"],
     author: "Dele and Louisa Olatuyi",
@@ -119,8 +128,9 @@ export const audioBooksData: StoriesType[] = [
   {
     title: " Leaders",
     image: Chisomcard,
-    audioBook: AudioBookOne,
+    videoBook: VideoBook,
     range: 70,
+    lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "5",
     genre: ["Sport", "Finance", "Money smart"],
     author: "Dele and Louisa Olatuyi",
@@ -135,8 +145,9 @@ export const audioBooksData: StoriesType[] = [
   {
     title: "Inspiring Leaders",
     image: Earniing2card,
-    audioBook: AudioBookOne,
+    videoBook: VideoBook,
     range: 56,
+    lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "6",
     genre: ["Sport", "Inventors", "Inspiring Leaders"],
     author: "Dele and Louisa Olatuyi",
@@ -151,8 +162,9 @@ export const audioBooksData: StoriesType[] = [
   {
     title: "Inspiring Leaders",
     image: Earningcard,
-    audioBook: AudioBookOne,
+    videoBook: VideoBook,
     range: 66,
+    lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "7",
     genre: ["Sport", "Bedtime", "Folk Tales"],
     author: "Dele and Louisa Olatuyi",
@@ -167,8 +179,9 @@ export const audioBooksData: StoriesType[] = [
   {
     title: "Sports",
     image: Dancercard,
-    audioBook: AudioBookOne,
+    videoBook: VideoBook,
     range: 90,
+    lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "8",
     genre: ["Life & Growing up", "Bedtime", "Money smart"],
     author: "Dele and Louisa Olatuyi",
@@ -183,8 +196,9 @@ export const audioBooksData: StoriesType[] = [
   {
     title: "Afam",
     image: Afamcard,
-    audioBook: AudioBookOne,
+    videoBook: VideoBook,
     range: 36,
+    lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "9",
     genre: ["Life & Growing up", "Bedtime", "Money smart"],
     author: "Dele and Louisa Olatuyi",
@@ -199,8 +213,9 @@ export const audioBooksData: StoriesType[] = [
   {
     title: "African Leaders",
     image: Africancard,
-    audioBook: AudioBookOne,
+    videoBook: VideoBook,
     range: 56,
+    lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "10",
     genre: ["Life & Growing up", "Bedtime", "Money smart"],
     author: "Dele and Louisa Olatuyi",
@@ -215,8 +230,9 @@ export const audioBooksData: StoriesType[] = [
   {
     title: " Leaders",
     image: Caterpillercard,
-    audioBook: AudioBookOne,
+    videoBook: VideoBook,
     range: 86,
+    lanType: ["yourba", "twi", "igbo", "luganda", "kiswahili"],
     id: "11",
     genre: ["Sport", "Finance", "Money smart"],
     author: "Dele and Louisa Olatuyi",
@@ -298,9 +314,14 @@ const MainStoriesLayout = () => {
 const AfricanLanguagess = () => {
   return (
     <>
-      <Wrapper>
+      <Wrapper bgColor="#fff7fd">
         <InnerWrapper>
-          <LanguagesVideo />
+          <Routes>
+            <Route index element={<LanguagesVideo />}></Route>
+            <Route path=":lan_type" element={<Videos />}></Route>
+            <Route path=":lan_type/:id" element={<VideoPlayer />}></Route>
+            <Route path=":story_type/:id/quiz" element={<Quiz />}></Route>
+          </Routes>
         </InnerWrapper>
       </Wrapper>
     </>
@@ -317,10 +338,10 @@ const LanguagesVideo = () => {
         <Hero image={AfricanBanner} />
         <hr className="my-20 mx-[200px]" />
         <h1 className="text-center font-bold text-[30px] font-Recoleta mt-10 ">
-          {params?.id?.toString()} Audiobooks
+          Start Learning!
         </h1>
         <p className="text-center text-[18px] text-[#B5B5C3] my-8">
-          Whenever they request a new bedtime audiobooks
+          Learning a new language is so important...
         </p>
       </div>
       <div className="flex justify-center items-center">
@@ -328,7 +349,7 @@ const LanguagesVideo = () => {
           {languageData.map((story, index) => {
             return (
               <>
-                <Card key={index} clickable {...story} size={300} />
+                <VideoCard key={index} {...story} size={300} />
               </>
             );
           })}
@@ -339,166 +360,30 @@ const LanguagesVideo = () => {
   );
 };
 
-const BrowseGenre = () => {
+export const VideoCard = ({ title, image, size, id }: CardProps) => {
   const navigate = useNavigate();
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 2,
-    slidesToScroll: 2,
+  const { id: storyType } = useParams();
+  const goto = () => {
+    if (title) {
+      navigate(title?.trim().toLocaleLowerCase());
+    }
   };
   return (
-    <>
-      {/* <div className="bg-white rounded-3xl"> */}
-      {/* <Hero image={AudioBanner} /> */}
-
-      <hr className="my-20 mx-[200px]" />
-
-      <div>
-        <h1 className="text-center font-bold text-[30px] font-Recoleta my-10 ">
-          Browse Genres
-        </h1>
-      </div>
-      <div className="flex justify-center items-center">
-        <div className="flex flex-wrap justify-center items-center  max-w-[900px]  gap-x-8 gap-y-4">
-          {subButtons.map((genre, index) => (
-            <SubButton
-              onClick={() => navigate(genre.name.trim())}
-              key={index}
-              name={genre.name}
-            />
-          ))}
-        </div>
-      </div>
-
-      <div className="my-16">
-        <h1 className="mb-4 font-bold font-Recoleta mt-20 text-center text-[40px]">
-          Trending Now
-        </h1>
-        <p className="text-center text-[18px] text-[#B5B5C3]">
-          See what peole are reading
-        </p>
-
-        <div className=" px-40 my-28 mb-44">
-          <Slider {...settings}>
-            {audioBooksData.slice(1, 6).map((data, index) => (
-              <div key={index}>
-                <AudioBookSliderCard {...data} />
-              </div>
-            ))}
-            {/* <div>1</div>
-            <div>1</div>
-          <div>1</div> */}
-          </Slider>
-
-          <style>
-            {`
-          .slick-prev,
-          .slick-next {
-          }
-          .slick-prev:hover,
-          .slick-next:hover {
-            border-radius : 50%;
-          }
-          .slick-dots {
-            bottom: -70px;
-      
-          }
-
-          .slick-dots li button:before {
-      font-size: 16px; /* Increase the font size of the dots */
-      line-height: 1; /* Adjust the line height of the dots */
-      width: 16px; /* Increase the width of the dots */
-      height: 16px; /* Increase the height of the dots */
-      
-    }
-    .slick-dots li button:before {
-      color: #8530C1; /* Set the background color of the active dot */
-    }
-    .slick-dots li.slick-active button:before{
-      color: #8530C1;
-    }
-        `}
-          </style>
-        </div>
-      </div>
-
-      <div
-        style={{
-          background:
-            "linear-gradient(280.43deg, #2BB457  0.5%, #000000 173.5%)",
-        }}
-        className="h-[495px] grid grid-cols-[700px_1fr] mb-[50px] max-w-[1500px] relative rounded-2xl mx-auto object-cover bg- "
-      >
+    <div
+      onClick={goto}
+      className="w-[200px]"
+      style={{ width: `${size ? size : ""}px` }}
+    >
+      <span>
         <img
-          src={GroupCard}
-          alt="card "
-          className="absolute w-[700px] left-0 bottom-0 rounded-3xl"
+          src={image}
+          alt="image"
+          style={{ width: `${size ? size : "350px"}px` }}
         />
-        <div></div>
-        <div className="text-center text-white flex flex-col gap-3 justify-center items-center ">
-          <h1 className="text-[30px] font-bold ">New Story Titles</h1>
-          <p className="mb-10">We published new audiobook just for you</p>
-          <Button size="md" color="black" backgroundColor="white">
-            See books
-          </Button>
-        </div>
-      </div>
-
-      <CardScreen
-        data={audioBooksData.slice(1, 7)}
-        card={(props: StoriesType) => <Card {...props} />}
-        isTitled={true}
-        header="Audiobooks we love"
-      />
-      {/* </div> */}
-    </>
-  );
-};
-
-const SubButton = ({
-  name,
-  onClick,
-}: {
-  name: string;
-  onClick?: () => void;
-}) => {
-  return (
-    <button onClick={onClick} className="py-3 rounded-3xl px-6 bg-[#FFF7FD]">
-      {name}
-    </button>
-  );
-};
-
-const AudioBookSliderCard = ({
-  image,
-  title,
-  author,
-}: {
-  image?: string;
-  title?: string;
-  author?: string;
-}) => {
-  return (
-    <div className="bg-[#8530C1]  rounded-3xl py-8 flex gap-8 mx-5  px-8 ">
-      <div>
-        <img src={image} alt="" />
-      </div>
-      <div className="flex flex-col text-[#D190FF] flex-grow">
-        <p className="font-bold">AUDIOBOOK</p>
-        <p className="font-bold text-white">{title}</p>
-        <p className="flex-grow">by {author}</p>
-        <p className="flex">
-          <img src={TimeIcon} alt="timeicon" />
-          <span>10 minutes and 33 seconds</span>
-        </p>
-      </div>
-      <div className=" flex items-end">
-        <p className="flex justify-center items-end">
-          <img src={PlayIcon} alt="play" />
-        </p>
-      </div>
+      </span>
+      {/* {title ? (
+        <p className="mt-[10px] font-bold font-Hanken">{title}</p>
+      ) : null} */}
     </div>
   );
 };

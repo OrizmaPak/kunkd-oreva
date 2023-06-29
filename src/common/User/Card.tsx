@@ -10,10 +10,14 @@ export type CardProps = {
 
 const Card = ({ title, image, size, id, clickable }: CardProps) => {
   const navigate = useNavigate();
-  const { id: storyType } = useParams();
+  const { lan_type, id: storyType } = useParams();
+  const params = useParams();
+  console.log(params);
   const goto = () => {
     if (!clickable) return;
-    navigate(`../${storyType}/${id}`, { state: { image, title, size } });
+    navigate(`../${lan_type || storyType}/${id}`, {
+      state: { image, title, size },
+    });
   };
   return (
     <div

@@ -190,7 +190,7 @@ const SchoolHeader = () => {
                     onClick={() => navigate("/")}
                     className="p-2 px-4  hover:cursor-pointer  text-red-500"
                   >
-                    Log Out
+                    Sign out of Kunda kids
                   </button>
                 </Menu.Item>
               </div>
