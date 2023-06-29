@@ -1,6 +1,6 @@
 import NextIcon from "@/assets/nexticon.svg";
 // import { space } from "@chakra-ui/react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const AfricanLanguagesNav = ({
   category,
   lanType,
