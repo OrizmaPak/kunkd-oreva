@@ -21,7 +21,7 @@ const Hero = ({ username, userimage }: Props) => {
         </div>
         <div className="relative">
           <img src={Banner1} alt="Banner" className="w-[1200px]" />
-          <span className="absolute h-[20px] w-16 bg-[#782caf] bottom-[65px] left-[40px]"></span>
+          {/* <span className="absolute h-[20px] w-16 bg-[#782caf] bottom-[65px] left-[40px]"></span> */}
         </div>
       </div>
       <hr className="mt-[60px] mx-16 " />

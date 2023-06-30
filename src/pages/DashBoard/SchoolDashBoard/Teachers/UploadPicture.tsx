@@ -7,7 +7,7 @@ import DragIcon from "@/assets/draganddropicon.svg";
 import CameraIcon from "@/assets/cameralogo.svg";
 import { motion } from "framer-motion";
 
-const UploadPicture = () => {
+const UploadPicture = ({ toggle }: { toggle?: () => void }) => {
   const [files, setFiles] = useState<FileWithPath[]>([]);
   console.log(files);
   const previews = files.map((file, index) => {
@@ -59,7 +59,7 @@ const UploadPicture = () => {
           </Text>
         </Dropzone>
         <div className="max-w-[70%] mx-auto my-4">
-          <Button>Create Profile</Button>
+          <Button onClick={toggle}>Create Profile</Button>
         </div>
       </div>
     </motion.div>

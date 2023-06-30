@@ -13,6 +13,20 @@ import Avatar1 from "@/assets/Avatar1.svg";
 import Avatar2 from "@/assets/Avatar2.svg";
 import UserIcon2 from "@/assets/userIcon2.svg";
 import KundaLogo from "@/assets/schoolIcon.svg";
+import Blxst from "@/assets/Blxst.svg";
+
+const notificationData = [
+  {
+    image: Blxst,
+    msg: "  is trying to add her child to your class",
+    name: "Ella Mia",
+  },
+  {
+    image: Blxst,
+    msg: "  is trying to add her child to your class",
+    name: "Ella Mia",
+  },
+];
 
 const SchoolHeader = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -140,11 +154,25 @@ const SchoolHeader = () => {
           />
         </div>
 
-        <div>
-          <span>
-            <img src={BellIcon} alt="bell icon" className="min-w-[17px]" />
-          </span>
-        </div>
+        <Menu>
+          <Menu.Target>
+            <div>
+              <span>
+                <img src={BellIcon} alt="bell icon" className="min-w-[17px]" />
+              </span>
+            </div>
+          </Menu.Target>
+          <Menu.Dropdown>
+            <p className="text-center text-[18px] font-bold my-2">
+              Notification
+            </p>
+            {notificationData.map((data, index) => (
+              // <Menu.Item>
+              <Notification key={index} {...data} />
+              // </Menu.Item>
+            ))}
+          </Menu.Dropdown>
+        </Menu>
 
         {userType === "parent" ? (
           <Menu>
@@ -247,3 +275,32 @@ const SchoolHeader = () => {
 };
 
 export default SchoolHeader;
+
+const Notification = ({
+  image,
+  msg,
+  name,
+}: {
+  image: string;
+  msg: string;
+  name: string;
+}) => {
+  return (
+    <div className="py-2 ">
+      <hr />
+      <p className="flex my-3 px-6 justify-center items-center gap-2">
+        <img
+          src={image}
+          alt="image"
+          className="w-[80px] h-[80px] rounded-full"
+        />
+        <span className="text-[#8530C1] ml-4">{name}</span>
+        <span>{msg}</span>
+      </p>
+      <p className="my-3  pl-32  flex gap-4 text-white">
+        <button className="p-2 px-8 bg-[#F3DAFF] rounded-3xl">Delete</button>
+        <button className="p-2 px-8 bg-[#8530C1] rounded-3xl">Accept</button>
+      </p>
+    </div>
+  );
+};
