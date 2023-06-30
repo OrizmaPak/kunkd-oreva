@@ -1,6 +1,6 @@
 import DeleteIcon from "@/assets/deleteicon.svg";
 import ToggleIcon from "@/assets/toggleicon.svg";
-import Rectangle from "@/assets/Rectangle.svg";
+import Rectangle from "@/assets/boxIcon.svg";
 
 const Row = ({
   noOfStudents,

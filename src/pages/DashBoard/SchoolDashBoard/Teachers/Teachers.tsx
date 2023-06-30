@@ -1,6 +1,6 @@
 import ArrowDown from "@/assets/arrowdown.svg";
 
-import Rectangle from "@/assets/Rectangle.svg";
+import Rectangle from "@/assets/boxIcon.svg";
 import Chiks from "@/assets/chiks.svg";
 import Jessica from "@/assets/jessica.svg";
 import Grease from "@/assets/grease.svg";

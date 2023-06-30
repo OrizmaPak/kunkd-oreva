@@ -1,5 +1,5 @@
 import ArrowDown from "@/assets/arrowdown.svg";
-import Rectangle from "@/assets/Rectangle.svg";
+import Rectangle from "@/assets/boxIcon.svg";
 import { dashboardData } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";
 import Row from "./Row";
 import { useNavigate } from "react-router-dom";
