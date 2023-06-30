@@ -1,7 +1,8 @@
 import Button from "@/components/Button";
 import ArrowDown from "@/assets/arrowdown.svg";
 import ClassesIcon from "@/assets/classes.svg";
-import Rectangle from "@/assets/Rectangle.svg";
+// import Rectangle from "@/assets/boxIcon.svg";
+import Box from "@/assets/box.svg";
 // import { data } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";
 import Row from "./Row";
 import { Pagination } from "@mantine/core";
@@ -225,12 +226,12 @@ const Classes = () => {
           <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px] mt-5  px-8">
             <div className="flex justify-start items-center ">
               <span className=" ">
-                <img src={Rectangle} alt="" />
+                <img src={Box} alt="box" />
               </span>
             </div>
-            <div className=" ">Name</div>
-            <div className="">No of Students</div>
-            <div className="">No of Teachers</div>
+            <div>Name</div>
+            <div>No of Students</div>
+            <div>No of Teachers</div>
             <div className="flex justify-end   items-center">
               <span>Actions</span>
             </div>
