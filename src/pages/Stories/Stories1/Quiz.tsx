@@ -193,7 +193,7 @@ const Quiz = () => {
         </div>
       )}
       {curentStep === STEP_3 && (
-        <div className="flex-grow mt-5 pt-10 px-[450px] flex  flex-col py-14 bg-white rounded-3xl ">
+        <div className="flex-grow mt-5 pt-10 px-[300px] flex  flex-col py-14 bg-white rounded-3xl ">
           <Result answers={answers} />
         </div>
       )}
@@ -324,12 +324,12 @@ const GoodRemarkMsg = ({ setShowResult }: { setShowResult: () => void }) => {
         <img
           src={RemarkBg}
           alt=""
-          className="absolute left-[520px] top-[100px] "
+          className="absolute left-[320px] top-[100px] "
         />
         <img
           src={RemarkIcon}
           alt="remarkIcon"
-          className="absolute left-[600px] top-[100px]"
+          className="absolute left-[400px] top-[100px]"
         />
         <div className="text-center  mt-[350px]">
           <h1 className="font-bold">Good Job!</h1>
@@ -340,19 +340,15 @@ const GoodRemarkMsg = ({ setShowResult }: { setShowResult: () => void }) => {
       </div>
       <div>
         <div className="flex justify-between items-center text-white">
-          <button className="py-3 px-16 bg-[#E2B6FF]  text-white rounded-3xl">
-            Review quiz
-          </button>
+          <Button
+            onClick={refreshPage}
+            size="md"
+            color="black"
+            varient="outlined"
+          >
+            <strong className="text-[#8530C1]">Retake Quiz</strong>
+          </Button>
           <div className="flex gap-20">
-            <Button
-              onClick={refreshPage}
-              size="md"
-              color="black"
-              varient="outlined"
-            >
-              <strong className="text-[#8530C1]">Retake Quiz</strong>
-            </Button>
-
             <button
               onClick={setShowResult}
               className="py-3 px-16 bg-[#8530C1] rounded-3xl"
@@ -370,7 +366,7 @@ const Result = ({ answers }: { answers: ObjAnsQuestionType[] }) => {
   const navigate = useNavigate();
   return (
     <div className="relative flex-grow bg-white">
-      <div className="bg-[#B76DEB] rounded-3xl pt-16 px-16">
+      <div className="bg-[#B76DEB] rounded-3xl pt-16 px-8">
         <div className="flex justify-center items-center gap-10 px-8 bg-[#FBC70D] rounded-t-3xl">
           <p>
             <RingProgress

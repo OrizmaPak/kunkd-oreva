@@ -304,7 +304,7 @@ const Story = () => {
             .map((story, index) => {
               return (
                 <>
-                  <Card key={index} clickable {...story} size={300} />
+                  <Card key={index} clickable {...story} size={250} />
                 </>
               );
             })}

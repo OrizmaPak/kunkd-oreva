@@ -6,7 +6,7 @@ const HomeHeader = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex font-[500] py-2 text-[16px] px-[120px] justify-between items-center bg-white  fixed w-full z-[100]">
+    <div className="flex font-[500] py-2 text-[16px] px-[20px] justify-between items-center bg-red-600  fixed w-[1440px] z-[100]">
       <NavLink
         to="/"
         className={({ isActive }) => (isActive ? "" : "text-black")}

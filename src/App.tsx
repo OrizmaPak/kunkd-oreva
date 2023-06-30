@@ -59,7 +59,7 @@ import AfricanLanguages from "@/pages/AfricanLanguages/AfricanLanguages";
 function App() {
   return (
     <BrowserRouter>
-      <div className="App ">
+      <div className="App max-w-[1440px] mx-auto ">
         <Routes>
           {/* Routes Before Login */}
           <Route path="/">

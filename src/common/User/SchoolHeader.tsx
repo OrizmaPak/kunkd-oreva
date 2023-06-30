@@ -43,7 +43,7 @@ const SchoolHeader = () => {
     }
   };
   return (
-    <div className="flex  fixed top-0 w-full font-[500] py-4 text-[16px] px-[130px] justify-between items-center bg-white z-50 gap-4  h-[8vh] ">
+    <div className="flex   fixed top-0 max-w-[1440px] w-full font-[500] py-4 text-[16px] px-[20px] justify-between items-center bg-whit z-50 gap-4  h-[8vh] ">
       <Modal
         opened={opened}
         onClose={close}

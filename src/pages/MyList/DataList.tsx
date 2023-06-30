@@ -8,7 +8,7 @@ const DataList = ({ data }: Props) => {
     <div className="px-14 my-4">
       <div className="grid grid-cols-5  p-5 gap-10">
         {data.map((data, index) => {
-          return <Card key={index} image={data.image} size={250} />;
+          return <Card key={index} image={data.image} size={200} />;
         })}
       </div>
     </div>

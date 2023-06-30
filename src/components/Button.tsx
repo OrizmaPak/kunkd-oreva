@@ -1,9 +1,9 @@
 import React from "react";
 
 const sizes = {
-  md: "px-10 py-3",
-  sm: "px-4 py-2",
-  full: "w-full py-4 text-center",
+  md: "px-8 py-2",
+  sm: "px-4 py-1",
+  full: "w-full py-3 text-center",
 };
 const colors = {
   default: "text-[#F2F2F2]",

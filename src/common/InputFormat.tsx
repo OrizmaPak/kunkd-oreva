@@ -16,7 +16,6 @@ const InputFormat = ({
   type,
   placeholder,
   rightIcon,
-  leftIcon,
   reg,
 
   errorMsg,
@@ -26,14 +25,13 @@ const InputFormat = ({
       <div
         className={`border ${
           errorMsg ? "border-red-700" : "border-[#F3DAFF]"
-        } py-4 px-8 rounded-full flex items-center gap-2 mt-2   `}
+        } px-8 rounded-full flex items-center gap-2 mt-2  h-[42px] `}
       >
-        {leftIcon ? <span>{leftIcon}</span> : null}
         <input
           {...reg}
           placeholder={placeholder}
           type={type}
-          className="w-full  h-full flex-1  focus:outline-none"
+          className="w-full  h-full flex-1 text-[14px]  focus:outline-none"
         />
         {rightIcon ? <span>{rightIcon}</span> : null}
         {errorMsg && <img src={ErrorIcon} alt="error icon" />}

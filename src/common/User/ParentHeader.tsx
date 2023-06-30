@@ -14,7 +14,7 @@ import UserIcon2 from "@/assets/userIcon2.svg";
 const ParentHeader = () => {
   const navigate = useNavigate();
   return (
-    <div className="flex font-[500] py-4 text-[16px] px-[130px] justify-between items-center bg-white z-50 gap-4  h- h-[8vh] ">
+    <div className="flex font-[500] py-4 text-[16px] px-[20px] justify-between items-center bg-whit bg-red-600 z-50 gap-4  h- h-[8vh] ">
       <div className="flex items-center gap-20">
         <Link to="/">
           <div>

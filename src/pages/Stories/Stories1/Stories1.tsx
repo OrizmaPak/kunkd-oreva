@@ -77,7 +77,7 @@ const Stories1 = () => {
   console.log(state);
   const story = storiesData.find((el) => `${el.id}` === id);
   return (
-    <div className=" ">
+    <div className="  ">
       <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] ">
         {/* <div className="flex flex-col h-full"> */}
 
@@ -90,10 +90,11 @@ const Stories1 = () => {
             />
           )}
         </div>
-        <div className="flex-grow flex  h-full ">
-          <div className="flex-grow mt-5 rounded-2xl">
+
+        <div className="  ">
+          <div className=" mt-5 rounded-2xl">
             {!isFinish ? (
-              <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
+              <div className="flex h-full  gap-4  flex-col ">
                 {story && !startRead && (
                   <AboutPage
                     story={story}
@@ -142,7 +143,7 @@ const AboutPage = ({
   setStartRead: () => void;
 }) => {
   return (
-    <div className="bg-[#5D0093]  w-[100%] flex rounded-3xl px-20 py-10">
+    <div className="bg-[#5D0093] flex rounded-3xl px-5  py-10 border-red-700 border-8">
       <div className="flex basis-full  border-r-2 border-[#BD6AFA]  ">
         <p className="flex flex-col w-full">
           <img src={story?.image} alt="image " className="w-[300px]" />
@@ -163,7 +164,7 @@ const AboutPage = ({
           </p>
         </p>
       </div>
-      <div className=" basis-3/4 text-[#BD6AFA] px-10">
+      <div className=" basis-4/4 text-[#BD6AFA] px-10">
         <div>
           <h1 className="text-white font-bold  font-Hanken text-[25px] my-4">
             About the author
@@ -352,8 +353,8 @@ const AudioControls = ({
 const WelDone = () => {
   const navigate = useNavigate();
   return (
-    <div className=" h-full flex justify-center bg-white rounded-3xl items-center">
-      <div>
+    <div className=" h-[calc(100vh-60px-8vh-60px)] flex justify-center bg-white flex-grow rounded-3xl items-center">
+      <div className="">
         <p className="flex justify-center items-center">
           <img src={Congrats} alt="congrats" className="w-[200px]" />
         </p>
