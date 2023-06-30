@@ -1,5 +1,5 @@
 import DeleteIcon from "@/assets/deleteicon.svg";
-import ToggleIcon from "@/assets/toggleicon.svg";
+// import ToggleIcon from "@/assets/toggleicon.svg";
 import Rectangle from "@/assets/boxIcon.svg";
 
 const Row = ({
@@ -34,9 +34,7 @@ const Row = ({
           <div className="flex justify-start items-center ">{noOfStudents}</div>
           <div className="flex justify-start items-center ">{noOfTeacher}</div>
           <div className="flex justify-end  gap-4  items-center">
-            <span>
-              <img src={ToggleIcon} alt="" />
-            </span>
+            <span>{/* <img src={ToggleIcon} alt="" /> */}</span>
             <span>
               <img src={DeleteIcon} alt="delete" />
             </span>
