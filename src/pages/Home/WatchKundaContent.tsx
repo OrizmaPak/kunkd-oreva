@@ -34,7 +34,7 @@ const WatchKundaContent = () => {
         <img
           src={RoundR}
           alt="zigzag"
-          className="absolute  bottom-[950px]  left-[1700px]"
+          className="absolute  bottom-[950px]  left-[700px]"
         />
         <img
           src={RoundY}
