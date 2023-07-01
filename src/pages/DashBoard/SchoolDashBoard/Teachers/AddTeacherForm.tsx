@@ -35,7 +35,7 @@ const AddTeacherForm = ({ handleContinue }: { handleContinue: () => void }) => {
             <InputFormat
               type="email"
               placeholder="Email"
-              leftIcon={<img src={EmailIcon} alt="icon" />}
+              leftIcon={<img loading="lazy" src={EmailIcon} alt="icon" />}
             />
           </div>
           <div className="flex gap-2 mb-2">
@@ -44,8 +44,12 @@ const AddTeacherForm = ({ handleContinue }: { handleContinue: () => void }) => {
               <InputFormat
                 type="password"
                 placeholder="password"
-                leftIcon={<img src={PasswordIcon} alt="pasword icon" />}
-                rightIcon={<img src={PasswordEye} alt="paswordeye icon" />}
+                leftIcon={
+                  <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
+                }
+                rightIcon={
+                  <img loading="lazy" src={PasswordEye} alt="paswordeye icon" />
+                }
               />
             </div>
             <div className="flex-grow">
@@ -53,8 +57,12 @@ const AddTeacherForm = ({ handleContinue }: { handleContinue: () => void }) => {
               <InputFormat
                 type="password"
                 placeholder="password"
-                leftIcon={<img src={PasswordIcon} alt="pasword icon" />}
-                rightIcon={<img src={PasswordEye} alt="paswordeye icon" />}
+                leftIcon={
+                  <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
+                }
+                rightIcon={
+                  <img loading="lazy" src={PasswordEye} alt="paswordeye icon" />
+                }
               />
             </div>
           </div>

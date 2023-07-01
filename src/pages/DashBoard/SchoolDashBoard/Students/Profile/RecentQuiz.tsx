@@ -7,7 +7,12 @@ const RecentQuiz = ({}) => {
       <div className="flex gap-10">
         <div className="flex gap-4 ">
           <p>
-            <img src={FoodFight} alt="image" className="w-[70px]" />
+            <img
+              loading="lazy"
+              src={FoodFight}
+              alt="image"
+              className="w-[70px]"
+            />
           </p>
           <p className="flex flex-col">
             <span className="text-[25px] font-bold text-[#2BB457]">8.0 </span>
@@ -18,7 +23,12 @@ const RecentQuiz = ({}) => {
         </div>
         <div className="flex gap-4">
           <p className="flex ">
-            <img src={FoodFight} alt="image" className="w-[70px]" />
+            <img
+              loading="lazy"
+              src={FoodFight}
+              alt="image"
+              className="w-[70px]"
+            />
           </p>
           <p className="flex flex-col">
             <span className="text-[25px] font-bold text-blue-700">6.0</span>

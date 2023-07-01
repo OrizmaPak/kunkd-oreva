@@ -35,7 +35,7 @@ const SignContent = () => {
     <div className="w-[100%] max-w-[500px] mx-auto relative">
       <Link to="/">
         <span className="absolute">
-          <img src={Cancel} alt="cancel" />
+          <img loading="lazy" src={Cancel} alt="cancel" />
         </span>
       </Link>
 
@@ -69,13 +69,23 @@ const SignContent = () => {
         </div>
         <div className="flex gap-8">
           <Button size="full" varient="outlined">
-            <img src={Google} alt="google" className="mx-auto " />
+            <img
+              loading="lazy"
+              src={Google}
+              alt="google"
+              className="mx-auto "
+            />
           </Button>
           <Button size="full" varient="outlined">
-            <img src={Apple} alt="apple" className="mx-auto " />
+            <img loading="lazy" src={Apple} alt="apple" className="mx-auto " />
           </Button>
           <Button size="full" varient="outlined">
-            <img src={Facebook} alt="facebook" className="mx-auto " />
+            <img
+              loading="lazy"
+              src={Facebook}
+              alt="facebook"
+              className="mx-auto "
+            />
           </Button>
         </div>
         <p className="mt-2 text-center text-[] text-gray-400 ">

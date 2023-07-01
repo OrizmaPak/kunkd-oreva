@@ -147,7 +147,12 @@ const AboutPage = ({
     <div className="bg-[#5D0093]  w-[100%] flex rounded-3xl px-10 py-5">
       <div className="flex basis-full gap-2  border-r-2 justify-center items-center border-[#BD6AFA]  ">
         <p className="flex flex-col w-full">
-          <img src={story?.image} alt="image " className="w-[300px]" />
+          <img
+            loading="lazy"
+            src={story?.image}
+            alt="image "
+            className="w-[300px]"
+          />
         </p>
         <p className="flex flex-col w-full  ">
           <span className="font-bold font-Recoleta text-white text-[30px]">
@@ -161,7 +166,7 @@ const AboutPage = ({
             >
               Read
             </button>
-            <img src={Bookmark} alt="bookmark" />
+            <img loading="lazy" src={Bookmark} alt="bookmark" />
           </p>
         </p>
       </div>
@@ -195,7 +200,12 @@ const ReadPage = ({
   return (
     <div className="flex py-16 bg-white  rounded-3xl px-16">
       <div className=" basis-3/4 flex  items-center">
-        <img src={story.image} alt="image" className="w-[400px]" />
+        <img
+          loading="lazy"
+          src={story.image}
+          alt="image"
+          className="w-[400px]"
+        />
       </div>
       <div className=" basis-full flex flex-col ">
         <div className="flex-grow">
@@ -240,19 +250,24 @@ const BookPagination = ({ setIsFinish }: { setIsFinish: () => void }) => {
       <div className="flex  justify-between   items-center">
         <span className="flex gap-2">
           <p>Pages 5 </p>
-          <img src={ArrowDown} alt="arrow" className="w-[15px]" />
+          <img
+            loading="lazy"
+            src={ArrowDown}
+            alt="arrow"
+            className="w-[15px]"
+          />
         </span>
         <div className="flex gap-4">
           <p className="bg-[#8530C1] text-white p-3 rounded-3xl px-8 gap-8 flex justify-between  items-center">
             <button onClick={() => pageItirate("prev")}>
-              <img src={PreviousIcon} alt="icon" />
+              <img loading="lazy" src={PreviousIcon} alt="icon" />
             </button>
             {currentPage !== pageTotal && <span>{currentPage}</span>}
             {currentPage !== pageTotal && <span>/</span>}
             {currentPage !== pageTotal && <span>{pageTotal}</span>}
             {currentPage !== pageTotal && (
               <button onClick={() => pageItirate("next")}>
-                <img src={NextIcon} alt="icon" />
+                <img loading="lazy" src={NextIcon} alt="icon" />
               </button>
             )}
           </p>
@@ -324,7 +339,7 @@ const AudioControls = ({
       ></audio>
       <div className="flex justify-end rounded-full h-[60px] gap-10 px-20 py-4 bg-[#FBECFF] items-center ">
         <button onClick={handeSkip10("backward")}>
-          <img src={FastBackward} alt="backward" />
+          <img loading="lazy" src={FastBackward} alt="backward" />
         </button>
         <button onClick={handlePlayControl}>
           <img
@@ -334,7 +349,7 @@ const AudioControls = ({
           />
         </button>
         <button onClick={handeSkip10("forward")}>
-          <img src={FastForward} alt="forward" />
+          <img loading="lazy" src={FastForward} alt="forward" />
         </button>
       </div>
       {ended && (
@@ -357,7 +372,12 @@ const WelDone = () => {
     <div className=" h-[calc(100vh-60px-8vh-80px)] flex justify-center bg-white rounded-3xl items-center">
       <div>
         <p className="flex justify-center items-center">
-          <img src={Congrats} alt="congrats" className="w-[200px]" />
+          <img
+            loading="lazy"
+            src={Congrats}
+            alt="congrats"
+            className="w-[200px]"
+          />
         </p>
         <div className="text-center">
           <h1 className="text-[30px] font-Recoleta font-bold">Well Done!</h1>

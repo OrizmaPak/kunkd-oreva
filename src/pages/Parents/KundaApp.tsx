@@ -6,7 +6,7 @@ const KundaApp = () => {
   return (
     <div className="flex justify-between  max-w-[1000px] mx-auto gap-[150px]">
       <div className="basis-[100%]">
-        <img src={Iphone} alt="phone" className="  " />
+        <img loading="lazy" src={Iphone} alt="phone" className="  " />
       </div>
 
       <div className="basis-[100%]">

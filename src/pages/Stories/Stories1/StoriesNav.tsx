@@ -20,7 +20,7 @@ const StoriesNav = ({
         onClick={() => navigate(`/librarynotpaid/stories`)}
       >
         <span>{category}</span>
-        <img src={NextIcon} alt="nextIcon" />
+        <img loading="lazy" src={NextIcon} alt="nextIcon" />
       </div>
 
       <div
@@ -28,7 +28,7 @@ const StoriesNav = ({
         onClick={() => navigate(`/librarynotpaid/stories/${genre}`)}
       >
         <span>{genre}</span>
-        <img src={NextIcon} alt="nextIcon" />
+        <img loading="lazy" src={NextIcon} alt="nextIcon" />
       </div>
 
       <div
@@ -36,7 +36,7 @@ const StoriesNav = ({
         className={`flex gap-2  cursor-pointer ${quiz && "font-bold"} `}
       >
         <span>{title}</span>
-        {quiz && <img src={NextIcon} alt="nextIcon" />}
+        {quiz && <img loading="lazy" src={NextIcon} alt="nextIcon" />}
       </div>
 
       <div className=" cursor-pointer ">

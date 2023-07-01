@@ -34,7 +34,7 @@ const Card = ({
   return (
     <div className=" rounded-3xl py-4 px-8 border border-purple-300">
       <div>
-        <img src={image} alt="image" className="w-[60px]" />
+        <img loading="lazy" src={image} alt="image" className="w-[60px]" />
       </div>
       <div className="flex flex-col">
         <span className="font-bold text-[30px]">{total}</span>

@@ -14,7 +14,12 @@ const WaveCard = ({ children }: Props) => {
         alt=""
         className="absolute    top-[22%] left-[7%] z-[100] "
       />
-      <img src={Ellipse3} alt="" className="absolute left-0  top-[-20%]" />
+      <img
+        loading="lazy"
+        src={Ellipse3}
+        alt=""
+        className="absolute left-0  top-[-20%]"
+      />
       <div
         className="bg-cover bg-center  w-full h-52   matt  "
         style={{ backgroundImage: `url(${Wave1})` }}

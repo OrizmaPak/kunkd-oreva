@@ -51,12 +51,12 @@ const Row = ({
       <p>
         {isPositive ? (
           <span className="text-green-700 flex gap-1">
-            <img src={ArrowPositive} alt="positive" />
+            <img loading="lazy" src={ArrowPositive} alt="positive" />
             {percentage}%
           </span>
         ) : (
           <span className="text-red-700 flex gap-1">
-            <img src={ArrowNegative} alt="Negative" />
+            <img loading="lazy" src={ArrowNegative} alt="Negative" />
             {percentage}%
           </span>
         )}

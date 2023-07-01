@@ -79,9 +79,9 @@ const OurTeamContent = () => {
             })}
         </div>
         {/* <div className="flex gap-6 mb-16">
-          <img src={Chike} alt="Chike" />
-          <img src={Chidera} alt="Chidera" />
-          <img src={Toni} alt="Toni" />
+          <img loading="lazy" src={Chike} alt="Chike" />
+          <img loading="lazy" src={Chidera} alt="Chidera" />
+          <img loading="lazy" src={Toni} alt="Toni" />
         </div> */}
       </div>
     </div>

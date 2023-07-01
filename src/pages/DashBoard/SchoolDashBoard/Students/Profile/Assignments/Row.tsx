@@ -16,7 +16,7 @@ const Row = ({
   return (
     <div className="grid grid-cols-[70px_200px_1fr_1fr_150px] flex-grow  mb-1 gap-5 px-8">
       <p className="flex justify-center items-center">
-        <img src={image} alt="image" className="w-[70px]" />
+        <img loading="lazy" src={image} alt="image" className="w-[70px]" />
       </p>
       <p className="flex flex-col justify-center">
         <span className="font-bold">{title}</span>
@@ -34,7 +34,7 @@ const Row = ({
       </p>
       <p className="flex justify-center gap-4 items-center">
         <span>{date}</span>
-        <img src={DateIcon} alt="date" />
+        <img loading="lazy" src={DateIcon} alt="date" />
       </p>
     </div>
   );

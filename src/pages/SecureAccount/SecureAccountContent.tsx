@@ -44,7 +44,7 @@ const SecureAccountContent = () => {
       <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">
         <Link to="/">
           <span className="absolute right-[-150px] top-[-40px]">
-            <img src={Cancel} alt="cancel" />
+            <img loading="lazy" src={Cancel} alt="cancel" />
           </span>
         </Link>
         <div className="w-[100%]  my-auto ">
@@ -61,7 +61,9 @@ const SecureAccountContent = () => {
               <InputFormat
                 type="password"
                 placeholder="password"
-                leftIcon={<img src={PasswordIcon} alt="pasword icon" />}
+                leftIcon={
+                  <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
+                }
                 reg={register("password")}
                 errorMsg={errors.password?.message}
               />
@@ -71,7 +73,9 @@ const SecureAccountContent = () => {
               <InputFormat
                 type="password"
                 placeholder="Confirm password"
-                leftIcon={<img src={PasswordIcon} alt="pasword icon" />}
+                leftIcon={
+                  <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
+                }
                 reg={register("confirmPassword")}
                 errorMsg={errors.confirmPassword?.message}
               />

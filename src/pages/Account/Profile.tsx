@@ -75,8 +75,13 @@ const Card = ({
   return (
     <div className="flex justify-between p-6 border border-[#8530C1]  rounded-3xl">
       <div className="flex justify-center items-center gap-14 relative ">
-        <img src={image} alt="image" className="w-[150px]" />
-        <img src={BigPencil} alt="pencil" className="absolute left-[65px]" />
+        <img loading="lazy" src={image} alt="image" className="w-[150px]" />
+        <img
+          loading="lazy"
+          src={BigPencil}
+          alt="pencil"
+          className="absolute left-[65px]"
+        />
         <p>
           <p className="font-bold text-[35px] font-Recoleta">{name}</p>
           <p className="text-[#B5B5C3]">{email}</p>
@@ -85,7 +90,7 @@ const Card = ({
       <div className="flex justify-center items-center">
         <Button size="md">
           <p className="flex justify-center items-center gap-2">
-            <img src={Starr} alt="starr" />
+            <img loading="lazy" src={Starr} alt="starr" />
             <span>Upgrade Plan</span>
           </p>
         </Button>
@@ -113,7 +118,7 @@ const PersonalInfomation = ({
         <h1 className="font-bold text-[25px]">Personal Information</h1>
         <Button size="sm" varient="outlined">
           <p className="gap-4 flex">
-            <img src={EditPencil} alt="pencil" />{" "}
+            <img loading="lazy" src={EditPencil} alt="pencil" />{" "}
             <span className="text-[#8530C1]">Edit</span>
           </p>
         </Button>
@@ -173,7 +178,7 @@ const Card2 = ({
         <UploadPicture />
       </Modal>
       <div className="relative">
-        <img src={schbg} alt="schbg" className="w-[100%]" />
+        <img loading="lazy" src={schbg} alt="schbg" className="w-[100%]" />
         <img
           src={CameraIcon}
           alt="camera"
@@ -184,15 +189,20 @@ const Card2 = ({
           className="absolute p-4 bg-white rounded-full bottom-[-100px] left-12"
         >
           <span className=" bg-[#b9b9b9] z-50 rounded-full flex justify-center items-center relative  ">
-            <img src={schlogo} alt="" className="w-[180px] " />
-            <img src={BigPencil} alt="pencil" className="absolute" />
+            <img loading="lazy" src={schlogo} alt="" className="w-[180px] " />
+            <img
+              loading="lazy"
+              src={BigPencil}
+              alt="pencil"
+              className="absolute"
+            />
           </span>
         </span>
       </div>
       <div className="pl-[300px] flex justify-between mt-2  ">
         <div className="">
           <h1 className="font-bold flex gap-4">
-            {schname} <img src={EditIcon} alt="editIcon" />
+            {schname} <img loading="lazy" src={EditIcon} alt="editIcon" />
           </h1>
           <span className="text-[16px] text-[#B5B5C3]">{schaddress}</span>
         </div>
@@ -200,7 +210,7 @@ const Card2 = ({
           <p className="flex gap-3 justify-center items-baseline">
             School code:
             <p className="font-bold text-[23px] pt-1">{schcode}</p>
-            <img src={CopyIcon} alt="copyIcon" />
+            <img loading="lazy" src={CopyIcon} alt="copyIcon" />
           </p>
         </div>
       </div>

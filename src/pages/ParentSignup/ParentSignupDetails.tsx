@@ -40,7 +40,7 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
       <div className="w-[100%] max-w-[500px] mx-auto relative">
         <Link to="/">
           <span className="absolute right-0 top-[-30px]">
-            <img src={Cancel} alt="cancel" />
+            <img loading="lazy" src={Cancel} alt="cancel" />
           </span>
         </Link>
         <div className="w-[100%] pt-20">
@@ -72,7 +72,9 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
               <InputFormat
                 type="text"
                 placeholder="Email"
-                leftIcon={<img src={EmailLogo} alt="pasword icon" />}
+                leftIcon={
+                  <img loading="lazy" src={EmailLogo} alt="pasword icon" />
+                }
                 reg={register("email")}
                 errorMsg={errors.email?.message}
               />

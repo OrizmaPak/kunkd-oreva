@@ -18,7 +18,12 @@ const Mission = () => {
             </p>
           </div>
           <div className="basis-1/2 flex justify-end">
-            <img src={DadBoy} alt="parentImage" className="w-[70%]" />
+            <img
+              loading="lazy"
+              src={DadBoy}
+              alt="parentImage"
+              className="w-[70%]"
+            />
           </div>
         </div>
       </div>

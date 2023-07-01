@@ -47,7 +47,12 @@ const ShopBooks = () => {
   const sliderRef = useRef<Slider>(null);
   return (
     <div className="relative">
-      <img src={Lines} alt="lines" className="absolute  right-0 top-[-300px]" />
+      <img
+        loading="lazy"
+        src={Lines}
+        alt="lines"
+        className="absolute  right-0 top-[-300px]"
+      />
       <img
         src={RoundG}
         alt="lines"
@@ -97,7 +102,12 @@ const ShopBooks = () => {
           <div className="h-[605px] p-14 w-[1365px] bg-[#8530C1] rounded-[70px] mb-[200px] ">
             <div className="flex gap-10 ">
               <div className="basis-1/2">
-                <img src={BigCart} alt="b=cart card" className="w-[500px]" />
+                <img
+                  loading="lazy"
+                  src={BigCart}
+                  alt="b=cart card"
+                  className="w-[500px]"
+                />
               </div>
               <div className="basis-1/2 text-white">
                 <p className="mb-5 mt-8">New Books</p>

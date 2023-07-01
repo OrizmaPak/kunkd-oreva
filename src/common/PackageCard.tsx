@@ -65,7 +65,12 @@ const PackageCard = ({
           {content.map((item, index) => (
             <div className="mt-7" key={index}>
               <p className=" flex justify-center items-center">
-                <img src={item} alt="icon" className="w-[10px] my-5" />
+                <img
+                  loading="lazy"
+                  src={item}
+                  alt="icon"
+                  className="w-[10px] my-5"
+                />
               </p>
             </div>
           ))}

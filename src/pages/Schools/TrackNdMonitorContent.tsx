@@ -16,7 +16,7 @@ const TrackNdMonitorContent = () => {
 
       <div className="relative overflow-hidden mt-40">
         <div className="  ml-40">
-          <img src={LadyBackground} alt="teacher" />
+          <img loading="lazy" src={LadyBackground} alt="teacher" />
         </div>
         <div>
           <img

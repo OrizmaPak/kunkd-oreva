@@ -30,7 +30,12 @@ const Hero = () => {
             />
           </div>
           <div>
-            <img src={Banner2} alt="banner2" className="w-[100%]" />
+            <img
+              loading="lazy"
+              src={Banner2}
+              alt="banner2"
+              className="w-[100%]"
+            />
           </div>
         </Slider>
       </div>

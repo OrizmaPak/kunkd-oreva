@@ -10,7 +10,7 @@ const Header = () => {
       <div className="flex justify-between items-center w-full  ">
         <div className="flex justify-items-center items-center gap-4">
           <span onClick={() => navigate(-1)} className=" hover:cursor-pointer">
-            <img src={LessThanIcon} alt="" className="" />
+            <img loading="lazy" src={LessThanIcon} alt="" className="" />
           </span>
           <h1 className="text-[25px] font-bold"> Students profile</h1>
         </div>
@@ -18,12 +18,17 @@ const Header = () => {
           <span className="text-[#8530C1]">Last 7 days:</span>
           <span className="flex gap-2 justify-center items-center">
             <span> May 21 May 28 2023</span>
-            <img src={ArrowDown} alt="Arrowdown" className="w-4" />
+            <img
+              loading="lazy"
+              src={ArrowDown}
+              alt="Arrowdown"
+              className="w-4"
+            />
           </span>
         </div>
         <div>
           <button className="text-white bg-[#ED1C24] p-3 flex gap-2  rounded-3xl">
-            <img src={StudentIcon} alt="" />
+            <img loading="lazy" src={StudentIcon} alt="" />
             <span>Remove student</span>
           </button>
         </div>

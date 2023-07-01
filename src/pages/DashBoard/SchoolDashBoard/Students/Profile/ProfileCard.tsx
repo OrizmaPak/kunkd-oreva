@@ -12,7 +12,12 @@ const ProfileCard = ({
   return (
     <div className="grid grid-cols-[1fr_200px_1fr] bg-[#003914] text-white p-3 rounded-3xl gap-4  mx-[auto]">
       <div className="flex justify-center items-center">
-        <img src={image} alt="image" className="w-[100px] rounded-full" />
+        <img
+          loading="lazy"
+          src={image}
+          alt="image"
+          className="w-[100px] rounded-full"
+        />
       </div>
       <div className=" border-r-2">
         <h1>{name}</h1>

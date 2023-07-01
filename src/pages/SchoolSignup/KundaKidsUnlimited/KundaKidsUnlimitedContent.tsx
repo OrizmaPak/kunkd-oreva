@@ -61,7 +61,12 @@ const KundaKidsUnlimitedContent = () => {
       </div>
       <Link to="/">
         <span>
-          <img src={Cancel} alt="Cancle" className="absolute top-10 right-24" />
+          <img
+            loading="lazy"
+            src={Cancel}
+            alt="Cancle"
+            className="absolute top-10 right-24"
+          />
         </span>
       </Link>
       <button
@@ -69,7 +74,7 @@ const KundaKidsUnlimitedContent = () => {
         className="absolute right-24 bottom-14 flex justify-center items-center gap-4"
       >
         <p className="text-[18px] font-Hanken font-bold">Continue free </p>
-        <img src={GreaterIcon} alt="greater icon" />
+        <img loading="lazy" src={GreaterIcon} alt="greater icon" />
       </button>
     </div>
   );
@@ -81,7 +86,7 @@ const CustomList = ({ val }: { val: string }) => {
   return (
     <div className="flex justify-start items-center gap-4 my-3 text-white">
       <span>
-        <img src={Marked} alt="marked" />
+        <img loading="lazy" src={Marked} alt="marked" />
       </span>
       <p>{val}</p>
     </div>

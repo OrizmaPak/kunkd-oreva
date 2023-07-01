@@ -18,7 +18,7 @@ const ChoosePlan = () => {
         <div className="mt-20 relative">
           <Link to="/">
             <span className="absolute top-0 right-32">
-              <img src={Cancel} alt="cancel" />
+              <img loading="lazy" src={Cancel} alt="cancel" />
             </span>
           </Link>
           <h1 className="text-center font-Recoleta font-bold text-[30px]">

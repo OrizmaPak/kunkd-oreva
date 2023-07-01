@@ -464,20 +464,20 @@ const AudioBookSliderCard = ({
   return (
     <div className="bg-[#8530C1]  rounded-3xl py-8 flex gap-8 mx-5  px-3 ">
       <div>
-        <img src={image} alt="" />
+        <img loading="lazy" src={image} alt="" />
       </div>
       <div className="flex flex-col text-[#D190FF] flex-grow">
         <p className="font-bold text-[12px]">AUDIOBOOK</p>
         <p className="font-bold text-white text-[18px]">{title}</p>
         <p className="flex-grow text-[14px]">by {author}</p>
         <p className="flex text-[12px]">
-          <img src={TimeIcon} alt="timeicon" />
+          <img loading="lazy" src={TimeIcon} alt="timeicon" />
           <span>10 minutes and 33 seconds</span>
         </p>
       </div>
       <div className=" flex items-end">
         <p className="flex justify-center items-end">
-          <img src={PlayIcon} alt="play" />
+          <img loading="lazy" src={PlayIcon} alt="play" />
         </p>
       </div>
     </div>

@@ -134,7 +134,12 @@ const AboutPage = ({
     <div className="bg-[#003914]  w-[100%] flex rounded-3xl px-10 py-5">
       <div className="flex basis-full  border-r-2 justify-center items-center gap-4 border-[#008A3B]  ">
         <p className="flex flex-col w-full ">
-          <img src={story?.image} alt="image " className="w-[300px]" />
+          <img
+            loading="lazy"
+            src={story?.image}
+            alt="image "
+            className="w-[300px]"
+          />
         </p>
         <p className="flex flex-col w-full  ">
           <span className="font-bold font-Recoleta text-white text-[30px]">
@@ -148,7 +153,7 @@ const AboutPage = ({
             >
               Read
             </button>
-            <img src={Bookmark} alt="bookmark" />
+            <img loading="lazy" src={Bookmark} alt="bookmark" />
           </p>
         </p>
       </div>
@@ -176,7 +181,12 @@ const ReadPage = ({ story }: { story: StoriesType }) => {
   return (
     <div className="flex bg-[#fff7fd] py-5 gap-16 rounded-3xl ">
       <div className=" basis-3/6 flex  items-center bg-[white] flex-col p-10 rounded-3xl">
-        <img src={story.image} alt="image" className="w-[300px]" />
+        <img
+          loading="lazy"
+          src={story.image}
+          alt="image"
+          className="w-[300px]"
+        />
         <AudioControls audio={story.audioBook} />
       </div>
       <div className=" basis-full flex flex-col bg-white rounded-3xl p-10 ">
@@ -184,7 +194,7 @@ const ReadPage = ({ story }: { story: StoriesType }) => {
           <p className="mb-5 flex justify-between items-center">
             <span className="text-[#B5B5C3] text-[18px]">Lyrics</span>
             <span>
-              <img src={ExportIcon} alt="" />
+              <img loading="lazy" src={ExportIcon} alt="" />
             </span>
           </p>
           <p className=" leading-10 text-[22px]">{story.content}</p>
@@ -308,7 +318,7 @@ const AudioControls = ({ audio }: { audio?: string }) => {
         ></audio>
         <div className="flex justify-end rounded-full gap-10 px-20 py-4 bg-[#FBECFF] items-center ">
           <button onClick={handeSkip10("backward")}>
-            <img src={FastBackward} alt="backward" />
+            <img loading="lazy" src={FastBackward} alt="backward" />
           </button>
           <button onClick={handlePlayControl}>
             <img
@@ -318,12 +328,17 @@ const AudioControls = ({ audio }: { audio?: string }) => {
             />
           </button>
           <button onClick={handeSkip10("forward")}>
-            <img src={FastForward} alt="forward" />
+            <img loading="lazy" src={FastForward} alt="forward" />
           </button>
         </div>
       </div>
       <div className="mt-20 flex gap-5 pr-24">
-        <img src={VolumeIcon} alt="volume" className="w-[20px]" />
+        <img
+          loading="lazy"
+          src={VolumeIcon}
+          alt="volume"
+          className="w-[20px]"
+        />
         <input
           type="range"
           className="mr-2   text-[#8530C1] bg-[#8530C1] w-[100px]"

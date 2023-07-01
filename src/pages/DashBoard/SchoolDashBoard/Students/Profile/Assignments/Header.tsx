@@ -7,10 +7,10 @@ const Header = () => {
       <p className="font-bold font-Hanken">Assignments</p>
       <p className="gap-5 flex">
         <button>
-          <img src={PrevIcon} alt="previous" />
+          <img loading="lazy" src={PrevIcon} alt="previous" />
         </button>
         <button>
-          <img src={NextIcon} alt="Nexticon" />
+          <img loading="lazy" src={NextIcon} alt="Nexticon" />
         </button>
       </p>
     </div>

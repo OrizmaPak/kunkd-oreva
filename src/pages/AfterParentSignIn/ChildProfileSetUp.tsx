@@ -152,7 +152,7 @@ export const WelcomeModal = ({ onContinue }: { onContinue: () => void }) => {
       </div>
       <div className="flex justify-center items-center py-10">
         <button onClick={onContinue} className=" text-center">
-          <img src={AddAvatarIcon} alt="avatar" />
+          <img loading="lazy" src={AddAvatarIcon} alt="avatar" />
           <p className="py-5">Add Profile</p>
         </button>
       </div>
@@ -179,7 +179,7 @@ export const ChildNameModal = ({
     >
       {showGoBackIcon && (
         <p onClick={goBack} className="pl-10 pb-10">
-          <img src={LessDOwnIcon} alt="lessdownIcon" />
+          <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
         </p>
       )}
       <div className="px-14">
@@ -190,7 +190,7 @@ export const ChildNameModal = ({
           <p className="text-center">Input your child’s full name</p>
         </div>
         <div className="flex justify-center items-center p-4">
-          <img src={YaJump} alt="jump" />
+          <img loading="lazy" src={YaJump} alt="jump" />
         </div>
         <div>
           <form>
@@ -225,7 +225,7 @@ export const ChildAgeModal = ({
       className=" max-w-[600px] rounded-3xl w-[100%] py-10"
     >
       <p onClick={goBack} className="pl-10 pb-10">
-        <img src={LessDOwnIcon} alt="lessdownIcon" />
+        <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
       </p>
       <div className="px-14">
         <div>
@@ -237,7 +237,7 @@ export const ChildAgeModal = ({
           </p>
         </div>
         <div className="flex justify-center items-center p-4">
-          <img src={YaJump} alt="jump" />
+          <img loading="lazy" src={YaJump} alt="jump" />
         </div>
         <div>
           <form>
@@ -274,7 +274,7 @@ export const SelectAvatar = ({
       className=" max-w-[600px] rounded-3xl w-[100%] py-10"
     >
       <p onClick={goBack} className="pl-10 pb-10">
-        <img src={LessDOwnIcon} alt="lessdownIcon" />
+        <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
       </p>
       <div className="px-14">
         <div>
@@ -337,7 +337,7 @@ const AvatarCard = ({
           selected === name ? "border-[10px] border-[red]" : ""
         }  rounded-[30px]`}
       >
-        <img src={image} alt="avatar" />
+        <img loading="lazy" src={image} alt="avatar" />
       </button>
     </div>
   );
@@ -354,7 +354,7 @@ export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
     >
       <div className="px-14 rounded-3xl">
         <div className="flex justify-center items-center p-4">
-          <img src={YajSucces} alt="success" />
+          <img loading="lazy" src={YajSucces} alt="success" />
         </div>
         <p className="text-center my-4">You have successfully added a child</p>
         <p className="mb-12">

@@ -26,7 +26,7 @@ const Row = ({
         <div className="grid   grid-cols-[100px_300px_1fr_1fr_150px] mt-2  px-8">
           <div className="flex justify-start items-center ">
             <span className=" ">
-              <img src={Rectangle} alt="" />
+              <img loading="lazy" src={Rectangle} alt="" />
             </span>
           </div>
           <div
@@ -34,16 +34,21 @@ const Row = ({
             className="flex items-center justify-start gap-4 "
           >
             <span>
-              <img src={image} alt="image" className=" w-[46px]" />
+              <img
+                loading="lazy"
+                src={image}
+                alt="image"
+                className=" w-[46px]"
+              />
             </span>
             <span>{name}</span>
           </div>
           <div className="flex justify-start items-center ">{classs}</div>
           <div className="flex justify-start items-center ">{gender}</div>
           <div className="flex justify-end  gap-4  items-center">
-            <span>{/* <img src={ToggleIcon} alt="" /> */}</span>
+            <span>{/* <img loading="lazy" src={ToggleIcon} alt="" /> */}</span>
             <span onClick={onDeleteProfile}>
-              <img src={DeleteIcon} alt="delete" />
+              <img loading="lazy" src={DeleteIcon} alt="delete" />
             </span>
             <span></span>
           </div>

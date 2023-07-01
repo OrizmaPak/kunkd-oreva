@@ -17,7 +17,7 @@ const MakePaymentContent = ({ onSubmit }: { onSubmit: () => void }) => {
     <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">
       <Link to="/">
         <span className="absolute right-[-150px] top-[40px]">
-          <img src={Cancel} alt="cancel" />
+          <img loading="lazy" src={Cancel} alt="cancel" />
         </span>
       </Link>
       <div className="w-[100%]  my-auto ">
@@ -34,7 +34,7 @@ const MakePaymentContent = ({ onSubmit }: { onSubmit: () => void }) => {
             <InputFormat
               type="number"
               placeholder="54737 347373 34774"
-              leftIcon={<img src={Visa} alt=" visa icon" />}
+              leftIcon={<img loading="lazy" src={Visa} alt=" visa icon" />}
             />
           </p>
           <div className="flex justify-between">

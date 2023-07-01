@@ -15,7 +15,7 @@ const HeroContentContent = () => {
           </h1>
           <div className="max-w-[400px] flex mb-10 ">
             <span className="mr-4 ">
-              <img src={Arrow} alt="" className="w-20 pt-2 " />
+              <img loading="lazy" src={Arrow} alt="" className="w-20 pt-2 " />
             </span>
             <p className="  font-Hanken">
               Embark on a reading adventure with Kunda Kids and empower your
@@ -31,8 +31,8 @@ const HeroContentContent = () => {
             alt=""
             className="absolute bottom-0  right-60  z-50"
           />
-          {/* <img src={Book} alt="" className='absolute  bottom-[34%]  right-[34%] z-50 ' /> */}
-          {/* <img src={Music} alt="" className='absolute  bottom-[25%]  right-[9%] z-50 ' /> */}
+          {/* <img loading="lazy" src={Book} alt="" className='absolute  bottom-[34%]  right-[34%] z-50 ' /> */}
+          {/* <img loading="lazy" src={Music} alt="" className='absolute  bottom-[25%]  right-[9%] z-50 ' /> */}
         </div>
       </div>
     </div>

@@ -36,15 +36,15 @@ const Grade = ({
         <div className="">
           <p className="flex my-4 gap-2  items-center" onClick={onEdit}>
             <span> Assigned teachers</span>
-            <img src={EditPencil} alt="editpencil" />
+            <img loading="lazy" src={EditPencil} alt="editpencil" />
           </p>
           <div className=" flex justify-start gap-10 items-center my-5">
             <div className="flex justify-center  gap-2 items-center  border-r-gray-500 ">
-              <img src={image1} alt="" />
+              <img loading="lazy" src={image1} alt="" />
               <span>{name1}</span>
             </div>
             <div className="flex justify-center gap-2 items-center">
-              <img src={image2} alt="" />
+              <img loading="lazy" src={image2} alt="" />
               <span>{name2}</span>
             </div>
           </div>

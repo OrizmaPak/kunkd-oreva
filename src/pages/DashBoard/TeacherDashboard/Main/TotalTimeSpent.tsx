@@ -11,7 +11,7 @@ const TotalTimeSpent = () => {
         <p className="flex justify-between mt-1 ">
           <span>Minutes</span>
           <span className="flex">
-            <img src={PositiveArrow} alt="Positive arrow" />
+            <img loading="lazy" src={PositiveArrow} alt="Positive arrow" />
             <span className="text-green-600">3.9%</span>
           </span>
         </p>

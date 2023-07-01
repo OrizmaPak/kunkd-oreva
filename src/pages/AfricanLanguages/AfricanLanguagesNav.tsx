@@ -20,7 +20,7 @@ const AfricanLanguagesNav = ({
         onClick={() => navigate(`/librarynotpaid/africanlanguages`)}
       >
         <span>{category}</span>
-        <img src={NextIcon} alt="nextIcon" />
+        <img loading="lazy" src={NextIcon} alt="nextIcon" />
       </div>
 
       <div
@@ -28,7 +28,7 @@ const AfricanLanguagesNav = ({
         onClick={() => navigate(`/librarynotpaid/africanlanguages/${lanType}`)}
       >
         <span>{lanType}</span>
-        {title && <img src={NextIcon} alt="nextIcon" />}
+        {title && <img loading="lazy" src={NextIcon} alt="nextIcon" />}
       </div>
 
       <div
@@ -38,7 +38,7 @@ const AfricanLanguagesNav = ({
         className={`flex gap-2  cursor-pointer  ${quiz ? "font-bold" : ""}  `}
       >
         {title && <span>{title}</span>}
-        {quiz && <img src={NextIcon} alt="nextIcon" />}
+        {quiz && <img loading="lazy" src={NextIcon} alt="nextIcon" />}
       </div>
       <div className={`flex gap-2  cursor-pointer  `}>
         <span>{quiz}</span>

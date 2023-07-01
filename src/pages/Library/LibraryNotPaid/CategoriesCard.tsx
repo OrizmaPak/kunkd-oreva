@@ -13,7 +13,12 @@ const CategoriesCard = ({
       className="flex gap-3 justify-center items-center cursor-pointer"
     >
       <span>
-        <img src={image} alt="image" className="w-[70px] h-[70px]" />
+        <img
+          loading="lazy"
+          src={image}
+          alt="image"
+          className="w-[70px] h-[70px]"
+        />
       </span>
       <p className="font-bold font-Recoleta">{label}</p>
     </div>

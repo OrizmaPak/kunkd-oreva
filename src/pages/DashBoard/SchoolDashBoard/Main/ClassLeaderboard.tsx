@@ -74,7 +74,7 @@ const Row = ({
   return (
     <div className="flex justify-between items-center my-3 flex-grow">
       <span className="flex gap-2 items-center justify-center">
-        <img src={image} alt="image" className="w-[30px]" />
+        <img loading="lazy" src={image} alt="image" className="w-[30px]" />
         <span>{grade}</span>
       </span>
       <span>{name}</span>

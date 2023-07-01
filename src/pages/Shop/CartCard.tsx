@@ -16,7 +16,7 @@ const CartCard = ({
   return (
     <div className="my-10">
       <div style={{ width: `${size ? size : "350"}px` }} className="w-[300px]">
-        <img src={image} alt="image" className="w-full" />
+        <img loading="lazy" src={image} alt="image" className="w-full" />
 
         <p className="my-4">{title}</p>
         <p className=" font-bold text-[20px] mb-8">{price} NGN</p>

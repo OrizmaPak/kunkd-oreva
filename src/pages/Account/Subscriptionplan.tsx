@@ -23,7 +23,7 @@ const Subscriptionplan = () => {
             <p className="flex justify-center items-center">
               <Button size="md">
                 <p className="flex gap-3">
-                  <img src={Starr} alt="starr" />
+                  <img loading="lazy" src={Starr} alt="starr" />
                   <span>Upgrade</span>
                 </p>
               </Button>
@@ -41,7 +41,11 @@ const Subscriptionplan = () => {
             className="flex gap-2 cursor-pointer"
           >
             See avalaible plan
-            <img src={openPlan ? ArrowDown : ArrowUp} alt="arrow" />
+            <img
+              loading="lazy"
+              src={openPlan ? ArrowDown : ArrowUp}
+              alt="arrow"
+            />
           </span>
           <hr className="flex-grow" />
         </div>

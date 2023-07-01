@@ -26,7 +26,7 @@ const AddStudentForm = ({ handleContinue }: { handleContinue: () => void }) => {
           <InputFormat
             type="email"
             placeholder="Email"
-            leftIcon={<img src={EmailIcon} alt="icon" />}
+            leftIcon={<img loading="lazy" src={EmailIcon} alt="icon" />}
           />
         </div>
         <div className=" mb-4">
@@ -34,7 +34,7 @@ const AddStudentForm = ({ handleContinue }: { handleContinue: () => void }) => {
           <InputFormat
             type="number"
             placeholder="Unique code"
-            leftIcon={<img src={EmailIcon} alt="icon" />}
+            leftIcon={<img loading="lazy" src={EmailIcon} alt="icon" />}
           />
         </div>
 

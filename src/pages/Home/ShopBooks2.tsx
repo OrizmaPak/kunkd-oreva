@@ -13,7 +13,12 @@ const BigCartCard = () => {
       <div className="h-[605px] p-14 w-[1165px] bg-[#8530C1] rounded-[70px] mb-[200px] ">
         <div className="flex gap-10 ">
           <div className="basis-1/2">
-            <img src={BigCart} alt="b=cart card" className="w-[900px]" />
+            <img
+              loading="lazy"
+              src={BigCart}
+              alt="b=cart card"
+              className="w-[900px]"
+            />
           </div>
           <div className="basis-1/2 text-white">
             <p className="mb-5 mt-8">New Books</p>
