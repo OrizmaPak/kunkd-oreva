@@ -55,11 +55,13 @@ import SelectProfile from "./pages/AfterParentSignIn/SelectProfile";
 import ChildProfileSetUp from "./pages/AfterParentSignIn/ChildProfileSetUp";
 import AudioBooks from "@/pages/AudioBooks/AudioBooks";
 import AfricanLanguages from "@/pages/AfricanLanguages/AfricanLanguages";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
     <BrowserRouter>
       <div className="App ">
+        <ScrollToTop />
         <Routes>
           {/* Routes Before Login */}
           <Route path="/">
