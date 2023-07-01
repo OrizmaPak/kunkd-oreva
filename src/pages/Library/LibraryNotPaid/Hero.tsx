@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Skeleton, Button } from "@mantine/core";
+import { Skeleton } from "@mantine/core";
 const Hero = ({ image }: { image: string }) => {
   const [isLoading, setIsLoading] = useState(true);
   return (
