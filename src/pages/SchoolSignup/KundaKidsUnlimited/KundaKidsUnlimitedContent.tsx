@@ -33,11 +33,11 @@ const KundaKidsUnlimitedContent = () => {
           </p>
         </div>
 
-        <div className="bg-[#8530C1] rounded-[40px] px-6 py-8 border-solid border-[12px] border-gray-200 mt-8">
+        <div className="bg-[#8530C1] rounded-[40px] px-6 py-4 border-solid border-[12px] border-gray-200 mt-8">
           <p className=" text-center text-white text-[20px] font-Hanken">
             EnterPrise
           </p>
-          <h1 className=" text-center text-[30px] font-bold text-white mb-6 font-Hanken">
+          <h1 className=" text-center text-[30px] font-bold text-white mb-4 font-Hanken">
             CUSTOM
           </h1>
           <div className="flex justify-between">
@@ -53,8 +53,8 @@ const KundaKidsUnlimitedContent = () => {
             </div>
           </div>
           <p className="flex justify-center">
-            <button className="text-[20px] py-4 px-16 font-bold rounded-[40px] bg-slate-50 text-[#8530C1]">
-              <h1 className="text-[25px]">Contact us</h1>
+            <button className="text-[20px] py-4 px-10 font-bold rounded-[40px] bg-slate-50 text-[#8530C1]">
+              <h1 className="text-[20px]">Contact us</h1>
             </button>
           </p>
         </div>
@@ -66,7 +66,7 @@ const KundaKidsUnlimitedContent = () => {
       </Link>
       <button
         onClick={() => navigate("/newlyregistereduser")}
-        className="absolute right-24 bottom-14 flex gap-4"
+        className="absolute right-24 bottom-14 flex justify-center items-center gap-4"
       >
         <p className="text-[18px] font-Hanken font-bold">Continue free </p>
         <img src={GreaterIcon} alt="greater icon" />
@@ -79,7 +79,7 @@ export default KundaKidsUnlimitedContent;
 
 const CustomList = ({ val }: { val: string }) => {
   return (
-    <div className="flex justify-start items-center gap-4 my-6 text-white">
+    <div className="flex justify-start items-center gap-4 my-3 text-white">
       <span>
         <img src={Marked} alt="marked" />
       </span>

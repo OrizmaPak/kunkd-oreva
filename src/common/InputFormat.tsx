@@ -26,7 +26,7 @@ const InputFormat = ({
       <div
         className={`border ${
           errorMsg ? "border-red-700" : "border-[#F3DAFF]"
-        } py-4 px-8 rounded-full flex items-center gap-2 mt-2   `}
+        } py-3 px-8 rounded-full flex items-center gap-2 mt-1   `}
       >
         {leftIcon ? <span>{leftIcon}</span> : null}
         <input

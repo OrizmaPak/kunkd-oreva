@@ -57,7 +57,7 @@ const SignContent = () => {
             />
           ))}
           {/* // <OptionButton title="'I'm a Parent" body="I want to manage my child's access to this platform" image={UnChecked}/> */}
-          <div className="mt-20">
+          <div className="mt-10">
             <Link to={to}>
               <Link to={`/${to}`}>
                 <Button onClick={handleClick} size="full">

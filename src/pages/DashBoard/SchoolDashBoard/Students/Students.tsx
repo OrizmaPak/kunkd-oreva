@@ -12,7 +12,7 @@ const Students = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
   return (
-    <div className="h-full flex flex-col ">
+    <div className="h-[100%] flex flex-col overflow-y-scroll ">
       <Modal
         radius={"xl"}
         size="lg"
@@ -24,7 +24,7 @@ const Students = () => {
         <DeleteProfile onCancel={close} />
       </Modal>
 
-      <div className=" flex-grow flex flex-col  rounded-3xl p-4 bg-white">
+      <div className=" flex-grow flex flex-col  rounded-3xl bg-white py-2  ">
         <div className="grid grid-cols-2 justify-center items-center w-full px-8 ">
           <div>
             <h1 className="text-[25px] font-bold">Students (35)</h1>
@@ -36,7 +36,7 @@ const Students = () => {
           </div>
         </div>
 
-        <div className="grid  grid-cols-[100px_1fr_250px_250px_150px] mt-5 text-gray-400  px-8">
+        <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px] mt-5 text-gray-400  px-8">
           <div className="flex justify-start items-center ">
             <span className=" ">
               <img src={Rectangle} alt="" />
@@ -81,6 +81,15 @@ const Students = () => {
           })}
         />
       </div>
+
+      <style>
+        {`
+       ::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+        `}
+      </style>
     </div>
   );
 };

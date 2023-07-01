@@ -1,6 +1,8 @@
 import Banner1 from "@/assets/storyBanner.svg";
 import Banner2 from "@/assets/cultureBanner.svg";
 import Slider from "react-slick";
+import { Skeleton } from "@mantine/core";
+import { useState } from "react";
 
 const Hero = () => {
   const settings = {
@@ -14,18 +16,25 @@ const Hero = () => {
     speed: 3000,
     arrows: false,
   };
-
+  const [isLoading, setIsLoadind] = useState(true);
   return (
-    <div>
-      <Slider {...settings}>
-        <div>
-          <img src={Banner1} alt="banner1" className="w-[100%]" />
-        </div>
-        <div>
-          <img src={Banner2} alt="banner2" className="w-[100%]" />
-        </div>
-      </Slider>
-    </div>
+    <Skeleton visible={isLoading}>
+      <div className="h-[250px]">
+        <Slider {...settings}>
+          <div>
+            <img
+              src={Banner1}
+              alt="banner1"
+              className="w-[100%]"
+              onLoad={() => setIsLoadind(false)}
+            />
+          </div>
+          <div>
+            <img src={Banner2} alt="banner2" className="w-[100%]" />
+          </div>
+        </Slider>
+      </div>
+    </Skeleton>
   );
 };
 

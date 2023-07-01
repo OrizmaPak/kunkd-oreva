@@ -124,16 +124,16 @@ const LoginContent = () => {
           <img src={Cancel} alt="cancel" />
         </span>
       </Link>
-      <div className="w-[100%] pt-20">
+      <div className="w-[100%] pt-10">
         <span></span>
         <h1 className="font-bold fon text-[40px] font-Recoleta">
           Welcome back
         </h1>
-        <p className="text-[15px] text-[#A7A7A7] font-Hanken">
-          Welcome back! please enter your details{" "}
+        <p className="text-[14px] text-[#A7A7A7] font-Hanken">
+          Welcome back! please enter your details
         </p>
         <form onSubmit={handleSubmit(submitData)}>
-          <p className="my-8">
+          <p className="my-4">
             {
               <InputFormat
                 type="text"
@@ -144,7 +144,7 @@ const LoginContent = () => {
               />
             }
           </p>
-          <p className="my-4">
+          <p className="my-2">
             <InputFormat
               type="password"
               placeholder="password"
@@ -154,7 +154,7 @@ const LoginContent = () => {
               errorMsg={errors.password?.message}
             />
           </p>
-          <p className="flex justify-end mb-8 text-[#8530C1] font-bold">
+          <p className="flex justify-end mb-4 text-[#8530C1] font-bold">
             <Link to="/forgotpassword">
               <button>Forgot password?</button>
             </Link>
@@ -162,13 +162,13 @@ const LoginContent = () => {
           <Button type="submit" size="full">
             Login
           </Button>
-          <p className="flex justify-center mt-8 text-[#8530C1] font-bold underline">
+          <p className="flex justify-center mt-3 text-[#8530C1] font-bold underline">
             <button type="button" onClick={() => open2()}>
               Sign In as Student
             </button>
           </p>
         </form>
-        <p className="flex items-center justify-items-center py-8 gap-3  text-gray-400 font-400">
+        <p className="flex items-center justify-items-center py-2 gap-3  text-gray-400 font-400">
           <hr className="flex-1" />
           <span>or continue with</span> <hr className="flex-1" />
         </p>
@@ -186,7 +186,7 @@ const LoginContent = () => {
         <p className="mt-2 text-center text-[] text-gray-400 ">
           <span className="font-Hanken">Don't hava an account? </span>
           <Link to="/signup">
-            <button className="mt-8 text-[#8530C1] font-bold">Sign up</button>
+            <button className="mt-4 text-[#8530C1] font-bold">Sign up</button>
           </Link>
         </p>
       </div>

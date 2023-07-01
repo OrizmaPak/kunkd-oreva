@@ -47,7 +47,7 @@ const SchoolSignupContent = () => {
   };
 
   return (
-    <div className="w-[100%] max-w-[500px] mx-auto relative mt-[-50px]">
+    <div className="w-[100%] max-w-[500px] mx-auto relative mt-[-10px]">
       <Link to="/">
         <span className="absolute">
           <img src={Cancel} alt="cancel" />
@@ -62,7 +62,7 @@ const SchoolSignupContent = () => {
           Start learning and reading without restrictions.{" "}
         </p>
         <form onSubmit={handleSubmit(submitData)} className="mt-8">
-          <p className="my-8">
+          <p className="my-3">
             <InputFormat
               type="text"
               placeholder="School Name"
@@ -71,7 +71,7 @@ const SchoolSignupContent = () => {
             />
           </p>
 
-          <p className="my-8">
+          <p className="my-3">
             <InputFormat
               type="text"
               placeholder="School Address"
@@ -80,7 +80,7 @@ const SchoolSignupContent = () => {
             />
           </p>
 
-          <p className="my-8">
+          <p className="my-3">
             <InputFormat
               type="text"
               placeholder="Contact Name"
@@ -88,7 +88,7 @@ const SchoolSignupContent = () => {
               errorMsg={errors.contactName?.message}
             />
           </p>
-          <p className="my-8">
+          <p className="my-3">
             <InputFormat
               type="text"
               placeholder="Email"

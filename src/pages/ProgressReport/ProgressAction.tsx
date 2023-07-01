@@ -8,7 +8,7 @@ const ProgressAction = ({
   onClick: (val: number) => void;
 }) => {
   return (
-    <div className="rounded-full w-[1450px] flex mx-auto     bg-[#F9F9F9]  my-16">
+    <div className="rounded-full w-[85%] flex   mx-auto   bg-[#F9F9F9]  my-16">
       <button
         onClick={() => {
           onClick(STEP_1), console.log(active);

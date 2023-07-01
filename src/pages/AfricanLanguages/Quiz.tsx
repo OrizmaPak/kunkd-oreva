@@ -177,7 +177,7 @@ const Quiz = () => {
         />
       )}
       {curentStep === STEP_1 && (
-        <div className="flex-grow mt-5 pt-10 px-40 flex  flex-col py-14 bg-white rounded-3xl ">
+        <div className="flex-grow mt-5 pt-5 px-40 flex  flex-col  bg-white rounded-3xl ">
           <Progress value={progress * answers.length} size="xl" radius="xl" />
 
           {/* Question  */}
@@ -204,7 +204,7 @@ const Quiz = () => {
       )}
 
       {curentStep === STEP_3 && (
-        <div className="flex-grow mt-5 pt-10 px-[450px] flex  flex-col py-14 bg-white rounded-3xl ">
+        <div className="flex-grow mt-5 pt-10 px-[300px] flex  flex-col py-14 bg-white rounded-3xl ">
           <Result answers={answers} />
         </div>
       )}
@@ -231,9 +231,9 @@ const Question = ({
   currentQuestion: number;
 }) => {
   return (
-    <div className="mt-[100px] flex justify-center items-center flex-col gap-y-8 flex-grow">
-      <h1 className="text-[20px] font-bold  text-center">{quesObject.qus}</h1>
-      <div className="grid grid-cols-2 gap-10">
+    <div className=" mt-8 flex justify-center  items-center flex-col gap-y-8 flex-grow">
+      <h1 className="text-[20px] font-bold   text-center">{quesObject.qus}</h1>
+      <div className="grid grid-cols-2  pb-5 gap-5 gap-x-15 flex-grow">
         {quesObject.ans.map((ans, index) => (
           <AnsButton
             key={index}
@@ -270,11 +270,11 @@ const AnsButton = ({
   return (
     <button
       onClick={handleSelected}
-      className={`p-2  ${
+      className={`p-1  ${
         selected?.answer === name ? "bg-[#8530C1] text-white " : ""
       } border border-[#8530C1] rounded-3xl`}
     >
-      <img src={image} alt="" />
+      <img src={image} alt="ans" className="w-[150px]" />
     </button>
   );
 };
@@ -336,14 +336,14 @@ const GoodRemarkMsg = ({ setShowResult }: { setShowResult: () => void }) => {
         <img
           src={RemarkBg}
           alt=""
-          className="absolute left-[520px] top-[100px] "
+          className="absolute left-[320px] top-[50px] "
         />
         <img
           src={RemarkIcon}
           alt="remarkIcon"
-          className="absolute left-[600px] top-[100px]"
+          className="absolute left-[400px] top-[50px]"
         />
-        <div className="text-center  mt-[350px]">
+        <div className="text-center  mt-[270px]">
           <h1 className="font-bold">Good Job!</h1>
           <p className="text-[18px] text-[#B5B5C3]">
             You answered 7 questions correct
@@ -352,19 +352,15 @@ const GoodRemarkMsg = ({ setShowResult }: { setShowResult: () => void }) => {
       </div>
       <div>
         <div className="flex justify-between items-center text-white">
-          <button className="py-3 px-16 bg-[#E2B6FF]  text-white rounded-3xl">
-            Review quiz
-          </button>
+          <Button
+            onClick={refreshPage}
+            size="md"
+            color="black"
+            varient="outlined"
+          >
+            <strong className="text-[#8530C1]">Retake Quiz</strong>
+          </Button>
           <div className="flex gap-20">
-            <Button
-              onClick={refreshPage}
-              size="md"
-              color="black"
-              varient="outlined"
-            >
-              <strong className="text-[#8530C1]">Retake Quiz</strong>
-            </Button>
-
             <button
               onClick={setShowResult}
               className="py-3 px-16 bg-[#8530C1] rounded-3xl"
@@ -383,7 +379,7 @@ const Result = ({ answers }: { answers: ObjAnsQuestionType[] }) => {
   return (
     <div className="relative flex-grow bg-white">
       <div className="bg-[#B76DEB] rounded-3xl pt-16 px-16">
-        <div className="flex justify-center items-center px-8 gap-10 bg-[#FBC70D] rounded-t-3xl">
+        <div className="flex justify-center items-center px-6 gap-5 bg-[#FBC70D] rounded-t-3xl">
           <p>
             <RingProgress
               size={300}
@@ -432,14 +428,14 @@ const ResultRow = ({
   index: number;
 }) => {
   return (
-    <div className="my-5">
+    <div className="my-2">
       <p className="flex gap-10 items-center ">
         <p className="bg-[#8530C1]  rounded-full p-3 text-white w-[30px] h-[30px] flex justify-center items-center">
           {index + 1}
         </p>
         <p className="text-[20px] font-bold">{question}</p>
       </p>
-      <p className="pl-20 text-[20px] text-[#B5B5C3] py-5">{answer}</p>
+      <p className="pl-20 text-[20px] text-[#B5B5C3] py-2">{answer}</p>
     </div>
   );
 };

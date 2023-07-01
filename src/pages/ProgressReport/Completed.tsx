@@ -7,7 +7,7 @@ const Completed = () => {
     <div>
       <div className="p-8 grid grid-cols-3 gap-4 gap-x-14">
         {data2 &&
-          data2.slice(7).map((data, index) => {
+          data2.slice(1, 5).map((data, index) => {
             return <ProgressCard key={index} {...data} />;
           })}
       </div>

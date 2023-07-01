@@ -169,7 +169,7 @@ const Teachers = () => {
     (el) => el.id == currentClicked
   );
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col overflow-y-scroll">
       <Modal
         radius={"xl"}
         size="lg"
@@ -259,6 +259,14 @@ const Teachers = () => {
           />
         </div>
       </div>
+      <style>
+        {`
+       ::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+        `}
+      </style>
     </div>
   );
 };

@@ -28,6 +28,8 @@ import Mamacard from "@/assets/mamacard.svg";
 import Puffcard from "@/assets/puffcard.svg";
 import AudioBookOne from "@/audiobooks/QueenMoremi.mp3";
 import Quiz from "./Stories1/Quiz";
+import { Skeleton } from "@mantine/core";
+import { useState } from "react";
 
 export type StoriesType = {
   title?: string;
@@ -296,7 +298,7 @@ const Story = () => {
         </p>
       </div>
       <div className="flex justify-center items-center">
-        <div className="grid grid-cols-4 gap-8 px-24 py-10">
+        <div className="grid grid-cols-5 gap-8 px-24 py-10">
           {storiesData
             ?.filter((story) =>
               story?.genre?.includes(params?.id ? params?.id : "")
@@ -304,7 +306,7 @@ const Story = () => {
             .map((story, index) => {
               return (
                 <>
-                  <Card key={index} clickable {...story} size={300} />
+                  <Card key={index} clickable {...story} size={200} />
                 </>
               );
             })}
@@ -315,6 +317,7 @@ const Story = () => {
 };
 const BrowseGenre = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   return (
     <>
       <hr className="my-20 mx-[200px]" />
@@ -343,28 +346,30 @@ const BrowseGenre = () => {
         actiontitle="View View all"
         isTitled={true}
       />
-
-      <div
-        style={{
-          background:
-            "linear-gradient(280.43deg, #8530C1 0.5%, #000000 173.5%)",
-        }}
-        className="h-[495px] grid grid-cols-[700px_1fr] mb-[50px] max-w-[1500px] relative rounded-2xl mx-auto object-cover bg- "
-      >
-        <img
-          src={GroupCard}
-          alt="card "
-          className="absolute w-[700px] right-0 bottom-0 rounded-3xl "
-        />
-        <div className="text-center text-white flex flex-col gap-3 justify-center items-center">
-          <h1 className="text-[30px] font-bold ">New Story Titles</h1>
-          <p className="mb-10">We published new audiobook just for you</p>
-          <Button size="md" color="black" backgroundColor="white">
-            See books
-          </Button>
+      <Skeleton visible={isLoading}>
+        <div
+          style={{
+            background:
+              "linear-gradient(280.43deg, #8530C1 0.5%, #000000 173.5%)",
+          }}
+          className="h-[495px] grid grid-cols-[700px_1fr] mb-[50px] max-w-[1156px] relative rounded-2xl mx-auto object-cover bg- "
+        >
+          <img
+            src={GroupCard}
+            alt="card "
+            className="absolute w-[700px] right-0 bottom-0 rounded-3xl "
+            onLoad={() => setIsLoading(false)}
+          />
+          <div className="text-center text-white flex flex-col gap-3 justify-center items-center">
+            <h1 className="text-[30px] font-bold ">New Story Titles</h1>
+            <p className="mb-10">We published new audiobook just for you</p>
+            <Button size="md" color="black" backgroundColor="white">
+              See books
+            </Button>
+          </div>
+          <div></div>
         </div>
-        <div></div>
-      </div>
+      </Skeleton>
 
       <div>
         <h1 className="mb-4 font-bold font-Recoleta mt-20 text-center text-[40px]">
@@ -377,7 +382,7 @@ const BrowseGenre = () => {
 
       <CardScreen
         data={storiesData.slice(1, 7)}
-        card={(props: StoriesType) => <Card {...props} />}
+        card={(props: StoriesType) => <Card {...props} size={200} />}
         isTitled={true}
       />
     </>
@@ -392,7 +397,10 @@ const SubButton = ({
   onClick?: () => void;
 }) => {
   return (
-    <button onClick={onClick} className="py-3 rounded-3xl px-6 bg-[#FFF7FD]">
+    <button
+      onClick={onClick}
+      className="py-3 my-3 rounded-3xl px-6 bg-[#FFF7FD]"
+    >
       {name}
     </button>
   );

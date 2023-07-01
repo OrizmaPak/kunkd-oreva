@@ -90,7 +90,7 @@ const Stories1 = () => {
             />
           )}
         </div>
-        <div className="flex-grow flex  h-full ">
+        <div className="flex-grow  h-full ">
           <div className="flex-grow mt-5 rounded-2xl">
             {!isFinish ? (
               <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
@@ -112,7 +112,9 @@ const Stories1 = () => {
                   {
                     <CardScreen
                       data={storiesData?.slice(1, 7).map((el) => ({ ...el }))}
-                      card={(props: StoriesType) => <Card {...props} />}
+                      card={(props: StoriesType) => (
+                        <Card {...props} size={200} />
+                      )}
                       header="Trending"
                       actiontitle="View all"
                       isTitled={true}
@@ -142,8 +144,8 @@ const AboutPage = ({
   setStartRead: () => void;
 }) => {
   return (
-    <div className="bg-[#5D0093]  w-[100%] flex rounded-3xl px-20 py-10">
-      <div className="flex basis-full  border-r-2 border-[#BD6AFA]  ">
+    <div className="bg-[#5D0093]  w-[100%] flex rounded-3xl px-10 py-5">
+      <div className="flex basis-full gap-2  border-r-2 justify-center items-center border-[#BD6AFA]  ">
         <p className="flex flex-col w-full">
           <img src={story?.image} alt="image " className="w-[300px]" />
         </p>
@@ -352,7 +354,7 @@ const AudioControls = ({
 const WelDone = () => {
   const navigate = useNavigate();
   return (
-    <div className=" h-full flex justify-center bg-white rounded-3xl items-center">
+    <div className=" h-[calc(100vh-60px-8vh-80px)] flex justify-center bg-white rounded-3xl items-center">
       <div>
         <p className="flex justify-center items-center">
           <img src={Congrats} alt="congrats" className="w-[200px]" />

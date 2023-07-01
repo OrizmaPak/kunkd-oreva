@@ -28,6 +28,8 @@ import AudioBanner from "@/assets/audiobanner.svg";
 import TimeIcon from "@/assets/timeIcon.svg";
 import PlayIcon from "@/assets/play.svg";
 import Slider from "react-slick";
+import { Skeleton } from "@mantine/core";
+import { useState } from "react";
 
 export type StoriesType = {
   title?: string;
@@ -305,7 +307,7 @@ const Books = () => {
             .map((story, index) => {
               return (
                 <>
-                  <Card key={index} clickable {...story} size={300} />
+                  <Card key={index} clickable {...story} size={250} />
                 </>
               );
             })}
@@ -324,6 +326,7 @@ const BrowseGenre = () => {
     slidesToShow: 2,
     slidesToScroll: 2,
   };
+  const [isLoading, setIsLoading] = useState(true);
   return (
     <>
       {/* <div className="bg-white rounded-3xl"> */}
@@ -356,7 +359,7 @@ const BrowseGenre = () => {
           See what peole are reading
         </p>
 
-        <div className=" px-40 my-28 mb-44">
+        <div className=" px-20 my-28 mb-44">
           <Slider {...settings}>
             {audioBooksData.slice(1, 6).map((data, index) => (
               <div key={index}>
@@ -399,28 +402,30 @@ const BrowseGenre = () => {
           </style>
         </div>
       </div>
-
-      <div
-        style={{
-          background:
-            "linear-gradient(280.43deg, #2BB457  0.5%, #000000 173.5%)",
-        }}
-        className="h-[495px] grid grid-cols-[700px_1fr] mb-[50px] max-w-[1500px] relative rounded-2xl mx-auto object-cover bg- "
-      >
-        <img
-          src={GroupCard}
-          alt="card "
-          className="absolute w-[700px] left-0 bottom-0 rounded-3xl"
-        />
-        <div></div>
-        <div className="text-center text-white flex flex-col gap-3 justify-center items-center ">
-          <h1 className="text-[30px] font-bold ">New Story Titles</h1>
-          <p className="mb-10">We published new audiobook just for you</p>
-          <Button size="md" color="black" backgroundColor="white">
-            See books
-          </Button>
+      <Skeleton visible={isLoading}>
+        <div
+          style={{
+            background:
+              "linear-gradient(280.43deg, #2BB457  0.5%, #000000 173.5%)",
+          }}
+          className="h-[495px] grid grid-cols-[700px_1fr] mb-[50px] max-w-[1156px] relative rounded-2xl mx-auto object-cover bg- "
+        >
+          <img
+            src={GroupCard}
+            alt="card "
+            className="absolute w-[700px] left-0 bottom-0 rounded-3xl"
+            onLoad={() => setIsLoading(false)}
+          />
+          <div></div>
+          <div className="text-center text-white flex flex-col gap-3 justify-center items-center ">
+            <h1 className="text-[30px] font-bold ">New Story Titles</h1>
+            <p className="mb-10">We published new audiobook just for you</p>
+            <Button size="md" color="black" backgroundColor="white">
+              See books
+            </Button>
+          </div>
         </div>
-      </div>
+      </Skeleton>
 
       <CardScreen
         data={audioBooksData.slice(1, 7)}
@@ -457,15 +462,15 @@ const AudioBookSliderCard = ({
   author?: string;
 }) => {
   return (
-    <div className="bg-[#8530C1]  rounded-3xl py-8 flex gap-8 mx-5  px-8 ">
+    <div className="bg-[#8530C1]  rounded-3xl py-8 flex gap-8 mx-5  px-3 ">
       <div>
         <img src={image} alt="" />
       </div>
       <div className="flex flex-col text-[#D190FF] flex-grow">
-        <p className="font-bold">AUDIOBOOK</p>
-        <p className="font-bold text-white">{title}</p>
-        <p className="flex-grow">by {author}</p>
-        <p className="flex">
+        <p className="font-bold text-[12px]">AUDIOBOOK</p>
+        <p className="font-bold text-white text-[18px]">{title}</p>
+        <p className="flex-grow text-[14px]">by {author}</p>
+        <p className="flex text-[12px]">
           <img src={TimeIcon} alt="timeicon" />
           <span>10 minutes and 33 seconds</span>
         </p>

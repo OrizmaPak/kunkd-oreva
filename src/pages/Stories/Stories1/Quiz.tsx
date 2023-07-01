@@ -167,7 +167,7 @@ const Quiz = () => {
         />
       )}
       {curentStep === STEP_1 && (
-        <div className="flex-grow mt-5 pt-10 px-40 flex  flex-col py-14 bg-white rounded-3xl ">
+        <div className="flex-grow mt-5 pt-5 px-40 flex  flex-col py-5 bg-white rounded-3xl ">
           <Progress value={progress * answers.length} size="xl" radius="xl" />
 
           {/* Question  */}
@@ -193,7 +193,7 @@ const Quiz = () => {
         </div>
       )}
       {curentStep === STEP_3 && (
-        <div className="flex-grow mt-5 pt-10 px-[450px] flex  flex-col py-14 bg-white rounded-3xl ">
+        <div className="flex-grow mt-5 pt-10 px-[300px] flex  flex-col py-14 bg-white rounded-3xl ">
           <Result answers={answers} />
         </div>
       )}
@@ -220,9 +220,9 @@ const Question = ({
   currentQuestion: number;
 }) => {
   return (
-    <div className="mt-[100px] flex justify-center items-center flex-col gap-y-8 flex-grow">
+    <div className=" flex justify-center items-center flex-col gap-y-4 flex-grow">
       <h1 className="text-[20px] font-bold  text-center">{quesObject.qus}</h1>
-      <div className=" flex flex-col gap-10">
+      <div className=" flex flex-col gap-6">
         {quesObject.ans.map((ans, index) => (
           <AnsButton
             key={index}
@@ -256,7 +256,7 @@ const AnsButton = ({
   return (
     <button
       onClick={handleSelected}
-      className={`py-2 px-20 ${
+      className={`py-3 px-20 ${
         selected?.answer === title ? "bg-[#8530C1] text-white " : ""
       } border border-[#8530C1] rounded-3xl`}
     >
@@ -324,14 +324,14 @@ const GoodRemarkMsg = ({ setShowResult }: { setShowResult: () => void }) => {
         <img
           src={RemarkBg}
           alt=""
-          className="absolute left-[520px] top-[100px] "
+          className="absolute left-[320px] top-[20px] "
         />
         <img
           src={RemarkIcon}
           alt="remarkIcon"
-          className="absolute left-[600px] top-[100px]"
+          className="absolute left-[400px] top-[20px]"
         />
-        <div className="text-center  mt-[350px]">
+        <div className="text-center  mt-[250px]">
           <h1 className="font-bold">Good Job!</h1>
           <p className="text-[18px] text-[#B5B5C3]">
             You answered 7 questions correct
@@ -340,19 +340,15 @@ const GoodRemarkMsg = ({ setShowResult }: { setShowResult: () => void }) => {
       </div>
       <div>
         <div className="flex justify-between items-center text-white">
-          <button className="py-3 px-16 bg-[#E2B6FF]  text-white rounded-3xl">
-            Review quiz
-          </button>
+          <Button
+            onClick={refreshPage}
+            size="md"
+            color="black"
+            varient="outlined"
+          >
+            <strong className="text-[#8530C1]">Retake Quiz</strong>
+          </Button>
           <div className="flex gap-20">
-            <Button
-              onClick={refreshPage}
-              size="md"
-              color="black"
-              varient="outlined"
-            >
-              <strong className="text-[#8530C1]">Retake Quiz</strong>
-            </Button>
-
             <button
               onClick={setShowResult}
               className="py-3 px-16 bg-[#8530C1] rounded-3xl"
@@ -370,8 +366,8 @@ const Result = ({ answers }: { answers: ObjAnsQuestionType[] }) => {
   const navigate = useNavigate();
   return (
     <div className="relative flex-grow bg-white">
-      <div className="bg-[#B76DEB] rounded-3xl pt-16 px-16">
-        <div className="flex justify-center items-center gap-10 px-8 bg-[#FBC70D] rounded-t-3xl">
+      <div className="bg-[#B76DEB] rounded-3xl pt-16 px-10">
+        <div className="flex justify-center items-center gap-10 px-5 bg-[#FBC70D] rounded-t-3xl">
           <p>
             <RingProgress
               size={300}
@@ -420,7 +416,7 @@ const ResultRow = ({
   index: number;
 }) => {
   return (
-    <div className="my-5">
+    <div className="my-2">
       <p className="flex gap-10 items-center ">
         <p className="bg-[#8530C1]  rounded-full p-3 text-white w-[30px] h-[30px] flex justify-center items-center">
           {index + 1}

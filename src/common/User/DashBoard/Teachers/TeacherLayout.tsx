@@ -58,9 +58,9 @@ const TeacherLayout = () => {
         <LogoutModal onCloseModal={() => close()} />
       </Modal>
 
-      <div className="w-full  bg-[#FFF7FD]  px-[100px] py-[15px] mt-[8vh] h-[92vh]  ">
-        <div className="flex h-[calc(100vh-50px-8vh)]  gap-8">
-          <div className="basis-1/5 bg-white h-full rounded-[40px] px-7 flex  flex-col pb-4 ">
+      <div className="w-full  bg-[#FFF7FD]  px-[100px] py-2 pb-4 mt-[8vh] h-[92vh]  ">
+        <div className="flex h-full  gap-8">
+          <div className="basis-1/4 bg-white h-full rounded-[40px] px-7 flex  flex-col pb-4 ">
             <div className="flex-grow-1 flex-1">
               <Header
                 icon1={<img src={SchoolIcon} alt="icon" className="w-[40px]" />}
@@ -76,7 +76,7 @@ const TeacherLayout = () => {
                   icon={<img src={link.icon} alt="icon" />}
                 />
               ))}
-              <hr className="my-10" />
+              <hr className="my-" />
 
               <TeacherProfile
                 name="Mitchel Mccarty"
@@ -164,7 +164,7 @@ const TeacherProfile = ({
   email: string;
 }) => {
   return (
-    <div className="mt-28">
+    <div className="mt-10">
       <div className="flex justify-center items-center">
         <img src={image} alt="image" />
       </div>

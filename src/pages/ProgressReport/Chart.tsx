@@ -6,11 +6,11 @@ import PieChart from "./PieChart";
 const Chart = () => {
   return (
     <div>
-      <div className="flex  justify-between px-10">
-        <div className="w-[450px] h-[450px">
+      <div className="flex  justify-between  gap-16 px-10">
+        <div className="w-[450px] h-[400px">
           <PieChart />
         </div>
-        <div className=" flex  justify-center items-center gap-14 ">
+        <div className=" flex  justify-center items-center gap-10 ">
           <button className="p-4 px-6 flex flex-col gap-4 border-2 border-[#FBECFF] rounded-3xl w-[200px] my-4 ">
             <img src={BookIcon} alt="bookicon" className="w-[50%]" />
             <p className="flex flex-col my-2">

@@ -88,7 +88,7 @@ const BookLayout = () => {
             />
           )}
         </div>
-        <div className="flex-grow flex  h-full ">
+        <div className="flex-grow  h-full ">
           <div className="flex-grow  mt-5 rounded-2xl">
             <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
               {story && !startRead && (
@@ -131,9 +131,9 @@ const AboutPage = ({
   setStartRead: () => void;
 }) => {
   return (
-    <div className="bg-[#003914]  w-[100%] flex rounded-3xl px-20 py-10">
-      <div className="flex basis-full  border-r-2 border-[#008A3B]  ">
-        <p className="flex flex-col w-full">
+    <div className="bg-[#003914]  w-[100%] flex rounded-3xl px-10 py-5">
+      <div className="flex basis-full  border-r-2 justify-center items-center gap-4 border-[#008A3B]  ">
+        <p className="flex flex-col w-full ">
           <img src={story?.image} alt="image " className="w-[300px]" />
         </p>
         <p className="flex flex-col w-full  ">
@@ -187,7 +187,7 @@ const ReadPage = ({ story }: { story: StoriesType }) => {
               <img src={ExportIcon} alt="" />
             </span>
           </p>
-          <p className=" leading-10">{story.content}</p>
+          <p className=" leading-10 text-[22px]">{story.content}</p>
         </div>
       </div>
     </div>

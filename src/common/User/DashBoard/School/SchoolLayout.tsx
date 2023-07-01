@@ -66,9 +66,9 @@ const SchoolLayout = () => {
         <LogoutModal onCloseModal={() => close()} />
       </Modal>
 
-      <div className="w-full   bg-[#FFF7FD]  px-[100px] py-[15px] mt-[8vh] h-[92vh]  ">
-        <div className="flex h-[calc(100vh-50px-8vh)] gap-8">
-          <div className="basis-1/5 bg-white  h-[calc(100vh-50px-8vh)] rounded-[40px] px-7 flex  flex-col pb-4 ">
+      <div className="w-full   bg-[#FFF7FD] px-[100px] mt-[8vh] py-2  pb-4 h-[92vh]  ">
+        <div className="flex  h-full gap-8">
+          <div className="basis-1/4 bg-white   h-full rounded-[40px] px-7 flex  flex-col pb-4 ">
             <div className="flex-grow-1 flex-1">
               <Header
                 icon1={<img src={SchoolIcon} alt="icon" className="w-[40px]" />}
@@ -101,9 +101,7 @@ const SchoolLayout = () => {
             </div>
           </div>
 
-          <div className="basis-full   h-[calc(100vh-50px-8vh)]">
-            {<Outlet />}
-          </div>
+          <div className="basis-full    h-full">{<Outlet />}</div>
         </div>
       </div>
     </>

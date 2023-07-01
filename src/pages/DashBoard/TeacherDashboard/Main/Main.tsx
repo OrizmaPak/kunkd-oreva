@@ -8,7 +8,7 @@ import ProgressLog from "../../SchoolDashBoard/Students/Profile/ProgressLog";
 
 const Main = () => {
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col overflow-y-scroll">
       <div className="flex justify-between px-8 gap-2">
         <h1 className="font-bold text-[30px] font-Recoleta">Overview</h1>
         <span className="flex gap-2 justify-center items-center">
@@ -32,6 +32,14 @@ const Main = () => {
           <TotalTimeSpent />
         </div>
       </div>
+      <style>
+        {`
+       ::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+        `}
+      </style>
     </div>
   );
 };

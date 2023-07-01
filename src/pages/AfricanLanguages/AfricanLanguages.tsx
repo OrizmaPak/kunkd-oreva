@@ -332,11 +332,11 @@ const LanguagesVideo = () => {
         </p>
       </div>
       <div className="flex justify-center items-center">
-        <div className="grid grid-cols-4 gap-8 px-24 py-10 justify-center items-center">
+        <div className="grid grid-cols-5 gap-8 px-24 py-10 justify-center items-center">
           {languageData.map((story, index) => {
             return (
               <>
-                <VideoCard key={index} {...story} size={300} />
+                <VideoCard key={index} {...story} size={200} />
               </>
             );
           })}

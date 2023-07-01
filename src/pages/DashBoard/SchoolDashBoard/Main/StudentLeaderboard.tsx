@@ -61,7 +61,7 @@ const Row = ({
 }) => {
   return (
     <>
-      <div className="grid grid-cols-3 justify-between items-center flex-grow ">
+      <div className="grid grid-cols-3 py-3  h-[72px] justify-between items-center flex-grow ">
         <span className="flex gap-2 items-center justify-start">
           <img src={image} alt="image" className="" />
           <span>{name}</span>

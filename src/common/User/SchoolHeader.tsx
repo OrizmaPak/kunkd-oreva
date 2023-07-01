@@ -71,9 +71,9 @@ const SchoolHeader = () => {
             <img
               src={KundaLogo}
               alt="logo"
-              width="60.91px"
+              width="45.91px"
               height="35pxs"
-              className="min-w-[60.91px]"
+              className="min-w-[45.91px]"
             />
           </div>
         </Link>
@@ -226,14 +226,14 @@ const SchoolHeader = () => {
         ) : (
           <Menu>
             <Menu.Target>
-              <div className="flex justify-center items-center gap-10  px-10 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
-                <img src={UserIcon} alt="user icon" className="w-[30px]" />
+              <div className="flex justify-center items-center gap-7  px-6 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
+                <img src={UserIcon} alt="user icon" className="w-[25px]" />
 
                 <span>
                   <img
                     src={ArrowDown}
                     alt="arrow down icon"
-                    className="min-w-[17px]"
+                    className="min-w-[12px]"
                   />
                 </span>
               </div>
