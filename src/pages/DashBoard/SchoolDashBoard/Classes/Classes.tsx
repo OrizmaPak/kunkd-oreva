@@ -210,12 +210,12 @@ const Classes = () => {
           <div className="flex gap-2">
             <span>Sort by</span>
             <span>Newest</span>
-            <img src={ArrowDown} alt="Arrowdown" />
+            <img loading="lazy" src={ArrowDown} alt="Arrowdown" />
           </div>
           <div className="flex justify-center">
             <Button onClick={() => newClassOpen()} size="md">
               <span className="flex  justify-end items-end gap-2">
-                <img src={ClassesIcon} alt="" />
+                <img loading="lazy" src={ClassesIcon} alt="" />
                 <span>Create class</span>
               </span>
             </Button>
@@ -226,7 +226,7 @@ const Classes = () => {
           <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px] mt-5  px-8">
             <div className="flex justify-start items-center ">
               <span className=" ">
-                <img src={Box} alt="box" />
+                <img loading="lazy" src={Box} alt="box" />
               </span>
             </div>
             <div>Name</div>

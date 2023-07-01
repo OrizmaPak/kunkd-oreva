@@ -22,7 +22,7 @@ const Row = ({
         <div className="grid  grid-cols-[100px_1fr_1fr_150px_150px] mt-2  px-8">
           <div className="flex justify-start items-center ">
             <span className=" ">
-              <img src={Rectangle} alt="image" />
+              <img loading="lazy" src={Rectangle} alt="image" />
             </span>
           </div>
           <div
@@ -30,16 +30,18 @@ const Row = ({
             className="flex items-center justify-start gap-2 "
           >
             <span>
-              <img src={image} alt="image" />
+              <img loading="lazy" src={image} alt="image" />
             </span>
             <span>{name}</span>
           </div>
           <div className="flex justify-start items-center ">{email}</div>
           <div className="flex justify-start items-center ">{gender}</div>
           <div className="flex justify-end  gap-4  items-center">
-            <span>{/* <img src={ToggleIcon} alt="image" /> */}</span>
             <span>
-              <img src={DeleteIcon} alt="delete" />
+              {/* <img loading="lazy" src={ToggleIcon} alt="image" /> */}
+            </span>
+            <span>
+              <img loading="lazy" src={DeleteIcon} alt="delete" />
             </span>
             <span></span>
           </div>

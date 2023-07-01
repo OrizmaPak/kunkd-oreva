@@ -34,7 +34,12 @@ const Serviceontent = () => {
   return (
     <div className="relative">
       <div className="flex items-center justify-center">
-        <img src={MacBok} alt="" className=" z-[50] mt-[-300px] mb-[100px]" />
+        <img
+          loading="lazy"
+          src={MacBok}
+          alt=""
+          className=" z-[50] mt-[-300px] mb-[100px]"
+        />
       </div>
 
       <div className="max-w-[1000px] mx-auto text-center">
@@ -50,7 +55,7 @@ const Serviceontent = () => {
           })}
         </div>
         <div>
-          <img src={LadyBg} alt="Lady" />
+          <img loading="lazy" src={LadyBg} alt="Lady" />
         </div>
       </div>
       <div className="mt-[100px] mb-[50px] max-w-[1000px] mx-auto text-center">
@@ -64,7 +69,7 @@ const Serviceontent = () => {
           captivate and inspire your child's love for reading.
         </p>
         <div className="mt-8">
-          <img src={Pupils} alt="pupils" />
+          <img loading="lazy" src={Pupils} alt="pupils" />
         </div>
       </div>
     </div>

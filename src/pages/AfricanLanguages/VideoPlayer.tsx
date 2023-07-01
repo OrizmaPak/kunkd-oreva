@@ -44,11 +44,21 @@ const VideoPlayer = () => {
                   <p className="text-[20px] font-bold ">{video?.title}</p>
                   <p className="flex gap-5 text-[#8530C1]">
                     <button className="py-3 px-10 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]">
-                      <img src={SaveIcon} alt="icon" className="w-[20px]" />
+                      <img
+                        loading="lazy"
+                        src={SaveIcon}
+                        alt="icon"
+                        className="w-[20px]"
+                      />
                       <span>Save</span>
                     </button>
                     <button className="py-3 px-10 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]">
-                      <img src={ShareIcon} alt="icon" className="w-[20px]" />
+                      <img
+                        loading="lazy"
+                        src={ShareIcon}
+                        alt="icon"
+                        className="w-[20px]"
+                      />
                       <span>Share</span>
                     </button>
                   </p>
@@ -96,7 +106,7 @@ const RecommendedVideoCard = ({
       onClick={onClick}
       className="flex gap-4 bg-[#fff7fd]  items-center my-8  rounded-3xl"
     >
-      <img src={image} alt="image" className="w-[130px]" />
+      <img loading="lazy" src={image} alt="image" className="w-[130px]" />
       <span className=" text-black text-[20px] font-Recoleta font-bold">
         {title}
       </span>
@@ -110,7 +120,12 @@ const WelDone = () => {
     <div className=" h-full flex-grow mt-4 flex justify-center bg-white rounded-3xl items-center">
       <div>
         <p className="flex justify-center items-center">
-          <img src={Congrats} alt="congrats" className="w-[200px]" />
+          <img
+            loading="lazy"
+            src={Congrats}
+            alt="congrats"
+            className="w-[200px]"
+          />
         </p>
         <div className="text-center">
           <h1 className="text-[30px] font-Recoleta font-bold">Well Done!</h1>

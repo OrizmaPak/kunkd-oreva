@@ -71,9 +71,16 @@ const SchoolLayout = () => {
           <div className="basis-1/4 bg-white   h-full rounded-[40px] px-7 flex  flex-col pb-4 ">
             <div className="flex-grow-1 flex-1">
               <Header
-                icon1={<img src={SchoolIcon} alt="icon" className="w-[40px]" />}
+                icon1={
+                  <img
+                    loading="lazy"
+                    src={SchoolIcon}
+                    alt="icon"
+                    className="w-[40px]"
+                  />
+                }
                 title="Pampers Schools"
-                icon2={<img src={Arrow} alt="icon" />}
+                icon2={<img loading="lazy" src={Arrow} alt="icon" />}
               />
               {links.slice(0, 4).map((link) => (
                 <NavButton
@@ -81,7 +88,7 @@ const SchoolLayout = () => {
                   title={link.label}
                   href={link.href}
                   route={link.route}
-                  icon={<img src={link.icon} alt="icon" />}
+                  icon={<img loading="lazy" src={link.icon} alt="icon" />}
                 />
               ))}
               {/* <hr className="my-10" />
@@ -89,14 +96,14 @@ const SchoolLayout = () => {
               title={links[links.length - 1].label}
               href={links[links.length - 1].href}
               route={links[links.length - 1].route}
-              icon={<img src={links[links.length - 1].icon} alt="icon" />}
+              icon={<img loading="lazy" src={links[links.length - 1].icon} alt="icon" />}
             /> */}
             </div>
             <div>
               <DasboardButton
                 onClick={() => open()}
                 title="Logout"
-                icon={<img src={LogoutIcon} alt="icon" />}
+                icon={<img loading="lazy" src={LogoutIcon} alt="icon" />}
               />
             </div>
           </div>

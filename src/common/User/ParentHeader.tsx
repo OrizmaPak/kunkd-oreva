@@ -38,7 +38,7 @@ const ParentHeader = () => {
 
       <div className="flex items-center justify-center pl-2 gap-20">
         <div className="max-w-[700px] w-full rounded-3xl  flex  px-4  bg-gray-100  ">
-          <img src={SearchIcon} alt="search icon" className="" />
+          <img loading="lazy" src={SearchIcon} alt="search icon" className="" />
           <input
             type="text"
             className="w-full h-full py-4 rounded-3xl px-4 focus:outline-none  bg-inherit"
@@ -47,14 +47,24 @@ const ParentHeader = () => {
 
         <div>
           <span>
-            <img src={BellIcon} alt="bell icon" className="min-w-[17px]" />
+            <img
+              loading="lazy"
+              src={BellIcon}
+              alt="bell icon"
+              className="min-w-[17px]"
+            />
           </span>
         </div>
 
         <Menu>
           <Menu.Target>
             <div className="flex justify-center items-center gap-10  px-10 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
-              <img src={UserIcon} alt="user icon" className="w-[30px]" />
+              <img
+                loading="lazy"
+                src={UserIcon}
+                alt="user icon"
+                className="w-[30px]"
+              />
 
               <span>
                 <img
@@ -69,13 +79,23 @@ const ParentHeader = () => {
             <div className="flex flex-col py-2 px-1">
               <Menu.Item>
                 <button className="p-2 px-4 flex gap-2  items-center hover:cursor-pointer  hover:text-[#8530C1]">
-                  <img src={Avatar1} alt="avatar1" className="w-[25%]" />
+                  <img
+                    loading="lazy"
+                    src={Avatar1}
+                    alt="avatar1"
+                    className="w-[25%]"
+                  />
                   <span>Jake</span>
                 </button>
               </Menu.Item>
               <Menu.Item>
                 <button className="p-2 px-4 flex gap-2  items-center  hover:cursor-pointer  hover:text-[#8530C1]">
-                  <img src={Avatar2} alt="avatar1" className="w-[25%]" />
+                  <img
+                    loading="lazy"
+                    src={Avatar2}
+                    alt="avatar1"
+                    className="w-[25%]"
+                  />
                   <span>Mabel</span>
                 </button>
               </Menu.Item>
@@ -84,7 +104,8 @@ const ParentHeader = () => {
                   onClick={() => navigate("/account")}
                   className="p-2 px-4 hover:cursor-pointer hover:text-[#8530C1] flex gap-2 items-center"
                 >
-                  <img src={UserIcon2} alt="userIcon" /> <span> Account</span>
+                  <img loading="lazy" src={UserIcon2} alt="userIcon" />{" "}
+                  <span> Account</span>
                 </button>
               </Menu.Item>
               <hr />

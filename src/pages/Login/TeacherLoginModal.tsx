@@ -55,8 +55,12 @@ const TeacherLoginModal = ({ onContinue }: { onContinue: () => void }) => {
             <InputFormat
               type="password"
               reg={register("password")}
-              leftIcon={<img src={PasswordIcon} alt="pasword icon" />}
-              rightIcon={<img src={PasswordEye} alt="paswordeye icon" />}
+              leftIcon={
+                <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
+              }
+              rightIcon={
+                <img loading="lazy" src={PasswordEye} alt="paswordeye icon" />
+              }
               errorMsg={errors.password?.message}
             />
           </div>
@@ -66,8 +70,12 @@ const TeacherLoginModal = ({ onContinue }: { onContinue: () => void }) => {
             <InputFormat
               type="password"
               reg={register("confirmPassword")}
-              leftIcon={<img src={PasswordIcon} alt="pasword icon" />}
-              rightIcon={<img src={PasswordEye} alt="paswordeye icon" />}
+              leftIcon={
+                <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
+              }
+              rightIcon={
+                <img loading="lazy" src={PasswordEye} alt="paswordeye icon" />
+              }
               errorMsg={errors.password?.message}
             />
           </div>
@@ -89,7 +97,7 @@ export const CongratulationsModal = () => {
   return (
     <div className="px-14">
       <div className="flex justify-center items-center my-14">
-        <img src={Congrat} alt="congrate" />
+        <img loading="lazy" src={Congrat} alt="congrate" />
       </div>
 
       <div className="text-center mb-10">

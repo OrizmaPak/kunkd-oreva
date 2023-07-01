@@ -17,7 +17,7 @@ const Profile = ({
     <div className="p-3">
       <div className="flex gap-4">
         <div>
-          <img src={image} alt="image" className="w-[250px]" />
+          <img loading="lazy" src={image} alt="image" className="w-[250px]" />
         </div>
         <div className=" flex-1 px-8">
           <div className="flex flex-col  ">
@@ -33,7 +33,7 @@ const Profile = ({
               <span>Assigned class</span>
               <p onClick={onEdit} className="flex gap-2">
                 <span className="font-bold">Purple</span>
-                <img src={BlcakPencil} alt="pencil" />
+                <img loading="lazy" src={BlcakPencil} alt="pencil" />
               </p>
             </p>
             <p className="flex flex-col">
@@ -53,7 +53,7 @@ const Profile = ({
             <p className="flex justify-between ">
               <span>Minutes</span>
               <span className="flex">
-                <img src={PositiveArrow} alt="Positive arrow" />
+                <img loading="lazy" src={PositiveArrow} alt="Positive arrow" />
                 <span className="text-green-600">3.9%</span>
               </span>
             </p>
@@ -69,7 +69,7 @@ const Profile = ({
             <p className="flex justify-between ">
               <span>Minutes</span>
               <span className="flex">
-                <img src={PositiveArrow} alt="Positive arrow" />
+                <img loading="lazy" src={PositiveArrow} alt="Positive arrow" />
                 <span className="text-green-600">3.9%</span>
               </span>
             </p>

@@ -16,7 +16,7 @@ const HeroContent = () => {
         </h1>
         <div className="max-w-[400px] flex mb-10 ">
           <span className="mr-4 ">
-            <img src={Arrow} alt="" className="w-20 pt-2 " />
+            <img loading="lazy" src={Arrow} alt="" className="w-20 pt-2 " />
           </span>
           <p className=" font-Hanken">
             Unlock the power of literacy with Kunda Kids, the revolutionary

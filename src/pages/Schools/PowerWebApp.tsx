@@ -7,7 +7,12 @@ const PowerWebApp = () => {
       <div className="max-w-[1000px] w-full mx-auto ">
         <div className="max-w-[1000px] mx-auto flex">
           <div className="basis-1/2">
-            <img src={DadBoy} alt="parentImage" className="w-[70%]" />
+            <img
+              loading="lazy"
+              src={DadBoy}
+              alt="parentImage"
+              className="w-[70%]"
+            />
           </div>
           <div className="basis-1/2 ">
             <h1 className="font-bold font-Recoleta text-[30px] mb-4">

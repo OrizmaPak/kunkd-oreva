@@ -32,14 +32,14 @@ const Students = () => {
           <div className="flex gap-2 justify-end ">
             <span className="text-[#8530C1]">Sort by</span>
             <span>Newest</span>
-            <img src={ArrowDown} alt="Arrowdown" />
+            <img loading="lazy" src={ArrowDown} alt="Arrowdown" />
           </div>
         </div>
 
         <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px] mt-5 text-gray-400  px-8">
           <div className="flex justify-start items-center ">
             <span className=" ">
-              <img src={Rectangle} alt="" />
+              <img loading="lazy" src={Rectangle} alt="" />
             </span>
           </div>
           <div className=" ">Name</div>

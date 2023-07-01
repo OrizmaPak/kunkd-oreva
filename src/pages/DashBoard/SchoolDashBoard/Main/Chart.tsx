@@ -47,7 +47,7 @@ const Card = ({
   return (
     <div className="grid grid-cols-2   items-center justify-center">
       <span>
-        <img src={image} alt="image" className="w-[40px] " />
+        <img loading="lazy" src={image} alt="image" className="w-[40px] " />
       </span>
       <p className="flex flex-col">
         <span className="font-bold text-[20px] ">{amount}</span>

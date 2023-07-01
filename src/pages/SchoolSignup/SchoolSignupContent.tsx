@@ -50,7 +50,7 @@ const SchoolSignupContent = () => {
     <div className="w-[100%] max-w-[500px] mx-auto relative mt-[-10px]">
       <Link to="/">
         <span className="absolute">
-          <img src={Cancel} alt="cancel" />
+          <img loading="lazy" src={Cancel} alt="cancel" />
         </span>
       </Link>
       <div className="w-[100%] pt-20">
@@ -92,7 +92,9 @@ const SchoolSignupContent = () => {
             <InputFormat
               type="text"
               placeholder="Email"
-              leftIcon={<img src={EmailLogo} alt="pasword icon" />}
+              leftIcon={
+                <img loading="lazy" src={EmailLogo} alt="pasword icon" />
+              }
               reg={register("email")}
               errorMsg={errors.email?.message}
             />
@@ -101,8 +103,12 @@ const SchoolSignupContent = () => {
             <InputFormat
               type="password"
               placeholder="Password"
-              leftIcon={<img src={PasswordIcon} alt="pasword icon" />}
-              rightIcon={<img src={PasswordEye} alt="paswordeye icon" />}
+              leftIcon={
+                <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
+              }
+              rightIcon={
+                <img loading="lazy" src={PasswordEye} alt="paswordeye icon" />
+              }
               reg={register("password")}
               errorMsg={errors.password?.message}
             />

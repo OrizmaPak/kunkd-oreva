@@ -59,27 +59,57 @@ const BookTrailer = () => {
         <div>
           <button className="my-24  bg-white flex justify-between items-center font-bold  p-5 rounded-3xl px-16  gap-8 mx-auto">
             <span>Watch Kunda kids on</span>
-            <img src={YoutubeIcon} alt="Yuotube" />
+            <img loading="lazy" src={YoutubeIcon} alt="Yuotube" />
           </button>
           <div className="py-4 mt-10 h-[800px]  ">
             <Slider {...settings}>
               <div>
-                <img src={Pupils} style={imageStyle(active, 0)} alt="pupils" />
+                <img
+                  loading="lazy"
+                  src={Pupils}
+                  style={imageStyle(active, 0)}
+                  alt="pupils"
+                />
               </div>
               <div>
-                <img src={Pupils} style={imageStyle(active, 1)} alt="pupils" />
+                <img
+                  loading="lazy"
+                  src={Pupils}
+                  style={imageStyle(active, 1)}
+                  alt="pupils"
+                />
               </div>
               <div>
-                <img src={Pupils} style={imageStyle(active, 2)} alt="pupils" />
+                <img
+                  loading="lazy"
+                  src={Pupils}
+                  style={imageStyle(active, 2)}
+                  alt="pupils"
+                />
               </div>
               <div>
-                <img src={Pupils} style={imageStyle(active, 3)} alt="pupils" />
+                <img
+                  loading="lazy"
+                  src={Pupils}
+                  style={imageStyle(active, 3)}
+                  alt="pupils"
+                />
               </div>
               <div>
-                <img src={Pupils} style={imageStyle(active, 4)} alt="pupils" />
+                <img
+                  loading="lazy"
+                  src={Pupils}
+                  style={imageStyle(active, 4)}
+                  alt="pupils"
+                />
               </div>
               <div>
-                <img src={Pupils} style={imageStyle(active, 5)} alt="pupils" />
+                <img
+                  loading="lazy"
+                  src={Pupils}
+                  style={imageStyle(active, 5)}
+                  alt="pupils"
+                />
               </div>
             </Slider>
 

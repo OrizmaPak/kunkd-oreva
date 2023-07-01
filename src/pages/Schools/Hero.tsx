@@ -22,13 +22,13 @@ const Hero = () => {
 
         <div className="flex ">
           <div>
-            <img src={SchHero1} alt="girl" />
+            <img loading="lazy" src={SchHero1} alt="girl" />
           </div>
           <div className="mt-[100px]">
-            <img src={SchHero2} alt="girl" />
+            <img loading="lazy" src={SchHero2} alt="girl" />
           </div>
           <div>
-            <img src={SchHero3} alt="girl" />
+            <img loading="lazy" src={SchHero3} alt="girl" />
           </div>
         </div>
       </div>

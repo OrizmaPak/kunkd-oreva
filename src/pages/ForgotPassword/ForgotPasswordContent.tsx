@@ -29,7 +29,7 @@ const ForgotPasswordContent = () => {
     <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">
       <Link to="/">
         <span className="absolute">
-          <img src={Cancel} alt="cancel" />
+          <img loading="lazy" src={Cancel} alt="cancel" />
         </span>
       </Link>
       <div className="w-[100%]  my-auto ">
@@ -47,7 +47,7 @@ const ForgotPasswordContent = () => {
             placeholder="email"
             reg={register("email")}
             errorMsg={errors.email?.message}
-            leftIcon={<img src={EmailLogo} alt="email icon" />}
+            leftIcon={<img loading="lazy" src={EmailLogo} alt="email icon" />}
           />
           <p className="mt-10">
             {/* <Link to="/resetpassword"> */}

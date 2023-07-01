@@ -9,7 +9,7 @@ const NewPasswordContent = () => {
     <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">
       <Link to="/">
         <span className="absolute">
-          <img src={Cancel} alt="cancel" />
+          <img loading="lazy" src={Cancel} alt="cancel" />
         </span>
       </Link>
       <div className="w-[100%]  my-auto ">
@@ -26,7 +26,9 @@ const NewPasswordContent = () => {
             <InputFormat
               type="password"
               placeholder="password"
-              leftIcon={<img src={EmailLogo} alt="pasword icon" />}
+              leftIcon={
+                <img loading="lazy" src={EmailLogo} alt="pasword icon" />
+              }
             />
           </p>
           <p className="text-[15px] text-[#A7A7A7] my-4">
@@ -34,7 +36,9 @@ const NewPasswordContent = () => {
             <InputFormat
               type="password"
               placeholder="password"
-              leftIcon={<img src={EmailLogo} alt="pasword icon" />}
+              leftIcon={
+                <img loading="lazy" src={EmailLogo} alt="pasword icon" />
+              }
             />
           </p>
           <p className="mt-10">

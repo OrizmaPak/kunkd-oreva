@@ -18,7 +18,12 @@ const Main = () => {
           <span className="text-[#8530C1]">Last 7 days:</span>
           <span className="flex gap-2 justify-center items-center">
             <span> May 21 May 28 2023</span>
-            <img src={ArrowDown} alt="Arrowdown" className="w-4" />
+            <img
+              loading="lazy"
+              src={ArrowDown}
+              alt="Arrowdown"
+              className="w-4"
+            />
           </span>
         </div>
       </div>

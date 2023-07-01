@@ -63,9 +63,16 @@ const TeacherLayout = () => {
           <div className="basis-1/4 bg-white h-full rounded-[40px] px-7 flex  flex-col pb-4 ">
             <div className="flex-grow-1 flex-1">
               <Header
-                icon1={<img src={SchoolIcon} alt="icon" className="w-[40px]" />}
+                icon1={
+                  <img
+                    loading="lazy"
+                    src={SchoolIcon}
+                    alt="icon"
+                    className="w-[40px]"
+                  />
+                }
                 title="Pampers Schools"
-                icon2={<img src={Arrow} alt="icon" />}
+                icon2={<img loading="lazy" src={Arrow} alt="icon" />}
               />
               {links.slice(0, 4).map((link) => (
                 <NavButton
@@ -73,7 +80,7 @@ const TeacherLayout = () => {
                   title={link.label}
                   href={link.href}
                   route={link.route}
-                  icon={<img src={link.icon} alt="icon" />}
+                  icon={<img loading="lazy" src={link.icon} alt="icon" />}
                 />
               ))}
               <hr className="my-" />
@@ -88,7 +95,7 @@ const TeacherLayout = () => {
               <DasboardButton
                 onClick={() => open()}
                 title="Logout"
-                icon={<img src={LogoutIcon} alt="icon" />}
+                icon={<img loading="lazy" src={LogoutIcon} alt="icon" />}
               />
             </div>
           </div>
@@ -166,7 +173,7 @@ const TeacherProfile = ({
   return (
     <div className="mt-10">
       <div className="flex justify-center items-center">
-        <img src={image} alt="image" />
+        <img loading="lazy" src={image} alt="image" />
       </div>
       <div className="text-center">
         <p className="font-bold text-[20px]">{name}</p>

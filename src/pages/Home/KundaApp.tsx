@@ -15,10 +15,15 @@ const KundaApp = ({ children }: Props) => {
         className="bg-cover bg-bottom  w-full h-[250px]   "
         style={{ backgroundImage: `url(${Wave2})` }}
       ></div>
-      {/* <img src={Wave2} alt="wave 2" /> */}
+      {/* <img loading="lazy" src={Wave2} alt="wave 2" /> */}
 
       <div className="w-[100%] bg-[#8530C1]  px-[100px]   mt-[-10px]  z-[-1]  ">
-        <img src={Zigzag1} alt="" className=" left-60 top-[43%] absolute" />
+        <img
+          loading="lazy"
+          src={Zigzag1}
+          alt=""
+          className=" left-60 top-[43%] absolute"
+        />
         <img
           src={OutLineZero}
           alt=""

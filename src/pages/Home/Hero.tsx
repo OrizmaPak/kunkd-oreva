@@ -19,9 +19,19 @@ type Props = {
 const Hero = ({ children }: Props) => {
   return (
     <div className=" w-[100%] bg-[#F9F4FC] h-[879.61px] relative px-[200px] z-[-1] ">
-      <img src={Ellipse1} alt="" className="absolute left-0 " />
-      <img src={Ellipse2} alt="" className="absolute    top-[0] right-0 " />
-      <img src={Ellipse3} alt="" className="absolute left-0  bottom-[-100px]" />
+      <img loading="lazy" src={Ellipse1} alt="" className="absolute left-0 " />
+      <img
+        loading="lazy"
+        src={Ellipse2}
+        alt=""
+        className="absolute    top-[0] right-0 "
+      />
+      <img
+        loading="lazy"
+        src={Ellipse3}
+        alt=""
+        className="absolute left-0  bottom-[-100px]"
+      />
       <img
         src={Ellipse4}
         alt=""

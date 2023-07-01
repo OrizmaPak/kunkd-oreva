@@ -15,7 +15,12 @@ const TeamCard = ({
 
   return (
     <div className="w-[340px] h-[440px] relative transition-all duration-500 ease-in-out  ">
-      <img src={image} alt="image" className="w-[100%] h-[100%]" />
+      <img
+        loading="lazy"
+        src={image}
+        alt="image"
+        className="w-[100%] h-[100%]"
+      />
       {showMessage && (
         <div
           className={

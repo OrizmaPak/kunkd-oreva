@@ -6,7 +6,12 @@ const MyTeacher = () => {
       <h1 className="font-bold text-[20px] mb-4">My Teacher</h1>
       <div className="flex gap-4">
         <p>
-          <img src={Grease} alt="fgrase" className=" w-[120px]" />
+          <img
+            loading="lazy"
+            src={Grease}
+            alt="fgrase"
+            className=" w-[120px]"
+          />
         </p>
         <p className="flex flex-col">
           <p className="font-bold mb-3">Grease Kemma</p>

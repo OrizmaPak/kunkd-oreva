@@ -20,7 +20,12 @@ const UploadPicture = ({ toggle }: { toggle?: () => void }) => {
           className="rounded-full w-[200px] h-[200px]  object-cover"
         />
         <span className="absolute  bottom-5 right-0 bg-white rounded-full p-4">
-          <img src={CameraIcon} alt="camera" className="w-[30px]" />
+          <img
+            loading="lazy"
+            src={CameraIcon}
+            alt="camera"
+            className="w-[30px]"
+          />
         </span>
       </p>
     );
@@ -44,7 +49,7 @@ const UploadPicture = ({ toggle }: { toggle?: () => void }) => {
                 <p className="w-[250px]">
                   {files && previews}
                   {files.length < 1 && (
-                    <img src={DragIcon} alt="drag and drop" />
+                    <img loading="lazy" src={DragIcon} alt="drag and drop" />
                   )}
                 </p>
               </span>

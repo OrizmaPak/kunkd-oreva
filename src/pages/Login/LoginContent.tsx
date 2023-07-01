@@ -121,7 +121,7 @@ const LoginContent = () => {
 
       <Link to="/">
         <span className="absolute">
-          <img src={Cancel} alt="cancel" />
+          <img loading="lazy" src={Cancel} alt="cancel" />
         </span>
       </Link>
       <div className="w-[100%] pt-10">
@@ -139,7 +139,9 @@ const LoginContent = () => {
                 type="text"
                 placeholder="Email"
                 reg={register("email")}
-                leftIcon={<img src={EmailLogo} alt="pasword icon" />}
+                leftIcon={
+                  <img loading="lazy" src={EmailLogo} alt="pasword icon" />
+                }
                 errorMsg={errors.email?.message}
               />
             }
@@ -149,8 +151,12 @@ const LoginContent = () => {
               type="password"
               placeholder="password"
               reg={register("password")}
-              leftIcon={<img src={PasswordIcon} alt="pasword icon" />}
-              rightIcon={<img src={PasswordEye} alt="paswordeye icon" />}
+              leftIcon={
+                <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
+              }
+              rightIcon={
+                <img loading="lazy" src={PasswordEye} alt="paswordeye icon" />
+              }
               errorMsg={errors.password?.message}
             />
           </p>
@@ -174,13 +180,23 @@ const LoginContent = () => {
         </p>
         <div className="flex gap-8">
           <Button size="full" varient="outlined">
-            <img src={Google} alt="google" className="mx-auto " />
+            <img
+              loading="lazy"
+              src={Google}
+              alt="google"
+              className="mx-auto "
+            />
           </Button>
           <Button size="full" varient="outlined">
-            <img src={Apple} alt="apple" className="mx-auto " />
+            <img loading="lazy" src={Apple} alt="apple" className="mx-auto " />
           </Button>
           <Button size="full" varient="outlined">
-            <img src={Facebook} alt="facebook" className="mx-auto " />
+            <img
+              loading="lazy"
+              src={Facebook}
+              alt="facebook"
+              className="mx-auto "
+            />
           </Button>
         </div>
         <p className="mt-2 text-center text-[] text-gray-400 ">

@@ -48,7 +48,7 @@ const ParentSignupLayout = ({
         } pt-8 px-8`}
       >
         <div onClick={toggle} className="mb-24">
-          <img src={isOpen ? Cancel2 : Hambuger} alt="cancel2" />
+          <img loading="lazy" src={isOpen ? Cancel2 : Hambuger} alt="cancel2" />
         </div>
         {signinDashboardData.map((data, index) =>
           isOpen ? (
@@ -82,7 +82,7 @@ const SigninDash = ({
   return (
     <div className="flex  mt-16 gap-4">
       <div>
-        <img src={Checked} alt="roundmark" />
+        <img loading="lazy" src={Checked} alt="roundmark" />
       </div>
       <div>
         <h1
@@ -100,7 +100,7 @@ const SigninDash = ({
 const SigninDashIonsOnly = ({}: { active?: boolean }) => {
   return (
     <div className="mb-20">
-      <img src={Checked} alt="roundmark" />
+      <img loading="lazy" src={Checked} alt="roundmark" />
     </div>
   );
 };

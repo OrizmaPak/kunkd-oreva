@@ -8,7 +8,12 @@ const EmptyList = () => {
       <div className="flex justify-center items-center pb-10">
         <div>
           <span>
-            <img src={EmptyIcon} alt="Empty" className="w-[70%]" />
+            <img
+              loading="lazy"
+              src={EmptyIcon}
+              alt="Empty"
+              className="w-[70%]"
+            />
           </span>
           <h1 className="font-bold font-Recoleta text-[30px]  text-center my-8">
             Your List is Empty

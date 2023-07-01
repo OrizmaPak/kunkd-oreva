@@ -107,7 +107,7 @@ const MyKids = () => {
               size="md"
             >
               <p className="flex gap-2 py-1">
-                <img src={Kidmeme} alt="meme" />
+                <img loading="lazy" src={Kidmeme} alt="meme" />
                 <span>Create new profile</span>
               </p>
             </Button>
@@ -170,7 +170,7 @@ const KidCard = ({
 
       <div className=" relative flex border border-gray-300 px-8 py-8 rounded-3xl">
         <div>
-          <img src={image} alt="avatar" />
+          <img loading="lazy" src={image} alt="avatar" />
         </div>
         <div className="ml-4">
           <h1 className="font-bold text-[25px] font-Recoleta">{name}</h1>
@@ -185,7 +185,7 @@ const KidCard = ({
           <Menu>
             <Menu.Target>
               <span className="absolute  right-10 p-2 cursor-pointer">
-                <img src={DotIcon} alt="doticon" />
+                <img loading="lazy" src={DotIcon} alt="doticon" />
               </span>
             </Menu.Target>
             <Menu.Dropdown>
@@ -195,7 +195,7 @@ const KidCard = ({
                     onClick={openEditModal}
                     className="p-2 px-4   flex gap-2  justify-start items-center"
                   >
-                    <img src={PencilIcon} alt="pencil icon" />
+                    <img loading="lazy" src={PencilIcon} alt="pencil icon" />
                     <span>Edit profile</span>
                   </button>
                 </Menu.Item>
@@ -204,13 +204,13 @@ const KidCard = ({
                     onClick={openConnectModal}
                     className="p-2 px-4  flex gap-2  justify-start items-center"
                   >
-                    <img src={LinkIcon} alt="link icon" />
+                    <img loading="lazy" src={LinkIcon} alt="link icon" />
                     <span> Connect school</span>
                   </button>
                 </Menu.Item>
                 <Menu.Item>
                   <button className="p-2 px-4  flex gap-2  justify-start items-center">
-                    <img src={DeleteIcon} alt="delete icon" />
+                    <img loading="lazy" src={DeleteIcon} alt="delete icon" />
                     <span> Remove profile</span>
                   </button>
                 </Menu.Item>
@@ -231,7 +231,7 @@ const EditProfile = () => {
       </h1>
       <div className="flex justify-between items-center">
         <p className="flex gap-2 justify-end items-center">
-          <img src={Avatar1} alt="Avatar" />
+          <img loading="lazy" src={Avatar1} alt="Avatar" />
           <span>Profile Picture</span>
         </p>
         <p className="text-blue-400">Upload picture</p>

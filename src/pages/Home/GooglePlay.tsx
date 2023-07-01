@@ -5,7 +5,7 @@ const GooglePlay = () => {
     <div>
       <button className="bg-black text-white items-center justify-center flex gap-2 rounded-md px-4 py-2 h-auto w-auto ">
         <div>
-          <img src={Google} alt="" width="30px" />
+          <img loading="lazy" src={Google} alt="" width="30px" />
         </div>
         <div className="flex flex-col">
           <span className="text-[9px]">GET IT ON</span>

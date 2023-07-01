@@ -1,12 +1,11 @@
-import content from '@/assets/wavecardcontent.svg'
+import content from "@/assets/wavecardcontent.svg";
 
 const StatContent = () => {
   return (
-    <div className='flex items-center justify-center  '>
-      <img src={content} alt="" width="50%" />
+    <div className="flex items-center justify-center  ">
+      <img loading="lazy" src={content} alt="" width="50%" />
     </div>
-  )
-}
+  );
+};
 
-export default StatContent
-    
+export default StatContent;

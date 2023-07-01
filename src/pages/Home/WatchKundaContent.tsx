@@ -13,7 +13,12 @@ const WatchKundaContent = () => {
       <div className="flex items-center justify-center  ">
         {/* <div className="bg-cover bg-center  w-full bg-red-500 matt h-[300px] " style={{ backgroundImage: `url(${ThirdWave})` }}/> */}
 
-        <img src={Phones} alt="" className="z-[50] mt-[-500px] w-[70%]" />
+        <img
+          loading="lazy"
+          src={Phones}
+          alt=""
+          className="z-[50] mt-[-500px] w-[70%]"
+        />
 
         {/* <div> */}
         <img
@@ -34,7 +39,7 @@ const WatchKundaContent = () => {
         <img
           src={RoundR}
           alt="zigzag"
-          className="absolute  bottom-[950px]  left-[1700px]"
+          className="absolute  bottom-[950px]  left-[700px]"
         />
         <img
           src={RoundY}

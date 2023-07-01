@@ -28,7 +28,12 @@ const ProgressReport = () => {
                 Progress Report
               </h1>
               <span>
-                <img src={SearchIcon} alt="SearchIcon " className="" />
+                <img
+                  loading="lazy"
+                  src={SearchIcon}
+                  alt="SearchIcon "
+                  className=""
+                />
               </span>
             </div>
             <hr className="mx-20 my-4" />

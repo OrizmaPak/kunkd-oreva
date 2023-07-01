@@ -25,7 +25,7 @@ const Row = ({
         <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px] mt-2  px-8 py-2">
           <div className="flex justify-start items-center ">
             <span className=" ">
-              <img src={Rectangle} alt="" />
+              <img loading="lazy" src={Rectangle} alt="" />
             </span>
           </div>
           <div className="flex items-center justify-start gap-2 ">
@@ -34,9 +34,9 @@ const Row = ({
           <div className="flex justify-start items-center ">{noOfStudents}</div>
           <div className="flex justify-start items-center ">{noOfTeacher}</div>
           <div className="flex justify-end  gap-4  items-center">
-            <span>{/* <img src={ToggleIcon} alt="" /> */}</span>
+            <span>{/* <img loading="lazy" src={ToggleIcon} alt="" /> */}</span>
             <span>
-              <img src={DeleteIcon} alt="delete" />
+              <img loading="lazy" src={DeleteIcon} alt="delete" />
             </span>
             <span></span>
           </div>

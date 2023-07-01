@@ -274,7 +274,7 @@ const AnsButton = ({
         selected?.answer === name ? "bg-[#8530C1] text-white " : ""
       } border border-[#8530C1] rounded-3xl`}
     >
-      <img src={image} alt="ans" className="w-[150px]" />
+      <img loading="lazy" src={image} alt="ans" className="w-[150px]" />
     </button>
   );
 };

@@ -15,21 +15,46 @@ type Props = {
 const FormWrapper = ({ children }: Props) => {
   return (
     <div className="py-20 px-14 bg-white relative h-screen w-[100%]">
-      <img src={Ellipse59} alt="Ellipse" className="absolute top-40 left-20" />
+      <img
+        loading="lazy"
+        src={Ellipse59}
+        alt="Ellipse"
+        className="absolute top-40 left-20"
+      />
       <img
         src={RoundYellow}
         alt="Ellipse"
         className="absolute top-20 right-60"
       />
-      <img src={Ellipse57} alt="Ellipse" className="absolute top-96 right-16" />
-      <img src={Zag4} alt="Ellipse" className="absolute top-48 right-32" />
-      <img src={Zag5} alt="Ellipse" className="absolute bottom-12 right-32" />
+      <img
+        loading="lazy"
+        src={Ellipse57}
+        alt="Ellipse"
+        className="absolute top-96 right-16"
+      />
+      <img
+        loading="lazy"
+        src={Zag4}
+        alt="Ellipse"
+        className="absolute top-48 right-32"
+      />
+      <img
+        loading="lazy"
+        src={Zag5}
+        alt="Ellipse"
+        className="absolute bottom-12 right-32"
+      />
       <img
         src={RoundGreen}
         alt="Ellipse"
         className="absolute bottom-4 left-96"
       />
-      <img src={Star} alt="Ellipse" className="absolute bottom-16 left-32" />
+      <img
+        loading="lazy"
+        src={Star}
+        alt="Ellipse"
+        className="absolute bottom-16 left-32"
+      />
       <img
         src={SixGreen}
         alt="Ellipse"

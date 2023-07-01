@@ -36,7 +36,7 @@ const InputFormat = ({
           className="w-full  h-full flex-1  focus:outline-none"
         />
         {rightIcon ? <span>{rightIcon}</span> : null}
-        {errorMsg && <img src={ErrorIcon} alt="error icon" />}
+        {errorMsg && <img loading="lazy" src={ErrorIcon} alt="error icon" />}
       </div>
       {errorMsg && <span className="text-red-700">{errorMsg}</span>}
     </div>

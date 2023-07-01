@@ -40,7 +40,7 @@ const Billing = () => {
                 <div className="flex gap-8 border rounded-3xl p-4 border-[#8530C1] px-8">
                   <div>
                     <h1>
-                      <img src={VisaIcon} alt="visa" />
+                      <img loading="lazy" src={VisaIcon} alt="visa" />
                     </h1>
                   </div>
                   <div className="text-[#8530C1]  flex-grow">
@@ -51,7 +51,12 @@ const Billing = () => {
                     </p>
                   </div>
                   <div className=" ">
-                    <img src={Marked} alt="marked" className="    " />
+                    <img
+                      loading="lazy"
+                      src={Marked}
+                      alt="marked"
+                      className="    "
+                    />
                   </div>
                 </div>
               </div>
@@ -59,7 +64,8 @@ const Billing = () => {
 
             <div className="flex items-center gap-4 my-8">
               <span onClick={open} className="flex gap-2 cursor-pointer">
-                <img src={PlusIcon} alt="plusIcon" /> Add payment method
+                <img loading="lazy" src={PlusIcon} alt="plusIcon" /> Add payment
+                method
               </span>
               <hr className="flex-grow" />
             </div>

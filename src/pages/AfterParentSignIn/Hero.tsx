@@ -16,7 +16,12 @@ const Hero = ({ username, userimage }: Props) => {
         <div className="flex  w-full  justify-between">
           <div className="py-8 pl-24 mt-4">
             <p className=" mb-5">
-              <img src={userimage} alt="userimage" className="w-[150px]" />
+              <img
+                loading="lazy"
+                src={userimage}
+                alt="userimage"
+                className="w-[150px]"
+              />
             </p>
             <h1 className="font-bold font-Recoleta text-[32px]">
               Hello {username},

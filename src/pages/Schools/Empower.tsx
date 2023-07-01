@@ -15,7 +15,7 @@ const Empower = () => {
           reading.
         </p>
         <div className="mt-8">
-          <img src={Pupils} alt="pupils" />
+          <img loading="lazy" src={Pupils} alt="pupils" />
         </div>
       </div>
     </div>

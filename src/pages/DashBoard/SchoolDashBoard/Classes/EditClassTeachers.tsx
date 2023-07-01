@@ -22,24 +22,24 @@ const EditClassTeachers = ({
         <div>
           <p className="flex  justify-between my-8 ">
             <p className="flex  justify-center items-center">
-              <img src={DeleteIcon} alt="deleteIcon" />
+              <img loading="lazy" src={DeleteIcon} alt="deleteIcon" />
               <p className="flex justify-center items-center ml-5 gap-2">
-                <img src={image1} alt="image1" />
+                <img loading="lazy" src={image1} alt="image1" />
                 <span>{name1}</span>
               </p>
             </p>
-            <img src={ArrowDown} alt="arrowdown" />
+            <img loading="lazy" src={ArrowDown} alt="arrowdown" />
           </p>
           {name2 && (
             <p className="flex  justify-between  my-8">
               <p className="flex  justify-center items-center">
-                <img src={DeleteIcon} alt="deleteIcon" />
+                <img loading="lazy" src={DeleteIcon} alt="deleteIcon" />
                 <p className="flex justify-center items-center ml-5 gap-2">
-                  <img src={image2} alt="image1" />
+                  <img loading="lazy" src={image2} alt="image1" />
                   <span>{name2}</span>
                 </p>
               </p>
-              <img src={ArrowDown} alt="arrowdown" />
+              <img loading="lazy" src={ArrowDown} alt="arrowdown" />
             </p>
           )}
         </div>

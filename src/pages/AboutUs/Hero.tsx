@@ -17,7 +17,7 @@ const Hero = () => {
         </p>
 
         <div className="flex ">
-          <img src={Pupils2} alt="pupils" />
+          <img loading="lazy" src={Pupils2} alt="pupils" />
         </div>
       </div>
     </div>

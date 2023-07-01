@@ -41,7 +41,7 @@ const SecureAdminPortalContent = () => {
     <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">
       <Link to="/">
         <span className="absolute">
-          <img src={Cancel} alt="cancel" />
+          <img loading="lazy" src={Cancel} alt="cancel" />
         </span>
       </Link>
       <div className="w-[100%]  my-auto ">

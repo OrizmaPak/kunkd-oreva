@@ -9,7 +9,7 @@ const PaymentCompletedContent = ({}: { onSubmit: () => void }) => {
         <span></span>
         <div>
           <div className=" flex justify-center items-center">
-            <img src={Congrats} alt="Congrats" />
+            <img loading="lazy" src={Congrats} alt="Congrats" />
           </div>
           <h1 className="font-bold text-[40px] text-center mt-4 font-Recoleta">
             Payment Completed

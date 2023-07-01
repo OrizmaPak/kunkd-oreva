@@ -65,7 +65,7 @@ const LoginCarousel = () => {
               onClick={() => sliderRef?.current?.slickNext()}
               className="absolute z-10 right-8 top-[85%] hover:text-white bg-[#ffff]  rounded-full p-1"
             >
-              <img src={ArrowCaro} alt="arrow" />
+              <img loading="lazy" src={ArrowCaro} alt="arrow" />
             </button> */}
               <div className="flex gap-2 bottom-6 left-[270px] absolute z-50">
                 <CustomDot
