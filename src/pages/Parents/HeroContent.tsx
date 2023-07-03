@@ -7,10 +7,10 @@ const HeroContentContent = () => {
     <div>
       <div>
         <div className="absolute top-40  left-40">
-          <p className="font-bold text-[40px] text-[#8530C1] font-Secondary">
+          <p className="font-bold text-[62px] text-[#8530C1] font-Recoleta">
             Introducing Kunda Kids
           </p>
-          <h1 className="text-[70px] font-bold   font-Recoleta">
+          <h1 className="text-[62px] font-bold   font-Recoleta">
             Empowering your child's <br /> reading journey
           </h1>
           <div className="max-w-[400px] flex mb-10 ">

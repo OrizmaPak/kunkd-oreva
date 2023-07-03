@@ -10,7 +10,7 @@ const SettingPassword = () => {
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
     >
-      <div className="px-20">
+      <div className="px-4">
         <h1 className="text-[25px] font-bold py-8">Password</h1>
 
         <form>

@@ -12,6 +12,8 @@ import Button from "@/components/Button";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
 import Kidmeme from "@/assets/kidmeme.svg";
+import { useRef } from "react";
+
 import {
   ChildNameModal,
   ChildAgeModal,
@@ -97,9 +99,9 @@ const MyKids = () => {
           )}
         </Modal>
 
-        <div className="px-20 ">
+        <div className="px-4 ">
           <div className="flex justify-between items-center">
-            <h1 className="text-[25px] font-bold my-8">My Kids</h1>
+            <h1 className="text-[30px] font-bold my-8">My Kids</h1>
             <Button
               onClick={() => {
                 open(), setCurrentStep(STEP_1);
@@ -173,7 +175,7 @@ const KidCard = ({
           <img loading="lazy" src={image} alt="avatar" />
         </div>
         <div className="ml-4">
-          <h1 className="font-bold text-[25px] font-Recoleta">{name}</h1>
+          <h1 className="font-bold text-[16px] font-Recoleta">{name}</h1>
           <p className="text-gray-400">
             <span className="border-l-gray-600 border-r-2 mr-4 px-4">
               Age - {age}
@@ -224,6 +226,11 @@ const KidCard = ({
 };
 
 const EditProfile = () => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = () => {
+    fileInputRef?.current?.click();
+  };
   return (
     <div className="px-20">
       <h1 className="text-center font-Recoleta font-bold text-[30px] ">
@@ -234,16 +241,24 @@ const EditProfile = () => {
           <img loading="lazy" src={Avatar1} alt="Avatar" />
           <span>Profile Picture</span>
         </p>
-        <p className="text-blue-400">Upload picture</p>
+        <button onClick={handleFileChange} className="text-blue-400">
+          Upload picture
+        </button>
       </div>
       <div>
         <form>
-          <p className="my-5">
+          <input
+            type="file"
+            placeholder="Upload Picture"
+            ref={fileInputRef}
+            hidden
+          />
+          <p className="my-2">
             <label htmlFor="name">Name</label>
             <InputFormat type="text" />
           </p>
 
-          <p className="my-5 flex gap-4">
+          <p className="my-2 flex gap-4">
             <p className=" flex-grow">
               <label htmlFor="name">Gender</label>
               <p className="border border-[#F3DAFF] py-4 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
@@ -264,11 +279,11 @@ const EditProfile = () => {
             </p>
           </p>
 
-          <p className="my-5">
+          <p className="my-2">
             <label htmlFor="school">School</label>
             <InputFormat type="text" />
           </p>
-          <p className="my-5 flex gap-4">
+          <p className="my-2 flex gap-4">
             <p className="flex-grow">
               <label htmlFor="class">Class</label>
               <InputFormat type="text" />

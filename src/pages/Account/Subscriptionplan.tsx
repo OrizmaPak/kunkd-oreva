@@ -14,12 +14,12 @@ const Subscriptionplan = () => {
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
     >
-      <div className="px-20 ">
+      <div className="px-4 ">
         <h1 className="text-[25px] font-bold my-8">Subscription Plan</h1>
         <div className="p-6 border border-[#8530C1]  rounded-3xl my-8">
           <div className="grid grid-cols-[1fr_1fr_300px]">
-            <span className="text-[#B5B5C3]">Plan</span>
-            <span className="text-[#B5B5C3]">Payment</span>
+            <span className="text-[#B5B5C3] text-[16px]">Plan</span>
+            <span className="text-[#B5B5C3] text-[16px]">Payment</span>
             <p className="flex justify-center items-center">
               <Button size="md">
                 <p className="flex gap-3">
@@ -50,7 +50,7 @@ const Subscriptionplan = () => {
           <hr className="flex-grow" />
         </div>
         {openPlan && (
-          <div className="flex  gap-36">
+          <div className="flex  gap-20">
             <PlanCard duration={12} amount={59.88} recommended />
             <PlanCard duration={1} amount={4.99} />
           </div>

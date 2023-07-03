@@ -8,7 +8,7 @@ const DeleteAccount = ({ onCancel }: { onCancel: () => void }) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
     >
-      <h1 className="font-bold text-[30px] mt-8 text-center font-Recoleta">
+      <h1 className="font-bold text-[30px] text-center font-Recoleta">
         Are you sure you want to delete your account?
       </h1>
       <p className="text-center mb-10 ">

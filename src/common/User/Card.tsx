@@ -1,4 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { Skeleton } from "@mantine/core";
 
 export type CardProps = {
   image?: string;
@@ -19,19 +21,23 @@ const Card = ({ title, image, size, id, clickable }: CardProps) => {
       state: { image, title, size },
     });
   };
+  const [isLoading, setIsLoading] = useState(true);
   return (
     <div
       onClick={goto}
       className="w-[200px]"
       style={{ width: `${size ? size : ""}px` }}
     >
-      <span>
-        <img
-          src={image}
-          alt="image"
-          style={{ width: `${size ? size : "350px"}px` }}
-        />
-      </span>
+      <Skeleton visible={isLoading}>
+        <span>
+          <img
+            src={image}
+            alt="image"
+            style={{ width: `${size ? size : "350px"}px` }}
+            onLoad={() => setIsLoading(false)}
+          />
+        </span>
+      </Skeleton>
       {title ? (
         <p className="mt-[10px] font-bold font-Hanken">{title}</p>
       ) : null}

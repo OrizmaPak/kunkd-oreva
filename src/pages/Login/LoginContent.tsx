@@ -124,7 +124,7 @@ const LoginContent = () => {
           <img loading="lazy" src={Cancel} alt="cancel" />
         </span>
       </Link>
-      <div className="w-[100%] pt-10">
+      <div className="w-[100%] pt-20">
         <span></span>
         <h1 className="font-bold fon text-[40px] font-Recoleta">
           Welcome back

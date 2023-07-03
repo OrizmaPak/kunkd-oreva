@@ -8,22 +8,22 @@ const HeroContent = () => {
   return (
     <div>
       <div className="absolute top-40  left-40">
-        <p className="font-bold text-[40px] text-[#8530C1]  font-Recoleta">
-          Introducing Kunda Kids{" "}
+        <p className="font-bold text-[36px] text-[#8530C1]  font-Recoleta">
+          Introducing Kunda Kids
         </p>
-        <h1 className="text-[70px] font-bold font-Recoleta ">
+        <h1 className="text-[62px] font-bold font-Recoleta ">
           Empowering Africa's <br /> Reading Leaders
         </h1>
-        <div className="max-w-[400px] flex mb-10 ">
+        <div className="max-w-[400px] flex mb-10 mt-10">
           <span className="mr-4 ">
             <img loading="lazy" src={Arrow} alt="" className="w-20 pt-2 " />
           </span>
-          <p className=" font-Hanken">
+          <p className="text-[18px] font-Hanken leading-8">
             Unlock the power of literacy with Kunda Kids, the revolutionary
             platform dedicated to raising reading leaders across Africa{" "}
           </p>
         </div>
-        <Button size="sm">Create free account</Button>
+        <Button size="md">Create free account</Button>
       </div>
       <div>
         <img

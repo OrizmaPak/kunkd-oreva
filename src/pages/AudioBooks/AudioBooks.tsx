@@ -299,7 +299,7 @@ const Books = () => {
         </p>
       </div>
       <div className="flex justify-center items-center">
-        <div className="grid grid-cols-4 gap-8 px-24 py-10">
+        <div className="grid grid-cols-5 gap-8 px-24 py-10">
           {audioBooksData
             ?.filter((story) =>
               story?.genre?.includes(params?.id ? params?.id : "")
@@ -307,7 +307,7 @@ const Books = () => {
             .map((story, index) => {
               return (
                 <>
-                  <Card key={index} clickable {...story} size={250} />
+                  <Card key={index} clickable {...story} size={200} />
                 </>
               );
             })}

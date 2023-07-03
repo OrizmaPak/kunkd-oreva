@@ -28,7 +28,7 @@ const Billing = () => {
           <AddCard />
         </Modal>
 
-        <div className="px-20">
+        <div className="px-4">
           <h1 className="text-[25px] font-bold my-8">Billing</h1>
           <form>
             <div className="grid grid-cols-[400px_1fr] mt-4">
