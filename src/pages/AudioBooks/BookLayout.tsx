@@ -14,7 +14,7 @@ import VolumeIcon from "@/assets/volumeIcon.svg";
 import ExportIcon from "@/assets/exportIcon.svg";
 import AudioBooksNav from "./AudioBooksNav";
 // import { Slider } from "@mantine/core";
-
+// import { useReducedMotion } from "@mantine/hooks";
 // const data = [
 //   {
 //     id: 1,
@@ -285,10 +285,32 @@ const AudioControls = ({ audio }: { audio?: string }) => {
 
   //   console.log("current time", calculateTime(currentTTime));
   //   console.log("duration", duration);
-  console.log("actual duration", Math.floor((currentTTime * 100) / duration));
+  console.log("duration", duration);
+  console.log("actual currentTime", currentTTime);
+  console.log(
+    "calculated duration ",
+    Math.floor((currentTTime * 100) / duration),
+    "calc current time",
+    currentTTime
+  );
   // const handleSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
   //   const value = event.target.value;
   //   event.target.style.background = `linear-gradient(to right, #82CFD0 0%, #82CFD0 ${value}%, #fff ${value}%, white 100%)`;
+  // };
+  // const timeMax = Number(calculateTime(duration));
+  // console.log(`max: ${timeMax}`, duration);
+
+  // const reducedMotion = useReducedMotion();
+
+  // const handleTimeUpdate = (e) => {
+  //   setCurrentTTime(e.target.currentTime);
+  //   setDuration(e.target.duration);
+  // };
+
+  // const handleSliderChange = (value: number) => {
+  //   console.log("new current time", value);
+  //   setCurrentTTime(value);
+  //   // Use the `value` for seeking to a specific time in the audio
   // };
   return (
     <div className="mt-10">
@@ -296,25 +318,37 @@ const AudioControls = ({ audio }: { audio?: string }) => {
         <p className=" flex-grow w-20">{calculateTime(currentTTime)}</p>
         <input
           type="range"
-          className="mr-2   text-[#8530C1] bg-[#8530C1]  flex-grow w-full"
+          className="mr-2   text-[#8530C1] bg-[#8530C1]  flex-grow w-full slider"
           ref={progressBar}
           value={currentTTime}
           onChange={changeRage}
           id="input-range1"
           defaultValue={0}
         />
-        {/* <p className="w-[100px]">
-          <Slider
-            value={mantineP}
-            // ref={progressBar}
-            onChange={() => setMantineP((val) => val + 1)}
+
+        <p className="w-[100px]">
+          {/* <Slider
+            value={currentTTime}
+            ref={progressBar}
+            // onChange={changeRage}
             label={null}
-            // defaultValue={20}
-            // min={0}
-            // // scale={(val) => currentTTime + val}
-            // max={Number(calculateTime(duration))}
-          />
-        </p> */}
+            defaultValue={20}
+            min={0}
+            scale={(val) => currentTTime + val}
+            max={Number(timeMax)}
+          /> */}
+          {/* <Slider
+            value={currentTTime}
+            onChange={handleSliderChange}
+            min={0}
+            max={duration}
+            step={0.1}
+            label={`Duration: ${calculateTime(currentTTime)}`}
+            disabled={reducedMotion}
+            onLoadedMetadata={handleTimeUpdate}
+            onTimeUpdate={handleTimeUpdate}
+          /> */}
+        </p>
 
         <p className="flex-grow w-20">
           {duration ? calculateTime(duration) : `0:00`}

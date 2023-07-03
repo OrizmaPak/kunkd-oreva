@@ -352,7 +352,7 @@ const BrowseGenre = () => {
             background:
               "linear-gradient(280.43deg, #8530C1 0.5%, #000000 173.5%)",
           }}
-          className="h-[495px] grid grid-cols-[700px_1fr] mb-[50px] max-w-[1156px] relative rounded-2xl mx-auto object-cover bg- "
+          className="h-[495px] grid grid-cols-[500px_1fr] mb-[50px] max-w-[1156px] relative rounded-2xl mx-auto object-cover bg- "
         >
           <img
             src={GroupCard}

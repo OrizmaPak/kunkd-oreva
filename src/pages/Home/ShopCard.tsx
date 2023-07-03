@@ -7,12 +7,12 @@ type Props = {
 
 const ShopCard = ({ image, title, body }: Props) => {
   return (
-    <div className="  w-[900px]  mx-auto relative mt-[100px]">
+    <div className="  w-[900px] max-h-[305px] h-full  mx-auto relative mt-[100px]">
       <img
         loading="lazy"
         src={image}
         alt=""
-        className=" w-[60%] top-[-55px] absolute  left-[-45px] z-50 "
+        className=" w-[50%] top-[-55px] absolute  left-[-45px] z-50 "
       />
       <div className="  flex justify-between  bg-[#F3DAFF]  rounded-2xl h-[400px] w-[100%] ml-auto  mb-[100px] leading-12  ">
         <div className="basis-1/2">

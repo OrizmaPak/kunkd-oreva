@@ -19,7 +19,7 @@ const Hero = () => {
   const [isLoading, setIsLoadind] = useState(true);
   return (
     <Skeleton visible={isLoading}>
-      <div className="h-[250px]">
+      <div className="h-[250px] mb-28">
         <Slider {...settings}>
           <div>
             <img

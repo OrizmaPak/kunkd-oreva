@@ -332,18 +332,18 @@ const GoodRemarkMsg = ({ setShowResult }: { setShowResult: () => void }) => {
   };
   return (
     <>
-      <div className="relative flex-grow bg-white">
+      <div className="relative flex-grow bg-white ">
         <img
           src={RemarkBg}
-          alt=""
-          className="absolute left-[320px] top-[50px] "
+          alt="icon"
+          className="absolute left-1/2 top-[30%]  transform -translate-x-1/2 -translate-y-1/2"
         />
         <img
           src={RemarkIcon}
           alt="remarkIcon"
-          className="absolute left-[400px] top-[50px]"
+          className="absolute left-1/2 top-[30%] transform -translate-x-1/2 -translate-y-1/2"
         />
-        <div className="text-center  mt-[270px]">
+        <div className="text-center  mt-[290px]">
           <h1 className="font-bold">Good Job!</h1>
           <p className="text-[18px] text-[#B5B5C3]">
             You answered 7 questions correct
@@ -387,7 +387,8 @@ const Result = ({ answers }: { answers: ObjAnsQuestionType[] }) => {
               sections={[{ value: 70, color: "white" }]}
               label={
                 <h1 className="font-bold text-black  text-center text-[30px]">
-                  7/10
+                  <span className="text-[40px]">7</span>
+                  /10
                 </h1>
               }
               rootColor="rgba(255,255,255,0.4)"
