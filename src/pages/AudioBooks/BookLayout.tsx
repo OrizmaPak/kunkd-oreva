@@ -13,7 +13,7 @@ import VolumeIcon from "@/assets/volumeIcon.svg";
 
 import ExportIcon from "@/assets/exportIcon.svg";
 import AudioBooksNav from "./AudioBooksNav";
-import { Slider } from "@mantine/core";
+// import { Slider } from "@mantine/core";
 
 // const data = [
 //   {
@@ -290,12 +290,11 @@ const AudioControls = ({ audio }: { audio?: string }) => {
   //   const value = event.target.value;
   //   event.target.style.background = `linear-gradient(to right, #82CFD0 0%, #82CFD0 ${value}%, #fff ${value}%, white 100%)`;
   // };
-  const [mantineP, setMantineP] = useState(0);
   return (
     <div className="mt-10">
       <div className="my-10 flex">
         <p className=" flex-grow w-20">{calculateTime(currentTTime)}</p>
-        {/* <input
+        <input
           type="range"
           className="mr-2   text-[#8530C1] bg-[#8530C1]  flex-grow w-full"
           ref={progressBar}
@@ -303,8 +302,8 @@ const AudioControls = ({ audio }: { audio?: string }) => {
           onChange={changeRage}
           id="input-range1"
           defaultValue={0}
-        /> */}
-        <p className="w-[100px]">
+        />
+        {/* <p className="w-[100px]">
           <Slider
             value={mantineP}
             // ref={progressBar}
@@ -315,7 +314,7 @@ const AudioControls = ({ audio }: { audio?: string }) => {
             // // scale={(val) => currentTTime + val}
             // max={Number(calculateTime(duration))}
           />
-        </p>
+        </p> */}
 
         <p className="flex-grow w-20">
           {duration ? calculateTime(duration) : `0:00`}
