@@ -6,7 +6,7 @@ import { useState } from "react";
 import RemarkBg from "@/assets/remarkbg.svg";
 import RemarkIcon from "@/assets/remarkIcon.svg";
 import Button from "@/components/Button";
-import { RingProgress, Text } from "@mantine/core";
+import { RingProgress } from "@mantine/core";
 import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
 type ObjAnsQuestionType = {
   question: string;
