@@ -15,7 +15,6 @@ import ExportIcon from "@/assets/exportIcon.svg";
 import AudioBooksNav from "./AudioBooksNav";
 import { Slider } from "@mantine/core";
 import { useReducedMotion } from "@mantine/hooks";
-import { number } from "zod";
 // const data = [
 //   {
 //     id: 1,
@@ -245,13 +244,13 @@ const AudioControls = ({ audio }: { audio?: string }) => {
   };
 
   const max = 20;
-  const handleVolume = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { value } = e.target;
-    const volume = Number(value) / max;
-    if (audioRef.current) {
-      audioRef.current.volume = volume;
-    }
-  };
+  // const handleVolume = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  //   const { value } = e.target;
+  //   const volume = Number(value) / max;
+  //   if (audioRef.current) {
+  //     audioRef.current.volume = volume;
+  //   }
+  // };
 
   // const handleVolume2 = (val): void => {
   //   const { value } = e.target;
@@ -412,16 +411,11 @@ const AudioControls = ({ audio }: { audio?: string }) => {
         <p className="w-[100px]">
           <Slider
             color="violet"
-            // backgroundColor=""
             value={volume}
             onChange={handleVolumeChange}
             min={0}
             max={max}
-            // step={0.1}
-            // label={`Duration: ${calculateTime(currentTTime)}`}
             disabled={reducedMotion}
-            // onLoadedMetadata={handleTimeUpdate}
-            // onTimeUpdate={handleTimeUpdate}
           />
         </p>
       </div>
