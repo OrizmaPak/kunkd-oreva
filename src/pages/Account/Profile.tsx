@@ -14,6 +14,7 @@ import { Modal } from "@mantine/core";
 import Teacher01 from "@/assets/teacher01.svg";
 import BigPencil from "@/assets/bigeditingpencil.svg";
 import InputFormat from "@/common/InputFormat";
+import { useState } from "react";
 
 const parentData = {
   image: Teacher01,
@@ -55,11 +56,9 @@ const schData = {
 
 const Profile = () => {
   const [{ userType }] = userContext();
-  const [openedSch, { open: openSch, close: closeSch }] = useDisclosure(false);
-  const [openedTeacher, { open: openTeacher, close: closeTeacher }] =
-    useDisclosure(false);
-  const [openedParent, { open: openParent, close: closeParent }] =
-    useDisclosure(false);
+  const [parentEditMode, setParentEditMode] = useState(false);
+  const [teacherEditMode, setTeacherEditMode] = useState(false);
+  const [schEditMode, setSchEditMode] = useState(false);
 
   return (
     <>
@@ -69,62 +68,55 @@ const Profile = () => {
         exit={{ opacity: 0 }}
         transition={{ duration: 1 }}
       >
-        <Modal
-          opened={openedSch}
-          onClose={closeSch}
-          centered
-          size="lg"
-          radius={"xl"}
-          closeButtonProps={{
-            size: "xl",
-          }}
-        >
-          <EditSchPersonalInfo />
-        </Modal>
-        <Modal
-          opened={openedTeacher}
-          onClose={closeTeacher}
-          centered
-          size="lg"
-          radius={"xl"}
-          closeButtonProps={{
-            size: "xl",
-          }}
-        >
-          <EditTeacherPersonalInfo />
-        </Modal>
-        <Modal
-          opened={openedParent}
-          onClose={closeParent}
-          centered
-          size="lg"
-          radius={"xl"}
-          closeButtonProps={{
-            size: "xl",
-          }}
-        >
-          <EditParentPersonalInfo />
-        </Modal>
-
         <div className="px-4 ">
           <h1 className="text-[30px] font-bold my-8 font-Hanken">Profile</h1>
 
           {userType === "teacher" && (
             <>
               <PTCard {...teacherData} />
-              <TeacherPersonalInfomation {...teacherData} open={openTeacher} />
+              {teacherEditMode ? (
+                <EditTeacherPersonalInfomation
+                  onSave={() => setTeacherEditMode(false)}
+                  {...teacherData}
+                />
+              ) : (
+                <TeacherPersonalInfomation
+                  {...teacherData}
+                  openEdit={() => setTeacherEditMode(true)}
+                />
+              )}
             </>
           )}
           {userType === "school" && (
             <>
               <SchCard {...schData} />
-              <SchoolPersonalInfomation {...schData} open={openSch} />
+              {schEditMode ? (
+                <EditSchoolPersonalInfomation
+                  onSave={() => setSchEditMode(false)}
+                  {...schData}
+                />
+              ) : (
+                <SchoolPersonalInfomation
+                  {...schData}
+                  openEdit={() => setSchEditMode(true)}
+                />
+              )}
             </>
           )}
           {userType === "parent" && (
             <>
               <PTCard {...parentData} />
-              <ParentPersonalInfomation {...parentData} open={openParent} />
+              {parentEditMode ? (
+                <EditParentPersonalInfomation
+                  onSave={() => setParentEditMode(false)}
+                  {...parentData}
+                />
+              ) : (
+                <ParentPersonalInfomation
+                  {...parentData}
+                  openEdit={() => setParentEditMode(true)}
+                />
+              )}
             </>
           )}
         </div>
@@ -178,20 +170,20 @@ const ParentPersonalInfomation = ({
   email,
   country,
   city,
-  open,
+  openEdit,
 }: {
   name?: string;
   phone?: string;
   email?: string;
   country?: string;
   city?: string;
-  open: () => void;
+  openEdit: () => void;
 }) => {
   return (
     <div className="p-6 border border-[#8530C1]  rounded-3xl mt-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="font-bold text-[16px]">Personal Information</h1>
-        <Button onClick={open} size="sm" varient="outlined">
+        <Button onClick={openEdit} size="sm" varient="outlined">
           <p className="gap-4 flex">
             <img loading="lazy" src={EditPencil} alt="pencil" />{" "}
             <span className="text-[#8530C1]">Edit</span>
@@ -230,7 +222,7 @@ const SchoolPersonalInfomation = ({
   city,
   postCode,
   taxId,
-  open,
+  openEdit,
 }: {
   name?: string;
   phone?: string;
@@ -240,13 +232,13 @@ const SchoolPersonalInfomation = ({
   contactName?: string;
   postCode?: string;
   taxId?: string;
-  open: () => void;
+  openEdit: () => void;
 }) => {
   return (
     <div className="p-6 border border-[#8530C1]  rounded-3xl mt-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="font-bold text-[16px]">Personal Information</h1>
-        <Button onClick={open} size="sm" varient="outlined">
+        <Button onClick={openEdit} size="sm" varient="outlined">
           <p className="gap-4 flex">
             <img loading="lazy" src={EditPencil} alt="pencil" />{" "}
             <span className="text-[#8530C1]">Edit</span>
@@ -283,18 +275,18 @@ const TeacherPersonalInfomation = ({
   name,
   phone,
   email,
-  open,
+  openEdit,
 }: {
   name?: string;
   phone?: string;
   email?: string;
-  open: () => void;
+  openEdit: () => void;
 }) => {
   return (
     <div className="p-6 border border-[#8530C1]  rounded-3xl mt-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="font-bold text-[16px]">Personal Information</h1>
-        <Button onClick={open} size="sm" varient="outlined">
+        <Button onClick={openEdit} size="sm" varient="outlined">
           <p className="gap-4 flex">
             <img loading="lazy" src={EditPencil} alt="pencil" />{" "}
             <span className="text-[#8530C1]">Edit</span>
@@ -386,131 +378,143 @@ const SchCard = ({
   );
 };
 
-const EditSchPersonalInfo = () => {
+const EditParentPersonalInfomation = ({
+  name,
+  phone,
+  email,
+  country,
+  city,
+  onSave,
+}: {
+  name?: string;
+  phone?: string;
+  email?: string;
+  country?: string;
+  city?: string;
+  onSave: () => void;
+}) => {
   return (
-    <div className="px-10">
-      <h1 className="text-[24px] font-Recoleta font-bold text-center ">
-        Edit profile
-      </h1>
-      <form>
-        <div className="grid grid-cols-[1fr_250px] gap-4">
-          <p>
-            <span>Enter First Name</span>
-            <InputFormat type="text" placeholder="First Name" />
+    <div className="p-6 border border-[#8530C1]  rounded-3xl mt-8">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="font-bold text-[16px]">Personal Information</h1>
+        <Button onClick={onSave} size="sm" varient="outlined">
+          <p className="gap-4 flex">
+            <span className="text-[#8530C1]">Save</span>
           </p>
-          <p>
-            <span>Enter Last Name</span>
-            <InputFormat type="text" placeholder="Last Name" />
-          </p>
-        </div>
-        <p className="my-5">
-          <span>Enter Email address</span>
-          <InputFormat type="email" placeholder="Email" />
-        </p>
-        <div className="flex gap-4">
-          <p className=" flex-grow">
-            <label htmlFor="name">Assign to Class</label>
-            <p className="border border-[#F3DAFF] py-4 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
-              <select
-                name=""
-                id=""
-                className="w-full  h-full flex-1  focus:outline-none"
-              >
-                <option value="male">Class A</option>
-                <option value="female">Class B</option>
-              </select>
-            </p>
-          </p>
-
-          <p className=" flex-grow">
-            <label htmlFor="name">Gender</label>
-            <p className="border border-[#F3DAFF] py-4 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
-              <select
-                name=""
-                id=""
-                className="w-full  h-full flex-1  focus:outline-none"
-              >
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
-            </p>
-          </p>
-        </div>
-
-        <p className="my-5">
-          <Button>Continue</Button>
-        </p>
-      </form>
+        </Button>
+      </div>
+      <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] my-1 text-[12px] text-[#B5B5C3]">
+        <span>Name</span>
+        <span>Phone</span>
+        <span>Email</span>
+      </div>
+      <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] mb-4 text-[14px]">
+        <InputFormat type="text" value={name} />
+        <InputFormat type="text" value={phone} />
+        <InputFormat type="text" value={email} />
+      </div>
+      <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] text-[#B5B5C3] text-[12px] mt-5">
+        <span>Country</span>
+        <span>City/Sate</span>
+        <span></span>
+      </div>
+      <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] mb-5 text-[14px]">
+        <InputFormat type="text" value={country} />
+        <InputFormat type="text" value={city} />
+        <span></span>
+      </div>
     </div>
   );
 };
 
-const EditParentPersonalInfo = () => {
+const EditTeacherPersonalInfomation = ({
+  name,
+  phone,
+  email,
+  onSave,
+}: {
+  name?: string;
+  phone?: string;
+  email?: string;
+  onSave: () => void;
+}) => {
   return (
-    <div className="px-10">
-      <h1 className="text-[24px] font-Recoleta font-bold text-center ">
-        Edit profile
-      </h1>
-      <form>
-        <div className="grid grid-cols-[1fr_250px] gap-4">
-          <p>
-            <span>Enter First Name</span>
-            <InputFormat type="text" placeholder="First Name" />
+    <div className="p-6 border border-[#8530C1]  rounded-3xl mt-8">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="font-bold text-[16px]">Personal Information</h1>
+        <Button onClick={onSave} size="sm" varient="outlined">
+          <p className="gap-4 flex">
+            <img loading="lazy" src={EditPencil} alt="pencil" />{" "}
+            <span className="text-[#8530C1]">Save</span>
           </p>
-          <p>
-            <span>Enter Last Name</span>
-            <InputFormat type="text" placeholder="Last Name" />
-          </p>
-        </div>
-        <p className="my-5">
-          <span>Enter Email address</span>
-          <InputFormat type="email" placeholder="Email" />
-        </p>
-        <div className="flex gap-4">
-          <p className=" flex-grow">
-            <label htmlFor="name">Country</label>
-            <InputFormat type="text" placeholder="Country" />
-          </p>
-          <p className=" flex-grow">
-            <label htmlFor="name">City</label>
-            <InputFormat type="text" placeholder="City" />
-          </p>
-        </div>
-
-        <p className="my-5">
-          <Button>Continue</Button>
-        </p>
-      </form>
+        </Button>
+      </div>
+      <div className="grid gap-2 grid-cols-[1fr_1fr_1fr] my-1 text-[12px] text-[#B5B5C3]">
+        <span>Name</span>
+        <span>Phone</span>
+        <span>Email</span>
+      </div>
+      <div className="grid gap-2 grid-cols-[1fr_1fr_1fr] mb-4 text-[14px]">
+        <InputFormat type="text" value={name} />
+        <InputFormat type="text" value={phone} />
+        <InputFormat type="text" value={email} />
+      </div>
     </div>
   );
 };
 
-const EditTeacherPersonalInfo = () => {
+const EditSchoolPersonalInfomation = ({
+  contactName,
+  phone,
+  email,
+  country,
+  city,
+  postCode,
+  taxId,
+  onSave,
+}: {
+  name?: string;
+  phone?: string;
+  email?: string;
+  country?: string;
+  city?: string;
+  contactName?: string;
+  postCode?: string;
+  taxId?: string;
+  onSave: () => void;
+}) => {
   return (
-    <div className="px-10">
-      <h1 className="text-[24px] font-Recoleta font-bold text-center ">
-        Edit profile
-      </h1>
-      <form>
-        <div className="grid grid-cols-[1fr_250px] gap-4">
-          <p>
-            <span>Enter First Name</span>
-            <InputFormat type="text" placeholder="First Name" />
+    <div className="p-6 border border-[#8530C1]  rounded-3xl mt-8">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="font-bold text-[16px]">Personal Information</h1>
+        <Button onClick={onSave} size="sm" varient="outlined">
+          <p className="gap-4 flex">
+            <span className="text-[#8530C1]">Save</span>
           </p>
-          <p>
-            <span>Enter Last Name</span>
-            <InputFormat type="text" placeholder="Last Name" />
-          </p>
-        </div>
-        <p className="my-5">
-          <span>Enter Email address</span>
-          <InputFormat type="email" placeholder="Email" />
-        </p>
-
-        <p className="my-5">
-          <Button>Continue</Button>
-        </p>
-      </form>
+        </Button>
+      </div>
+      <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] my-1 text-[12px] text-[#B5B5C3]">
+        <span>Contact Name</span>
+        <span>Phone</span>
+        <span>Email</span>
+      </div>
+      <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] mb-4 text-[14px]">
+        <InputFormat type="text" value={contactName} />
+        <InputFormat type="text" value={phone} />
+        <InputFormat type="text" value={email} />
+      </div>
+      <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] text-[#B5B5C3] text-[12px] mt-5">
+        <span>Country</span>
+        <span>City/Sate</span>
+        <span>Post Code</span>
+        <span>Tax ID</span>
+      </div>
+      <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] mb-5 text-[14px]">
+        <InputFormat type="text" value={country} />
+        <InputFormat type="text" value={city} />
+        <InputFormat type="text" value={postCode} />
+        <InputFormat type="text" value={taxId} />
+      </div>
     </div>
   );
 };

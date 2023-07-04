@@ -111,7 +111,7 @@ const Stories1 = () => {
                 <div className="w-full bg-white rounded-3xl mt-4">
                   {
                     <CardScreen
-                      data={storiesData?.slice(1, 7).map((el) => ({ ...el }))}
+                      data={storiesData?.slice(1, 6).map((el) => ({ ...el }))}
                       card={(props: StoriesType) => (
                         <Card {...props} size={200} />
                       )}
@@ -369,23 +369,25 @@ const AudioControls = ({
 const WelDone = () => {
   const navigate = useNavigate();
   return (
-    <div className=" h-[calc(100vh-60px-8vh-80px)] flex justify-center bg-white rounded-3xl items-center">
+    <div className=" min-h-[calc(92vh-72px-8vh-34px)] h-[100%] flex-grow mt-4 flex justify-center bg-white rounded-3xl items-center">
       <div>
         <p className="flex justify-center items-center">
           <img
             loading="lazy"
             src={Congrats}
             alt="congrats"
-            className="w-[200px]"
+            className="w-[176px] h-[176px]"
           />
         </p>
         <div className="text-center">
-          <h1 className="text-[30px] font-Recoleta font-bold">Well Done!</h1>
+          <h1 className="text-[40px] font-Recoleta font-semibold">
+            Well Done!
+          </h1>
           <p className="text-[#7E7E89] text-[18px]">
             You have just finished reading Chisom’s Eco-friendly Visit.
           </p>
         </div>
-        <p className="flex flex-col gap-y-5 mt-16">
+        <p className="flex flex-col gap-y-3 mt-8">
           <button
             onClick={() => navigate("quiz")}
             className="px-16 py-3 bg-[#8530C1] text-white rounded-2xl"

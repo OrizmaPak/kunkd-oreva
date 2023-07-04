@@ -168,7 +168,12 @@ const Quiz = () => {
       )}
       {curentStep === STEP_1 && (
         <div className="flex-grow mt-5 pt-5 px-40 flex  flex-col py-5 bg-white rounded-3xl ">
-          <Progress value={progress * answers.length} size="xl" radius="xl" />
+          <Progress
+            value={progress * answers.length}
+            size="xl"
+            radius="xl"
+            color="violet"
+          />
 
           {/* Question  */}
           <Question
@@ -220,8 +225,10 @@ const Question = ({
   currentQuestion: number;
 }) => {
   return (
-    <div className=" flex justify-center items-center flex-col gap-y-4 flex-grow">
-      <h1 className="text-[20px] font-bold  text-center">{quesObject.qus}</h1>
+    <div className=" flex justify-start mt-20 items-center flex-col gap-y-4 flex-grow ">
+      <h1 className="text-[24px] font-bold  text-center mb-8">
+        {quesObject.qus}
+      </h1>
       <div className=" flex flex-col gap-6">
         {quesObject.ans.map((ans, index) => (
           <AnsButton
@@ -256,9 +263,11 @@ const AnsButton = ({
   return (
     <button
       onClick={handleSelected}
-      className={`py-3 px-20 ${
-        selected?.answer === title ? "bg-[#8530C1] text-white " : ""
-      } border border-[#8530C1] rounded-3xl`}
+      className={`py-3 px-20 w-[478px] ${
+        selected?.answer === title
+          ? "bg-[#8530C1] text-white "
+          : "text-[#8530C1]"
+      } border border-[#8530C1] rounded-2xl texx`}
     >
       {title}
     </button>

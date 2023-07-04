@@ -9,6 +9,7 @@ type Props = {
   rightIcon?: React.ReactNode;
   leftIcon?: React.ReactNode;
   reg?: UseFormRegisterReturn;
+  value?: string;
 
   errorMsg?: string;
 };
@@ -18,6 +19,7 @@ const InputFormat = ({
   rightIcon,
   leftIcon,
   reg,
+  value,
 
   errorMsg,
 }: Props) => {
@@ -33,6 +35,7 @@ const InputFormat = ({
           {...reg}
           placeholder={placeholder}
           type={type}
+          value={value}
           className="w-full  h-full flex-1  focus:outline-none"
         />
         {rightIcon ? <span>{rightIcon}</span> : null}

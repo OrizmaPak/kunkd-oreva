@@ -15,6 +15,7 @@ import ExportIcon from "@/assets/exportIcon.svg";
 import AudioBooksNav from "./AudioBooksNav";
 import { Slider } from "@mantine/core";
 import { useReducedMotion } from "@mantine/hooks";
+import { number } from "zod";
 // const data = [
 //   {
 //     id: 1,
@@ -251,6 +252,15 @@ const AudioControls = ({ audio }: { audio?: string }) => {
       audioRef.current.volume = volume;
     }
   };
+
+  // const handleVolume2 = (val): void => {
+  //   const { value } = e.target;
+  //   const volume = Number(value) / max;
+  //   if (audioRef.current) {
+  //     audioRef.current.volume = volume;
+  //   }
+  // };
+
   useEffect(() => {
     let seconds;
     console.log("effect duration", audioRef.current?.duration);
@@ -262,7 +272,6 @@ const AudioControls = ({ audio }: { audio?: string }) => {
       progressBar.current.max = seconds?.toString() || "";
     }
   }, [audioRef?.current?.onloadedmetadata, audioRef?.current?.readyState]);
-  // const { story_type, id } = useParams();
 
   const calculateTime = (secs: number) => {
     const minutes = Math.floor(secs / 60);
@@ -272,40 +281,10 @@ const AudioControls = ({ audio }: { audio?: string }) => {
     const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
     return `${returnedMinutes}: ${returnedSeconds}`;
   };
-  // const changeRage = () => {
-  //   if (audioRef?.current?.currentTime && progressBar.current) {
-  //     audioRef.current.currentTime = Number(progressBar.current.value);
-  //   }
-  //   if (progressBar.current) {
-  //     setCurrentTTime(+progressBar?.current?.value);
-  //     console.log(currentTTime);
-  //   }
-  // };
-  //   const navigate = useNavigate();
 
-  //   console.log("current time", calculateTime(currentTTime));
-  //   console.log("duration", duration);
-  // console.log("duration", duration);
   console.log("actual currentTime", currentTTime);
-  // console.log(
-  //   "calculated duration ",
-  //   Math.floor((currentTTime * 100) / duration),
-  //   "calc current time",
-  //   currentTTime
-  // );
-  // const handleSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   const value = event.target.value;
-  //   event.target.style.background = `linear-gradient(to right, #82CFD0 0%, #82CFD0 ${value}%, #fff ${value}%, white 100%)`;
-  // };
-  // const timeMax = Number(calculateTime(duration));
-  // console.log(`max: ${timeMax}`, duration);
 
   const reducedMotion = useReducedMotion();
-
-  // const handleTimeUpdate = (e ) => {
-  //   setCurrentTTime(e.target.currentTime);
-  //   setDuration(e.target.duration);
-  // };
 
   const handleSliderChange = (value: number) => {
     console.log("new current time", value);
@@ -313,7 +292,16 @@ const AudioControls = ({ audio }: { audio?: string }) => {
     if (audioRef.current) {
       audioRef.current.currentTime = value;
     }
-    // Use the `value` for seeking to a specific time in the audio
+  };
+
+  const [volume, setVolume] = React.useState(50);
+
+  const handleVolumeChange = (value: number) => {
+    setVolume(value);
+    const volume = Number(value) / max;
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
   };
   return (
     <div className="mt-10">
@@ -331,7 +319,7 @@ const AudioControls = ({ audio }: { audio?: string }) => {
 
         <p className="w-full flex-grow">
           <Slider
-            color=":#8530C1"
+            color="violet"
             // backgroundColor=""
             value={currentTTime}
             onChange={handleSliderChange}
@@ -380,9 +368,14 @@ const AudioControls = ({ audio }: { audio?: string }) => {
           ref={audioRef}
           src={audio}
         ></audio>
-        <div className="flex justify-end rounded-full gap-10 px-20 py-4 bg-[#FBECFF] items-center ">
+        <div className="flex h-[72px] justify-end rounded-full gap-10 px-20 py-4 bg-[#FBECFF] items-center ">
           <button onClick={handeSkip10("backward")}>
-            <img loading="lazy" src={FastBackward} alt="backward" />
+            <img
+              loading="lazy"
+              src={FastBackward}
+              alt="backward"
+              className="w-[50px] h-[50px]"
+            />
           </button>
           <button onClick={handlePlayControl}>
             <img
@@ -392,7 +385,12 @@ const AudioControls = ({ audio }: { audio?: string }) => {
             />
           </button>
           <button onClick={handeSkip10("forward")}>
-            <img loading="lazy" src={FastForward} alt="forward" />
+            <img
+              loading="lazy"
+              src={FastForward}
+              alt="forward"
+              className="w-[50px] h-[50px]"
+            />
           </button>
         </div>
       </div>
@@ -403,14 +401,29 @@ const AudioControls = ({ audio }: { audio?: string }) => {
           alt="volume"
           className="w-[20px]"
         />
-        <input
+        {/* <input
           type="range"
           className="mr-2   text-[#8530C1] bg-[#8530C1] w-[100px]"
           min={0}
           max={max}
           id="input"
           onChange={(e) => handleVolume(e)}
-        />
+        /> */}
+        <p className="w-[100px]">
+          <Slider
+            color="violet"
+            // backgroundColor=""
+            value={volume}
+            onChange={handleVolumeChange}
+            min={0}
+            max={max}
+            // step={0.1}
+            // label={`Duration: ${calculateTime(currentTTime)}`}
+            disabled={reducedMotion}
+            // onLoadedMetadata={handleTimeUpdate}
+            // onTimeUpdate={handleTimeUpdate}
+          />
+        </p>
       </div>
       <style>
         {`
