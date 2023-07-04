@@ -17,14 +17,14 @@ const ParentHomePage = () => {
           <Hero userimage={userImage} username="Kunle" />
 
           <CardScreen
-            data={data?.slice(1, 7).map((el) => ({ ...el }))}
+            data={data?.slice(1, 6).map((el) => ({ ...el }))}
             header="New & Trending"
             actiontitle="View all"
             isTitled={false}
             card={(props: DataType) => <Card {...props} />}
           />
           <CardScreen
-            data={data?.slice(1, 7).map((el) => ({ ...el }))}
+            data={data?.slice(1, 6).map((el) => ({ ...el }))}
             card={(props: DataType) => <Card {...props} />}
             header="Books In Our Library"
             actiontitle="View Categories"
@@ -32,7 +32,7 @@ const ParentHomePage = () => {
           />
           <AdsButton />
           <CardScreen
-            data={data?.slice(1, 7).map((el) => ({ ...el, title: "" }))}
+            data={data?.slice(1, 6).map((el) => ({ ...el, title: "" }))}
             header="Recommended For You"
             isTitled={false}
             card={(props: DataType) => <Card {...props} />}

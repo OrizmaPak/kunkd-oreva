@@ -20,10 +20,6 @@ const signinDashboardData = [
     title: "Make Payment",
     body: "Enter your payment details",
   },
-  {
-    title: "Add Child/Children",
-    body: "Add your children to manage their account",
-  },
 ];
 const ParentSignupLayout = ({
   children,

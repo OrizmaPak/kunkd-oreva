@@ -13,8 +13,8 @@ import VolumeIcon from "@/assets/volumeIcon.svg";
 
 import ExportIcon from "@/assets/exportIcon.svg";
 import AudioBooksNav from "./AudioBooksNav";
-// import { Slider } from "@mantine/core";
-// import { useReducedMotion } from "@mantine/hooks";
+import { Slider } from "@mantine/core";
+import { useReducedMotion } from "@mantine/hooks";
 // const data = [
 //   {
 //     id: 1,
@@ -104,7 +104,7 @@ const BookLayout = () => {
               <div className="w-full bg-white rounded-3xl mt-4">
                 {
                   <CardScreen
-                    data={audioBooksData?.slice(1, 7).map((el) => ({ ...el }))}
+                    data={audioBooksData?.slice(1, 6).map((el) => ({ ...el }))}
                     card={(props: StoriesType) => <Card {...props} />}
                     header="Trending"
                     actiontitle="View all"
@@ -198,7 +198,7 @@ const ReadPage = ({ story }: { story: StoriesType }) => {
               <img loading="lazy" src={ExportIcon} alt="" />
             </span>
           </p>
-          <p className=" leading-10 text-[22px]">{story.content}</p>
+          <p className=" leading-[60px] text-[22px]">{story.content}</p>
         </div>
       </div>
     </div>
@@ -272,27 +272,27 @@ const AudioControls = ({ audio }: { audio?: string }) => {
     const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
     return `${returnedMinutes}: ${returnedSeconds}`;
   };
-  const changeRage = () => {
-    if (audioRef?.current?.currentTime && progressBar.current) {
-      audioRef.current.currentTime = Number(progressBar.current.value);
-    }
-    if (progressBar.current) {
-      setCurrentTTime(+progressBar?.current?.value);
-      console.log(currentTTime);
-    }
-  };
+  // const changeRage = () => {
+  //   if (audioRef?.current?.currentTime && progressBar.current) {
+  //     audioRef.current.currentTime = Number(progressBar.current.value);
+  //   }
+  //   if (progressBar.current) {
+  //     setCurrentTTime(+progressBar?.current?.value);
+  //     console.log(currentTTime);
+  //   }
+  // };
   //   const navigate = useNavigate();
 
   //   console.log("current time", calculateTime(currentTTime));
   //   console.log("duration", duration);
-  console.log("duration", duration);
+  // console.log("duration", duration);
   console.log("actual currentTime", currentTTime);
-  console.log(
-    "calculated duration ",
-    Math.floor((currentTTime * 100) / duration),
-    "calc current time",
-    currentTTime
-  );
+  // console.log(
+  //   "calculated duration ",
+  //   Math.floor((currentTTime * 100) / duration),
+  //   "calc current time",
+  //   currentTTime
+  // );
   // const handleSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
   //   const value = event.target.value;
   //   event.target.style.background = `linear-gradient(to right, #82CFD0 0%, #82CFD0 ${value}%, #fff ${value}%, white 100%)`;
@@ -300,23 +300,26 @@ const AudioControls = ({ audio }: { audio?: string }) => {
   // const timeMax = Number(calculateTime(duration));
   // console.log(`max: ${timeMax}`, duration);
 
-  // const reducedMotion = useReducedMotion();
+  const reducedMotion = useReducedMotion();
 
-  // const handleTimeUpdate = (e) => {
+  // const handleTimeUpdate = (e ) => {
   //   setCurrentTTime(e.target.currentTime);
   //   setDuration(e.target.duration);
   // };
 
-  // const handleSliderChange = (value: number) => {
-  //   console.log("new current time", value);
-  //   setCurrentTTime(value);
-  //   // Use the `value` for seeking to a specific time in the audio
-  // };
+  const handleSliderChange = (value: number) => {
+    console.log("new current time", value);
+    setCurrentTTime(value);
+    if (audioRef.current) {
+      audioRef.current.currentTime = value;
+    }
+    // Use the `value` for seeking to a specific time in the audio
+  };
   return (
     <div className="mt-10">
-      <div className="my-10 flex">
+      <div className="my-10 flex justify-center items-center gap-2">
         <p className=" flex-grow w-20">{calculateTime(currentTTime)}</p>
-        <input
+        {/* <input
           type="range"
           className="mr-2   text-[#8530C1] bg-[#8530C1]  flex-grow w-full slider"
           ref={progressBar}
@@ -324,20 +327,12 @@ const AudioControls = ({ audio }: { audio?: string }) => {
           onChange={changeRage}
           id="input-range1"
           defaultValue={0}
-        />
+        /> */}
 
-        <p className="w-[100px]">
-          {/* <Slider
-            value={currentTTime}
-            ref={progressBar}
-            // onChange={changeRage}
-            label={null}
-            defaultValue={20}
-            min={0}
-            scale={(val) => currentTTime + val}
-            max={Number(timeMax)}
-          /> */}
-          {/* <Slider
+        <p className="w-full flex-grow">
+          <Slider
+            color=":#8530C1"
+            // backgroundColor=""
             value={currentTTime}
             onChange={handleSliderChange}
             min={0}
@@ -345,9 +340,26 @@ const AudioControls = ({ audio }: { audio?: string }) => {
             step={0.1}
             label={`Duration: ${calculateTime(currentTTime)}`}
             disabled={reducedMotion}
-            onLoadedMetadata={handleTimeUpdate}
-            onTimeUpdate={handleTimeUpdate}
-          /> */}
+            // onLoadedMetadata={handleTimeUpdate}
+            // onTimeUpdate={handleTimeUpdate}
+          />
+          <style>
+            {`
+            .mantine-157yjkz{
+              background-color:#8530C1 !important;
+            }
+            .mantine-ejm21a{
+              border-color:white !important;
+              background-color:#8530C1 !important;
+              padding:5px !important;
+              box-shadow: 0 0 5px 0 #8530C1 !important;
+            }
+            .mantine-11g3ikq {
+              background-color:#8530C1 !important;
+
+            }
+            `}
+          </style>
         </p>
 
         <p className="flex-grow w-20">

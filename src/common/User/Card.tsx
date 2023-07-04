@@ -25,7 +25,7 @@ const Card = ({ title, image, size, id, clickable }: CardProps) => {
   return (
     <div
       onClick={goto}
-      className="w-[200px]"
+      className="w-[200px] z-[1]"
       style={{ width: `${size ? size : ""}px` }}
     >
       <Skeleton visible={isLoading}>
@@ -39,7 +39,9 @@ const Card = ({ title, image, size, id, clickable }: CardProps) => {
         </span>
       </Skeleton>
       {title ? (
-        <p className="mt-[10px] font-bold font-Hanken">{title}</p>
+        <p className="mt-[10px] text-[20px] font-Hanken font-semibold ">
+          {title}
+        </p>
       ) : null}
     </div>
   );

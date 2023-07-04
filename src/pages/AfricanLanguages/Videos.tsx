@@ -6,15 +6,14 @@ import Card from "@/common/User/Card";
 const Videos = () => {
   const { lan_type } = useParams();
   return (
-    <div className="bg-[#fff7fd]">
-      <AfricanLanguagesNav
-        category="Africanlanguages"
-        lanType={lan_type?.toUpperCase()}
-      />
+    <div className="bg-[#fff7fd] ">
+      <AfricanLanguagesNav category="Africanlanguages" lanType={lan_type} />
 
       <div className="mt-5 bg-white p-5 pt-20 rounded-3xl">
-        <h1 className="text-[25px] font-bold font-Recoleta text-center">
-          Learn {lan_type?.toUpperCase()} - with videos created for you
+        <h1 className="text-[32px] font-semibold font-Recoleta text-center">
+          Learn{" "}
+          {lan_type && lan_type?.charAt(0).toUpperCase() + lan_type.slice(1)} -
+          with videos created for you
         </h1>
         <p className="text-center text-[#B5B5C3] text-[18px] my-5">
           Learning a new language is so important...

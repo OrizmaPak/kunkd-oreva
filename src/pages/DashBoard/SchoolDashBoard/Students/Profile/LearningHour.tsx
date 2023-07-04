@@ -29,6 +29,7 @@ export const options = {
       text: "Learning Hours",
     },
   },
+  barThickness: 10,
 };
 
 const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];

@@ -233,7 +233,7 @@ const Question = ({
   return (
     <div className=" mt-8 flex justify-center  items-center flex-col gap-y-8 flex-grow">
       <h1 className="text-[20px] font-bold   text-center">{quesObject.qus}</h1>
-      <div className="grid grid-cols-2  pb-5 gap-5 gap-x-15 flex-grow">
+      <div className="grid grid-cols-2  content-center pb-5 gap-5 gap-x-15 flex-grow">
         {quesObject.ans.map((ans, index) => (
           <AnsButton
             key={index}
@@ -270,11 +270,13 @@ const AnsButton = ({
   return (
     <button
       onClick={handleSelected}
-      className={`p-1  ${
-        selected?.answer === name ? "bg-[#8530C1] text-white " : ""
-      } border border-[#8530C1] rounded-3xl`}
+      className={`p-1   rounded-3xl  ${
+        selected?.answer === name
+          ? "border-[#8530C1] border-4 "
+          : "border-[#FBECFF] border-2"
+      }`}
     >
-      <img loading="lazy" src={image} alt="ans" className="w-[150px]" />
+      <img loading="lazy" src={image} alt="ans" className="w-[130px]" />
     </button>
   );
 };
@@ -293,7 +295,7 @@ const QuestionPagination = ({
   setShowRemark: () => void;
 }) => {
   return (
-    <div>
+    <div className="mb-4">
       <hr className="mb-5" />
       <div className="flex justify-between items-center">
         <button

@@ -19,8 +19,8 @@ const Chart = () => {
               className="w-[50%]"
             />
             <p className="flex flex-col my-2">
-              <span className="text-start font-bold text-[20px]">36</span>
-              <span>Stories & Quiz</span>
+              <span className="text-start  text-[24px] font-semibold">36</span>
+              <span className="text-[#B5B5C3] text-[14px]">Stories & Quiz</span>
             </p>
           </button>
           <button className="p-4 flex px-6 gap-4 flex-col  border-2 border-[#FBECFF] rounded-3xl  w-[200px] my-4">
@@ -31,8 +31,8 @@ const Chart = () => {
               className="w-[50%]"
             />
             <p className="flex flex-col my-2">
-              <span className=" text-start font-bold text-[20px]">42</span>
-              <span>Audiobooks</span>
+              <span className=" text-start text-[24px] font-semibold">42</span>
+              <span className="text-[#B5B5C3] text-[14px]">Audiobooks</span>
             </p>
           </button>
           <button className="p-4 px-6 flex flex-col gap-4  border-2 border-[#FBECFF] rounded-3xl w-[200px] my-4">
@@ -43,8 +43,8 @@ const Chart = () => {
               className="w-[50%]"
             />
             <p className="flex flex-col my-2">
-              <span className="text-start font-bold text-[20px]">71</span>
-              <span>Videos</span>
+              <span className="text-start  text-[24px] font-semibold">71</span>
+              <span className="text-[#B5B5C3] text-[14px]">Videos</span>
             </p>
           </button>
         </div>

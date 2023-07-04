@@ -24,7 +24,7 @@ const ProgressReport = () => {
         <InnerWrapper>
           <div className="min-h-[calc(100vh-80px-8vh)]">
             <div className="flex justify-between items-center py-10 px-20">
-              <h1 className="font-bold font-Recoleta text-[30px]">
+              <h1 className="font-semibold font-Recoleta text-[32px]">
                 Progress Report
               </h1>
               <span>

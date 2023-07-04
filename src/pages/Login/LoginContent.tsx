@@ -93,7 +93,7 @@ const LoginContent = () => {
   };
 
   return (
-    <div className="w-[100%] max-w-[500px] mx-auto relative">
+    <div className="w-[100%] max-w-[500px] mx-auto absolute left-0 right-0 bottom-0 top-0 my-auto flex justify-end items-center ">
       <Modal
         radius={"xl"}
         size="lg"
@@ -120,11 +120,11 @@ const LoginContent = () => {
       </Modal>
 
       <Link to="/">
-        <span className="absolute">
+        <span className="absolute top-[40px] ">
           <img loading="lazy" src={Cancel} alt="cancel" />
         </span>
       </Link>
-      <div className="w-[100%] pt-20">
+      <div className="w-[100%]">
         <span></span>
         <h1 className="font-bold fon text-[40px] font-Recoleta">
           Welcome back
