@@ -18,7 +18,7 @@ const WaveCard = ({ children }: Props) => {
         loading="lazy"
         src={Ellipse3}
         alt=""
-        className="absolute left-0  top-[-20%]"
+        className="absolute left-[-200px] rotate-360 top-[-20%]"
       />
       <div
         className="bg-cover bg-center  w-full h-52   matt  "

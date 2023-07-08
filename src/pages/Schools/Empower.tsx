@@ -1,4 +1,7 @@
 import Pupils from "@/assets/pupils.svg";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import PupilsBlur from "@/assets/pupilsblur.jpg";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const Empower = () => {
   return (
@@ -15,7 +18,13 @@ const Empower = () => {
           reading.
         </p>
         <div className="mt-8">
-          <img loading="lazy" src={Pupils} alt="pupils" />
+          <LazyLoadImage
+            src={Pupils}
+            placeholderSrc={PupilsBlur}
+            effect="blur"
+            width={1075.79}
+            height={605.13}
+          />
         </div>
       </div>
     </div>

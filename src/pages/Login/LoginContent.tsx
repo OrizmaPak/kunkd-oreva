@@ -19,6 +19,7 @@ import { useState } from "react";
 import StudentLoginModal from "./StudentLoginModal";
 import TeacherLoginModal, { CongratulationsModal } from "./TeacherLoginModal";
 import { userContext } from "@/Context/StateProvider";
+import { googleSignIn, facebookSignIn } from "@/auth/sdk";
 
 const users = [
   {
@@ -179,7 +180,7 @@ const LoginContent = () => {
           <span>or continue with</span> <hr className="flex-1" />
         </p>
         <div className="flex gap-8">
-          <Button size="full" varient="outlined">
+          <Button size="full" onClick={googleSignIn} varient="outlined">
             <img
               loading="lazy"
               src={Google}
@@ -190,7 +191,7 @@ const LoginContent = () => {
           <Button size="full" varient="outlined">
             <img loading="lazy" src={Apple} alt="apple" className="mx-auto " />
           </Button>
-          <Button size="full" varient="outlined">
+          <Button onClick={facebookSignIn} size="full" varient="outlined">
             <img
               loading="lazy"
               src={Facebook}

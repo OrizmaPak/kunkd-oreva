@@ -3,6 +3,9 @@ import group from "@/assets/Group 425.svg";
 import Book from "@/assets/Book Icon.svg";
 import Music from "@/assets/Audio Icon.svg";
 import Arrow from "@/assets/arrow.svg";
+import GroupBlur from "@/assets/groupblur.jpg";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const HeroContent = () => {
   return (
@@ -11,14 +14,14 @@ const HeroContent = () => {
         <p className="font-bold text-[36px] text-[#8530C1]  font-Recoleta">
           Introducing Kunda Kids
         </p>
-        <h1 className="text-[62px] font-bold font-Recoleta ">
+        <h1 className="text-[62px] font-bold font-Recoleta leading-[70px] ">
           Empowering Africa's <br /> Reading Leaders
         </h1>
         <div className="max-w-[400px] flex mb-10 mt-10">
           <span className="mr-4 ">
             <img loading="lazy" src={Arrow} alt="" className="w-20 pt-2 " />
           </span>
-          <p className="text-[18px] font-Hanken leading-8">
+          <p className="text-[18px] font-Hanken leading-[31px]">
             Unlock the power of literacy with Kunda Kids, the revolutionary
             platform dedicated to raising reading leaders across Africa{" "}
           </p>
@@ -26,10 +29,13 @@ const HeroContent = () => {
         <Button size="md">Create free account</Button>
       </div>
       <div>
-        <img
+        <LazyLoadImage
           src={group}
-          alt=""
-          className="absolute bottom-0  right-72 top-32 z-50"
+          placeholderSrc={GroupBlur}
+          effect="blur"
+          wrapperClassName="absolute bottom-0  right-72 top-32 z-50"
+          width={300}
+          height={400}
         />
         <img
           src={Book}

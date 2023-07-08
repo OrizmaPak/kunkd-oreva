@@ -28,7 +28,7 @@ const Card = ({ title, image, size, id, clickable }: CardProps) => {
       className="w-[200px] z-[1]"
       style={{ width: `${size ? size : ""}px` }}
     >
-      <Skeleton visible={isLoading}>
+      <Skeleton h={200} width={200} visible={isLoading}>
         <span>
           <img
             src={image}

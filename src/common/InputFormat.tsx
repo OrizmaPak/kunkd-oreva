@@ -35,7 +35,7 @@ const InputFormat = ({
           {...reg}
           placeholder={placeholder}
           type={type}
-          value={value}
+          defaultValue={value}
           className="w-full  h-full flex-1  focus:outline-none"
         />
         {rightIcon ? <span>{rightIcon}</span> : null}
