@@ -3,7 +3,6 @@ import {
   signInWithPopup,
   FacebookAuthProvider,
   signOut,
-  signInWithRedirect,
 } from "firebase/auth";
 import { auth } from "../firebase";
 

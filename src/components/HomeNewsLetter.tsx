@@ -1,5 +1,3 @@
-import Button from "./Button";
-
 const HomeNewsLetter = () => {
   return (
     <div className="h-[358px] pt-10 bg-[#8530C1]">

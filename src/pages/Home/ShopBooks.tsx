@@ -3,7 +3,7 @@ import client1 from "@/assets/client.svg";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { BsChevronRight, BsChevronLeft } from "react-icons/bs";
 import BigCart from "@/assets/Afam-04 1.svg";
 import BigCartBlur from "@/assets/afamblur.jpg";

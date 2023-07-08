@@ -23,7 +23,7 @@ const HeroContentContent = () => {
             <p className="  font-Hanken leading-[30px]">
               Embark on a reading adventure with Kunda Kids and empower your
               child's literacy journey. Join us today and unlock the boundless
-              possiblities of literacy{" "}
+              possiblities of literacy
             </p>
           </div>
           <Button size="md">Create free account</Button>

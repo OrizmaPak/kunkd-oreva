@@ -1,5 +1,5 @@
 import ParentSignupLayout from "@/common/ParentSignupLayout";
-import MomthPackage from "@/pages/ChoosePlan/ChoosePlanContent";
+import MonthPackage from "@/pages/ChoosePlan/ChoosePlanContent";
 import Cancel from "@/assets/Cancel.svg";
 import { Link } from "react-router-dom";
 
@@ -47,7 +47,7 @@ const ChoosePlan = () => {
               </button>
             </div>
           </div> */}
-          <MomthPackage />
+          <MonthPackage />
         </div>
       </ParentSignupLayout>
     </>
