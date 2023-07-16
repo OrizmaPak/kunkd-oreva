@@ -7,9 +7,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { z, ZodType } from "zod";
-
+import { useForgotPassword } from "@/api/queries";
+import { Loader } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { getApiErrorMessage } from "@/api/helper";
 const ForgotPasswordContent = () => {
   const navigate = useNavigate();
+  const { isLoading, mutate } = useForgotPassword();
+
   const schema: ZodType<FormData> = z.object({
     email: z.string().email(),
   });
@@ -22,7 +27,28 @@ const ForgotPasswordContent = () => {
 
   const submitData = (data: FormData) => {
     console.log("It is working", data);
-    navigate("/resetpassword");
+    mutate(
+      { ...data },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+
+          navigate("/resetpassword");
+        },
+
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
   };
 
   return (
@@ -32,9 +58,9 @@ const ForgotPasswordContent = () => {
           <img loading="lazy" src={Cancel} alt="cancel" />
         </span>
       </Link>
-      <div className="w-[100%]  my-auto ">
+      <div className="w-[90%]  mx-auto my-auto ">
         <span></span>
-        <h1 className="font-bold text-[50px] font-Recoleta mb-2">
+        <h1 className="font-bold text-[40px] font-Recoleta mb-2">
           Forgot password?
         </h1>
         <p className="text-[15px] text-[#A7A7A7] font-Hanken">
@@ -50,11 +76,15 @@ const ForgotPasswordContent = () => {
             leftIcon={<img loading="lazy" src={EmailLogo} alt="email icon" />}
           />
           <p className="mt-10">
-            {/* <Link to="/resetpassword"> */}
             <Button type="submit" size="full">
-              Get verification code
+              {isLoading ? (
+                <p className="flex justify-center items-center">
+                  <Loader color="white" size="sm" />
+                </p>
+              ) : (
+                <span>Create free account</span>
+              )}
             </Button>
-            {/* </Link> */}
           </p>
         </form>
         <p className="mt-2 text-center text-[] text-gray-400 ">

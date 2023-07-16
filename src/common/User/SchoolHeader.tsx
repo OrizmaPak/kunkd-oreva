@@ -14,6 +14,9 @@ import Avatar2 from "@/assets/Avatar2.svg";
 import UserIcon2 from "@/assets/userIcon2.svg";
 import KundaLogo from "@/assets/schoolIcon.svg";
 import Blxst from "@/assets/Blxst.svg";
+import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
+import { getProfileState } from "@/store/profileStore";
 
 const notificationData = [
   {
@@ -31,16 +34,28 @@ const notificationData = [
 const SchoolHeader = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
+  const [user] = useStore(getUserState);
+  const [profile] = useStore(getProfileState);
+  console.log("______user______", user);
 
   const [{ userType }] = userContext();
   const handleDashboard = () => {
     console.log("usertype", userType);
-    if (userType === "teacher") {
+    if (user?.role === "teacher") {
       navigate("../teacherdashboard");
     }
-    if (userType === "school") {
+    if (user?.role === "schoolAdmin") {
       open();
     }
+  };
+  const handLogOut = () => {
+    navigate("/");
+    localStorage.clear();
+  };
+
+  const handleChangeProfile = (id: number) => {
+    localStorage.setItem("profileId", JSON.stringify(id));
+    window.location.reload();
   };
   return (
     <div className="bg-white w-full fixed top-0 h-[8vh] z-50">
@@ -82,7 +97,7 @@ const SchoolHeader = () => {
           <div className="flex gap-8">
             <NavLink
               to={
-                userType === "parent"
+                user?.role === "parent"
                   ? "parenthomepage"
                   : "/newlyregistereduser"
               }
@@ -187,7 +202,7 @@ const SchoolHeader = () => {
             </Menu.Dropdown>
           </Menu>
 
-          {userType === "parent" ? (
+          {user?.role === "parent" ? (
             <Menu>
               <Menu.Target>
                 <div className="flex justify-center items-center gap-5  px-10 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
@@ -209,7 +224,17 @@ const SchoolHeader = () => {
               </Menu.Target>
               <Menu.Dropdown>
                 <div className="flex flex-col py-2 px-1">
-                  <Menu.Item>
+                  {profile.map((profile, index) => (
+                    <Menu.Item>
+                      <button
+                        onClick={() => handleChangeProfile(profile.id)}
+                        key={index}
+                      >
+                        {profile.name}
+                      </button>
+                    </Menu.Item>
+                  ))}
+                  {/* <Menu.Item>
                     <button className="p-2 px-4 flex gap-2  items-center hover:cursor-pointer  hover:text-[#8530C1]">
                       <img
                         loading="lazy"
@@ -219,8 +244,8 @@ const SchoolHeader = () => {
                       />
                       <span>Jake</span>
                     </button>
-                  </Menu.Item>
-                  <Menu.Item>
+                  </Menu.Item> */}
+                  {/* <Menu.Item>
                     <button className="p-2 px-4 flex gap-2  items-center  hover:cursor-pointer  hover:text-[#8530C1]">
                       <img
                         loading="lazy"
@@ -230,7 +255,7 @@ const SchoolHeader = () => {
                       />
                       <span>Mabel</span>
                     </button>
-                  </Menu.Item>
+                  </Menu.Item> */}
                   <Menu.Item>
                     <button
                       onClick={() => navigate("/account")}
@@ -243,7 +268,7 @@ const SchoolHeader = () => {
                   <hr />
                   <Menu.Item>
                     <button
-                      onClick={() => navigate("/")}
+                      onClick={handLogOut}
                       className="p-2 px-4  hover:cursor-pointer  text-red-500"
                     >
                       Sign out of Kunda kids
@@ -293,7 +318,7 @@ const SchoolHeader = () => {
                   </Menu.Item>
                   <Menu.Item>
                     <button
-                      onClick={() => navigate("/")}
+                      onClick={handLogOut}
                       className="p-2 px-14  hover:cursor-pointer  text-red-500"
                     >
                       Sign out of Kunda kids

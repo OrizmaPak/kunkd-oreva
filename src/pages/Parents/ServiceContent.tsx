@@ -10,8 +10,8 @@ import MacBok from "@/assets/MacBook1.svg";
 import MacBookBlur from "@/assets/MacBook1blur.jpg";
 import LadyBgBlur from "@/assets/ladybgBlur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import PupilsBlur from "@/assets/pupilsblur.jpg";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import PupilsBlur from "@/assets/pupilsblur.jpg";
 
 const Serviceontent = () => {
   const servicesData: CardTypes[] = [

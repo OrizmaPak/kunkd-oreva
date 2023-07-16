@@ -1,11 +1,20 @@
-import Avatar1 from "@/assets/Avatar1.svg";
-import Avatar2 from "@/assets/Avatar2.svg";
-
 import { useNavigate } from "react-router-dom";
 import GroupIcon from "@/assets/groupIcons.svg";
+import { useGetProfile } from "@/api/queries";
+import useStore from "@/store/index";
+import { getProfileState } from "@/store/profileStore";
+
+export type selectAvatarType = {
+  name: string;
+  image: string;
+  id: number;
+};
 
 const SelectProfile = () => {
-  const navigate = useNavigate();
+  const [profiles] = useStore(getProfileState);
+
+  const { isLoading } = useGetProfile();
+
   return (
     <>
       <div
@@ -23,25 +32,13 @@ const SelectProfile = () => {
             <p className=" font-Hanken">Select which kid is learning now </p>
           </div>
           <div className="flex text-white text-center gap-10 justify-center items-center bg-transparent">
-            <p>
-              <img
-                onClick={() => navigate("/parenthomepage")}
-                src={Avatar1}
-                alt="avatar"
-                className=" cursor-pointer"
-              />
-              <span className="text-black">Ema</span>
-            </p>
-
-            <p>
-              <img
-                onClick={() => navigate("/parenthomepage")}
-                src={Avatar2}
-                alt="avatar"
-                className=" cursor-pointer"
-              />
-              <span className="text-black">Mabel</span>
-            </p>
+            {!isLoading ? (
+              profiles?.map((avatar, index) => (
+                <AvatarCard key={index} {...avatar} isLoading={isLoading} />
+              ))
+            ) : (
+              <span>Loading</span>
+            )}
           </div>
         </div>
       </div>
@@ -50,3 +47,40 @@ const SelectProfile = () => {
 };
 
 export default SelectProfile;
+
+const AvatarCard = ({
+  image,
+  name,
+  id,
+  isLoading,
+}: {
+  image: string;
+  name: string;
+  id: number;
+  isLoading: boolean;
+  setSelected?: (val: string) => void;
+}) => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    image = "";
+    localStorage.setItem("profileId", JSON.stringify(id));
+    navigate("/parenthomepage");
+  };
+  return (
+    <div>
+      {isLoading ? (
+        <span>Loading </span>
+      ) : (
+        <button onClick={handleClick}>
+          <img
+            loading="lazy"
+            src={image}
+            alt="avatar"
+            className="w-[100px] h-[100px] object-cover "
+          />
+          <p className="text-black font-normal text-[20px]  mt-4 ">{name}</p>
+        </button>
+      )}
+    </div>
+  );
+};

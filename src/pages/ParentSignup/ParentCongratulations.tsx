@@ -20,7 +20,9 @@ const ParentCongratulations = ({}: { onSubmit: () => void }) => {
               Your profile has been created
             </p>
             <Link to="/secureaccount">
-              <Button size="full">Secure account</Button>
+              <Button color="white" size="full">
+                Secure account
+              </Button>
             </Link>
           </div>
         </div>

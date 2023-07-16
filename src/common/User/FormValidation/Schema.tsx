@@ -1,14 +1,24 @@
 export type FormData = {
   name?: string;
-  lastName?: string;
+  lastname?: string;
+  firstname?: string;
   email?: string;
   password?: string;
-  schoolName?: string;
+  school_name?: string;
+  school_address?: string;
   address?: string;
   contactName?: string;
   pin?: string;
+  otp?: string;
   confirmPassword?: string;
   fullName?: string;
   schoolCode?: string;
   selectSchool?: string;
+  dob?: string;
+  current_password?: string;
+  new_password?: string;
+  gender?: string;
+  teacher?: string;
+  class?: string;
+  file?: string;
 };

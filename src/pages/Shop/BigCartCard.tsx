@@ -1,14 +1,25 @@
 import BigCart from "@/assets/bigcart.svg";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import AfamBur from "@/assets/afamblur.jpg";
 const BigCartCard = () => {
   return (
-    <div className="h-[605px] p-14 w-[1165px] bg-[#447ADC] rounded-[70px] mb-[200px] ">
-      <div className="flex gap-10 ">
+    <div className="h-[605px] p-14 w-[1165px] bg-[#447ADC] rounded-[70px] mb-[200px] flex justify-end  items-centers ">
+      <div className="flex gap-10 items-center ">
         <div className="basis-1/2">
-          <img
+          {/* <img
             loading="lazy"
             src={BigCart}
             alt="b=cart card"
             className="w-[900px]"
+          /> */}
+          <LazyLoadImage
+            src={BigCart}
+            placeholderSrc={AfamBur}
+            effect="blur"
+            wrapperClassName=""
+            width={467}
+            height={467}
           />
         </div>
         <div className="basis-1/2 text-white">

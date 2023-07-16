@@ -7,12 +7,14 @@ import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
 import DeleteAccount from "./DeleteAccount";
 import { userContext } from "@/Context/StateProvider";
+import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
 
 const baseUrl = "/account";
 
 const links = [
   {
-    name: "profile",
+    name: "Profile",
     route: baseUrl,
     href: "",
     isSchool: true,
@@ -21,13 +23,13 @@ const links = [
   },
 
   {
-    name: "My kids",
+    name: "My Kids",
     route: baseUrl + "/mykids",
     href: "mykids",
     isParent: true,
   },
   {
-    name: "subscription plan",
+    name: "Subscription Plan",
     route: baseUrl + "/subscriptionplan",
     href: "subscriptionplan",
     isParent: true,
@@ -52,6 +54,7 @@ const SettingsLayout = () => {
   const [{ userType }] = userContext();
   const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
+  const [user, ,] = useStore(getUserState);
   return (
     <Wrapper bgColor="#FFF7FD">
       <InnerWrapper>
@@ -77,10 +80,10 @@ const SettingsLayout = () => {
               >
                 {links &&
                   links.map((link, index) => {
-                    if (userType === "teacher" && !link.isTeacher) {
+                    if (user?.role === "teacher" && !link.isTeacher) {
                       return null;
                     }
-                    if (userType === "school" && !link.isSchool) {
+                    if (user?.role === "schoolAdmin" && !link.isSchool) {
                       return null;
                     }
 

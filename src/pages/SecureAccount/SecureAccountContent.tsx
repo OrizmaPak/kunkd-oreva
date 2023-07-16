@@ -8,9 +8,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { z, ZodType } from "zod";
+import { useSetPassword } from "@/api/queries";
+import { notifications } from "@mantine/notifications";
+import { Loader } from "@mantine/core";
+import { getApiErrorMessage } from "@/api/helper";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
 
 const SecureAccountContent = () => {
   const navigate = useNavigate();
+  const [user] = useStore(getUserState);
+  const { isLoading, mutate } = useSetPassword();
+
   const schema: ZodType<FormData> = z
     .object({
       password: z
@@ -36,7 +45,27 @@ const SecureAccountContent = () => {
   const submitData = (data: FormData) => {
     console.log("testing");
     console.log("It is working", data);
-    navigate("/packages");
+
+    mutate(
+      { password: data.password },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+          navigate("/packages");
+        },
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
   };
 
   return (
@@ -81,11 +110,15 @@ const SecureAccountContent = () => {
               />
             </p>
             <p className="mt-10">
-              {/* <Link to="/packages"> */}
               <Button type="submit" size="full">
-                Continue
+                {isLoading ? (
+                  <p className="flex justify-center items-center">
+                    <Loader color="white" size="sm" />
+                  </p>
+                ) : (
+                  <span>Continue</span>
+                )}
               </Button>
-              {/* </Link> */}
             </p>
           </form>
         </div>

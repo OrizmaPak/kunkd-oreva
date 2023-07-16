@@ -1,6 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { Skeleton } from "@mantine/core";
+import AfamBlur from "@/assets/afamblur.jpg";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 export type CardProps = {
   image?: string;
@@ -14,7 +17,6 @@ const Card = ({ title, image, size, id, clickable }: CardProps) => {
   const navigate = useNavigate();
   const { lan_type, id: storyType } = useParams();
   const params = useParams();
-  console.log(params);
   const goto = () => {
     if (!clickable) return;
     navigate(`../${lan_type || storyType}/${id}`, {
@@ -28,16 +30,26 @@ const Card = ({ title, image, size, id, clickable }: CardProps) => {
       className="w-[200px] z-[1]"
       style={{ width: `${size ? size : ""}px` }}
     >
-      <Skeleton h={200} width={200} visible={isLoading}>
-        <span>
-          <img
+      {/* <Skeleton h={200} width={200} visible={isLoading}> */}
+      <span>
+        {/* <img
             src={image}
             alt="image"
             style={{ width: `${size ? size : "350px"}px` }}
             onLoad={() => setIsLoading(false)}
-          />
-        </span>
-      </Skeleton>
+          /> */}
+        <LazyLoadImage
+          src={image}
+          placeholderSrc={AfamBlur}
+          effect="blur"
+          wrapperClassName=""
+          width={200}
+          height={200}
+          afterLoad={() => setIsLoading(false)}
+          // onLoadedData={() => setIsLoading(false)}
+        />
+      </span>
+      {/* </Skeleton> */}
       {title ? (
         <p className="mt-[10px] text-[20px] font-Hanken font-semibold ">
           {title}

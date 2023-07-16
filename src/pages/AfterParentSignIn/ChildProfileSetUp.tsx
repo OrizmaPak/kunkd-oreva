@@ -2,81 +2,35 @@ import AddAvatarIcon from "@/assets/AddAvatarIcon.svg";
 import YaJump from "@/assets/Yaa jump 1.svg";
 import InputFormat from "@/common/InputFormat";
 import Button from "@/components/Button";
-import Avatar1 from "@/assets/Avatar1.svg";
 import YajSucces from "@/assets/yupsuccess.svg";
-
-import Avatar2 from "@/assets/Avatar2.svg";
-import Avatar3 from "@/assets/Avatar3.svg";
-import Avatar4 from "@/assets/Avatar4.svg";
-import Avatar5 from "@/assets/Avatar5.svg";
-import Avatar6 from "@/assets/Avatar6.svg";
-import Avatar7 from "@/assets/Avatar7.svg";
-import Avatar8 from "@/assets/Avatar8.svg";
-import Avatar9 from "@/assets/Avatar9.svg";
-import Avatar10 from "@/assets/Avatar10.svg";
-import Avatar11 from "@/assets/Avatar11.svg";
-import Avatar12 from "@/assets/Avatar12.svg";
+import { Loader } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { getApiErrorMessage } from "@/api/helper";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import LessDOwnIcon from "@/assets/lessthanIcon.svg";
+import { useGetAvatars, useGetProfile, useProfle } from "@/api/queries";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormData } from "@/common/User/FormValidation/Schema";
+import { z, ZodType } from "zod";
 
 import GroupIcon from "@/assets/groupIcons.svg";
 import { STEP_1, STEP_2, STEP_3, STEP_4, STEP_5 } from "@/utils/constants";
 import { useNavigate } from "react-router-dom";
+import { getProfileState } from "@/store/profileStore";
+import useStore from "@/store/index";
+import { selectAvatarType } from "./SelectProfile";
 
-const arrayAvatar = [
-  {
-    name: "Avatar1",
-    image: Avatar1,
-  },
-  {
-    name: "Avatar2",
-    image: Avatar2,
-  },
-  {
-    name: "Avatar3",
-    image: Avatar3,
-  },
-  {
-    name: "Avatar4",
-    image: Avatar4,
-  },
-  {
-    name: "Avatar5",
-    image: Avatar5,
-  },
-  {
-    name: "Avatar6",
-    image: Avatar6,
-  },
-  {
-    name: "Avatar7",
-    image: Avatar7,
-  },
-  {
-    name: "Avatar8",
-    image: Avatar8,
-  },
-  {
-    name: "Avatar9",
-    image: Avatar9,
-  },
-  {
-    name: "Avatar10",
-    image: Avatar10,
-  },
-  {
-    name: "Avatar11",
-    image: Avatar11,
-  },
-  {
-    name: "Avatar12",
-    image: Avatar12,
-  },
-];
-
+export type avatarType = {
+  name: string;
+  image: string;
+};
 const ChildProfileSetUp = () => {
   const [currentStep, setCurrentStep] = useState(STEP_1);
+  const [name, setName] = useState<string>("");
+  const [age, setAge] = useState<string>("");
+
   console.log(currentStep, STEP_2);
   const navigate = useNavigate();
   return (
@@ -90,11 +44,6 @@ const ChildProfileSetUp = () => {
       className="relative h-screen w-full flex justify-center items-center  "
     >
       <div className="border-2 border-[#FBECFF] rounded-3xl ">
-        {/* <img
-        src={GroupIcon}
-        alt="group"
-        className="absolute left-0 top-0 w-full h-screen"
-      /> */}
         {currentStep === STEP_1 && (
           <WelcomeModal
             onContinue={() => {
@@ -108,18 +57,22 @@ const ChildProfileSetUp = () => {
             onContinue={() => setCurrentStep(STEP_3)}
             goBack={() => setCurrentStep(currentStep - 1)}
             showGoBackIcon={true}
+            setName={setName}
           />
         )}
         {currentStep === STEP_3 && (
           <ChildAgeModal
             onContinue={() => setCurrentStep(STEP_4)}
             goBack={() => setCurrentStep(currentStep - 1)}
+            setAge={setAge}
           />
         )}
         {currentStep === STEP_4 && (
           <SelectAvatar
             onContinue={() => setCurrentStep(STEP_5)}
             goBack={() => setCurrentStep(currentStep - 1)}
+            age={age}
+            name={name}
           />
         )}
         {currentStep === STEP_5 && (
@@ -164,11 +117,34 @@ export const ChildNameModal = ({
   onContinue,
   goBack,
   showGoBackIcon,
+  setName,
 }: {
   onContinue: () => void;
   goBack: () => void;
   showGoBackIcon: boolean;
+  setName: (val: string) => void;
 }) => {
+  const schema: ZodType<Pick<FormData, "name">> = z.object({
+    name: z
+      .string()
+      .min(4, { message: "Name must be at least 4 characters long" })
+      .max(20, { message: "Name must not exceed 20 characters" }),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const submitData = async (data: FormData) => {
+    console.log("testing");
+    console.log("It is working", data);
+    onContinue();
+    if (data.name) {
+      setName(data.name);
+    }
+  };
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -178,7 +154,7 @@ export const ChildNameModal = ({
       className=" max-w-[600px] rounded-3xl w-[100%] py-10"
     >
       {showGoBackIcon && (
-        <p onClick={goBack} className="pl-10 pb-10">
+        <p onClick={goBack} className="pl-10">
           <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
         </p>
       )}
@@ -193,14 +169,17 @@ export const ChildNameModal = ({
           <img loading="lazy" src={YaJump} alt="jump" />
         </div>
         <div>
-          <form>
+          <form onSubmit={handleSubmit(submitData)}>
             <p className="mb-12">
-              <InputFormat type="text" placeholder="Full Name" />
+              <InputFormat
+                reg={register("name")}
+                errorMsg={errors?.name?.message}
+                type="text"
+                placeholder="Full Name"
+              />
             </p>
-            <p className="mb-12">
-              <Button onClick={onContinue} type="submit">
-                Continue
-              </Button>
+            <p className="mb-8">
+              <Button type="submit">Continue</Button>
             </p>
           </form>
         </div>
@@ -212,10 +191,31 @@ export const ChildNameModal = ({
 export const ChildAgeModal = ({
   onContinue,
   goBack,
+  setAge,
 }: {
   onContinue: () => void;
   goBack: () => void;
+  setAge: (val: string) => void;
 }) => {
+  const schema: ZodType<FormData> = z.object({
+    dob: z
+      .string()
+      .min(4, { message: "Invalid DOB" })
+      .max(20, { message: "Invalid DOB" }),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const submitData = async (data: FormData) => {
+    console.log("testing");
+    console.log("It is working", data);
+    onContinue();
+    setAge(data?.dob!);
+  };
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -224,7 +224,7 @@ export const ChildAgeModal = ({
       transition={{ duration: 0.3 }}
       className=" max-w-[600px] rounded-3xl w-[100%] py-10"
     >
-      <p onClick={goBack} className="pl-10 pb-10">
+      <p onClick={goBack} className="pl-10 ">
         <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
       </p>
       <div className="px-14">
@@ -240,14 +240,17 @@ export const ChildAgeModal = ({
           <img loading="lazy" src={YaJump} alt="jump" />
         </div>
         <div>
-          <form>
+          <form onSubmit={handleSubmit(submitData)}>
             <p className="mb-12">
-              <InputFormat type="date" placeholder="DOB" />
+              <InputFormat
+                reg={register("dob")}
+                errorMsg={errors.dob?.message}
+                type="date"
+                placeholder="DOB"
+              />
             </p>
-            <p className="mb-12">
-              <Button onClick={onContinue} type="submit">
-                Continue
-              </Button>
+            <p className="mb-8">
+              <Button type="submit">Continue</Button>
             </p>
           </form>
         </div>
@@ -259,21 +262,68 @@ export const ChildAgeModal = ({
 export const SelectAvatar = ({
   onContinue,
   goBack,
+  // arrayAvatar,
+  name,
+  age,
 }: {
   onContinue: () => void;
   goBack: () => void;
+  // arrayAvatar: avatarType[];
+  age: string;
+  name: string;
 }) => {
   const [selected, setSelected] = useState("");
   console.log(!!selected);
+  const { isLoading: isLoadingAvatar, data, error } = useGetAvatars();
+
+  // const arrayAvatar = data?.data.data.avatars;
+  const selectedAv = data?.data.data.avatars.filter(
+    (avatar: selectAvatarType) => avatar.name === selected
+  )[0];
+
+  const { isLoading, mutate } = useProfle();
+
+  const onSubmit = () => {
+    mutate(
+      {
+        name,
+        dob: age,
+        image: selectedAv.image,
+        is_avatar: "true",
+      },
+
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+
+          onContinue();
+        },
+
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+    console.log({ image: selectedAv.image, age, name });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className=" max-w-[600px] rounded-3xl w-[100%] py-10"
+      className=" max-w-[600px] rounded-3xl w-[100%] py-5"
     >
-      <p onClick={goBack} className="pl-10 pb-10">
+      <p onClick={goBack} className="pl-10 ">
         <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
       </p>
       <div className="px-14">
@@ -287,28 +337,41 @@ export const SelectAvatar = ({
         </div>
         <div className="flex justify-center items-center">
           <div className="grid grid-cols-4 gap-x-8 gap-y-4">
-            {arrayAvatar.map((avatar, index) => {
-              return (
-                <AvatarCard
-                  key={index}
-                  selected={selected}
-                  setSelected={setSelected}
-                  {...avatar}
-                />
-              );
-            })}
+            {isLoadingAvatar ? (
+              <span>
+                <Loader size={"lg"} />
+              </span>
+            ) : (
+              data?.data.data.avatars?.map(
+                (avatar: selectAvatarType, index: number) => {
+                  return (
+                    <AvatarCard
+                      key={index}
+                      selected={selected}
+                      setSelected={setSelected}
+                      {...avatar}
+                    />
+                  );
+                }
+              )
+            )}
           </div>
         </div>
 
         <button
           disabled={!selected}
-          onClick={onContinue}
+          onClick={onSubmit}
           className={`p-4 px-10 ${
             selected ? "bg-[#782caf]" : "bg-[#d9beeb]"
-          }  rounded-full w-full my-6`}
-          type="submit"
+          }  rounded-full w-full my-4`}
         >
-          Continue
+          {isLoading ? (
+            <p className="flex justify-center items-center">
+              <Loader color="white" size="sm" />
+            </p>
+          ) : (
+            <span>Continue</span>
+          )}
         </button>
       </div>
     </motion.div>
@@ -321,13 +384,13 @@ const AvatarCard = ({
   selected,
   setSelected,
 }: {
-  image: string;
-  name: string;
+  image?: string;
+  name?: string;
   selected: string;
   setSelected: (val: string) => void;
 }) => {
   const handleClick = () => {
-    setSelected(name);
+    setSelected(name!);
   };
   return (
     <div>
@@ -337,13 +400,28 @@ const AvatarCard = ({
           selected === name ? "border-[10px] border-[red]" : ""
         }  rounded-[30px]`}
       >
-        <img loading="lazy" src={image} alt="avatar" />
+        <img
+          loading="lazy"
+          src={image}
+          alt="avatar"
+          className="w-[80px] h-[80px]"
+        />
       </button>
     </div>
   );
 };
 
 export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
+  const [enabled, setEnabled] = useState(false);
+
+  const { data, isLoading } = useGetProfile(enabled, () => {
+    onContinue();
+  });
+
+  const handleSubmit = () => {
+    console.log(data);
+    setEnabled(true);
+  };
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -358,7 +436,15 @@ export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
         </div>
         <p className="text-center my-4">You have successfully added a child</p>
         <p className="mb-12">
-          <Button onClick={onContinue}>Great</Button>
+          <Button onClick={handleSubmit}>
+            {!isLoading ? (
+              <p className="flex justify-center items-center">
+                <Loader color="white" size="sm" />
+              </p>
+            ) : (
+              <span>Continue</span>
+            )}
+          </Button>
         </p>
       </div>
     </motion.div>

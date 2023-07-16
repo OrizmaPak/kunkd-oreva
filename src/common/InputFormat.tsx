@@ -36,7 +36,7 @@ const InputFormat = ({
           placeholder={placeholder}
           type={type}
           defaultValue={value}
-          className="w-full  h-full flex-1  focus:outline-none"
+          className="w-full  h-full flex-1 text-black text-[14px]  focus:outline-none"
         />
         {rightIcon ? <span>{rightIcon}</span> : null}
         {errorMsg && <img loading="lazy" src={ErrorIcon} alt="error icon" />}

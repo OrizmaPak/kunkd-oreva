@@ -61,6 +61,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import useStore from "./store";
 import { auth } from "./firebase";
 import { getUserState } from "./store/authStore";
+import { TUser } from "./api/types";
 // import { googleSignIn } from "./auth/sdk";
 
 function App() {
@@ -69,8 +70,11 @@ function App() {
   console.log("user data from Firebase", user);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      // console.log("user", currentUser);
+      const res = currentUser as TUser;
+      console.log("on state change user", currentUser);
+      if (currentUser) {
+        setUser(res);
+      }
     });
     return () => {
       unsubscribe();

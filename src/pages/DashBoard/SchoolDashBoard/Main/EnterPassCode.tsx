@@ -4,15 +4,18 @@ import Button from "@/components/Button";
 import { useNavigate } from "react-router-dom";
 import { userContext } from "@/Context/StateProvider";
 import { motion } from "framer-motion";
+import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
 
 const EnterPassCode = ({ onSubmit }: { onSubmit: () => void }) => {
   const navigate = useNavigate();
   const [pinValue, setPinValue] = useState("");
+  const [user, ,] = useStore(getUserState);
 
   const [{ userType }] = userContext();
   const goToSchoolDashboard = () => {
     console.log("usertype", userType);
-    if (userType === "school") {
+    if (user?.role === "schoolAdmin") {
       navigate("../schooldashboard");
     }
   };

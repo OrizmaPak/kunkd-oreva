@@ -16,15 +16,9 @@ export const googleSignIn = async () => {
     prompt: "select_account",
     login_hint: "user@example.com",
   });
-  return Promise.resolve()
-    .then(() => {
-      logOut();
-      console.log("logged out");
-    })
-    .then(() => {
-      signInWithPopup(auth, provider);
-      console.log("then logged in");
-    });
+  const result = await signInWithPopup(auth, provider);
+  console.log("then logged in result", result);
+  return result;
 };
 
 export const facebookSignIn = async () => {

@@ -1,37 +1,69 @@
-// import EmailLogo from '@/assets/emaillogo.svg'
 import Cancel from "@/assets/Cancel.svg";
-// import InputFormat from '@/pages/Login/InputFormat'
 import Button from "@/components/Button";
 import { Link } from "react-router-dom";
 import { PinInput, Group } from "@mantine/core";
-import { useState } from "react";
 import FormWrapper from "@/common/FormWrapper";
-// import { useForm, SubmitHandler } from "react-hook-form";
+import { useVerifyOtp } from "@/api/queries";
+import { notifications } from "@mantine/notifications";
+import { Loader } from "@mantine/core";
+import { getApiErrorMessage } from "@/api/helper";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store";
+import { z, ZodType } from "zod";
+import { useForm } from "react-hook-form";
+import { FormData } from "@/common/User/FormValidation/Schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TUser } from "@/api/types";
 
 const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
-  const [pinValue, setPinValue] = useState("");
+  const { isLoading, mutate } = useVerifyOtp();
+  const [, setUser] = useStore(getUserState);
+
+  const schema: ZodType<Pick<FormData, "otp">> = z.object({
+    otp: z
+      .string()
+      .min(4, { message: " OTP can only be at least 4 characters long" }),
+  });
+
+  const { handleSubmit, setValue, watch, trigger } = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
+
+  const otp = watch("otp");
+
+  const submitData = (data: Pick<FormData, "otp">) => {
+    console.log("testing");
+    console.log("It is working", data);
+
+    mutate(
+      { ...data },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+          const res = data?.data?.data as TUser;
+
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+          setUser({ ...res });
+          onSubmit();
+        },
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  };
 
   const handlePinChange = (value: string) => {
-    setPinValue(value);
-    // console.log(value);
+    console.log("-- pin value: ", value);
+    setValue("otp", value);
+    trigger("pin");
   };
-
-  const submitData = () => {
-    console.log("It is working");
-    console.log(pinValue);
-    if (pinValue.length < 4) {
-      console.log(pinValue.length);
-      return;
-    } else {
-      onSubmit();
-    }
-  };
-
-  // const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-
-  //   // Form submission logic here
-  // };
   return (
     <FormWrapper>
       <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">
@@ -46,19 +78,25 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
           <p className="text-[15px] text-[#A7A7A7] font-Hanken">
             A code has been sent to your email, enter to verify your account.
           </p>
-          {/* <form> */}
-          <div className="mt-8 flex justify-center items-center relative">
-            <Group position="center">
-              <PinInput value={pinValue} onChange={handlePinChange} />
-            </Group>
-          </div>
+          <form onSubmit={handleSubmit(submitData)}>
+            <div className="mt-8 flex justify-center items-center relative">
+              <Group position="center">
+                <PinInput value={otp} onChange={handlePinChange} />
+              </Group>
+            </div>
 
-          <p className="mt-10">
-            <Button onClick={submitData} size="full" type="submit">
-              Login
-            </Button>
-          </p>
-          {/* </form> */}
+            <p className="mt-10">
+              <Button type="submit" size="full">
+                {isLoading ? (
+                  <p className="flex justify-center items-center">
+                    <Loader color="white" size="sm" />
+                  </p>
+                ) : (
+                  <span>Verify</span>
+                )}
+              </Button>
+            </p>
+          </form>
           <p className="mt-2 text-center text-[] text-gray-400 ">
             <span>Don't hava an account? </span>
             <button
