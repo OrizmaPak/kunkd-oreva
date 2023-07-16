@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
-import { Skeleton } from "@mantine/core";
+// import { useState } from "react";
+// import { Skeleton } from "@mantine/core";
 import AfamBlur from "@/assets/afamblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
@@ -16,14 +16,14 @@ export type CardProps = {
 const Card = ({ title, image, size, id, clickable }: CardProps) => {
   const navigate = useNavigate();
   const { lan_type, id: storyType } = useParams();
-  const params = useParams();
+  // const params = useParams();
   const goto = () => {
     if (!clickable) return;
     navigate(`../${lan_type || storyType}/${id}`, {
       state: { image, title, size },
     });
   };
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   return (
     <div
       onClick={goto}
@@ -45,7 +45,7 @@ const Card = ({ title, image, size, id, clickable }: CardProps) => {
           wrapperClassName=""
           width={200}
           height={200}
-          afterLoad={() => setIsLoading(false)}
+          // afterLoad={() => setIsLoading(false)}
           // onLoadedData={() => setIsLoading(false)}
         />
       </span>

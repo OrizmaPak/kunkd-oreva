@@ -12,13 +12,13 @@ import { useSecurePortal } from "@/api/queries";
 import { notifications } from "@mantine/notifications";
 import { Loader } from "@mantine/core";
 import { getApiErrorMessage } from "@/api/helper";
-import { getUserState } from "@/store/authStore";
-import useStore from "@/store";
+// import { getUserState } from "@/store/authStore";
+// import useStore from "@/store";
 
 const SecureAdminPortalContent = () => {
   const navigate = useNavigate();
   const { isLoading, mutate } = useSecurePortal();
-  const [user] = useStore(getUserState);
+  // const [user] = useStore(getUserState);
 
   const schema: ZodType<Pick<FormData, "pin">> = z.object({
     pin: z

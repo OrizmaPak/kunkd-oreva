@@ -9,8 +9,6 @@ import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
 import EnterPassCode from "@/pages/DashBoard/SchoolDashBoard/Main/EnterPassCode";
 import { userContext } from "@/Context/StateProvider";
-import Avatar1 from "@/assets/Avatar1.svg";
-import Avatar2 from "@/assets/Avatar2.svg";
 import UserIcon2 from "@/assets/userIcon2.svg";
 import KundaLogo from "@/assets/schoolIcon.svg";
 import Blxst from "@/assets/Blxst.svg";

@@ -15,7 +15,7 @@ import {
 } from "./api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 // import { TProfileData } from "./types";
-import { AxiosResponse } from "axios";
+// import { AxiosResponse } from "axios";
 import { selectAvatarType } from "@/pages/AfterParentSignIn/SelectProfile";
 import { ApiResponse } from "./types";
 import { getProfileState } from "@/store/profileStore";

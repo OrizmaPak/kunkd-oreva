@@ -18,8 +18,8 @@ import { z, ZodType } from "zod";
 import GroupIcon from "@/assets/groupIcons.svg";
 import { STEP_1, STEP_2, STEP_3, STEP_4, STEP_5 } from "@/utils/constants";
 import { useNavigate } from "react-router-dom";
-import { getProfileState } from "@/store/profileStore";
-import useStore from "@/store/index";
+// import { getProfileState } from "@/store/profileStore";
+// import useStore from "@/store/index";
 import { selectAvatarType } from "./SelectProfile";
 
 export type avatarType = {
@@ -323,57 +323,63 @@ export const SelectAvatar = ({
       transition={{ duration: 0.3 }}
       className=" max-w-[600px] rounded-3xl w-[100%] py-5"
     >
-      <p onClick={goBack} className="pl-10 ">
-        <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
-      </p>
-      <div className="px-14">
+      {error ? (
+        <h1>something went wrong</h1>
+      ) : (
         <div>
-          <h1 className="text-center font-bold text-[35px] font-Recoleta">
-            Select Avatar
-          </h1>
-          <p className="text-center mb-4">
-            Pick an avatar you think your child might like
+          <p onClick={goBack} className="pl-10 ">
+            <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
           </p>
-        </div>
-        <div className="flex justify-center items-center">
-          <div className="grid grid-cols-4 gap-x-8 gap-y-4">
-            {isLoadingAvatar ? (
-              <span>
-                <Loader size={"lg"} />
-              </span>
-            ) : (
-              data?.data.data.avatars?.map(
-                (avatar: selectAvatarType, index: number) => {
-                  return (
-                    <AvatarCard
-                      key={index}
-                      selected={selected}
-                      setSelected={setSelected}
-                      {...avatar}
-                    />
-                  );
-                }
-              )
-            )}
+          <div className="px-14">
+            <div>
+              <h1 className="text-center font-bold text-[35px] font-Recoleta">
+                Select Avatar
+              </h1>
+              <p className="text-center mb-4">
+                Pick an avatar you think your child might like
+              </p>
+            </div>
+            <div className="flex justify-center items-center">
+              <div className="grid grid-cols-4 gap-x-8 gap-y-4">
+                {isLoadingAvatar ? (
+                  <span>
+                    <Loader size={"lg"} />
+                  </span>
+                ) : (
+                  data?.data.data.avatars?.map(
+                    (avatar: selectAvatarType, index: number) => {
+                      return (
+                        <AvatarCard
+                          key={index}
+                          selected={selected}
+                          setSelected={setSelected}
+                          {...avatar}
+                        />
+                      );
+                    }
+                  )
+                )}
+              </div>
+            </div>
+
+            <button
+              disabled={!selected}
+              onClick={onSubmit}
+              className={`p-4 px-10 ${
+                selected ? "bg-[#782caf]" : "bg-[#d9beeb]"
+              }  rounded-full w-full my-4`}
+            >
+              {isLoading ? (
+                <p className="flex justify-center items-center">
+                  <Loader color="white" size="sm" />
+                </p>
+              ) : (
+                <span>Continue</span>
+              )}
+            </button>
           </div>
         </div>
-
-        <button
-          disabled={!selected}
-          onClick={onSubmit}
-          className={`p-4 px-10 ${
-            selected ? "bg-[#782caf]" : "bg-[#d9beeb]"
-          }  rounded-full w-full my-4`}
-        >
-          {isLoading ? (
-            <p className="flex justify-center items-center">
-              <Loader color="white" size="sm" />
-            </p>
-          ) : (
-            <span>Continue</span>
-          )}
-        </button>
-      </div>
+      )}
     </motion.div>
   );
 };
@@ -414,7 +420,7 @@ const AvatarCard = ({
 export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
   const [enabled, setEnabled] = useState(false);
 
-  const { data, isLoading } = useGetProfile(enabled, () => {
+  const { data } = useGetProfile(enabled, () => {
     onContinue();
   });
 
@@ -437,13 +443,7 @@ export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
         <p className="text-center my-4">You have successfully added a child</p>
         <p className="mb-12">
           <Button onClick={handleSubmit}>
-            {!isLoading ? (
-              <p className="flex justify-center items-center">
-                <Loader color="white" size="sm" />
-              </p>
-            ) : (
-              <span>Continue</span>
-            )}
+            <span>Continue</span>
           </Button>
         </p>
       </div>
