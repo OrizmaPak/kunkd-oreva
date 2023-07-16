@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
 import DeleteAccount from "./DeleteAccount";
-import { userContext } from "@/Context/StateProvider";
+// import { userContext } from "@/Context/StateProvider";
 import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
 
@@ -51,7 +51,6 @@ const links = [
 ];
 
 const SettingsLayout = () => {
-  const [{ userType }] = userContext();
   const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
   const [user, ,] = useStore(getUserState);

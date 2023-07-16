@@ -12,12 +12,12 @@ import { useSetPassword } from "@/api/queries";
 import { notifications } from "@mantine/notifications";
 import { Loader } from "@mantine/core";
 import { getApiErrorMessage } from "@/api/helper";
-import useStore from "@/store";
-import { getUserState } from "@/store/authStore";
+// import useStore from "@/store";
+// import { getUserState } from "@/store/authStore";
 
 const SecureAccountContent = () => {
   const navigate = useNavigate();
-  const [user] = useStore(getUserState);
+  // const [user] = useStore(getUserState);
   const { isLoading, mutate } = useSetPassword();
 
   const schema: ZodType<FormData> = z

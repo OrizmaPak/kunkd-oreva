@@ -1,7 +1,3 @@
-import Avatar1 from "@/assets/Avatar1.svg";
-import Avatar2 from "@/assets/Avatar2.svg";
-import Avatar3 from "@/assets/Avatar3.svg";
-import Avatar4 from "@/assets/Avatar4.svg";
 import DotIcon from "@/assets/dotIcon.svg";
 import { Menu } from "@mantine/core";
 import PencilIcon from "@/assets/blackPencilIcon.svg";
