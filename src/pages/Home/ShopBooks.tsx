@@ -6,15 +6,19 @@ import "slick-carousel/slick/slick-theme.css";
 import { useRef } from "react";
 import { BsChevronRight, BsChevronLeft } from "react-icons/bs";
 import BigCart from "@/assets/Afam-04 1.svg";
+import BigCartBlur from "@/assets/afamblur.jpg";
 import Lines from "@/assets/lines.svg";
 import RoundG from "@/assets/Ellipse 56.svg";
 import RoundR from "@/assets/Ellipse 59.svg";
 import ZagB from "@/assets/zag3.svg";
 import RoundY from "@/assets/Ellipse 57.svg";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 import SixB from "@/assets/six.svg";
 
 import ClientCard from "./ClientCard";
+// import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const ShopBooks = () => {
   // const settings = {
@@ -27,7 +31,6 @@ const ShopBooks = () => {
   //   autoplay: true,
   //   autoplaySpeed: 2000,
   // };
-
   var settings2 = {
     className: "center",
     arrows: false,
@@ -102,11 +105,14 @@ const ShopBooks = () => {
           <div className="h-[605px] p-14 w-[1365px] bg-[#8530C1] rounded-[70px] mb-[200px] ">
             <div className="flex gap-10 ">
               <div className="basis-1/2">
-                <img
-                  loading="lazy"
+                <LazyLoadImage
+                  width={500}
+                  height={500}
+                  effect="blur"
+                  className="rounded-2xl"
+                  wrapperClassName="rounded-2xl"
                   src={BigCart}
-                  alt="b=cart card"
-                  className="w-[500px]"
+                  placeholderSrc={BigCartBlur}
                 />
               </div>
               <div className="basis-1/2 text-white">

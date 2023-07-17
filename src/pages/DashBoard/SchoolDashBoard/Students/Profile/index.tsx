@@ -28,7 +28,7 @@ const index = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
-      className=" h-full flex flex-col "
+      className=" h-[100%] flex flex-col  overflow-y-scroll "
     >
       {/* <div className=" bg-green-600   rounded-3xl py-4 "> */}
       <div className="mb-2">
@@ -63,7 +63,14 @@ const index = () => {
           <LearningHour />
         </div>
       </div>
-      {/* </div> */}
+      <style>
+        {`
+       ::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+        `}
+      </style>
     </motion.div>
     // </div>
   );

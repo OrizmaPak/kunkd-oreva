@@ -233,7 +233,7 @@ const Question = ({
   return (
     <div className=" mt-8 flex justify-center  items-center flex-col gap-y-8 flex-grow">
       <h1 className="text-[20px] font-bold   text-center">{quesObject.qus}</h1>
-      <div className="grid grid-cols-2  pb-5 gap-5 gap-x-15 flex-grow">
+      <div className="grid grid-cols-2  content-center pb-5 gap-5 gap-x-15 flex-grow">
         {quesObject.ans.map((ans, index) => (
           <AnsButton
             key={index}
@@ -270,11 +270,13 @@ const AnsButton = ({
   return (
     <button
       onClick={handleSelected}
-      className={`p-1  ${
-        selected?.answer === name ? "bg-[#8530C1] text-white " : ""
-      } border border-[#8530C1] rounded-3xl`}
+      className={`p-1   rounded-3xl  ${
+        selected?.answer === name
+          ? "border-[#8530C1] border-4 "
+          : "border-[#FBECFF] border-2"
+      }`}
     >
-      <img loading="lazy" src={image} alt="ans" className="w-[150px]" />
+      <img loading="lazy" src={image} alt="ans" className="w-[130px]" />
     </button>
   );
 };
@@ -293,7 +295,7 @@ const QuestionPagination = ({
   setShowRemark: () => void;
 }) => {
   return (
-    <div>
+    <div className="mb-4a">
       <hr className="mb-5" />
       <div className="flex justify-between items-center">
         <button
@@ -332,18 +334,18 @@ const GoodRemarkMsg = ({ setShowResult }: { setShowResult: () => void }) => {
   };
   return (
     <>
-      <div className="relative flex-grow bg-white">
+      <div className="relative flex-grow bg-white ">
         <img
           src={RemarkBg}
-          alt=""
-          className="absolute left-[320px] top-[50px] "
+          alt="icon"
+          className="absolute left-1/2 top-[30%]  transform -translate-x-1/2 -translate-y-1/2"
         />
         <img
           src={RemarkIcon}
           alt="remarkIcon"
-          className="absolute left-[400px] top-[50px]"
+          className="absolute left-1/2 top-[30%] transform -translate-x-1/2 -translate-y-1/2"
         />
-        <div className="text-center  mt-[270px]">
+        <div className="text-center  mt-[290px]">
           <h1 className="font-bold">Good Job!</h1>
           <p className="text-[18px] text-[#B5B5C3]">
             You answered 7 questions correct
@@ -387,7 +389,8 @@ const Result = ({ answers }: { answers: ObjAnsQuestionType[] }) => {
               sections={[{ value: 70, color: "white" }]}
               label={
                 <h1 className="font-bold text-black  text-center text-[30px]">
-                  7/10
+                  <span className="text-[40px]">7</span>
+                  /10
                 </h1>
               }
               rootColor="rgba(255,255,255,0.4)"

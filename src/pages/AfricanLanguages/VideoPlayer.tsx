@@ -1,8 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import AfricanLanguagesNav from "./AfricanLanguagesNav";
 import { africanLanguagesData } from "./AfricanLanguages";
-import { useState } from "react";
-
+import { useState, useRef } from "react";
 import SaveIcon from "@/assets/saveIcon.svg";
 import ShareIcon from "@/assets/shareIcon.svg";
 import Congrats from "@/assets/congrats.svg";
@@ -12,13 +11,14 @@ const VideoPlayer = () => {
   const { lan_type, id } = useParams();
   const video = africanLanguagesData.find((data) => data.id === id);
   console.log(video);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   return (
-    <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col px-10 bg-[#fff7fd]">
+    <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col  bg-[#fff7fd]">
       <div className="">
         <AfricanLanguagesNav
           category="Africanlanguages"
-          lanType={lan_type?.toUpperCase()}
+          lanType={lan_type}
           title={video && video.title}
         />
       </div>
@@ -26,10 +26,10 @@ const VideoPlayer = () => {
         <div className="  flex-grow mt-5  gap-10 rounded-3xl flex w-[100%]">
           <div className="  basis-full  flex flex-col">
             <div className="basis">
-              <div className="  rounded-t-3xl flex flex-col relative">
+              <div className="  rounded-t-3xl flex flex-col relative group">
                 <button
                   onClick={() => setIsFinsh(true)}
-                  className="py-4  text-[#8530C1]   z-50 px-14 flex gap-4 justify-center items-center rounded-3xl bg-white right-8  top-4 absolute"
+                  className="py-3  text-[#8530C1]   z-50 px-8 flex gap-4 justify-center items-center rounded-3xl bg-white right-8  top-4 absolute"
                 >
                   Finish
                 </button>
@@ -37,35 +37,36 @@ const VideoPlayer = () => {
                   className=" rounded-t-3xl flex-grow"
                   src={video?.videoBook}
                   autoPlay
+                  ref={videoRef}
                   controls
                 ></video>
+              </div>
+              <div className=" bg-white py-8  rounded-b-3xl px-24 flex justify-between  items-center">
+                <p className="text-[20px] font-bold ">{video?.title}</p>
+                <p className="flex gap-5 text-[#8530C1]">
+                  <button className="py-3 px-7 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]">
+                    <img
+                      loading="lazy"
+                      src={SaveIcon}
+                      alt="icon"
+                      className="w-[20px]"
+                    />
+                    <span>Save</span>
+                  </button>
+                  <button className="py-3 px-7 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]">
+                    <img
+                      loading="lazy"
+                      src={ShareIcon}
+                      alt="icon"
+                      className="w-[20px]"
+                    />
+                    <span>Share</span>
+                  </button>
+                </p>
+              </div>
 
-                <div className=" bg-white py-8  rounded-b-3xl px-24 flex justify-between  items-center">
-                  <p className="text-[20px] font-bold ">{video?.title}</p>
-                  <p className="flex gap-5 text-[#8530C1]">
-                    <button className="py-3 px-10 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]">
-                      <img
-                        loading="lazy"
-                        src={SaveIcon}
-                        alt="icon"
-                        className="w-[20px]"
-                      />
-                      <span>Save</span>
-                    </button>
-                    <button className="py-3 px-10 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]">
-                      <img
-                        loading="lazy"
-                        src={ShareIcon}
-                        alt="icon"
-                        className="w-[20px]"
-                      />
-                      <span>Share</span>
-                    </button>
-                  </p>
-                </div>
-                <div className="mt-4 bg-white left-10 p-10 rounded-3xl leading-10">
-                  <p>{video?.content}</p>
-                </div>
+              <div className="mt-4 bg-white left-10 p-10 rounded-3xl leading-10">
+                <p>{video?.content}</p>
               </div>
             </div>
 
@@ -73,11 +74,11 @@ const VideoPlayer = () => {
           </div>
 
           <div className="  basis-3/6 rounded-3xl bg-white px-10">
-            <h1 className="text-[30px] font-bold font-Recoleta my-3 ">
+            <h1 className="text-[24px]  font-semibold font-Recoleta my-3 ">
               Recommended Videos
             </h1>
             <div>
-              {africanLanguagesData.slice(1, 6).map((data, index) => (
+              {africanLanguagesData.slice(1, 7).map((data, index) => (
                 <RecommendedVideoCard key={index} {...data} />
               ))}
             </div>
@@ -104,10 +105,10 @@ const RecommendedVideoCard = ({
   return (
     <div
       onClick={onClick}
-      className="flex gap-4 bg-[#fff7fd]  items-center my-8  rounded-3xl"
+      className="flex h-[100px] gap-4 bg-[#fffbff]  items-center my-8  rounded-2xl border-[2px] border-[#fbeff8]"
     >
-      <img loading="lazy" src={image} alt="image" className="w-[130px]" />
-      <span className=" text-black text-[20px] font-Recoleta font-bold">
+      <img loading="lazy" src={image} alt="image" className=" h-[100px]" />
+      <span className=" text-black text-[16px]  font-Hanken font-semibold">
         {title}
       </span>
     </div>

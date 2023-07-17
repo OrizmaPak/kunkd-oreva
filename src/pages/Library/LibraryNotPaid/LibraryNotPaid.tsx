@@ -76,7 +76,7 @@ const LibraryNotPaid = () => {
           </div>
 
           <CardScreen
-            data={data?.slice(1, 7).map((el) => ({ ...el }))}
+            data={data?.slice(1, 6).map((el) => ({ ...el }))}
             card={(props: DataType) => <Card {...props} />}
             header="Stories"
             actiontitle="View all"
@@ -85,7 +85,7 @@ const LibraryNotPaid = () => {
           <AdsButton />
 
           <CardScreen
-            data={data?.slice(1, 7).map((el) => ({ ...el }))}
+            data={data?.slice(1, 6).map((el) => ({ ...el }))}
             card={(props: DataType) => <Card {...props} />}
             header="Audio books"
             actiontitle="View all"

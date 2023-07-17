@@ -23,6 +23,6 @@
       "@/*": ["*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "public/messaging_init_in_sw.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

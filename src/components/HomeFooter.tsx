@@ -46,11 +46,11 @@ const HomeFooter = () => {
         </div>
         <div className=" flex justify-between items-center ">
           <span className="ml-4 font-bold">Download Our App</span>
-          <span className="ml-4 cursor-pointer">
+          <span className="ml-4 cursor-pointer ">
             <GooglePlay />
           </span>
           <span className="ml-4 cursor-pointer">
-            <AppleStore />{" "}
+            <AppleStore />
           </span>
         </div>
       </div>

@@ -56,12 +56,35 @@ import ChildProfileSetUp from "./pages/AfterParentSignIn/ChildProfileSetUp";
 import AudioBooks from "@/pages/AudioBooks/AudioBooks";
 import AfricanLanguages from "@/pages/AfricanLanguages/AfricanLanguages";
 import ScrollToTop from "./components/ScrollToTop";
+import { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import useStore from "./store";
+import { auth } from "./firebase";
+import { getUserState } from "./store/authStore";
+import { TUser } from "./api/types";
+// import { googleSignIn } from "./auth/sdk";
 
 function App() {
+  const [user, setUser] = useStore(getUserState);
+
+  console.log("user data from Firebase", user);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      const res = currentUser as TUser;
+      console.log("on state change user", currentUser);
+      if (currentUser) {
+        setUser(res);
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
   return (
     <BrowserRouter>
       <div className="App ">
         <ScrollToTop />
+        {/* <Button onClick={log}></Button> */}
         <Routes>
           {/* Routes Before Login */}
           <Route path="/">

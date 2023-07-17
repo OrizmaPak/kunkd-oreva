@@ -9,11 +9,12 @@ import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
 import EnterPassCode from "@/pages/DashBoard/SchoolDashBoard/Main/EnterPassCode";
 import { userContext } from "@/Context/StateProvider";
-import Avatar1 from "@/assets/Avatar1.svg";
-import Avatar2 from "@/assets/Avatar2.svg";
 import UserIcon2 from "@/assets/userIcon2.svg";
 import KundaLogo from "@/assets/schoolIcon.svg";
 import Blxst from "@/assets/Blxst.svg";
+import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
+import { getProfileState } from "@/store/profileStore";
 
 const notificationData = [
   {
@@ -31,92 +32,107 @@ const notificationData = [
 const SchoolHeader = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
+  const [user] = useStore(getUserState);
+  const [profile] = useStore(getProfileState);
+  console.log("______user______", user);
 
   const [{ userType }] = userContext();
   const handleDashboard = () => {
     console.log("usertype", userType);
-    if (userType === "teacher") {
+    if (user?.role === "teacher") {
       navigate("../teacherdashboard");
     }
-    if (userType === "school") {
+    if (user?.role === "schoolAdmin") {
       open();
     }
   };
-  return (
-    <div className="flex  fixed top-0 w-full font-[500] py-4 text-[16px] px-[130px] justify-between items-center bg-white z-50 gap-4  h-[8vh] ">
-      <Modal
-        opened={opened}
-        onClose={close}
-        centered
-        size="lg"
-        radius={"xl"}
-        closeOnClickOutside={false}
-        withCloseButton={false}
-      >
-        <EnterPassCode onSubmit={close} />
+  const handLogOut = () => {
+    navigate("/");
+    localStorage.clear();
+  };
 
-        <style>
-          {`
+  const handleChangeProfile = (id: number) => {
+    localStorage.setItem("profileId", JSON.stringify(id));
+    window.location.reload();
+  };
+  return (
+    <div className="bg-white w-full fixed top-0 h-[8vh] z-50">
+      <div className="flex text-[#B5B5C3] text-[14px]  font-normal top-0 left-0 right-0  mx-auto  max-w-[1280px] w-full   py-4   justify-between items-center bg-white  z-[1000] gap-4  h-[8vh] ">
+        <Modal
+          opened={opened}
+          onClose={close}
+          centered
+          size="lg"
+          radius={"xl"}
+          closeOnClickOutside={false}
+          withCloseButton={false}
+        >
+          <EnterPassCode onSubmit={close} />
+
+          <style>
+            {`
          .mantine-kea9ny {
             background-color: rgba(0, 0, 0, 0.9);
           
           }
           
                 `}
-        </style>
-      </Modal>
-      <div className="flex items-center gap-20">
-        <Link to="/">
-          <div>
-            <img
-              src={KundaLogo}
-              alt="logo"
-              width="45.91px"
-              height="35pxs"
-              className="min-w-[45.91px]"
-            />
+          </style>
+        </Modal>
+        <div className="flex items-center gap-10">
+          <Link to="/">
+            <div>
+              <img
+                src={KundaLogo}
+                alt="logo"
+                width="45.91px"
+                height="35pxs"
+                className="min-w-[45.91px]"
+              />
+            </div>
+          </Link>
+
+          <div className="flex gap-8">
+            <NavLink
+              to={
+                user?.role === "parent"
+                  ? "parenthomepage"
+                  : "/newlyregistereduser"
+              }
+              className={({ isActive }) =>
+                isActive ? " text-[#8530C1]" : "text-black"
+              }
+            >
+              <button>Home</button>
+            </NavLink>
+            <NavLink
+              to="/librarynotpaid"
+              className={({ isActive }) =>
+                isActive ? " text-[#8530C1]" : "text-black"
+              }
+            >
+              <button>Library</button>
+            </NavLink>
+            <NavLink
+              to="/mylist"
+              className={({ isActive }) =>
+                isActive ? " text-[#8530C1]" : "text-black"
+              }
+            >
+              <button>My List</button>
+            </NavLink>
+            <NavLink
+              to="/progressreport"
+              className={({ isActive }) =>
+                isActive ? " text-[#8530C1]" : "text-black"
+              }
+            >
+              <button>Progress Report</button>
+            </NavLink>
           </div>
-        </Link>
-
-        <div className="flex gap-14">
-          <NavLink
-            to={
-              userType === "parent" ? "parenthomepage" : "/newlyregistereduser"
-            }
-            className={({ isActive }) =>
-              isActive ? " text-[#8530C1]" : "text-black"
-            }
-          >
-            <button>Home</button>
-          </NavLink>
-          <NavLink
-            to="/librarynotpaid"
-            className={({ isActive }) =>
-              isActive ? " text-[#8530C1]" : "text-black"
-            }
-          >
-            <button>Library</button>
-          </NavLink>
-          <NavLink
-            to="/mylist"
-            className={({ isActive }) =>
-              isActive ? " text-[#8530C1]" : "text-black"
-            }
-          >
-            <button>My List</button>
-          </NavLink>
-          <NavLink
-            to="/progressreport"
-            className={({ isActive }) =>
-              isActive ? " text-[#8530C1]" : "text-black"
-            }
-          >
-            <button>Progress Report</button>
-          </NavLink>
         </div>
-      </div>
 
-      {/* <div className="max-w-[700px] w-full rounded-3xl  flex  px-4  bg-gray-100  ">
+        {/* <div className="max-w-[700px] w-full rounded-3xl  flex  px-4  bg-gray-100  ">
         <img loading="lazy" src={SearchIcon} alt="search icon" className="" />
         <input
           type="text"
@@ -124,8 +140,8 @@ const SchoolHeader = () => {
         />
       </div> */}
 
-      <div className="flex items-center justify-center pl-2 gap-20">
-        {/* <div className="flex gap-14">
+        <div className="flex items-center justify-center pl-2 gap-10">
+          {/* <div className="flex gap-14">
           <button>Home</button>
           <button>Library</button>
           <button>My List</button>
@@ -146,155 +162,171 @@ const SchoolHeader = () => {
           </span>
         </div> */}
 
-        <div className="max-w-[700px] w-full rounded-3xl  flex  px-4  bg-gray-100  ">
-          <img loading="lazy" src={SearchIcon} alt="search icon" className="" />
-          <input
-            type="text"
-            className="w-full h-full py-4 rounded-3xl px-4 focus:outline-none  bg-inherit"
-          />
-        </div>
+          <div className="max-w-[700px] w-full rounded-3xl  flex  px-4  bg-gray-100  ">
+            <img
+              loading="lazy"
+              src={SearchIcon}
+              alt="search icon"
+              className=""
+            />
+            <input
+              type="text"
+              className="w-full h-full py-4 rounded-3xl px-4 focus:outline-none  bg-inherit"
+            />
+          </div>
 
-        <Menu>
-          <Menu.Target>
-            <div>
-              <span>
-                <img
-                  loading="lazy"
-                  src={BellIcon}
-                  alt="bell icon"
-                  className="min-w-[17px]"
-                />
-              </span>
-            </div>
-          </Menu.Target>
-          <Menu.Dropdown>
-            <p className="text-center text-[18px] font-bold my-2">
-              Notification
-            </p>
-            {notificationData.map((data, index) => (
-              // <Menu.Item>
-              <Notification key={index} {...data} />
-              // </Menu.Item>
-            ))}
-          </Menu.Dropdown>
-        </Menu>
-
-        {userType === "parent" ? (
           <Menu>
             <Menu.Target>
-              <div className="flex justify-center items-center gap-10  px-10 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
-                <img
-                  loading="lazy"
-                  src={UserIcon}
-                  alt="user icon"
-                  className="w-[30px]"
-                />
-
+              <div>
                 <span>
                   <img
-                    src={ArrowDown}
-                    alt="arrow down icon"
+                    loading="lazy"
+                    src={BellIcon}
+                    alt="bell icon"
                     className="min-w-[17px]"
                   />
                 </span>
               </div>
             </Menu.Target>
             <Menu.Dropdown>
-              <div className="flex flex-col py-2 px-1">
-                <Menu.Item>
-                  <button className="p-2 px-4 flex gap-2  items-center hover:cursor-pointer  hover:text-[#8530C1]">
-                    <img
-                      loading="lazy"
-                      src={Avatar1}
-                      alt="avatar1"
-                      className="w-[25%]"
-                    />
-                    <span>Jake</span>
-                  </button>
-                </Menu.Item>
-                <Menu.Item>
-                  <button className="p-2 px-4 flex gap-2  items-center  hover:cursor-pointer  hover:text-[#8530C1]">
-                    <img
-                      loading="lazy"
-                      src={Avatar2}
-                      alt="avatar1"
-                      className="w-[25%]"
-                    />
-                    <span>Mabel</span>
-                  </button>
-                </Menu.Item>
-                <Menu.Item>
-                  <button
-                    onClick={() => navigate("/account")}
-                    className="p-2 px-4 hover:cursor-pointer hover:text-[#8530C1] flex gap-2 items-center"
-                  >
-                    <img loading="lazy" src={UserIcon2} alt="userIcon" />{" "}
-                    <span> Account</span>
-                  </button>
-                </Menu.Item>
-                <hr />
-                <Menu.Item>
-                  <button
-                    onClick={() => navigate("/")}
-                    className="p-2 px-4  hover:cursor-pointer  text-red-500"
-                  >
-                    Sign out of Kunda kids
-                  </button>
-                </Menu.Item>
-              </div>
+              <p className="text-center text-[18px] font-bold my-2">
+                Notification
+              </p>
+              {notificationData.map((data, index) => (
+                // <Menu.Item>
+                <Notification key={index} {...data} />
+                // </Menu.Item>
+              ))}
             </Menu.Dropdown>
           </Menu>
-        ) : (
-          <Menu>
-            <Menu.Target>
-              <div className="flex justify-center items-center gap-7  px-6 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
-                <img
-                  loading="lazy"
-                  src={UserIcon}
-                  alt="user icon"
-                  className="w-[25px]"
-                />
 
-                <span>
+          {user?.role === "parent" ? (
+            <Menu>
+              <Menu.Target>
+                <div className="flex justify-center items-center gap-5  px-10 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
                   <img
-                    src={ArrowDown}
-                    alt="arrow down icon"
-                    className="min-w-[12px]"
+                    loading="lazy"
+                    src={UserIcon}
+                    alt="user icon"
+                    className="w-[30px]"
                   />
-                </span>
-              </div>
-            </Menu.Target>
 
-            <Menu.Dropdown>
-              <div className="flex flex-col py-2 px-1">
-                <Menu.Item>
-                  <button
-                    onClick={handleDashboard}
-                    className="p-2 px-14  hover:cursor-pointer hover:text-[#8530C1]"
-                  >
-                    Admin
-                  </button>
-                </Menu.Item>
-                <Menu.Item>
-                  <button
-                    onClick={() => navigate("/account")}
-                    className="p-2 px-14  hover:cursor-pointer hover:text-[#8530C1]"
-                  >
-                    Account
-                  </button>
-                </Menu.Item>
-                <Menu.Item>
-                  <button
-                    onClick={() => navigate("/")}
-                    className="p-2 px-14  hover:cursor-pointer  text-red-500"
-                  >
-                    Sign out of Kunda kids
-                  </button>
-                </Menu.Item>
-              </div>
-            </Menu.Dropdown>
-          </Menu>
-        )}
+                  <span>
+                    <img
+                      src={ArrowDown}
+                      alt="arrow down icon"
+                      className="min-w-[17px]"
+                    />
+                  </span>
+                </div>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <div className="flex flex-col py-2 px-1">
+                  {profile.map((profile, index) => (
+                    <Menu.Item>
+                      <button
+                        onClick={() => handleChangeProfile(profile.id)}
+                        key={index}
+                      >
+                        {profile.name}
+                      </button>
+                    </Menu.Item>
+                  ))}
+                  {/* <Menu.Item>
+                    <button className="p-2 px-4 flex gap-2  items-center hover:cursor-pointer  hover:text-[#8530C1]">
+                      <img
+                        loading="lazy"
+                        src={Avatar1}
+                        alt="avatar1"
+                        className="w-[25%]"
+                      />
+                      <span>Jake</span>
+                    </button>
+                  </Menu.Item> */}
+                  {/* <Menu.Item>
+                    <button className="p-2 px-4 flex gap-2  items-center  hover:cursor-pointer  hover:text-[#8530C1]">
+                      <img
+                        loading="lazy"
+                        src={Avatar2}
+                        alt="avatar1"
+                        className="w-[25%]"
+                      />
+                      <span>Mabel</span>
+                    </button>
+                  </Menu.Item> */}
+                  <Menu.Item>
+                    <button
+                      onClick={() => navigate("/account")}
+                      className="p-2 px-4 hover:cursor-pointer hover:text-[#8530C1] flex gap-2 items-center"
+                    >
+                      <img loading="lazy" src={UserIcon2} alt="userIcon" />{" "}
+                      <span> Account</span>
+                    </button>
+                  </Menu.Item>
+                  <hr />
+                  <Menu.Item>
+                    <button
+                      onClick={handLogOut}
+                      className="p-2 px-4  hover:cursor-pointer  text-red-500"
+                    >
+                      Sign out of Kunda kids
+                    </button>
+                  </Menu.Item>
+                </div>
+              </Menu.Dropdown>
+            </Menu>
+          ) : (
+            <Menu>
+              <Menu.Target>
+                <div className="flex justify-center items-center gap-7  px-6 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
+                  <img
+                    loading="lazy"
+                    src={UserIcon}
+                    alt="user icon"
+                    className="w-[25px]"
+                  />
+
+                  <span>
+                    <img
+                      src={ArrowDown}
+                      alt="arrow down icon"
+                      className="min-w-[12px]"
+                    />
+                  </span>
+                </div>
+              </Menu.Target>
+
+              <Menu.Dropdown>
+                <div className="flex flex-col py-2 px-1">
+                  <Menu.Item>
+                    <button
+                      onClick={handleDashboard}
+                      className="p-2 px-14  hover:cursor-pointer hover:text-[#8530C1]"
+                    >
+                      Admin
+                    </button>
+                  </Menu.Item>
+                  <Menu.Item>
+                    <button
+                      onClick={() => navigate("/account")}
+                      className="p-2 px-14  hover:cursor-pointer hover:text-[#8530C1]"
+                    >
+                      Account
+                    </button>
+                  </Menu.Item>
+                  <Menu.Item>
+                    <button
+                      onClick={handLogOut}
+                      className="p-2 px-14  hover:cursor-pointer  text-red-500"
+                    >
+                      Sign out of Kunda kids
+                    </button>
+                  </Menu.Item>
+                </div>
+              </Menu.Dropdown>
+            </Menu>
+          )}
+        </div>
       </div>
     </div>
   );

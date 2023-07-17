@@ -11,17 +11,17 @@ type Props = {
 };
 const AfricanHistoryContent = ({ data }: Props) => {
   return (
-    <div>
-      <h1 className="font-bold font-Recoleta text-center text-[60px] ">
+    <div className="max-w-[1300px] mx-auto">
+      <h1 className=" font-semibold font-Recoleta text-center text-[46px] ">
         African History stories
       </h1>
-      <p className="text-center text-[20px] mb-10">
+      <p className="text-center text-[18px] mb-10">
         Adventure stories based on African leaders in history.
       </p>
-      <div className="flex flex-wrap gap-10 px-20 justify-center items-center">
+      <div className="grid grid-cols-4 flex-wrap gap-28 px-20 justify-center items-center">
         {data &&
-          data.slice(3).map((data, index) => {
-            return <CartCard key={index} {...data} />;
+          data.slice(1, 9).map((data, index) => {
+            return <CartCard key={index} {...data} size="260" />;
           })}
       </div>
     </div>

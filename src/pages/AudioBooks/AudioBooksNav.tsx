@@ -14,9 +14,9 @@ const AudioBooksNav = ({
   const navigate = useNavigate();
   const { id } = useParams();
   return (
-    <div className="py-4 rounded-full bg-white gap-8 flex px-8">
+    <div className="py-4 pl-20 font-Recoleta h-[90px] text-[24px]  font-semibold items-center rounded-full bg-white gap-8 flex px-8">
       <div
-        className="flex gap-2 cursor-pointer  font-bold"
+        className="flex gap-2 cursor-pointer "
         onClick={() => navigate(`/librarynotpaid/audiobooks`)}
       >
         <span>{category}</span>
@@ -24,7 +24,7 @@ const AudioBooksNav = ({
       </div>
 
       <div
-        className="flex gap-2  cursor-pointer  font-bold"
+        className="flex gap-2  cursor-pointer  "
         onClick={() => navigate(`/librarynotpaid/audiobooks/${genre}`)}
       >
         <span>{genre}</span>
@@ -33,7 +33,9 @@ const AudioBooksNav = ({
 
       <div
         onClick={() => navigate(`/librarynotpaid/audiobooks/${genre}/${id}`)}
-        className={`flex gap-2  cursor-pointer ${quiz && "font-bold"} `}
+        className={`flex gap-2  cursor-pointer text-[#B5B5C3] ${
+          quiz && "text-black"
+        } `}
       >
         <span>{title}</span>
         {quiz && <img loading="lazy" src={NextIcon} alt="nextIcon" />}

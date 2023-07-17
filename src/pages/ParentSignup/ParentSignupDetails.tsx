@@ -8,17 +8,22 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { z, ZodType } from "zod";
+import { useCreateParentUser } from "@/api/queries";
+import { Loader } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { getApiErrorMessage } from "@/api/helper";
 
 const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
+  const { isLoading, mutate } = useCreateParentUser();
   const schema: ZodType<FormData> = z.object({
-    name: z
+    firstname: z
       .string()
-      .min(4, { message: "Name must be at least 4 characters long" })
-      .max(20, { message: "Name must not exceed 20 characters" }),
-    address: z
+      .min(4, { message: "First must be at least 4 characters long" })
+      .max(20, { message: "First must not exceed 20 characters" }),
+    lastname: z
       .string()
-      .min(4, { message: "Address must be at least 4 characters long" })
-      .max(40, { message: "Address must not exceed 30 characters" }),
+      .min(4, { message: "Last name must be at least 4 characters long" })
+      .max(40, { message: "Last name must not exceed 30 characters" }),
     email: z.string().email(),
   });
 
@@ -28,11 +33,31 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const submitData = (data: FormData) => {
+  const submitData = async (data: FormData) => {
     console.log("testing");
     console.log("It is working", data);
-    onSubmit();
-    //  navigate("/schoolverification");
+
+    mutate(
+      { ...data },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+          onSubmit();
+        },
+
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
   };
 
   return (
@@ -56,14 +81,14 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
               <InputFormat
                 type="text"
                 placeholder="First Name"
-                reg={register("name")}
+                reg={register("firstname")}
                 errorMsg={errors.name?.message}
               />
 
               <InputFormat
                 type="text"
                 placeholder="Last Name"
-                reg={register("address")}
+                reg={register("lastname")}
                 errorMsg={errors.address?.message}
               />
             </p>
@@ -86,7 +111,13 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
               <strong className="text-black"> Privacy Policy </strong>
             </p>
             <Button size="full" type="submit">
-              Create free account
+              {isLoading ? (
+                <p className="flex justify-center items-center">
+                  <Loader color="white" size="sm" />
+                </p>
+              ) : (
+                <span>Create free account</span>
+              )}
             </Button>
           </form>
 

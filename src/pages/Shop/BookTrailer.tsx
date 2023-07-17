@@ -45,10 +45,10 @@ const BookTrailer = () => {
     <div className=" -z-0">
       <KundaApp>
         <div className="text-center text-white">
-          <h1 className=" font-Recoleta text-[50px] ">
+          <h1 className=" font-Recoleta text-[46px] font-semibold  ">
             Our awsome book trail!
           </h1>
-          <p>
+          <p className="text-[18px] leading-[30px]">
             Enjoy our animated book trailers below and subscribe to the Kunda
             Kids YouTube
             <br /> channel and enjoy more videos where our characters and

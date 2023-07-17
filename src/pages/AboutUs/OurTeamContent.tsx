@@ -5,10 +5,18 @@ import Chidera from "@/assets/Chidera1.svg";
 import Toni from "@/assets/Toni1.svg";
 import Peter from "@/assets/Peter1.svg";
 import TeamCard from "./TeamCard";
+import DeleBlur from "@/assets/Deleblur.jpg";
+import LouisaBlur from "@/assets/Louisablur.jpg";
+import ChikeBlur from "@/assets/Chikeblur.jpg";
+import ChideraBlur from "@/assets/Chiderablur.jpg";
+import ToniBlur from "@/assets/Toniblur.jpg";
+import PeterBlur from "@/assets/Peterblur.jpg";
 
 const data = [
   {
     image: Dele,
+    imageBlur: DeleBlur,
+
     name: "Dele Olafuyi",
     title: "Co-founder, CEO",
     message:
@@ -16,6 +24,8 @@ const data = [
   },
   {
     image: Louisa,
+    imageBlur: LouisaBlur,
+
     name: "Louisa Olafuyi",
     title: "Co-founder, COO",
     message:
@@ -23,6 +33,8 @@ const data = [
   },
   {
     image: Toni,
+    imageBlur: ToniBlur,
+
     name: "Oluwatoni Ajewole",
     title: "Head of Product",
     message:
@@ -30,6 +42,8 @@ const data = [
   },
   {
     image: Chike,
+    imageBlur: ChikeBlur,
+
     name: "Chike Obasi",
     title: "Art Director",
     message:
@@ -37,6 +51,8 @@ const data = [
   },
   {
     image: Chidera,
+    imageBlur: ChideraBlur,
+
     name: "Chidera Monde",
     title: "Content & Strategy Director",
     message:
@@ -44,6 +60,7 @@ const data = [
   },
   {
     image: Peter,
+    imageBlur: PeterBlur,
     name: "Peter Ogedengbe",
     title: "Chief Technology Officer",
     message:
@@ -54,20 +71,19 @@ const data = [
 const OurTeamContent = () => {
   return (
     <div className="max-w-[1000px] w-full mx-auto text-center">
-      <h1 className="font-bold font-Recoleta text-[40px] text-black text-center mb-4">
+      <h1 className=" font-semibold font-Recoleta text-[46px] text-black text-center mb-8">
         Our Amazing Team
       </h1>
-      <p className="mb-4">
+      <p className=" text-[18px] leading-[30px] mb-20">
         Our team is made up of passionate team of artists, writers, producers,
-        and content and business leaders who share our vision for creating{" "}
-        <br />
+        and content and business leaders who share our vision for creating
         diverse and inclusive children's literature. Together, we work to create
         engaging and inspiring <br /> stories that celebrate African culture and
         promote essential soft skills.
       </p>
 
       <div>
-        <p>
+        <p className="mb-20">
           <strong className="pr-6">Meet The Heads</strong> - - - - - - - - - - -
           - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
           - - - - - -- - - - - - - - - - - - - - - - - - - - - - - - - - -

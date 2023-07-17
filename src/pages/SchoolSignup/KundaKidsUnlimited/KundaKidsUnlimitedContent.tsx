@@ -9,15 +9,12 @@ const KundaKidsUnlimitedContent = () => {
     "Newsletter",
     "Booking",
     "KundaKids Mobile and Deesktop App",
-    "Confidence Workshop (virtual)",
     "Free Delivery(UK, Euroupe & USA)",
-    "Access to Events",
   ];
   const customArray2 = [
     "Storytellling (Africa Languages)",
-    "African History Classes",
     "Financial Literacy",
-    "Illustration Classes",
+    "Access to Events",
     "Digital Gift Box",
   ];
 
@@ -34,10 +31,10 @@ const KundaKidsUnlimitedContent = () => {
         </div>
 
         <div className="bg-[#8530C1] rounded-[40px] px-6 py-4 border-solid border-[12px] border-gray-200 mt-8">
-          <p className=" text-center text-white text-[20px] font-Hanken">
-            EnterPrise
+          <p className=" text-center text-white text-[18px] font-Hanken">
+            School
           </p>
-          <h1 className=" text-center text-[30px] font-bold text-white mb-4 font-Hanken">
+          <h1 className=" text-center text-[36px] font-semibold text-white mb-4 font-Hanken">
             CUSTOM
           </h1>
           <div className="flex justify-between">
@@ -53,8 +50,8 @@ const KundaKidsUnlimitedContent = () => {
             </div>
           </div>
           <p className="flex justify-center">
-            <button className="text-[20px] py-4 px-10 font-bold rounded-[40px] bg-slate-50 text-[#8530C1]">
-              <h1 className="text-[20px]">Contact us</h1>
+            <button className="text-[20px] my-8 py-3 px-14 font-bold rounded-[40px] bg-slate-50 text-[#8530C1]">
+              <span className="text-[20px]">Contact us</span>
             </button>
           </p>
         </div>
@@ -73,7 +70,7 @@ const KundaKidsUnlimitedContent = () => {
         onClick={() => navigate("/newlyregistereduser")}
         className="absolute right-24 bottom-14 flex justify-center items-center gap-4"
       >
-        <p className="text-[18px] font-Hanken font-bold">Continue free </p>
+        <p className="text-[16px] font-Hanken font-semibold">Continue free </p>
         <img loading="lazy" src={GreaterIcon} alt="greater icon" />
       </button>
     </div>
@@ -84,11 +81,11 @@ export default KundaKidsUnlimitedContent;
 
 const CustomList = ({ val }: { val: string }) => {
   return (
-    <div className="flex justify-start items-center gap-4 my-3 text-white">
+    <div className="flex justify-start items-center gap-4 my-4 text-white">
       <span>
         <img loading="lazy" src={Marked} alt="marked" />
       </span>
-      <p>{val}</p>
+      <p className="text-[12px]">{val}</p>
     </div>
   );
 };

@@ -6,7 +6,7 @@ import { useState } from "react";
 import RemarkBg from "@/assets/remarkbg.svg";
 import RemarkIcon from "@/assets/remarkIcon.svg";
 import Button from "@/components/Button";
-import { RingProgress, Text } from "@mantine/core";
+import { RingProgress } from "@mantine/core";
 import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
 type ObjAnsQuestionType = {
   question: string;
@@ -168,7 +168,12 @@ const Quiz = () => {
       )}
       {curentStep === STEP_1 && (
         <div className="flex-grow mt-5 pt-5 px-40 flex  flex-col py-5 bg-white rounded-3xl ">
-          <Progress value={progress * answers.length} size="xl" radius="xl" />
+          <Progress
+            value={progress * answers.length}
+            size="xl"
+            radius="xl"
+            color="violet"
+          />
 
           {/* Question  */}
           <Question
@@ -220,8 +225,10 @@ const Question = ({
   currentQuestion: number;
 }) => {
   return (
-    <div className=" flex justify-center items-center flex-col gap-y-4 flex-grow">
-      <h1 className="text-[20px] font-bold  text-center">{quesObject.qus}</h1>
+    <div className=" flex justify-start mt-20 items-center flex-col gap-y-4 flex-grow ">
+      <h1 className="text-[24px] font-bold  text-center mb-8">
+        {quesObject.qus}
+      </h1>
       <div className=" flex flex-col gap-6">
         {quesObject.ans.map((ans, index) => (
           <AnsButton
@@ -256,9 +263,11 @@ const AnsButton = ({
   return (
     <button
       onClick={handleSelected}
-      className={`py-3 px-20 ${
-        selected?.answer === title ? "bg-[#8530C1] text-white " : ""
-      } border border-[#8530C1] rounded-3xl`}
+      className={`py-3 px-20 w-[478px] ${
+        selected?.answer === title
+          ? "bg-[#8530C1] text-white "
+          : "text-[#8530C1]"
+      } border border-[#8530C1] rounded-2xl texx`}
     >
       {title}
     </button>
@@ -320,18 +329,18 @@ const GoodRemarkMsg = ({ setShowResult }: { setShowResult: () => void }) => {
   };
   return (
     <>
-      <div className="relative flex-grow bg-white">
+      <div className="relative flex-grow bg-white ">
         <img
           src={RemarkBg}
           alt=""
-          className="absolute left-[320px] top-[20px] "
+          className="absolute left-1/2 top-[30%]  transform -translate-x-1/2 -translate-y-1/2"
         />
         <img
           src={RemarkIcon}
           alt="remarkIcon"
-          className="absolute left-[400px] top-[20px]"
+          className="absolute left-1/2 top-[30%] transform -translate-x-1/2 -translate-y-1/2"
         />
-        <div className="text-center  mt-[250px]">
+        <div className="text-center  mt-[290px]">
           <h1 className="font-bold">Good Job!</h1>
           <p className="text-[18px] text-[#B5B5C3]">
             You answered 7 questions correct
@@ -374,9 +383,10 @@ const Result = ({ answers }: { answers: ObjAnsQuestionType[] }) => {
               thickness={40}
               sections={[{ value: 70, color: "white" }]}
               label={
-                <Text color="black" weight={700} align="center" size="xxl">
-                  7/10
-                </Text>
+                <h1 className="font-bold text-black  text-center text-[30px]">
+                  <span className="text-[40px]">7</span>
+                  /10
+                </h1>
               }
               rootColor="rgba(255,255,255,0.4)"
             />
