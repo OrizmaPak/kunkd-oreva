@@ -32,13 +32,13 @@ const PaymentType = () => {
             </div>
           </div>
 
-          <div className="  flex-grow grid grid-cols-5 gap-y-10 ">
+          <div className="  flex-grow grid grid-cols-5 gap-y-1 ">
             <span className="flex items-center justify-center">
               <img
                 loading="lazy"
                 src={GooglePay}
                 alt="googlepay"
-                className="w-[30%]"
+                className="w-[72px] h-[72px]"
               />
             </span>
             <span className="flex items-center justify-center">
@@ -46,7 +46,7 @@ const PaymentType = () => {
                 loading="lazy"
                 src={PayPal}
                 alt="googlepay"
-                className="w-[30%]"
+                className="w-[72px] h-[72px]"
               />
             </span>
             <span className="flex items-center justify-center">
@@ -54,7 +54,7 @@ const PaymentType = () => {
                 loading="lazy"
                 src={ApplePay}
                 alt="googlepay"
-                className="w-[30%]"
+                className="w-[72px] h-[72px]"
               />
             </span>
             <span className="flex items-center justify-center">
@@ -62,7 +62,7 @@ const PaymentType = () => {
                 loading="lazy"
                 src={Visa}
                 alt="googlepay"
-                className="w-[30%]"
+                className="w-[72px] h-[72px]"
               />
             </span>
             <span className="flex items-center justify-center">
@@ -70,7 +70,7 @@ const PaymentType = () => {
                 loading="lazy"
                 src={Master}
                 alt="googlepay"
-                className="w-[30%]"
+                className="w-[72px] h-[72px]"
               />
             </span>
             <span className="flex items-center justify-center">
@@ -78,7 +78,7 @@ const PaymentType = () => {
                 loading="lazy"
                 src={Stripe}
                 alt="googlepay"
-                className="w-[30%]"
+                className="w-[72px] h-[72px]"
               />
             </span>
             <span className="flex items-center justify-center">
@@ -86,7 +86,7 @@ const PaymentType = () => {
                 loading="lazy"
                 src={Amex}
                 alt="googlepay"
-                className="w-[30%]"
+                className="w-[72px] h-[72px]"
               />
             </span>
 
@@ -95,7 +95,7 @@ const PaymentType = () => {
                 loading="lazy"
                 src={Payooner}
                 alt="googlepay"
-                className="w-[30%]"
+                className="w-[72px] h-[72px]"
               />
             </span>
             <span className="flex items-center justify-center">
@@ -111,7 +111,7 @@ const PaymentType = () => {
                 loading="lazy"
                 src={Discover}
                 alt="googlepay"
-                className="w-[30%]"
+                className="w-[72px] h-[72px]"
               />
             </span>
           </div>

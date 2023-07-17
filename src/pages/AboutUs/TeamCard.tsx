@@ -1,25 +1,38 @@
 import { useState } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const TeamCard = ({
   name,
   image,
   message,
   title,
+  imageBlur,
 }: {
   name: string;
   image: string;
   message: string;
   title: string;
+  imageBlur?: string;
 }) => {
   const [showMessage, setShowMessage] = useState(false);
 
   return (
     <div className="w-[340px] h-[440px] relative transition-all duration-500 ease-in-out  ">
-      <img
+      {/* <img
         loading="lazy"
         src={image}
         alt="image"
         className="w-[100%] h-[100%]"
+      /> */}
+
+      <LazyLoadImage
+        src={image}
+        placeholderSrc={imageBlur}
+        effect="blur"
+        wrapperClassName=""
+        // width={408}
+        // height={408}
       />
       {showMessage && (
         <div

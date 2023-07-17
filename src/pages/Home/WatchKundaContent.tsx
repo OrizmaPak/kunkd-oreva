@@ -6,6 +6,9 @@ import RoundP from "@/assets/roundpurpple.svg";
 import RoundR from "@/assets/Ellipse 59.svg";
 import RoundY from "@/assets/Ellipse 57.svg";
 import ZagR from "@/assets/ZagR.svg";
+import Phonesblur from "@/assets/phonesblur.jpg";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const WatchKundaContent = () => {
   return (
@@ -13,11 +16,21 @@ const WatchKundaContent = () => {
       <div className="flex items-center justify-center  ">
         {/* <div className="bg-cover bg-center  w-full bg-red-500 matt h-[300px] " style={{ backgroundImage: `url(${ThirdWave})` }}/> */}
 
-        <img
+        {/* <img
           loading="lazy"
-          src={Phones}
+          src={phonesImg}
           alt=""
           className="z-[50] mt-[-500px] w-[70%]"
+          onLoad={() => setPhonesImg(Phones)}
+        /> */}
+        <LazyLoadImage
+          width={1184}
+          height={926}
+          effect="blur"
+          className="z-[50] mt-[-00px]  "
+          wrapperClassName="z-[50] mt-[-500px] "
+          src={Phones}
+          placeholderSrc={Phonesblur}
         />
 
         {/* <div> */}

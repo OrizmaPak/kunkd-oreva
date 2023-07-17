@@ -1,5 +1,3 @@
-// import Card from "./Card";
-// import SavingCard from "./@'/ser";
 import { DataType } from "../../pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import React from "react";
 

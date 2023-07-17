@@ -8,14 +8,23 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { z, ZodType } from "zod";
+import { useVerifyOtp } from "@/api/queries";
+import { notifications } from "@mantine/notifications";
+import { Loader } from "@mantine/core";
+import { getApiErrorMessage } from "@/api/helper";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store";
+import { TUser } from "@/api/types";
 
 const SchoolVerificationContent = () => {
   const navigate = useNavigate();
+  const { isLoading, mutate } = useVerifyOtp();
+  const [, setUser] = useStore(getUserState);
 
-  const schema: ZodType<Pick<FormData, "pin">> = z.object({
-    pin: z
+  const schema: ZodType<Pick<FormData, "otp">> = z.object({
+    otp: z
       .string()
-      .min(4, { message: " Pin can only be at least 4 characters long" }),
+      .min(4, { message: " OTP can only be at least 4 characters long" }),
   });
 
   const { handleSubmit, setValue, watch, trigger, formState } =
@@ -23,17 +32,39 @@ const SchoolVerificationContent = () => {
       resolver: zodResolver(schema),
     });
 
-  const pin = watch("pin");
+  const otp = watch("otp");
 
-  const submitData = (data: Pick<FormData, "pin">) => {
+  const submitData = (data: Pick<FormData, "otp">) => {
     console.log("testing");
     console.log("It is working", data);
-    navigate("/secureadminportal");
+
+    mutate(
+      { ...data },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+          const res = data?.data?.data as TUser;
+
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+          setUser({ ...res });
+          navigate("/secureadminportal");
+        },
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
   };
 
   const handlePinChange = (value: string) => {
     console.log("-- pin value: ", value);
-    setValue("pin", value);
+    setValue("otp", value);
     trigger("pin");
   };
 
@@ -46,17 +77,19 @@ const SchoolVerificationContent = () => {
       </Link>
       <div className="w-[100%]  my-auto ">
         <span></span>
-        <h1 className="font-bold text-[40px] font-Recoleta">Verify account</h1>
-        <p className="text-[15px] text-[#A7A7A7] font-Hanken">
+        <h1 className=" font-semibold text-[40px] font-Recoleta">
+          Verify account
+        </h1>
+        <p className="text-[14px] text-[#A7A7A7] font-Hanken">
           A code has been sent to mail, enter to verify your account{" "}
         </p>
         <form onSubmit={handleSubmit(submitData)}>
           <div className="mt-8 flex justify-center items-center flex-col">
             <Group position="center">
-              <PinInput value={pin} onChange={handlePinChange} />
+              <PinInput value={otp} onChange={handlePinChange} />
             </Group>
             <br />
-            {formState.errors.pin && (
+            {formState.errors.otp && (
               <p className="text-red-700">
                 PIN must be exactly 4 characters long
               </p>
@@ -64,11 +97,15 @@ const SchoolVerificationContent = () => {
           </div>
 
           <p className="mt-10">
-            {/* <Link to="/schoolcongratulations"> */}
             <Button type="submit" size="full">
-              Login
+              {isLoading ? (
+                <p className="flex justify-center items-center">
+                  <Loader color="white" size="sm" />
+                </p>
+              ) : (
+                <span>Verify</span>
+              )}
             </Button>
-            {/* </Link> */}
           </p>
         </form>
         <p className="mt-6 text-center text-[]  ">

@@ -1,3 +1,6 @@
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import BlxstBlur from "@/assets/BlxstBlur.jpg";
 export type CardTypes = {
   image?: string;
   name?: string;
@@ -10,11 +13,20 @@ const ClientCard = ({ image, name, location, story }: CardTypes) => {
   return (
     <div className="w-[450px] h-[258px] p-7 rounded-xl  bg-[#FFFFFF] shadow-md ml-[20px] mb-8">
       <div className="flex items-center mb-6">
-        <img
+        {/* <img
           loading="lazy"
           src={image}
           alt=""
           className="rounded-[50%] w-[100px] h-[100px]"
+        /> */}
+        <LazyLoadImage
+          src={image}
+          placeholderSrc={BlxstBlur}
+          effect="blur"
+          className="rounded-[50%] w-[100px] h-[100px]"
+          wrapperClassName="rounded-[50%] w-[100px] h-[100px]"
+          width={100}
+          height={100}
         />
         <span className="ml-4 flex flex-col">
           <span className="font-bold">{name}</span>

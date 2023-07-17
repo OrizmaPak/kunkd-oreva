@@ -12,38 +12,27 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { z, ZodType } from "zod";
-import { Modal } from "@mantine/core";
-import { STEP_1, STEP_2 } from "@/utils/constants";
-import { useDisclosure } from "@mantine/hooks";
-import { useState } from "react";
-import StudentLoginModal from "./StudentLoginModal";
-import TeacherLoginModal, { CongratulationsModal } from "./TeacherLoginModal";
+// import { Modal } from "@mantine/core";
+// import { STEP_1, STEP_2 } from "@/utils/constants";
+// import { useDisclosure } from "@mantine/hooks";
+// import { useState } from "react";
+// import StudentLoginModal from "./StudentLoginModal";
+// import TeacherLoginModal, { CongratulationsModal } from "./TeacherLoginModal";
 import { userContext } from "@/Context/StateProvider";
-
-const users = [
-  {
-    email: "jimatth222@gmail.com",
-    userType: "school",
-  },
-  {
-    email: "kizito222@gmail.com",
-    isCreatePassword: true,
-    userType: "teacher",
-  },
-  {
-    email: "mat222@gmail.com",
-    isCreatePassword: false,
-    userType: "teacher",
-  },
-  {
-    email: "tola222@gmail.com",
-    // isCreatePassword: false,
-    userType: "parent",
-  },
-];
+import { googleSignIn, facebookSignIn } from "@/auth/sdk";
+import { useLogin } from "@/api/queries";
+import { Loader } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { getApiErrorMessage } from "@/api/helper";
+import { TUser } from "@/api/types";
+import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
 
 const LoginContent = () => {
-  const [{ userType, email }, dispatch] = userContext();
+  const { isLoading, mutate } = useLogin();
+  const [user, setUser] = useStore(getUserState);
+
+  const [{ userType, email }] = userContext();
   console.log("testing one", userType, email);
   const navigate = useNavigate();
   const schema: ZodType<FormData> = z.object({
@@ -60,41 +49,71 @@ const LoginContent = () => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const [opened1, { open: open1, close: close1 }] = useDisclosure(false);
-  const [opened2, { open: open2, close: close2 }] = useDisclosure(false);
+  // const [opened1, { open: open1, close: close1 }] = useDisclosure(false);
 
-  const [modalStep, setModalStep] = useState(STEP_1);
-  // const [studentModal, setStudentModal] = useState(false);
-  const [teacherModal, setTeacherModal] = useState(false);
+  // const [modalStep, setModalStep] = useState(STEP_1);
+  // // const [studentModal, setStudentModal] = useState(false);
+  // const [teacherModal, setTeacherModal] = useState(false);
   console.log("--- errors", errors);
 
   const submitData = (data: FormData) => {
     console.log("It is working", data);
 
-    const user = users.find((el) => el.email === data.email);
-    user &&
-      dispatch({
-        type: "LOGIN",
-        payload: { email: user.email, userType: user.userType },
-      });
-    if (user?.userType === "school") {
-      navigate("/newlyregistereduser");
-    }
-    if (user?.userType === "teacher" && user.isCreatePassword) {
-      navigate("/newlyregistereduser");
-    }
-    if (user?.userType === "teacher" && !user.isCreatePassword) {
-      open1();
-      setTeacherModal(true);
-    }
-    if (user?.userType === "parent") {
-      navigate("/selectprofile");
-    }
+    mutate(
+      {
+        ...data,
+      },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+          const res = data?.data?.data as TUser;
+          setUser({ ...res });
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+
+          if (res?.role === "schoolAdmin") {
+            navigate("/newlyregistereduser");
+          } else {
+            navigate("/selectprofile");
+          }
+          if (user) {
+          }
+        },
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+
+    // const user = users.find((el) => el.email === data.email);
+    // user &&
+    //   dispatch({
+    //     type: "LOGIN",
+    //     payload: { email: user.email, userType: user.userType },
+    //   });
+    // if (user?.userType === "school") {
+    //   navigate("/newlyregistereduser");
+    // }
+    // if (user?.userType === "teacher" && user.isCreatePassword) {
+    //   navigate("/newlyregistereduser");
+    // }
+    // if (user?.userType === "teacher" && !user.isCreatePassword) {
+    //   open1();
+    //   setTeacherModal(true);
+    // }
+    // if (user?.userType === "parent") {
+    //   navigate("/selectprofile");
+    // }
   };
 
   return (
     <div className="w-[100%] max-w-[500px] mx-auto absolute left-0 right-0 bottom-0 top-0 my-auto flex justify-end items-center ">
-      <Modal
+      {/* <Modal
         radius={"xl"}
         size="lg"
         opened={opened1}
@@ -106,18 +125,7 @@ const LoginContent = () => {
           <TeacherLoginModal onContinue={() => setModalStep(STEP_2)} />
         )}
         {teacherModal && modalStep === STEP_2 && <CongratulationsModal />}
-      </Modal>
-
-      <Modal
-        radius={"xl"}
-        size="lg"
-        opened={opened2}
-        onClose={close2}
-        withCloseButton={false}
-        centered
-      >
-        <StudentLoginModal />
-      </Modal>
+      </Modal> */}
 
       <Link to="/">
         <span className="absolute top-[40px] ">
@@ -166,20 +174,26 @@ const LoginContent = () => {
             </Link>
           </p>
           <Button type="submit" size="full">
-            Login
+            {isLoading ? (
+              <p className="flex justify-center items-center">
+                <Loader color="white" size="sm" />
+              </p>
+            ) : (
+              <span>Login</span>
+            )}
           </Button>
-          <p className="flex justify-center mt-3 text-[#8530C1] font-bold underline">
+          {/* <p className="flex justify-center mt-3 text-[#8530C1] font-bold underline">
             <button type="button" onClick={() => open2()}>
               Sign In as Student
             </button>
-          </p>
+          </p> */}
         </form>
         <p className="flex items-center justify-items-center py-2 gap-3  text-gray-400 font-400">
           <hr className="flex-1" />
           <span>or continue with</span> <hr className="flex-1" />
         </p>
         <div className="flex gap-8">
-          <Button size="full" varient="outlined">
+          <Button size="full" onClick={googleSignIn} varient="outlined">
             <img
               loading="lazy"
               src={Google}
@@ -190,7 +204,7 @@ const LoginContent = () => {
           <Button size="full" varient="outlined">
             <img loading="lazy" src={Apple} alt="apple" className="mx-auto " />
           </Button>
-          <Button size="full" varient="outlined">
+          <Button onClick={facebookSignIn} size="full" varient="outlined">
             <img
               loading="lazy"
               src={Facebook}

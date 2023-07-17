@@ -4,7 +4,7 @@ import Starr from "@/assets/starr.svg";
 import { motion } from "framer-motion";
 import SchoolBg from "@/assets/schoolImage.svg";
 import SchoolLogo from "@/assets/schoolIcon.svg";
-import { userContext } from "@/Context/StateProvider";
+// import { userContext } from "@/Context/StateProvider";
 import EditIcon from "@/assets/editPencil.svg";
 import CameraIcon from "@/assets/cameraIcon.svg";
 import CopyIcon from "@/assets/copyIcon.svg";
@@ -15,6 +15,8 @@ import Teacher01 from "@/assets/teacher01.svg";
 import BigPencil from "@/assets/bigeditingpencil.svg";
 import InputFormat from "@/common/InputFormat";
 import { useState } from "react";
+import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
 
 const parentData = {
   image: Teacher01,
@@ -55,10 +57,10 @@ const schData = {
 };
 
 const Profile = () => {
-  const [{ userType }] = userContext();
   const [parentEditMode, setParentEditMode] = useState(false);
   const [teacherEditMode, setTeacherEditMode] = useState(false);
   const [schEditMode, setSchEditMode] = useState(false);
+  const [user, ,] = useStore(getUserState);
 
   return (
     <>
@@ -71,7 +73,7 @@ const Profile = () => {
         <div className="px-4 ">
           <h1 className="text-[30px] font-bold my-8 font-Hanken">Profile</h1>
 
-          {userType === "teacher" && (
+          {user?.role === "teacher" && (
             <>
               <PTCard {...teacherData} />
               {teacherEditMode ? (
@@ -87,23 +89,23 @@ const Profile = () => {
               )}
             </>
           )}
-          {userType === "school" && (
+          {user?.role === "schoolAdmin" && (
             <>
               <SchCard {...schData} />
               {schEditMode ? (
                 <EditSchoolPersonalInfomation
                   onSave={() => setSchEditMode(false)}
-                  {...schData}
+                  {...user}
                 />
               ) : (
                 <SchoolPersonalInfomation
-                  {...schData}
+                  {...user}
                   openEdit={() => setSchEditMode(true)}
                 />
               )}
             </>
           )}
-          {userType === "parent" && (
+          {user?.role === "parent" && (
             <>
               <PTCard {...parentData} />
               {parentEditMode ? (
@@ -140,7 +142,12 @@ const PTCard = ({
   return (
     <div className="flex justify-between p-6 border border-[#8530C1]  rounded-3xl">
       <div className="flex justify-center items-center gap-14 relative ">
-        <img loading="lazy" src={image} alt="image" className="w-[150px]" />
+        <img
+          loading="lazy"
+          src={image ? image : Teacher01}
+          alt="image"
+          className="w-[150px]"
+        />
         <img
           loading="lazy"
           src={BigPencil}
@@ -215,7 +222,8 @@ const ParentPersonalInfomation = ({
 };
 
 const SchoolPersonalInfomation = ({
-  contactName,
+  // contactName,
+  firstname,
   phone,
   email,
   country,
@@ -224,7 +232,7 @@ const SchoolPersonalInfomation = ({
   taxId,
   openEdit,
 }: {
-  name?: string;
+  firstname?: string;
   phone?: string;
   email?: string;
   country?: string;
@@ -251,8 +259,8 @@ const SchoolPersonalInfomation = ({
         <span>Email</span>
       </div>
       <div className="grid grid-cols-[1fr_1fr_1fr_1fr] mb-4 text-[14px]">
-        <span>{contactName}</span>
-        <span>{phone}</span>
+        <span>{firstname}</span>
+        <span>{phone ? phone : "+234804525689"}</span>
         <span>{email}</span>
       </div>
       <div className="grid grid-cols-[1fr_1fr_1fr_1fr] text-[#B5B5C3] text-[12px] mt-5">
@@ -262,10 +270,10 @@ const SchoolPersonalInfomation = ({
         <span>Tax ID</span>
       </div>
       <div className="grid grid-cols-[1fr_1fr_1fr_1fr] mb-5 text-[14px]">
-        <span>{country}</span>
-        <span>{city}</span>
-        <span>{postCode}</span>
-        <span>{taxId}</span>
+        <span>{country ? country : " United Kingdom"}</span>
+        <span>{city ? city : "Leeds East london"}</span>
+        <span>{postCode ? postCode : "KTF456"}</span>
+        <span>{taxId ? taxId : "LP45"}</span>
       </div>
     </div>
   );
@@ -338,7 +346,12 @@ const SchCard = ({
         <UploadPicture />
       </Modal>
       <div className="relative">
-        <img loading="lazy" src={schbg} alt="schbg" className="w-[100%]" />
+        <img
+          loading="lazy"
+          src={schbg ? schbg : SchoolBg}
+          alt="schbg"
+          className="w-[100%]"
+        />
         <img
           src={CameraIcon}
           alt="camera"

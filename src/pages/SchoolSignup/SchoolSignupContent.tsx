@@ -10,20 +10,30 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { z, ZodType } from "zod";
 import { useNavigate } from "react-router-dom";
+import useStore from "@/store";
+import { useCreateSchoolUser } from "@/api/queries";
+import { getPushTokenState } from "@/store/pushTokenStore";
+import { Loader } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { getApiErrorMessage } from "@/api/helper";
 
 const SchoolSignupContent = () => {
   const navigate = useNavigate();
+  const { isLoading, mutate } = useCreateSchoolUser();
+  const [pushToken] = useStore(getPushTokenState);
+
+  console.log("token ", pushToken);
 
   const schema: ZodType<FormData> = z.object({
-    schoolName: z
+    school_name: z
       .string()
       .min(4, { message: "School name must be at least 4 characters long" })
       .max(40, { message: "School name must not exceed 20 characters" }),
-    address: z
+    school_address: z
       .string()
       .min(4, { message: "Address must be at least 4 characters long" })
       .max(50, { message: "Address must not exceed 40 characters" }),
-    contactName: z
+    name: z
       .string()
       .min(4, { message: "Contact name must be at least 4 characters long" })
       .max(20, { message: "Contact name must not exceed 20 characters" }),
@@ -40,10 +50,29 @@ const SchoolSignupContent = () => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const submitData = (data: FormData) => {
-    console.log("testing");
-    console.log("It is working", data);
-    navigate("/schoolverification");
+  const submitData = async (data: FormData) => {
+    mutate(
+      { ...data, fcm_token: pushToken },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+
+          navigate("/schoolverification");
+        },
+
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
   };
 
   return (
@@ -56,7 +85,7 @@ const SchoolSignupContent = () => {
       <div className="w-[100%] pt-20">
         <span></span>
         <h1 className="font-bold fon text-[40px] font-Recoleta">
-          Sign up of school
+          Sign up for school
         </h1>
         <p className="text-[15px] text-[#A7A7A7] font-Hanken">
           Start learning and reading without restrictions.{" "}
@@ -66,8 +95,8 @@ const SchoolSignupContent = () => {
             <InputFormat
               type="text"
               placeholder="School Name"
-              reg={register("schoolName")}
-              errorMsg={errors.schoolName?.message}
+              reg={register("school_name")}
+              errorMsg={errors.school_name?.message}
             />
           </p>
 
@@ -75,8 +104,8 @@ const SchoolSignupContent = () => {
             <InputFormat
               type="text"
               placeholder="School Address"
-              reg={register("address")}
-              errorMsg={errors.address?.message}
+              reg={register("school_address")}
+              errorMsg={errors.school_address?.message}
             />
           </p>
 
@@ -84,8 +113,8 @@ const SchoolSignupContent = () => {
             <InputFormat
               type="text"
               placeholder="Contact Name"
-              reg={register("contactName")}
-              errorMsg={errors.contactName?.message}
+              reg={register("name")}
+              errorMsg={errors.name?.message}
             />
           </p>
           <p className="my-3">
@@ -114,15 +143,20 @@ const SchoolSignupContent = () => {
             />
           </p>
           <p className="text-center font-Hanken m-3 mt-4 text-gray-400">
-            By continuing you agree to Kunda Kids{" "}
+            By continuing you agree to Kunda Kids
             <strong className=" text-black"> Terms of Service </strong>and{" "}
             <strong className="text-black"> Privacy Policy </strong>
           </p>
-          {/* <Link to="/schoolverification"> */}
+
           <Button type="submit" size="full">
-            Create free account
+            {isLoading ? (
+              <p className="flex justify-center items-center">
+                <Loader color="white" size="sm" />
+              </p>
+            ) : (
+              <span>Create free account</span>
+            )}
           </Button>
-          {/* </Link> */}
         </form>
 
         <p className="mt-2 text-center text-[] text-gray-400 ">

@@ -4,10 +4,10 @@ const Hero = () => {
   return (
     <div className="bg-[rgba(237,28,36,0.06);] pt-14">
       <div className="max-w-[1200px] w-full mx-auto ">
-        <h1 className="font-bold font-Recoleta text-center text-[60px] mt-20">
+        <h1 className="font-semibold font-Recoleta text-center text-[60px] mt-20">
           Books for brilliants minds
         </h1>
-        <p className=" leading-8  text-center mb-20 text-[20px]">
+        <p className=" leading-[30px]  text-center mb-20 text-[18px]">
           Our award-winning children's books aim to build confident kids and
           inspire all children to learn about and celebrate diverse <br />
           people and places.

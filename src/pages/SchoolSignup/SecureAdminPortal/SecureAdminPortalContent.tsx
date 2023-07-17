@@ -8,9 +8,17 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { z, ZodType } from "zod";
+import { useSecurePortal } from "@/api/queries";
+import { notifications } from "@mantine/notifications";
+import { Loader } from "@mantine/core";
+import { getApiErrorMessage } from "@/api/helper";
+// import { getUserState } from "@/store/authStore";
+// import useStore from "@/store";
 
 const SecureAdminPortalContent = () => {
   const navigate = useNavigate();
+  const { isLoading, mutate } = useSecurePortal();
+  // const [user] = useStore(getUserState);
 
   const schema: ZodType<Pick<FormData, "pin">> = z.object({
     pin: z
@@ -28,7 +36,28 @@ const SecureAdminPortalContent = () => {
   const submitData = (data: Pick<FormData, "pin">) => {
     console.log("testing");
     console.log("It is working", data);
-    navigate("/schoolcongratulations");
+
+    mutate(
+      { ...data },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+
+          navigate("/schoolcongratulations");
+        },
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
   };
 
   const handlePinChange = (value: string) => {
@@ -68,7 +97,13 @@ const SecureAdminPortalContent = () => {
           <p className="mt-10">
             {/* <Link to="/schoolcongratulations"> */}
             <Button type="submit" size="full">
-              Login
+              {isLoading ? (
+                <p className="flex justify-center items-center">
+                  <Loader color="white" size="sm" />
+                </p>
+              ) : (
+                <span>Continue</span>
+              )}
             </Button>
             {/* </Link> */}
           </p>

@@ -14,19 +14,19 @@ const LoginCarousel = () => {
     {
       bgImage: ParentalCtrl,
       title: "Read, Listen & Enjoy",
-      className: "bg-[rgba(40,67,135,0.5)]",
+      className: "bg-[rgba(40,67,135,0.5)] backdrop-blur-lg",
       body: "Get access to fun and inspiring stories & audiobooks that build on soft skills, values, reading and numeracy on a weekly basis.",
     },
     {
       bgImage: LearnImage1,
       title: "Learn African Languages",
-      className: "bg-[rgba(60,179,113,0.5)]",
+      className: "bg-[rgba(60,179,113,0.5)] backdrop-blur-lg",
       body: "Get access to fun and inspiring stories & audiobooks that build on soft skills, values, reading and numeracy on a weekly basis.",
     },
     {
       bgImage: LearnImage2,
       title: "Learn African Languages",
-      className: "bg-[rgba(106,90,205,0.5)]",
+      className: "bg-[rgba(106,90,205,0.5)] backdrop-blur-lg",
       body: "Get access to fun and inspiring stories & audiobooks that build on soft skills, values, reading and numeracy on a weekly basis.",
     },
   ];
@@ -37,7 +37,7 @@ const LoginCarousel = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    speed: 3000,
+    speed: 0,
     autoplaySpeed: 5000,
     arrows: false,
     dots: false,
