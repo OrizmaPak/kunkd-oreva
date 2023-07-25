@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import AfricanLanguagesNav from "./AfricanLanguagesNav";
-import { africanLanguagesData } from "./AfricanLanguages";
+// import { africanLanguagesData } from "./AfricanLanguages";
 import CardHome from "@/common/User/CardHome";
 import { useGetContebtBySubCategories } from "@/api/queries";
 import { useNavigate } from "react-router-dom";

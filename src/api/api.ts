@@ -14,7 +14,6 @@ import type {
   TUdateProfileData,
   TGoogleSignUpData,
   TContentForHome,
-  TGetContentById,
 } from "./types";
 
 // School

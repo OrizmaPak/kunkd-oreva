@@ -8,7 +8,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
 import EnterPassCode from "@/pages/DashBoard/SchoolDashBoard/Main/EnterPassCode";
-import { userContext } from "@/Context/StateProvider";
+// import { userContext } from "@/Context/StateProvider";
 import UserIcon2 from "@/assets/userIcon2.svg";
 import KundaLogo from "@/assets/schoolIcon.svg";
 import Blxst from "@/assets/Blxst.svg";

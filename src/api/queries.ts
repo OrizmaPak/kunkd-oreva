@@ -19,7 +19,7 @@ import {
   SocialLogin,
   GetContebtBySubCategories,
 } from "./api";
-import { TGetContentById } from "./types";
+// import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 // import { TProfileData } from "./types";
 // import { AxiosResponse } from "axios";

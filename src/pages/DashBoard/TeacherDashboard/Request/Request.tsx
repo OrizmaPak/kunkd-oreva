@@ -2,10 +2,10 @@ import Chiks from "@/assets/chiks.svg";
 import Jessica from "@/assets/jessica.svg";
 import Grease from "@/assets/grease.svg";
 import Blxst from "@/assets/Blxst.svg";
-import Godwin from "@/assets/godwin.svg";
-import Mitchel from "@/assets/godwin.svg";
-import Pemela from "@/assets/pamela.svg";
-import Spa from "@/assets/spa.svg";
+// import Godwin from "@/assets/godwin.svg";
+// import Mitchel from "@/assets/godwin.svg";
+// import Pemela from "@/assets/pamela.svg";
+// import Spa from "@/assets/spa.svg";
 import Bella from "@/assets/bella.svg";
 
 type resquestT = {

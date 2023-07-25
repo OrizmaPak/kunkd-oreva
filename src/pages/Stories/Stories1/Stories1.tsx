@@ -1,6 +1,5 @@
 import StoriesNav from "./StoriesNav";
 import { useParams, useNavigate } from "react-router-dom";
-import { storiesData } from "../Stories";
 import CardScreenHome from "@/common/User/CardScreenHome";
 import CardHome, { CardProps } from "@/common/User/CardHome";
 import Bookmark from "@/assets/Bookmark.svg";
