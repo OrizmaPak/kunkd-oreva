@@ -1,7 +1,5 @@
 import Wrapper from "@/common/User/Wrapper";
 import Hero from "@/pages/Library/LibraryNotPaid/Hero";
-import CardScreen from "@/common/User/CardScreen";
-import Card from "@/common/User/Card";
 import CardHome, { CardProps } from "@/common/User/CardHome";
 import CardScreenHome from "@/common/User/CardScreenHome";
 // import { data } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
@@ -227,39 +225,6 @@ export const storiesData: StoriesType[] = [
       "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
     content:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-];
-
-const subButtons = [
-  {
-    name: " Bedtime",
-  },
-  {
-    name: "Holidays and Celebration",
-  },
-  {
-    name: " Inventors",
-  },
-  {
-    name: " Life & Growing up",
-  },
-  {
-    name: "Folk Tales",
-  },
-  {
-    name: " Inspiring Leaders",
-  },
-  {
-    name: "Finance",
-  },
-  {
-    name: "Money smart",
-  },
-  {
-    name: "Fairy Tales",
-  },
-  {
-    name: "Sport",
   },
 ];
 

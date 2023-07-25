@@ -32,7 +32,7 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
 
   const otp = watch("otp");
 
-  const [isActive, setIsActive] = useState(false);
+  // const [isActive, setIsActive] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(60);
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -40,7 +40,7 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
     }, 1000);
 
     if (secondsLeft === 0) {
-      setIsActive(true);
+      // setIsActive(true);
       clearInterval(intervalId);
     }
 

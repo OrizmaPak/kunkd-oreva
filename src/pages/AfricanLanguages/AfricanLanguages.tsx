@@ -1,6 +1,6 @@
 import Wrapper from "@/common/User/Wrapper";
 import Hero from "@/pages/Library/LibraryNotPaid/Hero";
-import { CardProps } from "@/common/User/Card";
+// import { CardProps } from "@/common/User/Card";
 // import { data } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 // import { DataType } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 
@@ -21,11 +21,6 @@ import Puffcard from "@/assets/puffcard.svg";
 import AfricanBanner from "@/assets/africanlanBanner.svg";
 import VideoBook1 from "@/videobooks/videobook1.mp4";
 
-import Yoruba from "@/assets/yoruba.svg";
-import Igbo from "@/assets/Igbo.svg";
-import Twi from "@/assets/twi.svg";
-import Luganda from "@/assets/Luganda.svg";
-import Kiswahili from "@/assets/Kiswahili.svg";
 import Videos from "./Videos";
 import VideoPlayer from "./VideoPlayer";
 import Quiz from "./Quiz";
@@ -242,71 +237,6 @@ type TSubVideo = {
   image: string;
   short_link: string;
 };
-
-// const subButtons = [
-//   {
-//     name: " Bedtime",
-//   },
-//   {
-//     name: "Holidays and Celebration",
-//   },
-//   {
-//     name: " Inventors",
-//   },
-//   {
-//     name: " Life & Growing up",
-//   },
-//   {
-//     name: "Folk Tales",
-//   },
-//   {
-//     name: " Inspiring Leaders",
-//   },
-//   {
-//     name: "Finance",
-//   },
-//   {
-//     name: "Money smart",
-//   },
-//   {
-//     name: "Fairy Tales",
-//   },
-//   {
-//     name: "Sport",
-//   },
-// ];
-
-const languageData = [
-  {
-    image: Yoruba,
-    title: "Yoruba",
-  },
-
-  {
-    image: Twi,
-    title: "Twi",
-  },
-  {
-    image: Luganda,
-    title: "Luganda",
-  },
-  {
-    image: Kiswahili,
-    title: "Kiswahili",
-  },
-  {
-    image: Igbo,
-    title: "Igbo",
-  },
-];
-// const MainStoriesLayout = () => {
-//   return (
-//     <>
-//       <Hero image={AfricanBanner} />
-//       <Outlet />
-//     </>
-//   );
-// };
 
 const AfricanLanguagess = () => {
   return (
