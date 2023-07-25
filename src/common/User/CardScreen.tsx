@@ -24,7 +24,7 @@ const CardScreen = ({ data, header, action, actiontitle, card }: Props) => {
         className="overflow-auto  no-scrollbar "
         style={{ maxHeight: "500px" }}
       >
-        <div className="grid grid-flow-col  gap-5 mb-14  ">
+        <div className="flex  gap-5 mb-14  ">
           {data?.map((data) => {
             return card ? card(data) : null;
             // <Card key={index} image={data?.image} title={data?.title} />

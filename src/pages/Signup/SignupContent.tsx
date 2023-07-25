@@ -2,13 +2,20 @@ import Button from "@/components/Button";
 import Apple from "@/assets/apple2.svg";
 import Facebook from "@/assets/facebook.svg";
 import Google from "@/assets/googleicon2.svg";
-// import InputFormat from './InputFormat'
 import Cancel from "@/assets/Cancel.svg";
 import OptionButton from "./OptionButton";
 import Checked from "@/assets/Checked.svg";
 import UnChecked from "@/assets/uncheck.svg";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useGoogleSignup } from "@/api/queries";
+import { googleSignIn } from "@/auth/sdk";
+import { getPushTokenState } from "@/store/pushTokenStore";
+import useStore from "@/store";
+import { notifications } from "@mantine/notifications";
+import { getApiErrorMessage } from "@/api/helper";
+import { getUserState } from "@/store/authStore";
+import { TUser } from "@/api/types";
 
 const options = [
   {
@@ -24,13 +31,64 @@ const options = [
 ];
 
 const SignContent = () => {
+  const [, setUser] = useStore(getUserState);
   const navigate = useNavigate();
   const [to, setTo] = useState("");
-
+  const { mutate } = useGoogleSignup();
+  const [pushToken, ,] = useStore(getPushTokenState);
   const handleClick = () => {
     console.log(to);
   };
 
+  const handleGoogleSignUp = async () => {
+    try {
+      const returnValue = await googleSignIn();
+      console.log("Request object", {
+        displayName: returnValue.user.displayName,
+        uid: returnValue.user.uid,
+        email: returnValue.user.email,
+        phoneNumber: returnValue.user.phoneNumber,
+        photoURL: returnValue.user.photoURL,
+        fcmToken: pushToken,
+      });
+      mutate(
+        {
+          providerId: returnValue.providerId,
+          displayName: returnValue.user.displayName,
+          uid: returnValue.user.uid,
+          email: returnValue.user.email,
+          phoneNumber: returnValue.user.phoneNumber,
+          photoURL: returnValue.user.photoURL,
+          fcmToken: pushToken,
+        },
+        {
+          onSuccess(data) {
+            console.log("success", data.data.message);
+            const res = data?.data?.data as TUser;
+
+            notifications.show({
+              title: `Notification`,
+              message: data.data.message,
+            });
+            setUser({ ...res });
+            navigate("/childprofilesetup");
+          },
+
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    } catch (error) {
+      notifications.show({
+        title: `Notification`,
+        message: getApiErrorMessage(error),
+      });
+    }
+  };
   return (
     <div className="w-[100%] max-w-[500px] mx-auto relative">
       <Link to="/">
@@ -68,13 +126,8 @@ const SignContent = () => {
           </div>
         </div>
         <div className="flex gap-8">
-          <Button size="full" varient="outlined">
-            <img
-              loading="lazy"
-              src={Google}
-              alt="google"
-              className="mx-auto "
-            />
+          <Button onClick={handleGoogleSignUp} size="full" varient="outlined">
+            <img loading="lazy" src={Google} alt="google" className="mx-auto" />
           </Button>
           <Button size="full" varient="outlined">
             <img loading="lazy" src={Apple} alt="apple" className="mx-auto " />

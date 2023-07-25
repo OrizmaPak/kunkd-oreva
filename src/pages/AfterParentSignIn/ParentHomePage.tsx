@@ -1,24 +1,28 @@
 import InnerWrapper from "@/common/User/InnerWrapper";
 import Wrapper from "@/common/User/Wrapper";
 import Hero from "./Hero";
-import CardScreen from "@/common/User/CardScreen";
-import Card from "@/common/User/Card";
 import AdsButton from "@/common/User/AdsButton";
-import {
-  data,
-  DataType,
-} from "../AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import useStore from "@/store/index";
 import { getProfileState } from "@/store/profileStore";
 import { selectAvatarType } from "./SelectProfile";
+import { useContentForHome } from "@/api/queries";
+import CardScreenHome from "@/common/User/CardScreenHome";
+import { CardProps } from "@/common/User/CardHome";
+import CardHome from "@/common/User/CardHome";
+import CategoriesCard from "../Library/LibraryNotPaid/CategoriesCard";
+import { useNavigate } from "react-router-dom";
+import musicIcon from "@/assets/musicIcon.svg";
+import videoIcon from "@/assets/videoicon.svg";
+import BookIcon from "@/assets/bookicon.svg";
 
 const ParentHomePage = () => {
   let profiles: selectAvatarType;
   const [profile] = useStore(getProfileState);
+  const { data: contentData } = useContentForHome();
+  const recommendedStories = contentData?.data.data.recommended_stories;
+  const newTrending = contentData?.data.data.trending_stories;
   const currentId = Number(localStorage.getItem("profileId"));
-  if (profile) {
-    console.log("profile", profile);
-  }
+
   if (
     // data2?.data.data.filter((each: profileType) => each.id !== currentProfile)
     !currentId
@@ -27,32 +31,72 @@ const ParentHomePage = () => {
   } else {
     profiles = profile?.find((each) => each.id === currentId)!;
   }
+  const navigate = useNavigate();
+
   return (
     <div>
       <Wrapper>
         <InnerWrapper>
           <Hero userimage={profiles?.image} username={profiles?.name} />
 
-          <CardScreen
-            data={data?.slice(1, 6).map((el) => ({ ...el }))}
+          <h1 className="text-center font-bold text-[30px] font-Recoleta my-10 ">
+            Our Library
+          </h1>
+          <div className="flex justify-center items-center my-8 mb-14">
+            <div className="flex justify-center items-center gap-[150px]  ">
+              <CategoriesCard
+                image={BookIcon}
+                label="Stories"
+                goTo={() => navigate("stories")}
+              />
+              <CategoriesCard
+                image={musicIcon}
+                label="Audio books"
+                goTo={() => navigate("audiobooks")}
+              />
+              <CategoriesCard
+                image={videoIcon}
+                label="African Language"
+                goTo={() => navigate("africanlanguages")}
+              />
+            </div>
+          </div>
+          <CardScreenHome
+            data={newTrending}
             header="New & Trending"
             actiontitle="View all"
             isTitled={false}
-            card={(props: DataType) => <Card {...props} />}
+            card={(props: CardProps) => (
+              <CardHome
+                {...props}
+                goTo={() =>
+                  navigate(
+                    `${props.category?.toLowerCase()}/${props.theme?.toLowerCase()}/${
+                      props.id
+                    }`
+                  )
+                }
+              />
+            )}
           />
-          <CardScreen
-            data={data?.slice(1, 6).map((el) => ({ ...el }))}
-            card={(props: DataType) => <Card {...props} />}
-            header="Books In Our Library"
-            actiontitle="View Categories"
-            isTitled={true}
-          />
+
           <AdsButton />
-          <CardScreen
-            data={data?.slice(1, 6).map((el) => ({ ...el, title: "" }))}
+          <CardScreenHome
+            data={recommendedStories}
             header="Recommended For You"
             isTitled={false}
-            card={(props: DataType) => <Card {...props} />}
+            card={(props: CardProps) => (
+              <CardHome
+                {...props}
+                goTo={() =>
+                  navigate(
+                    `${props.category?.toLowerCase()}/${props.theme?.toLowerCase()}/${
+                      props.id
+                    }`
+                  )
+                }
+              />
+            )}
           />
         </InnerWrapper>
       </Wrapper>

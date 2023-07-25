@@ -68,7 +68,7 @@ const SchoolLayout = () => {
 
       <div className="w-full   bg-[#FFF7FD] px-[100px] mt-[8vh] py-2  pb-4 h-[91vh]  ">
         <div className="flex max-w-[1280px] w-full mx-auto  h-full gap-8 mt-[1vh]">
-          <div className="basis-1/4 bg-white   h-full rounded-[40px] px-7 flex  flex-col pb-4 ">
+          <div className="basis-1/4 bg-white   h-full rounded-[40px] px- flex  flex-col pb-4 ">
             <div className="flex-grow-1 flex-1">
               <Header
                 icon1={
@@ -152,10 +152,10 @@ export const Header = ({
 }) => {
   return (
     <div>
-      <button className="px-4 mb-8 py-3  bg-[#EBEFF3]  rounded-3xl flex items-center justify-between gap-2 w-full   my-4">
+      <button className="px-4 mb-8 py-3  bg-[#EBEFF3]  rounded-3xl flex items-center  gap-2 w-full   my-4">
         <span>{icon1}</span>
 
-        <span className="text-[20px] font-bold">School Logo</span>
+        <span className="text-[14px] font-bold ml-4">School Logo</span>
       </button>
     </div>
   );

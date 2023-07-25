@@ -23,7 +23,7 @@ const ChoosePlanContent = () => {
           <PackageCard
             isIcon={true}
             title="Forever"
-            btn="Choose Plan"
+            btn="Choose "
             price="Free"
             content={[
               MarkGreen,
@@ -37,7 +37,7 @@ const ChoosePlanContent = () => {
           <PackageCard
             isIcon={true}
             title="1 Month"
-            btn="Choose Plan"
+            btn="Choose"
             price="$4.99/m"
             content={[MarkGreen, MarkGreen, MarkGreen, MarkGreen, MarkGreen]}
           ></PackageCard>

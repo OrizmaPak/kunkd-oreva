@@ -20,7 +20,7 @@ import { z, ZodType } from "zod";
 // import TeacherLoginModal, { CongratulationsModal } from "./TeacherLoginModal";
 import { userContext } from "@/Context/StateProvider";
 import { googleSignIn, facebookSignIn } from "@/auth/sdk";
-import { useLogin } from "@/api/queries";
+import { useLogin, useSocialLogin } from "@/api/queries";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
@@ -31,6 +31,43 @@ import { getUserState } from "@/store/authStore";
 const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
   const [user, setUser] = useStore(getUserState);
+  const { mutate: socilaMutate } = useSocialLogin();
+  const handleGoogleSignUp = async () => {
+    try {
+      const returnValue = await googleSignIn();
+      socilaMutate(
+        {
+          id: returnValue.user.uid,
+          email: returnValue.user.email,
+        },
+        {
+          onSuccess(data) {
+            console.log("success", data.data.message);
+            const res = data?.data?.data as TUser;
+            notifications.show({
+              title: `Notification`,
+              message: data.data.message,
+            });
+            setUser({ ...res });
+            console.log("work in progress", res);
+            navigate("/selectprofile");
+          },
+
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    } catch (error) {
+      notifications.show({
+        title: `Notification`,
+        message: getApiErrorMessage(error),
+      });
+    }
+  };
 
   const [{ userType, email }] = userContext();
   console.log("testing one", userType, email);
@@ -193,7 +230,7 @@ const LoginContent = () => {
           <span>or continue with</span> <hr className="flex-1" />
         </p>
         <div className="flex gap-8">
-          <Button size="full" onClick={googleSignIn} varient="outlined">
+          <Button size="full" onClick={handleGoogleSignUp} varient="outlined">
             <img
               loading="lazy"
               src={Google}

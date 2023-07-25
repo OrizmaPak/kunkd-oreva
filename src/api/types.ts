@@ -42,6 +42,14 @@ export type TApiError = AxiosError<{
   data: unknown;
 }>;
 
+export type TContentForHome = {};
+
+export type TGoogleSignUpData = {};
+export type TGetContentById = {
+  contentId: string;
+  userId: string;
+};
+
 export type TUser = (Partial<User> & Partial<returnUser>) | null;
 
 type TResponse<T> = {

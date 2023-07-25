@@ -29,6 +29,7 @@ import Kiswahili from "@/assets/Kiswahili.svg";
 import Videos from "./Videos";
 import VideoPlayer from "./VideoPlayer";
 import Quiz from "./Quiz";
+import { useGetSubCategories } from "@/api/queries";
 
 export type StoriesType = {
   title?: string;
@@ -234,6 +235,14 @@ export const africanLanguagesData: StoriesType[] = [
   },
 ];
 
+type TSubVideo = {
+  id: number;
+  name: string;
+  slug: string;
+  image: string;
+  short_link: string;
+};
+
 // const subButtons = [
 //   {
 //     name: " Bedtime",
@@ -306,8 +315,8 @@ const AfricanLanguagess = () => {
         <InnerWrapper>
           <Routes>
             <Route index element={<LanguagesVideo />}></Route>
-            <Route path=":lan_type" element={<Videos />}></Route>
-            <Route path=":lan_type/:id" element={<VideoPlayer />}></Route>
+            <Route path=":lan_type/:id" element={<Videos />}></Route>
+            <Route path="player/:title/:id" element={<VideoPlayer />}></Route>
             <Route path=":story_type/:id/quiz" element={<Quiz />}></Route>
           </Routes>
         </InnerWrapper>
@@ -319,6 +328,9 @@ export default AfricanLanguagess;
 
 const LanguagesVideo = () => {
   // const params = useParams();
+  const { data } = useGetSubCategories();
+  const subCategory = data?.data.data[2].sub_categories;
+  console.log(subCategory);
   return (
     <>
       {/* <div className="bg-white rounded-3xl"> */}
@@ -334,10 +346,10 @@ const LanguagesVideo = () => {
       </div>
       <div className="flex justify-center items-center">
         <div className="grid grid-cols-5 gap-8 px-24 py-10 justify-center items-center">
-          {languageData.map((story, index) => {
+          {subCategory?.map((story: TSubVideo, index: number) => {
             return (
               <>
-                <VideoCard key={index} {...story} size={200} />
+                <VideoCard key={index} {...story} />
               </>
             );
           })}
@@ -348,26 +360,18 @@ const LanguagesVideo = () => {
   );
 };
 
-export const VideoCard = ({ title, image, size }: CardProps) => {
+export const VideoCard = ({ name, image, id }: TSubVideo) => {
   const navigate = useNavigate();
   // const { id: storyType } = useParams();
   const goto = () => {
-    if (title) {
-      navigate(title?.trim().toLocaleLowerCase());
+    if (name) {
+      navigate(`${name?.trim().toLocaleLowerCase()}/${id}`);
     }
   };
   return (
-    <div
-      onClick={goto}
-      className="w-[200px]"
-      style={{ width: `${size ? size : ""}px` }}
-    >
+    <div onClick={goto} className="w-[200px]">
       <span>
-        <img
-          src={image}
-          alt="image"
-          style={{ width: `${size ? size : "350px"}px` }}
-        />
+        <img src={image} alt="image" />
       </span>
       {/* {title ? (
         <p className="mt-[10px] font-bold font-Hanken">{title}</p>

@@ -342,9 +342,9 @@ export const SelectAvatar = ({
             <div className="flex justify-center items-center">
               <div className="grid grid-cols-4 gap-x-8 gap-y-4">
                 {isLoadingAvatar ? (
-                  <span>
+                  <p className=" flex justify-center items-center">
                     <Loader size={"lg"} />
-                  </span>
+                  </p>
                 ) : (
                   data?.data.data.avatars?.map(
                     (avatar: selectAvatarType, index: number) => {
@@ -374,7 +374,7 @@ export const SelectAvatar = ({
                   <Loader color="white" size="sm" />
                 </p>
               ) : (
-                <span>Continue</span>
+                <span className="text-white">Continue</span>
               )}
             </button>
           </div>
@@ -443,7 +443,7 @@ export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
         <p className="text-center my-4">You have successfully added a child</p>
         <p className="mb-12">
           <Button onClick={handleSubmit}>
-            <span>Continue</span>
+            <span className="text-white">Continue</span>
           </Button>
         </p>
       </div>

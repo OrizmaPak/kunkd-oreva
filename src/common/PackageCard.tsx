@@ -53,8 +53,8 @@ const PackageCard = ({
       {content && !isIcon && (
         <div className=" flex flex-col ">
           {content.map((item, index) => (
-            <div className="mt-5 " key={index}>
-              <p className="text-sm my-5">{item}</p>
+            <div className="mt-2 " key={index}>
+              <p className="text-sm my-4">{item}</p>
             </div>
           ))}
         </div>
@@ -63,7 +63,7 @@ const PackageCard = ({
       {content && isIcon && (
         <div className=" flex flex-col ">
           {content.map((item, index) => (
-            <div className="mt-7" key={index}>
+            <div className="mt-2" key={index}>
               <p className=" flex justify-center items-center">
                 <img
                   loading="lazy"
@@ -79,7 +79,7 @@ const PackageCard = ({
 
       {btn && (
         <div className="flex justify-center items-center">
-          <Link to="/makepayment">
+          <Link to={price === "Free" ? "/childprofilesetup" : "/makepayment"}>
             <button className="mt-8 bg-[#E7D4F4] text-[#8530C1] p-3 rounded-2xl">
               {btn}
             </button>

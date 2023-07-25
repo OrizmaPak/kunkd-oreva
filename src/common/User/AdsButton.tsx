@@ -1,6 +1,6 @@
 const AdsButton = () => {
   return (
-    <div>
+    <div className="mb-14">
       <div>
         <p className="bg-[#8530C1] rounded-3xl mx-20 py-4 flex justify-between items-center gap-4 px-20 ">
           <p className="font-[bold] text-white text-[18px]">

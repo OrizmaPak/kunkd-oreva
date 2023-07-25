@@ -1,10 +1,20 @@
 import { useParams } from "react-router-dom";
 import AfricanLanguagesNav from "./AfricanLanguagesNav";
 import { africanLanguagesData } from "./AfricanLanguages";
-import Card from "@/common/User/Card";
+import CardHome from "@/common/User/CardHome";
+import { useGetContebtBySubCategories } from "@/api/queries";
+import { useNavigate } from "react-router-dom";
 
 const Videos = () => {
-  const { lan_type } = useParams();
+  const navigate = useNavigate();
+  const { lan_type, id } = useParams();
+  const { data } = useGetContebtBySubCategories(id!);
+  console.log(data?.data.data.records);
+  const subCategoryContents = data?.data.data.records as {
+    thumbnail: string;
+    id: number;
+    name: string;
+  }[];
   return (
     <div className="bg-[#fff7fd] ">
       <AfricanLanguagesNav category="Africanlanguages" lanType={lan_type} />
@@ -20,8 +30,12 @@ const Videos = () => {
         </p>
         <hr className="my-16 mx-20" />
         <div className="grid grid-cols-5 gap-5 px-20 mt-10">
-          {africanLanguagesData.map((data, index) => (
-            <Card key={index} clickable {...data} />
+          {subCategoryContents?.map((data, index) => (
+            <CardHome
+              key={index}
+              {...data}
+              goTo={() => navigate(`../player/${data.name}/${data.id}`)}
+            />
           ))}
         </div>
       </div>
