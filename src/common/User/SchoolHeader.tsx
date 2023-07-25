@@ -34,11 +34,8 @@ const SchoolHeader = () => {
   const navigate = useNavigate();
   const [user] = useStore(getUserState);
   const [profile] = useStore(getProfileState);
-  console.log("______user______", user);
 
-  const [{ userType }] = userContext();
   const handleDashboard = () => {
-    console.log("usertype", userType);
     if (user?.role === "teacher") {
       navigate("../teacherdashboard");
     }
@@ -221,39 +218,13 @@ const SchoolHeader = () => {
                 </div>
               </Menu.Target>
               <Menu.Dropdown>
-                <div className="flex flex-col py-2 px-1">
+                <div className="flex flex-col py-2 px-2 ">
                   {profile.map((profile, index) => (
-                    <Menu.Item>
-                      <button
-                        onClick={() => handleChangeProfile(profile.id)}
-                        key={index}
-                      >
-                        {profile.name}
-                      </button>
+                    <Menu.Item onClick={() => handleChangeProfile(profile.id)}>
+                      <button key={index}>{profile.name}</button>
                     </Menu.Item>
                   ))}
-                  {/* <Menu.Item>
-                    <button className="p-2 px-4 flex gap-2  items-center hover:cursor-pointer  hover:text-[#8530C1]">
-                      <img
-                        loading="lazy"
-                        src={Avatar1}
-                        alt="avatar1"
-                        className="w-[25%]"
-                      />
-                      <span>Jake</span>
-                    </button>
-                  </Menu.Item> */}
-                  {/* <Menu.Item>
-                    <button className="p-2 px-4 flex gap-2  items-center  hover:cursor-pointer  hover:text-[#8530C1]">
-                      <img
-                        loading="lazy"
-                        src={Avatar2}
-                        alt="avatar1"
-                        className="w-[25%]"
-                      />
-                      <span>Mabel</span>
-                    </button>
-                  </Menu.Item> */}
+
                   <Menu.Item>
                     <button
                       onClick={() => navigate("/account")}

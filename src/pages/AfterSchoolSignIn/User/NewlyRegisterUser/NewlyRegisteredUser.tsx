@@ -9,11 +9,18 @@ import Earniing2card from "@/assets/earniing2card.svg";
 import Earningcard from "@/assets/earningcard.svg";
 import Mamacard from "@/assets/mamacard.svg";
 import Puffcard from "@/assets/puffcard.svg";
-import CardScreen from "@/common/User/CardScreen";
 import AdsButton from "@/common/User/AdsButton";
-import Card from "@/common/User/Card";
 import Wrapper from "@/common/User/Wrapper";
 import InnerWrapper from "@/common/User/InnerWrapper";
+import CategoriesCard from "@/pages/Library/LibraryNotPaid/CategoriesCard";
+import { useNavigate } from "react-router-dom";
+import musicIcon from "@/assets/musicIcon.svg";
+import videoIcon from "@/assets/videoicon.svg";
+import BookIcon from "@/assets/bookicon.svg";
+import CardScreenHome from "@/common/User/CardScreenHome";
+import { CardProps } from "@/common/User/CardHome";
+import CardHome from "@/common/User/CardHome";
+import { useContentForHome } from "@/api/queries";
 
 export type DataType = {
   title?: string;
@@ -91,32 +98,83 @@ export const data: DataType[] = [
 ];
 
 const NewlyRegisteredUser = () => {
+  const navigate = useNavigate();
+
+  const { data: contentData } = useContentForHome();
+  console.log("Content for home", contentData?.data.data.recommended_stories);
+  const recommendedStories = contentData?.data.data.recommended_stories;
+  const newTrending = contentData?.data.data.trending_stories;
+  console.log(newTrending);
   return (
     // <div className="w-full  bg-[#EBEFF3] px-[130px] py-[40px]  ">
     // <div className=" w-full rounded-[35px] bg-white h-full mx-auto   ">
     <Wrapper>
       <InnerWrapper>
         <Hero />
-        <CardScreen
-          data={data?.slice(1, 6).map((el) => ({ ...el, title: "" }))}
+        <hr className="mx-20 mb-20" />
+        <h1 className="text-center font-bold text-[30px] font-Recoleta my-10 ">
+          Our Library
+        </h1>
+
+        <div className="flex justify-center items-center my-8">
+          <div className="flex justify-center items-center gap-[150px]  ">
+            <CategoriesCard
+              image={BookIcon}
+              label="Stories"
+              goTo={() => navigate("stories")}
+            />
+            <CategoriesCard
+              image={musicIcon}
+              label="Audio books"
+              goTo={() => navigate("audiobooks")}
+            />
+            <CategoriesCard
+              image={videoIcon}
+              label="African Language"
+              goTo={() => navigate("africanlanguages")}
+            />
+          </div>
+        </div>
+
+        <CardScreenHome
+          data={newTrending?.map((el: CardProps) => ({ ...el }))}
           header="New & Trending"
           actiontitle="View all"
           isTitled={false}
-          card={(props: DataType) => <Card {...props} />}
+          card={(props: CardProps) => (
+            <CardHome
+              {...props}
+              goTo={() =>
+                navigate(
+                  `${props.category?.toLowerCase()}/${props.theme?.toLowerCase()}/${
+                    props.id
+                  }`
+                )
+              }
+            />
+          )}
         />
-        <CardScreen
-          data={data?.slice(1, 6).map((el) => ({ ...el }))}
-          card={(props: DataType) => <Card {...props} />}
-          header="Books In Our Library"
-          actiontitle="View Categories"
-          isTitled={true}
-        />
+
         <AdsButton />
-        <CardScreen
-          data={data?.slice(1, 6).map((el) => ({ ...el, title: "" }))}
+        <CardScreenHome
+          data={recommendedStories?.map((el: CardProps) => ({
+            ...el,
+            title: "",
+          }))}
           header="Recommended For You"
           isTitled={false}
-          card={(props: DataType) => <Card {...props} />}
+          card={(props: CardProps) => (
+            <CardHome
+              {...props}
+              goTo={() =>
+                navigate(
+                  `${props.category?.toLowerCase()}/${props.theme?.toLowerCase()}/${
+                    props.id
+                  }`
+                )
+              }
+            />
+          )}
         />
       </InnerWrapper>
     </Wrapper>

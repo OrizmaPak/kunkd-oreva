@@ -13,8 +13,9 @@ const StoriesNav = ({
 }) => {
   const navigate = useNavigate();
   const { id } = useParams();
+
   return (
-    <div className="py-4 font-Recoleta pl-20 h-[90px] text-[24px]  font-semibold items-center rounded-full bg-white gap-8 flex px-8">
+    <div className="py-4 font-Recoleta pl-20 h-[60px] text-[24px]  font-semibold items-center rounded-full bg-white gap-8 flex px-8">
       <div
         className="flex gap-2 cursor-pointer"
         onClick={() => navigate(`/librarynotpaid/stories`)}

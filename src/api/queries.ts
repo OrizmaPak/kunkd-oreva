@@ -12,7 +12,14 @@ import {
   GetProfile,
   UpdatePassword,
   UpdateProfile,
+  GoogleSignUp,
+  ContentForHome,
+  GetContentById,
+  GetSubCategories,
+  SocialLogin,
+  GetContebtBySubCategories,
 } from "./api";
+import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 // import { TProfileData } from "./types";
 // import { AxiosResponse } from "axios";
@@ -123,4 +130,43 @@ export const useUpdateProfile = () => {
     mutationFn: UpdateProfile,
   });
 };
+
+// Google Sign up
+export const useGoogleSignup = () => {
+  return useMutation({
+    mutationFn: GoogleSignUp,
+  });
+};
+
+export const useContentForHome = () => {
+  return useQuery({ queryKey: ["ContentForHome"], queryFn: ContentForHome });
+};
+
+export const useGetContentById = (contentId: string, userId: string) => {
+  return useQuery({
+    queryKey: ["getContentById", contentId, userId],
+    queryFn: () => GetContentById(contentId, userId),
+  });
+};
+
+export const useGetSubCategories = () => {
+  return useQuery({
+    queryKey: ["getContentSubCategory"],
+    queryFn: GetSubCategories,
+  });
+};
+
+export const useGetContebtBySubCategories = (subId: string) => {
+  return useQuery({
+    queryKey: ["getContentBySubId", subId],
+    queryFn: () => GetContebtBySubCategories(subId),
+  });
+};
+
+export const useSocialLogin = () => {
+  return useMutation({
+    mutationFn: SocialLogin,
+  });
+};
+
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

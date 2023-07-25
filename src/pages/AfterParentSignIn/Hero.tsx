@@ -1,6 +1,6 @@
-import Banner1 from "@/assets/banner1.svg";
-import { Skeleton } from "@mantine/core";
-import { useState } from "react";
+import Slider from "react-slick";
+import PImages1 from "@/assets/pimages.svg";
+import PImages2 from "@/assets/Pimage2.svg";
 
 type Props = {
   //   banner: string;
@@ -9,38 +9,107 @@ type Props = {
 };
 
 const Hero = ({ username, userimage }: Props) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const settings = {
+    dots: true,
+    infinite: true,
+    // speed: 500,
+    fade: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    speed: 3000,
+    arrows: false,
+  };
   return (
-    <Skeleton visible={isLoading}>
-      <div>
-        <div className="flex  w-full  justify-between">
-          <div className="py-8 pl-24 mt-4">
-            <p className=" mb-5">
-              <img
-                loading="lazy"
-                src={userimage}
-                alt="userimage"
-                className="w-[150px] h-[150px] object-cover"
-              />
-            </p>
-            <h1 className="font-bold font-Recoleta text-[32px]">
-              Hello {username},
-            </h1>
-            <p className=" font-Hanken text-lg text-gray-400">Start reading.</p>
-          </div>
-          <div className="relative">
+    // <Skeleton visible={isLoading}>
+    <div>
+      <div className="flex  w-full  justify-between">
+        <div className="py-8 pl-24 mt-4">
+          <p className=" mb-2">
             <img
+              loading="lazy"
+              src={userimage}
+              alt="userimage"
+              className="w-[150px] h-[150px] object-cover"
+            />
+          </p>
+          <h1 className="font-bold font-Recoleta text-[25px]">
+            Hello {username},
+          </h1>
+          <p className=" font-Hanken text-lg text-gray-400">Start reading.</p>
+        </div>
+        <div className=" w-[900px]  h-[256px]">
+          <Slider {...settings}>
+            <div className="w-[900px] h-[256px] relative bg-[#8530C1]  rounded-bl-2xl rounded-tr-3xl">
+              <h1 className="text-[24px] text-white font-semibold mx-10  my-14">
+                Beautifully illustrated storybooks for <br /> your child
+              </h1>
+              <img
+                src={PImages1}
+                alt="images"
+                className="absolute  right-0 bottom-0"
+              />
+            </div>
+
+            <div className="bg-[#2BB457] relative w-[900px] h-[256px]  rounded-bl-2xl rounded-tr-3xl">
+              <h1 className="text-[24px] text-white mx-10  my-14 font-semibold">
+                Watch educational videos on the
+                <br /> African Culture
+              </h1>
+              <img
+                src={PImages2}
+                alt="images"
+                className="absolute  right-0 bottom-0"
+              />
+            </div>
+          </Slider>
+          <style>
+            {`
+          .slick-prev,
+          .slick-next {
+          }
+          .slick-prev:hover,
+          .slick-next:hover {
+            border-radius : 50%;
+          }
+          .slick-dots {
+            bottom: 20px;
+            left:-350px !important;
+            z-index: 1000 !important;
+      
+          }
+
+          .slick-dots li button:before {
+      font-size: 16px; /* Increase the font size of the dots */
+      line-height: 1; /* Adjust the line height of the dots */
+      width: 5px; /* Increase the width of the dots */
+      height: 5px; /* Increase the height of the dots */
+      *
+      
+    }
+    .slick-dots li button:before {
+      color:white; /* Set the background color of the active dot */
+      opacity: 0.2 !important; /* Set the opacity of the active dot */
+    }
+    .slick-dots li.slick-active button:before{
+      color: white;
+      opacity:1 !important;
+    }
+        `}
+          </style>
+
+          {/* <img
               src={Banner1}
               alt="Banner"
               className="w-[900px]"
               onLoad={() => setIsLoading(false)}
-            />
-            {/* <span className="absolute h-[20px] w-16 bg-[#782caf] bottom-[65px] left-[40px]"></span> */}
-          </div>
+            /> */}
+          {/* <span className="absolute h-[20px] w-16 bg-[#782caf] bottom-[65px] left-[40px]"></span> */}
         </div>
-        <hr className="mt-[60px] mx-16 " />
       </div>
-    </Skeleton>
+      <hr className="mt-[60px] mx-16 " />
+    </div>
+    // </Skeleton>
   );
 };
 

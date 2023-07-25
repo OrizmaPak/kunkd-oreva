@@ -1,9 +1,8 @@
 import StoriesNav from "./StoriesNav";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
-import Button from "@/components/Button";
-import { storiesData, StoriesType } from "../Stories";
-import CardScreen from "@/common/User/CardScreen";
-import Card from "@/common/User/Card";
+import { useParams, useNavigate } from "react-router-dom";
+import { storiesData } from "../Stories";
+import CardScreenHome from "@/common/User/CardScreenHome";
+import CardHome, { CardProps } from "@/common/User/CardHome";
 import Bookmark from "@/assets/Bookmark.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
 import PreviousIcon from "@/assets/chevrondown.svg";
@@ -14,6 +13,40 @@ import FastBackward from "@/assets/fastbackward.svg";
 import PauseIcon from "@/assets/pause.svg";
 import PlayIcon from "@/assets/play.svg";
 import Congrats from "@/assets/congrats.svg";
+import { useGetContentById, useContentForHome } from "@/api/queries";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store";
+import AfamBlur from "@/assets/afamblur.jpg";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+
+type TContentPage = {
+  audio: string;
+  web_body: string;
+  content_media_id: number;
+  image: string;
+  name: string;
+  page_number: number;
+};
+export type TStoryContent = {
+  category: string;
+  category_id: number;
+  content_type: string;
+  content_type_id: number;
+  has_quiz: boolean;
+  id: number;
+  is_liked: boolean;
+  media: string[];
+  media_type: string;
+  name: string;
+  pages: TContentPage[];
+  short_link: string;
+  slug: string;
+  synopsis: string;
+  tags: string;
+  theme: string;
+  thumbnail: string;
+};
 
 // const data = [
 //   {
@@ -72,21 +105,32 @@ import Congrats from "@/assets/congrats.svg";
 const Stories1 = () => {
   const [isFinish, setIsFinish] = useState(false);
   const [startRead, setStartRead] = useState(false);
-  const { id, story_type } = useParams();
-  const { state } = useLocation();
-  console.log(state);
-  const story = storiesData.find((el) => `${el.id}` === id);
+  const [user] = useStore(getUserState);
+
+  const params = useParams();
+  const { category, theme, id } = params;
+
+  // const story = storiesData.find((el) => `${el.id}` === id);
+  const { data } = useGetContentById(
+    id?.toString()!,
+    user?.user_id?.toString()!
+  );
+  const content = data?.data.data;
+  console.log(content);
+  const { data: recommendedData } = useContentForHome();
+  const recommendedStories = recommendedData?.data.data.recommended_stories;
+  const navigate = useNavigate();
   return (
     <div className=" ">
       <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] ">
         {/* <div className="flex flex-col h-full"> */}
 
         <div className=" ">
-          {story && (
+          {content && (
             <StoriesNav
-              category="Stories"
-              genre={story_type}
-              title={story?.title}
+              category={category}
+              genre={theme}
+              title={content.name}
             />
           )}
         </div>
@@ -94,30 +138,43 @@ const Stories1 = () => {
           <div className="flex-grow mt-5 rounded-2xl">
             {!isFinish ? (
               <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
-                {story && !startRead && (
+                {!startRead && (
                   <AboutPage
-                    story={story}
+                    story={content}
                     setStartRead={() => setStartRead(true)}
                   />
                 )}
 
-                {story && startRead && (
+                {content && startRead && (
                   <ReadPage
-                    story={story}
+                    thumbnail={content.thumbnail}
+                    content={content.pages}
                     setIsFinish={() => setIsFinish(true)}
                   />
                 )}
 
                 <div className="w-full bg-white rounded-3xl mt-4">
                   {
-                    <CardScreen
-                      data={storiesData?.slice(1, 6).map((el) => ({ ...el }))}
-                      card={(props: StoriesType) => (
-                        <Card {...props} size={200} />
+                    <CardScreenHome
+                      data={recommendedStories?.map((el: CardProps) => ({
+                        ...el,
+                        title: "",
+                      }))}
+                      header="Recommended For You"
+                      isTitled={false}
+                      card={(props: CardProps) => (
+                        <CardHome
+                          {...props}
+                          goTo={() => {
+                            navigate(
+                              `../../${props.category?.toLowerCase()}/${props.theme?.toLowerCase()}/${
+                                props.id
+                              }`
+                            );
+                            setStartRead(false);
+                          }}
+                        />
                       )}
-                      header="Trending"
-                      actiontitle="View all"
-                      isTitled={true}
                     />
                   }
                 </div>
@@ -140,25 +197,39 @@ const AboutPage = ({
   story,
   setStartRead,
 }: {
-  story: StoriesType;
+  story: TStoryContent;
   setStartRead: () => void;
 }) => {
   return (
     <div className="bg-[#5D0093]  w-[100%] flex rounded-3xl px-10 py-5">
       <div className="flex basis-full gap-2  border-r-2 justify-center items-center border-[#BD6AFA]  ">
         <p className="flex flex-col w-full">
-          <img
-            loading="lazy"
-            src={story?.image}
-            alt="image "
-            className="w-[300px]"
-          />
+          {story ? (
+            <LazyLoadImage
+              src={story?.thumbnail}
+              placeholderSrc={AfamBlur}
+              effect="blur"
+              className="rounded-2xl"
+              wrapperClassName=""
+              width={300}
+              height={300}
+            />
+          ) : (
+            <LazyLoadImage
+              placeholderSrc={AfamBlur}
+              effect="blur"
+              className="rounded-2xl"
+              wrapperClassName=""
+              width={300}
+              height={300}
+            />
+          )}
         </p>
         <p className="flex flex-col w-full  ">
-          <span className="font-bold font-Recoleta text-white text-[30px]">
-            {story?.title}
+          <span className="font-bold font-Recoleta text-white text-[24px]">
+            {story?.name}
           </span>
-          <span className="mt-4 text-[#BD6AFA]  ">{story?.author}</span>
+          <span className="mt-4 text-[#BD6AFA]  ">Dele and Louisa Olafuyi</span>
           <p className="mt-40 flex gap-4">
             <button
               onClick={setStartRead}
@@ -175,13 +246,23 @@ const AboutPage = ({
           <h1 className="text-white font-bold  font-Hanken text-[25px] my-4">
             About the author
           </h1>
-          <p>{story?.aboutAuthor}</p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam
+            at ullam incidunt maiores ut officiis adipisci in quod accusamus
+            fugit. Quia illum, inventore id tempora recusandae ut consectetur
+            veniam reiciendis.
+          </p>
         </div>
         <div>
           <h1 className="text-white font-bold  font-Hanken text-[25px] my-4">
             Overview
           </h1>
-          <p>{story?.overView}</p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero
+            harum eligendi cupiditate labore possimus deleniti fugit consequatur
+            ducimus in eum, ullam voluptate eveniet accusantium reprehenderit
+            magni qui. Aliquam, quia reiciendis!
+          </p>
         </div>
       </div>
     </div>
@@ -189,44 +270,64 @@ const AboutPage = ({
 };
 
 const ReadPage = ({
-  story,
+  content,
   setIsFinish,
+  thumbnail,
 }: {
-  story: StoriesType;
+  content: TContentPage[];
   setIsFinish: () => void;
+  thumbnail: string;
 }) => {
   const [isReading, setIsReading] = useState(false);
+  const [page, setPage] = useState(0);
+  const pageTotal = content.length - 1;
 
   return (
     <div className="flex py-16 bg-white  rounded-3xl px-16">
       <div className=" basis-3/4 flex  items-center">
         <img
           loading="lazy"
-          src={story.image}
+          src={thumbnail}
           alt="image"
-          className="w-[400px]"
+          className="w-[400px] rounded-xl"
         />
       </div>
       <div className=" basis-full flex flex-col ">
         <div className="flex-grow">
           <p className="mb-5">
-            <Button
-              onClick={() => setIsReading(true)}
-              size="md"
-              color="black"
-              varient="outlined"
+            <button
+              onClick={() => setIsReading(!isReading)}
+              className={`flex border py-2 ${
+                isReading ? "bg-[#8530C1] text-white" : "text-[#8530C1]"
+              } px-6 rounded-3xl border-[#8530C1] justify-center items-center`}
             >
-              Read to me
-            </Button>
+              <p
+                className={`h-[3px] ${
+                  isReading ? "bg-green-600" : "bg-yellow-600"
+                } rounded-full w-[3px] p-[5px] inline-block mr-2`}
+              ></p>
+              <p className="inline">Read to me</p>
+            </button>
           </p>
-          <p className=" leading-10">{story.content}</p>
+          {/* <p>{content[3].web_body}</p> */}
+          <article
+            className=" leading-10 flex h-[350px] overflow-y-auto  text-[16px] font-medium font-Hanken"
+            dangerouslySetInnerHTML={{ __html: content[page].web_body }}
+          />
         </div>
 
-        <div>
+        <div className="mt-8">
           {isReading ? (
-            <AudioControls audio={story.audioBook} setIsFinish={setIsFinish} />
+            <AudioControls
+              audio={content[page].audio}
+              setIsFinish={setIsFinish}
+            />
           ) : (
-            <BookPagination setIsFinish={setIsFinish} />
+            <BookPagination
+              setIsFinish={setIsFinish}
+              setPage={setPage}
+              pageTotal={pageTotal}
+            />
           )}
         </div>
       </div>
@@ -234,9 +335,17 @@ const ReadPage = ({
   );
 };
 
-const BookPagination = ({ setIsFinish }: { setIsFinish: () => void }) => {
-  const pageTotal = 5;
+const BookPagination = ({
+  setIsFinish,
+  setPage,
+  pageTotal,
+}: {
+  setIsFinish: () => void;
+  setPage: (val: number) => void;
+  pageTotal: number;
+}) => {
   const [currentPage, setCurrentage] = useState(1);
+  setPage(currentPage);
   const pageItirate = (itirateControl: string) => {
     if (currentPage < pageTotal && itirateControl === "next") {
       setCurrentage((val) => (val += 1));
@@ -249,7 +358,7 @@ const BookPagination = ({ setIsFinish }: { setIsFinish: () => void }) => {
     <div>
       <div className="flex  justify-between   items-center">
         <span className="flex gap-2">
-          <p>Pages 5 </p>
+          <p>Pages: {pageTotal} </p>
           <img
             loading="lazy"
             src={ArrowDown}
@@ -260,14 +369,26 @@ const BookPagination = ({ setIsFinish }: { setIsFinish: () => void }) => {
         <div className="flex gap-4">
           <p className="bg-[#8530C1] text-white p-3 rounded-3xl px-8 gap-8 flex justify-between  items-center">
             <button onClick={() => pageItirate("prev")}>
-              <img loading="lazy" src={PreviousIcon} alt="icon" />
+              <img
+                loading="lazy"
+                src={PreviousIcon}
+                alt="icon"
+                className="w-[25px]"
+              />
             </button>
-            {currentPage !== pageTotal && <span>{currentPage}</span>}
-            {currentPage !== pageTotal && <span>/</span>}
-            {currentPage !== pageTotal && <span>{pageTotal}</span>}
+            <span className=" space-x-1">
+              {currentPage !== pageTotal && <span>{currentPage}</span>}
+              {currentPage !== pageTotal && <span>/</span>}
+              {currentPage !== pageTotal && <span>{pageTotal}</span>}
+            </span>
             {currentPage !== pageTotal && (
               <button onClick={() => pageItirate("next")}>
-                <img loading="lazy" src={NextIcon} alt="icon" />
+                <img
+                  loading="lazy"
+                  src={NextIcon}
+                  alt="icon"
+                  className="w-[25px]"
+                />
               </button>
             )}
           </p>

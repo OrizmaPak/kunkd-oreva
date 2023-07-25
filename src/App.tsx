@@ -63,15 +63,14 @@ import { auth } from "./firebase";
 import { getUserState } from "./store/authStore";
 import { TUser } from "./api/types";
 // import { googleSignIn } from "./auth/sdk";
+import Request from "./pages/DashBoard/TeacherDashboard/Request/Request";
 
 function App() {
-  const [user, setUser] = useStore(getUserState);
+  const [, setUser] = useStore(getUserState);
 
-  console.log("user data from Firebase", user);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       const res = currentUser as TUser;
-      console.log("on state change user", currentUser);
       if (currentUser) {
         setUser(res);
       }
@@ -101,10 +100,15 @@ function App() {
 
             {/* Routes for School Teaher and Parent After  login */}
             <Route element={<AppLayout />}>
-              <Route
-                path="newlyregistereduser"
-                element={<NewlyRegisteredUser />}
-              ></Route>
+              <Route path="newlyregistereduser/*">
+                <Route index element={<NewlyRegisteredUser />}></Route>
+                <Route path=":category/*" element={<Stories />}></Route>
+                <Route path="audiobooks/*" element={<AudioBooks />}></Route>
+                <Route
+                  path="africanlanguages/*"
+                  element={<AfricanLanguages />}
+                ></Route>
+              </Route>
               <Route
                 path="existingusernotpaid"
                 element={<ExistingUserNotPaid />}
@@ -113,7 +117,7 @@ function App() {
 
               <Route path="librarynotpaid/*">
                 <Route index element={<LibraryNotPaid />}></Route>
-                <Route path="stories/*" element={<Stories />}></Route>
+                <Route path=":category/*" element={<Stories />}></Route>
                 <Route path="audiobooks/*" element={<AudioBooks />}></Route>
                 <Route
                   path="africanlanguages/*"
@@ -126,7 +130,15 @@ function App() {
               {/* <Route path="stories1/:id" element={<Stories1 />}></Route> */}
               <Route path="mylist" element={<MyList />}></Route>
               <Route path="progressreport" element={<ProgressReport />}></Route>
-              <Route path="parenthomepage" element={<ParentHomePage />}></Route>
+              <Route path="parenthomepage/*">
+                <Route index element={<ParentHomePage />}></Route>
+                <Route path=":category/*" element={<Stories />}></Route>
+                <Route path="audiobooks/*" element={<AudioBooks />}></Route>
+                <Route
+                  path="africanlanguages/*"
+                  element={<AfricanLanguages />}
+                ></Route>
+              </Route>
 
               {/* ///////////////School Dashboard////////////// */}
               <Route path="schooldashboard/*" element={<SchoolLayout />}>
@@ -153,7 +165,7 @@ function App() {
                     element={<StudentProfile />}
                   ></Route>
                 </Route>
-                {/* <Route path="classes" element={<TClasses />}></Route> */}
+                <Route path="request" element={<Request />}></Route>
               </Route>
 
               {/* Account */}

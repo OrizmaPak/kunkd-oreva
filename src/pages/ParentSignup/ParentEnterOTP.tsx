@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TUser } from "@/api/types";
+import { useState, useEffect } from "react";
 
 const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
   const { isLoading, mutate } = useVerifyOtp();
@@ -30,6 +31,21 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
   });
 
   const otp = watch("otp");
+
+  const [isActive, setIsActive] = useState(false);
+  const [secondsLeft, setSecondsLeft] = useState(60);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setSecondsLeft((prevSeconds) => prevSeconds - 1);
+    }, 1000);
+
+    if (secondsLeft === 0) {
+      setIsActive(true);
+      clearInterval(intervalId);
+    }
+
+    return () => clearInterval(intervalId);
+  }, [secondsLeft]);
 
   const submitData = (data: Pick<FormData, "otp">) => {
     console.log("testing");
@@ -98,13 +114,7 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
             </p>
           </form>
           <p className="mt-2 text-center text-[] text-gray-400 ">
-            <span>Don't hava an account? </span>
-            <button
-              className="mt-8 text-[#8530C1] font-bold
-        "
-            >
-              Sign up
-            </button>
+            <strong>Resend in {secondsLeft}s</strong>
           </p>
         </div>
       </div>

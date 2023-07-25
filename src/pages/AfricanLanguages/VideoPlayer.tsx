@@ -5,13 +5,24 @@ import { useState, useRef } from "react";
 import SaveIcon from "@/assets/saveIcon.svg";
 import ShareIcon from "@/assets/shareIcon.svg";
 import Congrats from "@/assets/congrats.svg";
+import { useGetContentById } from "@/api/queries";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store";
 
 const VideoPlayer = () => {
   const [isfinish, setIsFinsh] = useState(false);
   const { lan_type, id } = useParams();
-  const video = africanLanguagesData.find((data) => data.id === id);
-  console.log(video);
+  // const video = africanLanguagesData.find((data) => data.id === id);
+  // console.log(video);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [user] = useStore(getUserState);
+  const { data } = useGetContentById(
+    id?.toString()!,
+    user?.user_id?.toString()!
+  );
+  const video = data?.data.data.media[0];
+  console.log("_____cont", video?.file);
+  console.log("_____cont", video);
 
   return (
     <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col  bg-[#fff7fd]">
@@ -33,13 +44,24 @@ const VideoPlayer = () => {
                 >
                   Finish
                 </button>
-                <video
-                  className=" rounded-t-3xl flex-grow"
-                  src={video?.videoBook}
-                  autoPlay
-                  ref={videoRef}
-                  controls
-                ></video>
+                {video?.file && (
+                  <video
+                    className=" rounded-t-3xl flex-grow"
+                    // src={video?.file}
+                    poster={video.thumbnail}
+                    autoPlay
+                    ref={videoRef}
+                    controls
+                  >
+                    <source
+                      src={
+                        "https://player.vimeo.com/external/797310663.m3u8?s=ad15c2d1d188c442dde9c3767ec66bbd598176fd&oauth2_token_id=1592929906"
+                      }
+                      type="video/mp4"
+                    />
+                  </video>
+                  // <iframe src={video.file} width="960" height="540"></iframe>
+                )}
               </div>
               <div className=" bg-white py-8  rounded-b-3xl px-24 flex justify-between  items-center">
                 <p className="text-[20px] font-bold ">{video?.title}</p>

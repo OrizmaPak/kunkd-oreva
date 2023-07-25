@@ -15,11 +15,26 @@ import { getApiErrorMessage } from "@/api/helper";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store";
 import { TUser } from "@/api/types";
+import { useState, useEffect } from "react";
 
 const SchoolVerificationContent = () => {
   const navigate = useNavigate();
   const { isLoading, mutate } = useVerifyOtp();
   const [, setUser] = useStore(getUserState);
+  const [isActive, setIsActive] = useState(false);
+  const [secondsLeft, setSecondsLeft] = useState(60);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setSecondsLeft((prevSeconds) => prevSeconds - 1);
+    }, 1000);
+
+    if (secondsLeft === 0) {
+      setIsActive(true);
+      clearInterval(intervalId);
+    }
+
+    return () => clearInterval(intervalId);
+  }, [secondsLeft]);
 
   const schema: ZodType<Pick<FormData, "otp">> = z.object({
     otp: z
@@ -109,7 +124,7 @@ const SchoolVerificationContent = () => {
           </p>
         </form>
         <p className="mt-6 text-center text-[]  ">
-          <strong>Resend in 59s</strong>
+          <strong>Resend in {secondsLeft}s</strong>
         </p>
       </div>
     </div>

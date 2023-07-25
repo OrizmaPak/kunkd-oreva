@@ -12,6 +12,9 @@ import type {
   TGetProfileData,
   TUpdatePassword,
   TUdateProfileData,
+  TGoogleSignUpData,
+  TContentForHome,
+  TGetContentById,
 } from "./types";
 
 // School
@@ -79,4 +82,29 @@ export const UpdateProfile = (payload: TUdateProfileData) => {
   formData.append("image", payload?.image);
   formData.append("profile_id", payload?.profile_id);
   return axios.patch("/profile", formData);
+};
+
+export const GoogleSignUp = (payload: TGoogleSignUpData) => {
+  return axios.post("/social/auth/web", payload);
+};
+
+export const ContentForHome = (payload: TContentForHome) => {
+  return axios.get("/content/screen/web", payload);
+};
+
+export const GetContentById = (contentId: string, userId: string) => {
+  return axios.get(`/content/${contentId}/${userId}`);
+};
+
+export const GetSubCategories = () => {
+  return axios.get("/content/categories");
+};
+
+export const GetContebtBySubCategories = (subId: string) => {
+  return axios.get(`/content/subcategory/${subId}`);
+};
+
+// Socila Login
+export const SocialLogin = (payload: TLoginData) => {
+  return axios.post("/signup/login", payload);
 };
