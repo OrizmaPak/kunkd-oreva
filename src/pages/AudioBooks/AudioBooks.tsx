@@ -3,13 +3,7 @@ import Hero from "@/pages/Library/LibraryNotPaid/Hero";
 import CardHome from "@/common/User/CardHome";
 import InnerWrapper from "../../common/User/InnerWrapper";
 
-import {
-  Route,
-  Routes,
-  useNavigate,
-  useParams,
-  Outlet,
-} from "react-router-dom";
+import { Route, Routes, useNavigate, Outlet } from "react-router-dom";
 import BookLayout from "./BookLayout";
 import Chisomcard from "@/assets/Chisomcard.svg";
 import Gorillacard from "@/assets/Gorillacard.svg";
