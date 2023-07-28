@@ -23,11 +23,11 @@ import Mamacard from "@/assets/mamacard.svg";
 import Puffcard from "@/assets/puffcard.svg";
 import AudioBookOne from "@/audiobooks/QueenMoremi.mp3";
 import AudioBanner from "@/assets/audiobanner.svg";
-import TimeIcon from "@/assets/timeIcon.svg";
-import PlayIcon from "@/assets/play.svg";
-import Slider from "react-slick";
+// import TimeIcon from "@/assets/timeIcon.svg";
+// import PlayIcon from "@/assets/play.svg";
+// import Slider from "react-slick";
 import { Skeleton } from "@mantine/core";
-import { useState } from "react";
+// import { useState } from "react";
 import { useGetAudioBoks } from "@/api/queries";
 // import { useNavigate } from "react-router-dom";
 
@@ -283,7 +283,12 @@ const Books = () => {
               .fill(1)
               .map((arr, index) => (
                 <Skeleton visible={isLoading}>
-                  <div className="h-[200px] w-[200px]"></div>{" "}
+                  <div
+                    key={index}
+                    className="h-[200px] w-[200px] text-transparent"
+                  >
+                    {arr}
+                  </div>{" "}
                 </Skeleton>
               ))}
           {audioBooks?.map((audiobook: TAudioBooks, index: number) => {

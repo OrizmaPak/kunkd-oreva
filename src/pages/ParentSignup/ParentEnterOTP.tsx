@@ -18,8 +18,7 @@ import { useState, useEffect } from "react";
 
 const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
   const { isLoading, mutate } = useVerifyOtp();
-  const { isLoading: resendOTPIsLoading, mutate: resendOTPMutate } =
-    useResendOTP();
+  const { mutate: resendOTPMutate } = useResendOTP();
   const [user, setUser] = useStore(getUserState);
 
   const schema: ZodType<Pick<FormData, "otp">> = z.object({

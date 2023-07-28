@@ -107,7 +107,7 @@ const Stories1 = () => {
   const [user] = useStore(getUserState);
 
   const params = useParams();
-  const { category, theme, id } = params;
+  const { category, id } = params;
 
   // const story = storiesData.find((el) => `${el.id}` === id);
   const { data } = useGetContentById(
@@ -283,11 +283,7 @@ const ReadPage = ({
   const [isReading, setIsReading] = useState(false);
   const [page, setPage] = useState(0);
   const pageTotal = content.length - 1;
-  const customScrollbarStyle = {
-    WebkitScrollbar: {
-      width: "10px",
-    },
-  };
+
   return (
     <div className="flex py-16 bg-white  rounded-3xl px-16">
       <div className=" basis-3/4 flex  items-center">
