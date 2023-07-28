@@ -1,10 +1,8 @@
 import Wrapper from "@/common/User/Wrapper";
 import Hero from "@/pages/Library/LibraryNotPaid/Hero";
-import CardScreen from "@/common/User/CardScreen";
-import Card from "@/common/User/Card";
+import CardHome from "@/common/User/CardHome";
 import InnerWrapper from "../../common/User/InnerWrapper";
-import Button from "@/components/Button";
-import GroupCard from "@/assets/groupcard.svg";
+
 import {
   Route,
   Routes,
@@ -30,6 +28,8 @@ import PlayIcon from "@/assets/play.svg";
 import Slider from "react-slick";
 import { Skeleton } from "@mantine/core";
 import { useState } from "react";
+import { useGetAudioBoks } from "@/api/queries";
+// import { useNavigate } from "react-router-dom";
 
 export type StoriesType = {
   title?: string;
@@ -222,39 +222,6 @@ export const audioBooksData: StoriesType[] = [
   },
 ];
 
-const subButtons = [
-  {
-    name: " Bedtime",
-  },
-  {
-    name: "Holidays and Celebration",
-  },
-  {
-    name: " Inventors",
-  },
-  {
-    name: " Life & Growing up",
-  },
-  {
-    name: "Folk Tales",
-  },
-  {
-    name: " Inspiring Leaders",
-  },
-  {
-    name: "Finance",
-  },
-  {
-    name: "Money smart",
-  },
-  {
-    name: "Fairy Tales",
-  },
-  {
-    name: "Sport",
-  },
-];
-
 const MainStoriesLayout = () => {
   return (
     <>
@@ -271,10 +238,9 @@ const AudioBooks = () => {
         <InnerWrapper>
           <Routes>
             <Route element={<MainStoriesLayout />}>
-              <Route index element={<BrowseGenre />}></Route>
-              <Route path=":id" element={<Books />}></Route>
+              <Route index element={<Books />}></Route>
             </Route>
-            <Route path=":story_type/:id" element={<BookLayout />}></Route>
+            <Route path="audiobooks/:id" element={<BookLayout />}></Route>
           </Routes>
         </InnerWrapper>
       </Wrapper>
@@ -283,8 +249,20 @@ const AudioBooks = () => {
 };
 export default AudioBooks;
 
+type TAudioBooks = {
+  id: number;
+  name: string;
+  slug: string;
+  theme: string;
+  thumbnail: string;
+};
+
 const Books = () => {
-  const params = useParams();
+  const navigate = useNavigate();
+  const { isLoading, data } = useGetAudioBoks();
+  console.log("____testing", data?.data?.data.new_audiobook_titles);
+  const audioBooks = data?.data?.data.new_audiobook_titles;
+
   return (
     <>
       {/* <div className="bg-white rounded-3xl"> */}
@@ -292,7 +270,7 @@ const Books = () => {
         {/* <Hero image={AudioBanner} /> */}
         <hr className="my-20 mx-[200px]" />
         <h1 className="text-center font-bold text-[30px] font-Recoleta mt-10 ">
-          {params?.id?.toString()} Audiobooks
+          Audiobooks
         </h1>
         <p className="text-center text-[18px] text-[#B5B5C3] my-8">
           Whenever they request a new bedtime audiobooks
@@ -300,186 +278,74 @@ const Books = () => {
       </div>
       <div className="flex justify-center items-center">
         <div className="grid grid-cols-5 gap-8 px-24 py-10">
-          {audioBooksData
-            ?.filter((story) =>
-              story?.genre?.includes(params?.id ? params?.id : "")
-            )
-            .map((story, index) => {
-              return (
-                <>
-                  <Card key={index} clickable {...story} size={200} />
-                </>
-              );
-            })}
+          {isLoading &&
+            Array(10)
+              .fill(1)
+              .map((arr, index) => (
+                <Skeleton visible={isLoading}>
+                  <div className="h-[200px] w-[200px]"></div>{" "}
+                </Skeleton>
+              ))}
+          {audioBooks?.map((audiobook: TAudioBooks, index: number) => {
+            return (
+              <>
+                <CardHome
+                  key={index}
+                  {...audiobook}
+                  goTo={() => navigate(`audiobooks/${audiobook?.id}`)}
+                />
+              </>
+            );
+          })}
         </div>
       </div>
       {/* </div> */}
     </>
   );
 };
-const BrowseGenre = () => {
-  const navigate = useNavigate();
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 2,
-    slidesToScroll: 2,
-  };
-  const [isLoading, setIsLoading] = useState(true);
-  return (
-    <>
-      {/* <div className="bg-white rounded-3xl"> */}
-      {/* <Hero image={AudioBanner} /> */}
 
-      <hr className="my-20 mx-[200px]" />
+// const SubButton = ({
+//   name,
+//   onClick,
+// }: {
+//   name: string;
+//   onClick?: () => void;
+// }) => {
+//   return (
+//     <button onClick={onClick} className="py-3 rounded-3xl px-6 bg-[#FFF7FD]">
+//       {name}
+//     </button>
+//   );
+// };
 
-      <div>
-        <h1 className="text-center font-bold text-[30px] font-Recoleta my-10 ">
-          Browse Genres
-        </h1>
-      </div>
-      <div className="flex justify-center items-center">
-        <div className="flex flex-wrap justify-center items-center  max-w-[900px]  gap-x-8 gap-y-4">
-          {subButtons.map((genre, index) => (
-            <SubButton
-              onClick={() => navigate(genre.name.trim())}
-              key={index}
-              name={genre.name}
-            />
-          ))}
-        </div>
-      </div>
-
-      <div className="my-16">
-        <h1 className="mb-4 font-bold font-Recoleta mt-20 text-center text-[40px]">
-          Trending Now
-        </h1>
-        <p className="text-center text-[18px] text-[#B5B5C3]">
-          See what peole are reading
-        </p>
-
-        <div className=" px-20 my-28 mb-44">
-          <Slider {...settings}>
-            {audioBooksData.slice(1, 6).map((data, index) => (
-              <div key={index}>
-                <AudioBookSliderCard {...data} />
-              </div>
-            ))}
-            {/* <div>1</div>
-            <div>1</div>
-          <div>1</div> */}
-          </Slider>
-
-          <style>
-            {`
-          .slick-prev,
-          .slick-next {
-          }
-          .slick-prev:hover,
-          .slick-next:hover {
-            border-radius : 50%;
-          }
-          .slick-dots {
-            bottom: -70px;
-      
-          }
-
-          .slick-dots li button:before {
-      font-size: 16px; /* Increase the font size of the dots */
-      line-height: 1; /* Adjust the line height of the dots */
-      width: 16px; /* Increase the width of the dots */
-      height: 16px; /* Increase the height of the dots */
-      
-    }
-    .slick-dots li button:before {
-      color: #8530C1; /* Set the background color of the active dot */
-    }
-    .slick-dots li.slick-active button:before{
-      color: #8530C1;
-    }
-        `}
-          </style>
-        </div>
-      </div>
-      <Skeleton visible={isLoading}>
-        <div
-          style={{
-            background:
-              "linear-gradient(280.43deg, #2BB457  0.5%, #000000 173.5%)",
-          }}
-          className="h-[495px] grid grid-cols-[700px_1fr] mb-[50px] max-w-[1156px] relative rounded-2xl mx-auto object-cover bg- "
-        >
-          <img
-            src={GroupCard}
-            alt="card "
-            className="absolute w-[700px] left-0 bottom-0 rounded-3xl"
-            onLoad={() => setIsLoading(false)}
-          />
-          <div></div>
-          <div className="text-center text-white flex flex-col gap-3 justify-center items-center ">
-            <h1 className="text-[30px] font-bold ">New Story Titles</h1>
-            <p className="mb-10">We published new audiobook just for you</p>
-            <Button size="md" color="black" backgroundColor="white">
-              See books
-            </Button>
-          </div>
-        </div>
-      </Skeleton>
-
-      <CardScreen
-        data={audioBooksData.slice(1, 7)}
-        card={(props: StoriesType) => <Card {...props} />}
-        isTitled={true}
-        header="Audiobooks we love"
-      />
-      {/* </div> */}
-    </>
-  );
-};
-
-const SubButton = ({
-  name,
-  onClick,
-}: {
-  name: string;
-  onClick?: () => void;
-}) => {
-  return (
-    <button onClick={onClick} className="py-3 rounded-3xl px-6 bg-[#FFF7FD]">
-      {name}
-    </button>
-  );
-};
-
-const AudioBookSliderCard = ({
-  image,
-  title,
-  author,
-}: {
-  image?: string;
-  title?: string;
-  author?: string;
-}) => {
-  return (
-    <div className="bg-[#8530C1]  rounded-3xl py-8 flex gap-8 mx-5  px-3 ">
-      <div>
-        <img loading="lazy" src={image} alt="" />
-      </div>
-      <div className="flex flex-col text-[#D190FF] flex-grow">
-        <p className="font-bold text-[12px]">AUDIOBOOK</p>
-        <p className="font-bold text-white text-[18px]">{title}</p>
-        <p className="flex-grow text-[14px]">by {author}</p>
-        <p className="flex text-[12px]">
-          <img loading="lazy" src={TimeIcon} alt="timeicon" />
-          <span>10 minutes and 33 seconds</span>
-        </p>
-      </div>
-      <div className=" flex items-end">
-        <p className="flex justify-center items-end">
-          <img loading="lazy" src={PlayIcon} alt="play" />
-        </p>
-      </div>
-    </div>
-  );
-};
+// const AudioBookSliderCard = ({
+//   image,
+//   title,
+//   author,
+// }: {
+//   image?: string;
+//   title?: string;
+//   author?: string;
+// }) => {
+//   return (
+//     <div className="bg-[#8530C1]  rounded-3xl py-8 flex gap-8 mx-5  px-3 ">
+//       <div>
+//         <img loading="lazy" src={image} alt="" />
+//       </div>
+//       <div className="flex flex-col text-[#D190FF] flex-grow">
+//         <p className="font-bold text-[12px]">AUDIOBOOK</p>
+//         <p className="font-bold text-white text-[18px]">{title}</p>
+//         <p className="flex-grow text-[14px]">by {author}</p>
+//         <p className="flex text-[12px]">
+//           <img loading="lazy" src={TimeIcon} alt="timeicon" />
+//           <span>10 minutes and 33 seconds</span>
+//         </p>
+//       </div>
+//       <div className=" flex items-end">
+//         <p className="flex justify-center items-end">
+//           <img loading="lazy" src={PlayIcon} alt="play" />
+//         </p>
+//       </div>
+//     </div>
+//   );
+// };

@@ -21,6 +21,8 @@ export type TSetPasswordData = {};
 export type TLoginData = {};
 export type TForgotPasswordData = {};
 export type TResetPasswordData = {};
+export type TAudioBooks = {};
+
 export type TProfileData = {
   name: string;
   dob: string;
@@ -34,6 +36,16 @@ export type TUdateProfileData = {
   age: string;
   image: string | Blob;
   profile_id: string;
+};
+
+export type TUdateSchProfileData = {
+  contact_name: string;
+  email: string;
+  phone: string;
+  country_id: string;
+  state_id: string;
+  post_code: string;
+  tax_id: string;
 };
 
 export type TApiError = AxiosError<{

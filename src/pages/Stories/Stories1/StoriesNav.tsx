@@ -5,14 +5,17 @@ const StoriesNav = ({
   genre,
   title,
   quiz,
+  subCategoryId,
 }: {
   category?: string;
   genre?: string;
   title?: string;
   quiz?: string;
+  subCategoryId?: number;
 }) => {
   const navigate = useNavigate();
   const { id } = useParams();
+  console.log("subCategoryId", subCategoryId);
 
   return (
     <div className="py-4 font-Recoleta pl-20 h-[60px] text-[24px]  font-semibold items-center rounded-full bg-white gap-8 flex px-8">
@@ -26,7 +29,9 @@ const StoriesNav = ({
 
       <div
         className="flex gap-2  cursor-pointer "
-        onClick={() => navigate(`/librarynotpaid/stories/${genre}`)}
+        onClick={() =>
+          navigate(`/librarynotpaid/stories/${genre}/${subCategoryId}`)
+        }
       >
         <span>{genre}</span>
         <img loading="lazy" src={NextIcon} alt="nextIcon" />
@@ -42,7 +47,7 @@ const StoriesNav = ({
         {quiz && <img loading="lazy" src={NextIcon} alt="nextIcon" />}
       </div>
 
-      <div className=" cursor-pointer ">
+      <div className=" cursor-pointer">
         <span className="text-[#B5B5C3]"> {quiz}</span>
       </div>
     </div>

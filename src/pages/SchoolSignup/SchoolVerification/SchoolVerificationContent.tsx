@@ -21,7 +21,7 @@ const SchoolVerificationContent = () => {
   const navigate = useNavigate();
   const { isLoading, mutate } = useVerifyOtp();
   const [, setUser] = useStore(getUserState);
-  const [isActive, setIsActive] = useState(false);
+  // const [isActive, setIsActive] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(60);
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -29,7 +29,7 @@ const SchoolVerificationContent = () => {
     }, 1000);
 
     if (secondsLeft === 0) {
-      setIsActive(true);
+      // setIsActive(true);
       clearInterval(intervalId);
     }
 

@@ -100,11 +100,11 @@ export const data: DataType[] = [
 const NewlyRegisteredUser = () => {
   const navigate = useNavigate();
 
-  const { data: contentData } = useContentForHome();
+  const { isLoading, data: contentData } = useContentForHome();
   console.log("Content for home", contentData?.data.data.recommended_stories);
   const recommendedStories = contentData?.data.data.recommended_stories;
   const newTrending = contentData?.data.data.trending_stories;
-  console.log(newTrending);
+  console.log("newTrending", newTrending);
   return (
     // <div className="w-full  bg-[#EBEFF3] px-[130px] py-[40px]  ">
     // <div className=" w-full rounded-[35px] bg-white h-full mx-auto   ">
@@ -137,10 +137,11 @@ const NewlyRegisteredUser = () => {
         </div>
 
         <CardScreenHome
-          data={newTrending?.map((el: CardProps) => ({ ...el }))}
+          data={newTrending}
           header="New & Trending"
           actiontitle="View all"
           isTitled={false}
+          isLoading={isLoading}
           card={(props: CardProps) => (
             <CardHome
               {...props}
@@ -157,12 +158,10 @@ const NewlyRegisteredUser = () => {
 
         <AdsButton />
         <CardScreenHome
-          data={recommendedStories?.map((el: CardProps) => ({
-            ...el,
-            title: "",
-          }))}
+          data={recommendedStories}
           header="Recommended For You"
           isTitled={false}
+          isLoading={isLoading}
           card={(props: CardProps) => (
             <CardHome
               {...props}

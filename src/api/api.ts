@@ -14,7 +14,7 @@ import type {
   TUdateProfileData,
   TGoogleSignUpData,
   TContentForHome,
-  TGetContentById,
+  TUdateSchProfileData,
 } from "./types";
 
 // School
@@ -104,7 +104,39 @@ export const GetContebtBySubCategories = (subId: string) => {
   return axios.get(`/content/subcategory/${subId}`);
 };
 
+export const GetAudioBooks = () => {
+  return axios.get("/audiobook/page");
+};
+
+export const ResendOTP = (payload: TLoginData) => {
+  return axios.post("/otp/resend", payload);
+};
+
 // Socila Login
 export const SocialLogin = (payload: TLoginData) => {
   return axios.post("/signup/login", payload);
+};
+
+export const UpdateSchProfile = (payload: TUdateSchProfileData) => {
+  const formData = new FormData();
+  formData.append("contact_name", payload?.contact_name);
+  formData.append("email", payload?.email);
+  formData.append("phone", payload?.phone);
+  formData.append("state_id", payload?.state_id);
+  formData.append("post_code", payload?.post_code);
+  formData.append("tax_id", payload?.tax_id);
+  formData.append("country_code", payload.country_id);
+
+  return axios.patch("/profile/school", formData);
+};
+
+// GEt all countries
+export const GetCountries = () => {
+  return axios.get("/countries");
+};
+
+// GEt all States
+
+export const GetStates = () => {
+  return axios.get("/states/161");
 };

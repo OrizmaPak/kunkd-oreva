@@ -7,7 +7,7 @@ export type FormData = {
   school_name?: string;
   school_address?: string;
   address?: string;
-  contactName?: string;
+  contact_name?: string;
   pin?: string;
   otp?: string;
   confirmPassword?: string;
@@ -21,4 +21,9 @@ export type FormData = {
   teacher?: string;
   class?: string;
   file?: string;
+  country_id?: string;
+  state_id?: string;
+  post_code?: string;
+  tax_id?: string;
+  phone?: string;
 };

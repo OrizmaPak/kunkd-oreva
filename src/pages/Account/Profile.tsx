@@ -17,6 +17,22 @@ import InputFormat from "@/common/InputFormat";
 import { useState } from "react";
 import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
+// import { getProfileState } from "@/store/profileStore";
+import { UseFormRegisterReturn } from "react-hook-form";
+
+// import useStore from "@/store/index";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormData } from "@/common/User/FormValidation/Schema";
+import { z, ZodType } from "zod";
+import { notifications } from "@mantine/notifications";
+import {
+  useUpdateSchProfile,
+  useGetCountries,
+  useGetStates,
+} from "@/api/queries";
+import { getApiErrorMessage } from "@/api/helper";
+import { Loader } from "@mantine/core";
 
 const parentData = {
   image: Teacher01,
@@ -477,13 +493,11 @@ const EditTeacherPersonalInfomation = ({
 };
 
 const EditSchoolPersonalInfomation = ({
-  contactName,
+  contact_name,
   phone,
   email,
-  country,
-  city,
-  postCode,
-  taxId,
+  post_code,
+  tax_id,
   onSave,
 }: {
   name?: string;
@@ -491,43 +505,205 @@ const EditSchoolPersonalInfomation = ({
   email?: string;
   country?: string;
   city?: string;
-  contactName?: string;
-  postCode?: string;
-  taxId?: string;
+  contact_name?: string;
+  post_code?: string;
+  tax_id?: string;
   onSave: () => void;
 }) => {
+  const { mutate, isLoading } = useUpdateSchProfile();
+  const { data } = useGetCountries();
+  const { data: dataStates } = useGetStates();
+
+  const countries: TCountry[] = data?.data.data;
+  const states: TCountry[] = dataStates?.data.data;
+
+  const schema: ZodType<FormData> = z.object({
+    contact_name: z
+      .string()
+      .min(4, { message: "Contact name must be at least 4 characters long" })
+      .max(20, { message: "First must not exceed 20 characters" }),
+    phone: z
+      .string()
+      .min(11, { message: "Phone number  must be at least 11 characters long" })
+      .max(14, { message: "Last name must not exceed 14 characters" }),
+    email: z.string().email(),
+    tax_id: z
+      .string()
+      .min(4, { message: "TaxId must be at least 1 character" }),
+    country_id: z
+      .string()
+      .min(2, { message: "Country must be at least 2 characters" }),
+    state_id: z
+      .string()
+      .min(2, { message: "Country must be at least 2 characters" }),
+    post_code: z
+      .string()
+      .min(2, { message: "Post  code must be at least 2 characters" }),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const submitData = async (data: FormData) => {
+    console.log("testing");
+    console.log("It is working", data);
+
+    mutate(
+      {
+        contact_name: data.contact_name!,
+        email: data.email!,
+        post_code: data.post_code!,
+        tax_id: data.tax_id!,
+        country_id: data.country_id!,
+        phone: data.phone!,
+        state_id: data.state_id!,
+      },
+
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+          onSave();
+        },
+
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  };
+
   return (
     <div className="p-6 border border-[#8530C1]  rounded-3xl mt-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="font-bold text-[16px]">Personal Information</h1>
-        <Button onClick={onSave} size="sm" varient="outlined">
-          <p className="gap-4 flex">
-            <span className="text-[#8530C1]">Save</span>
-          </p>
-        </Button>
-      </div>
-      <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] my-1 text-[12px] text-[#B5B5C3]">
-        <span>Contact Name</span>
-        <span>Phone</span>
-        <span>Email</span>
-      </div>
-      <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] mb-4 text-[14px]">
-        <InputFormat type="text" value={contactName} />
-        <InputFormat type="text" value={phone} />
-        <InputFormat type="text" value={email} />
-      </div>
-      <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] text-[#B5B5C3] text-[12px] mt-5">
-        <span>Country</span>
-        <span>City/Sate</span>
-        <span>Post Code</span>
-        <span>Tax ID</span>
-      </div>
-      <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] mb-5 text-[14px]">
-        <InputFormat type="text" value={country} />
-        <InputFormat type="text" value={city} />
-        <InputFormat type="text" value={postCode} />
-        <InputFormat type="text" value={taxId} />
-      </div>
+      <form onSubmit={handleSubmit(submitData)}>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="font-bold text-[16px]">Personal Information</h1>
+          <Button type="submit" size="sm" varient="outlined">
+            <p className="gap-4 flex">
+              {isLoading ? (
+                <p className="flex justify-center items-center">
+                  <Loader color="white" size="sm" />
+                </p>
+              ) : (
+                <span>Save</span>
+              )}
+            </p>
+          </Button>
+        </div>
+        <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] my-1 text-[12px] text-[#B5B5C3]">
+          <span>Contact Name</span>
+          <span>Phone</span>
+          <span>Email</span>
+        </div>
+        <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] mb-4 text-[14px]">
+          <InputFormat
+            reg={register("contact_name")}
+            errorMsg={errors.contact_name?.message}
+            smallPadding="true"
+            type="text"
+            value={contact_name}
+          />
+          <InputFormat
+            reg={register("phone")}
+            errorMsg={errors.phone?.message}
+            smallPadding="true"
+            type="text"
+            value={phone}
+          />
+          <InputFormat
+            reg={register("email")}
+            errorMsg={errors.email?.message}
+            smallPadding="true"
+            type="text"
+            value={email}
+          />
+        </div>
+        <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] text-[#B5B5C3] text-[12px] mt-5">
+          <span>Country</span>
+          <span>City/State</span>
+          <span>Post Code</span>
+          <span>Tax ID</span>
+        </div>
+        <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] mb-5 text-[14px]">
+          {/* <InputFormat
+            reg={register("country")}
+            errorMsg={errors.country?.message}
+            smallPadding="true"
+            type="text"
+            value={country}
+          /> */}
+
+          <div className="px-2 border-[#F3DAFF]  rounded-full  items-center gap-2 mt-1 flex justify-center sssss  border">
+            <select {...register("country_id")} className="border-0 w-full">
+              {countries &&
+                countries.map((country, index) => (
+                  <option key={index} value="12">
+                    {country.name}
+                  </option>
+                ))}
+            </select>
+          </div>
+          {/* <CustomSelectInput reg={register("country_id")} data={countries} /> */}
+          {/* <InputFormat
+            reg={register("city")}
+            errorMsg={errors.city?.message}
+            smallPadding="true"
+            type="text"
+            value={city}
+          /> */}
+          <CustomSelectInput data={states} />
+          <InputFormat
+            reg={register("post_code")}
+            errorMsg={errors.post_code?.message}
+            smallPadding="true"
+            type="text"
+            value={post_code}
+          />
+          <InputFormat
+            reg={register("tax_id")}
+            errorMsg={errors.tax_id?.message}
+            smallPadding="true"
+            type="text"
+            value={tax_id}
+          />
+        </div>
+      </form>
+    </div>
+  );
+};
+
+type TCountry = {
+  id: number;
+  name: string;
+};
+const CustomSelectInput = ({
+  data,
+  reg,
+}: {
+  data: TCountry[];
+  reg?: UseFormRegisterReturn;
+}) => {
+  console.log(data);
+  return (
+    <div className="px-2 border-[#F3DAFF]  rounded-full  items-center gap-2 mt-1 flex justify-center sssss  border">
+      <select {...reg} className="border-0 w-full">
+        {data &&
+          data.map((country, index) => (
+            <option key={index} value={`${country.id}`}>
+              {country.name}
+            </option>
+          ))}
+      </select>
     </div>
   );
 };

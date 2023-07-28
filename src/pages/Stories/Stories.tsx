@@ -1,7 +1,5 @@
 import Wrapper from "@/common/User/Wrapper";
 import Hero from "@/pages/Library/LibraryNotPaid/Hero";
-import CardScreen from "@/common/User/CardScreen";
-import Card from "@/common/User/Card";
 import CardHome, { CardProps } from "@/common/User/CardHome";
 import CardScreenHome from "@/common/User/CardScreenHome";
 // import { data } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
@@ -230,39 +228,6 @@ export const storiesData: StoriesType[] = [
   },
 ];
 
-const subButtons = [
-  {
-    name: " Bedtime",
-  },
-  {
-    name: "Holidays and Celebration",
-  },
-  {
-    name: " Inventors",
-  },
-  {
-    name: " Life & Growing up",
-  },
-  {
-    name: "Folk Tales",
-  },
-  {
-    name: " Inspiring Leaders",
-  },
-  {
-    name: "Finance",
-  },
-  {
-    name: "Money smart",
-  },
-  {
-    name: "Fairy Tales",
-  },
-  {
-    name: "Sport",
-  },
-];
-
 const MainStoriesLayout = () => {
   return (
     <>
@@ -280,9 +245,9 @@ const Stories = () => {
           <Routes>
             <Route element={<MainStoriesLayout />}>
               <Route index element={<BrowseGenre />}></Route>
-              <Route path="/genre/:subCategory/:id" element={<Story />}></Route>
+              <Route path=":subCategory/:id" element={<Story />}></Route>
             </Route>
-            <Route path=":theme/:id" element={<Stories1 />}></Route>
+            <Route path=":theme/:id/:title" element={<Stories1 />}></Route>
             <Route path=":story_type/:id/quiz" element={<Quiz />}></Route>
           </Routes>
         </InnerWrapper>
@@ -296,7 +261,7 @@ const Story = () => {
   const { subCategory, id } = useParams();
   const navigate = useNavigate();
   console.log("Id", id);
-  const { data } = useGetContebtBySubCategories(id!);
+  const { data, isLoading } = useGetContebtBySubCategories(id!);
   console.log(data?.data.data.records);
   const subCategoryContents = data?.data.data.records;
   return (
@@ -312,28 +277,40 @@ const Story = () => {
       </div>
       <div className="flex justify-center items-center">
         <div className="grid grid-cols-5 gap-8 px-24 py-10">
-          {subCategoryContents &&
-            subCategoryContents.map((story: TStoryContent, index: number) => {
-              return (
-                <>
-                  {
-                    <CardHome
+          {isLoading
+            ? Array(10)
+                .fill(5)
+                .map((arr, index) => (
+                  <Skeleton visible={true}>
+                    <div
                       key={index}
-                      {...story}
-                      goTo={() =>
-                        navigate(
-                          `../../${story.category
-                            ?.toLowerCase()
-                            .trim()}/${story.theme.trim()?.toLowerCase()}/${
-                            story.id
-                          }`
-                        )
-                      }
-                    />
-                  }
-                </>
-              );
-            })}
+                      className="h-[200px] w-[200px] text-transparent"
+                    >
+                      {arr}
+                    </div>
+                  </Skeleton>
+                ))
+            : subCategoryContents.map((story: TStoryContent, index: number) => {
+                return (
+                  <>
+                    {
+                      <CardHome
+                        key={index}
+                        {...story}
+                        goTo={() =>
+                          navigate(
+                            `../../${story.category
+                              ?.toLowerCase()
+                              .trim()}/${story.theme.trim()?.toLowerCase()}/${
+                              story.id
+                            }/${story.name}`
+                          )
+                        }
+                      />
+                    }
+                  </>
+                );
+              })}
         </div>
       </div>
     </>
@@ -350,11 +327,11 @@ type TSubCategory = {
 
 const BrowseGenre = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingImage, setIsLoadingImage] = useState(true);
   const { data } = useGetSubCategories();
   const subCategory = data?.data.data[0].sub_categories;
   console.log("progressing", data?.data.data[0].sub_categories);
-  const { data: contentData } = useContentForHome();
+  const { data: contentData, isLoading } = useContentForHome();
   const recommendedStories = contentData?.data.data.recommended_stories;
   const newTrending: CardProps[] = contentData?.data.data.trending_stories;
   console.log("is it working", recommendedStories, newTrending);
@@ -373,7 +350,7 @@ const BrowseGenre = () => {
             subCategory.map((genre: TSubCategory, index: number) => (
               <SubButton
                 onClick={() =>
-                  navigate(`genre/${genre.name.toLowerCase()}/${genre.id}`)
+                  navigate(`${genre.name.toLowerCase()}/${genre.id}`)
                 }
                 key={index}
                 name={genre.name}
@@ -387,6 +364,7 @@ const BrowseGenre = () => {
         header="Stories we love"
         actiontitle=""
         isTitled={false}
+        isLoading={isLoading}
         card={(props: CardProps) => (
           <CardHome
             {...props}
@@ -400,7 +378,7 @@ const BrowseGenre = () => {
           />
         )}
       />
-      <Skeleton visible={isLoading}>
+      <Skeleton visible={isLoadingImage}>
         <div
           style={{
             background:
@@ -412,7 +390,7 @@ const BrowseGenre = () => {
             src={GroupCard}
             alt="card"
             className="absolute w-[700px] right-0 bottom-0 rounded-3xl "
-            onLoad={() => setIsLoading(false)}
+            onLoad={() => setIsLoadingImage(false)}
           />
           <div className="text-center text-white flex flex-col gap-3 justify-center items-center">
             <h1 className="text-[30px] font-bold ">New Story Titles</h1>
@@ -439,6 +417,7 @@ const BrowseGenre = () => {
         header=""
         actiontitle=""
         isTitled={false}
+        isLoading={isLoading}
         card={(props: CardProps) => (
           <CardHome
             {...props}
