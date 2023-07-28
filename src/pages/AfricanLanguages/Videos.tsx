@@ -4,11 +4,12 @@ import AfricanLanguagesNav from "./AfricanLanguagesNav";
 import CardHome from "@/common/User/CardHome";
 import { useGetContebtBySubCategories } from "@/api/queries";
 import { useNavigate } from "react-router-dom";
+import { Skeleton } from "@mantine/core";
 
 const Videos = () => {
   const navigate = useNavigate();
   const { lan_type, id } = useParams();
-  const { data } = useGetContebtBySubCategories(id!);
+  const { data, isLoading } = useGetContebtBySubCategories(id!);
   console.log(data?.data.data.records);
   const subCategoryContents = data?.data.data.records as {
     thumbnail: string;
@@ -30,13 +31,28 @@ const Videos = () => {
         </p>
         <hr className="my-16 mx-20" />
         <div className="grid grid-cols-5 gap-5 px-20 mt-10">
-          {subCategoryContents?.map((data, index) => (
-            <CardHome
-              key={index}
-              {...data}
-              goTo={() => navigate(`../player/${data.name}/${data.id}`)}
-            />
-          ))}
+          {isLoading
+            ? Array(10)
+                .fill(5)
+                .map((arr, index) => (
+                  <Skeleton visible={true}>
+                    <div
+                      key={index}
+                      className="h-[200px] w-[200px] text-transparent"
+                    >
+                      {arr}
+                    </div>
+                  </Skeleton>
+                ))
+            : subCategoryContents?.map((data, index) => (
+                <CardHome
+                  key={index}
+                  {...data}
+                  goTo={() =>
+                    navigate(`../${lan_type}/${data.name}/${data.id}`)
+                  }
+                />
+              ))}
         </div>
       </div>
     </div>

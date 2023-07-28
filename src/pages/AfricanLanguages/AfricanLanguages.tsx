@@ -1,13 +1,7 @@
 import Wrapper from "@/common/User/Wrapper";
 import Hero from "@/pages/Library/LibraryNotPaid/Hero";
-// import { CardProps } from "@/common/User/Card";
-// import { data } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
-// import { DataType } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
-
 import InnerWrapper from "../../common/User/InnerWrapper";
-
 import { Route, Routes, useNavigate } from "react-router-dom";
-// import BookLayout from "./BookLayout";
 import Chisomcard from "@/assets/Chisomcard.svg";
 import Gorillacard from "@/assets/Gorillacard.svg";
 import Afamcard from "@/assets/afamcard.svg";
@@ -20,11 +14,14 @@ import Mamacard from "@/assets/mamacard.svg";
 import Puffcard from "@/assets/puffcard.svg";
 import AfricanBanner from "@/assets/africanlanBanner.svg";
 import VideoBook1 from "@/videobooks/videobook1.mp4";
-
 import Videos from "./Videos";
 import VideoPlayer from "./VideoPlayer";
 import Quiz from "./Quiz";
 import { useGetSubCategories } from "@/api/queries";
+import { Skeleton } from "@mantine/core";
+import AfamBlur from "@/assets/afamblur.jpg";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 export type StoriesType = {
   title?: string;
@@ -246,8 +243,11 @@ const AfricanLanguagess = () => {
           <Routes>
             <Route index element={<LanguagesVideo />}></Route>
             <Route path=":lan_type/:id" element={<Videos />}></Route>
-            <Route path="player/:title/:id" element={<VideoPlayer />}></Route>
-            <Route path=":story_type/:id/quiz" element={<Quiz />}></Route>
+            <Route
+              path=":lan_type/:title/:id"
+              element={<VideoPlayer />}
+            ></Route>
+            <Route path=":lan_type/:title/:id/quiz" element={<Quiz />}></Route>
           </Routes>
         </InnerWrapper>
       </Wrapper>
@@ -258,7 +258,7 @@ export default AfricanLanguagess;
 
 const LanguagesVideo = () => {
   // const params = useParams();
-  const { data } = useGetSubCategories();
+  const { data, isLoading } = useGetSubCategories();
   const subCategory = data?.data.data[2].sub_categories;
   console.log(subCategory);
   return (
@@ -276,13 +276,26 @@ const LanguagesVideo = () => {
       </div>
       <div className="flex justify-center items-center">
         <div className="grid grid-cols-5 gap-8 px-24 py-10 justify-center items-center">
-          {subCategory?.map((story: TSubVideo, index: number) => {
-            return (
-              <>
-                <VideoCard key={index} {...story} />
-              </>
-            );
-          })}
+          {isLoading
+            ? Array(5)
+                .fill(5)
+                .map((arr, index) => (
+                  <Skeleton visible={true}>
+                    <div
+                      key={index}
+                      className="h-[120px] w-[200px] text-transparent"
+                    >
+                      {arr}
+                    </div>
+                  </Skeleton>
+                ))
+            : subCategory?.map((story: TSubVideo, index: number) => {
+                return (
+                  <>
+                    <VideoCard key={index} {...story} />
+                  </>
+                );
+              })}
         </div>
       </div>
       {/* </div> */}
@@ -299,9 +312,21 @@ export const VideoCard = ({ name, image, id }: TSubVideo) => {
     }
   };
   return (
-    <div onClick={goto} className="w-[200px]">
+    <div
+      onClick={goto}
+      className="w-[200px] transition-all hover:scale-[102%]  cursor-pointer "
+    >
       <span>
-        <img src={image} alt="image" />
+        <LazyLoadImage
+          src={image}
+          placeholderSrc={AfamBlur}
+          effect="blur"
+          className=" rounded-xl"
+          wrapperClassName=""
+          width={200}
+          height={100}
+        />
+        {/* <img src={image} alt="image" /> */}
       </span>
       {/* {title ? (
         <p className="mt-[10px] font-bold font-Hanken">{title}</p>

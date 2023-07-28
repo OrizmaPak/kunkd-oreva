@@ -18,6 +18,11 @@ import {
   GetSubCategories,
   SocialLogin,
   GetContebtBySubCategories,
+  GetAudioBooks,
+  ResendOTP,
+  UpdateSchProfile,
+  GetCountries,
+  GetStates,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -167,6 +172,36 @@ export const useSocialLogin = () => {
   return useMutation({
     mutationFn: SocialLogin,
   });
+};
+
+export const useGetAudioBoks = () => {
+  return useQuery({
+    queryKey: ["getAudioBooks"],
+    queryFn: () => GetAudioBooks(),
+  });
+};
+
+export const useResendOTP = () => {
+  return useMutation({
+    mutationFn: ResendOTP,
+  });
+};
+
+// Update School Profile
+export const useUpdateSchProfile = () => {
+  return useMutation({
+    mutationFn: UpdateSchProfile,
+  });
+};
+
+// Get All the countrie
+export const useGetCountries = () => {
+  return useQuery({ queryKey: ["GetCountries"], queryFn: GetCountries });
+};
+
+// Get All the countrie
+export const useGetStates = () => {
+  return useQuery({ queryKey: ["GetStates"], queryFn: GetStates });
 };
 
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

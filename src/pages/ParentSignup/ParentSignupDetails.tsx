@@ -12,9 +12,12 @@ import { useCreateParentUser } from "@/api/queries";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store";
 
 const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
   const { isLoading, mutate } = useCreateParentUser();
+  const [, setUser] = useStore(getUserState);
   const schema: ZodType<FormData> = z.object({
     firstname: z
       .string()
@@ -36,9 +39,11 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
   const submitData = async (data: FormData) => {
     console.log("testing");
     console.log("It is working", data);
+    setUser({ email: data.email });
 
     mutate(
       { ...data },
+
       {
         onSuccess(data) {
           console.log("success", data.data.message);
@@ -47,6 +52,7 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
             title: `Notification`,
             message: data.data.message,
           });
+
           onSubmit();
         },
 

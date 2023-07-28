@@ -102,14 +102,14 @@ const SchoolHeader = () => {
             >
               <button>Home</button>
             </NavLink>
-            <NavLink
+            {/* <NavLink
               to="/librarynotpaid"
               className={({ isActive }) =>
                 isActive ? " text-[#8530C1]" : "text-black"
               }
             >
               <button>Library</button>
-            </NavLink>
+            </NavLink> */}
             <NavLink
               to="/mylist"
               className={({ isActive }) =>

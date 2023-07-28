@@ -3,7 +3,7 @@ import Button from "@/components/Button";
 import { Link } from "react-router-dom";
 import { PinInput, Group } from "@mantine/core";
 import FormWrapper from "@/common/FormWrapper";
-import { useVerifyOtp } from "@/api/queries";
+import { useVerifyOtp, useResendOTP } from "@/api/queries";
 import { notifications } from "@mantine/notifications";
 import { Loader } from "@mantine/core";
 import { getApiErrorMessage } from "@/api/helper";
@@ -18,7 +18,9 @@ import { useState, useEffect } from "react";
 
 const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
   const { isLoading, mutate } = useVerifyOtp();
-  const [, setUser] = useStore(getUserState);
+  const { isLoading: resendOTPIsLoading, mutate: resendOTPMutate } =
+    useResendOTP();
+  const [user, setUser] = useStore(getUserState);
 
   const schema: ZodType<Pick<FormData, "otp">> = z.object({
     otp: z
@@ -33,7 +35,7 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
   const otp = watch("otp");
 
   // const [isActive, setIsActive] = useState(false);
-  const [secondsLeft, setSecondsLeft] = useState(60);
+  const [secondsLeft, setSecondsLeft] = useState(300);
   useEffect(() => {
     const intervalId = setInterval(() => {
       setSecondsLeft((prevSeconds) => prevSeconds - 1);
@@ -80,6 +82,26 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
     setValue("otp", value);
     trigger("pin");
   };
+  const handleResendOTP = () => {
+    resendOTPMutate(
+      { email: user?.email },
+      {
+        onSuccess(data) {
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+          setSecondsLeft(300);
+        },
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  };
   return (
     <FormWrapper>
       <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">
@@ -114,7 +136,13 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
             </p>
           </form>
           <p className="mt-2 text-center text-[] text-gray-400 ">
-            <strong>Resend in {secondsLeft}s</strong>
+            {secondsLeft === 0 ? (
+              <button onClick={handleResendOTP} className="font-semibold">
+                Resend
+              </button>
+            ) : (
+              <strong>Resend in {secondsLeft}s</strong>
+            )}
           </p>
         </div>
       </div>

@@ -23,7 +23,10 @@ const CardHome = ({ name, thumbnail, goTo }: CardProps) => {
   // };
 
   return (
-    <div onClick={goTo} className="w-[200px] z-[1] cursor-pointer">
+    <div
+      onClick={goTo}
+      className="w-[200px] z-[1] cursor-pointer hover:scale-[102%] transition-all"
+    >
       <span>
         <LazyLoadImage
           src={thumbnail}

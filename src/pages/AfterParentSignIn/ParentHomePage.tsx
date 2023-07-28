@@ -18,7 +18,7 @@ import BookIcon from "@/assets/bookicon.svg";
 const ParentHomePage = () => {
   let profiles: selectAvatarType;
   const [profile] = useStore(getProfileState);
-  const { data: contentData } = useContentForHome();
+  const { isLoading, data: contentData } = useContentForHome();
   const recommendedStories = contentData?.data.data.recommended_stories;
   const newTrending = contentData?.data.data.trending_stories;
   const currentId = Number(localStorage.getItem("profileId"));
@@ -65,6 +65,7 @@ const ParentHomePage = () => {
             data={newTrending}
             header="New & Trending"
             actiontitle="View all"
+            isLoading={isLoading}
             isTitled={false}
             card={(props: CardProps) => (
               <CardHome
@@ -85,6 +86,7 @@ const ParentHomePage = () => {
             data={recommendedStories}
             header="Recommended For You"
             isTitled={false}
+            isLoading={isLoading}
             card={(props: CardProps) => (
               <CardHome
                 {...props}

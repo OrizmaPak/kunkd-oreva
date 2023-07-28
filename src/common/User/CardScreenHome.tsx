@@ -1,5 +1,7 @@
 import React from "react";
 import { CardProps } from "./CardHome";
+import { Skeleton } from "@mantine/core";
+
 type Props = {
   data?: CardProps[];
   header?: string;
@@ -7,8 +9,16 @@ type Props = {
   actiontitle?: string;
   isTitled?: boolean;
   card?: (props: CardProps) => React.ReactNode;
+  isLoading: boolean;
 };
-const CardScreen = ({ data, header, action, actiontitle, card }: Props) => {
+const CardScreen = ({
+  data,
+  header,
+  action,
+  actiontitle,
+  card,
+  isLoading,
+}: Props) => {
   return (
     <div className=" mx-20 mt-4 ">
       <div className="flex justify-between mb-8 ">
@@ -20,14 +30,27 @@ const CardScreen = ({ data, header, action, actiontitle, card }: Props) => {
         </button>
       </div>
       <div
-        className="overflow-auto  no-scrollbar "
+        className="overflow-auto  no-scrollbar p-4 "
         style={{ maxHeight: "500px" }}
       >
         <div className="flex  gap-5 mb-14  ">
-          {data?.map((data) => {
-            return card ? card(data) : null;
-            // <Card key={index} image={data?.image} title={data?.title} />
-          })}
+          {isLoading
+            ? Array(5)
+                .fill(1)
+                .map((arr, index) => (
+                  <Skeleton visible={isLoading}>
+                    <div
+                      key={index}
+                      className="h-[200px] w-[400px] text-transparent"
+                    >
+                      {arr}
+                    </div>{" "}
+                  </Skeleton>
+                ))
+            : data?.map((data) => {
+                return card ? card(data) : null;
+                // <Card key={index} image={data?.image} title={data?.title} />
+              })}
         </div>
       </div>
     </div>

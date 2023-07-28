@@ -116,9 +116,13 @@ const Stories1 = () => {
   );
   const content = data?.data.data;
   console.log(content);
-  const { data: recommendedData } = useContentForHome();
+  const { data: recommendedData, isLoading } = useContentForHome();
   const recommendedStories = recommendedData?.data.data.recommended_stories;
   const navigate = useNavigate();
+  console.log(
+    "------SubCat-------"
+    // content.sub_categories[0].sub_category_id!
+  );
   return (
     <div className=" ">
       <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] ">
@@ -128,8 +132,9 @@ const Stories1 = () => {
           {content && (
             <StoriesNav
               category={category}
-              genre={theme}
+              genre={content.sub_categories[0].sub_category_name!}
               title={content.name}
+              subCategoryId={content.sub_categories[0].sub_category_id!}
             />
           )}
         </div>
@@ -155,10 +160,8 @@ const Stories1 = () => {
                 <div className="w-full bg-white rounded-3xl mt-4">
                   {
                     <CardScreenHome
-                      data={recommendedStories?.map((el: CardProps) => ({
-                        ...el,
-                        title: "",
-                      }))}
+                      data={recommendedStories}
+                      isLoading={isLoading}
                       header="Recommended For You"
                       isTitled={false}
                       card={(props: CardProps) => (
@@ -280,7 +283,11 @@ const ReadPage = ({
   const [isReading, setIsReading] = useState(false);
   const [page, setPage] = useState(0);
   const pageTotal = content.length - 1;
-
+  const customScrollbarStyle = {
+    WebkitScrollbar: {
+      width: "10px",
+    },
+  };
   return (
     <div className="flex py-16 bg-white  rounded-3xl px-16">
       <div className=" basis-3/4 flex  items-center">
@@ -310,7 +317,7 @@ const ReadPage = ({
           </p>
           {/* <p>{content[3].web_body}</p> */}
           <article
-            className=" leading-10 flex h-[350px] overflow-y-auto  text-[16px] font-medium font-Hanken"
+            className=" leading-10 flex h-[350px] overflow-y-auto  text-[16px] font-medium font-Hanken pr-8 text-justify "
             dangerouslySetInnerHTML={{ __html: content[page].web_body }}
           />
         </div>
