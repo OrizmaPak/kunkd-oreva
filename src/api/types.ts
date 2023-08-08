@@ -1,6 +1,13 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { User } from "firebase/auth";
 
+export type TSchool = {
+  address?: string;
+  backgroundImage?: string;
+  contact_name?: string;
+  name?: string;
+  profileImage?: string;
+};
 export type returnUser = {
   dob: string;
   email: string;
@@ -11,6 +18,14 @@ export type returnUser = {
   user_id: number;
   role: string;
   user_image: string;
+  contact_name: string;
+  school: TSchool;
+  // post_code: string;
+  // tax_id: string;
+  // country_id: string;
+  // state_id: string;
+  address: string;
+  school_name: string;
 };
 
 export type TSchoolSignupData = {};
@@ -22,6 +37,8 @@ export type TLoginData = {};
 export type TForgotPasswordData = {};
 export type TResetPasswordData = {};
 export type TAudioBooks = {};
+export type TVerifyPinData = {};
+export type TPayStackInitData = {};
 
 export type TProfileData = {
   name: string;
@@ -38,14 +55,24 @@ export type TUdateProfileData = {
   profile_id: string;
 };
 
+export type TUdateSchImageData = {
+  profileImage?: string | Blob;
+  backgroundImage?: string | Blob;
+};
+
+export type TUdateParentImageData = {
+  image: string | Blob;
+};
+
 export type TUdateSchProfileData = {
   contact_name: string;
   email: string;
-  phone: string;
-  country_id: string;
-  state_id: string;
-  post_code: string;
-  tax_id: string;
+  address: string;
+};
+
+export type TUdateParentProfileData = {
+  firstname: string;
+  lastname: string;
 };
 
 export type TApiError = AxiosError<{

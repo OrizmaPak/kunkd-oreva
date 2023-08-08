@@ -17,13 +17,13 @@ const MakePayment = () => {
           <MakePaymentContent onSubmit={() => handleNext(STEP_2)} />
         ) : null}
 
-        {activeStep === STEP_2 ? (
+        {/* {activeStep === STEP_2 ? (
           <PaymentCompletedContent
             onSubmit={() => {
               handleNext(STEP_3);
             }}
           />
-        ) : null}
+        ) : null} */}
       </ParentSignupLayout>
     </div>
   );

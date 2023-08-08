@@ -407,14 +407,14 @@ const EditProfile = ({
               />
             </p>
           </p>
-
+          {/* 
           <p className="my-2">
             <label htmlFor="school" className="text-[12px] text-[#7E7E89]">
               School
             </label>
             <InputFormat type="text" />
-          </p>
-          <p className="my-2 flex gap-4">
+          </p> */}
+          {/* <p className="my-2 flex gap-4">
             <p className="flex-grow">
               <label htmlFor="class" className="text-[12px] text-[#7E7E89]">
                 Class
@@ -427,7 +427,7 @@ const EditProfile = ({
               </label>
               <InputFormat type="text" />
             </p>
-          </p>
+          </p> */}
           <p className="my-5">
             <Button type="submit">
               {isLoading ? (

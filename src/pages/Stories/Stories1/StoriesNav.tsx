@@ -1,44 +1,68 @@
 import NextIcon from "@/assets/nexticon.svg";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 const StoriesNav = ({
   category,
   genre,
   title,
   quiz,
   subCategoryId,
+  slug,
 }: {
   category?: string;
   genre?: string;
   title?: string;
   quiz?: string;
   subCategoryId?: number;
+  slug?: string;
 }) => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const location = useLocation();
+  // const { id } = useParams();
+  // const urlName = location.pathname.trim().split(" ")[0].split("/");
+  // console.log("urlname", urlName);
+  const contentNavigate = () => {
+    console.log(location.pathname);
+    console.log(slug);
+    if (
+      location.pathname ===
+        `/${"parent"}/stories/sub/${title
+          ?.replace(/\s/g, "-")
+          .toLocaleLowerCase()}/quiz` ||
+      location.pathname ===
+        `/${"school"}/stories/sub/${title
+          ?.replace(/\s/g, "-")
+          .toLocaleLowerCase()}/quiz`
+    ) {
+      navigate(-1);
+    }
+  };
   console.log("subCategoryId", subCategoryId);
-
   return (
     <div className="py-4 font-Recoleta pl-20 h-[60px] text-[24px]  font-semibold items-center rounded-full bg-white gap-8 flex px-8">
       <div
         className="flex gap-2 cursor-pointer"
-        onClick={() => navigate(`/librarynotpaid/stories`)}
+        onClick={() => navigate(`../../stories`)}
       >
-        <span>{category}</span>
+        <span>
+          {category &&
+            category?.charAt(0).toUpperCase() + category.substring(1)}
+        </span>
         <img loading="lazy" src={NextIcon} alt="nextIcon" />
       </div>
 
       <div
         className="flex gap-2  cursor-pointer "
-        onClick={() =>
-          navigate(`/librarynotpaid/stories/${genre}/${subCategoryId}`)
-        }
+        onClick={() => {
+          navigate(`../${slug?.replace(/\s/g, "-").toLocaleLowerCase()}`);
+          localStorage.setItem("subCategoryId", subCategoryId?.toString()!);
+        }}
       >
         <span>{genre}</span>
         <img loading="lazy" src={NextIcon} alt="nextIcon" />
       </div>
 
       <div
-        onClick={() => navigate(`/librarynotpaid/stories/${genre}/${id}`)}
+        onClick={contentNavigate}
         className={`flex gap-2  cursor-pointer text-[#B5B5C3] ${
           quiz && "text-black"
         } `}

@@ -10,6 +10,11 @@ export type returnUser = {
   token: string;
   user_id: number;
   user_image: string;
+  contact_name: string;
+  post_code: string;
+  tax_id: string;
+  country_id: string;
+  state_id: string;
 };
 
 type State = {

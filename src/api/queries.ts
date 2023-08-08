@@ -23,6 +23,16 @@ import {
   UpdateSchProfile,
   GetCountries,
   GetStates,
+  UpdateParentProfile,
+  VerifyPin,
+  UpdateSchImage,
+  UpdateSchoolNameAddress,
+  GetQuiz,
+  UpdateParentImage,
+  GetPlans,
+  PayStackInit,
+  VerifyCompletePayStack,
+  StripeInit,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -194,6 +204,12 @@ export const useUpdateSchProfile = () => {
   });
 };
 
+export const useUpdateParentProfile = () => {
+  return useMutation({
+    mutationFn: UpdateParentProfile,
+  });
+};
+
 // Get All the countrie
 export const useGetCountries = () => {
   return useQuery({ queryKey: ["GetCountries"], queryFn: GetCountries });
@@ -202,6 +218,64 @@ export const useGetCountries = () => {
 // Get All the countrie
 export const useGetStates = () => {
   return useQuery({ queryKey: ["GetStates"], queryFn: GetStates });
+};
+
+// GET QUIZ
+
+export const useGetQuiz = (contentId: string) => {
+  return useQuery({
+    queryKey: ["GetQuiz", contentId],
+    queryFn: () => GetQuiz(contentId),
+    onSuccess: (response) => {
+      console.log("quiz got called here", response);
+    },
+  });
+};
+
+export const useVerifyPin = () => {
+  return useMutation({
+    mutationFn: VerifyPin,
+  });
+};
+
+export const useUpdateSchoolNameAddress = () => {
+  return useMutation({
+    mutationFn: UpdateSchoolNameAddress,
+  });
+};
+
+export const useUpdateSchImage = () => {
+  return useMutation({
+    mutationFn: UpdateSchImage,
+  });
+};
+
+export const useUpdateParentImage = () => {
+  return useMutation({
+    mutationFn: UpdateParentImage,
+  });
+};
+
+export const useGetPlans = () => {
+  return useQuery({ queryKey: ["GetPlans"], queryFn: GetPlans });
+};
+
+export const usePayStackInit = () => {
+  return useMutation({
+    mutationFn: PayStackInit,
+  });
+};
+
+export const useVerifyCompletePayStack = () => {
+  return useMutation({
+    mutationFn: VerifyCompletePayStack,
+  });
+};
+
+export const useStripeInit = () => {
+  return useMutation({
+    mutationFn: StripeInit,
+  });
 };
 
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

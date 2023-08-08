@@ -175,7 +175,7 @@ const ReadPage = ({ audiobook }: { audiobook: TAudioBook }) => {
           width={300}
           height={300}
         />
-        <AudioControls audio={audiobook.file} />
+        <AudioControls audio={audiobook && audiobook.file} />
       </div>
       <div className=" basis-full flex flex-col bg-white rounded-3xl p-10 ">
         <div className="flex-grow">
@@ -239,17 +239,19 @@ const AudioControls = ({ audio }: { audio?: string }) => {
       seconds = Math.floor(audioRef?.current.duration);
       setDuration(+seconds);
     }
-    if (progressBar?.current) {
-      progressBar.current.max = seconds?.toString() || "";
-    }
+    // if (progressBar?.current) {
+    //   progressBar.current.max = seconds?.toString() || "";
+    // }
   }, [audioRef?.current?.onloadedmetadata, audioRef?.current?.readyState]);
 
   const calculateTime = (secs: number) => {
-    const minutes = Math.floor(secs / 60);
-    const returnedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
-    const seconds = Math.floor(secs % 60);
-    const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
-    return `${returnedMinutes}: ${returnedSeconds}`;
+    if (audioRef.current) {
+      const minutes = Math.floor(secs / 60);
+      const returnedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+      const seconds = Math.floor(secs % 60);
+      const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+      return `${returnedMinutes}: ${returnedSeconds}`;
+    }
   };
 
   console.log("actual currentTime", currentTTime);
@@ -262,6 +264,7 @@ const AudioControls = ({ audio }: { audio?: string }) => {
     if (audioRef.current) {
       audioRef.current.currentTime = value;
     }
+    return value;
   };
 
   const [volume, setVolume] = React.useState(50);
@@ -273,10 +276,13 @@ const AudioControls = ({ audio }: { audio?: string }) => {
       audioRef.current.volume = volume;
     }
   };
+  const [load, setLoad] = useState(false);
   return (
     <div className="mt-10">
       <div className="my-10 flex justify-center items-center gap-2">
-        <p className=" flex-grow w-20">{calculateTime(currentTTime)}</p>
+        <p className=" flex-grow w-20">
+          {currentTTime && calculateTime(currentTTime)}
+        </p>
         {/* <input
           type="range"
           className="mr-2   text-[#8530C1] bg-[#8530C1]  flex-grow w-full slider"
@@ -336,7 +342,8 @@ const AudioControls = ({ audio }: { audio?: string }) => {
             // setEnded(true);
           }}
           ref={audioRef}
-          src={audio}
+          src={audio!}
+          onLoad={() => setLoad(true)}
         ></audio>
         <div className="flex h-[72px] justify-end rounded-full gap-10 px-20 py-4 bg-[#FBECFF] items-center ">
           <button onClick={handeSkip10("backward")}>

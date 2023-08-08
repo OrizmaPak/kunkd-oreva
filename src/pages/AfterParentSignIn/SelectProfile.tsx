@@ -64,7 +64,7 @@ const AvatarCard = ({
   const handleClick = () => {
     image = "";
     localStorage.setItem("profileId", JSON.stringify(id));
-    navigate("/parenthomepage");
+    navigate("/parent");
   };
   return (
     <div>

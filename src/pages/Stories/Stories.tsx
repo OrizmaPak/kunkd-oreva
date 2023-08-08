@@ -245,9 +245,12 @@ const Stories = () => {
           <Routes>
             <Route element={<MainStoriesLayout />}>
               <Route index element={<BrowseGenre />}></Route>
-              <Route path=":subCategory/:id" element={<Story />}></Route>
+              <Route path=":subCategory" element={<Story />}></Route>
+              {/* <Route path=":subCategory/:id" element={<Story />}></Route> */}
             </Route>
-            <Route path=":theme/:id/:title" element={<Stories1 />}></Route>
+            <Route path="sub/:title" element={<Stories1 />}></Route>
+            {/* <Route path=":theme/:id/:title" element={<Stories1 />}></Route> */}
+
             <Route path=":story_type/:id/quiz" element={<Quiz />}></Route>
           </Routes>
         </InnerWrapper>
@@ -261,7 +264,8 @@ const Story = () => {
   const { subCategory, id } = useParams();
   const navigate = useNavigate();
   console.log("Id", id);
-  const { data, isLoading } = useGetContebtBySubCategories(id!);
+  const subCategoryId = localStorage.getItem("subCategoryId");
+  const { data, isLoading } = useGetContebtBySubCategories(subCategoryId!);
   console.log(data?.data.data.records);
   const subCategoryContents = data?.data.data.records;
   return (
@@ -269,7 +273,10 @@ const Story = () => {
       <div>
         <hr className="my-20 mx-[200px]" />
         <h1 className="text-center font-bold text-[30px] font-Recoleta mt-10 ">
-          {subCategory?.toString()} Stories
+          {subCategory &&
+            subCategory?.charAt(0).toUpperCase() +
+              subCategory.substring(1).replace(/-/g, " ")}{" "}
+          Stories
         </h1>
         <p className="text-center text-[18px] text-[#B5B5C3] my-8">
           Whenever they request a new bedtime story
@@ -297,15 +304,13 @@ const Story = () => {
                       <CardHome
                         key={index}
                         {...story}
-                        goTo={() =>
+                        goTo={() => {
                           navigate(
-                            `../../${story.category
-                              ?.toLowerCase()
-                              .trim()}/${story.theme.trim()?.toLowerCase()}/${
-                              story.id
-                            }/${story.name}`
-                          )
-                        }
+                            `../sub/${story.slug
+                              .toLocaleLowerCase()
+                              .replace(/\s/g, "_")}`
+                          );
+                        }}
                       />
                     }
                   </>
@@ -349,11 +354,10 @@ const BrowseGenre = () => {
           {subCategory &&
             subCategory.map((genre: TSubCategory, index: number) => (
               <SubButton
-                onClick={() =>
-                  navigate(`${genre.name.toLowerCase()}/${genre.id}`)
-                }
+                onClick={() => navigate(`${genre.slug.toLowerCase()}`)}
                 key={index}
                 name={genre.name}
+                subCategoryId={genre.id.toString()}
               />
             ))}
         </div>
@@ -369,11 +373,7 @@ const BrowseGenre = () => {
           <CardHome
             {...props}
             goTo={() =>
-              navigate(
-                `../${props.category?.toLowerCase()}/${props.theme?.toLowerCase()}/${
-                  props.id
-                }`
-              )
+              navigate(`sub/${props?.slug.replace(/\s/g, "_")!?.toLowerCase()}`)
             }
           />
         )}
@@ -422,11 +422,7 @@ const BrowseGenre = () => {
           <CardHome
             {...props}
             goTo={() =>
-              navigate(
-                `../${props.category?.toLowerCase()}/${props.theme?.toLowerCase()}/${
-                  props.id
-                }`
-              )
+              navigate(`sub/${props.slug?.toLowerCase().toLocaleLowerCase()}`)
             }
           />
         )}
@@ -438,13 +434,19 @@ const BrowseGenre = () => {
 const SubButton = ({
   name,
   onClick,
+  subCategoryId,
 }: {
   name: string;
   onClick?: () => void;
+  subCategoryId: string;
 }) => {
+  const handleClick = () => {
+    if (onClick) onClick();
+    localStorage.setItem("subCategoryId", subCategoryId);
+  };
   return (
     <button
-      onClick={onClick}
+      onClick={handleClick}
       className="py-3 my-3 rounded-3xl px-6 bg-[#FFF7FD]"
     >
       {name}

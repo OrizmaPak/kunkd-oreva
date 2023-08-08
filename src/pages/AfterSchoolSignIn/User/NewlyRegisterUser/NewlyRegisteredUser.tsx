@@ -145,13 +145,13 @@ const NewlyRegisteredUser = () => {
           card={(props: CardProps) => (
             <CardHome
               {...props}
-              goTo={() =>
+              goTo={() => {
                 navigate(
-                  `${props.category?.toLowerCase()}/${props.theme?.toLowerCase()}/${
-                    props.id
-                  }`
-                )
-              }
+                  `${props.category?.toLowerCase()}/sub/${props.slug
+                    ?.toLocaleLowerCase()
+                    .replace(/\s/g, "-")}`
+                );
+              }}
             />
           )}
         />
@@ -165,13 +165,13 @@ const NewlyRegisteredUser = () => {
           card={(props: CardProps) => (
             <CardHome
               {...props}
-              goTo={() =>
+              goTo={() => {
                 navigate(
-                  `${props.category?.toLowerCase()}/${props.theme?.toLowerCase()}/${
-                    props.id
-                  }`
-                )
-              }
+                  `${props.category?.toLowerCase()}/sub/${props.slug
+                    ?.toLocaleLowerCase()
+                    .replace(/\s/g, "-")}`
+                );
+              }}
             />
           )}
         />

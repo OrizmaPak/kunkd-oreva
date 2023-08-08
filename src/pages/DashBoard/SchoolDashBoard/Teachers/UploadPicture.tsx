@@ -6,10 +6,25 @@ import { Dropzone, FileWithPath } from "@mantine/dropzone";
 import DragIcon from "@/assets/draganddropicon.svg";
 import CameraIcon from "@/assets/cameralogo.svg";
 import { motion } from "framer-motion";
+import { Loader } from "@mantine/core";
 
-const UploadPicture = ({ toggle }: { toggle?: () => void }) => {
+const UploadPicture = ({
+  // toggle,
+  isLoading,
+  btnTitle,
+  handleSubmit,
+}: {
+  // toggle: () => void;
+  btnTitle: string;
+  isLoading: boolean;
+  handleSubmit: (val: File) => void;
+}) => {
   const [files, setFiles] = useState<FileWithPath[]>([]);
+
   console.log(files);
+  const handleClick = () => {
+    handleSubmit(files[0] as File);
+  };
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
     return (
@@ -64,7 +79,15 @@ const UploadPicture = ({ toggle }: { toggle?: () => void }) => {
           </Text>
         </Dropzone>
         <div className="max-w-[70%] mx-auto my-4">
-          <Button onClick={toggle}>Create Profile</Button>
+          <Button onClick={handleClick}>
+            {isLoading ? (
+              <p className="flex justify-center items-center">
+                <Loader color="white" size="sm" />
+              </p>
+            ) : (
+              <span>{btnTitle}</span>
+            )}
+          </Button>
         </div>
       </div>
     </motion.div>

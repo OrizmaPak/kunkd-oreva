@@ -94,7 +94,7 @@ const Billing = () => {
                 <hr className="mr-16" />
               </span>
               <span>
-                <InputFormat type="text" placeholder="10 Kunda steet" />
+                <InputFormat type="text" placeholder="10 Kunda street" />
               </span>
             </div>
             <div className="grid grid-cols-[150px_1fr_1fr] gap-8 my-6 items-center">
@@ -106,7 +106,7 @@ const Billing = () => {
                 <hr className="mr-16" />
               </span>
               <span>
-                <InputFormat type="text" placeholder="10 Kunda steet" />
+                <InputFormat type="text" placeholder="10 Kunda street" />
               </span>
             </div>
 

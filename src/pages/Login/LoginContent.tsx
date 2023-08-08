@@ -111,7 +111,7 @@ const LoginContent = () => {
           });
 
           if (res?.role === "schoolAdmin") {
-            navigate("/newlyregistereduser");
+            navigate("/school");
           } else {
             navigate("/selectprofile");
           }

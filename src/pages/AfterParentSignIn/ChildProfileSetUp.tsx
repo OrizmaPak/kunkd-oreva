@@ -76,7 +76,7 @@ const ChildProfileSetUp = () => {
           />
         )}
         {currentStep === STEP_5 && (
-          <WellDoneModal onContinue={() => navigate("/parenthomepage")} />
+          <WellDoneModal onContinue={() => navigate("/parent")} />
         )}
       </div>
     </div>

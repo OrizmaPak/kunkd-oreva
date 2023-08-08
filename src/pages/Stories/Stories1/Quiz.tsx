@@ -6,200 +6,142 @@ import { useState } from "react";
 import RemarkBg from "@/assets/remarkbg.svg";
 import RemarkIcon from "@/assets/remarkIcon.svg";
 import Button from "@/components/Button";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store";
 import { RingProgress } from "@mantine/core";
-import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
-type ObjAnsQuestionType = {
-  question: string;
-  answer: string;
-};
+import { useGetContentById, useGetQuiz } from "@/api/queries";
+import { STEP_1, STEP_2, STEP_3, STEP_4 } from "@/utils/constants";
+import { notifications } from "@mantine/notifications";
+import Contour from "@/assets/contour.svg";
+import DangerCircle from "@/assets/Danger Circle.svg";
+import CheckCircle from "@/assets/CheckCircle-f.svg";
+import SmileIcon from "@/assets/SmileyMeh-d.svg";
+import { Skeleton } from "@mantine/core";
+
 const Quiz = () => {
-  const { id, story_type } = useParams();
-  const questions = [
-    {
-      qus: " Why did Chisom’s grand-mother seize her phone?",
-      ans: [
-        "She wanted her to help clean",
-        "She wanted to get her angry",
-        "Chisom wasn’t listening to her",
-        "Chisom refused to eat",
-      ],
-      myAnswer: null,
-    },
-    {
-      qus: " Why did Chisom’s grand-mother seize her phone?",
-      ans: [
-        "She wanted her to help clean",
-        "She wanted to get her angry",
-        "Chisom wasn’t listening to her",
-        "Chisom refused to eat",
-      ],
-      myAnswer: null,
-    },
-    {
-      qus: " Why did Chisom’s grand-mother seize her phone?",
-      ans: [
-        "She wanted her to help clean",
-        "She wanted to get her angry",
-        "Chisom wasn’t listening to her",
-        "Chisom refused to eat",
-      ],
-      myAnswer: null,
-    },
-    {
-      qus: " Why did Chisom’s grand-mother seize her phone?",
-      ans: [
-        "She wanted her to help clean",
-        "She wanted to get her angry",
-        "Chisom wasn’t listening to her",
-        "Chisom refused to eat",
-      ],
-      myAnswer: null,
-    },
-    {
-      qus: " Why did Chisom’s grand-mother seize her phone?",
-      ans: [
-        "She wanted her to help clean",
-        "She wanted to get her angry",
-        "Chisom wasn’t listening to her",
-        "Chisom refused to eat",
-      ],
-      myAnswer: null,
-    },
-    {
-      qus: " Why did Chisom’s grand-mother seize her phone?",
-      ans: [
-        "She wanted her to help clean",
-        "She wanted to get her angry",
-        "Chisom wasn’t listening to her",
-        "Chisom refused to eat",
-      ],
-      myAnswer: null,
-    },
-    {
-      qus: " Why did Chisom’s grand-mother seize her phone?",
-      ans: [
-        "She wanted her to help clean",
-        "She wanted to get her angry",
-        "Chisom wasn’t listening to her",
-        "Chisom refused to eat",
-      ],
-      myAnswer: null,
-    },
-    {
-      qus: " Why did Chisom’s grand-mother seize her phone?",
-      ans: [
-        "She wanted her to help clean",
-        "She wanted to get her angry",
-        "Chisom wasn’t listening to her",
-        "Chisom refused to eat",
-      ],
-      myAnswer: null,
-    },
-    {
-      qus: " Why did Chisom’s grand-mother seize her phone?",
-      ans: [
-        "She wanted her to help clean",
-        "She wanted to get her angry",
-        "Chisom wasn’t listening to her",
-        "Chisom refused to eat",
-      ],
-      myAnswer: null,
-    },
-    {
-      qus: " Why did Chisom’s grand-mother seize her phone?",
-      ans: [
-        "She wanted her to help clean",
-        "She wanted to get her angry",
-        "Chisom wasn’t listening to her",
-        "Chisom refused to eat",
-      ],
-      myAnswer: null,
-    },
-  ];
+  // const { id, story_type } = useParams();
+  // const [user] = useStore(getUserState);
+  const contentId = localStorage.getItem("contentId");
+  const { data: quiz, isLoading } = useGetQuiz(contentId?.toString()!);
+  const questions = quiz?.data?.data?.questions;
+  console.log("quiz-----------------", quiz?.data.data);
+  const contentString = localStorage.getItem("content");
+  const content = JSON.parse(contentString!);
 
   const [currentQues, setCurrentQues] = useState<number>(0);
-  const [answers, setAnswers] = useState<ObjAnsQuestionType[]>([]);
+  const [answers, setAnswers] = useState<answerObj[]>([]);
 
   const handlePagination = (paginationType: string) => {
     if (
       paginationType === "next" &&
-      currentQues < questions.length - 1 &&
-      answers.length >= currentQues + 1
+      currentQues < questions.length - 1
+      // answers.length >= currentQues + 1
     ) {
       setCurrentQues((el) => (el += 1));
       console.log("currentpage", currentQues, "answer", answers);
     }
     if (paginationType === "prev" && currentQues >= 1) {
       setCurrentQues((el) => (el -= 1));
-      // setAnswers((val) => (val -= 1));
     }
-    // console.log(answers);
   };
 
-  const story = storiesData.find((el) => `${el.id}` === id);
   const handleSelectAnswer = ({
     answer,
     question,
-  }: {
-    answer: string;
-    question: string;
-  }) => {
+    actual_answer,
+  }: answerObj) => {
     setAnswers((prev) => {
       const newAnswer = [...prev];
       if (newAnswer[currentQues]) {
-        newAnswer[currentQues] = { answer, question };
+        newAnswer[currentQues] = { answer: answer!, question, actual_answer };
       } else {
-        newAnswer.push({ answer, question });
+        newAnswer.push({ answer: answer!, question, actual_answer });
       }
       return newAnswer;
     });
   };
-  const progress = 100 / questions.length;
+  // const content = data?.data.data;
+  const params = useParams();
+  const { category } = params;
+  const progress = 100 / questions?.length;
   const [curentStep, setcurrentStep] = useState(STEP_1);
+  console.log("questions --- answers ", { answers, questions });
+  // if (isLoading) {
+  //   return "loading ....";
+  // }
   return (
-    <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] ">
-      {story && (
+    <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] w-[100%] ">
+      <Skeleton visible={isLoading}>
         <StoriesNav
-          category="Stories"
-          genre={story_type}
-          title={story?.title}
-          quiz="quiz"
+          category={category && category}
+          genre={content && content.sub_categories[0].sub_category_name!}
+          title={content && content.name}
+          subCategoryId={content && content.sub_categories[0].sub_category_id!}
+          slug={content && content.sub_categories[0].sub_category_name!}
+          quiz="Quiz"
         />
-      )}
+      </Skeleton>
+
       {curentStep === STEP_1 && (
-        <div className="flex-grow mt-5 pt-5 px-40 flex  flex-col py-5 bg-white rounded-3xl ">
-          <Progress
-            value={progress * answers.length}
-            size="xl"
-            radius="xl"
-            color="violet"
-          />
+        <>
+          <Skeleton visible={isLoading} height={600}>
+            <div className="flex-grow mt-5 pt-5 px-40 flex  h-[100%]  flex-col py-5 bg-white rounded-3xl ">
+              {/* <Skeleton visible={isLoading}> */}
+              <Progress
+                value={progress * answers.length}
+                size="xl"
+                radius="xl"
+                color="violet"
+              />
+              {/* </Skeleton> */}
 
-          {/* Question  */}
-          <Question
-            quesObject={questions[currentQues]}
-            selected={answers}
-            setSelected={handleSelectAnswer}
-            currentQuestion={currentQues}
-          />
-
-          <QuestionPagination
-            handlePagination={handlePagination}
-            totalQuestion={questions.length}
-            currentQues={currentQues}
-            answers={answers}
-            setShowRemark={() => setcurrentStep(STEP_2)}
-          />
-        </div>
+              {/* Question  */}
+              {/* <Skeleton visible={isLoading}> */}
+              <Question
+                quesObject={questions && questions[currentQues]}
+                selected={answers}
+                setSelected={handleSelectAnswer}
+                currentQuestion={currentQues}
+              />
+              {/* </Skeleton> */}
+              {/* <Skeleton visible={isLoading}> */}
+              <QuestionPagination
+                handlePagination={handlePagination}
+                totalQuestion={questions && questions?.length}
+                currentQues={questions && currentQues}
+                answers={answers && answers}
+                questions={questions ?? []}
+                handleSelectAnswer={handleSelectAnswer}
+                setShowResult={() => setcurrentStep(STEP_2)}
+              />
+              {/* </Skeleton> */}
+            </div>
+          </Skeleton>
+        </>
       )}
       {curentStep === STEP_2 && (
-        <div className="flex-grow mt-5 pt-10 px-40 flex  flex-col py-14 bg-white rounded-3xl ">
-          <GoodRemarkMsg setShowResult={() => setcurrentStep(STEP_3)} />
+        <div className="flex-grow mt-5 pt-10 flex  justify-center items-center  mx-auto w-[100%]  flex-col py-14 bg-white m rounded-3xl ">
+          <Result
+            answers={answers}
+            setShowRemark={() => setcurrentStep(STEP_3)}
+          />
+
+          {/* <GoodRemarkMsg setShowResult={() => setcurrentStep(STEP_3)} /> */}
         </div>
       )}
       {curentStep === STEP_3 && (
-        <div className="flex-grow mt-5 pt-10 px-[300px] flex  flex-col py-14 bg-white rounded-3xl ">
-          <Result answers={answers} />
+        <div className="flex-grow mt-5 pt-10 px-40 flex  flex-col py-14 bg-white rounded-3xl ">
+          {/* <Result answers={answers} /> */}
+          <GoodRemarkMsg
+            answers={answers}
+            setShowYourResult={() => setcurrentStep(STEP_4)}
+          />
+        </div>
+      )}
+      {curentStep === STEP_4 && (
+        <div className="flex-grow mt-5 pt-10  mx-auto  flex justify-center items-center  flex-col py-14 bg-white   w-[100%] rounded-3xl ">
+          {/* <Result answers={answers} /> */}
+          <YourResult answers={answers} />
         </div>
       )}
     </div>
@@ -209,8 +151,13 @@ const Quiz = () => {
 export default Quiz;
 
 type questionType = {
-  qus: string;
-  ans: string[];
+  answer: string;
+  option_a: string;
+  option_b: string;
+  option_c: string;
+  option_d: string;
+  question: string;
+  question_id: number;
 };
 
 const Question = ({
@@ -220,17 +167,57 @@ const Question = ({
   currentQuestion,
 }: {
   quesObject: questionType;
-  selected: ObjAnsQuestionType[];
-  setSelected: (val: ObjAnsQuestionType) => void;
+  selected: answerObj[];
+  // correctAns: answerObj[];
+  setSelected: (val: answerObj) => void;
   currentQuestion: number;
 }) => {
   return (
     <div className=" flex justify-start mt-20 items-center flex-col gap-y-4 flex-grow ">
       <h1 className="text-[24px] font-bold  text-center mb-8">
-        {quesObject.qus}
+        {quesObject?.question}
       </h1>
       <div className=" flex flex-col gap-6">
-        {quesObject.ans.map((ans, index) => (
+        <AnsButton
+          title={quesObject?.option_a}
+          actual_answer={
+            quesObject?.answer
+              ? (quesObject[
+                  `option_${quesObject?.answer}` as keyof questionType
+                ] as string)
+              : ""
+          }
+          question={quesObject?.question!}
+          selected={selected[currentQuestion]}
+          setSelected={setSelected}
+        />
+        <AnsButton
+          title={quesObject?.option_b}
+          question={quesObject?.question}
+          selected={selected[currentQuestion]}
+          actual_answer={
+            quesObject?.answer
+              ? (quesObject[
+                  `option_${quesObject?.answer}` as keyof questionType
+                ] as string)
+              : ""
+          }
+          setSelected={setSelected}
+        />
+        <AnsButton
+          title={quesObject?.option_c}
+          question={quesObject?.question}
+          selected={selected[currentQuestion]}
+          actual_answer={
+            quesObject?.answer
+              ? (quesObject[
+                  `option_${quesObject?.answer}` as keyof questionType
+                ] as string)
+              : ""
+          }
+          setSelected={setSelected}
+        />
+        {/* {quesObject.ans.map((ans, index) => (
           <AnsButton
             key={index}
             title={ans}
@@ -238,7 +225,7 @@ const Question = ({
             selected={selected[currentQuestion]}
             setSelected={setSelected}
           />
-        ))}
+        ))} */}
       </div>
     </div>
   );
@@ -249,21 +236,23 @@ const AnsButton = ({
   question,
   selected,
   setSelected,
+  actual_answer,
 }: {
   title: string;
   question: string;
-  selected: ObjAnsQuestionType;
-  setSelected: (val: ObjAnsQuestionType) => void;
+  selected: answerObj;
+  setSelected: (val: answerObj) => void;
+  actual_answer: string;
 }) => {
   const handleSelected = () => {
-    setSelected({ answer: title, question });
-    console.log(title);
-    console.log(selected);
+    setSelected({ answer: title, question, actual_answer });
+    // console.log(title);
+    // console.log(selected);
   };
   return (
     <button
       onClick={handleSelected}
-      className={`py-3 px-20 w-[478px] ${
+      className={`py-3 px-10 w-[478px] ${
         selected?.answer === title
           ? "bg-[#8530C1] text-white "
           : "text-[#8530C1]"
@@ -274,19 +263,43 @@ const AnsButton = ({
   );
 };
 
+type answerObj = { answer?: string; question: string; actual_answer: string };
 const QuestionPagination = ({
   handlePagination,
   currentQues,
   totalQuestion,
   answers,
-  setShowRemark,
+  setShowResult,
+  questions,
+  handleSelectAnswer,
 }: {
   handlePagination: (val: string) => void;
   currentQues: number;
   totalQuestion: number;
-  answers: ObjAnsQuestionType[];
-  setShowRemark: () => void;
+  answers: answerObj[];
+  questions: questionType[];
+  setShowResult: () => void;
+  handleSelectAnswer: (answer: answerObj) => void;
 }) => {
+  console.log("current ques1", currentQues);
+  console.log("current ques2", questions);
+
+  console.log("current ques3", questions[currentQues]);
+
+  const question = questions[currentQues];
+  // console.log()
+  const actual_answer = question?.answer
+    ? (question[`option_${question?.answer}` as keyof questionType]! as string)
+    : "";
+  const handleNext = () => {
+    if (!answers[currentQues]) {
+      handleSelectAnswer({
+        question: question?.question,
+        actual_answer,
+      });
+    }
+    handlePagination("next");
+  };
   return (
     <div>
       <hr className="mb-5" />
@@ -303,14 +316,14 @@ const QuestionPagination = ({
         {answers.length === totalQuestion &&
         currentQues + 1 === totalQuestion ? (
           <button
-            onClick={setShowRemark}
+            onClick={setShowResult}
             className="py-3 px-16 bg-green-600 rounded-3xl  text-white"
           >
             Finish Quiz
           </button>
         ) : (
           <button
-            onClick={() => handlePagination("next")}
+            onClick={handleNext}
             className="py-3 px-16 bg-[#8530C1] rounded-3xl text-white"
           >
             Next
@@ -321,32 +334,60 @@ const QuestionPagination = ({
   );
 };
 
-const GoodRemarkMsg = ({ setShowResult }: { setShowResult: () => void }) => {
+const GoodRemarkMsg = ({
+  setShowYourResult,
+  answers,
+}: {
+  setShowYourResult: () => void;
+  answers: answerObj[];
+}) => {
   // const location = useLocation();
 
   const refreshPage = () => {
     window.location.reload();
   };
+
+  const result = answers.filter(
+    (answer) => answer.answer === answer.actual_answer
+  );
+  console.log(answers);
+
   return (
     <>
-      <div className="relative flex-grow bg-white ">
-        <img
-          src={RemarkBg}
-          alt=""
-          className="absolute left-1/2 top-[30%]  transform -translate-x-1/2 -translate-y-1/2"
-        />
-        <img
-          src={RemarkIcon}
-          alt="remarkIcon"
-          className="absolute left-1/2 top-[30%] transform -translate-x-1/2 -translate-y-1/2"
-        />
-        <div className="text-center  mt-[290px]">
-          <h1 className="font-bold">Good Job!</h1>
-          <p className="text-[18px] text-[#B5B5C3]">
-            You answered 7 questions correct
-          </p>
+      {result.length < answers.length / 2 ? (
+        <div className="relative flex-grow bg-white ">
+          <img
+            src={SmileIcon}
+            alt="remarkIcon"
+            className="absolute left-1/2 top-[30%] transform -translate-x-1/2 -translate-y-1/2"
+          />
+          <div className="text-center  mt-[290px]">
+            <h1 className="font-bold">You can do better!</h1>
+            <p className="text-[18px] text-[#B5B5C3]">
+              You answered {result.length} questions correct
+            </p>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="relative flex-grow bg-white ">
+          <img
+            src={RemarkBg}
+            alt=""
+            className="absolute left-1/2 top-[30%]  transform -translate-x-1/2 -translate-y-1/2"
+          />
+          <img
+            src={RemarkIcon}
+            alt="remarkIcon"
+            className="absolute left-1/2 top-[30%] transform -translate-x-1/2 -translate-y-1/2"
+          />
+          <div className="text-center  mt-[290px]">
+            <h1 className="font-bold">Good Job!</h1>
+            <p className="text-[18px] text-[#B5B5C3]">
+              You answered {result.length} questions correct
+            </p>
+          </div>
+        </div>
+      )}
       <div>
         <div className="flex justify-between items-center text-white">
           <Button
@@ -359,7 +400,7 @@ const GoodRemarkMsg = ({ setShowResult }: { setShowResult: () => void }) => {
           </Button>
           <div className="flex gap-20">
             <button
-              onClick={setShowResult}
+              onClick={setShowYourResult}
               className="py-3 px-16 bg-[#8530C1] rounded-3xl"
             >
               Done
@@ -371,42 +412,86 @@ const GoodRemarkMsg = ({ setShowResult }: { setShowResult: () => void }) => {
   );
 };
 
-const Result = ({ answers }: { answers: ObjAnsQuestionType[] }) => {
+const Result = ({
+  answers,
+  setShowRemark,
+}: {
+  answers: answerObj[];
+  setShowRemark: () => void;
+}) => {
   const navigate = useNavigate();
+  const attempted = answers.filter((answer) => answer.answer !== undefined);
   return (
-    <div className="relative flex-grow bg-white">
-      <div className="bg-[#B76DEB] rounded-3xl pt-16 px-10">
-        <div className="flex justify-center items-center gap-10 px-5 bg-[#FBC70D] rounded-t-3xl">
-          <p>
-            <RingProgress
-              size={300}
-              thickness={40}
-              sections={[{ value: 70, color: "white" }]}
-              label={
-                <h1 className="font-bold text-black  text-center text-[30px]">
-                  <span className="text-[40px]">7</span>
-                  /10
-                </h1>
-              }
-              rootColor="rgba(255,255,255,0.4)"
-            />
-          </p>
-          <p className="text-[24px] font-bold ">
-            You answered 7 of 10 questions
-          </p>
-        </div>
+    <div className="relative mx-auto flex-grow bg-white  w-[780px] rounded-3xl">
+      {/* <div className="bg-[#B76DEB] rounded-3xl pt-16 px-10"> */}
+      <div className="flex mx-auto relative justify-center items-center gap-10 px-5 bg-[#2BB457] w-[672px] h-[385px] rounded-3xl">
+        <img
+          src={Contour}
+          alt="image"
+          className="absolute object-cover w-[100%]"
+        />
+        <p>
+          <RingProgress
+            size={300}
+            thickness={30}
+            sections={[
+              {
+                value: (100 / answers.length) * attempted.length,
+                color: "white",
+              },
+            ]}
+            label={
+              <h1 className="font-bold text-white  text-center text-[30px]">
+                <span className="text-[40px]">{attempted.length}</span>/
+                {answers.length}
+              </h1>
+            }
+            rootColor="rgba(255,255,255,0.4)"
+          />
+        </p>
+        <p className="text-[24px] font-semibold  text-white ">
+          You answered {attempted.length} of {answers.length} questions
+        </p>
+        {/* </div> */}
       </div>
       <div className="my-10 text-center">
         <h1 className="text-[24px] font-bold ">Your Answers</h1>
       </div>
-      <div className=" flex bg-[#FFF7FD] py-10 rounded-3xl  justify-items-center items-center flex-col">
+      <div className=" flex bg-[#FFF7FD] py-10 rounded-3xl   flex-col">
         {answers.map((data, index) => (
           <ResultRow {...data} index={index} />
         ))}
-        <p>
+        <p className="flex justify-center mt-14 items-center">
           <button
-            onClick={() => navigate("/librarynotpaid")}
-            className="p-4 px-20 text-white bg-[#8530C1] rounded-3xl"
+            onClick={setShowRemark}
+            className="p-3 px-20 text-white bg-[#8530C1] rounded-3xl"
+          >
+            Submit
+          </button>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const YourResult = ({ answers }: { answers: answerObj[] }) => {
+  const navigate = useNavigate();
+  // const attempted = answers.filter((answer) => answer.answer !== undefined);
+  return (
+    <div className="relative flex-grow    w-[780px] rounded-3xl">
+      {/* <div className="bg-[#B76DEB] rounded-3xl pt-16 px-10"> */}
+
+      <div className="my-10 text-center">
+        <h1 className="text-[24px] font-bold ">Your Answers</h1>
+      </div>
+      <div className=" flex bg-[#FFF7FD] py-10 rounded-3xl    flex-col">
+        {answers.map((data, index) => (
+          <ResultRow2 {...data} index={index} />
+        ))}
+        <p className="flex justify-center mt-14 items-center">
+          <button
+            onClick={() => navigate(-2)}
+            className="p-3 px-20 text-white bg-[#8530C1] rounded-3xl"
           >
             Done
           </button>
@@ -420,20 +505,78 @@ const ResultRow = ({
   question,
   answer,
   index,
+  actual_answer,
 }: {
-  question: string;
-  answer: string;
-  index: number;
+  question?: string;
+  answer?: string;
+  index?: number;
+  actual_answer?: string;
 }) => {
   return (
-    <div className="my-2">
-      <p className="flex gap-10 items-center ">
-        <p className="bg-[#8530C1]  rounded-full p-3 text-white w-[30px] h-[30px] flex justify-center items-center">
-          {index + 1}
+    <div className={`pt-7 py-5 px-16 ${!answer && "bg-[#ED1C241A]"} `}>
+      <p className={`flex gap-10 items-center `}>
+        <p className="text-[#8530C1]  rounded-full p-3 bg-white w-[30px] h-[30px] flex justify-center items-center">
+          {index! + 1}
         </p>
-        <p className="text-[20px] font-bold">{question}</p>
+        <p
+          className={`text-[20px]  w-full flex  justify-between font-semibold `}
+        >
+          {question} {!answer && <img src={DangerCircle} alt="image" />}
+        </p>
       </p>
-      <p className="pl-20 text-[20px] text-[#B5B5C3] py-5">{answer}</p>
+      {/* <p className="pl-20 text-[20px] text-[#B5B5C3] pt-5">{answer}</p> */}
+      <p className="pl-20 text-[20px] text-[#B5B5C3] py-2">
+        {answer ? answer : "-"}
+      </p>
+    </div>
+  );
+};
+
+const ResultRow2 = ({
+  question,
+  answer,
+  index,
+  actual_answer,
+}: {
+  question?: string;
+  answer?: string;
+  index?: number;
+  actual_answer?: string;
+}) => {
+  return (
+    <div
+      className={`pt-7 py-5 px-16 ${
+        answer !== actual_answer && "bg-[#ED1C241A]"
+      } `}
+    >
+      <p className={`flex gap-10 items-center `}>
+        <p className="text-[#8530C1]  rounded-full p-3 bg-white w-[30px] h-[30px] flex justify-center items-center">
+          {index! + 1}
+        </p>
+        <p
+          className={`text-[20px]  w-full flex  justify-between font-semibold `}
+        >
+          {question}{" "}
+          {!answer || answer !== actual_answer ? (
+            <img src={DangerCircle} alt="image" />
+          ) : (
+            <img src={CheckCircle} alt="iamge" />
+          )}
+        </p>
+      </p>
+      {/* <p className="pl-20 text-[20px] text-[#B5B5C3] pt-5">{answer}</p> */}
+      {answer === actual_answer && (
+        <p className="pl-20 text-[20px] text-[#B5B5C3] py-2"> {answer}</p>
+      )}
+      {answer !== actual_answer ? (
+        <p className="pl-20 text-[20px] text-[#B5B5C3] py-2">
+          {answer !== actual_answer ? answer : ""}
+          <br />
+          <p className="text-red-500 font=semibold">Answer: {actual_answer}</p>
+        </p>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

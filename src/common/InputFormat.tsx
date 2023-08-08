@@ -11,7 +11,7 @@ type Props = {
   reg?: UseFormRegisterReturn;
   value?: string;
   smallPadding?: "true";
-
+  readonly?: true | false;
   errorMsg?: string;
 };
 const InputFormat = ({
@@ -22,6 +22,7 @@ const InputFormat = ({
   reg,
   value,
   smallPadding,
+  readonly,
 
   errorMsg,
 }: Props) => {
@@ -40,6 +41,7 @@ const InputFormat = ({
           placeholder={placeholder}
           type={type}
           defaultValue={value}
+          readOnly={readonly}
           className="w-full  h-full flex-1 text-black text-[14px]  focus:outline-none"
         />
         {rightIcon ? <span>{rightIcon}</span> : null}

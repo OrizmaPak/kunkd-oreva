@@ -10,87 +10,95 @@ import { getUserState } from "@/store/authStore";
 import useStore from "@/store";
 import "video-react/dist/video-react.css";
 import ReactHlsPlayer from "react-hls-player";
+import { Skeleton } from "@mantine/core";
 
 const VideoPlayer = () => {
   const [isfinish, setIsFinsh] = useState(false);
-  const { lan_type, id } = useParams();
+  const { lan_type } = useParams();
   // const video = africanLanguagesData.find((data) => data.id === id);
   // console.log(video);
+  const contentId = localStorage.getItem("contentId");
   const videoRef = useRef<HTMLVideoElement>(null);
   const [user] = useStore(getUserState);
-  const { data } = useGetContentById(
-    id?.toString()!,
+  const { data, isLoading } = useGetContentById(
+    contentId?.toString()!,
     user?.user_id?.toString()!
   );
   const video = data?.data.data.media[0];
+  const videoData = data?.data.data.sub_categories[0];
   console.log("_____cont", video);
-  console.log("_____cont", video);
+  console.log("_____cont", videoData);
 
   return (
     <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col  bg-[#fff7fd]">
       <div className="">
-        <AfricanLanguagesNav
-          category="Africanlanguages"
-          lanType={lan_type}
-          title={video && video.name}
-        />
+        <Skeleton visible={isLoading}>
+          <AfricanLanguagesNav
+            category="Africanlanguages"
+            lanType={lan_type}
+            title={video && video.name}
+            subCategoryId={videoData?.sub_category_id}
+            subCategoryName={videoData?.sub_category_name}
+          />
+        </Skeleton>
       </div>
       {!isfinish ? (
         <div className="  flex-grow mt-5  gap-10 rounded-3xl flex w-[100%]">
-          <div className="  basis-full  flex flex-col">
-            <div className="basis">
-              <div className="  rounded-t-3xl flex flex-col relative group">
-                <button
-                  onClick={() => setIsFinsh(true)}
-                  className="py-3  text-[#8530C1]   z-50 px-8 flex gap-4 justify-center items-center rounded-3xl bg-white right-8  top-4 absolute"
-                >
-                  Finish
-                </button>
-                {video?.file && (
-                  <ReactHlsPlayer
-                    className=" rounded-t-3xl flex-grow"
-                    // poster={video.thumbnail}
-                    src={video?.file}
-                    autoPlay={false}
-                    controls={true}
-                    playerRef={videoRef}
-                    width="100%"
-                    height={"200px"}
-                  />
-                )}
-              </div>
-              <div className=" bg-white py-8  rounded-b-3xl px-24 flex justify-between  items-center">
-                <p className="text-[20px] font-bold ">{video?.name}</p>
-                <p className="flex gap-5 text-[#8530C1]">
-                  <button className="py-3 px-7 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]">
-                    <img
-                      loading="lazy"
-                      src={SaveIcon}
-                      alt="icon"
-                      className="w-[20px]"
-                    />
-                    <span>Save</span>
+          <Skeleton visible={isLoading}>
+            <div className="  basis-full  flex flex-col">
+              <div className="basis">
+                <div className="  rounded-t-3xl flex flex-col relative group">
+                  <button
+                    onClick={() => setIsFinsh(true)}
+                    className="py-3  text-[#8530C1]   z-50 px-8 flex gap-4 justify-center items-center rounded-3xl bg-white right-8  top-4 absolute"
+                  >
+                    Finish
                   </button>
-                  <button className="py-3 px-7 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]">
-                    <img
-                      loading="lazy"
-                      src={ShareIcon}
-                      alt="icon"
-                      className="w-[20px]"
+                  {video?.file && (
+                    <ReactHlsPlayer
+                      className=" rounded-t-3xl flex-grow"
+                      // poster={video.thumbnail}
+                      src={video?.file}
+                      autoPlay={false}
+                      controls={true}
+                      playerRef={videoRef}
+                      width="100%"
+                      height={"200px"}
                     />
-                    <span>Share</span>
-                  </button>
-                </p>
+                  )}
+                </div>
+                <div className=" bg-white py-8  rounded-b-3xl px-24 flex justify-between  items-center">
+                  <p className="text-[20px] font-bold ">{video?.name}</p>
+                  <p className="flex gap-5 text-[#8530C1]">
+                    <button className="py-3 px-7 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]">
+                      <img
+                        loading="lazy"
+                        src={SaveIcon}
+                        alt="icon"
+                        className="w-[20px]"
+                      />
+                      <span>Save</span>
+                    </button>
+                    <button className="py-3 px-7 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]">
+                      <img
+                        loading="lazy"
+                        src={ShareIcon}
+                        alt="icon"
+                        className="w-[20px]"
+                      />
+                      <span>Share</span>
+                    </button>
+                  </p>
+                </div>
+
+                <div className="mt-4 bg-white left-10 p-10 rounded-3xl leading-10">
+                  <p>{video?.content}</p>
+                </div>
               </div>
 
-              <div className="mt-4 bg-white left-10 p-10 rounded-3xl leading-10">
-                <p>{video?.content}</p>
-              </div>
+              <div></div>
             </div>
-
-            <div></div>
-          </div>
-
+          </Skeleton>
           <div className="  basis-3/6 rounded-3xl bg-white px-10">
             <h1 className="text-[24px]  font-semibold font-Recoleta my-3 ">
               Recommended Videos

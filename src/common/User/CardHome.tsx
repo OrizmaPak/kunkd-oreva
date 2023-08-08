@@ -15,16 +15,16 @@ export type CardProps = {
   goTo?: () => void;
 };
 
-const CardHome = ({ name, thumbnail, goTo }: CardProps) => {
-  // const goto = () => {
-  //   navigate(`${category?.toLowerCase()}/${theme?.toLowerCase()}/${id}`, {
-  //     // state: { image, title, size },
-  //   });
-  // };
+const CardHome = ({ name, thumbnail, id, goTo }: CardProps) => {
+  console.log("id ----", id);
+  const handleClick = () => {
+    if (goTo) goTo();
 
+    localStorage.setItem("contentId", id?.toString()!);
+  };
   return (
     <div
-      onClick={goTo}
+      onClick={handleClick}
       className="w-[200px] z-[1] cursor-pointer hover:scale-[102%] transition-all"
     >
       <span>
