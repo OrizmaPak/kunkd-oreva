@@ -409,7 +409,7 @@ const AvatarCard = ({
 export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
   const [enabled, setEnabled] = useState(false);
 
-  const { data } = useGetProfile(enabled, () => {
+  const {} = useGetProfile(enabled, () => {
     onContinue();
   });
 

@@ -1,11 +1,11 @@
 import { PinInput, Group } from "@mantine/core";
-import { useState } from "react";
+// import { useState } from "react";
 import Button from "@/components/Button";
 import { useNavigate } from "react-router-dom";
-import { userContext } from "@/Context/StateProvider";
+// import { userContext } from "@/Context/StateProvider";
 import { motion } from "framer-motion";
-import useStore from "@/store/index";
-import { getUserState } from "@/store/authStore";
+// import useStore from "@/store/index";
+// import { getUserState } from "@/store/authStore";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
@@ -17,16 +17,16 @@ import { getApiErrorMessage } from "@/api/helper";
 
 const EnterPassCode = ({ onSubmit }: { onSubmit: () => void }) => {
   const navigate = useNavigate();
-  const [pinValue, setPinValue] = useState("");
-  const [user, ,] = useStore(getUserState);
+  // const [pinValue, setPinValue] = useState("");
+  // const [user, ,] = useStore(getUserState);
 
-  const [{ userType }] = userContext();
-  const goToSchoolDashboard = () => {
-    console.log("usertype", userType);
-    if (user?.role === "schoolAdmin") {
-      navigate("../schooldashboard");
-    }
-  };
+  // const [{ userType }] = userContext();
+  // const goToSchoolDashboard = () => {
+  //   console.log("usertype", userType);
+  //   if (user?.role === "schoolAdmin") {
+  //     navigate("../schooldashboard");
+  //   }
+  // };
 
   // const handlePinChange = (value: string) => {
   //   setPinValue(value);
@@ -54,10 +54,9 @@ const EnterPassCode = ({ onSubmit }: { onSubmit: () => void }) => {
       .min(4, { message: " Pin can only be at least 4 characters long" }),
   });
 
-  const { handleSubmit, setValue, watch, trigger, formState } =
-    useForm<FormData>({
-      resolver: zodResolver(schema),
-    });
+  const { handleSubmit, setValue, watch, trigger } = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
 
   const pin = watch("pin");
 

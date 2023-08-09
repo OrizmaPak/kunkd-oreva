@@ -6,7 +6,7 @@ import { useGetPlans } from "@/api/queries";
 import { Skeleton } from "@mantine/core";
 
 const ChoosePlanContent = () => {
-  const { isLoading, data, error } = useGetPlans();
+  const { isLoading, data } = useGetPlans();
 
   const plans = data?.data.data.plans;
   return (

@@ -3,13 +3,12 @@ import DateIcon from "@/assets/dateIcon.svg";
 const Row = ({
   image,
   date,
-  duration,
+
   range,
   title,
 }: {
   image?: string;
   date?: string;
-  duration?: string;
   range?: number;
   title?: string;
 }) => {

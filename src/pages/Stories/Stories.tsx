@@ -261,7 +261,7 @@ const Stories = () => {
 export default Stories;
 
 const Story = () => {
-  const { subCategory, id } = useParams();
+  const { subCategory } = useParams();
   const navigate = useNavigate();
   const subCategoryId = localStorage.getItem("subCategoryId");
   const { data, isLoading } = useGetContebtBySubCategories(subCategoryId!);

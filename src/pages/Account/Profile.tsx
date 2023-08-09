@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 import EditPencil from "@/assets/editPencil.svg";
-import Starr from "@/assets/starr.svg";
+// import Starr from "@/assets/starr.svg";
 import { motion } from "framer-motion";
 import SchoolBg from "@/assets/schoolImage.svg";
 import SchoolLogo from "@/assets/schoolIcon.svg";
@@ -14,11 +14,11 @@ import { Modal } from "@mantine/core";
 import Teacher01 from "@/assets/teacher01.svg";
 import BigPencil from "@/assets/bigeditingpencil.svg";
 import InputFormat from "@/common/InputFormat";
-import { useState, ChangeEvent } from "react";
+import { useState } from "react";
 import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
 // import { getProfileState } from "@/store/profileStore";
-import { UseFormRegisterReturn } from "react-hook-form";
+// import { UseFormRegisterReturn } from "react-hook-form";
 
 // import useStore from "@/store/index";
 import { useForm } from "react-hook-form";
@@ -132,11 +132,11 @@ export default Profile;
 
 const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
   const { isLoading, mutate } = useUpdateParentImage();
-  const [edit, setEdit] = useState(false);
+  // const [edit, setEdit] = useState(false);
 
-  const [uploadType, setUploadType] = useState<
-    "profileImage" | "backgroundImage" | null
-  >(null);
+  const [uploadType, ,] = useState<"profileImage" | "backgroundImage" | null>(
+    null
+  );
 
   const handleSubmit = (data: File) => {
     if (!uploadType) return;
@@ -660,12 +660,12 @@ const EditSchNameAddress = ({
 const EditParentPersonalInfomation = ({
   firstname,
   lastname,
-  email,
+
   onSave,
 }: {
   firstname?: string;
   lastname?: string;
-  email?: string;
+
   onSave: () => void;
 }) => {
   const { mutate, isLoading } = useUpdateParentProfile();
@@ -924,28 +924,28 @@ const EditSchoolPersonalInfomation = ({
   );
 };
 
-type TCountry = {
-  id: number;
-  name: string;
-};
-const CustomSelectInput = ({
-  data,
-  reg,
-}: {
-  data: TCountry[];
-  reg?: UseFormRegisterReturn;
-}) => {
-  // console.log(data);
-  return (
-    <div className="px-2 border-[#F3DAFF]  rounded-full  items-center gap-2 mt-1 flex justify-center sssss  border">
-      <select {...reg} className="border-0 w-full">
-        {data &&
-          data.map((country, index) => (
-            <option key={index} value={`${country.id}`}>
-              {country.name}
-            </option>
-          ))}
-      </select>
-    </div>
-  );
-};
+// type TCountry = {
+//   id: number;
+//   name: string;
+// };
+// const CustomSelectInput = ({
+//   data,
+//   reg,
+// }: {
+//   data: TCountry[];
+//   reg?: UseFormRegisterReturn;
+// }) => {
+//   // console.log(data);
+//   return (
+//     <div className="px-2 border-[#F3DAFF]  rounded-full  items-center gap-2 mt-1 flex justify-center sssss  border">
+//       <select {...reg} className="border-0 w-full">
+//         {data &&
+//           data.map((country, index) => (
+//             <option key={index} value={`${country.id}`}>
+//               {country.name}
+//             </option>
+//           ))}
+//       </select>
+//     </div>
+//   );
+// };

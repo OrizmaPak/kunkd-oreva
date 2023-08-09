@@ -200,7 +200,7 @@ const ReadPage = ({ audiobook }: { audiobook: TAudioBook }) => {
 const AudioControls = ({ audio }: { audio?: string }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const progressBar = useRef<HTMLInputElement>(null);
+  // const progressBar = useRef<HTMLInputElement>(null);
   const [currentTTime, setCurrentTTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -276,7 +276,7 @@ const AudioControls = ({ audio }: { audio?: string }) => {
       audioRef.current.volume = volume;
     }
   };
-  const [load, setLoad] = useState(false);
+  const [, setLoad] = useState(false);
   return (
     <div className="mt-10">
       <div className="my-10 flex justify-center items-center gap-2">

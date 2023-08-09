@@ -1,10 +1,5 @@
 import { SyntheticEvent, useEffect, useState } from "react";
-import {
-  loadStripe,
-  StripeCardElementOptions,
-  StripeElementsOptions,
-  Stripe,
-} from "@stripe/stripe-js";
+import { loadStripe, Stripe } from "@stripe/stripe-js";
 import {
   PaymentElement,
   Elements,
@@ -54,11 +49,11 @@ const CheckoutForm = ({ data }: { data: TStripe }) => {
     // Create the PaymentIntent and obtain clientSecret from your server endpoint
     const {
       clientSecret,
-      customerID,
-      email,
-      payment_intent_id,
-      public_key,
-      transaction_reference,
+      // customerID,
+      // email,
+      // payment_intent_id,
+      // public_key,
+      // transaction_reference,
     } = data;
 
     const { error } = await stripe.confirmPayment({
@@ -77,7 +72,7 @@ const CheckoutForm = ({ data }: { data: TStripe }) => {
     setIsLoading(false);
   };
 
-  const [email, setEmail] = useState("");
+  // const [email, setEmail] = useState("");sss
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -86,7 +81,7 @@ const CheckoutForm = ({ data }: { data: TStripe }) => {
         id="link-authentication-element"
         onChange={(e) => {
           console.log("e", e);
-          setEmail(e.value.email);
+          // setEmail(e.value.email);
         }}
       />
       <PaymentElement
@@ -109,13 +104,7 @@ const CheckoutForm = ({ data }: { data: TStripe }) => {
   );
 };
 
-const PaymentOutlet = ({
-  planId,
-  onSubmit,
-}: {
-  planId: string;
-  onSubmit: () => void;
-}) => {
+const PaymentOutlet = ({ planId }: { planId: string }) => {
   const { mutate, isLoading } = useStripeInit();
   const [stripeData, setStripeData] = useState<TStripe>();
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null>>();

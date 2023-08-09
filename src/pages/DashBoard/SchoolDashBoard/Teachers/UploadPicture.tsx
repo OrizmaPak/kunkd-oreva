@@ -16,14 +16,14 @@ const UploadPicture = ({
 }: {
   // toggle: () => void;
   btnTitle: string;
-  isLoading: boolean;
-  handleSubmit: (val: File) => void;
+  isLoading?: boolean;
+  handleSubmit?: (val: File) => void;
 }) => {
   const [files, setFiles] = useState<FileWithPath[]>([]);
 
   console.log(files);
   const handleClick = () => {
-    handleSubmit(files[0] as File);
+    if (handleSubmit) handleSubmit(files[0] as File)!;
   };
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
