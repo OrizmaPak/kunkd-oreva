@@ -73,7 +73,8 @@ const MakePaymentContent = () => {
 
             {
               onSuccess(data) {
-                window.location.href = "http://localhost:5173/congratulations";
+                window.location.href =
+                  "https://dev-kundakids.vercel.app/congratulations";
                 setVerifyResponse(data.data.data.transaction_reference);
                 notifications.show({
                   title: `Notification`,

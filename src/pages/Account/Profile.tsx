@@ -134,12 +134,12 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
   const { isLoading, mutate } = useUpdateParentImage();
   // const [edit, setEdit] = useState(false);
 
-  const [uploadType, ,] = useState<"profileImage" | "backgroundImage" | null>(
-    null
-  );
+  // const [uploadType, ,] = useState<"profileImage" | "backgroundImage" | null>(
+  //   null
+  // );
 
   const handleSubmit = (data: File) => {
-    if (!uploadType) return;
+    // if (!uploadType) return;
     mutate(
       {
         image: data as Blob | string,
