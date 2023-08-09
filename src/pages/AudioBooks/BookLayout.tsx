@@ -1,4 +1,4 @@
-import { useParams, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { audioBooksData, StoriesType } from "./AudioBooks";
 import CardScreen from "@/common/User/CardScreen";
 import Card from "@/common/User/Card";
