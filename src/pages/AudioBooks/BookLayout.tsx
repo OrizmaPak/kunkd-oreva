@@ -11,7 +11,6 @@ import PauseIcon from "@/assets/pause.svg";
 import PlayIcon from "@/assets/play.svg";
 import VolumeIcon from "@/assets/volumeIcon.svg";
 
-import ExportIcon from "@/assets/exportIcon.svg";
 import AudioBooksNav from "./AudioBooksNav";
 import { Slider } from "@mantine/core";
 import { useReducedMotion } from "@mantine/hooks";
