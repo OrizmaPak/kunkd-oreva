@@ -14,7 +14,7 @@ import VolumeIcon from "@/assets/volumeIcon.svg";
 import AudioBooksNav from "./AudioBooksNav";
 import { Slider } from "@mantine/core";
 import { useReducedMotion } from "@mantine/hooks";
-import { useGetContentById } from "@/api/queries";
+import { useGetContentById, useGetTrendingAudioBooks } from "@/api/queries";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store";
 import AfamBlur from "@/assets/afamblur.jpg";
@@ -29,10 +29,11 @@ type TAudioBook = {
   thumbnail: string;
 };
 const BookLayout = () => {
-  const { audiobooks, id } = useParams();
+  // const { audiobooks,  } = useParams();
+  const contentId = localStorage.getItem("contentId");
   const [user] = useStore(getUserState);
   const { data } = useGetContentById(
-    id?.toString()!,
+    contentId?.toString()!,
     user?.user_id?.toString()!
   );
   const audiobook = data?.data.data.media[0];
@@ -40,6 +41,8 @@ const BookLayout = () => {
   const [startRead, setStartRead] = useState(false);
   const { state } = useLocation();
   console.log(state);
+  const { data: trendingData } = useGetTrendingAudioBooks();
+  console.log("Trending Audios ", trendingData);
   return (
     <div className=" ">
       <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd]  ">
@@ -47,7 +50,7 @@ const BookLayout = () => {
           {audiobook && (
             <AudioBooksNav
               category="Audiobooks"
-              genre={audiobooks}
+              // genre={audiobooks}
               title={audiobook?.name}
             />
           )}

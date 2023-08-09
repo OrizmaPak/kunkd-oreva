@@ -1,17 +1,38 @@
 import { useParams, useNavigate } from "react-router-dom";
 import AfricanLanguagesNav from "./AfricanLanguagesNav";
-import { africanLanguagesData } from "./AfricanLanguages";
+// import { africanLanguagesData } from "./AfricanLanguages";
 import { useState, useRef } from "react";
 import SaveIcon from "@/assets/saveIcon.svg";
 import ShareIcon from "@/assets/shareIcon.svg";
 import Congrats from "@/assets/congrats.svg";
-import { useGetContentById } from "@/api/queries";
+import { useGetContentById, useGetRecommendedVideo } from "@/api/queries";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store";
 import "video-react/dist/video-react.css";
 import ReactHlsPlayer from "react-hls-player";
 import { Skeleton } from "@mantine/core";
+import AfamBlur from "@/assets/afamblur.jpg";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
+type TRecommendedVideo = {
+  id: number;
+  category_id: number;
+  category: string;
+  content_type_id: number;
+  content_type: string;
+  name: string;
+  slug: string;
+  synopsis: string;
+  theme: string;
+  tags: string;
+  has_quiz: boolean;
+  media_type: string;
+  thumbnail: string;
+  media: [];
+  is_liked: boolean;
+  short_link: string;
+};
 const VideoPlayer = () => {
   const [isfinish, setIsFinsh] = useState(false);
   const { lan_type } = useParams();
@@ -24,6 +45,10 @@ const VideoPlayer = () => {
     contentId?.toString()!,
     user?.user_id?.toString()!
   );
+  const { data: recommendedData, isLoading: recommendedIsLoading } =
+    useGetRecommendedVideo(contentId?.toString()!);
+  const recommendedVideos = recommendedData?.data?.data.recommended_contents;
+  console.log("recommendedData", recommendedVideos);
   const video = data?.data.data.media[0];
   const videoData = data?.data.data.sub_categories[0];
   console.log("_____cont", video);
@@ -104,9 +129,18 @@ const VideoPlayer = () => {
               Recommended Videos
             </h1>
             <div>
-              {africanLanguagesData.slice(1, 6).map((data, index) => (
-                <RecommendedVideoCard key={index} {...data} />
-              ))}
+              {recommendedVideos &&
+                recommendedVideos
+                  .slice(1, 6)
+                  .map((data: TRecommendedVideo, index: number) => (
+                    <Skeleton visible={recommendedIsLoading}>
+                      <RecommendedVideoCard
+                        subCategory={videoData?.sub_category_name}
+                        key={index}
+                        {...data}
+                      />
+                    </Skeleton>
+                  ))}
             </div>
           </div>
         </div>
@@ -120,22 +154,46 @@ const VideoPlayer = () => {
 export default VideoPlayer;
 
 const RecommendedVideoCard = ({
-  title,
-  onClick,
-  image,
+  name,
+  thumbnail,
+  slug,
+  id,
+  subCategory,
 }: {
-  title?: string;
-  onClick?: () => void;
-  image?: string;
+  name?: string;
+  slug?: string;
+  thumbnail?: string;
+  id?: number;
+  subCategory?: string;
 }) => {
+  const navigate = useNavigate();
+  const handleGoTo = () => {
+    navigate(`../${subCategory}/${slug}`);
+    localStorage.setItem("contentId", id?.toString()!);
+  };
   return (
     <div
-      onClick={onClick}
-      className="flex h-[100px] gap-4 bg-[#fffbff]  items-center my-8  rounded-2xl border-[2px] border-[#fbeff8]"
+      onClick={handleGoTo}
+      className="flex h-[100px] gap-4 bg-[#fffbff]  items-center my-8  rounded-2xl border-[2px] border-[#fbeff8] cursor-pointer"
     >
-      <img loading="lazy" src={image} alt="image" className=" h-[100px]" />
+      {/* <img
+        loading="lazy"
+        src={thumbnail}
+        alt="image"
+        className=" h-[100px] rounded-xl"
+      /> */}
+
+      <LazyLoadImage
+        src={thumbnail}
+        placeholderSrc={AfamBlur}
+        effect="blur"
+        className=" rounded-xl"
+        wrapperClassName=""
+        width={100}
+        height={100}
+      />
       <span className=" text-black text-[16px]  font-Hanken font-semibold">
-        {title}
+        {name}
       </span>
     </div>
   );

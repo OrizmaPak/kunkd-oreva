@@ -23,7 +23,7 @@ const AfricanLanguagesNav = ({
         className="flex gap-3 cursor-pointer  "
         onClick={() => navigate(`../../africanlanguages`)}
       >
-        <span>{category}</span>
+        <span>African Languages</span>
         <img loading="lazy" src={NextIcon} alt="nextIcon" />
       </div>
 

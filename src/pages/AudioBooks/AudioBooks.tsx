@@ -234,7 +234,7 @@ const AudioBooks = () => {
             <Route element={<MainStoriesLayout />}>
               <Route index element={<Books />}></Route>
             </Route>
-            <Route path="audiobooks/:id" element={<BookLayout />}></Route>
+            <Route path=":id" element={<BookLayout />}></Route>
           </Routes>
         </InnerWrapper>
       </Wrapper>
@@ -282,7 +282,7 @@ const Books = () => {
                     className="h-[200px] w-[200px] text-transparent"
                   >
                     {arr}
-                  </div>{" "}
+                  </div>
                 </Skeleton>
               ))}
           {audioBooks?.map((audiobook: TAudioBooks, index: number) => {
@@ -291,7 +291,11 @@ const Books = () => {
                 <CardHome
                   key={index}
                   {...audiobook}
-                  goTo={() => navigate(`audiobooks/${audiobook?.id}`)}
+                  goTo={() =>
+                    navigate(
+                      `${audiobook?.slug?.replace(/\s/g, "_")!?.toLowerCase()}`
+                    )
+                  }
                 />
               </>
             );

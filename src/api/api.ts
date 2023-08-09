@@ -113,6 +113,10 @@ export const GetAudioBooks = () => {
   return axios.get("/audiobook/page");
 };
 
+export const GetTrendingAudioBooks = () => {
+  return axios.get("/audiobook/content/trending");
+};
+
 export const GetPlans = () => {
   return axios.get("/subscription/plans");
 };
@@ -156,6 +160,10 @@ export const UpdateSchoolNameAddress = (payload: TVerifyPinData) => {
 // QIUZ
 export const GetQuiz = (contentId: string) => {
   return axios.get(`/quiz/${contentId}`);
+};
+
+export const GetRecommendedVideo = (contentId: string) => {
+  return axios.get(`/recommended/content/${contentId}`);
 };
 
 export const UpdateSchImage = (payload: TUdateSchImageData) => {

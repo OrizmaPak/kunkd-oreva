@@ -33,6 +33,8 @@ import {
   PayStackInit,
   VerifyCompletePayStack,
   StripeInit,
+  GetTrendingAudioBooks,
+  GetRecommendedVideo,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -191,6 +193,13 @@ export const useGetAudioBoks = () => {
   });
 };
 
+export const useGetTrendingAudioBooks = () => {
+  return useQuery({
+    queryKey: ["getTrendinAudioBooks"],
+    queryFn: () => GetTrendingAudioBooks(),
+  });
+};
+
 export const useResendOTP = () => {
   return useMutation({
     mutationFn: ResendOTP,
@@ -229,6 +238,13 @@ export const useGetQuiz = (contentId: string) => {
     onSuccess: (response) => {
       console.log("quiz got called here", response);
     },
+  });
+};
+
+export const useGetRecommendedVideo = (contentId: string) => {
+  return useQuery({
+    queryKey: ["GetRecommendedVideo", contentId],
+    queryFn: () => GetRecommendedVideo(contentId),
   });
 };
 
