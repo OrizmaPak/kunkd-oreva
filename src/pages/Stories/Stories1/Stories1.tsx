@@ -6,11 +6,7 @@ import Bookmark from "@/assets/Bookmark.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
 import PreviousIcon from "@/assets/chevrondown.svg";
 import NextIcon from "@/assets/chevronup.svg";
-import { useState, useRef } from "react";
-import FastForward from "@/assets/fastforward.svg";
-import FastBackward from "@/assets/fastbackward.svg";
-import PauseIcon from "@/assets/pause.svg";
-import PlayIcon from "@/assets/play.svg";
+import { useState } from "react";
 import Congrats from "@/assets/congrats.svg";
 import { useGetContentById, useContentForHome } from "@/api/queries";
 import { getUserState } from "@/store/authStore";
@@ -20,7 +16,6 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { Skeleton } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import TextToSpeech from "@/components/TextToSpeech";
 import CustomTTSComponent from "@/components/TTS";
 
 type TContentPage = {
@@ -67,25 +62,18 @@ const Stories1 = () => {
   const params = useParams();
   const { category } = params;
 
-  // const story = storiesData.find((el) => `${el.id}` === id);
   const { data, isLoading: contentIsLoading } = useGetContentById(
     contentId?.toString()!,
     user?.user_id?.toString()!
   );
   const content = data?.data.data;
-  console.log(content);
   const { data: recommendedData, isLoading } = useContentForHome();
   const recommendedStories = recommendedData?.data.data.recommended_stories;
   const navigate = useNavigate();
-  console.log(
-    "------SubCat-------"
-    // content.sub_categories[0].sub_category_id!
-  );
+
   return (
     <div className=" ">
       <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] ">
-        {/* <div className="flex flex-col h-full"> */}
-
         <div className=" ">
           {
             <Skeleton visible={contentIsLoading}>
@@ -103,9 +91,6 @@ const Stories1 = () => {
         </div>
         <div className="flex-grow  h-full   ">
           <div className="flex-grow mt-5 rounded-2xl ">
-            {/* <Skeleton visible={contentIsLoading}>
-              <div className="h-[400px] w-full"></div>
-            </Skeleton> */}
             {!isFinish ? (
               <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
                 {!startRead && (
@@ -275,27 +260,13 @@ const ReadPage = ({
               <p className="inline">Read to me</p>
             </button>
           </p>
-          {/* <p>{content[3].web_body}</p> */}
-          {/* <CustomTTSComponent
-            autoPlay={pageNumber !== 0}
-            setPageNumber={() => {
-              if (pageNumber + 1 === pageTotal) {
-                return;
-              }
-              setPageNumber((prev) => prev + 1);
-            }}
-            highlight
-          > */}
-          {/* <p>nvsdskvjakkvjas</p> */}
           {!isReading && (
             <p className=" leading-10 flex h-[350px] overflow-y-auto  text-[16px] font-medium font-Hanken pr-8 text-justify ">
               {content[page].web_body}
             </p>
           )}
-          {/* </CustomTTSComponent> */}
         </div>
-        {/* <CustomTTSComponent /> */}
-        {/* <TextToSpeech text={content[page].web_body} /> */}
+
         <div className="mt-8">
           {isReading ? (
             <CustomTTSComponent
@@ -305,17 +276,13 @@ const ReadPage = ({
               autoPlay={pageNumber !== 1}
               setPageNumber={() => {
                 if (pageNumber === pageTotal) {
-                  // setPageNumber(1);
                   return;
                 }
                 setPageNumber((prev) => prev + 1);
               }}
               highlight
             >
-              {/* <p>nvsdskvjakkvjas</p> */}
-              {/* <p className=" leading-10 flex h-[350px] overflow-y-auto  text-[16px] font-medium font-Hanken pr-8 text-justify "> */}
               {content[pageNumber].web_body}
-              {/* </p> */}
             </CustomTTSComponent>
           ) : (
             <BookPagination
@@ -397,87 +364,6 @@ const BookPagination = ({
           )}
         </div>
       </div>
-    </div>
-  );
-};
-
-const AudioControls = ({
-  audio,
-  setIsFinish,
-}: {
-  audio?: string;
-  setIsFinish: () => void;
-}) => {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [ended, setEnded] = useState(false);
-
-  // const [audioDuration, setAudioDuration] = useState(audioRef.current);
-
-  const handlePlayControl = () => {
-    const audioCon = audioRef.current;
-    console.log("audio played", audioCon);
-    setEnded(false);
-    setIsPlaying(!isPlaying);
-    if (audioCon && !audioCon.paused) {
-      return audioCon.pause();
-    }
-    audioRef?.current?.play();
-  };
-
-  const handeSkip10 = (direction: "forward" | "backward") => () => {
-    const audioCon = audioRef.current;
-    setEnded(false);
-    const duration = audioCon?.duration || 0;
-    const currentTime = audioCon?.currentTime || 0;
-
-    console.log("duration", audioCon?.duration, audioCon?.currentTime);
-    if (audioCon && direction === "forward") {
-      audioCon.currentTime +=
-        currentTime + 10 > duration ? duration - currentTime : 10;
-      return;
-    } else if (audioCon && direction === "backward") {
-      audioCon.currentTime -= currentTime - 10 < 0 ? currentTime : 10;
-      return;
-    }
-  };
-  // const { story_type, id } = useParams();
-  // const navigate = useNavigate();
-  return (
-    <div className="flex justify-center ">
-      <audio
-        onEnded={() => {
-          setIsPlaying(false);
-          setEnded(true);
-        }}
-        ref={audioRef}
-        src={audio}
-      ></audio>
-      <div className="flex justify-end rounded-full h-[60px] gap-10 px-20 py-4 bg-[#FBECFF] items-center ">
-        <button onClick={handeSkip10("backward")}>
-          <img loading="lazy" src={FastBackward} alt="backward" />
-        </button>
-        <button onClick={handlePlayControl}>
-          <img
-            src={isPlaying ? PauseIcon : PlayIcon}
-            alt=""
-            className="w-[40px]"
-          />
-        </button>
-        <button onClick={handeSkip10("forward")}>
-          <img loading="lazy" src={FastForward} alt="forward" />
-        </button>
-      </div>
-      {ended && (
-        <div className="flex items-end">
-          <button
-            onClick={setIsFinish}
-            className=" px-14 bg-green-700 text-[16px] py-4 h-[60px] text-white  rounded-full ml-10"
-          >
-            Finish
-          </button>
-        </div>
-      )}
     </div>
   );
 };

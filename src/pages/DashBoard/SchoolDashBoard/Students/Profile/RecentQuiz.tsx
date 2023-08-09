@@ -3,7 +3,7 @@ import FoodFight from "@/assets/kojocard.svg";
 const RecentQuiz = ({}) => {
   return (
     <div className="bg-white p-4 rounded-3xl px-8 ">
-      <h1 className="font-bold text-[25px]  mb-2">Recent Quiz</h1>
+      <h1 className="font-bold text-[16px]  mb-2">Recently Completed</h1>
       <div className="flex gap-10">
         <div className="flex gap-4 ">
           <p>

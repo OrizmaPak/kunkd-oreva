@@ -16,7 +16,6 @@ export type CardProps = {
 };
 
 const CardHome = ({ name, thumbnail, id, goTo }: CardProps) => {
-  console.log("id ----", id);
   const handleClick = () => {
     if (goTo) goTo();
 

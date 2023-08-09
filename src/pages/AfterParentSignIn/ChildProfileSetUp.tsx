@@ -31,7 +31,6 @@ const ChildProfileSetUp = () => {
   const [name, setName] = useState<string>("");
   const [age, setAge] = useState<string>("");
 
-  console.log(currentStep, STEP_2);
   const navigate = useNavigate();
   return (
     <div
@@ -48,7 +47,6 @@ const ChildProfileSetUp = () => {
           <WelcomeModal
             onContinue={() => {
               setCurrentStep(STEP_2);
-              console.log(currentStep);
             }}
           />
         )}
@@ -86,7 +84,6 @@ const ChildProfileSetUp = () => {
 export default ChildProfileSetUp;
 
 export const WelcomeModal = ({ onContinue }: { onContinue: () => void }) => {
-  console.log(onContinue);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -138,8 +135,6 @@ export const ChildNameModal = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    console.log("testing");
-    console.log("It is working", data);
     onContinue();
     if (data.name) {
       setName(data.name);
@@ -211,8 +206,6 @@ export const ChildAgeModal = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    console.log("testing");
-    console.log("It is working", data);
     onContinue();
     setAge(data?.dob!);
   };
@@ -273,7 +266,6 @@ export const SelectAvatar = ({
   name: string;
 }) => {
   const [selected, setSelected] = useState("");
-  console.log(!!selected);
   const { isLoading: isLoadingAvatar, data, error } = useGetAvatars();
 
   // const arrayAvatar = data?.data.data.avatars;
@@ -294,8 +286,6 @@ export const SelectAvatar = ({
 
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
-
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -312,7 +302,6 @@ export const SelectAvatar = ({
         },
       }
     );
-    console.log({ image: selectedAv.image, age, name });
   };
 
   return (
@@ -425,7 +414,6 @@ export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
   });
 
   const handleSubmit = () => {
-    console.log(data);
     setEnabled(true);
   };
   return (

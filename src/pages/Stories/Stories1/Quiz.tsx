@@ -1,17 +1,13 @@
 import { Progress } from "@mantine/core";
 import StoriesNav from "./StoriesNav";
 import { useParams, useNavigate } from "react-router-dom";
-import { storiesData } from "../Stories";
 import { useState } from "react";
 import RemarkBg from "@/assets/remarkbg.svg";
 import RemarkIcon from "@/assets/remarkIcon.svg";
 import Button from "@/components/Button";
-import { getUserState } from "@/store/authStore";
-import useStore from "@/store";
 import { RingProgress } from "@mantine/core";
-import { useGetContentById, useGetQuiz } from "@/api/queries";
+import { useGetQuiz } from "@/api/queries";
 import { STEP_1, STEP_2, STEP_3, STEP_4 } from "@/utils/constants";
-import { notifications } from "@mantine/notifications";
 import Contour from "@/assets/contour.svg";
 import DangerCircle from "@/assets/Danger Circle.svg";
 import CheckCircle from "@/assets/CheckCircle-f.svg";
@@ -19,12 +15,9 @@ import SmileIcon from "@/assets/SmileyMeh-d.svg";
 import { Skeleton } from "@mantine/core";
 
 const Quiz = () => {
-  // const { id, story_type } = useParams();
-  // const [user] = useStore(getUserState);
   const contentId = localStorage.getItem("contentId");
   const { data: quiz, isLoading } = useGetQuiz(contentId?.toString()!);
   const questions = quiz?.data?.data?.questions;
-  console.log("quiz-----------------", quiz?.data.data);
   const contentString = localStorage.getItem("content");
   const content = JSON.parse(contentString!);
 
@@ -32,13 +25,8 @@ const Quiz = () => {
   const [answers, setAnswers] = useState<answerObj[]>([]);
 
   const handlePagination = (paginationType: string) => {
-    if (
-      paginationType === "next" &&
-      currentQues < questions.length - 1
-      // answers.length >= currentQues + 1
-    ) {
+    if (paginationType === "next" && currentQues < questions.length - 1) {
       setCurrentQues((el) => (el += 1));
-      console.log("currentpage", currentQues, "answer", answers);
     }
     if (paginationType === "prev" && currentQues >= 1) {
       setCurrentQues((el) => (el -= 1));
@@ -60,15 +48,11 @@ const Quiz = () => {
       return newAnswer;
     });
   };
-  // const content = data?.data.data;
   const params = useParams();
   const { category } = params;
   const progress = 100 / questions?.length;
   const [curentStep, setcurrentStep] = useState(STEP_1);
-  console.log("questions --- answers ", { answers, questions });
-  // if (isLoading) {
-  //   return "loading ....";
-  // }
+
   return (
     <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] w-[100%] ">
       <Skeleton visible={isLoading}>
@@ -86,25 +70,20 @@ const Quiz = () => {
         <>
           <Skeleton visible={isLoading} height={600}>
             <div className="flex-grow mt-5 pt-5 px-40 flex  h-[100%]  flex-col py-5 bg-white rounded-3xl ">
-              {/* <Skeleton visible={isLoading}> */}
               <Progress
                 value={progress * answers.length}
                 size="xl"
                 radius="xl"
                 color="violet"
               />
-              {/* </Skeleton> */}
 
-              {/* Question  */}
-              {/* <Skeleton visible={isLoading}> */}
               <Question
                 quesObject={questions && questions[currentQues]}
                 selected={answers}
                 setSelected={handleSelectAnswer}
                 currentQuestion={currentQues}
               />
-              {/* </Skeleton> */}
-              {/* <Skeleton visible={isLoading}> */}
+
               <QuestionPagination
                 handlePagination={handlePagination}
                 totalQuestion={questions && questions?.length}
@@ -114,7 +93,6 @@ const Quiz = () => {
                 handleSelectAnswer={handleSelectAnswer}
                 setShowResult={() => setcurrentStep(STEP_2)}
               />
-              {/* </Skeleton> */}
             </div>
           </Skeleton>
         </>
@@ -125,13 +103,10 @@ const Quiz = () => {
             answers={answers}
             setShowRemark={() => setcurrentStep(STEP_3)}
           />
-
-          {/* <GoodRemarkMsg setShowResult={() => setcurrentStep(STEP_3)} /> */}
         </div>
       )}
       {curentStep === STEP_3 && (
         <div className="flex-grow mt-5 pt-10 px-40 flex  flex-col py-14 bg-white rounded-3xl ">
-          {/* <Result answers={answers} /> */}
           <GoodRemarkMsg
             answers={answers}
             setShowYourResult={() => setcurrentStep(STEP_4)}
@@ -140,7 +115,6 @@ const Quiz = () => {
       )}
       {curentStep === STEP_4 && (
         <div className="flex-grow mt-5 pt-10  mx-auto  flex justify-center items-center  flex-col py-14 bg-white   w-[100%] rounded-3xl ">
-          {/* <Result answers={answers} /> */}
           <YourResult answers={answers} />
         </div>
       )}
@@ -168,7 +142,6 @@ const Question = ({
 }: {
   quesObject: questionType;
   selected: answerObj[];
-  // correctAns: answerObj[];
   setSelected: (val: answerObj) => void;
   currentQuestion: number;
 }) => {
@@ -217,15 +190,6 @@ const Question = ({
           }
           setSelected={setSelected}
         />
-        {/* {quesObject.ans.map((ans, index) => (
-          <AnsButton
-            key={index}
-            title={ans}
-            question={quesObject.qus}
-            selected={selected[currentQuestion]}
-            setSelected={setSelected}
-          />
-        ))} */}
       </div>
     </div>
   );
@@ -246,8 +210,6 @@ const AnsButton = ({
 }) => {
   const handleSelected = () => {
     setSelected({ answer: title, question, actual_answer });
-    // console.log(title);
-    // console.log(selected);
   };
   return (
     <button
@@ -281,13 +243,7 @@ const QuestionPagination = ({
   setShowResult: () => void;
   handleSelectAnswer: (answer: answerObj) => void;
 }) => {
-  console.log("current ques1", currentQues);
-  console.log("current ques2", questions);
-
-  console.log("current ques3", questions[currentQues]);
-
   const question = questions[currentQues];
-  // console.log()
   const actual_answer = question?.answer
     ? (question[`option_${question?.answer}` as keyof questionType]! as string)
     : "";
@@ -341,8 +297,6 @@ const GoodRemarkMsg = ({
   setShowYourResult: () => void;
   answers: answerObj[];
 }) => {
-  // const location = useLocation();
-
   const refreshPage = () => {
     window.location.reload();
   };
@@ -350,7 +304,6 @@ const GoodRemarkMsg = ({
   const result = answers.filter(
     (answer) => answer.answer === answer.actual_answer
   );
-  console.log(answers);
 
   return (
     <>
@@ -419,11 +372,9 @@ const Result = ({
   answers: answerObj[];
   setShowRemark: () => void;
 }) => {
-  const navigate = useNavigate();
   const attempted = answers.filter((answer) => answer.answer !== undefined);
   return (
     <div className="relative mx-auto flex-grow bg-white  w-[780px] rounded-3xl">
-      {/* <div className="bg-[#B76DEB] rounded-3xl pt-16 px-10"> */}
       <div className="flex mx-auto relative justify-center items-center gap-10 px-5 bg-[#2BB457] w-[672px] h-[385px] rounded-3xl">
         <img
           src={Contour}
@@ -476,11 +427,8 @@ const Result = ({
 
 const YourResult = ({ answers }: { answers: answerObj[] }) => {
   const navigate = useNavigate();
-  // const attempted = answers.filter((answer) => answer.answer !== undefined);
   return (
     <div className="relative flex-grow    w-[780px] rounded-3xl">
-      {/* <div className="bg-[#B76DEB] rounded-3xl pt-16 px-10"> */}
-
       <div className="my-10 text-center">
         <h1 className="text-[24px] font-bold ">Your Answers</h1>
       </div>
@@ -505,12 +453,10 @@ const ResultRow = ({
   question,
   answer,
   index,
-  actual_answer,
 }: {
   question?: string;
   answer?: string;
   index?: number;
-  actual_answer?: string;
 }) => {
   return (
     <div className={`pt-7 py-5 px-16 ${!answer && "bg-[#ED1C241A]"} `}>
@@ -524,7 +470,6 @@ const ResultRow = ({
           {question} {!answer && <img src={DangerCircle} alt="image" />}
         </p>
       </p>
-      {/* <p className="pl-20 text-[20px] text-[#B5B5C3] pt-5">{answer}</p> */}
       <p className="pl-20 text-[20px] text-[#B5B5C3] py-2">
         {answer ? answer : "-"}
       </p>
@@ -564,7 +509,6 @@ const ResultRow2 = ({
           )}
         </p>
       </p>
-      {/* <p className="pl-20 text-[20px] text-[#B5B5C3] pt-5">{answer}</p> */}
       {answer === actual_answer && (
         <p className="pl-20 text-[20px] text-[#B5B5C3] py-2"> {answer}</p>
       )}

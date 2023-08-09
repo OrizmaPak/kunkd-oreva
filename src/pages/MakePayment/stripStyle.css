@@ -6,6 +6,9 @@
     0px 2px 5px 0px rgba(50, 50, 93, 0.1), 0px 1px 1.5px 0px rgba(0, 0, 0, 0.07);
   border-radius: 7px;
   padding: 40px;
+  background-color: yellow;
+  margin: 0 auto !important;
+  box-sizing: border-box;
 }
 
 #payment-message {
@@ -21,7 +24,7 @@
 }
 
 /* Buttons and links */
-#stripe-form button {
+/* #stripe-form button {
   background: #8530c1 !important;
   font-family: Arial, sans-serif;
   color: #ffffff;
@@ -34,20 +37,21 @@
   display: block;
   transition: all 0.2s ease;
   box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
-  width: 100%;
+  width: 100% !important;
   text-align: center;
   width: 100% !important;
-  background-color: #8530c1 !important;
+  background-color: red !important;
   padding: 4px !important;
   border-radius: 5px !important;
-}
+} */
 #button-text {
   background-color: #8530c1 !important;
-  width: 500px !important;
-  display: block;
+  width: 100% !important;
+  display: block !important;
   padding: 8px !important;
   border-radius: 6px !important;
   color: white !important;
+  box-sizing: content-box;
 }
 
 #stripe-button:hover {

@@ -35,13 +35,13 @@ const index = () => {
         <Header />
       </div>
 
-      <div className="flex flex-grow gap-8">
-        <div className=" basis-full flex flex-col gap-y-3">
-          <div className=" ">
+      <div className=" flex-grow gap-4 flex">
+        <div className=" flex flex-col w-[600px] gap-y-3 ">
+          <div>
             <ProfileCard {...currentData} />
           </div>
 
-          <div className="flex justify-center gap-4  ">
+          <div className="flex justify-center gap-5  ">
             <div className="flex-grow ">
               <TotalTimeSpent />
             </div>
@@ -49,7 +49,7 @@ const index = () => {
               <RecentQuiz />
             </div>
           </div>
-          <div className="flex gap-4  justify-center ">
+          <div className="grid grid-cols-2 gap-5 ">
             <MyTeacher />
             <TopSubCategories />
           </div>
@@ -58,7 +58,7 @@ const index = () => {
           </div>
         </div>
 
-        <div className=" basis-2/3  flex  flex-col  ">
+        <div className="  flex   flex-col  ">
           <ProgressLog />
           <LearningHour />
         </div>

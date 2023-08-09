@@ -251,7 +251,7 @@ const Stories = () => {
             <Route path="sub/:title" element={<Stories1 />}></Route>
             {/* <Route path=":theme/:id/:title" element={<Stories1 />}></Route> */}
 
-            <Route path=":story_type/:id/quiz" element={<Quiz />}></Route>
+            <Route path="sub/:title/quiz" element={<Quiz />}></Route>
           </Routes>
         </InnerWrapper>
       </Wrapper>
@@ -263,10 +263,8 @@ export default Stories;
 const Story = () => {
   const { subCategory, id } = useParams();
   const navigate = useNavigate();
-  console.log("Id", id);
   const subCategoryId = localStorage.getItem("subCategoryId");
   const { data, isLoading } = useGetContebtBySubCategories(subCategoryId!);
-  console.log(data?.data.data.records);
   const subCategoryContents = data?.data.data.records;
   return (
     <>
@@ -335,11 +333,8 @@ const BrowseGenre = () => {
   const [isLoadingImage, setIsLoadingImage] = useState(true);
   const { data } = useGetSubCategories();
   const subCategory = data?.data.data[0].sub_categories;
-  console.log("progressing", data?.data.data[0].sub_categories);
   const { data: contentData, isLoading } = useContentForHome();
-  const recommendedStories = contentData?.data.data.recommended_stories;
   const newTrending: CardProps[] = contentData?.data.data.trending_stories;
-  console.log("is it working", recommendedStories, newTrending);
   return (
     <>
       <hr className="my-20 mx-[200px]" />
@@ -373,7 +368,9 @@ const BrowseGenre = () => {
           <CardHome
             {...props}
             goTo={() =>
-              navigate(`sub/${props?.slug.replace(/\s/g, "_")!?.toLowerCase()}`)
+              navigate(
+                `sub/${props?.slug?.replace(/\s/g, "_")!?.toLowerCase()}`
+              )
             }
           />
         )}

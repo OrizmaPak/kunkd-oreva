@@ -215,7 +215,10 @@ const SchoolHeader = () => {
               <Menu.Dropdown>
                 <div className="flex flex-col py-2 px-2 ">
                   {profile.map((profile, index) => (
-                    <Menu.Item onClick={() => handleChangeProfile(profile.id)}>
+                    <Menu.Item
+                      key={index}
+                      onClick={() => handleChangeProfile(profile.id)}
+                    >
                       <button key={index}>{profile.name}</button>
                     </Menu.Item>
                   ))}

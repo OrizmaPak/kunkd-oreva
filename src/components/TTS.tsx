@@ -35,8 +35,6 @@ const CustomTTSComponent = ({
     },
   });
 
-  console.log("spoken text ----", spokenText);
-
   return (
     <div>
       <p className=" leading-10  h-[350px] overflow-y-auto  text-[16px] font-medium font-Hanken pr-8 text-justify ">

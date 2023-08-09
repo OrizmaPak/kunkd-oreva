@@ -17,12 +17,7 @@ const StoriesNav = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  // const { id } = useParams();
-  // const urlName = location.pathname.trim().split(" ")[0].split("/");
-  // console.log("urlname", urlName);
   const contentNavigate = () => {
-    console.log(location.pathname);
-    console.log(slug);
     if (
       location.pathname ===
         `/${"parent"}/stories/sub/${title
@@ -36,7 +31,6 @@ const StoriesNav = ({
       navigate(-1);
     }
   };
-  console.log("subCategoryId", subCategoryId);
   return (
     <div className="py-4 font-Recoleta pl-20 h-[60px] text-[24px]  font-semibold items-center rounded-full bg-white gap-8 flex px-8">
       <div
