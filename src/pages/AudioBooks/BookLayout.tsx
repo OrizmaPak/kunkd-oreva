@@ -165,19 +165,26 @@ const AboutPage = ({
 const ReadPage = ({ audiobook }: { audiobook: TAudioBook }) => {
   return (
     <div className="flex bg-[#fff7fd] py-5 gap-16 rounded-3xl ">
-      <div className=" basis-3/6 flex  items-center bg-[white] flex-col p-10 rounded-3xl">
-        <LazyLoadImage
-          src={audiobook.thumbnail}
-          placeholderSrc={AfamBlur}
-          effect="blur"
-          className=" rounded-xl"
-          wrapperClassName=""
-          width={300}
-          height={300}
-        />
-        <AudioControls audio={audiobook && audiobook.file} />
+      <div className=" basis-full flex   bg-[white]  p-10 rounded-3xl gap-24 ">
+        <div>
+          <LazyLoadImage
+            src={audiobook.thumbnail}
+            placeholderSrc={AfamBlur}
+            effect="blur"
+            className=" rounded-xl"
+            wrapperClassName=""
+            width={229}
+            height={229}
+          />
+        </div>
+        <div className=" flex-grow">
+          <AudioControls
+            audio={audiobook && audiobook.file}
+            title={audiobook?.name}
+          />
+        </div>
       </div>
-      <div className=" basis-full flex flex-col bg-white rounded-3xl p-10 ">
+      {/* <div className=" basis-full flex flex-col bg-red-600 rounded-3xl p-10 ">
         <div className="flex-grow">
           <p className="mb-5 flex justify-between items-center">
             <span className="text-[#B5B5C3] text-[18px]">Lyrics</span>
@@ -192,12 +199,12 @@ const ReadPage = ({ audiobook }: { audiobook: TAudioBook }) => {
             veniam quis doloremque!
           </p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
 
-const AudioControls = ({ audio }: { audio?: string }) => {
+const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   // const progressBar = useRef<HTMLInputElement>(null);
@@ -278,11 +285,12 @@ const AudioControls = ({ audio }: { audio?: string }) => {
   };
   const [, setLoad] = useState(false);
   return (
-    <div className="mt-10">
-      <div className="my-10 flex justify-center items-center gap-2">
-        <p className=" flex-grow w-20">
+    <div className="h-[229px]">
+      <h1 className="text-[22px] font-semibold text-[#151515]">{title}</h1>
+      <div className="my-3 flex justify-center items-center gap-2 mt-8">
+        {/* <p className=" flex-grow w-20">
           {currentTTime && calculateTime(currentTTime)}
-        </p>
+        </p> */}
         {/* <input
           type="range"
           className="mr-2   text-[#8530C1] bg-[#8530C1]  flex-grow w-full slider"
@@ -326,59 +334,67 @@ const AudioControls = ({ audio }: { audio?: string }) => {
           </style>
         </p>
 
-        <p className="flex-grow w-20">
+        {/* <p className="flex-grow w-20">
           {duration ? calculateTime(duration) : `0:00`}
-        </p>
+        </p> */}
         {/* <Progress value={(currentTTime * 100) / duration} /> */}
       </div>
+
       {/* <Progress value={(currentTTime * 100) / duration} /> */}
-      <div className="flex justify-center h-[72px] ">
-        <audio
-          onTimeUpdate={(event) => {
-            setCurrentTTime(+event.currentTarget.currentTime);
-          }}
-          onEnded={() => {
-            setIsPlaying(false);
-            // setEnded(true);
-          }}
-          ref={audioRef}
-          src={audio!}
-          onLoad={() => setLoad(true)}
-        ></audio>
-        <div className="flex h-[72px] justify-end rounded-full gap-10 px-20 py-4 bg-[#FBECFF] items-center ">
-          <button onClick={handeSkip10("backward")}>
-            <img
-              loading="lazy"
-              src={FastBackward}
-              alt="backward"
-              className="w-[50px] h-[50px]"
-            />
-          </button>
-          <button onClick={handlePlayControl}>
-            <img
-              src={isPlaying ? PauseIcon : PlayIcon}
-              alt=""
-              className="w-[40px]"
-            />
-          </button>
-          <button onClick={handeSkip10("forward")}>
-            <img
-              loading="lazy"
-              src={FastForward}
-              alt="forward"
-              className="w-[50px] h-[50px]"
-            />
-          </button>
-        </div>
+
+      <div className="flex  justify-between ">
+        <p>{currentTTime && calculateTime(currentTTime)}</p>
+        <p>{duration ? calculateTime(duration) : `0:00`}</p>
       </div>
-      <div className="mt-20 flex gap-5 pr-24">
-        <img
-          loading="lazy"
-          src={VolumeIcon}
-          alt="volume"
-          className="w-[20px]"
-        />
-        {/* <input
+
+      <div className="flex justify-between mt-8">
+        <div className="flex justify-center h-[72px]">
+          <audio
+            onTimeUpdate={(event) => {
+              setCurrentTTime(+event.currentTarget.currentTime);
+            }}
+            onEnded={() => {
+              setIsPlaying(false);
+              // setEnded(true);
+            }}
+            ref={audioRef}
+            src={audio!}
+            onLoad={() => setLoad(true)}
+          ></audio>
+          <div className="flex h-[72px] justify-end rounded-full gap-10 px-10 py-4 bg-[#FBECFF] items-center ">
+            <button onClick={handeSkip10("backward")}>
+              <img
+                loading="lazy"
+                src={FastBackward}
+                alt="backward"
+                className="w-[50px] h-[50px]"
+              />
+            </button>
+            <button onClick={handlePlayControl}>
+              <img
+                src={isPlaying ? PauseIcon : PlayIcon}
+                alt=""
+                className="w-[40px]"
+              />
+            </button>
+            <button onClick={handeSkip10("forward")}>
+              <img
+                loading="lazy"
+                src={FastForward}
+                alt="forward"
+                className="w-[50px] h-[50px]"
+              />
+            </button>
+          </div>
+        </div>
+        <div className=" flex justify-center items-center gap-5 ">
+          <img
+            loading="lazy"
+            src={VolumeIcon}
+            alt="volume"
+            className="w-[20px]"
+          />
+          {/* <input
           type="range"
           className="mr-2   text-[#8530C1] bg-[#8530C1] w-[100px]"
           min={0}
@@ -386,22 +402,18 @@ const AudioControls = ({ audio }: { audio?: string }) => {
           id="input"
           onChange={(e) => handleVolume(e)}
         /> */}
-        <p className="w-[100px]">
-          <Slider
-            color="violet"
-            value={volume}
-            onChange={handleVolumeChange}
-            min={0}
-            max={max}
-            disabled={reducedMotion}
-          />
-        </p>
+          <p className="w-[100px]">
+            <Slider
+              color="violet"
+              value={volume}
+              onChange={handleVolumeChange}
+              min={0}
+              max={max}
+              disabled={reducedMotion}
+            />
+          </p>
+        </div>
       </div>
-      <style>
-        {`
-      
-          `}
-      </style>
     </div>
   );
 };
