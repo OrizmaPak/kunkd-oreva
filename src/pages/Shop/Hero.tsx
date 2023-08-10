@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import StoreRT from "@/assets/storeRT.svg";
 import StoreRB from "@/assets/storeRB.svg";
 import StoreLT from "@/assets/storeLT.svg";
-import StoreLB from "@/assets/storeLB.svg";
+// import StoreLB from "@/assets/storeLB.svg";
 
 const Hero = () => {
   return (
