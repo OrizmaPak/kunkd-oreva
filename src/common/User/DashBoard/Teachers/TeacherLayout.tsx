@@ -132,14 +132,19 @@ const DasboardButton = ({
         console.log("testing");
         onClick();
       }}
-      className={`px-4 py-4  rounded-3xl flex items-center gap-8 w-full my-8 ${
+      className={`transition-all duration-500 px-2 py-2  rounded-2xl flex items-center justify-between gap-8 w-full my-8 ${
         active
           ? "bg-[#8530c1] text-white"
           : "hover:bg-[#8530C1] hover:text-white"
       }  my-4`}
     >
-      <span>{icon}</span>
-      <span className={`${title === "Logout" && "text-red-600"}`}>{title}</span>
+      <span className="flex gap-3 justify-center">
+        <span>{icon}</span>
+        <span className={`${title === "Logout" && "text-red-600"}`}>
+          {title}
+        </span>
+      </span>
+      <span className="h-8 w-2 bg-white rounded-2xl"></span>
     </button>
   );
 };

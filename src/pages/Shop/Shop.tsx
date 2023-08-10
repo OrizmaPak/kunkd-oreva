@@ -91,8 +91,8 @@ const Shop = () => {
       <Hero />
       <NewRelease data={datas} />
       <AfricanHsitory data={datas} />
-      <BookTrailer />
-      <PaymentType />
+      {/* <BookTrailer />
+      <PaymentType /> */}
     </div>
   );
 };

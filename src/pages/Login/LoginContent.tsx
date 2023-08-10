@@ -225,7 +225,7 @@ const LoginContent = () => {
             </button>
           </p> */}
         </form>
-        <p className="flex items-center justify-items-center py-2 gap-3  text-gray-400 font-400">
+        <p className="flex items-center justify-items-center py-10 gap-3  text-gray-400 font-400">
           <hr className="flex-1" />
           <span>or continue with</span> <hr className="flex-1" />
         </p>

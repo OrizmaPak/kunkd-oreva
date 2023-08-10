@@ -28,7 +28,7 @@ const ChoosePlanContent = () => {
             ></PackageCard>
             <PackageCard
               isIcon={true}
-              title="Forever"
+              title="Basic"
               btn="Choose "
               price="Free"
               content={[

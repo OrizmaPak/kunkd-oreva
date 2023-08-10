@@ -20,26 +20,55 @@ const Request = () => {
       image: Chiks,
       name: "Pemela Azunda",
       request: " is requesting for her child to join your class",
+      time: "1 hour ago",
     },
     {
       image: Jessica,
       name: "Mitchel Obi",
-      request: "is requesting for her child to join your class.",
+      request: " is requesting for her child to join your class.",
+      time: "1 hour ago",
     },
     {
       image: Grease,
       name: "Jessica Deji",
       request: " is requesting for her child to join your class.",
+      time: "1 hour ago",
     },
     {
       image: Blxst,
       name: "Kim Maybe",
       request: "  is requesting for her child to join your class.",
+      time: "1 hour ago",
     },
     {
       image: Bella,
       name: "BellaMaybe",
       request: "  is requesting for her child to join your class.",
+      time: "1 hour ago",
+    },
+    {
+      image: Jessica,
+      name: "Mitchel Obi",
+      request: "  is requesting for her child to join your class.",
+      time: "1 hour ago",
+    },
+    {
+      image: Grease,
+      name: "Jessica Deji",
+      request: " is requesting for her child to join your class.",
+      time: "1 hour ago",
+    },
+    {
+      image: Blxst,
+      name: "Kim Maybe",
+      request: "  is requesting for her child to join your class.",
+      time: "1 hour ago",
+    },
+    {
+      image: Bella,
+      name: "BellaMaybe",
+      request: "  is requesting for her child to join your class.",
+      time: "1 hour ago",
     },
   ];
 
@@ -87,25 +116,27 @@ const Row = ({
   name: string;
 }) => {
   return (
-    <div className="grid grid-cols-[1fr_200px] my-2">
+    <div className="grid grid-cols-[1fr_300px] my-8">
       <div className="flex">
-        <p>
-          <img src={image} alt="image" />
+        <p className="mr-6">
+          <img src={image} alt="image" className=" rounded-full w-[60px]" />
         </p>
         <p>
-          <span>
-            <span className="text-[#8530C1]">{name}</span>
+          <span className="text-[#7E7E89] text-[18px] font-medium">
+            <span className="text-[#8530C1] ">{name}</span>
             {request}
           </span>
-          <span>{time}</span>
+          <span className=" text-[#7E7E89]  block mt-3 text-[14px]">
+            {time}
+          </span>
         </p>
       </div>
 
-      <div>
-        <button className="p-[15px] text-[16px] rounded-3xl text-[#E2B6FF]">
+      <div className="flex  text-white gap-5">
+        <button className="p-[15px]  text-[16px]  w-[120px] h-[42px] flex justify-center items-center rounded-2xl bg-[#E2B6FF] ">
           Decline
         </button>
-        <button className="p-[15px] text-[16px] rounded-3xl text-[#8530C1]">
+        <button className="p-[15px] text-[16px] w-[120px] h-[42px]  flex justify-center items-center rounded-2xl bg-[#8530C1]">
           Accept
         </button>
       </div>

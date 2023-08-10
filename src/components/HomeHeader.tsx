@@ -61,7 +61,7 @@ const HomeHeader = () => {
             isActive ? " text-[#8530C1]" : "text-black"
           }
         >
-          <span>Shop</span>
+          <span>Visit Store</span>
         </NavLink>
         <span>| EN </span>
       </div>

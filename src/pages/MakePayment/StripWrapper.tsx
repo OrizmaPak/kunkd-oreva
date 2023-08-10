@@ -1,5 +1,6 @@
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent, useLayoutEffect, useState } from "react";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
+
 import {
   PaymentElement,
   Elements,
@@ -61,6 +62,7 @@ const CheckoutForm = ({ data }: { data: TStripe }) => {
       clientSecret,
       confirmParams: {
         return_url: "https://dev-kundakids.vercel.app/congratulations",
+        // return_url: "http://localhost:5173/congratulations",
         // onSuccess:(){}
       },
     });
@@ -105,10 +107,11 @@ const CheckoutForm = ({ data }: { data: TStripe }) => {
 };
 
 const PaymentOutlet = ({ planId }: { planId: string }) => {
-  const { mutate, isLoading } = useStripeInit();
+  const { mutate } = useStripeInit();
+  const [isLoading, setIsLoading] = useState(true);
   const [stripeData, setStripeData] = useState<TStripe>();
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null>>();
-
+  console.log("StripeInit", isLoading);
   console.log("strip data", planId);
   const handleStripeInit = () => {
     mutate(
@@ -123,6 +126,7 @@ const PaymentOutlet = ({ planId }: { planId: string }) => {
           const publishableKey = data.data.data?.public_key;
           const stripe = loadStripe(publishableKey);
           setStripePromise(stripe);
+          setIsLoading(false);
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -130,6 +134,8 @@ const PaymentOutlet = ({ planId }: { planId: string }) => {
         },
 
         onError(err) {
+          setIsLoading(false);
+
           notifications.show({
             title: `Notification`,
             message: getApiErrorMessage(err),
@@ -138,12 +144,12 @@ const PaymentOutlet = ({ planId }: { planId: string }) => {
       }
     );
   };
-  useEffect(() => {
+  useLayoutEffect(() => {
     handleStripeInit();
   }, []);
 
   return (
-    <Skeleton visible={isLoading}>
+    <Skeleton height={400} visible={isLoading}>
       {stripePromise ? (
         <Elements
           stripe={stripePromise}

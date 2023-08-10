@@ -31,11 +31,11 @@ const PackageCard = ({
   plan,
 }: Props) => {
   const navigate = useNavigate();
-  const handlePaln = (price: string, planId: number) => {
-    if (price === "Free") {
+  const handlePaln = (planId: number) => {
+    if (!plan) {
       navigate("/childprofilesetup");
     } else {
-      localStorage.setItem("planId", planId.toString());
+      localStorage.setItem("planId", planId?.toString());
       navigate("/makepayment");
     }
   };
@@ -67,7 +67,7 @@ const PackageCard = ({
             recommended ? "text-white" : ""
           } `}
         >
-          {plan?.dollar_value}
+          {plan?.dollar_value || price}
         </div>
       )}
       {content && !isIcon && (
@@ -99,14 +99,12 @@ const PackageCard = ({
 
       {btn && (
         <div className="flex justify-center items-center">
-          {/* <Link to={price === "Free" ? "/childprofilesetup" : "/makepayment"}> */}
           <button
-            onClick={() => handlePaln(plan?.dollar_value!, plan?.id!)}
+            onClick={() => handlePaln(plan?.id!)}
             className="mt-8 bg-[#E7D4F4] text-[#8530C1] p-3 rounded-2xl"
           >
             {btn}
           </button>
-          {/* </Link> */}
         </div>
       )}
     </div>

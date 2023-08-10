@@ -75,6 +75,8 @@ const MakePaymentContent = () => {
               onSuccess(data) {
                 window.location.href =
                   "https://dev-kundakids.vercel.app/congratulations";
+                // window.location.href =
+                //   "http://localhost:5173/congratulations";
                 setVerifyResponse(data.data.data.transaction_reference);
                 notifications.show({
                   title: `Notification`,
@@ -106,7 +108,7 @@ const MakePaymentContent = () => {
   const [showStripe, setShowStripe] = useState(false);
   const [showPatStack, setShowPatStack] = useState(false);
   return (
-    <div className="w-[100%] max-w-[800px] mx-auto relative  h-full pt-[20%] ">
+    <div className="w-[100%] max-w-[800px] mx-auto relative  h-full pt-[10%] ">
       <Link to="/">
         <span className="absolute right-[-150px] top-[40px]">
           <img loading="lazy" src={Cancel} alt="cancel" />
@@ -159,9 +161,11 @@ const MakePaymentContent = () => {
           </p>
         )}
         {showStripe && (
+          // <Skeleton height={400} width={800} visible={isLoading}>
           <p className="mt-10 flex items-center justify-center">
             <StripWrapper planId={planId!} />
           </p>
+          // </Skeleton>
         )}
       </div>
     </div>

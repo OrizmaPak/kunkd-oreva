@@ -11,7 +11,7 @@ const OptionButton = ({
     <div
       onClick={onClick}
       className={`relative  rounded-md py-4 my-6  px-4 cursor-pointer bg-[#F9F5FC] ${
-        clicked ? "border border-[#8530C1]" : ""
+        clicked ? "border-[2px] border-[#8530C1]" : ""
       }`}
     >
       <p className="flex items-center text-start justify-between ">
