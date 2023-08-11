@@ -8,8 +8,8 @@ import Checked from "@/assets/Checked.svg";
 import UnChecked from "@/assets/uncheck.svg";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useGoogleSignup } from "@/api/queries";
-import { googleSignIn } from "@/auth/sdk";
+import { useSocialSignUp } from "@/api/queries";
+import { googleSignIn, facebookSignIn } from "@/auth/sdk";
 import { getPushTokenState } from "@/store/pushTokenStore";
 import useStore from "@/store";
 import { notifications } from "@mantine/notifications";
@@ -34,7 +34,7 @@ const SignContent = () => {
   const [, setUser] = useStore(getUserState);
   const navigate = useNavigate();
   const [to, setTo] = useState("");
-  const { mutate } = useGoogleSignup();
+  const { mutate } = useSocialSignUp();
   const [pushToken, ,] = useStore(getPushTokenState);
   const handleClick = () => {
     console.log(to);
@@ -59,6 +59,55 @@ const SignContent = () => {
           email: returnValue.user.email,
           phoneNumber: returnValue.user.phoneNumber,
           photoURL: returnValue.user.photoURL,
+          fcmToken: pushToken,
+        },
+        {
+          onSuccess(data) {
+            console.log("success", data.data.message);
+            const res = data?.data?.data as TUser;
+
+            notifications.show({
+              title: `Notification`,
+              message: data.data.message,
+            });
+            setUser({ ...res });
+            navigate("/childprofilesetup");
+          },
+
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    } catch (error) {
+      notifications.show({
+        title: `Notification`,
+        message: getApiErrorMessage(error),
+      });
+    }
+  };
+  const handleFacebookSignUp = async () => {
+    try {
+      const returnValue = await facebookSignIn();
+      console.log("Request object", {
+        displayName: returnValue?.user.displayName,
+        uid: returnValue?.user.uid,
+        email: returnValue?.user.email,
+        phoneNumber: returnValue?.user.phoneNumber,
+        photoURL: returnValue?.user.photoURL,
+        fcmToken: pushToken,
+      });
+      mutate(
+        {
+          providerId: returnValue?.providerId,
+          displayName: returnValue?.user.displayName,
+          uid: returnValue?.user.uid,
+          email: returnValue?.user.email,
+          phoneNumber: returnValue?.user.phoneNumber,
+          photoURL: returnValue?.user.photoURL,
           fcmToken: pushToken,
         },
         {
@@ -132,7 +181,7 @@ const SignContent = () => {
           <Button size="full" varient="outlined">
             <img loading="lazy" src={Apple} alt="apple" className="mx-auto " />
           </Button>
-          <Button size="full" varient="outlined">
+          <Button onClick={handleFacebookSignUp} size="full" varient="outlined">
             <img
               loading="lazy"
               src={Facebook}

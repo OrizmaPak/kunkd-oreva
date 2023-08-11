@@ -12,7 +12,7 @@ import {
   GetProfile,
   UpdatePassword,
   UpdateProfile,
-  GoogleSignUp,
+  SocialSignUp,
   ContentForHome,
   GetContentById,
   GetSubCategories,
@@ -149,9 +149,9 @@ export const useUpdateProfile = () => {
 };
 
 // Google Sign up
-export const useGoogleSignup = () => {
+export const useSocialSignUp = () => {
   return useMutation({
-    mutationFn: GoogleSignUp,
+    mutationFn: SocialSignUp,
   });
 };
 

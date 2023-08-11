@@ -89,7 +89,7 @@ export const UpdateProfile = (payload: TUdateProfileData) => {
   return axios.patch("/profile", formData);
 };
 
-export const GoogleSignUp = (payload: TGoogleSignUpData) => {
+export const SocialSignUp = (payload: TGoogleSignUpData) => {
   return axios.post("/social/auth/web", payload);
 };
 

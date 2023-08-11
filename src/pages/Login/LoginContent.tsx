@@ -32,14 +32,61 @@ import { getUserState } from "@/store/authStore";
 const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
   const [user, setUser] = useStore(getUserState);
-  const { mutate: socilaMutate } = useSocialLogin();
-  const handleGoogleSignUp = async () => {
+  const { mutate: socialMutate } = useSocialLogin();
+  const handleGoogleLogin = async () => {
     try {
       const returnValue = await googleSignIn();
-      socilaMutate(
+      socialMutate(
         {
-          id: returnValue.user.uid,
-          email: returnValue.user.email,
+          providerId: returnValue?.providerId,
+          displayName: returnValue?.user.displayName,
+          uid: returnValue?.user.uid,
+          email: returnValue?.user.email,
+          phoneNumber: returnValue?.user.phoneNumber,
+          photoURL: returnValue?.user.photoURL,
+          // fcmToken: pushToken,
+        },
+        {
+          onSuccess(data) {
+            console.log("success", data.data.message);
+            const res = data?.data?.data as TUser;
+            notifications.show({
+              title: `Notification`,
+              message: data.data.message,
+            });
+            setUser({ ...res });
+            console.log("work in progress", res);
+            navigate("/selectprofile");
+          },
+
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    } catch (error) {
+      notifications.show({
+        title: `Notification`,
+        message: getApiErrorMessage(error),
+      });
+    }
+  };
+
+  const handleFacebookLogin = async () => {
+    try {
+      const returnValue = await facebookSignIn();
+      socialMutate(
+        {
+          providerId: returnValue?.providerId,
+          displayName: returnValue?.user.displayName,
+          uid: returnValue?.user.uid,
+          email: returnValue?.user.email,
+          phoneNumber: returnValue?.user.phoneNumber,
+          photoURL: returnValue?.user.photoURL,
+          // fcmToken: pushToken,
         },
         {
           onSuccess(data) {
@@ -231,7 +278,7 @@ const LoginContent = () => {
           <span>or continue with</span> <hr className="flex-1" />
         </p>
         <div className="flex gap-8">
-          <Button size="full" onClick={handleGoogleSignUp} varient="outlined">
+          <Button size="full" onClick={handleGoogleLogin} varient="outlined">
             <img
               loading="lazy"
               src={Google}
@@ -242,7 +289,7 @@ const LoginContent = () => {
           <Button size="full" varient="outlined">
             <img loading="lazy" src={Apple} alt="apple" className="mx-auto " />
           </Button>
-          <Button onClick={facebookSignIn} size="full" varient="outlined">
+          <Button onClick={handleFacebookLogin} size="full" varient="outlined">
             <img
               loading="lazy"
               src={Facebook}

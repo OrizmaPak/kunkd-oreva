@@ -24,7 +24,9 @@ export const googleSignIn = async () => {
 export const facebookSignIn = async () => {
   const provider = new FacebookAuthProvider();
   try {
-    await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, provider);
+    console.log("Facebook result", result);
+    return result;
   } catch (error) {
     console.log("autheni error", error);
   }
