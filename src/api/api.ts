@@ -182,9 +182,7 @@ export const UpdateSchImage = (payload: TUdateSchImageData) => {
 
 export const UpdateParentImage = (payload: TUdateParentImageData) => {
   const formData = new FormData();
-
   formData.append("image", payload?.image as string | Blob);
-
   return axios.patch("/profile/image", formData);
 };
 

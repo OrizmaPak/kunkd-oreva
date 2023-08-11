@@ -4,7 +4,6 @@ import { useGetProfile } from "@/api/queries";
 import useStore from "@/store/index";
 import { getProfileState } from "@/store/profileStore";
 import { Skeleton } from "@mantine/core";
-// import { useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import BlurImage from "@/assets/BlxstBlur.jpg";
