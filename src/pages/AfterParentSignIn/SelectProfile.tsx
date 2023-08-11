@@ -3,6 +3,11 @@ import GroupIcon from "@/assets/groupIcons.svg";
 import { useGetProfile } from "@/api/queries";
 import useStore from "@/store/index";
 import { getProfileState } from "@/store/profileStore";
+import { Skeleton } from "@mantine/core";
+// import { useState } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import BlurImage from "@/assets/BlxstBlur.jpg";
 
 export type selectAvatarType = {
   name: string;
@@ -32,13 +37,22 @@ const SelectProfile = () => {
             <p className=" font-Hanken">Select which kid is learning now </p>
           </div>
           <div className="flex text-white text-center gap-10 justify-center items-center bg-transparent">
-            {!isLoading ? (
-              profiles?.map((avatar, index) => (
-                <AvatarCard key={index} {...avatar} isLoading={isLoading} />
-              ))
-            ) : (
-              <span>Loading</span>
-            )}
+            {isLoading
+              ? Array(3)
+                  .fill(1)
+                  .map((arr, index) => (
+                    <Skeleton
+                      key={index}
+                      height={100}
+                      circle
+                      visible={isLoading}
+                    >
+                      {arr}
+                    </Skeleton>
+                  ))
+              : profiles?.map((avatar, index) => (
+                  <AvatarCard key={index} {...avatar} isLoading={isLoading} />
+                ))}
           </div>
         </div>
       </div>
@@ -66,17 +80,31 @@ const AvatarCard = ({
     localStorage.setItem("profileId", JSON.stringify(id));
     navigate("/parent");
   };
+  // const [imageLoding, setImageLoding] = useState(true);
   return (
     <div>
       {isLoading ? (
         <span>Loading </span>
       ) : (
         <button onClick={handleClick}>
-          <img
-            loading="lazy"
+          {/* <Skeleton height={100} circle visible={imageLoding}>
+            <img
+              loading="lazy"
+              src={image}
+              alt="avatar"
+              className="w-[100px] h-[100px] object-cover  rounded-full "
+              onLoad={() => setImageLoding(false)}
+            />
+          </Skeleton> */}
+
+          <LazyLoadImage
             src={image}
-            alt="avatar"
-            className="w-[100px] h-[100px] object-cover "
+            placeholderSrc={BlurImage}
+            effect="blur"
+            className=" rounded-full h-[100px] w-[100px] object-cover"
+            wrapperClassName=" rounded-full object-cover  z-50"
+            width={100}
+            height={100}
           />
           <p className="text-black font-normal text-[20px]  mt-4 ">{name}</p>
         </button>

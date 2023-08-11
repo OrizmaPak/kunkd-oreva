@@ -30,10 +30,10 @@ const Hero = ({ username, userimage }: Props) => {
               loading="lazy"
               src={userimage}
               alt="userimage"
-              className="w-[150px] h-[150px] object-cover"
+              className="w-[150px] h-[150px] object-cover rounded-full"
             />
           </p>
-          <h1 className="font-bold font-Recoleta text-[25px]">
+          <h1 className="font-bold font-Recoleta text-[22px]">
             Hello {username},
           </h1>
           <p className=" font-Hanken text-lg text-gray-400">Start reading.</p>

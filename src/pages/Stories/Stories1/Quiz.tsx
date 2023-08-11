@@ -5,7 +5,9 @@ import { useState } from "react";
 import RemarkBg from "@/assets/remarkbg.svg";
 import RemarkIcon from "@/assets/remarkIcon.svg";
 import Button from "@/components/Button";
-import { RingProgress } from "@mantine/core";
+import { RingProgress, MantineProvider } from "@mantine/core";
+// import { Slider, MantineProvider } from "@mantine/core";
+
 import { useGetQuiz } from "@/api/queries";
 import { STEP_1, STEP_2, STEP_3, STEP_4 } from "@/utils/constants";
 import Contour from "@/assets/contour.svg";
@@ -70,13 +72,31 @@ const Quiz = () => {
         <>
           <Skeleton visible={isLoading} height={600}>
             <div className="flex-grow mt-5 pt-5 px-40 flex  h-[100%]  flex-col py-5 bg-white rounded-3xl ">
-              <Progress
-                value={progress * answers.length}
-                size="xl"
-                radius="xl"
-                color="violet"
-              />
-
+              <MantineProvider
+                theme={{
+                  colors: {
+                    "ocean-blue": [
+                      "#8530C1",
+                      "#5FCCDB",
+                      "#44CADC",
+                      "#2AC9DE",
+                      "#1AC2D9",
+                      "#11B7CD",
+                      "#09ADC3",
+                      "#0E99AC",
+                      "#128797",
+                      "#147885",
+                    ],
+                  },
+                }}
+              >
+                <Progress
+                  value={progress * answers.length}
+                  size="xl"
+                  radius="xl"
+                  color="ocean-blue.0"
+                />
+              </MantineProvider>
               <Question
                 quesObject={questions && questions[currentQues]}
                 selected={answers}

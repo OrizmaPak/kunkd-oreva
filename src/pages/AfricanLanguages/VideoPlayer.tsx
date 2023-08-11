@@ -57,7 +57,7 @@ const VideoPlayer = () => {
   return (
     <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col  bg-[#fff7fd]">
       <div className="">
-        <Skeleton visible={isLoading}>
+        <Skeleton visible={isLoading} radius={"xl"}>
           <AfricanLanguagesNav
             category="Africanlanguages"
             lanType={lan_type}
@@ -129,18 +129,29 @@ const VideoPlayer = () => {
               Recommended Videos
             </h1>
             <div>
-              {recommendedVideos &&
-                recommendedVideos
-                  .slice(1, 6)
-                  .map((data: TRecommendedVideo, index: number) => (
-                    <Skeleton visible={recommendedIsLoading}>
+              {recommendedIsLoading
+                ? Array(6)
+                    .fill(1)
+                    .map((arr, index) => (
+                      <Skeleton
+                        key={index}
+                        height={100}
+                        className="mb-5"
+                        visible={recommendedIsLoading}
+                      >
+                        {arr}
+                      </Skeleton>
+                    ))
+                : recommendedData &&
+                  recommendedVideos
+                    ?.slice(1, 6)
+                    .map((data: TRecommendedVideo, index: number) => (
                       <RecommendedVideoCard
                         subCategory={videoData?.sub_category_name}
                         key={index}
                         {...data}
                       />
-                    </Skeleton>
-                  ))}
+                    ))}
             </div>
           </div>
         </div>

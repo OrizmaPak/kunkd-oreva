@@ -24,7 +24,6 @@ const AudioBooksNav = ({
       </div>
 
       <div
-        onClick={() => navigate(`/librarynotpaid/audiobooks/${genre}/${id}`)}
         className={`flex gap-2  cursor-pointer text-[#B5B5C3] ${
           quiz && "text-black"
         } `}

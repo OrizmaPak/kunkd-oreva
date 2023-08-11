@@ -61,8 +61,8 @@ const CheckoutForm = ({ data }: { data: TStripe }) => {
       elements,
       clientSecret,
       confirmParams: {
-        return_url: "https://dev-kundakids.vercel.app/congratulations",
-        // return_url: "http://localhost:5173/congratulations",
+        // return_url: "https://dev-kundakids.vercel.app/congratulations",
+        return_url: "http://localhost:5173/congratulations",
         // onSuccess:(){}
       },
     });

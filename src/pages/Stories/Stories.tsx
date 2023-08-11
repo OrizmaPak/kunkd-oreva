@@ -331,7 +331,7 @@ type TSubCategory = {
 const BrowseGenre = () => {
   const navigate = useNavigate();
   const [isLoadingImage, setIsLoadingImage] = useState(true);
-  const { data } = useGetSubCategories();
+  const { data, isLoading: subIsLoading } = useGetSubCategories();
   const subCategory = data?.data.data[0].sub_categories;
   const { data: contentData, isLoading } = useContentForHome();
   const newTrending: CardProps[] = contentData?.data.data.trending_stories;
@@ -346,15 +346,27 @@ const BrowseGenre = () => {
       </div>
       <div className="flex justify-center items-center my-14">
         <div className="flex flex-wrap justify-center items-center  max-w-[900px]  gap-x-8 gap-y-4">
-          {subCategory &&
-            subCategory.map((genre: TSubCategory, index: number) => (
-              <SubButton
-                onClick={() => navigate(`${genre.slug.toLowerCase()}`)}
-                key={index}
-                name={genre.name}
-                subCategoryId={genre.id.toString()}
-              />
-            ))}
+          {subIsLoading
+            ? Array(10)
+                .fill(1)
+                .map((arr, index) => (
+                  <Skeleton
+                    height={40}
+                    width={180}
+                    key={index}
+                    visible={subIsLoading}
+                  >
+                    {arr}
+                  </Skeleton>
+                ))
+            : subCategory?.map((genre: TSubCategory, index: number) => (
+                <SubButton
+                  onClick={() => navigate(`${genre.slug.toLowerCase()}`)}
+                  key={index}
+                  name={genre.name}
+                  subCategoryId={genre.id.toString()}
+                />
+              ))}
         </div>
       </div>
 
