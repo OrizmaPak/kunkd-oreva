@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import React from "react";
 
 type Props = {
@@ -9,6 +9,16 @@ type Props = {
   content?: string[];
   noBorder?: boolean;
   isIcon?: boolean;
+  plan?: TPlan;
+};
+
+export type TPlan = {
+  dollar_value: string;
+  duration_days: number;
+  id: number;
+  naira_value: string;
+  name: string;
+  pounds_value: string;
 };
 const PackageCard = ({
   recommended,
@@ -18,7 +28,17 @@ const PackageCard = ({
   content,
   noBorder,
   isIcon,
+  plan,
 }: Props) => {
+  const navigate = useNavigate();
+  const handlePaln = (planId: number) => {
+    if (!plan) {
+      navigate("/childprofilesetup");
+    } else {
+      localStorage.setItem("planId", planId?.toString());
+      navigate("/makepayment");
+    }
+  };
   return (
     <div
       className={` min-w-[176px] ${
@@ -47,7 +67,7 @@ const PackageCard = ({
             recommended ? "text-white" : ""
           } `}
         >
-          {price}
+          {plan?.dollar_value || price}
         </div>
       )}
       {content && !isIcon && (
@@ -79,11 +99,12 @@ const PackageCard = ({
 
       {btn && (
         <div className="flex justify-center items-center">
-          <Link to={price === "Free" ? "/childprofilesetup" : "/makepayment"}>
-            <button className="mt-8 bg-[#E7D4F4] text-[#8530C1] p-3 rounded-2xl">
-              {btn}
-            </button>
-          </Link>
+          <button
+            onClick={() => handlePaln(plan?.id!)}
+            className="mt-8 bg-[#E7D4F4] text-[#8530C1] p-3 rounded-2xl"
+          >
+            {btn}
+          </button>
         </div>
       )}
     </div>

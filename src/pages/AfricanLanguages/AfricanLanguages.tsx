@@ -242,11 +242,8 @@ const AfricanLanguagess = () => {
         <InnerWrapper>
           <Routes>
             <Route index element={<LanguagesVideo />}></Route>
-            <Route path=":lan_type/:id" element={<Videos />}></Route>
-            <Route
-              path=":lan_type/:title/:id"
-              element={<VideoPlayer />}
-            ></Route>
+            <Route path=":lan_type" element={<Videos />}></Route>
+            <Route path=":lan_type/:title" element={<VideoPlayer />}></Route>
             <Route path=":lan_type/:title/:id/quiz" element={<Quiz />}></Route>
           </Routes>
         </InnerWrapper>
@@ -264,7 +261,7 @@ const LanguagesVideo = () => {
   return (
     <>
       {/* <div className="bg-white rounded-3xl"> */}
-      <div>
+      <div className=" ">
         <Hero image={AfricanBanner} />
         <hr className="my-20 mx-[200px]" />
         <h1 className="text-center font-bold text-[30px] font-Recoleta mt-10 ">
@@ -308,8 +305,9 @@ export const VideoCard = ({ name, image, id }: TSubVideo) => {
   // const { id: storyType } = useParams();
   const goto = () => {
     if (name) {
-      navigate(`${name?.trim().toLocaleLowerCase()}/${id}`);
+      navigate(`${name?.trim().toLocaleLowerCase()}`);
     }
+    localStorage.setItem("subCategoryId", id.toString());
   };
   return (
     <div

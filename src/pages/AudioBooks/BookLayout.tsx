@@ -1,4 +1,4 @@
-import { useParams, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { audioBooksData, StoriesType } from "./AudioBooks";
 import CardScreen from "@/common/User/CardScreen";
 import Card from "@/common/User/Card";
@@ -11,16 +11,17 @@ import PauseIcon from "@/assets/pause.svg";
 import PlayIcon from "@/assets/play.svg";
 import VolumeIcon from "@/assets/volumeIcon.svg";
 
-import ExportIcon from "@/assets/exportIcon.svg";
 import AudioBooksNav from "./AudioBooksNav";
-import { Slider } from "@mantine/core";
+import { Slider, MantineProvider } from "@mantine/core";
 import { useReducedMotion } from "@mantine/hooks";
-import { useGetContentById } from "@/api/queries";
+import { useGetContentById, useGetTrendingAudioBooks } from "@/api/queries";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store";
 import AfamBlur from "@/assets/afamblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import { Skeleton } from "@mantine/core";
+// import { Badge, Button, MantineProvider } from "@mantine/core";
 
 type TAudioBook = {
   name: string;
@@ -30,38 +31,45 @@ type TAudioBook = {
   thumbnail: string;
 };
 const BookLayout = () => {
-  const { audiobooks, id } = useParams();
+  // const { audiobooks,  } = useParams();
+  const contentId = localStorage.getItem("contentId");
   const [user] = useStore(getUserState);
-  const { data } = useGetContentById(
-    id?.toString()!,
+  const { data, isLoading } = useGetContentById(
+    contentId?.toString()!,
     user?.user_id?.toString()!
   );
   const audiobook = data?.data.data.media[0];
-  console.log(audiobook);
+  // console.log(audiobook);
   const [startRead, setStartRead] = useState(false);
   const { state } = useLocation();
   console.log(state);
+  const { data: trendingData } = useGetTrendingAudioBooks();
+  console.log("Trending Audios ", trendingData);
   return (
     <div className=" ">
       <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd]  ">
         <div className=" ">
-          {audiobook && (
-            <AudioBooksNav
-              category="Audiobooks"
-              genre={audiobooks}
-              title={audiobook?.name}
-            />
-          )}
+          <Skeleton visible={isLoading} radius={"xl"}>
+            {
+              <AudioBooksNav
+                category="Audiobooks"
+                // genre={audiobooks}
+                title={audiobook && audiobook?.name}
+              />
+            }
+          </Skeleton>
         </div>
         <div className="flex-grow  h-full ">
           <div className="flex-grow  mt-5 rounded-2xl">
             <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
-              {audiobook && !startRead && (
-                <AboutPage
-                  audiobook={audiobook}
-                  setStartRead={() => setStartRead(true)}
-                />
-              )}
+              <Skeleton visible={isLoading}>
+                {!startRead && (
+                  <AboutPage
+                    audiobook={audiobook}
+                    setStartRead={() => setStartRead(true)}
+                  />
+                )}
+              </Skeleton>
 
               {audiobook && startRead && <ReadPage audiobook={audiobook} />}
 
@@ -164,20 +172,27 @@ const AboutPage = ({
 
 const ReadPage = ({ audiobook }: { audiobook: TAudioBook }) => {
   return (
-    <div className="flex bg-[#fff7fd] py-5 gap-16 rounded-3xl ">
-      <div className=" basis-3/6 flex  items-center bg-[white] flex-col p-10 rounded-3xl">
-        <LazyLoadImage
-          src={audiobook.thumbnail}
-          placeholderSrc={AfamBlur}
-          effect="blur"
-          className=" rounded-xl"
-          wrapperClassName=""
-          width={300}
-          height={300}
-        />
-        <AudioControls audio={audiobook.file} />
+    <div className="flex bg-[#fff7fd]  gap-16 rounded-3xl ">
+      <div className=" basis-full flex   bg-[white]  p-10 rounded-3xl gap-24 ">
+        <div>
+          <LazyLoadImage
+            src={audiobook.thumbnail}
+            placeholderSrc={AfamBlur}
+            effect="blur"
+            className=" rounded-xl"
+            wrapperClassName=""
+            width={229}
+            height={229}
+          />
+        </div>
+        <div className=" flex-grow">
+          <AudioControls
+            audio={audiobook && audiobook.file}
+            title={audiobook?.name}
+          />
+        </div>
       </div>
-      <div className=" basis-full flex flex-col bg-white rounded-3xl p-10 ">
+      {/* <div className=" basis-full flex flex-col bg-red-600 rounded-3xl p-10 ">
         <div className="flex-grow">
           <p className="mb-5 flex justify-between items-center">
             <span className="text-[#B5B5C3] text-[18px]">Lyrics</span>
@@ -192,15 +207,15 @@ const ReadPage = ({ audiobook }: { audiobook: TAudioBook }) => {
             veniam quis doloremque!
           </p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
 
-const AudioControls = ({ audio }: { audio?: string }) => {
+const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const progressBar = useRef<HTMLInputElement>(null);
+  // const progressBar = useRef<HTMLInputElement>(null);
   const [currentTTime, setCurrentTTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -217,17 +232,20 @@ const AudioControls = ({ audio }: { audio?: string }) => {
   const handeSkip10 = (direction: "forward" | "backward") => () => {
     const audioCon = audioRef.current;
     const duration = audioCon?.duration || 0;
+    console.log(direction, duration);
     const currentTime = audioCon?.currentTime || 0;
-
-    console.log("duration", audioCon?.duration, audioCon?.currentTime);
-    if (audioCon && direction === "forward") {
-      audioCon.currentTime +=
-        currentTime + 10 > duration ? duration - currentTime : 10;
-      return;
-    } else if (audioCon && direction === "backward") {
-      audioCon.currentTime -= currentTime - 10 < 0 ? currentTime : 10;
-      return;
-    }
+    console.log(currentTime + 0.1);
+    if (!audioCon) return;
+    audioCon.currentTime = currentTime + 0.2;
+    // console.log("duration", audioCon?.duration, audioCon?.currentTime);
+    // if (audioCon && direction === "forward") {
+    //   audioCon.currentTime += 0.1;
+    //   // currentTime + 10 > duration ? duration - currentTime : 10;
+    //   return;
+    // } else if (audioCon && direction === "backward") {
+    //   audioCon.currentTime -= currentTime - 10 < 0 ? currentTime : 10;
+    //   return;
+    // }
   };
 
   const max = 20;
@@ -239,20 +257,33 @@ const AudioControls = ({ audio }: { audio?: string }) => {
       seconds = Math.floor(audioRef?.current.duration);
       setDuration(+seconds);
     }
-    if (progressBar?.current) {
-      progressBar.current.max = seconds?.toString() || "";
-    }
+    // if (progressBar?.current) {
+    //   progressBar.current.max = seconds?.toString() || "";
+    // }
   }, [audioRef?.current?.onloadedmetadata, audioRef?.current?.readyState]);
 
+  useEffect(() => {
+    audioRef?.current?.addEventListener("ontimeupdate", (event) => {
+      setCurrentTTime(+event?.currentTarget! as number);
+    });
+    audioRef?.current?.addEventListener("onend", () => {
+      setIsPlaying(false);
+    });
+  }, []);
+
   const calculateTime = (secs: number) => {
-    const minutes = Math.floor(secs / 60);
-    const returnedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
-    const seconds = Math.floor(secs % 60);
-    const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
-    return `${returnedMinutes}: ${returnedSeconds}`;
+    // console.log("sec", secs);
+
+    if (audioRef.current) {
+      const minutes = Math.floor(secs / 60);
+      const returnedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+      const seconds = Math.floor(secs % 60);
+      const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+      return `${returnedMinutes}: ${returnedSeconds}`;
+    }
   };
 
-  console.log("actual currentTime", currentTTime);
+  // console.log("actual currentTime", currentTTime);
 
   const reducedMotion = useReducedMotion();
 
@@ -262,6 +293,7 @@ const AudioControls = ({ audio }: { audio?: string }) => {
     if (audioRef.current) {
       audioRef.current.currentTime = value;
     }
+    return value;
   };
 
   const [volume, setVolume] = React.useState(50);
@@ -273,10 +305,14 @@ const AudioControls = ({ audio }: { audio?: string }) => {
       audioRef.current.volume = volume;
     }
   };
+  const [, setLoad] = useState(false);
   return (
-    <div className="mt-10">
-      <div className="my-10 flex justify-center items-center gap-2">
-        <p className=" flex-grow w-20">{calculateTime(currentTTime)}</p>
+    <div className="h-[229px]">
+      <h1 className="text-[22px] font-semibold text-[#151515]">{title}</h1>
+      <div className="my-3 flex justify-center items-center gap-2 mt-8">
+        {/* <p className=" flex-grow w-20">
+          {currentTTime && calculateTime(currentTTime)}
+        </p> */}
         {/* <input
           type="range"
           className="mr-2   text-[#8530C1] bg-[#8530C1]  flex-grow w-full slider"
@@ -288,90 +324,102 @@ const AudioControls = ({ audio }: { audio?: string }) => {
         /> */}
 
         <p className="w-full flex-grow">
-          <Slider
-            color="violet"
-            // backgroundColor=""
-            value={currentTTime}
-            onChange={handleSliderChange}
-            min={0}
-            max={duration}
-            step={0.1}
-            label={`Duration: ${calculateTime(currentTTime)}`}
-            disabled={reducedMotion}
-            // onLoadedMetadata={handleTimeUpdate}
-            // onTimeUpdate={handleTimeUpdate}
-          />
-          <style>
-            {`
-            .mantine-157yjkz{
-              background-color:#8530C1 !important;
-            }
-            .mantine-ejm21a{
-              border-color:white !important;
-              background-color:#8530C1 !important;
-              padding:5px !important;
-              box-shadow: 0 0 5px 0 #8530C1 !important;
-            }
-            .mantine-11g3ikq {
-              background-color:#8530C1 !important;
-
-            }
-            `}
-          </style>
+          <MantineProvider
+            theme={{
+              colors: {
+                "ocean-blue": [
+                  "#8530c1",
+                  "#5FCCDB",
+                  "#44CADC",
+                  "#2AC9DE",
+                  "#1AC2D9",
+                  "#11B7CD",
+                  "#09ADC3",
+                  "#0E99AC",
+                  "#128797",
+                  "#147885",
+                ],
+              },
+            }}
+          >
+            <Slider
+              color="ocean-blue.0"
+              // backgroundColor=""
+              value={currentTTime}
+              onChange={handleSliderChange}
+              min={0}
+              max={duration}
+              step={0.1}
+              label={`Duration: ${calculateTime(currentTTime)}`}
+              disabled={reducedMotion}
+              // onLoadedMetadata={handleTimeUpdate}
+              // onTimeUpdate={handleTimeUpdate}
+            />
+          </MantineProvider>
         </p>
 
-        <p className="flex-grow w-20">
+        {/* <p className="flex-grow w-20">
           {duration ? calculateTime(duration) : `0:00`}
-        </p>
+        </p> */}
         {/* <Progress value={(currentTTime * 100) / duration} /> */}
       </div>
+
       {/* <Progress value={(currentTTime * 100) / duration} /> */}
-      <div className="flex justify-center h-[72px] ">
-        <audio
-          onTimeUpdate={(event) => {
-            setCurrentTTime(+event.currentTarget.currentTime);
-          }}
-          onEnded={() => {
-            setIsPlaying(false);
-            // setEnded(true);
-          }}
-          ref={audioRef}
-          src={audio}
-        ></audio>
-        <div className="flex h-[72px] justify-end rounded-full gap-10 px-20 py-4 bg-[#FBECFF] items-center ">
-          <button onClick={handeSkip10("backward")}>
-            <img
-              loading="lazy"
-              src={FastBackward}
-              alt="backward"
-              className="w-[50px] h-[50px]"
-            />
-          </button>
-          <button onClick={handlePlayControl}>
-            <img
-              src={isPlaying ? PauseIcon : PlayIcon}
-              alt=""
-              className="w-[40px]"
-            />
-          </button>
-          <button onClick={handeSkip10("forward")}>
-            <img
-              loading="lazy"
-              src={FastForward}
-              alt="forward"
-              className="w-[50px] h-[50px]"
-            />
-          </button>
-        </div>
+
+      <div className="flex  justify-between ">
+        <p>{currentTTime && calculateTime(currentTTime)}</p>
+        <p>{duration ? calculateTime(duration) : `0:00`}</p>
       </div>
-      <div className="mt-20 flex gap-5 pr-24">
-        <img
-          loading="lazy"
-          src={VolumeIcon}
-          alt="volume"
-          className="w-[20px]"
-        />
-        {/* <input
+
+      <div className="flex justify-between mt-8">
+        <div className="flex justify-center h-[72px]">
+          <audio
+            id="audio-book"
+            onTimeUpdate={(event) => {
+              setCurrentTTime(+event.currentTarget.currentTime);
+            }}
+            onEnded={() => {
+              setIsPlaying(false);
+              // setEnded(true);
+            }}
+            ref={audioRef}
+            src={audio!}
+            onLoad={() => setLoad(true)}
+          ></audio>
+          <div className="flex h-[72px] justify-end rounded-full gap-10 px-10 py-4 bg-[#FBECFF] items-center ">
+            <button onClick={handeSkip10("backward")}>
+              <img
+                loading="lazy"
+                src={FastBackward}
+                alt="backward"
+                className="w-[50px] h-[50px]"
+              />
+            </button>
+            <button onClick={handlePlayControl}>
+              <img
+                src={isPlaying ? PauseIcon : PlayIcon}
+                alt=""
+                className="w-[40px]"
+              />
+            </button>
+            <button onClick={handeSkip10("forward")}>
+              <img
+                loading="lazy"
+                src={FastForward}
+                alt="forward"
+                className="w-[50px] h-[50px]"
+              />
+            </button>
+          </div>
+        </div>
+        <div className=" flex justify-center items-center gap-5 ">
+          <img
+            loading="lazy"
+            src={VolumeIcon}
+            alt="volume"
+            className="w-[20px]"
+          />
+          {/* <input
           type="range"
           className="mr-2   text-[#8530C1] bg-[#8530C1] w-[100px]"
           min={0}
@@ -379,22 +427,38 @@ const AudioControls = ({ audio }: { audio?: string }) => {
           id="input"
           onChange={(e) => handleVolume(e)}
         /> */}
-        <p className="w-[100px]">
-          <Slider
-            color="violet"
-            value={volume}
-            onChange={handleVolumeChange}
-            min={0}
-            max={max}
-            disabled={reducedMotion}
-          />
-        </p>
+          <p className="w-[100px]">
+            <MantineProvider
+              theme={{
+                colors: {
+                  "ocean-blue": [
+                    "#8530c1",
+                    "#5FCCDB",
+                    "#44CADC",
+                    "#2AC9DE",
+                    "#1AC2D9",
+                    "#11B7CD",
+                    "#09ADC3",
+                    "#0E99AC",
+                    "#128797",
+                    "#147885",
+                  ],
+                },
+              }}
+            >
+              <Slider
+                color="ocean-blue.0"
+                value={volume}
+                onChange={handleVolumeChange}
+                min={0}
+                max={max}
+                disabled={reducedMotion}
+                size={"sm"}
+              />
+            </MantineProvider>
+          </p>
+        </div>
       </div>
-      <style>
-        {`
-      
-          `}
-      </style>
     </div>
   );
 };

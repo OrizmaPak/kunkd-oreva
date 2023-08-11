@@ -33,23 +33,22 @@ const CardScreen = ({
         className="overflow-auto  no-scrollbar p-4 "
         style={{ maxHeight: "500px" }}
       >
-        <div className="flex  gap-5 mb-14  ">
+        <div className="flex gap-5 mb-14  ">
           {isLoading
             ? Array(5)
                 .fill(1)
                 .map((arr, index) => (
-                  <Skeleton visible={isLoading}>
+                  <Skeleton key={index} visible={isLoading}>
                     <div
                       key={index}
                       className="h-[200px] w-[400px] text-transparent"
                     >
                       {arr}
-                    </div>{" "}
+                    </div>
                   </Skeleton>
                 ))
             : data?.map((data) => {
                 return card ? card(data) : null;
-                // <Card key={index} image={data?.image} title={data?.title} />
               })}
         </div>
       </div>

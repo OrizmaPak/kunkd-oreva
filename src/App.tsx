@@ -61,6 +61,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import useStore from "./store";
 import { auth } from "./firebase";
 import { getUserState } from "./store/authStore";
+import PaymentCongratulations from "./pages/MakePayment/PaymentCompletedContent";
 import { TUser } from "./api/types";
 // import { googleSignIn } from "./auth/sdk";
 import Request from "./pages/DashBoard/TeacherDashboard/Request/Request";
@@ -100,7 +101,8 @@ function App() {
 
             {/* Routes for School Teaher and Parent After  login */}
             <Route element={<AppLayout />}>
-              <Route path="newlyregistereduser/*">
+              {/* <Route path="newlyregistereduser/*"> */}
+              <Route path="school/*">
                 <Route index element={<NewlyRegisteredUser />}></Route>
                 <Route path=":category/*" element={<Stories />}></Route>
                 <Route path="audiobooks/*" element={<AudioBooks />}></Route>
@@ -130,7 +132,9 @@ function App() {
               {/* <Route path="stories1/:id" element={<Stories1 />}></Route> */}
               <Route path="mylist" element={<MyList />}></Route>
               <Route path="progressreport" element={<ProgressReport />}></Route>
-              <Route path="parenthomepage/*">
+
+              {/* ///////  <Route path="parenthomepage///////*"> */}
+              <Route path="parent/*">
                 <Route index element={<ParentHomePage />}></Route>
                 <Route path=":category/*" element={<Stories />}></Route>
                 <Route path="audiobooks/*" element={<AudioBooks />}></Route>
@@ -220,6 +224,11 @@ function App() {
             <Route path="parentsignup" element={<ParentSignup />}></Route>
             <Route path="secureaccount" element={<SecureAccount />}></Route>
             <Route path="makepayment" element={<MakePayment />}></Route>
+            <Route
+              path="congratulations"
+              element={<PaymentCongratulations />}
+            ></Route>
+
             <Route path="packages" element={<ChoosePlan />}></Route>
             <Route
               path="childprofilesetup"

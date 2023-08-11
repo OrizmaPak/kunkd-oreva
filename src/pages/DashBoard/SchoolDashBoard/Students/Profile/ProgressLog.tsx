@@ -32,7 +32,7 @@ const Card = ({
   total: string;
 }) => {
   return (
-    <div className=" rounded-3xl py-4 px-8 border border-purple-300">
+    <div className=" rounded-3xl py-4 px-3 border border-purple-300">
       <div>
         <img loading="lazy" src={image} alt="image" className="w-[60px]" />
       </div>

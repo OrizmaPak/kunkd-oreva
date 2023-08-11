@@ -28,7 +28,7 @@ const data = [
 
 const index = () => {
   return (
-    <div className=" bg-white rounded-3xl flex flex-col flex-grow ">
+    <div className=" bg-white rounded-3xl flex flex-col px-6  w-[600px]">
       <Header />
       {data.map((data, index) => {
         return <Row key={index} {...data} />;

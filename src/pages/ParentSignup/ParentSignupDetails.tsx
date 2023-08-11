@@ -83,7 +83,7 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
             Start learning and reading without restrictions.{" "}
           </p>
           <form className="mt-8" onSubmit={handleSubmit(submitData)}>
-            <p className="my-8 flex gap-2">
+            <p className="my-8 flex  w-full justify-between">
               <InputFormat
                 type="text"
                 placeholder="First Name"

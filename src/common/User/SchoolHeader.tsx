@@ -34,7 +34,6 @@ const SchoolHeader = () => {
   const navigate = useNavigate();
   const [user] = useStore(getUserState);
   const [profile] = useStore(getProfileState);
-
   const handleDashboard = () => {
     if (user?.role === "teacher") {
       navigate("../teacherdashboard");
@@ -91,11 +90,7 @@ const SchoolHeader = () => {
 
           <div className="flex gap-8">
             <NavLink
-              to={
-                user?.role === "parent"
-                  ? "parenthomepage"
-                  : "/newlyregistereduser"
-              }
+              to={user?.role === "parent" ? "parent" : "/school"}
               className={({ isActive }) =>
                 isActive ? " text-[#8530C1]" : "text-black"
               }
@@ -220,7 +215,10 @@ const SchoolHeader = () => {
               <Menu.Dropdown>
                 <div className="flex flex-col py-2 px-2 ">
                   {profile.map((profile, index) => (
-                    <Menu.Item onClick={() => handleChangeProfile(profile.id)}>
+                    <Menu.Item
+                      key={index}
+                      onClick={() => handleChangeProfile(profile.id)}
+                    >
                       <button key={index}>{profile.name}</button>
                     </Menu.Item>
                   ))}

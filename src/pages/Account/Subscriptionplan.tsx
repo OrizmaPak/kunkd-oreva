@@ -4,9 +4,12 @@ import Button from "@/components/Button";
 import ArrowUp from "@/assets/colorArrowup.svg";
 import ArrowDown from "@/assets/colorArrowDown.svg";
 import { motion } from "framer-motion";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
 
 const Subscriptionplan = () => {
   const [openPlan, setOpenPlan] = useState(false);
+  const [user] = useStore(getUserState);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -35,24 +38,28 @@ const Subscriptionplan = () => {
             <span></span>
           </div>
         </div>
-        <div className="flex items-center gap-4">
-          <span
-            onClick={() => setOpenPlan((el) => !el)}
-            className="flex gap-2 cursor-pointer"
-          >
-            See avalaible plan
-            <img
-              loading="lazy"
-              src={openPlan ? ArrowDown : ArrowUp}
-              alt="arrow"
-            />
-          </span>
-          <hr className="flex-grow" />
-        </div>
-        {openPlan && (
-          <div className="flex  gap-20">
-            <PlanCard duration={12} amount={59.88} recommended />
-            <PlanCard duration={1} amount={4.99} />
+        {user?.role === "parent" && (
+          <div>
+            <div className="flex items-center gap-4">
+              <span
+                onClick={() => setOpenPlan((el) => !el)}
+                className="flex gap-2 cursor-pointer"
+              >
+                See avalaible plan
+                <img
+                  loading="lazy"
+                  src={openPlan ? ArrowDown : ArrowUp}
+                  alt="arrow"
+                />
+              </span>
+              <hr className="flex-grow" />
+            </div>
+            {openPlan && (
+              <div className="flex  gap-20">
+                <PlanCard duration={12} amount={59.88} recommended />
+                <PlanCard duration={1} amount={4.99} />
+              </div>
+            )}
           </div>
         )}
       </div>

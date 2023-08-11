@@ -6,11 +6,7 @@ import Bookmark from "@/assets/Bookmark.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
 import PreviousIcon from "@/assets/chevrondown.svg";
 import NextIcon from "@/assets/chevronup.svg";
-import { useState, useRef } from "react";
-import FastForward from "@/assets/fastforward.svg";
-import FastBackward from "@/assets/fastbackward.svg";
-import PauseIcon from "@/assets/pause.svg";
-import PlayIcon from "@/assets/play.svg";
+import { useState } from "react";
 import Congrats from "@/assets/congrats.svg";
 import { useGetContentById, useContentForHome } from "@/api/queries";
 import { getUserState } from "@/store/authStore";
@@ -18,6 +14,9 @@ import useStore from "@/store";
 import AfamBlur from "@/assets/afamblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import { Skeleton } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import CustomTTSComponent from "@/components/TTS";
 
 type TContentPage = {
   audio: string;
@@ -27,8 +26,15 @@ type TContentPage = {
   name: string;
   page_number: number;
 };
+
+type TSubCategory = {
+  sub_category_id: number;
+  sub_category_name: string;
+};
 export type TStoryContent = {
+  sub_category_name: any;
   category: string;
+  sub_categorie: TSubCategory[];
   category_id: number;
   content_type: string;
   content_type_id: number;
@@ -47,106 +53,53 @@ export type TStoryContent = {
   thumbnail: string;
 };
 
-// const data = [
-//   {
-//     id: 1,
-//     image: Poster1,
-//     title: "Chisom's Eco-Friendly Visit",
-//     author: "Dele and Louisa Olatuyi",
-//     aboutAuthor:
-//       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nobis perspiciatis aliquam, atque excepturi nemo harum, nulla doloremque nisi distinctio provident impedit sint odit? Asperiores, quod excepturi vel aliquam, dignissimos doloribus at magnam ducimus doloremque voluptate possimus officia aperiam repellat blanditiis omnis alias qui provident, ut deleniti assumenda aliquid! Facere, reprehenderit. ",
-
-//     overview:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus voluptatem facere suscipit, quidem fuga quaerat illum temporibus ut, magni explicabo molestiae in ullam? Nam voluptatem excepturi minima sunt. Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-//     content:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-//   },
-//   {
-//     id: 2,
-//     image: Poster1,
-//     title: "Chisom's Eco-Friendly Visit",
-//     author: "Dele and Louisa Olatuyi",
-//     aboutAuthor:
-//       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nobis perspiciatis aliquam, atque excepturi nemo harum, nulla doloremque nisi distinctio provident impedit sint odit? Asperiores, quod excepturi vel aliquam, dignissimos doloribus at magnam ducimus doloremque voluptate possimus officia aperiam repellat blanditiis omnis alias qui provident, ut deleniti assumenda aliquid! Facere, reprehenderit. ",
-
-//     overview:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus voluptatem facere suscipit, quidem fuga quaerat illum temporibus ut, magni explicabo molestiae in ullam? Nam voluptatem excepturi minima sunt. Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-//     content:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-//   },
-//   {
-//     id: 3,
-//     image: Poster1,
-//     title: "Chisom's Eco-Friendly Visit",
-//     author: "Dele and Louisa Olatuyi",
-//     aboutAuthor:
-//       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nobis perspiciatis aliquam, atque excepturi nemo harum, nulla doloremque nisi distinctio provident impedit sint odit? Asperiores, quod excepturi vel aliquam, dignissimos doloribus at magnam ducimus doloremque voluptate possimus officia aperiam repellat blanditiis omnis alias qui provident, ut deleniti assumenda aliquid! Facere, reprehenderit. ",
-
-//     overview:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus voluptatem facere suscipit, quidem fuga quaerat illum temporibus ut, magni explicabo molestiae in ullam? Nam voluptatem excepturi minima sunt. Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-//     content:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-//   },
-//   {
-//     id: 4,
-//     image: Poster1,
-//     title: "Chisom's Eco-Friendly Visit",
-//     author: "Dele and Louisa Olatuyi",
-//     aboutAuthor:
-//       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nobis perspiciatis aliquam, atque excepturi nemo harum, nulla doloremque nisi distinctio provident impedit sint odit? Asperiores, quod excepturi vel aliquam, dignissimos doloribus at magnam ducimus doloremque voluptate possimus officia aperiam repellat blanditiis omnis alias qui provident, ut deleniti assumenda aliquid! Facere, reprehenderit. ",
-
-//     overview:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus voluptatem facere suscipit, quidem fuga quaerat illum temporibus ut, magni explicabo molestiae in ullam? Nam voluptatem excepturi minima sunt. Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-//     content:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-//   },
-// ];
 const Stories1 = () => {
   const [isFinish, setIsFinish] = useState(false);
   const [startRead, setStartRead] = useState(false);
   const [user] = useStore(getUserState);
+  const contentId = localStorage.getItem("contentId");
 
   const params = useParams();
-  const { category, theme, id } = params;
+  const { category } = params;
 
-  // const story = storiesData.find((el) => `${el.id}` === id);
-  const { data } = useGetContentById(
-    id?.toString()!,
+  const { data, isLoading: contentIsLoading } = useGetContentById(
+    contentId?.toString()!,
     user?.user_id?.toString()!
   );
   const content = data?.data.data;
-  console.log(content);
   const { data: recommendedData, isLoading } = useContentForHome();
   const recommendedStories = recommendedData?.data.data.recommended_stories;
   const navigate = useNavigate();
-  console.log(
-    "------SubCat-------"
-    // content.sub_categories[0].sub_category_id!
-  );
+
   return (
     <div className=" ">
       <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] ">
-        {/* <div className="flex flex-col h-full"> */}
-
         <div className=" ">
-          {content && (
-            <StoriesNav
-              category={category}
-              genre={content.sub_categories[0].sub_category_name!}
-              title={content.name}
-              subCategoryId={content.sub_categories[0].sub_category_id!}
-            />
-          )}
+          {
+            <Skeleton visible={contentIsLoading}>
+              <StoriesNav
+                category={category && category}
+                genre={content && content.sub_categories[0].sub_category_name!}
+                title={content && content.name}
+                subCategoryId={
+                  content && content.sub_categories[0].sub_category_id!
+                }
+                slug={content && content.sub_categories[0].sub_category_name!}
+              />
+            </Skeleton>
+          }
         </div>
-        <div className="flex-grow  h-full ">
-          <div className="flex-grow mt-5 rounded-2xl">
+        <div className="flex-grow  h-full   ">
+          <div className="flex-grow mt-5 rounded-2xl ">
             {!isFinish ? (
               <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
                 {!startRead && (
-                  <AboutPage
-                    story={content}
-                    setStartRead={() => setStartRead(true)}
-                  />
+                  <Skeleton visible={contentIsLoading}>
+                    <AboutPage
+                      story={content}
+                      setStartRead={() => setStartRead(true)}
+                    />
+                  </Skeleton>
                 )}
 
                 {content && startRead && (
@@ -168,11 +121,7 @@ const Stories1 = () => {
                         <CardHome
                           {...props}
                           goTo={() => {
-                            navigate(
-                              `../../${props.category?.toLowerCase()}/${props.theme?.toLowerCase()}/${
-                                props.id
-                              }`
-                            );
+                            navigate(`../sub/${props.slug?.toLowerCase()}`);
                             setStartRead(false);
                           }}
                         />
@@ -182,7 +131,7 @@ const Stories1 = () => {
                 </div>
               </div>
             ) : (
-              <WelDone />
+              <WelDone content={content} />
             )}
           </div>
         </div>
@@ -283,11 +232,7 @@ const ReadPage = ({
   const [isReading, setIsReading] = useState(false);
   const [page, setPage] = useState(0);
   const pageTotal = content.length - 1;
-  const customScrollbarStyle = {
-    WebkitScrollbar: {
-      width: "10px",
-    },
-  };
+  const [pageNumber, setPageNumber] = useState(1);
   return (
     <div className="flex py-16 bg-white  rounded-3xl px-16">
       <div className=" basis-3/4 flex  items-center">
@@ -315,19 +260,30 @@ const ReadPage = ({
               <p className="inline">Read to me</p>
             </button>
           </p>
-          {/* <p>{content[3].web_body}</p> */}
-          <article
-            className=" leading-10 flex h-[350px] overflow-y-auto  text-[16px] font-medium font-Hanken pr-8 text-justify "
-            dangerouslySetInnerHTML={{ __html: content[page].web_body }}
-          />
+          {!isReading && (
+            <p className=" leading-10 flex h-[350px] overflow-y-auto  text-[16px] font-medium font-Hanken pr-8 text-justify ">
+              {content[page].web_body}
+            </p>
+          )}
         </div>
 
         <div className="mt-8">
           {isReading ? (
-            <AudioControls
-              audio={content[page].audio}
+            <CustomTTSComponent
               setIsFinish={setIsFinish}
-            />
+              pageNumber={pageNumber}
+              pageTotal={pageTotal}
+              autoPlay={pageNumber !== 1}
+              setPageNumber={() => {
+                if (pageNumber === pageTotal) {
+                  return;
+                }
+                setPageNumber((prev) => prev + 1);
+              }}
+              highlight
+            >
+              {content[pageNumber].web_body}
+            </CustomTTSComponent>
           ) : (
             <BookPagination
               setIsFinish={setIsFinish}
@@ -412,89 +368,19 @@ const BookPagination = ({
   );
 };
 
-const AudioControls = ({
-  audio,
-  setIsFinish,
-}: {
-  audio?: string;
-  setIsFinish: () => void;
-}) => {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [ended, setEnded] = useState(false);
-
-  // const [audioDuration, setAudioDuration] = useState(audioRef.current);
-
-  const handlePlayControl = () => {
-    const audioCon = audioRef.current;
-    console.log("audio played", audioCon);
-    setEnded(false);
-    setIsPlaying(!isPlaying);
-    if (audioCon && !audioCon.paused) {
-      return audioCon.pause();
-    }
-    audioRef?.current?.play();
-  };
-
-  const handeSkip10 = (direction: "forward" | "backward") => () => {
-    const audioCon = audioRef.current;
-    setEnded(false);
-    const duration = audioCon?.duration || 0;
-    const currentTime = audioCon?.currentTime || 0;
-
-    console.log("duration", audioCon?.duration, audioCon?.currentTime);
-    if (audioCon && direction === "forward") {
-      audioCon.currentTime +=
-        currentTime + 10 > duration ? duration - currentTime : 10;
-      return;
-    } else if (audioCon && direction === "backward") {
-      audioCon.currentTime -= currentTime - 10 < 0 ? currentTime : 10;
-      return;
-    }
-  };
-  // const { story_type, id } = useParams();
-  // const navigate = useNavigate();
-  return (
-    <div className="flex justify-center ">
-      <audio
-        onEnded={() => {
-          setIsPlaying(false);
-          setEnded(true);
-        }}
-        ref={audioRef}
-        src={audio}
-      ></audio>
-      <div className="flex justify-end rounded-full h-[60px] gap-10 px-20 py-4 bg-[#FBECFF] items-center ">
-        <button onClick={handeSkip10("backward")}>
-          <img loading="lazy" src={FastBackward} alt="backward" />
-        </button>
-        <button onClick={handlePlayControl}>
-          <img
-            src={isPlaying ? PauseIcon : PlayIcon}
-            alt=""
-            className="w-[40px]"
-          />
-        </button>
-        <button onClick={handeSkip10("forward")}>
-          <img loading="lazy" src={FastForward} alt="forward" />
-        </button>
-      </div>
-      {ended && (
-        <div className="flex items-end">
-          <button
-            onClick={setIsFinish}
-            className=" px-14 bg-green-700 text-[16px] py-4 h-[60px] text-white  rounded-full ml-10"
-          >
-            Finish
-          </button>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const WelDone = () => {
+const WelDone = ({ content }: { content: TStoryContent }) => {
   const navigate = useNavigate();
+  const navigateQuiz = () => {
+    localStorage.setItem("content", JSON.stringify(content));
+    if (content.has_quiz === true) {
+      navigate("quiz");
+    } else {
+      notifications.show({
+        title: `Notification`,
+        message: "Quiz is not available for this content",
+      });
+    }
+  };
   return (
     <div className=" min-h-[calc(92vh-72px-8vh-34px)] h-[100%] flex-grow mt-4 flex justify-center bg-white rounded-3xl items-center">
       <div>
@@ -511,17 +397,19 @@ const WelDone = () => {
             Well Done!
           </h1>
           <p className="text-[#7E7E89] text-[18px]">
-            You have just finished reading Chisom’s Eco-friendly Visit.
+            You have just finished reading {content?.pages[0].name}
           </p>
         </div>
         <p className="flex flex-col gap-y-3 mt-8">
           <button
-            onClick={() => navigate("quiz")}
+            onClick={navigateQuiz}
             className="px-16 py-3 bg-[#8530C1] text-white rounded-2xl"
           >
             Take quiz
           </button>
-          <button className="text-[18px]">Later</button>
+          <button onClick={() => navigate(-1)} className="text-[18px] mt-2">
+            Later
+          </button>
         </p>
       </div>
     </div>

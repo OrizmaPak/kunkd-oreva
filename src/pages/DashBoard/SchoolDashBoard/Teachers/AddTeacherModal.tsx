@@ -31,7 +31,7 @@ const AddTeacherModal = ({
         <AddTeacherForm handleContinue={handleContinue} />
       )}
 
-      {modalStep === STEP_2 && <UploadPicture toggle={toggle} />}
+      {modalStep === STEP_2 && <UploadPicture btnTitle="Continue" />}
     </Modal>
   );
 };

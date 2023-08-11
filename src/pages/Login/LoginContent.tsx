@@ -27,6 +27,7 @@ import { getApiErrorMessage } from "@/api/helper";
 import { TUser } from "@/api/types";
 import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
+// import { PasswordInput } from "@mantine/core";
 
 const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
@@ -111,7 +112,7 @@ const LoginContent = () => {
           });
 
           if (res?.role === "schoolAdmin") {
-            navigate("/newlyregistereduser");
+            navigate("/school");
           } else {
             navigate("/selectprofile");
           }
@@ -225,7 +226,7 @@ const LoginContent = () => {
             </button>
           </p> */}
         </form>
-        <p className="flex items-center justify-items-center py-2 gap-3  text-gray-400 font-400">
+        <p className="flex items-center justify-items-center py-10 gap-3  text-gray-400 font-400">
           <hr className="flex-1" />
           <span>or continue with</span> <hr className="flex-1" />
         </p>

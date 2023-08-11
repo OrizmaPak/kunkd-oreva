@@ -15,6 +15,11 @@ import type {
   TGoogleSignUpData,
   TContentForHome,
   TUdateSchProfileData,
+  TUdateParentProfileData,
+  TUdateSchImageData,
+  TVerifyPinData,
+  TUdateParentImageData,
+  TPayStackInitData,
 } from "./types";
 
 // School
@@ -108,6 +113,14 @@ export const GetAudioBooks = () => {
   return axios.get("/audiobook/page");
 };
 
+export const GetTrendingAudioBooks = () => {
+  return axios.get("/audiobook/content/trending");
+};
+
+export const GetPlans = () => {
+  return axios.get("/subscription/plans");
+};
+
 export const ResendOTP = (payload: TLoginData) => {
   return axios.post("/otp/resend", payload);
 };
@@ -118,16 +131,11 @@ export const SocialLogin = (payload: TLoginData) => {
 };
 
 export const UpdateSchProfile = (payload: TUdateSchProfileData) => {
-  const formData = new FormData();
-  formData.append("contact_name", payload?.contact_name);
-  formData.append("email", payload?.email);
-  formData.append("phone", payload?.phone);
-  formData.append("state_id", payload?.state_id);
-  formData.append("post_code", payload?.post_code);
-  formData.append("tax_id", payload?.tax_id);
-  formData.append("country_code", payload.country_id);
+  return axios.patch("/profile/school", payload);
+};
 
-  return axios.patch("/profile/school", formData);
+export const UpdateParentProfile = (payload: TUdateParentProfileData) => {
+  return axios.patch("/profile/parent", payload);
 };
 
 // GEt all countries
@@ -139,4 +147,53 @@ export const GetCountries = () => {
 
 export const GetStates = () => {
   return axios.get("/states/161");
+};
+
+export const VerifyPin = (payload: TVerifyPinData) => {
+  return axios.post("/user/pin/verify", payload);
+};
+
+export const UpdateSchoolNameAddress = (payload: TVerifyPinData) => {
+  return axios.patch("/profile/school/name", payload);
+};
+
+// QIUZ
+export const GetQuiz = (contentId: string) => {
+  return axios.get(`/quiz/${contentId}`);
+};
+
+export const GetRecommendedVideo = (contentId: string) => {
+  return axios.get(`/recommended/content/${contentId}`);
+};
+
+export const UpdateSchImage = (payload: TUdateSchImageData) => {
+  const formData = new FormData();
+  if (payload.backgroundImage) {
+    formData.append(
+      "background_image",
+      payload?.backgroundImage as string | Blob
+    );
+  } else {
+    formData.append("profile_image", payload?.profileImage as string | Blob);
+  }
+
+  return axios.patch("/profile/school/image", formData);
+};
+
+export const UpdateParentImage = (payload: TUdateParentImageData) => {
+  const formData = new FormData();
+  formData.append("image", payload?.image as string | Blob);
+  return axios.patch("/profile/image", formData);
+};
+
+export const PayStackInit = (payload: TPayStackInitData) => {
+  return axios.post("/subscribe/paystack/init", payload);
+};
+
+export const VerifyCompletePayStack = (payload: TPayStackInitData) => {
+  return axios.post("/subscribe/paystack/verify", payload);
+};
+
+export const StripeInit = (payload: TPayStackInitData) => {
+  return axios.post("/subscribe/stripe/init", payload);
 };

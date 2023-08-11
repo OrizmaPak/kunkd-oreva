@@ -3,13 +3,7 @@ import Hero from "@/pages/Library/LibraryNotPaid/Hero";
 import CardHome from "@/common/User/CardHome";
 import InnerWrapper from "../../common/User/InnerWrapper";
 
-import {
-  Route,
-  Routes,
-  useNavigate,
-  useParams,
-  Outlet,
-} from "react-router-dom";
+import { Route, Routes, useNavigate, Outlet } from "react-router-dom";
 import BookLayout from "./BookLayout";
 import Chisomcard from "@/assets/Chisomcard.svg";
 import Gorillacard from "@/assets/Gorillacard.svg";
@@ -23,11 +17,11 @@ import Mamacard from "@/assets/mamacard.svg";
 import Puffcard from "@/assets/puffcard.svg";
 import AudioBookOne from "@/audiobooks/QueenMoremi.mp3";
 import AudioBanner from "@/assets/audiobanner.svg";
-import TimeIcon from "@/assets/timeIcon.svg";
-import PlayIcon from "@/assets/play.svg";
-import Slider from "react-slick";
+// import TimeIcon from "@/assets/timeIcon.svg";
+// import PlayIcon from "@/assets/play.svg";
+// import Slider from "react-slick";
 import { Skeleton } from "@mantine/core";
-import { useState } from "react";
+// import { useState } from "react";
 import { useGetAudioBoks } from "@/api/queries";
 // import { useNavigate } from "react-router-dom";
 
@@ -240,7 +234,7 @@ const AudioBooks = () => {
             <Route element={<MainStoriesLayout />}>
               <Route index element={<Books />}></Route>
             </Route>
-            <Route path="audiobooks/:id" element={<BookLayout />}></Route>
+            <Route path=":id" element={<BookLayout />}></Route>
           </Routes>
         </InnerWrapper>
       </Wrapper>
@@ -283,7 +277,12 @@ const Books = () => {
               .fill(1)
               .map((arr, index) => (
                 <Skeleton visible={isLoading}>
-                  <div className="h-[200px] w-[200px]"></div>{" "}
+                  <div
+                    key={index}
+                    className="h-[200px] w-[200px] text-transparent"
+                  >
+                    {arr}
+                  </div>
                 </Skeleton>
               ))}
           {audioBooks?.map((audiobook: TAudioBooks, index: number) => {
@@ -292,7 +291,11 @@ const Books = () => {
                 <CardHome
                   key={index}
                   {...audiobook}
-                  goTo={() => navigate(`audiobooks/${audiobook?.id}`)}
+                  goTo={() =>
+                    navigate(
+                      `${audiobook?.slug?.replace(/\s/g, "_")!?.toLowerCase()}`
+                    )
+                  }
                 />
               </>
             );

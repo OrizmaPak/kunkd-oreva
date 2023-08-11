@@ -67,7 +67,7 @@ const KundaKidsUnlimitedContent = () => {
         </span>
       </Link>
       <button
-        onClick={() => navigate("/newlyregistereduser")}
+        onClick={() => navigate("/school")}
         className="absolute right-24 bottom-14 flex justify-center items-center gap-4"
       >
         <p className="text-[16px] font-Hanken font-semibold">Continue free </p>
