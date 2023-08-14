@@ -1,12 +1,13 @@
-import Video1 from "@/assets/video1.svg";
+// import Video1 from "@/assets/video1.svg";
 import { useGetIntroVideo } from "@/api/queries";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useCallback, useRef } from "react";
+import { Skeleton } from "@mantine/core";
 
 const VideoCard = () => {
   const { data, isLoading } = useGetIntroVideo();
   console.log(data);
-  const { ref, inView, entry } = useInView({
+  const { ref, inView } = useInView({
     /* Optional options */
     threshold: 0,
   });
@@ -36,15 +37,17 @@ const VideoCard = () => {
     <div className="flex justify-center items-center mb-28">
       {/* <Status inView={inView} /> */}
       {/* <img loading="lazy" src={Video1} alt="" /> */}
-      <video
-        src={data?.data.data.url}
-        autoPlay={!inView}
-        controls
-        height={605}
-        width={1000}
-        ref={setRefs}
-        className=" rounded-2xl"
-      ></video>
+      <Skeleton visible={isLoading}>
+        <video
+          src={data?.data.data.url}
+          autoPlay={!inView}
+          controls
+          height={605}
+          width={1000}
+          ref={setRefs}
+          className=" rounded-2xl"
+        ></video>
+      </Skeleton>
     </div>
   );
 };

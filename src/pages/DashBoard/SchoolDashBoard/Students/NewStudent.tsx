@@ -8,9 +8,8 @@ const NewStudent = () => {
 
   return (
     <>
-      {/* <Button onClick={toggle} size="sm" varient="filled"> */}
-      <button className=" bg-[#8530C1] w-[200px] h-[32]">
-        <span className="flex  h-[50px] justify-between items-center gap-2">
+      <Button onClick={toggle} size="sm" varient="filled">
+        <span className="flex  justify-between items-center gap-2">
           <img
             loading="lazy"
             src={StudentIcon}
@@ -19,8 +18,7 @@ const NewStudent = () => {
           />
           <span>Add new Student</span>
         </span>
-      </button>
-      {/* </Button> */}
+      </Button>
       {opened ? <AddTeacherModal opened={opened} toggle={toggle} /> : null}
     </>
   );
