@@ -16,7 +16,7 @@ const EditClassTeachers = ({
   return (
     <div className="px-10">
       <h1 className="text-center font-bold font-Recoleta text-[25px]">
-        Edit class teacher
+        Edit Class Teachers
       </h1>
       <div>
         <div>
@@ -44,7 +44,7 @@ const EditClassTeachers = ({
           )}
         </div>
       </div>
-      <p className="px-10 my-10">
+      <p className=" my-10">
         <Button>Save</Button>
       </p>
     </div>

@@ -1,4 +1,4 @@
-import Pupils from "@/assets/pupils.svg";
+// import Pupils from "@/assets/pupils.svg";
 import ServiceCard from "./ServiceCard";
 import { CardTypes } from "../Home/ClientCard";
 import Service4 from "@/assets/service1.svg";
@@ -11,7 +11,8 @@ import MacBookBlur from "@/assets/MacBook1blur.jpg";
 import LadyBgBlur from "@/assets/ladybgBlur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import PupilsBlur from "@/assets/pupilsblur.jpg";
+// import PupilsBlur from "@/assets/pupilsblur.jpg";
+import VideoCard from "@/components/VideoCard";
 
 const Serviceontent = () => {
   const servicesData: CardTypes[] = [
@@ -92,14 +93,15 @@ const Serviceontent = () => {
           captivate and inspire your child's love for reading.
         </p>
         <div className="mt-14">
-          {/* <img loading="lazy" src={Pupils} alt="pupils" /> */}
+          {/* <img loading="lazy" src={Pupils} alt="pupils" />
           <LazyLoadImage
             src={Pupils}
             placeholderSrc={PupilsBlur}
             effect="blur"
             width={1075.79}
             height={605.13}
-          />
+          /> */}
+          <VideoCard />
         </div>
       </div>
     </div>

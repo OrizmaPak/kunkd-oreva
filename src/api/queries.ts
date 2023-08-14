@@ -35,6 +35,7 @@ import {
   StripeInit,
   GetTrendingAudioBooks,
   GetRecommendedVideo,
+  GetIntroVideo,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -190,6 +191,13 @@ export const useGetAudioBoks = () => {
   return useQuery({
     queryKey: ["getAudioBooks"],
     queryFn: () => GetAudioBooks(),
+  });
+};
+
+export const useGetIntroVideo = () => {
+  return useQuery({
+    queryKey: ["getIntroVideo"],
+    queryFn: () => GetIntroVideo(),
   });
 };
 

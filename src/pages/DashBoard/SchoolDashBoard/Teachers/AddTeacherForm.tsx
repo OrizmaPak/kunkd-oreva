@@ -1,8 +1,8 @@
 import Button from "@/components/Button";
 import InputFormat from "@/common/InputFormat";
 import EmailIcon from "@/assets/emaillogo.svg";
-import PasswordIcon from "@/assets/passwordIcon.svg";
-import PasswordEye from "@/assets/passwordeye.svg";
+// import PasswordIcon from "@/assets/passwordIcon.svg";
+// import PasswordEye from "@/assets/passwordeye.svg";
 import { motion } from "framer-motion";
 
 const AddTeacherForm = ({ handleContinue }: { handleContinue: () => void }) => {
@@ -13,14 +13,14 @@ const AddTeacherForm = ({ handleContinue }: { handleContinue: () => void }) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
     >
-      <div className="p-4">
+      <div className="p-4 px-8">
         <div>
           <h1 className="font-bold  font-Recoleta text-center mb-8">
             Add New Teacher
           </h1>
         </div>
         <form>
-          <div className="flex gap-2 mb-2">
+          <div className="flex gap-2 mb-8">
             <div className="flex-grow">
               <label htmlFor="firstname">Enter first Name</label>
               <InputFormat placeholder="First name" type="text" />
@@ -30,7 +30,7 @@ const AddTeacherForm = ({ handleContinue }: { handleContinue: () => void }) => {
               <InputFormat placeholder="Last name" type="text" />
             </div>
           </div>
-          <div className="mb-4">
+          <div className="mb-8">
             <label htmlFor="email">Enter Email Address</label>
             <InputFormat
               type="email"
@@ -38,7 +38,7 @@ const AddTeacherForm = ({ handleContinue }: { handleContinue: () => void }) => {
               leftIcon={<img loading="lazy" src={EmailIcon} alt="icon" />}
             />
           </div>
-          <div className="flex gap-2 mb-2">
+          {/* <div className="flex gap-2 mb-2">
             <div className=" flex-grow">
               <label htmlFor="password">Enter Password</label>
               <InputFormat
@@ -65,9 +65,9 @@ const AddTeacherForm = ({ handleContinue }: { handleContinue: () => void }) => {
                 }
               />
             </div>
-          </div>
+          </div> */}
 
-          <div className="flex gap-2 mb-2">
+          <div className="flex gap-2 mb-8">
             <div className="flex-grow">
               <label htmlFor="class">Assign to a class</label>
               <p className="border border-[#F3DAFF] py-4 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">

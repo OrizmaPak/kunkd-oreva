@@ -16,7 +16,7 @@ const NewTeacher = () => {
         transition={{ duration: 1 }}
       >
         <Button onClick={toggle} size="sm" varient="filled">
-          <span className="flex  justify-between items-center gap-2">
+          <span className="flex  h-[34px]  px-3 justify-between items-center gap-2">
             <img loading="lazy" src={AddTeacherIcon} alt="" />
             <span className="py-1">Add new teacher</span>
           </span>

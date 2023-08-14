@@ -117,6 +117,10 @@ export const GetTrendingAudioBooks = () => {
   return axios.get("/audiobook/content/trending");
 };
 
+export const GetIntroVideo = () => {
+  return axios.get("intro/video");
+};
+
 export const GetPlans = () => {
   return axios.get("/subscription/plans");
 };

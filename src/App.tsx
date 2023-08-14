@@ -82,6 +82,7 @@ function App() {
   }, []);
   return (
     <BrowserRouter>
+      {/* <div className="App max-w-[1444px] mx-auto "></div> */}
       <div className="App ">
         <ScrollToTop />
         {/* <Button onClick={log}></Button> */}

@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import { audioBooksData, StoriesType } from "./AudioBooks";
 import CardScreen from "@/common/User/CardScreen";
 import Card from "@/common/User/Card";
@@ -14,7 +14,7 @@ import VolumeIcon from "@/assets/volumeIcon.svg";
 import AudioBooksNav from "./AudioBooksNav";
 import { Slider, MantineProvider } from "@mantine/core";
 import { useReducedMotion } from "@mantine/hooks";
-import { useGetContentById, useGetTrendingAudioBooks } from "@/api/queries";
+import { useGetContentById } from "@/api/queries";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store";
 import AfamBlur from "@/assets/afamblur.jpg";
@@ -22,6 +22,9 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { Skeleton } from "@mantine/core";
 // import { Badge, Button, MantineProvider } from "@mantine/core";
+// import ReactAudioPlayer from "react-audio-player";
+// import axios from "axios";
+// import { useQuery } from "@tanstack/react-query";
 
 type TAudioBook = {
   name: string;
@@ -41,10 +44,10 @@ const BookLayout = () => {
   const audiobook = data?.data.data.media[0];
   // console.log(audiobook);
   const [startRead, setStartRead] = useState(false);
-  const { state } = useLocation();
-  console.log(state);
-  const { data: trendingData } = useGetTrendingAudioBooks();
-  console.log("Trending Audios ", trendingData);
+  // const { state } = useLocation();
+  // console.log(state);
+  // const { data: trendingData } = useGetTrendingAudioBooks();
+  // console.log("Trending Audios ", trendingData);
   return (
     <div className=" ">
       <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd]  ">
@@ -213,11 +216,13 @@ const ReadPage = ({ audiobook }: { audiobook: TAudioBook }) => {
 };
 
 const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
+  console.log("file", audio);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   // const progressBar = useRef<HTMLInputElement>(null);
   const [currentTTime, setCurrentTTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [durationn, setDuration] = useState(0);
+  const [load, setLoad] = useState(false);
 
   const handlePlayControl = () => {
     const audioCon = audioRef.current;
@@ -234,42 +239,46 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
     const duration = audioCon?.duration || 0;
     console.log(direction, duration);
     const currentTime = audioCon?.currentTime || 0;
-    console.log(currentTime + 0.1);
-    if (!audioCon) return;
-    audioCon.currentTime = currentTime + 0.2;
+    console.log({ currentTime, currentPlus: currentTTime + 1 });
+    if (!audioCon?.currentTime) return;
+    // audioCon.currentTime = currentTime + 1;
     // console.log("duration", audioCon?.duration, audioCon?.currentTime);
-    // if (audioCon && direction === "forward") {
-    //   audioCon.currentTime += 0.1;
-    //   // currentTime + 10 > duration ? duration - currentTime : 10;
-    //   return;
-    // } else if (audioCon && direction === "backward") {
-    //   audioCon.currentTime -= currentTime - 10 < 0 ? currentTime : 10;
-    //   return;
-    // }
+    if (audioCon?.currentTime && load && direction === "forward") {
+      audioCon.currentTime += 2;
+      // currentTime + 10 > duration ? duration - currentTime : 10;
+    } else if (audioCon.currentTime && load && direction === "backward") {
+      // audioCon.currentTime -= currentTime - 10 < 0 ? currentTime : 10;
+      audioCon.currentTime += 2;
+    }
   };
 
   const max = 20;
 
   useEffect(() => {
     let seconds;
-    console.log("effect duration", audioRef.current?.duration);
     if (audioRef.current) {
+      console.log("effect duration", audioRef.current?.duration);
       seconds = Math.floor(audioRef?.current.duration);
       setDuration(+seconds);
     }
     // if (progressBar?.current) {
     //   progressBar.current.max = seconds?.toString() || "";
     // }
-  }, [audioRef?.current?.onloadedmetadata, audioRef?.current?.readyState]);
+  }, [
+    audioRef?.current?.onloadedmetadata,
+    audioRef?.current?.readyState,
+    audioRef?.current?.onload,
+    audioRef?.current?.oncanplaythrough,
+  ]);
 
-  useEffect(() => {
-    audioRef?.current?.addEventListener("ontimeupdate", (event) => {
-      setCurrentTTime(+event?.currentTarget! as number);
-    });
-    audioRef?.current?.addEventListener("onend", () => {
-      setIsPlaying(false);
-    });
-  }, []);
+  // useEffect(() => {
+  //   audioRef?.current?.addEventListener("ontimeupdate", (event) => {
+  //     setCurrentTTime(+event?.currentTarget! as number);
+  //   });
+  //   audioRef?.current?.addEventListener("onend", () => {
+  //     setIsPlaying(false);
+  //   });
+  // }, []);
 
   const calculateTime = (secs: number) => {
     // console.log("sec", secs);
@@ -288,10 +297,10 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
   const reducedMotion = useReducedMotion();
 
   const handleSliderChange = (value: number) => {
-    console.log("new current time", value);
     setCurrentTTime(value);
-    if (audioRef.current) {
-      audioRef.current.currentTime = value;
+    console.log("new current time", audioRef.current?.duration, value, load);
+    if (load && audioRef.current) {
+      audioRef.current.currentTime = 10;
     }
     return value;
   };
@@ -305,9 +314,50 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
       audioRef.current.volume = volume;
     }
   };
-  const [, setLoad] = useState(false);
+
+  // const [currentTime, setCurrentTime] = useState(0);
+  // const fetchAudioData = async (currentTime: number) => {
+  //   const url = audio ?? ""; // Replace with your audio file URL
+
+  //   console.log("url", url);
+  //   const headers = {
+  //     Range: `bytes=${currentTime * 128}`, // Assuming 128 bytes per second
+  //   };
+
+  //   const response = await axios.get(url, {
+  //     headers,
+  //     responseType: "blob",
+  //   });
+  //   return response.data;
+  // };
+
+  // const { data, error, status } = useQuery({
+  //   queryKey: ["audio", currentTime],
+  //   queryFn: () => fetchAudioData(currentTime),
+
+  //   // enabled: false, // Disabled by default, enabled on seek
+  // });
+
+  // console.log(" reess", data);
+
+  // const handleSeek = () => {
+  //   if (audioRef.current) {
+  //     console.log("seeking");
+  //     setCurrentTime(audioRef?.current?.currentTime);
+  //   }
+  // };
+
+  // const audioRef = React.createRef();
+
+  // const blbAudio = data ? URL.createObjectURL(data) : audio;
+  // console.log("blbAudio", blbAudio);
   return (
     <div className="h-[229px]">
+      {/* <audio ref={audioRef} controls autoPlay onTimeUpdate={handleSeek}>
+        <source src={blbAudio} />
+        Your browser does not support the audio element.
+      </audio> */}
+
       <h1 className="text-[22px] font-semibold text-[#151515]">{title}</h1>
       <div className="my-3 flex justify-center items-center gap-2 mt-8">
         {/* <p className=" flex-grow w-20">
@@ -345,15 +395,19 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
             <Slider
               color="ocean-blue.0"
               // backgroundColor=""
+
               value={currentTTime}
-              onChange={handleSliderChange}
+              onChange={(event) => {
+                handleSliderChange(event);
+                // handleSeek();
+              }}
               min={0}
-              max={duration}
+              max={durationn}
               step={0.1}
               label={`Duration: ${calculateTime(currentTTime)}`}
               disabled={reducedMotion}
               // onLoadedMetadata={handleTimeUpdate}
-              // onTimeUpdate={handleTimeUpdate}
+              // onTimeUpdate={handleUpdate}
             />
           </MantineProvider>
         </p>
@@ -368,7 +422,7 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
 
       <div className="flex  justify-between ">
         <p>{currentTTime && calculateTime(currentTTime)}</p>
-        <p>{duration ? calculateTime(duration) : `0:00`}</p>
+        <p>{durationn ? calculateTime(durationn) : `0:00`}</p>
       </div>
 
       <div className="flex justify-between mt-8">
@@ -377,15 +431,28 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
             id="audio-book"
             onTimeUpdate={(event) => {
               setCurrentTTime(+event.currentTarget.currentTime);
+              // handleSeek();
             }}
             onEnded={() => {
               setIsPlaying(false);
               // setEnded(true);
             }}
+            onCanPlayThrough={(event) => {
+              setCurrentTTime(+event.currentTarget.currentTime);
+            }}
             ref={audioRef}
-            src={audio!}
-            onLoad={() => setLoad(true)}
-          ></audio>
+            src={audio && audio}
+            // src={blbAudio}
+            // onLoadedMetadata={() => setLoad(true)}
+            // onLoad={() => setLoad(true)}
+            onCanPlay={(event) => {
+              setCurrentTTime(+event.currentTarget.currentTime);
+              setLoad(true);
+            }}
+          >
+            {/* <source src={blbAudio} /> */}
+            {/* <source src={audio && audio} type="audio/mpeg" /> */}
+          </audio>
           <div className="flex h-[72px] justify-end rounded-full gap-10 px-10 py-4 bg-[#FBECFF] items-center ">
             <button onClick={handeSkip10("backward")}>
               <img

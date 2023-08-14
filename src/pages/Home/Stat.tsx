@@ -8,7 +8,7 @@ type Props = {
 };
 const WaveCard = ({ children }: Props) => {
   return (
-    <div className="mt-[-250px] relative ">
+    <div className="mt-[-250px] relative z-[100] ">
       <img
         src={Six}
         alt=""

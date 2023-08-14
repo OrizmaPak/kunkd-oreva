@@ -6,12 +6,14 @@ import Arrow from "@/assets/arrow.svg";
 import GroupBlur from "@/assets/groupblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import { useNavigate } from "react-router-dom";
 
 const HeroContent = () => {
+  const navigate = useNavigate();
   return (
-    <div>
+    <div className=" z-[1000]">
       <div className="absolute top-40  left-40">
-        <p className="font-bold text-[36px] text-[#8530C1]  font-Recoleta">
+        <p className="font-bold text-[36px] text-[#8530C1]  font-Recoleta ">
           Introducing Kunda Kids
         </p>
         <h1 className="text-[62px] font-bold font-Recoleta leading-[70px] ">
@@ -26,7 +28,13 @@ const HeroContent = () => {
             platform dedicated to raising reading leaders across Africa{" "}
           </p>
         </div>
-        <Button size="md">Create free account</Button>
+        <Button
+          onClick={() => navigate("/signup")}
+          size="md"
+          className=" cursor-pointer  z-[1000]"
+        >
+          Create free account
+        </Button>
       </div>
       <div>
         <LazyLoadImage

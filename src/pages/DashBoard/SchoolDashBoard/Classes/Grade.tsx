@@ -54,10 +54,10 @@ const Grade = ({
           </div>
         </div>
 
-        <div className="flex  gap-4  justify-center my-10 px-10">
+        <div className="flex  gap-4  justify-center mt-5 px-10">
           <button
             onClick={handleClick}
-            className="py-3 px-5 bg-red-600 text-white rounded-full flex-grow"
+            className="py-2 px-5 h-[42px] w-[260px] bg-red-600 text-white rounded-full flex-grow"
           >
             Delete class
           </button>

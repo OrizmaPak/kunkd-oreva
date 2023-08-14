@@ -9,7 +9,7 @@ const EditAssignedClass = ({ onClose }: { onClose: () => void }) => {
         <form>
           <div>
             <label htmlFor="assigntoclass">Assign to a class</label>
-            <p className="border border-[#F3DAFF] py-4 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
+            <p className="border border-[#F3DAFF] py-4 mb-10 px-8 rounded-full flex items-center gap-2 mt-2   ">
               <select
                 name=""
                 id=""

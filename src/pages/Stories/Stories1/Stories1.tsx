@@ -261,7 +261,7 @@ const ReadPage = ({
             </button>
           </p>
           {!isReading && (
-            <p className=" leading-10 flex h-[350px] overflow-y-auto  text-[16px] font-medium font-Hanken pr-8 text-justify ">
+            <p className=" leading-10 flex h-[350px] overflow-y-auto  text-[20px] font-medium font-Hanken pr-8 text-justify ">
               {content[page].web_body}
             </p>
           )}

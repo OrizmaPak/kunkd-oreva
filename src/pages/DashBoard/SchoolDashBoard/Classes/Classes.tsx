@@ -214,9 +214,9 @@ const Classes = () => {
           </div>
           <div className="flex justify-center">
             <Button onClick={() => newClassOpen()} size="md">
-              <span className="flex  justify-end items-end gap-2">
+              <span className="flex  h-[32px] w-[] justify-center items-center gap-2">
                 <img loading="lazy" src={ClassesIcon} alt="" />
-                <span>Create class</span>
+                <span>Add new class</span>
               </span>
             </Button>
           </div>

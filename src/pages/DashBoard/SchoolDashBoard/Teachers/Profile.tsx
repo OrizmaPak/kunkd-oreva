@@ -17,7 +17,12 @@ const Profile = ({
     <div className="p-3">
       <div className="flex gap-4">
         <div>
-          <img loading="lazy" src={image} alt="image" className="w-[250px]" />
+          <img
+            loading="lazy"
+            src={image}
+            alt="image"
+            className="w-[176px] h-[176px] rounded-full "
+          />
         </div>
         <div className=" flex-1 px-8">
           <div className="flex flex-col  ">
@@ -83,7 +88,7 @@ const Profile = ({
         </button> */}
         <button
           onClick={handleClick}
-          className="p-4 px-10 bg-red-600 text-white rounded-full flex-grow"
+          className="p-3 px-10 bg-red-600 text-white rounded-full flex-grow"
         >
           Remove
         </button>

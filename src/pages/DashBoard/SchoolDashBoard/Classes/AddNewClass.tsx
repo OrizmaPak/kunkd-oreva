@@ -6,11 +6,11 @@ const AddNewClass = () => {
       <h1 className="text-center font-Recoleta text-[30px]">Add new class</h1>
       <div>
         <form action="">
-          <p className="my-5">
+          <p className="my-5  mb-8">
             <label htmlFor="classname">Class name</label>
             <InputFormat type="text" placeholder="Enter classs name" />
           </p>
-          <p className="my-5">
+          <p className="my-5 mb-8">
             <label htmlFor="assignteacher">Assign teacher</label>
             <p className="border border-[#F3DAFF] py-4 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
               <select
