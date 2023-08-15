@@ -16,6 +16,9 @@ import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
 import { getUserState } from "@/store/authStore";
 import { TUser } from "@/api/types";
+import { FcGoogle } from "react-icons/fc";
+import { BsApple } from "react-icons/bs";
+import { AiFillFacebook } from "react-icons/ai";
 
 const options = [
   {
@@ -176,18 +179,23 @@ const SignContent = () => {
         </div>
         <div className="flex gap-8">
           <Button onClick={handleGoogleSignUp} size="full" varient="outlined">
-            <img loading="lazy" src={Google} alt="google" className="mx-auto" />
+            {/* <img loading="lazy" src={Google} alt="google" className="mx-auto" />
+            
+             */}
+            <FcGoogle size={30} className={" mx-auto"} />
           </Button>
           <Button size="full" varient="outlined">
-            <img loading="lazy" src={Apple} alt="apple" className="mx-auto " />
+            {/* <img loading="lazy" src={Apple} alt="apple" className="mx-auto " /> */}
+            <BsApple size={30} className={" mx-auto"} color={"black"} />
           </Button>
           <Button onClick={handleFacebookSignUp} size="full" varient="outlined">
-            <img
+            {/* <img
               loading="lazy"
               src={Facebook}
               alt="facebook"
               className="mx-auto "
-            />
+            /> */}
+            <AiFillFacebook size={30} className={" mx-auto"} color="black" />
           </Button>
         </div>
         <p className="mt-2 text-center text-[] text-gray-400 ">

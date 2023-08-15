@@ -1,7 +1,4 @@
 import Button from "@/components/Button";
-import Apple from "@/assets/apple2.svg";
-import Facebook from "@/assets/facebook.svg";
-import Google from "@/assets/googleicon2.svg";
 import InputFormat from "../../common/InputFormat";
 import EmailLogo from "@/assets/emaillogo.svg";
 import PasswordIcon from "@/assets/passwordIcon.svg";
@@ -12,12 +9,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { z, ZodType } from "zod";
-// import { Modal } from "@mantine/core";
-// import { STEP_1, STEP_2 } from "@/utils/constants";
-// import { useDisclosure } from "@mantine/hooks";
-// import { useState } from "react";
-// import StudentLoginModal from "./StudentLoginModal";
-// import TeacherLoginModal, { CongratulationsModal } from "./TeacherLoginModal";
 import { userContext } from "@/Context/StateProvider";
 import { googleSignIn, facebookSignIn } from "@/auth/sdk";
 import { useLogin, useSocialLogin } from "@/api/queries";
@@ -27,8 +18,9 @@ import { getApiErrorMessage } from "@/api/helper";
 import { TUser } from "@/api/types";
 import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
-// import { PasswordInput } from "@mantine/core";
-
+import { FcGoogle } from "react-icons/fc";
+import { BsApple } from "react-icons/bs";
+import { AiFillFacebook } from "react-icons/ai";
 const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
   const [user, setUser] = useStore(getUserState);
@@ -279,23 +271,13 @@ const LoginContent = () => {
         </p>
         <div className="flex gap-8">
           <Button size="full" onClick={handleGoogleLogin} varient="outlined">
-            <img
-              loading="lazy"
-              src={Google}
-              alt="google"
-              className="mx-auto "
-            />
+            <FcGoogle size={30} className={" mx-auto"} />
           </Button>
           <Button size="full" varient="outlined">
-            <img loading="lazy" src={Apple} alt="apple" className="mx-auto " />
+            <BsApple size={30} className={" mx-auto"} color={"black"} />
           </Button>
           <Button onClick={handleFacebookLogin} size="full" varient="outlined">
-            <img
-              loading="lazy"
-              src={Facebook}
-              alt="facebook"
-              className="mx-auto "
-            />
+            <AiFillFacebook size={30} className={" mx-auto"} color="black" />
           </Button>
         </div>
         <p className="mt-2 text-center text-[] text-gray-400 ">

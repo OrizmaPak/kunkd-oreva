@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import BellIcon from "@/assets/bellicon.svg";
+// import BellIcon from "@/assets/bellicon.svg";
 import UserIcon from "@/assets/usericon.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
-import SearchIcon from "@/assets/searchicon.svg";
+// import SearchIcon from "@/assets/searchicon.svg";
 import { Menu } from "@mantine/core";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
@@ -15,6 +15,8 @@ import Blxst from "@/assets/Blxst.svg";
 import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
 import { getProfileState } from "@/store/profileStore";
+import { AiOutlineBell } from "react-icons/ai";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const notificationData = [
   {
@@ -155,12 +157,13 @@ const SchoolHeader = () => {
         </div> */}
 
           <div className="max-w-[700px] w-full rounded-3xl  flex  px-4  bg-gray-100  ">
-            <img
+            {/* <img
               loading="lazy"
               src={SearchIcon}
               alt="search icon"
               className=""
-            />
+            /> */}
+            <AiOutlineSearch size={30} className={" mx-auto my-auto"} />
             <input
               type="text"
               className="w-full h-full py-4 rounded-3xl px-4 focus:outline-none  bg-inherit"
@@ -171,11 +174,16 @@ const SchoolHeader = () => {
             <Menu.Target>
               <div>
                 <span>
-                  <img
+                  {/* <img
                     loading="lazy"
                     src={BellIcon}
                     alt="bell icon"
                     className="min-w-[17px]"
+                  /> */}
+                  <AiOutlineBell
+                    size={20}
+                    className={" mx-auto"}
+                    color="black"
                   />
                 </span>
               </div>
