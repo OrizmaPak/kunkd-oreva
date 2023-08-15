@@ -1,7 +1,4 @@
 import Button from "@/components/Button";
-import Apple from "@/assets/apple2.svg";
-import Facebook from "@/assets/facebook.svg";
-import Google from "@/assets/googleicon2.svg";
 import Cancel from "@/assets/Cancel.svg";
 import OptionButton from "./OptionButton";
 import Checked from "@/assets/Checked.svg";
@@ -179,22 +176,12 @@ const SignContent = () => {
         </div>
         <div className="flex gap-8">
           <Button onClick={handleGoogleSignUp} size="full" varient="outlined">
-            {/* <img loading="lazy" src={Google} alt="google" className="mx-auto" />
-            
-             */}
             <FcGoogle size={30} className={" mx-auto"} />
           </Button>
           <Button size="full" varient="outlined">
-            {/* <img loading="lazy" src={Apple} alt="apple" className="mx-auto " /> */}
             <BsApple size={30} className={" mx-auto"} color={"black"} />
           </Button>
           <Button onClick={handleFacebookSignUp} size="full" varient="outlined">
-            {/* <img
-              loading="lazy"
-              src={Facebook}
-              alt="facebook"
-              className="mx-auto "
-            /> */}
             <AiFillFacebook size={30} className={" mx-auto"} color="black" />
           </Button>
         </div>
