@@ -17,7 +17,7 @@ import { getUserState } from "@/store/authStore";
 import { getProfileState } from "@/store/profileStore";
 import { AiOutlineBell } from "react-icons/ai";
 import { AiOutlineSearch } from "react-icons/ai";
-import SchLogo from "@/assets/schLogo.svg";
+// import SchLogo from "@/assets/schLogo.svg";
 
 const notificationData = [
   {
@@ -354,7 +354,7 @@ const ParentNotification = ({ name }: { name: string }) => {
       <hr />
       <p className="flex my-2 px-6 justify-center items-center gap-2 ">
         <img
-          src={SchLogo}
+          src={Blxst}
           alt="image"
           className="w-[40px] h-[40px] rounded-full"
         />
