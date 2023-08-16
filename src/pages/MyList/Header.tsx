@@ -1,10 +1,17 @@
 import SearchIcon from "@/assets/searchicon.svg";
-import musicIcon from "@/assets/svgmusic.svg";
-import videoIcon from "@/assets/svgvideo.svg";
-import BookIcon from "@/assets/svgbook.svg";
-import ArrowDown from "@/assets/arrowdown.svg";
 
-const Header = () => {
+import ArrowDown from "@/assets/arrowdown.svg";
+import { GoBook } from "react-icons/go";
+import { MdOutlineAudiotrack } from "react-icons/md";
+import { BsCameraVideo } from "react-icons/bs";
+
+const Header = ({
+  setMyListType,
+  myListType,
+}: {
+  setMyListType: (val: string) => void;
+  myListType: string;
+}) => {
   return (
     <div>
       <div className="flex justify-between items-center py-10 px-24">
@@ -16,17 +23,62 @@ const Header = () => {
 
       <div className="flex justify-between items-center p">
         <div className="flex gap-4 pb-4 pl-24">
-          <button className="bg-[#FBECFF] flex py-4 px-8 gap-4 rounded-full items-center justify-center">
-            <img loading="lazy" src={BookIcon} alt="" />
-            <span className=" text-[#8530C1]">Stories</span>
+          <button
+            onClick={() => setMyListType("stories")}
+            className={`${
+              myListType === "stories" ? "bg-[#8530C1]" : "bg-[#FBECFF]"
+            } flex py-2 px-8 gap-4 rounded-full items-center justify-center`}
+          >
+            <GoBook
+              size={25}
+              className={" mx-auto "}
+              color={myListType === "stories" ? "white" : "#8530C1"}
+            />
+            <span
+              className={
+                myListType === "stories" ? "text-white" : " text-[#8530C1]"
+              }
+            >
+              Stories
+            </span>
           </button>
-          <button className="bg-[#FFEDEA] flex py-4 px-8 gap-4 rounded-full items-center justify-center">
-            <img loading="lazy" src={musicIcon} alt="" />
-            <span className="text-[#ED1C24]">Audiobooks</span>
+          <button
+            onClick={() => setMyListType("audiobooks")}
+            className={`${
+              myListType === "audiobooks" ? "bg-[#8530C1]" : "bg-[#FFEDEA]"
+            }   flex py-2 px-8 gap-4 rounded-full items-center justify-center`}
+          >
+            <MdOutlineAudiotrack
+              size={25}
+              className={" mx-auto "}
+              color={myListType === "audiobooks" ? "white" : "#ED1C24"}
+            />
+            <span
+              className={
+                myListType === "audiobooks" ? "text-white" : " text-[#ED1C24]"
+              }
+            >
+              Audiobooks
+            </span>
           </button>
-          <button className=" bg-[#EBFFE8] flex py-4 px-8 gap-4 rounded-full items-center justify-center">
-            <img loading="lazy" src={videoIcon} alt="" />
-            <span className="text-[#2BB457]">African Languages</span>
+          <button
+            onClick={() => setMyListType("languages")}
+            className={`${
+              myListType === "languages" ? "bg-[#8530C1]" : "bg-[#EBFFE8]"
+            }  flex py-2 px-8 gap-4 rounded-full items-center justify-center`}
+          >
+            <BsCameraVideo
+              size={25}
+              className={" mx-auto "}
+              color={myListType === "languages" ? "white" : "#2BB457"}
+            />
+            <span
+              className={
+                myListType === "languages" ? "text-white" : "text-[#2BB457]"
+              }
+            >
+              African Languages
+            </span>
           </button>
         </div>
 

@@ -35,6 +35,7 @@ const MakePaymentContent = () => {
       {
         onSuccess(data) {
           // <PaystackButton {...data.data.data} />;
+          console.log("--------paystack----------", data.data.data);
           setPayStatckData({ ...data.data.data });
           notifications.show({
             title: `Notification`,

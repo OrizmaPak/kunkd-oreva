@@ -17,6 +17,7 @@ import { getUserState } from "@/store/authStore";
 import { getProfileState } from "@/store/profileStore";
 import { AiOutlineBell } from "react-icons/ai";
 import { AiOutlineSearch } from "react-icons/ai";
+import SchLogo from "@/assets/schLogo.svg";
 
 const notificationData = [
   {
@@ -192,11 +193,18 @@ const SchoolHeader = () => {
               <p className="text-center text-[18px] font-bold my-2">
                 Notification
               </p>
-              {notificationData.map((data, index) => (
-                // <Menu.Item>
-                <Notification key={index} {...data} />
-                // </Menu.Item>
-              ))}
+              {user?.role === "parent" &&
+                notificationData.slice(1).map((data, index) => (
+                  // <Menu.Item>
+                  <ParentNotification key={index} {...data} />
+                  // </Menu.Item>
+                ))}
+              {user?.role === "schoolAdmin" &&
+                notificationData.map((data, index) => (
+                  // <Menu.Item>
+                  <SchNotification key={index} {...data} />
+                  // </Menu.Item>
+                ))}
             </Menu.Dropdown>
           </Menu>
 
@@ -311,7 +319,7 @@ const SchoolHeader = () => {
 
 export default SchoolHeader;
 
-const Notification = ({
+const SchNotification = ({
   image,
   msg,
   name,
@@ -321,20 +329,40 @@ const Notification = ({
   name: string;
 }) => {
   return (
-    <div className="py-2 ">
+    <div className="py-1 ">
       <hr />
-      <p className="flex my-3 px-6 justify-center items-center gap-2">
+      <p className="flex my-2 px-6 justify-center items-center gap-2">
         <img
           src={image}
           alt="image"
-          className="w-[80px] h-[80px] rounded-full"
+          className="w-[70px] h-[70px] rounded-full"
         />
         <span className="text-[#8530C1] ml-4">{name}</span>
         <span>{msg}</span>
       </p>
-      <p className="my-3  pl-32  flex gap-4 text-white">
+      <p className="my-1  pl-32  flex gap-4 text-white">
         <button className="p-2 px-8 bg-[#F3DAFF] rounded-3xl">Delete</button>
         <button className="p-2 px-8 bg-[#8530C1] rounded-3xl">Accept</button>
+      </p>
+    </div>
+  );
+};
+
+const ParentNotification = ({ name }: { name: string }) => {
+  return (
+    <div className="py-2 w-[400px] ">
+      <hr />
+      <p className="flex my-2 px-6 justify-center items-center gap-2 ">
+        <img
+          src={SchLogo}
+          alt="image"
+          className="w-[40px] h-[40px] rounded-full"
+        />
+        <span className=" text-[14px] font-medium ml-4">
+          <span className="text-[#8530C1]">{name} </span>
+          has accepted your request for your child join her class.
+        </span>
+        <span>Now</span>
       </p>
     </div>
   );

@@ -4,7 +4,7 @@ export default {
   theme: {
     fontFamily: {
       Recoleta: ["Recoleta", "sans-serif"],
-      Hanken: ["Hanken-Grotesk", "sans-serif"],
+      Hanken: ["Hanken-Grotest", "sans-serif"],
     },
     extend: {},
   },

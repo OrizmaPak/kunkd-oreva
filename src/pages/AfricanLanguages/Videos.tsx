@@ -53,9 +53,7 @@ const Videos = () => {
                 <CardHome
                   key={index}
                   {...data}
-                  goTo={() =>
-                    navigate(`../${data.sub_category_name}/${data.slug}`)
-                  }
+                  goTo={() => navigate(`../${data.slug}/${data.name}`)}
                 />
               ))}
         </div>

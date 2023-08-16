@@ -15,8 +15,17 @@ import AfamBlur from "@/assets/afamblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { Skeleton } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
+// import { notifications } from "@mantine/notifications";
 import CustomTTSComponent from "@/components/TTS";
+import {
+  useGetLikedContent,
+  useLikedContent,
+  useUnLikedContent,
+} from "@/api/queries";
+import { getApiErrorMessage } from "@/api/helper";
+
+import { notifications } from "@mantine/notifications";
+// import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
 
 type TContentPage = {
   audio: string;
@@ -151,6 +160,69 @@ const AboutPage = ({
   story: TStoryContent;
   setStartRead: () => void;
 }) => {
+  const profileId = localStorage.getItem("profileId");
+  const { data, refetch } = useGetLikedContent(profileId!);
+  const likeContents: TStoryContent[] = data?.data.data.records;
+  // console.log("data", likeContents);
+  const { mutate } = useLikedContent();
+  const { mutate: unFavoriteMutate } = useUnLikedContent();
+  const isLiked = likeContents?.filter((content) => content.id === story?.id);
+  // console.log("isLiked", isLiked);
+  const handleLikedContent = () => {
+    // handleShake();
+    if (isLiked?.length === 0 || isLiked === undefined) {
+      mutate(
+        {
+          content_id: Number(story.id),
+          profile_id: Number(profileId),
+        },
+        {
+          onSuccess(data) {
+            console.log("success", data.data.message);
+            // const res = data?.data?.data as TUser;
+            // setUser({ ...res });
+            refetch();
+            notifications.show({
+              title: `Notification`,
+              message: name + " added to list",
+            });
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    } else {
+      unFavoriteMutate(
+        {
+          content_id: Number(story?.id),
+          profile_id: Number(profileId),
+        },
+        {
+          onSuccess(data) {
+            console.log("success", data.data.message);
+            // const res = data?.data?.data as TUser;
+            // setUser({ ...res });
+            refetch();
+            notifications.show({
+              title: `Notification`,
+              message: name + " removed from the list",
+            });
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    }
+  };
+
   return (
     <div className="bg-[#5D0093]  w-[100%] flex rounded-3xl px-10 py-5">
       <div className="flex basis-full gap-2  border-r-2 justify-center items-center border-[#BD6AFA]  ">
@@ -188,7 +260,9 @@ const AboutPage = ({
             >
               Read
             </button>
-            <img loading="lazy" src={Bookmark} alt="bookmark" />
+            <button onClick={handleLikedContent}>
+              <img loading="lazy" src={Bookmark} alt="bookmark" />
+            </button>
           </p>
         </p>
       </div>

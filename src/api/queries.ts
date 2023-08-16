@@ -36,6 +36,9 @@ import {
   GetTrendingAudioBooks,
   GetRecommendedVideo,
   GetIntroVideo,
+  LikedContent,
+  GetLikedContent,
+  UnLikedContent,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -299,6 +302,29 @@ export const useVerifyCompletePayStack = () => {
 export const useStripeInit = () => {
   return useMutation({
     mutationFn: StripeInit,
+  });
+};
+
+export const useLikedContent = () => {
+  return useMutation({
+    mutationFn: LikedContent,
+  });
+};
+
+export const useUnLikedContent = () => {
+  return useMutation({
+    mutationFn: UnLikedContent,
+  });
+};
+
+// export const useGetLikedContent = () => {
+//   return useQuery({ queryKey: ["GetLikedContent"], queryFn: GetLikedContent });
+// };
+
+export const useGetLikedContent = (profileId: string) => {
+  return useQuery({
+    queryKey: ["GetLikedContent", profileId],
+    queryFn: () => GetLikedContent(profileId),
   });
 };
 

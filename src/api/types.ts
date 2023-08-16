@@ -39,6 +39,7 @@ export type TResetPasswordData = {};
 export type TAudioBooks = {};
 export type TVerifyPinData = {};
 export type TPayStackInitData = {};
+export type TLikedContentData = {};
 
 export type TProfileData = {
   name: string;

@@ -1,6 +1,5 @@
 import Button from "@/components/Button";
 import InputFormat from "../../common/InputFormat";
-import EmailLogo from "@/assets/emaillogo.svg";
 import PasswordIcon from "@/assets/passwordIcon.svg";
 import PasswordEye from "@/assets/passwordeye.svg";
 import Cancel from "@/assets/Cancel.svg";
@@ -20,7 +19,9 @@ import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
 import { FcGoogle } from "react-icons/fc";
 import { BsApple } from "react-icons/bs";
-import { AiFillFacebook } from "react-icons/ai";
+import { AiFillFacebook, AiOutlineMail } from "react-icons/ai";
+// import { IconName } from "react-icons/ai";
+
 const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
   const [user, setUser] = useStore(getUserState);
@@ -225,7 +226,8 @@ const LoginContent = () => {
                 placeholder="Email"
                 reg={register("email")}
                 leftIcon={
-                  <img loading="lazy" src={EmailLogo} alt="pasword icon" />
+                  // <img loading="lazy" src={EmailLogo} alt="pasword icon" />
+                  <AiOutlineMail size={20} className={" mx-auto"} />
                 }
                 errorMsg={errors.email?.message}
               />

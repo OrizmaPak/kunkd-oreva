@@ -20,6 +20,7 @@ import type {
   TVerifyPinData,
   TUdateParentImageData,
   TPayStackInitData,
+  TLikedContentData,
 } from "./types";
 
 // School
@@ -127,6 +128,20 @@ export const GetPlans = () => {
 
 export const ResendOTP = (payload: TLoginData) => {
   return axios.post("/otp/resend", payload);
+};
+export const LikedContent = (payload: TLikedContentData) => {
+  return axios.post("/user/content/favourite", payload);
+};
+
+export const UnLikedContent = (payload: TLikedContentData) => {
+  return axios.post("/user/content/unfavourite", payload);
+};
+
+// export const GetLikedContent = (payload: TLikedContentData) => {
+//   return axios.get("/user/content/favourites/:id", payload);
+// };
+export const GetLikedContent = (profileId: string) => {
+  return axios.get(`/user/content/favourites/${profileId}`);
 };
 
 // Socila Login

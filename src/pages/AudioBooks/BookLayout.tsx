@@ -245,10 +245,10 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
     // console.log("duration", audioCon?.duration, audioCon?.currentTime);
     if (audioCon?.currentTime && load && direction === "forward") {
       audioCon.currentTime += 2;
-      // currentTime + 10 > duration ? duration - currentTime : 10;
+      // currentTime + 5 > duration ? duration - currentTime : 5;
     } else if (audioCon.currentTime && load && direction === "backward") {
-      // audioCon.currentTime -= currentTime - 10 < 0 ? currentTime : 10;
-      audioCon.currentTime += 2;
+      audioCon.currentTime -= currentTime - 5 < 0 ? currentTime : 5;
+      // audioCon.currentTime += 2;
     }
   };
 
@@ -300,7 +300,7 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
     setCurrentTTime(value);
     console.log("new current time", audioRef.current?.duration, value, load);
     if (load && audioRef.current) {
-      audioRef.current.currentTime = 10;
+      audioRef.current.currentTime = value;
     }
     return value;
   };
@@ -442,7 +442,9 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
             }}
             ref={audioRef}
             src={audio && audio}
-            // src={blbAudio}
+            // src={
+            //   "https://file-examples.com/storage/fe7bb0e37864d66f29c40ee/2017/11/file_example_MP3_700KB.mp3"
+            // }
             // onLoadedMetadata={() => setLoad(true)}
             // onLoad={() => setLoad(true)}
             onCanPlay={(event) => {

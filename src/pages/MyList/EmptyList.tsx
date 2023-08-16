@@ -3,9 +3,9 @@ import EmptyIcon from "@/assets/emptylist.svg";
 const EmptyList = () => {
   return (
     <div>
-      <hr className=" mx-24 my-14" />
+      <hr className=" mx-24 my-8" />
 
-      <div className="flex justify-center items-center pb-10">
+      <div className="flex justify-center items-center pb-6">
         <div>
           <span>
             <img
@@ -15,7 +15,7 @@ const EmptyList = () => {
               className="w-[70%]"
             />
           </span>
-          <h1 className="font-bold font-Recoleta text-[30px]  text-center my-8">
+          <h1 className="font-bold font-Recoleta text-[30px]  text-center my-5">
             Your List is Empty
           </h1>
           <p className=" text-[#7E7E89] text center">
