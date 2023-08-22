@@ -30,7 +30,7 @@ import { STEP_1, STEP_2 } from "@/utils/constants";
 
 const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
-  const [user, setUser] = useStore(getUserState);
+  const [, setUser] = useStore(getUserState);
   const { mutate: socialMutate } = useSocialLogin();
   const handleGoogleLogin = async () => {
     try {

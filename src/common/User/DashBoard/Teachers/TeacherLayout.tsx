@@ -9,7 +9,7 @@ import { useMatch, useNavigate } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
 import LogoutModal from "@/pages/DashBoard/SchoolDashBoard/LogoutModal";
-import Teacher01 from "@/assets/teacher01.svg";
+// import Teacher01 from "@/assets/teacher01.svg";
 import SchoolIcon from "@/assets/schoolIcon.svg";
 import { Header } from "@/common/User/DashBoard/School/SchoolLayout";
 import React from "react";

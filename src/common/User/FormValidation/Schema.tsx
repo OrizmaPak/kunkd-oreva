@@ -28,4 +28,5 @@ export type FormData = {
   phone?: string;
   classid?: string;
   teacher_id?: string;
+  schoolid?: string;
 };
