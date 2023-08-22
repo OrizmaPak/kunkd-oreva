@@ -2,7 +2,7 @@
 // import ArrowDown from "@/assets/arrowdown.svg";
 import Button from "@/components/Button";
 
-import { useGetClassList, useGetTeacherList } from "@/api/queries";
+import { useGetTeacherList } from "@/api/queries";
 import { TClassList } from "../Classes/Classes";
 import { TTeacherList } from "../Teachers/Teachers";
 
