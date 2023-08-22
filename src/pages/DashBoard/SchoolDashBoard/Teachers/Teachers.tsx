@@ -10,7 +10,7 @@ import Mitchel from "@/assets/godwin.svg";
 import Pemela from "@/assets/pamela.svg";
 import Spa from "@/assets/spa.svg";
 import Bella from "@/assets/bella.svg";
-import { Pagination } from "@mantine/core";
+import { Pagination, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
 import { useState } from "react";
@@ -20,6 +20,8 @@ import Row from "./Row";
 import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
 import DeleteProfile from "./DeleteProfile";
 import EditAssignedClass from "./EditAssignedClass";
+import { useGetTeacherList } from "@/api/queries";
+// import { Skeleton } from "@mantine/core";
 
 export type DashBoardDataType = {
   noOfTeacher: number;
@@ -156,7 +158,23 @@ export const dashboardData = [
   },
 ];
 
+export type TTeacherList = {
+  class: { class_id: number; class_name: string };
+  class_teacher_id: number;
+  user: {
+    email: string;
+    firstname: string;
+    gender: string;
+    id: number;
+    image: string;
+    lastname: string;
+  };
+};
+
 const Teachers = () => {
+  const { data, isLoading } = useGetTeacherList();
+  const teacherList: TTeacherList[] = data?.data.data.records;
+  console.log("Teacher list", teacherList);
   const [opened, { open, close }] = useDisclosure(false);
   const [modalStep, setModalStep] = useState(STEP_1);
   const handleClick = () => {
@@ -165,24 +183,38 @@ const Teachers = () => {
 
   const [currentClicked, setCucrrentClicked] = useState(0);
   console.log(currentClicked);
-  const currentClickedData = dashboardData.find(
-    (el) => el.id == currentClicked
+  const currentClickedProfile = teacherList?.find(
+    (el) => el.class_teacher_id == currentClicked
   );
   return (
     <div className="h-full flex flex-col overflow-y-scroll">
       <Modal
-        radius={"xl"}
-        size="lg"
+        radius={50}
+        padding={30}
+        // title={<h1></h1>}
+        size={currentClickedProfile && modalStep === STEP_1 ? 645 : "lg"}
         opened={opened}
         onClose={close}
+        title={
+          modalStep && modalStep === STEP_3 ? (
+            <h1 className="text-[24] font-semibold ml-36 font-Recoleta">
+              Edit Assigned Class
+            </h1>
+          ) : null
+        }
         closeButtonProps={{ size: "lg" }}
         centered
       >
-        {modalStep === STEP_1 && currentClickedData && (
+        {modalStep === STEP_1 && currentClickedProfile && (
           <Profile
-            name={currentClickedData?.name}
-            image={currentClickedData.image}
-            email={currentClickedData.email}
+            name={
+              currentClickedProfile?.user.firstname +
+              " " +
+              currentClickedProfile?.user.lastname
+            }
+            asignClass={currentClickedProfile.class.class_name}
+            image={currentClickedProfile?.user.image}
+            email={currentClickedProfile?.user.email}
             handleClick={handleClick}
             onEdit={() => setModalStep(STEP_3)}
           />
@@ -191,11 +223,12 @@ const Teachers = () => {
 
         {modalStep === STEP_3 && <EditAssignedClass onClose={close} />}
       </Modal>
-
       <div className="  flex-grow flex flex-col rounded-3xl p-4 bg-white">
         <div className="grid grid-cols-3 justify-center items-center w-full px-8 ">
           <div>
-            <h1 className="text-[25px] font-bold">Teacher (35)</h1>
+            <h1 className="text-[25px] font-bold">
+              Teacher ({teacherList?.length})
+            </h1>
           </div>
           <div className="flex gap-2 justify-center font-bold">
             <span className="text-[#8530C1] ">Sort by</span>
@@ -208,7 +241,7 @@ const Teachers = () => {
         </div>
 
         <div>
-          <div className="grid  grid-cols-[100px_1fr_1fr_150px_150px] mt-5  text-gray-400 px-8">
+          <div className="grid  grid-cols-[100px_1fr_1fr_100px_100px] mt-5  text-gray-400 px-8">
             <div className="flex justify-start items-center">
               <span className=" ">
                 <img loading="lazy" src={Rectangle} alt="" />
@@ -225,20 +258,25 @@ const Teachers = () => {
         </div>
 
         <div className="flex flex-col flex-grow">
-          {dashboardData &&
-            dashboardData.slice(1, 10).map((data, index) => {
-              return (
-                <Row
-                  onClick={() => {
-                    open();
-                    setCucrrentClicked(data.id);
-                    setModalStep(STEP_1);
-                  }}
-                  key={index}
-                  {...data}
-                />
-              );
-            })}
+          {isLoading
+            ? new Array(10).fill(1).map((array) => (
+                <Skeleton height={60} my={10} visible={true}>
+                  <h1 className="w-full">{array}</h1>
+                </Skeleton>
+              ))
+            : teacherList?.map((data: TTeacherList, index: number) => {
+                return (
+                  <Row
+                    onClick={() => {
+                      open();
+                      setCucrrentClicked(data.class_teacher_id);
+                      setModalStep(STEP_1);
+                    }}
+                    key={index}
+                    data={data}
+                  />
+                );
+              })}
         </div>
       </div>
       <div>

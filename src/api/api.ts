@@ -21,6 +21,8 @@ import type {
   TUdateParentImageData,
   TPayStackInitData,
   TLikedContentData,
+  TLogBookProgress,
+  TAddTeacherData,
 } from "./types";
 
 // School
@@ -146,7 +148,7 @@ export const GetLikedContent = (profileId: string) => {
 
 // Socila Login
 export const SocialLogin = (payload: TLoginData) => {
-  return axios.post("/signup/login", payload);
+  return axios.post("/social/auth/web", payload);
 };
 
 export const UpdateSchProfile = (payload: TUdateSchProfileData) => {
@@ -215,4 +217,35 @@ export const VerifyCompletePayStack = (payload: TPayStackInitData) => {
 
 export const StripeInit = (payload: TPayStackInitData) => {
   return axios.post("/subscribe/stripe/init", payload);
+};
+
+export const LogBookProgress = (payload: TLogBookProgress) => {
+  return axios.post("/content/track/book", payload);
+};
+
+export const AddTeacherData = (payload: TAddTeacherData) => {
+  return axios.post("/school/teacher", payload);
+};
+
+export const AddClassData = (payload: TAddTeacherData) => {
+  return axios.post("/school/class", payload);
+};
+export const ConnectStudentData = (payload: TAddTeacherData) => {
+  return axios.post("/school/student/connect", payload);
+};
+
+export const GetClassList = () => {
+  return axios.get("/school/class");
+};
+
+export const GetSchool = () => {
+  return axios.get("/school");
+};
+
+export const GetTeacherList = () => {
+  return axios.get("/school/teacher");
+};
+
+export const GetStudents = () => {
+  return axios.get("/school/student");
 };

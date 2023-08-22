@@ -8,7 +8,11 @@ import PreviousIcon from "@/assets/chevrondown.svg";
 import NextIcon from "@/assets/chevronup.svg";
 import { useState } from "react";
 import Congrats from "@/assets/congrats.svg";
-import { useGetContentById, useContentForHome } from "@/api/queries";
+import {
+  useGetContentById,
+  useContentForHome,
+  useLogBookProgress,
+} from "@/api/queries";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store";
 import AfamBlur from "@/assets/afamblur.jpg";
@@ -25,6 +29,7 @@ import {
 import { getApiErrorMessage } from "@/api/helper";
 
 import { notifications } from "@mantine/notifications";
+
 // import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
 
 type TContentPage = {
@@ -184,7 +189,7 @@ const AboutPage = ({
             refetch();
             notifications.show({
               title: `Notification`,
-              message: name + " added to list",
+              message: story?.name + " added to list",
             });
           },
           onError(err) {
@@ -209,7 +214,7 @@ const AboutPage = ({
             refetch();
             notifications.show({
               title: `Notification`,
-              message: name + " removed from the list",
+              message: story?.name + " removed from the list",
             });
           },
           onError(err) {
@@ -380,6 +385,9 @@ const BookPagination = ({
   setPage: (val: number) => void;
   pageTotal: number;
 }) => {
+  const { mutate } = useLogBookProgress();
+  const profileId = localStorage.getItem("profileId");
+  const contentId = localStorage.getItem("contentId");
   const [currentPage, setCurrentage] = useState(1);
   setPage(currentPage);
   const pageItirate = (itirateControl: string) => {
@@ -389,6 +397,34 @@ const BookPagination = ({
     if (currentPage > 1 && itirateControl === "prev") {
       setCurrentage((val) => (val -= 1));
     }
+  };
+  const handleBookProgress = () => {
+    mutate(
+      {
+        profile_id: Number(profileId),
+        content_id: Number(contentId),
+        current_page: Number(currentPage + 1),
+        current_time: 4,
+      },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+          // const res = data?.data?.data as TUser;
+          // setUser({ ...res });
+
+          notifications.show({
+            title: `Notification`,
+            message: data?.data.message,
+          });
+        },
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
   };
   return (
     <div>
@@ -418,7 +454,12 @@ const BookPagination = ({
               {currentPage !== pageTotal && <span>{pageTotal}</span>}
             </span>
             {currentPage !== pageTotal && (
-              <button onClick={() => pageItirate("next")}>
+              <button
+                onClick={() => {
+                  pageItirate("next");
+                  handleBookProgress();
+                }}
+              >
                 <img
                   loading="lazy"
                   src={NextIcon}

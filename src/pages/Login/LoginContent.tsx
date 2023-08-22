@@ -21,6 +21,12 @@ import { FcGoogle } from "react-icons/fc";
 import { BsApple } from "react-icons/bs";
 import { AiFillFacebook, AiOutlineMail } from "react-icons/ai";
 // import { IconName } from "react-icons/ai";
+import { useDisclosure } from "@mantine/hooks";
+import { Modal } from "@mantine/core";
+import { useState } from "react";
+import TeacherLoginModal from "./TeacherLoginModal";
+import { CongratulationsModal } from "./TeacherLoginModal";
+import { STEP_1, STEP_2 } from "@/utils/constants";
 
 const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
@@ -127,15 +133,16 @@ const LoginContent = () => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  // const [opened1, { open: open1, close: close1 }] = useDisclosure(false);
+  const [opened1, { open: open1, close: close1 }] = useDisclosure(false);
 
-  // const [modalStep, setModalStep] = useState(STEP_1);
-  // // const [studentModal, setStudentModal] = useState(false);
-  // const [teacherModal, setTeacherModal] = useState(false);
+  const [modalStep, setModalStep] = useState(STEP_1);
+  // const [studentModal, setStudentModal] = useState(false);
+  const [teacherModal, setTeacherModal] = useState(false);
   console.log("--- errors", errors);
 
   const submitData = (data: FormData) => {
     console.log("It is working", data);
+    localStorage.setItem("userPassword", data?.password!);
 
     mutate(
       {
@@ -153,10 +160,12 @@ const LoginContent = () => {
 
           if (res?.role === "schoolAdmin") {
             navigate("/school");
-          } else {
+          } else if (res?.role === "parent") {
             navigate("/selectprofile");
-          }
-          if (user) {
+          } else if (res?.role === "teacher") {
+            setTeacherModal(true);
+            console.log("it's teacher ", teacherModal);
+            open1();
           }
         },
         onError(err) {
@@ -191,19 +200,23 @@ const LoginContent = () => {
 
   return (
     <div className="w-[100%] max-w-[500px] mx-auto absolute left-0 right-0 bottom-0 top-0 my-auto flex justify-end items-center ">
-      {/* <Modal
+      <Modal
         radius={"xl"}
         size="lg"
         opened={opened1}
         onClose={close1}
-        withCloseButton={false}
+        closeButtonProps={{
+          size: "xl",
+        }}
         centered
       >
-        {teacherModal && modalStep === STEP_1 && (
+        {teacherModal && modalStep === STEP_1 ? (
           <TeacherLoginModal onContinue={() => setModalStep(STEP_2)} />
+        ) : (
+          ""
         )}
-        {teacherModal && modalStep === STEP_2 && <CongratulationsModal />}
-      </Modal> */}
+        {teacherModal && modalStep === STEP_2 ? <CongratulationsModal /> : ""}
+      </Modal>
 
       <Link to="/">
         <span className="absolute top-[40px] ">

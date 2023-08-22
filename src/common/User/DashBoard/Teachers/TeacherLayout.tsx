@@ -13,6 +13,8 @@ import Teacher01 from "@/assets/teacher01.svg";
 import SchoolIcon from "@/assets/schoolIcon.svg";
 import { Header } from "@/common/User/DashBoard/School/SchoolLayout";
 import React from "react";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
 
 const routeBaseUrl = "/teacherdashboard";
 const links = [
@@ -92,11 +94,7 @@ const TeacherLayout = () => {
               ))}
               <hr className="my-" />
 
-              <TeacherProfile
-                name="Mitchel Mccarty"
-                email="mitchelmccarty@mail.com"
-                image={Teacher01}
-              />
+              <TeacherProfile />
             </div>
             <div>
               <DasboardButton
@@ -173,23 +171,23 @@ const NavButton = (props: {
   );
 };
 
-const TeacherProfile = ({
-  image,
-  name,
-  email,
-}: {
-  image: string;
-  name: string;
-  email: string;
-}) => {
+const TeacherProfile = () => {
+  const [user, ,] = useStore(getUserState);
   return (
     <div className="mt-10">
       <div className="flex justify-center items-center">
-        <img loading="lazy" src={image} alt="image" />
+        <img
+          loading="lazy"
+          src={user?.user_image}
+          alt="image"
+          className="rounded-full h-[130px] w-[130px] object-cover"
+        />
       </div>
       <div className="text-center">
-        <p className="font-bold text-[20px]">{name}</p>
-        <p>{email}</p>
+        <p className="font-bold text-[20px]">
+          {user?.firstname} {user?.lastname}
+        </p>
+        <p>{user?.email}</p>
       </div>
     </div>
   );

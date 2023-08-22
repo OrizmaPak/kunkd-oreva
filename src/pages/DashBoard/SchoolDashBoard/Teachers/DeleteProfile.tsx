@@ -8,7 +8,7 @@ const DeleteProfile = ({ onCancel }: { onCancel: () => void }) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
     >
-      <h1 className="font-bold text-[30px] mt-8 text-center">
+      <h1 className="font-bold text-[30px] mt-4 text-center">
         Are you sure you want to delete this profile
       </h1>
       <p className="text-center mb-10 ">

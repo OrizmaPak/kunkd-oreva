@@ -1,23 +1,14 @@
 import EditPencil from "@/assets/editPencil.svg";
 import { motion } from "framer-motion";
+import { TTeacherList } from "../Teachers/Teachers";
 
 const Grade = ({
-  title,
-  name1,
-  name2,
-  image1,
-  image2,
-  noOfStudents,
+  data,
   handleClick,
   onEdit,
 }: {
   name1?: string;
-  name2?: string;
-  title?: string;
-  image1?: string;
-  image2?: string;
-  noOfStudents?: number;
-  email?: string;
+  data?: TTeacherList;
   handleClick?: () => void;
   onEdit?: (e: any) => void;
 }) => {
@@ -28,29 +19,45 @@ const Grade = ({
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
     >
-      <div className="p-3 px-7">
-        <p className="font-bold font-Recoleta text-[25px] mb-5">{title}</p>
-
-        <hr className="my-3" />
+      <div className="pb-3 px-7">
+        <hr className="mb-8" />
 
         <div className="">
           <p className="flex my-4 gap-2  items-center" onClick={onEdit}>
-            <span> Assigned teachers</span>
-            <img loading="lazy" src={EditPencil} alt="editpencil" />
+            {data?.user.firstname ? (
+              <span> Assigned teacher</span>
+            ) : (
+              <span>There is no teacher assigned to this class</span>
+            )}
+            <img
+              loading="lazy"
+              src={EditPencil}
+              alt="editpencil"
+              className=" cursor-pointer"
+            />
           </p>
           <div className=" flex justify-start gap-10 items-center my-5">
             <div className="flex justify-center  gap-2 items-center  border-r-gray-500 ">
-              <img loading="lazy" src={image1} alt="" />
-              <span>{name1}</span>
+              {data?.user.image && (
+                <img
+                  loading="lazy"
+                  src={data?.user.image}
+                  alt="image"
+                  className="w-[60px] h-[60px] rounded-full"
+                />
+              )}
+              <span>
+                {data?.user.firstname} {data?.user.lastname}
+              </span>
             </div>
-            <div className="flex justify-center gap-2 items-center">
+            {/* <div className="flex justify-center gap-2 items-center">
               <img loading="lazy" src={image2} alt="" />
               <span>{name2}</span>
-            </div>
+            </div> */}
           </div>
           <div>
             <p>No of students in class </p>
-            <span className="font-bold">{noOfStudents}</span>
+            <span className="font-bold">{50}</span>
           </div>
         </div>
 

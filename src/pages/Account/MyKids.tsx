@@ -16,11 +16,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { z, ZodType } from "zod";
 import { notifications } from "@mantine/notifications";
-import { useUpdateProfile } from "@/api/queries";
+import {
+  useUpdateProfile,
+  useGetSchool,
+  useConnectStudentData,
+} from "@/api/queries";
 import { getApiErrorMessage } from "@/api/helper";
 import { Loader } from "@mantine/core";
 import { useQueryClient } from "@tanstack/react-query";
 import { querykeys } from "@/api/queries";
+import { Tclass } from "../DashBoard/SchoolDashBoard/Teachers/AddTeacherForm";
 
 import {
   ChildNameModal,
@@ -178,7 +183,7 @@ const KidCard = ({
         }}
         centered
       >
-        <ConnectTOSchool />
+        <ConnectTOSchool profileId={id!} closeModal={closeConnectModal} />
       </Modal>
 
       <div className=" relative flex border border-gray-300 px-6 py-6 rounded-3xl">
@@ -286,7 +291,7 @@ const EditProfile = ({
       .string()
       .min(4, { message: "School name must be at least 4 characters long" })
       .max(40, { message: "School name must not exceed 20 characters" }),
-    gender: z
+    genderid: z
       .string()
       .min(4, { message: "Invalid gender" })
       .max(10, { message: "Invalid gender" }),
@@ -384,14 +389,14 @@ const EditProfile = ({
                 <select
                   id=""
                   className="w-full  h-full flex-1  focus:outline-none text-[14px]"
-                  {...register("gender")}
+                  {...register("genderid")}
                 >
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                 </select>
               </p>
               <span className="text-red-700">
-                {errors && errors?.gender?.message}
+                {errors && errors?.genderid?.message}
               </span>
             </p>
 
@@ -445,34 +450,129 @@ const EditProfile = ({
   );
 };
 
-const ConnectTOSchool = () => {
+type TSchools = {
+  id: number;
+  name: string;
+  slug: string;
+  classes: [];
+};
+
+const ConnectTOSchool = ({
+  closeModal,
+  profileId,
+}: {
+  closeModal: () => void;
+  profileId: number;
+}) => {
+  const { mutate, isLoading } = useConnectStudentData();
+  const { data: schoolData } = useGetSchool();
+  // const profileId = localStorage.getItem("profileId");
+  console.log("Profile", profileId);
+  const schoolList = schoolData?.data.data.records;
+  console.log(schoolList);
+  const [selectedSCH, setSelectedSHC] = useState<number>();
+
+  const schema: ZodType<FormData> = z.object({
+    firstname: z
+      .string()
+      .min(4, { message: "First name must be at least 4 characters long" })
+      .max(40, { message: "First name must not exceed 20 characters" }),
+    lastname: z
+      .string()
+      .min(4, { message: "Last name must be at least 4 characters long" })
+      .max(40, { message: "Last name must not exceed 20 characters" }),
+    schoolid: z
+      .string()
+      .min(1, { message: "Select School Id" })
+      .max(10, { message: "Invalid School Id" }),
+    classid: z
+      .string()
+      .min(1, { message: "Select a class" })
+      .max(20, { message: "invalid class id" }),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const submitData = async (data: FormData) => {
+    console.log("TeacherDta", data);
+    mutate(
+      {
+        profile_id: Number(profileId),
+        firstname: data.firstname,
+        lastname: data.lastname,
+        school_id: Number(data?.schoolid),
+        class_id: Number(data?.classid),
+      },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+          closeModal();
+
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+        },
+
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  };
+
   return (
     <div className="px-16">
       <h1 className="text-center font-Recoleta font-bold text-[30px] ">
         Connect to school
       </h1>
-
       <p className="text-center my-5">
         Connect your child to his/her school to enjoy...
       </p>
-
       <div>
-        <form>
+        <form onSubmit={handleSubmit(submitData)}>
           <p className="my-5">
-            <InputFormat type="text" placeholder="Enter full name" />
+            <InputFormat
+              reg={register("firstname")}
+              errorMsg={errors?.firstname?.message}
+              type="text"
+              placeholder="First name"
+            />
           </p>
           <p className="my-5">
-            <InputFormat type="text" placeholder="Enter school code" />
+            <InputFormat
+              reg={register("lastname")}
+              errorMsg={errors?.lastname?.message}
+              type="text"
+              placeholder="Last name"
+            />
           </p>
 
           <p className="my-5">
             <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
               <select
-                name=""
-                id=""
+                {...register("schoolid")}
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setSelectedSHC(Number(e.target.value)!);
+                }}
+                name="schoolid"
+                id="schoold"
                 className="w-full  h-full flex-1  focus:outline-none text-[14px]"
               >
                 <option value="male">Select school</option>
+                {schoolList?.map((school: TSchools, index: number) => (
+                  <option key={index} value={school.id}>
+                    {school.name}
+                  </option>
+                ))}
                 <option value="SchoolA">School A</option>
                 <option value="SchoolB">School B</option>
                 <option value="SchoolC">School C</option>
@@ -483,20 +583,34 @@ const ConnectTOSchool = () => {
           <p className="my-5">
             <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
               <select
-                name=""
-                id=""
+                disabled={!selectedSCH}
+                {...register("classid")}
+                name="classid"
+                id="classid"
                 className="w-full  h-full flex-1  focus:outline-none text-[14px]"
               >
-                <option value="male">Select class</option>
-                <option value="ClassA">Class A</option>
-                <option value="ClassB">Class B</option>
-                <option value="ClassC">Class C</option>
+                <option value="">Select class</option>
+                {schoolList
+                  ?.find((sch: TSchools) => sch.id === selectedSCH)
+                  ?.classes?.map((classs: Tclass, index: number) => (
+                    <option key={index} value={classs.id}>
+                      {classs.name}
+                    </option>
+                  ))}
               </select>
             </p>
           </p>
 
           <p className="my-5">
-            <Button>Continue</Button>
+            <Button type="submit">
+              {isLoading ? (
+                <p className="flex justify-center items-center">
+                  <Loader color="white" size="sm" />
+                </p>
+              ) : (
+                <span>Continue</span>
+              )}
+            </Button>
           </p>
         </form>
       </div>

@@ -39,6 +39,14 @@ import {
   LikedContent,
   GetLikedContent,
   UnLikedContent,
+  LogBookProgress,
+  AddTeacherData,
+  AddClassData,
+  GetClassList,
+  GetSchool,
+  ConnectStudentData,
+  GetTeacherList,
+  GetStudents,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -326,6 +334,45 @@ export const useGetLikedContent = (profileId: string) => {
     queryKey: ["GetLikedContent", profileId],
     queryFn: () => GetLikedContent(profileId),
   });
+};
+
+export const useLogBookProgress = () => {
+  return useMutation({
+    mutationFn: LogBookProgress,
+  });
+};
+
+export const useAddTeacherData = () => {
+  return useMutation({
+    mutationFn: AddTeacherData,
+  });
+};
+
+export const useAddClassData = () => {
+  return useMutation({
+    mutationFn: AddClassData,
+  });
+};
+
+export const useConnectStudentData = () => {
+  return useMutation({
+    mutationFn: ConnectStudentData,
+  });
+};
+export const useGetClassList = () => {
+  return useQuery({ queryKey: ["GetClassList"], queryFn: GetClassList });
+};
+
+export const useGetSchool = () => {
+  return useQuery({ queryKey: ["GetSchool"], queryFn: GetSchool });
+};
+
+export const useGetTeacherList = () => {
+  return useQuery({ queryKey: ["GetTeacherList"], queryFn: GetTeacherList });
+};
+
+export const useGetStudents = () => {
+  return useQuery({ queryKey: ["GetGStudents"], queryFn: GetStudents });
 };
 
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

@@ -7,8 +7,11 @@ import { Pagination } from "@mantine/core";
 import DeleteProfile from "../Teachers/DeleteProfile";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
+import { useGetStudents } from "@/api/queries";
 
 const Students = () => {
+  const { data } = useGetStudents();
+  console.log("students", data);
   const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
   return (

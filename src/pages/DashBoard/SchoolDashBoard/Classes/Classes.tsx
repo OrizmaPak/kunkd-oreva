@@ -22,6 +22,10 @@ import Grade from "./Grade";
 import { useState } from "react";
 import EditClassTeachers from "./EditClassTeachers";
 import AddNewClass from "./AddNewClass";
+import { useGetClassList, useGetTeacherList } from "@/api/queries";
+// import { number } from "zod";
+import { TTeacherList } from "../Teachers/Teachers";
+import { Skeleton } from "@mantine/core";
 
 export const data = [
   {
@@ -144,7 +148,20 @@ export const data = [
   },
 ];
 
+export type TClassList = {
+  id: number;
+  name: string;
+  slug: string;
+  student_count: number;
+  teacher_count: number;
+};
+
 const Classes = () => {
+  const { data: teacherDataList } = useGetTeacherList();
+  const teacherList: TTeacherList[] = teacherDataList?.data.data.records;
+  const { data: classDataList, isLoading } = useGetClassList();
+  console.log("class list", classDataList, teacherList);
+  const listOfClass = classDataList?.data.data.records;
   const [opened, { open, close }] = useDisclosure(false);
   const [editOpened, { open: editOpen, close: editClose }] =
     useDisclosure(false);
@@ -159,25 +176,37 @@ const Classes = () => {
 
   const [currentClicked, setCucrrentClicked] = useState(0);
   console.log(currentClicked);
-  const currentClickedData = data.find((el) => el.id == currentClicked);
+  const currentClickedTeacherData = teacherList?.find(
+    (el: TTeacherList) => el.class.class_id == currentClicked
+  );
+  const currentClickedClassData: TClassList = listOfClass?.find(
+    (el: TClassList) => el.id == currentClicked
+  );
 
   return (
     <div className="h-full flex flex-col overflow-y-scroll">
       <Modal
-        radius={"xl"}
+        radius={60}
+        padding={"xl"}
+        xOffset={500}
+        title={
+          <h1 className=" pl-8 text-[24px] font-semibold">
+            {currentClickedClassData?.name}
+          </h1>
+        }
         size="md"
         opened={opened}
         onClose={close}
         closeButtonProps={{ size: "lg" }}
         centered
       >
-        {currentClickedData && (
+        {
           <Grade
-            {...currentClickedData}
+            data={currentClickedTeacherData!}
             onEdit={() => (editOpen(), close())}
             handleClick={handleClick}
           />
-        )}
+        }
       </Modal>
 
       <Modal
@@ -188,7 +217,7 @@ const Classes = () => {
         closeButtonProps={{ size: "lg" }}
         centered
       >
-        <AddNewClass />
+        <AddNewClass newClassClose={newClassClose} />
       </Modal>
 
       <Modal
@@ -196,10 +225,15 @@ const Classes = () => {
         size="md"
         opened={editOpened}
         onClose={editClose}
+        title={
+          <h1 className="text-[24px] font-semibold text-center w-full ml-16">
+            Edit Class Teachers
+          </h1>
+        }
         closeButtonProps={{ size: "lg" }}
         centered
       >
-        {currentClickedData && <EditClassTeachers {...currentClickedData} />}
+        {<EditClassTeachers editClose={editClose} />}
       </Modal>
 
       <div className=" flex-grow flex flex-col rounded-3xl p-4 bg-white">
@@ -222,8 +256,8 @@ const Classes = () => {
           </div>
         </div>
 
-        <div>
-          <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px] mt-5  px-8">
+        <div className="border-b-[2px] py-5 border-[#eee]">
+          <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px] mt-5  px-8 text-gray-400">
             <div className="flex justify-start items-center ">
               <span className=" ">
                 <img loading="lazy" src={Box} alt="box" />
@@ -236,19 +270,23 @@ const Classes = () => {
               <span>Actions</span>
             </div>
           </div>
-          <hr className="my-4 mx-8" />
         </div>
-        <div className="flex flex-grow flex-col">
-          {data &&
-            data.map((data, index) => {
-              return (
-                <Row
-                  key={index}
-                  {...data}
-                  onClick={() => (setCucrrentClicked(data.id), open())}
-                />
-              );
-            })}
+        <div className="flex flex-col">
+          {isLoading
+            ? new Array(8).fill(1).map((array) => (
+                <Skeleton height={60} my={10} visible={true}>
+                  <h1 className="w-full">{array}</h1>
+                </Skeleton>
+              ))
+            : listOfClass.map((data: TClassList, index: number) => {
+                return (
+                  <Row
+                    key={index}
+                    data={data}
+                    onClick={() => (setCucrrentClicked(data.id), open())}
+                  />
+                );
+              })}
         </div>
       </div>
       <div>

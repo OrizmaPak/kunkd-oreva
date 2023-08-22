@@ -1,22 +1,31 @@
 import Button from "@/components/Button";
+import { useGetClassList } from "@/api/queries";
+import { TClassList } from "../Classes/Classes";
+
 const EditAssignedClass = ({ onClose }: { onClose: () => void }) => {
+  const { data } = useGetClassList();
+  const classList = data?.data.data.records;
+  console.log("HI", classList);
   return (
-    <div className="px-20">
-      <h1 className="fon-bold text-center font-Recoleta text-[30px] my-10">
-        Edit Assigned Class
-      </h1>
+    <div className="px-10 mt-12">
       <div>
         <form>
           <div>
             <label htmlFor="assigntoclass">Assign to a class</label>
-            <p className="border border-[#F3DAFF] py-4 mb-10 px-8 rounded-full flex items-center gap-2 mt-2   ">
+            <p className="border border-[#F3DAFF] py-3 mb-10 px-8 rounded-full flex items-center gap-2 mt-2   ">
               <select
-                name=""
-                id=""
+                name="classid"
+                id="classid"
                 className="w-full  h-full flex-1  focus:outline-none"
               >
-                <option value="classA">Class A</option>
-                <option value="classB">Class B</option>
+                <option value="">Select Class</option>
+                {classList
+                  ?.filter((data: TClassList) => data.teacher_count === 0)
+                  .map((data: TClassList) => (
+                    <option value={data.id}>{data.name}</option>
+                  ))}
+                {/* <option value="classA">Class A</option>
+                <option value="classB">Class B</option> */}
               </select>
             </p>
           </div>

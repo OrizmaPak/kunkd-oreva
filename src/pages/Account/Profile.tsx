@@ -49,12 +49,6 @@ const parentData = {
   country: "United Kingdom",
   city: "Leeds East london",
 };
-const teacherData = {
-  image: Teacher01,
-  name: "Mitchel Mccarthy ",
-  email: " mitchelmccarty@gmail.com",
-  phone: "+1442023052906",
-};
 
 const Profile = () => {
   const [parentEditMode, setParentEditMode] = useState(false);
@@ -80,11 +74,11 @@ const Profile = () => {
               {teacherEditMode ? (
                 <EditTeacherPersonalInfomation
                   onSave={() => setTeacherEditMode(false)}
-                  {...teacherData}
+                  user={user}
                 />
               ) : (
                 <TeacherPersonalInfomation
-                  {...teacherData}
+                  user={user}
                   openEdit={() => setTeacherEditMode(true)}
                 />
               )}
@@ -140,6 +134,7 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
 
   const handleSubmit = (data: File) => {
     // if (!uploadType) return;
+    console.log("I'm getting it", data);
     mutate(
       {
         image: data as Blob | string,
@@ -168,6 +163,7 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
       }
     );
   };
+
   const [opened, { open, close }] = useDisclosure(false);
   return (
     <>
@@ -292,14 +288,10 @@ const SchoolPersonalInfomation = ({
 };
 
 const TeacherPersonalInfomation = ({
-  name,
-  phone,
-  email,
+  user,
   openEdit,
 }: {
-  name?: string;
-  phone?: string;
-  email?: string;
+  user: TUser;
   openEdit: () => void;
 }) => {
   return (
@@ -314,14 +306,14 @@ const TeacherPersonalInfomation = ({
         </Button>
       </div>
       <div className="grid grid-cols-[1fr_1fr_1fr] my-1 text-[12px] text-[#B5B5C3]">
-        <span>Name</span>
-        <span>Phone</span>
+        <span>First Name</span>
+        <span>Last Name</span>
         <span>Email</span>
       </div>
       <div className="grid grid-cols-[1fr_1fr_1fr] mb-4 text-[14px]">
-        <span>{name}</span>
-        <span>{phone}</span>
-        <span>{email}</span>
+        <span>{user?.firstname}</span>
+        <span>{user?.lastname}</span>
+        <span>{user?.email}</span>
       </div>
     </div>
   );
@@ -774,14 +766,10 @@ const EditParentPersonalInfomation = ({
 };
 
 const EditTeacherPersonalInfomation = ({
-  name,
-  phone,
-  email,
+  user,
   onSave,
 }: {
-  name?: string;
-  phone?: string;
-  email?: string;
+  user: TUser;
   onSave: () => void;
 }) => {
   return (
@@ -796,14 +784,14 @@ const EditTeacherPersonalInfomation = ({
         </Button>
       </div>
       <div className="grid gap-2 grid-cols-[1fr_1fr_1fr] my-1 text-[12px] text-[#B5B5C3]">
-        <span>Name</span>
-        <span>Phone</span>
+        <span>First Name</span>
+        <span>Last Name</span>
         <span>Email</span>
       </div>
       <div className="grid gap-2 grid-cols-[1fr_1fr_1fr] mb-4 text-[14px]">
-        <InputFormat type="text" value={name} />
-        <InputFormat type="text" value={phone} />
-        <InputFormat type="text" value={email} />
+        <InputFormat type="text" value={user?.firstname} />
+        <InputFormat type="text" value={user?.lastname} />
+        <InputFormat type="text" value={user?.email} />
       </div>
     </div>
   );
