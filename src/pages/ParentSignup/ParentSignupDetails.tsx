@@ -1,6 +1,5 @@
 import Button from "@/components/Button";
 import InputFormat from "@/common/InputFormat";
-import EmailLogo from "@/assets/emaillogo.svg";
 import Cancel from "@/assets/Cancel.svg";
 import { Link } from "react-router-dom";
 import FormWrapper from "@/common/FormWrapper";
@@ -14,6 +13,8 @@ import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store";
+import { AiOutlineMail } from "react-icons/ai";
+// import { motion } from "framer-motion";
 
 const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
   const { isLoading, mutate } = useCreateParentUser();
@@ -103,9 +104,7 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
               <InputFormat
                 type="text"
                 placeholder="Email"
-                leftIcon={
-                  <img loading="lazy" src={EmailLogo} alt="pasword icon" />
-                }
+                leftIcon={<AiOutlineMail size={20} color="#c4ccd0" />}
                 reg={register("email")}
                 errorMsg={errors.email?.message}
               />

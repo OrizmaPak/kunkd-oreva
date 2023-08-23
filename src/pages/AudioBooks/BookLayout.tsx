@@ -3,14 +3,8 @@ import { audioBooksData, StoriesType } from "./AudioBooks";
 import CardScreen from "@/common/User/CardScreen";
 import Card from "@/common/User/Card";
 import Bookmark from "@/assets/Bookmark.svg";
-
 import React, { useState, useRef, useEffect } from "react";
-import FastForward from "@/assets/fastforward.svg";
-import FastBackward from "@/assets/fastbackward.svg";
-import PauseIcon from "@/assets/pause.svg";
-import PlayIcon from "@/assets/play.svg";
-import VolumeIcon from "@/assets/volumeIcon.svg";
-
+// import VolumeIcon from "@/assets/volumeIcon.svg";
 import AudioBooksNav from "./AudioBooksNav";
 import { Slider, MantineProvider } from "@mantine/core";
 import { useReducedMotion } from "@mantine/hooks";
@@ -25,6 +19,9 @@ import { Skeleton } from "@mantine/core";
 // import ReactAudioPlayer from "react-audio-player";
 // import axios from "axios";
 // import { useQuery } from "@tanstack/react-query";
+import { GrForwardTen, GrBackTen } from "react-icons/gr";
+import { BsFillPlayCircleFill, BsPauseCircleFill } from "react-icons/bs";
+import { FiVolume1 } from "react-icons/fi";
 
 type TAudioBook = {
   name: string;
@@ -457,37 +454,51 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
           </audio>
           <div className="flex h-[72px] justify-end rounded-full gap-10 px-10 py-4 bg-[#FBECFF] items-center ">
             <button onClick={handeSkip10("backward")}>
-              <img
+              {/* <img
                 loading="lazy"
                 src={FastBackward}
                 alt="backward"
                 className="w-[50px] h-[50px]"
-              />
+              /> */}
+              <GrBackTen size={25} color="red" className="u-react-icon" />
             </button>
             <button onClick={handlePlayControl}>
-              <img
+              {isPlaying ? (
+                <BsPauseCircleFill size={40} color="#8530C1" x />
+              ) : (
+                <BsFillPlayCircleFill size={40} color="#8530C1" />
+              )}
+              {/* <img
                 src={isPlaying ? PauseIcon : PlayIcon}
                 alt=""
                 className="w-[40px]"
-              />
+              /> */}
             </button>
             <button onClick={handeSkip10("forward")}>
-              <img
+              {/* <img
                 loading="lazy"
                 src={FastForward}
                 alt="forward"
                 className="w-[50px] h-[50px]"
+              /> */}
+              <GrForwardTen
+                size={25}
+                color="red"
+                text="red"
+                className="u-react-icon"
               />
             </button>
           </div>
         </div>
-        <div className=" flex justify-center items-center gap-5 ">
-          <img
+        <div className=" flex justify-center items-center gap-2">
+          <FiVolume1 size={25} />
+          {/* <img
             loading="lazy"
             src={VolumeIcon}
             alt="volume"
             className="w-[20px]"
-          />
+          /> */}
+
           {/* <input
           type="range"
           className="mr-2   text-[#8530C1] bg-[#8530C1] w-[100px]"

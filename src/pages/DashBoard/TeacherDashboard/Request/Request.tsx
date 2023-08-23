@@ -7,6 +7,7 @@ import Blxst from "@/assets/Blxst.svg";
 // import Pemela from "@/assets/pamela.svg";
 // import Spa from "@/assets/spa.svg";
 import Bella from "@/assets/bella.svg";
+import { useGetAttemptStudentConnect } from "@/api/queries";
 
 type resquestT = {
   image: string;
@@ -15,6 +16,9 @@ type resquestT = {
 };
 
 const Request = () => {
+  const { data } = useGetAttemptStudentConnect();
+
+  console.log("attempting students", data);
   const requestArray = [
     {
       image: Chiks,

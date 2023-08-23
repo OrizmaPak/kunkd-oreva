@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import StripeButton from "@/assets/paymentStripe.svg";
 import PayStackButton from "@/assets/paymentPaystack.svg";
 import StripWrapper from "./StripWrapper";
+import { useNavigate } from "react-router-dom";
 
 type TPayStack = {
   access_code: string;
@@ -21,6 +22,7 @@ type TPayStack = {
 
 const MakePaymentContent = () => {
   const planId = localStorage.getItem("planId");
+  const navigate = useNavigate();
 
   const { mutate: verifyMutate } = useVerifyCompletePayStack();
   const { mutate, isLoading } = usePayStackInit();
@@ -74,9 +76,11 @@ const MakePaymentContent = () => {
 
             {
               onSuccess(data) {
-                window.location.href =
-                  "https://dev-kundakids.vercel.app/congratulations";
-                // window.location.href = "http://localhost:5173/congratulations";
+                // window.location.href =
+                // "https://dev-kundakids.vercel.app/congratulations";
+                // window.location.href =
+                //   "http://localhost:5173/congratulations";
+                navigate("/congratulations");
                 setVerifyResponse(data.data.data.transaction_reference);
                 notifications.show({
                   title: `Notification`,

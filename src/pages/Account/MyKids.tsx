@@ -186,7 +186,7 @@ const KidCard = ({
         <ConnectTOSchool profileId={id!} closeModal={closeConnectModal} />
       </Modal>
 
-      <div className=" relative flex border border-gray-300 px-6 py-6 rounded-3xl">
+      <div className=" relative flex  border-[#FBECFF] border-[2px] px-6 py-6 rounded-3xl">
         <div>
           {isLoading ? (
             <span>

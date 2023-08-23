@@ -246,6 +246,22 @@ export const GetTeacherList = () => {
   return axios.get("/school/teacher");
 };
 
-export const GetStudents = () => {
+export const GetAdmittedStudents = () => {
   return axios.get("/school/student");
+};
+
+export const GetAttemptStudentConnect = () => {
+  return axios.get("school/student/connect/list");
+};
+
+export const ReAssignTeacher = (payload: TAddTeacherData) => {
+  return axios.post("/school/teacher/reassign", payload);
+};
+
+export const GetOngoingContents = () => {
+  return axios.get("/content/tracking/ongoing");
+};
+
+export const GetCompletedContents = () => {
+  return axios.get("/content/tracking/completed");
 };

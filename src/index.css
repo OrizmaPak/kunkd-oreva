@@ -32,3 +32,12 @@
   border-color: transparent;
   box-shadow: none;
 }
+
+.u-react-icon polyline {
+  stroke: white !important;
+}
+
+.u-react-icon path {
+  /* fill: white;  */
+  stroke: #8530c1;
+}

@@ -153,12 +153,11 @@ const CardHome = ({ name, thumbnail, id, goTo }: CardProps) => {
           <p className="">
             <button
               onClick={handleClick}
-              className="mx-auto flex  border-white  justify-center items-center  border-[2px]  text-transparent px-5 bg-[rgba(255,255,255,.3)]    py-3  font-semibold my-auto mt-12"
+              className="mx-auto flex  border-white  text-white justify-center items-center  border-[2px]   rounded-2xl px-12 bg-[rgba(255,255,255,.3)]    py-2   font-semibold my-auto mt-12"
             >
-              <span className="bg-white  w-[80px] h-[8px] rounded-3xl inline-block">
-                {" "}
-                dsnfsgvjns
-              </span>
+              {/* <span className="bg-white text-black  w-[80px] h-[8px] rounded-3xl inline-block"> */}
+              view
+              {/* </span> */}
             </button>
           </p>
         </span>

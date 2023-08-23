@@ -5,7 +5,7 @@ import CardHome, { CardProps } from "@/common/User/CardHome";
 import Bookmark from "@/assets/Bookmark.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
 import PreviousIcon from "@/assets/chevrondown.svg";
-import NextIcon from "@/assets/chevronup.svg";
+// import NextIcon from "@/assets/chevronup.svg";
 import { useState } from "react";
 import Congrats from "@/assets/congrats.svg";
 import {
@@ -29,6 +29,7 @@ import {
 import { getApiErrorMessage } from "@/api/helper";
 
 import { notifications } from "@mantine/notifications";
+import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 
 // import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
 
@@ -441,11 +442,10 @@ const BookPagination = ({
         <div className="flex gap-4">
           <p className="bg-[#8530C1] text-white p-3 rounded-3xl px-8 gap-8 flex justify-between  items-center">
             <button onClick={() => pageItirate("prev")}>
-              <img
-                loading="lazy"
-                src={PreviousIcon}
-                alt="icon"
-                className="w-[25px]"
+              <GrFormPrevious
+                size={30}
+                color="white"
+                className="u-react-icon"
               />
             </button>
             <span className=" space-x-1">
@@ -460,11 +460,15 @@ const BookPagination = ({
                   handleBookProgress();
                 }}
               >
-                <img
-                  loading="lazy"
-                  src={NextIcon}
-                  alt="icon"
-                  className="w-[25px]"
+                <GrFormNext
+                  size={30}
+                  color="white"
+                  className="u-react-icon"
+                  style={{
+                    polyline: {
+                      stroke: "white",
+                    },
+                  }}
                 />
               </button>
             )}

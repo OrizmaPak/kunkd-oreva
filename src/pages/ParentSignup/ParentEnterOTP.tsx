@@ -15,6 +15,7 @@ import { FormData } from "@/common/User/FormValidation/Schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TUser } from "@/api/types";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
   const { isLoading, mutate } = useVerifyOtp();
@@ -103,6 +104,10 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
   };
   return (
     <FormWrapper>
+      {/* <motion.div
+        animate={{ x: 100 }}
+        transition={{ ease: "easeOut", duration: 2 }}
+      > */}
       <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">
         <Link to="/">
           <span className="absolute right-0 top[-50px]">
@@ -145,6 +150,7 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
           </p>
         </div>
       </div>
+      {/* </motion.div> */}
     </FormWrapper>
   );
 };

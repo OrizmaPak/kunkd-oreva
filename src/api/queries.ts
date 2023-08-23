@@ -46,7 +46,11 @@ import {
   GetSchool,
   ConnectStudentData,
   GetTeacherList,
-  GetStudents,
+  GetAdmittedStudents,
+  GetAttemptStudentConnect,
+  ReAssignTeacher,
+  GetOngoingContents,
+  GetCompletedContents,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -371,8 +375,35 @@ export const useGetTeacherList = () => {
   return useQuery({ queryKey: ["GetTeacherList"], queryFn: GetTeacherList });
 };
 
-export const useGetStudents = () => {
-  return useQuery({ queryKey: ["GetGStudents"], queryFn: GetStudents });
+export const useGetAdmittedStudents = () => {
+  return useQuery({ queryKey: ["GetStudents"], queryFn: GetAdmittedStudents });
+};
+
+export const useGetOngoingContents = () => {
+  return useQuery({
+    queryKey: ["GetOngoingContents"],
+    queryFn: GetOngoingContents,
+  });
+};
+
+export const useGetAttemptStudentConnect = () => {
+  return useQuery({
+    queryKey: ["GetAttemptStudentConnect"],
+    queryFn: GetAttemptStudentConnect,
+  });
+};
+
+export const useReAssignTeacher = () => {
+  return useMutation({
+    mutationFn: ReAssignTeacher,
+  });
+};
+
+export const useGetCompletedContents = () => {
+  return useQuery({
+    queryKey: ["GetCompletedContents"],
+    queryFn: GetCompletedContents,
+  });
 };
 
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

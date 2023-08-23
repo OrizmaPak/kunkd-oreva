@@ -58,7 +58,7 @@ const EditClassTeachers = ({ editClose }: { editClose: () => void }) => {
                 id="classid"
                 className="w-full  h-full flex-1  focus:outline-none"
               >
-                <option value="">Select Class</option>
+                <option value="">Select Teacher</option>
                 {teacherList
                   ?.filter((data: TTeacherList) => data.class === undefined)
                   .map((data: TClassList) => (

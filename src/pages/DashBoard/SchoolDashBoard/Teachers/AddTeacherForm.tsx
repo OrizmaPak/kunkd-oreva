@@ -1,6 +1,5 @@
 import Button from "@/components/Button";
 import InputFormat from "@/common/InputFormat";
-import EmailIcon from "@/assets/emaillogo.svg";
 // import PasswordIcon from "@/assets/passwordIcon.svg";
 // import PasswordEye from "@/assets/passwordeye.svg";
 import { motion } from "framer-motion";
@@ -17,6 +16,7 @@ import { useGetClassList } from "@/api/queries";
 // import { Loader } from "@mantine/core";
 // import { notifications } from "@mantine/notifications";
 // import { getApiErrorMessage } from "@/api/helper";
+import { AiOutlineMail } from "react-icons/ai";
 
 export type Tclass = {
   id: number;
@@ -131,7 +131,7 @@ const AddTeacherForm = ({
               errorMsg={errors.email?.message}
               type="email"
               placeholder="Email"
-              leftIcon={<img loading="lazy" src={EmailIcon} alt="icon" />}
+              leftIcon={<AiOutlineMail size={25} color="#c4ccd0" />}
             />
           </div>
           <div className="flex gap-2 mb-2">
@@ -144,12 +144,12 @@ const AddTeacherForm = ({
                 placeholder="password"
                 leftIcon={
                   // <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
-                  <RiLockLine size={25} />
+                  <RiLockLine size={25} color="#c4ccd0" />
                 }
                 rightIcon={
                   // <img loading="lazy" src={PasswordEye} alt="paswordeye icon" />
 
-                  <AiOutlineEye size={25} />
+                  <AiOutlineEye size={25} color="#c4ccd0" />
                 }
               />
             </div>
@@ -162,11 +162,11 @@ const AddTeacherForm = ({
                 placeholder="confirm password"
                 leftIcon={
                   // <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
-                  <RiLockLine size={25} />
+                  <RiLockLine size={25} color="#c4ccd0" />
                 }
                 rightIcon={
                   // <img loading="lazy" src={PasswordEye} alt="paswordeye icon" />
-                  <AiOutlineEye size={25} />
+                  <AiOutlineEye size={25} color="#c4ccd0" />
                 }
               />
             </div>

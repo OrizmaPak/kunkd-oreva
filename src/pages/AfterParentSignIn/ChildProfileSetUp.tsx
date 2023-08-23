@@ -3,7 +3,7 @@ import YaJump from "@/assets/Yaa jump 1.svg";
 import InputFormat from "@/common/InputFormat";
 import Button from "@/components/Button";
 import YajSucces from "@/assets/yupsuccess.svg";
-import { Loader } from "@mantine/core";
+import { Loader, Skeleton } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
 import { useState } from "react";
@@ -209,6 +209,7 @@ export const ChildAgeModal = ({
     onContinue();
     setAge(data?.dob!);
   };
+  // const [isKid, setIsKid] = useState(false)
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -218,7 +219,7 @@ export const ChildAgeModal = ({
       className=" max-w-[600px] rounded-3xl w-[100%] py-10"
     >
       <p onClick={goBack} className="pl-10 ">
-        <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
+        {} <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
       </p>
       <div className="px-14">
         <div>
@@ -231,6 +232,7 @@ export const ChildAgeModal = ({
         </div>
         <div className="flex justify-center items-center p-4">
           <img loading="lazy" src={YaJump} alt="jump" />
+          {/* {isKid? <Skeleton height={150} width={100}></Skeleton>:<img loading="lazy" src={YaJump} alt="jump" onLoad={()=>setIsKid(false)} />} */}
         </div>
         <div>
           <form onSubmit={handleSubmit(submitData)}>
@@ -330,42 +332,48 @@ export const SelectAvatar = ({
             </div>
             <div className="flex justify-center items-center">
               <div className="grid grid-cols-4 gap-x-8 gap-y-4">
-                {isLoadingAvatar ? (
-                  <p className=" flex justify-center items-center">
-                    <Loader size={"lg"} />
-                  </p>
-                ) : (
-                  data?.data.data.avatars?.map(
-                    (avatar: selectAvatarType, index: number) => {
-                      return (
-                        <AvatarCard
-                          key={index}
-                          selected={selected}
-                          setSelected={setSelected}
-                          {...avatar}
-                        />
-                      );
-                    }
-                  )
-                )}
+                {isLoadingAvatar
+                  ? new Array(12).fill(1).map((el, index) => (
+                      <Skeleton
+                        key={index}
+                        height={80}
+                        width={80}
+                        radius={"xl"}
+                      >
+                        {el}
+                      </Skeleton>
+                    ))
+                  : data?.data.data.avatars?.map(
+                      (avatar: selectAvatarType, index: number) => {
+                        return (
+                          <AvatarCard
+                            key={index}
+                            selected={selected}
+                            setSelected={setSelected}
+                            {...avatar}
+                          />
+                        );
+                      }
+                    )}
               </div>
             </div>
-
-            <button
-              disabled={!selected}
-              onClick={onSubmit}
-              className={`p-4 px-10 ${
-                selected ? "bg-[#782caf]" : "bg-[#d9beeb]"
-              }  rounded-full w-full my-4`}
-            >
-              {isLoading ? (
-                <p className="flex justify-center items-center">
-                  <Loader color="white" size="sm" />
-                </p>
-              ) : (
-                <span className="text-white">Continue</span>
-              )}
-            </button>
+            <div className="px-14">
+              <button
+                disabled={!selected}
+                onClick={onSubmit}
+                className={`p-3 px-20 ${
+                  selected ? "bg-[#782caf]" : "bg-[#d9beeb]"
+                }  rounded-2xl w-full my-4`}
+              >
+                {isLoading ? (
+                  <p className="flex justify-center items-center">
+                    <Loader color="white" size="sm" />
+                  </p>
+                ) : (
+                  <span className="text-white">Continue</span>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -392,8 +400,10 @@ const AvatarCard = ({
       <button
         onClick={handleClick}
         className={`${
-          selected === name ? "border-[10px] border-[red]" : ""
-        }  rounded-[30px]`}
+          selected === name
+            ? "border-[2px] border-[#8530C1]"
+            : "border-[2px] border-white"
+        }  rounded-xl p-2 transition-all duration-200`}
       >
         <img
           loading="lazy"
@@ -429,7 +439,7 @@ export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
           <img loading="lazy" src={YajSucces} alt="success" />
         </div>
         <p className="text-center my-4">You have successfully added a child</p>
-        <p className="mb-12">
+        <p className="mb-12 ">
           <Button onClick={handleSubmit}>
             <span className="text-white">Continue</span>
           </Button>

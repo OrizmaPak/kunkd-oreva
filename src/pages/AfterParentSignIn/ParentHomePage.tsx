@@ -31,6 +31,10 @@ const ParentHomePage = () => {
   } else {
     profiles = profile?.find((each) => each.id === currentId)!;
   }
+
+  console.log(profile);
+  console.log(currentId);
+  console.log(profiles);
   const navigate = useNavigate();
 
   return (

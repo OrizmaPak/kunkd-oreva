@@ -11,9 +11,13 @@ import { useState } from "react";
 import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
 import Ongoing from "./Ongoing";
 import Completed from "./Completed";
+import { useGetOngoingContents, useGetCompletedContents } from "@/api/queries";
 
 const ProgressReport = () => {
   // const [displaySectio, setDisplaySection] = useState<number>(STEP_1);
+  const { data } = useGetOngoingContents();
+  const { data: completedData } = useGetCompletedContents();
+  console.log("ongtion", data, " completed", completedData);
 
   const [currentStep, setCurrentStep] = useState(STEP_1);
   console.log(currentStep);

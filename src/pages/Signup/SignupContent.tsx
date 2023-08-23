@@ -16,6 +16,7 @@ import { TUser } from "@/api/types";
 import { FcGoogle } from "react-icons/fc";
 import { BsApple } from "react-icons/bs";
 import { AiFillFacebook } from "react-icons/ai";
+import { IoCheckmarkCircleOutline, IoEllipseOutline } from "react-icons/io5";
 
 const options = [
   {
@@ -150,7 +151,7 @@ const SignContent = () => {
         <span></span>
         <h1 className="font-bold text-[40px] font-Recoleta">Get Started</h1>
         <p className="text-[15px] text-[#A7A7A7] font-Hanken">
-          Let's create account that fits you!{" "}
+          Let's create account that fits you!
         </p>
         <div className="mb-14 ">
           {options.map((option) => (
@@ -160,7 +161,13 @@ const SignContent = () => {
               body={option.desc}
               key={option.to}
               onClick={() => setTo(option.to)}
-              image={to === option.to ? Checked : UnChecked}
+              image={
+                to === option.to ? (
+                  <IoCheckmarkCircleOutline size={25} color="#8530C1" />
+                ) : (
+                  <IoEllipseOutline size={25} />
+                )
+              }
             />
           ))}
           {/* // <OptionButton title="'I'm a Parent" body="I want to manage my child's access to this platform" image={UnChecked}/> */}

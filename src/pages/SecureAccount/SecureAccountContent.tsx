@@ -1,4 +1,4 @@
-import PasswordIcon from "@/assets/passwordIcon.svg";
+// import PasswordIcon from "@/assets/passwordIcon.svg";
 import Cancel from "@/assets/Cancel.svg";
 import InputFormat from "@/common/InputFormat";
 import Button from "@/components/Button";
@@ -12,6 +12,8 @@ import { useSetPassword } from "@/api/queries";
 import { notifications } from "@mantine/notifications";
 import { Loader } from "@mantine/core";
 import { getApiErrorMessage } from "@/api/helper";
+// import { AiOutlineEye } from "react-icons/ai";
+import { RiLockLine } from "react-icons/ri";
 // import useStore from "@/store";
 // import { getUserState } from "@/store/authStore";
 
@@ -90,9 +92,7 @@ const SecureAccountContent = () => {
               <InputFormat
                 type="password"
                 placeholder="password"
-                leftIcon={
-                  <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
-                }
+                leftIcon={<RiLockLine size={25} color="#c4ccd0" />}
                 reg={register("password")}
                 errorMsg={errors.password?.message}
               />
@@ -102,9 +102,7 @@ const SecureAccountContent = () => {
               <InputFormat
                 type="password"
                 placeholder="Confirm password"
-                leftIcon={
-                  <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
-                }
+                leftIcon={<RiLockLine size={25} color="#c4ccd0" />}
                 reg={register("confirmPassword")}
                 errorMsg={errors.confirmPassword?.message}
               />

@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
-import Congrats from "@/assets/congrats.svg";
 import { Link } from "react-router-dom";
+import { IoCheckmarkCircleOutline } from "react-icons/io5";
 
 const PasswordCongratulationsContent = () => {
   return (
@@ -9,7 +9,8 @@ const PasswordCongratulationsContent = () => {
         <span></span>
         <div>
           <div className=" flex justify-center items-center">
-            <img loading="lazy" src={Congrats} alt="Congrats" />
+            {/* <img loading="lazy" src={Congrats} alt="Congrats" /> */}
+            <IoCheckmarkCircleOutline size={150} color="#8530C1" />
           </div>
           <h1 className="font-bold text-[40px] text-center mt-4 font-Recoleta">
             Congratulations

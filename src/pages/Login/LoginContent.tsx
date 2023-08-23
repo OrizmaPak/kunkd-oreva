@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import InputFormat from "../../common/InputFormat";
-import PasswordIcon from "@/assets/passwordIcon.svg";
-import PasswordEye from "@/assets/passwordeye.svg";
+// import PasswordIcon from "@/assets/passwordIcon.svg";
+// import PasswordEye from "@/assets/passwordeye.svg";
 import Cancel from "@/assets/Cancel.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -27,6 +27,8 @@ import { useState } from "react";
 import TeacherLoginModal from "./TeacherLoginModal";
 import { CongratulationsModal } from "./TeacherLoginModal";
 import { STEP_1, STEP_2 } from "@/utils/constants";
+import { AiOutlineEye } from "react-icons/ai";
+import { RiLockLine } from "react-icons/ri";
 
 const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
@@ -240,7 +242,11 @@ const LoginContent = () => {
                 reg={register("email")}
                 leftIcon={
                   // <img loading="lazy" src={EmailLogo} alt="pasword icon" />
-                  <AiOutlineMail size={20} className={" mx-auto"} />
+                  <AiOutlineMail
+                    size={20}
+                    className={" mx-auto"}
+                    color="#c4ccd0"
+                  />
                 }
                 errorMsg={errors.email?.message}
               />
@@ -251,12 +257,8 @@ const LoginContent = () => {
               type="password"
               placeholder="password"
               reg={register("password")}
-              leftIcon={
-                <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
-              }
-              rightIcon={
-                <img loading="lazy" src={PasswordEye} alt="paswordeye icon" />
-              }
+              leftIcon={<RiLockLine size={20} color="#c4ccd0" />}
+              rightIcon={<AiOutlineEye size={22} color="#c4ccd0" />}
               errorMsg={errors.password?.message}
             />
           </p>
