@@ -15,7 +15,7 @@ import { FormData } from "@/common/User/FormValidation/Schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TUser } from "@/api/types";
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 
 const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
   const { isLoading, mutate } = useVerifyOtp();

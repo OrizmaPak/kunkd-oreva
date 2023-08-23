@@ -4,8 +4,6 @@ import CardScreenHome from "@/common/User/CardScreenHome";
 import CardHome, { CardProps } from "@/common/User/CardHome";
 import Bookmark from "@/assets/Bookmark.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
-import PreviousIcon from "@/assets/chevrondown.svg";
-// import NextIcon from "@/assets/chevronup.svg";
 import { useState } from "react";
 import Congrats from "@/assets/congrats.svg";
 import {
@@ -19,7 +17,6 @@ import AfamBlur from "@/assets/afamblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { Skeleton } from "@mantine/core";
-// import { notifications } from "@mantine/notifications";
 import CustomTTSComponent from "@/components/TTS";
 import {
   useGetLikedContent,
@@ -27,11 +24,8 @@ import {
   useUnLikedContent,
 } from "@/api/queries";
 import { getApiErrorMessage } from "@/api/helper";
-
 import { notifications } from "@mantine/notifications";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
-
-// import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
 
 type TContentPage = {
   audio: string;

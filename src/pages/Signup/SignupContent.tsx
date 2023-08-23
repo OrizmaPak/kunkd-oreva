@@ -1,8 +1,6 @@
 import Button from "@/components/Button";
 import Cancel from "@/assets/Cancel.svg";
 import OptionButton from "./OptionButton";
-import Checked from "@/assets/Checked.svg";
-import UnChecked from "@/assets/uncheck.svg";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSocialSignUp } from "@/api/queries";

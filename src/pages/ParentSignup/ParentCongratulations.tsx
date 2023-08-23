@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import Congrats from "@/assets/congrats.svg";
+// import Congrats from "@/assets/congrats.svg";
 import FormWrapper from "@/common/FormWrapper";
 import { Link } from "react-router-dom";
 // import { motion } from "framer-motion";
