@@ -4,10 +4,10 @@ const KundaAppContent = () => {
   return (
     <div>
       <div className=" max-w-[1000px] mx-auto text-white text-[18px] mb-14 leading-10  ">
-        <h1 className="text-center font-bold text-[40px] text-white mb-4 font-Secondary font-Recoleta">
+        <h1 className="text-center font-bold text-[40px] text-white mb-4 font-Secondary font-Recoleta header2">
           The Kunda Kids App
         </h1>
-        <p className="text-center font-primary">
+        <p className="text-center font-primary text1">
           Dive into a captivating world of enriching stories, interactie on The
           Kunda Kids app.Desiged with promoting the african <br /> culture in
           mind our content celebrates diversity, promotes inclusivity, and

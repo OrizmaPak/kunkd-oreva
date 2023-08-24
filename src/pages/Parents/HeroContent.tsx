@@ -9,8 +9,8 @@ const HeroContentContent = () => {
   return (
     <div>
       <div>
-        <div className="absolute top-40  left-40">
-          <h1 className="text-[62px] font-bold   font-Recoleta ">
+        <div className="absolute top-40  left-40 hero-text-container">
+          <h1 className="text-[62px] font-bold   font-Recoleta  header1">
             <span>
               <span className="text-[#8530C1]">Empowering</span> your child's
             </span>
@@ -20,7 +20,7 @@ const HeroContentContent = () => {
             <span className="mr-4 ">
               <img loading="lazy" src={Arrow} alt="" className="w-20 pt-2 " />
             </span>
-            <p className="  font-Hanken leading-[30px]">
+            <p className="  font-Hanken leading-[30px] text1">
               Embark on a reading adventure with Kunda Kids and empower your
               child's literacy journey. Join us today and unlock the boundless
               possiblities of literacy

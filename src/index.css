@@ -41,3 +41,26 @@
   /* fill: white;  */
   stroke: #8530c1;
 }
+
+.header2 {
+  /* font-size: clamp(1.125rem, 0.8887rem + 1.5126vw, 2.25rem) !important; */
+  font-size: clamp(1rem, 0.7374rem + 1.6807vw, 2.25rem) !important;
+}
+
+.header1 {
+  /* font-size: clamp(1.875rem, 1.4548rem + 2.6891vw, 3.875rem) !important; */
+  font-size: clamp(1.25rem, 0.6985rem + 3.5294vw, 3.875rem) !important;
+  line-height: clamp(1.75rem, 1.1985rem + 3.5294vw, 4.375rem) !important;
+}
+
+.text1 {
+  font-size: clamp(0.75rem, 0.6712rem + 0.5042vw, 1.125rem) !important;
+  line-height: clamp(1.125rem, 0.9543rem + 1.0924vw, 1.9375rem) !important;
+}
+.text2 {
+  font-size: clamp(0.75rem, 0.6975rem + 0.3361vw, 1rem);
+}
+
+.hero-text-container {
+  left: clamp(0.625rem, -0.2941rem + 5.8824vw, 5rem) !important;
+}

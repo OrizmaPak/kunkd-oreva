@@ -11,7 +11,7 @@ export type CardTypes = {
 };
 const ClientCard = ({ image, name, location, story }: CardTypes) => {
   return (
-    <div className="w-[450px] h-[258px] p-7 rounded-xl  bg-[#FFFFFF] shadow-md ml-[20px] mb-8">
+    <div className="w-[450px] h-[258px] p-7 rounded-xl  bg-[#FFFFFF] shadow-md ml-[20px] mb-8 pb-20">
       <div className="flex items-center mb-6">
         {/* <img
           loading="lazy"
@@ -34,7 +34,7 @@ const ClientCard = ({ image, name, location, story }: CardTypes) => {
         </span>
       </div>
       <div>
-        <p>{story}</p>
+        <p className="mb-10">{story}</p>
       </div>
     </div>
   );

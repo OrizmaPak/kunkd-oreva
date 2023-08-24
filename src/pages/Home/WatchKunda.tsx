@@ -13,7 +13,7 @@ const WatchKunda = ({ children }: Props) => {
       {/* </div> */}
       <img
         src={LineGruoped}
-        alt=""
+        alt="image"
         className="left-0 bottom-[20%] absolute transform rotate-180 w-[50px] h-[50px] "
       />
       <div className=" w-full bg-white relative ">{children}</div>

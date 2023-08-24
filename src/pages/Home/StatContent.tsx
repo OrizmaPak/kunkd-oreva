@@ -1,13 +1,12 @@
-import content from "@/assets/wavecardcontent.svg";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import ContentBlur from "@/assets/statcontentblur.jpg";
+import { FaUserAlt } from "react-icons/fa";
+import { BsJournalBookmark } from "react-icons/bs";
 
 const StatContent = () => {
   return (
     <div className="flex items-center justify-center ">
       {/* <img loading="lazy" src={content} alt="" width="50%" /> */}
-      <LazyLoadImage
+      {/* <LazyLoadImage
         // width={500}
         // height={500}
         effect="blur"
@@ -15,7 +14,41 @@ const StatContent = () => {
         wrapperClassName="w-[70%] mx-auto"
         src={content}
         placeholderSrc={ContentBlur}
-      />
+      /> */}
+
+      <div className="flex gap-16">
+        <div className="flex gap-8 justify-center items-center  ">
+          <p className="bg-white p-4 rounded-full shadow-md">
+            <FaUserAlt size={40} color={"#447ADC"} />
+          </p>
+          <p className="leading-[22px]">
+            <span className="header2 font-semibold font-Recoleta leading-0 my-0">
+              4.5k+
+            </span>
+            <br />
+            <p className="mt-2">
+              Total active kids
+              <br /> taking gifted course
+            </p>
+          </p>
+        </div>
+        <p className="h-[60px] border-[#C4CCD0] border-[1px]"></p>
+        <div className="flex gap-8 justify-center items-center ">
+          <p className="bg-white p-4 rounded-full shadow-md">
+            <BsJournalBookmark size={40} color={"#ED1C24"} />
+          </p>
+          <p className="leading-[22px]">
+            <span className="header2 font-semibold font-Recoleta leading-0 my-0 border-0">
+              100+
+            </span>
+            <br />
+            <span>
+              Available ebooks
+              <br /> programs and videos
+            </span>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

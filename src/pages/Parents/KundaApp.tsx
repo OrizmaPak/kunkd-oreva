@@ -37,7 +37,7 @@ const KundaApp = () => {
         </div>
         <div className="mt-[180px]">
           <h1 className="font-bold text-3xl mb-14 font-Recoleta">
-            Download App Now{" "}
+            Download App Now
           </h1>
           <div className="flex gap-4">
             <AppleStore />

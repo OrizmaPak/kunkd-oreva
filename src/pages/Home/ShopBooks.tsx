@@ -16,6 +16,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
 import SixB from "@/assets/six.svg";
+import "./ShopBooks.css";
 
 import ClientCard from "./ClientCard";
 // import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -88,10 +89,10 @@ const ShopBooks = () => {
       ></div>
       <div className="bg-[#EBEFF3]  w-[100%] pb-[40px] ">
         <div className="max-w-[800px] mx-auto mb-[70px] leading-8 text-center ">
-          <h1 className="text-black text-3xl font-bold text-center mb-4 leading-8 ">
+          <h1 className="text-black text-3xl font-bold text-center mb-4 leading-8 header2">
             Shop Our Books
           </h1>
-          <p>
+          <p className="text1">
             Discover a world of literary treasures at the Kunda Kids store,
             where you can find carefully curated books, educational materials,
             and engaging resources. From beautifully illustrated storybooks to
@@ -102,30 +103,30 @@ const ShopBooks = () => {
         </div>
 
         <div className="flex justify-center items-center ">
-          <div className="h-[605px] p-14 w-[1365px] bg-[#8530C1] rounded-[70px] mb-[200px] ">
+          <div className=" p-14  bg-[#8530C1] rounded-[70px] mb-[200px]  shopcard">
             <div className="flex gap-10 ">
               <div className="basis-1/2">
                 <LazyLoadImage
                   width={500}
                   height={500}
                   effect="blur"
-                  className="rounded-2xl"
-                  wrapperClassName="rounded-2xl"
+                  className="rounded-2xl shopcard-pic"
+                  wrapperClassName="rounded-2xl  shopcard-pic"
                   src={BigCart}
                   placeholderSrc={BigCartBlur}
                 />
               </div>
               <div className="basis-1/2 text-white">
-                <p className="mb-5 mt-8">New Books</p>
+                <p className="mb-5 ">New Books</p>
                 <h1 className="font-bold text-[25px] text-white">
                   Afam and the New Yam Festival <br /> [PRE-ORDER]
                 </h1>
-                <p className="my-5 leading-8">
+                <p className="my-5 text1">
                   Afam and the New Yam Festival is a heartwarming children’s
                   picture book, perfect for readers aged 3-8, that explores the
                   beauty of family, heritage, and unity.
                 </p>
-                <p className="font-bold text-[30px] mt-8">₦2,900.00 NGN</p>
+                <p className="font-bold text-[30px] ">₦2,900.00 NGN</p>
                 <p className="mb-10">Tax incuded</p>
                 <button className="bg-white text-[#8530C1] p-3  px-24 rounded-full">
                   Add to cart
@@ -165,7 +166,7 @@ const ShopBooks = () => {
                 name="Bolu Watife"
                 location="Lagos Nigeria"
                 image={client1}
-                story=" Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis."
+                story=" It's good for my own children to maintain a connection to the African continent. What you do is just so amazing and necessary. More African characters and experiences please!"
               />
             </div>
             <div className="mr-4">
@@ -173,7 +174,7 @@ const ShopBooks = () => {
                 name="Bolu Watife"
                 location="Lagos Nigeria"
                 image={client1}
-                story=" Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis."
+                story=" It's good for my own children to maintain a connection to the African continent. What you do is just so amazing and necessary. More African characters and experiences please!"
               />
             </div>
             <div className="mr-4">
@@ -181,7 +182,7 @@ const ShopBooks = () => {
                 name="Bolu Watife"
                 location="Lagos Nigeria"
                 image={client1}
-                story=" Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis."
+                story="It's good for my own children to maintain a connection to the African continent. They grew up in DRCongo but we're moving to Paraguay so I want those stories to be in their lives."
               />
             </div>
             <div className="mr-4">
@@ -189,7 +190,7 @@ const ShopBooks = () => {
                 name="Bolu Watife"
                 location="Lagos Nigeria"
                 image={client1}
-                story=" Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis."
+                story="It's good for my own children to maintain a connection to the African continent. What you do is just so amazing and necessary. More African characters and experiences please!"
               />
             </div>
             <div className="mr-4">
@@ -197,7 +198,7 @@ const ShopBooks = () => {
                 name="Bolu Watife"
                 location="Lagos Nigeria"
                 image={client1}
-                story=" Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis."
+                story=" It's good for my own children to maintain a connection to the African continent. What you do is just so amazing and necessary. More African characters and experiences please!"
               />
             </div>
             <div className="mr-4">
@@ -205,7 +206,7 @@ const ShopBooks = () => {
                 name="Bolu Watife"
                 location="Lagos Nigeria"
                 image={client1}
-                story=" Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis."
+                story="It's good for my own children to maintain a connection to the African continent. What you do is just so amazing and necessary. More African characters and experiences please!"
               />
             </div>
           </Slider>

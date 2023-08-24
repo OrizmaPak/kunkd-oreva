@@ -3,6 +3,7 @@ import { useGetIntroVideo } from "@/api/queries";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useCallback, useRef } from "react";
 import { Skeleton } from "@mantine/core";
+import "./VideoCard.css";
 
 const VideoCard = () => {
   const { data, isLoading } = useGetIntroVideo();
@@ -45,7 +46,7 @@ const VideoCard = () => {
           height={605}
           width={1000}
           ref={setRefs}
-          className=" rounded-2xl"
+          className=" rounded-2xl videocard-width "
         ></video>
       </Skeleton>
     </div>

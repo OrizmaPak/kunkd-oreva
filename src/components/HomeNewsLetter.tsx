@@ -1,8 +1,9 @@
+import "./HomeNewsLetter.css";
 const HomeNewsLetter = () => {
   return (
     <div className="h-[358px] pt-10 bg-[#8530C1]">
       <form className="text-center leading-8">
-        <h1 className="text-white font-bold text-[46px]  leading-[62.56px] font-Recoleta">
+        <h1 className="text-white font-bold text-[46px]  leading-[62.56px] font-Recoleta new-letterheader">
           Subscribe To Our NewLetter To <br /> Get Latest Updates & News
         </h1>
         <h1 className="  w-[500px] h-14 mx-auto mt-10 relative ">
