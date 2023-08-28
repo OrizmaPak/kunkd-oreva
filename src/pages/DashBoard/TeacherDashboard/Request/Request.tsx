@@ -4,7 +4,7 @@ import {
   useAcceptStudentAdmission,
   useRejectStudentAdmission,
 } from "@/api/queries";
-import { Alert, Loader } from "@mantine/core";
+import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
 
