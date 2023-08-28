@@ -1,4 +1,3 @@
-import Apple from "@/assets/appleicon.svg";
 import { FaApple } from "react-icons/fa";
 
 const AppleStore = () => {

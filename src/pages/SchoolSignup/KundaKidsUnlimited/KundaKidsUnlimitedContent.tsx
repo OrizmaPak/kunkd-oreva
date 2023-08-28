@@ -1,7 +1,6 @@
 import Marked from "@/assets/marked.svg";
-import Cancel from "@/assets/Cancel.svg";
 import GreaterIcon from "@/assets/greatericon.svg";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./kundakidsunlimitedcontent.css";
 
 const KundaKidsUnlimitedContent = () => {
@@ -72,9 +71,7 @@ const KundaKidsUnlimitedContent = () => {
           onClick={() => navigate("/school")}
           className="flex justify-center items-center gap-4"
         >
-          <p className="text-[16px] font-Hanken font-semibold">
-            Continue free{" "}
-          </p>
+          <p className="text3 font-Hanken font-semibold">Continue free</p>
           <img loading="lazy" src={GreaterIcon} alt="greater icon" />
         </button>
       </div>
