@@ -14,6 +14,7 @@ import { getApiErrorMessage } from "@/api/helper";
 
 import { notifications } from "@mantine/notifications";
 import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+import "./cardhome.css";
 
 export type CardProps = {
   id?: number;
@@ -110,10 +111,8 @@ const CardHome = ({ name, thumbnail, id, goTo }: CardProps) => {
           src={thumbnail}
           placeholderSrc={AfamBlur}
           effect="blur"
-          className=" rounded-xl"
-          wrapperClassName=""
-          width={200}
-          height={200}
+          className=" rounded-xl card"
+          wrapperClassName="card"
           onMouseMove={() => {
             setVisiblee(true);
             console.log(visiblee);
@@ -153,7 +152,7 @@ const CardHome = ({ name, thumbnail, id, goTo }: CardProps) => {
           <p className="">
             <button
               onClick={handleClick}
-              className="mx-auto flex  border-white  text-white justify-center items-center  border-[2px]   rounded-2xl px-12 bg-[rgba(255,255,255,.3)]    py-2   font-semibold my-auto mt-12"
+              className="mx-auto flex  border-white text2  text-white justify-center items-center  border-[2px]   rounded-2xl px-12 bg-[rgba(255,255,255,.3)]    py-2   font-semibold my-auto mt-12"
             >
               {/* <span className="bg-white text-black  w-[80px] h-[8px] rounded-3xl inline-block"> */}
               view
@@ -163,9 +162,7 @@ const CardHome = ({ name, thumbnail, id, goTo }: CardProps) => {
         </span>
       </span>
       {name ? (
-        <p className="mt-[10px]  text-[16px] font-Hanken font-semibold ">
-          {name}
-        </p>
+        <p className="mt-[10px]  text2 font-Hanken font-semibold ">{name}</p>
       ) : null}
     </div>
   );

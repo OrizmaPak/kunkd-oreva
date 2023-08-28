@@ -32,7 +32,7 @@ const StoriesNav = ({
     }
   };
   return (
-    <div className="py-4 font-Recoleta pl-20 h-[60px] text-[24px]  font-semibold items-center rounded-full bg-white gap-8 flex px-8">
+    <div className="py-4 font-Recoleta pl-20 content-nav text25  font-semibold items-center rounded-full bg-white gap-8 flex pad-x-40">
       <div
         className="flex gap-2 cursor-pointer"
         onClick={() => navigate(`../../stories`)}

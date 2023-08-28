@@ -1,13 +1,14 @@
 import Button from "./Button";
 import KundaLogo from "@/assets/schoolIcon.svg";
 import { NavLink, useNavigate } from "react-router-dom";
+import "./homeheader.css";
 
 const HomeHeader = () => {
   const navigate = useNavigate();
 
   return (
-    <div>
-      <div className="flex font-[500] py-2 text-[16px] px-[120px] justify-between items-center bg-white  fixed w-full z-[100]">
+    <div className=" w-[100%] bg-white px-8 fixed z-[100] flex justify-center items-center">
+      <div className="flex home-header-w font-[500] py-2 text2  justify-between items-center bg-white   ">
         <NavLink
           to="/"
           className={({ isActive }) => (isActive ? "" : "text-black")}

@@ -1,14 +1,14 @@
-import { data } from "../AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import ProgressCard from "./ProgressCard";
+import { TContentLog } from "./ProgressReport";
 
-const data2 = data.map((el) => ({ ...el, isCompleted: true }));
-const Completed = () => {
+// const data2 = data.map((el) => ({ ...el, isCompleted: true }));
+const Completed = ({ data }: { data: TContentLog[] }) => {
   return (
     <div>
-      <div className="p-8 grid grid-cols-3 gap-4 gap-x-14">
-        {data2 &&
-          data2.slice(1, 5).map((data, index) => {
-            return <ProgressCard key={index} {...data} />;
+      <div className="py-8 grid grid-cols-3 gap-4 gap-x-14">
+        {data &&
+          data.map((data: TContentLog, index) => {
+            return <ProgressCard key={index} data={data} />;
           })}
       </div>
     </div>

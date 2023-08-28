@@ -278,7 +278,7 @@ const Classes = () => {
                   <h1 className="w-full">{array}</h1>
                 </Skeleton>
               ))
-            : listOfClass.map((data: TClassList, index: number) => {
+            : listOfClass?.map((data: TClassList, index: number) => {
                 return (
                   <Row
                     key={index}

@@ -90,7 +90,7 @@ const Serviceontent = () => {
         <h1 className="text-[46px] text-black font-Recoleta mb-6  header2">
           Unlimited Books and Resources
         </h1>
-        <p className=" font-Hanken left-8 leading-[30px] text-[18px] text1">
+        <p className=" font-Hanken left-8 leading-[30px]  text1">
           With Kunda Kids’ informative non-fiction texts, our extensive
           collection covers a wide range of topics and genres that will
           captivate and inspire your child's love for reading.

@@ -22,10 +22,8 @@ const CardScreen = ({
   return (
     <div className=" mx-20 mt-4 ">
       <div className="flex justify-between mb-8 ">
-        <span className=" text-[24px] font-semibold font-Recoleta ">
-          {header}
-        </span>
-        <button onClick={action} className=" text-[#8530C1] text-lg">
+        <span className=" text25 font-semibold font-Recoleta ">{header}</span>
+        <button onClick={action} className=" text-[#8530C1] text2">
           {actiontitle}
         </button>
       </div>

@@ -18,7 +18,7 @@ const AfricanLanguagesNav = ({
 }) => {
   const navigate = useNavigate();
   return (
-    <div className="py-4 pl-20 font-Recoleta h-[60px] text-[24px]  font-semibold items-center rounded-full bg-white gap-8 flex px-8">
+    <div className="py-4 pl-20 font-Recoleta content-nav text-[24px]  font-semibold items-center rounded-full bg-white gap-8 flex px-8">
       <div
         className="flex gap-3 cursor-pointer  "
         onClick={() => navigate(`../../africanlanguages`)}

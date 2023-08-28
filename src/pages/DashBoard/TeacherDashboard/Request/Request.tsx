@@ -1,80 +1,34 @@
-import Chiks from "@/assets/chiks.svg";
-import Jessica from "@/assets/jessica.svg";
-import Grease from "@/assets/grease.svg";
 import Blxst from "@/assets/Blxst.svg";
-// import Godwin from "@/assets/godwin.svg";
-// import Mitchel from "@/assets/godwin.svg";
-// import Pemela from "@/assets/pamela.svg";
-// import Spa from "@/assets/spa.svg";
-import Bella from "@/assets/bella.svg";
-import { useGetAttemptStudentConnect } from "@/api/queries";
+import {
+  useGetAttemptStudentConnect,
+  useAcceptStudentAdmission,
+  useRejectStudentAdmission,
+} from "@/api/queries";
+import { Alert, Loader } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { getApiErrorMessage } from "@/api/helper";
 
-type resquestT = {
+type TRequestStudents = {
+  parent: {
+    firstname: string;
+    lastname: string;
+    user_id: number;
+  };
+  class: {
+    class_id: number;
+    class_name: string;
+  };
+  firstname: string;
+  lastname: string;
   image: string;
-  name: string;
-  request: string;
+  status: string;
 };
 
 const Request = () => {
-  const { data } = useGetAttemptStudentConnect();
+  const { data, refetch } = useGetAttemptStudentConnect();
+  const attemptConnectStudents: TRequestStudents[] = data?.data.data.records;
 
-  console.log("attempting students", data);
-  const requestArray = [
-    {
-      image: Chiks,
-      name: "Pemela Azunda",
-      request: " is requesting for her child to join your class",
-      time: "1 hour ago",
-    },
-    {
-      image: Jessica,
-      name: "Mitchel Obi",
-      request: " is requesting for her child to join your class.",
-      time: "1 hour ago",
-    },
-    {
-      image: Grease,
-      name: "Jessica Deji",
-      request: " is requesting for her child to join your class.",
-      time: "1 hour ago",
-    },
-    {
-      image: Blxst,
-      name: "Kim Maybe",
-      request: "  is requesting for her child to join your class.",
-      time: "1 hour ago",
-    },
-    {
-      image: Bella,
-      name: "BellaMaybe",
-      request: "  is requesting for her child to join your class.",
-      time: "1 hour ago",
-    },
-    {
-      image: Jessica,
-      name: "Mitchel Obi",
-      request: "  is requesting for her child to join your class.",
-      time: "1 hour ago",
-    },
-    {
-      image: Grease,
-      name: "Jessica Deji",
-      request: " is requesting for her child to join your class.",
-      time: "1 hour ago",
-    },
-    {
-      image: Blxst,
-      name: "Kim Maybe",
-      request: "  is requesting for her child to join your class.",
-      time: "1 hour ago",
-    },
-    {
-      image: Bella,
-      name: "BellaMaybe",
-      request: "  is requesting for her child to join your class.",
-      time: "1 hour ago",
-    },
-  ];
+  console.log("attempting students", data?.data.data.records);
 
   return (
     <div className="h-full flex flex-col overflow-y-scroll">
@@ -89,8 +43,8 @@ const Request = () => {
           </div>
         </div>
         <div>
-          {requestArray.map((res: resquestT, index) => (
-            <Row key={index} {...res} />
+          {attemptConnectStudents?.map((res: TRequestStudents, index) => (
+            <Row key={index} requestData={res} refetch={refetch} />
           ))}
         </div>
       </div>
@@ -109,39 +63,112 @@ const Request = () => {
 export default Request;
 
 const Row = ({
-  image,
-  request,
-  time,
-  name,
+  requestData,
+  refetch,
 }: {
-  image: string;
-  request: string;
-  time?: string;
-  name: string;
+  requestData: TRequestStudents;
+  refetch: () => void;
 }) => {
+  const { mutate, isLoading: acceptIsLoading } = useAcceptStudentAdmission();
+  const { mutate: mutateReject, isLoading: rejectIsLoading } =
+    useRejectStudentAdmission();
+
+  const handleAccept = (id: number) => {
+    mutate(
+      { student_id: id },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+          refetch();
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+        },
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  };
+  const handleReject = (id: number) => {
+    mutateReject(
+      { student_id: id },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+          refetch();
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+        },
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  };
+
   return (
     <div className="grid grid-cols-[1fr_300px] my-8">
       <div className="flex">
         <p className="mr-6">
-          <img src={image} alt="image" className=" rounded-full w-[60px]" />
+          <img
+            src={requestData.image ? requestData.image : Blxst}
+            alt="image"
+            className=" rounded-full w-[60px]"
+          />
         </p>
         <p>
-          <span className="text-[#7E7E89] text-[18px] font-medium">
-            <span className="text-[#8530C1] ">{name}</span>
-            {request}
+          <span className="text-[#7E7E89] text2 font-medium">
+            <span className="text-[#8530C1] ">
+              {requestData.parent.firstname.charAt(0).toUpperCase() +
+                requestData.parent.firstname.slice(1)}{" "}
+              {requestData.parent.lastname}
+            </span>{" "}
+            is requesting for her child to join your class
           </span>
           <span className=" text-[#7E7E89]  block mt-3 text-[14px]">
-            {time}
+            1 hour ago
           </span>
         </p>
       </div>
 
       <div className="flex  text-white gap-5">
-        <button className="p-[15px]  text-[16px]  w-[120px] h-[42px] flex justify-center items-center rounded-2xl bg-[#E2B6FF] ">
-          Decline
+        <button
+          onClick={() => {
+            handleReject(requestData.parent.user_id);
+          }}
+          className=" pad-x-40   text-[16px]   h-[42px] flex justify-center items-center rounded-2xl bg-[#E2B6FF] "
+        >
+          {rejectIsLoading ? (
+            <p className="flex justify-center items-center">
+              <Loader color="white" size="sm" />
+            </p>
+          ) : (
+            <span>Decline</span>
+          )}
         </button>
-        <button className="p-[15px] text-[16px] w-[120px] h-[42px]  flex justify-center items-center rounded-2xl bg-[#8530C1]">
-          Accept
+        <button
+          onClick={() => {
+            handleAccept(requestData.parent.user_id);
+          }}
+          className="pad-x-40 text-[16px]  h-[42px]  flex justify-center items-center rounded-2xl bg-[#8530C1]"
+        >
+          {acceptIsLoading ? (
+            <p className="flex justify-center items-center">
+              <Loader color="white" size="sm" />
+            </p>
+          ) : (
+            <span>Accept</span>
+          )}
         </button>
       </div>
     </div>

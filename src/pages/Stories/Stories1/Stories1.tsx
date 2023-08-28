@@ -9,7 +9,10 @@ import Congrats from "@/assets/congrats.svg";
 import {
   useGetContentById,
   useContentForHome,
-  useLogBookProgress,
+  useContentTracking,
+  useGetLikedContent,
+  useLikedContent,
+  useUnLikedContent,
 } from "@/api/queries";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store";
@@ -18,14 +21,11 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { Skeleton } from "@mantine/core";
 import CustomTTSComponent from "@/components/TTS";
-import {
-  useGetLikedContent,
-  useLikedContent,
-  useUnLikedContent,
-} from "@/api/queries";
+
 import { getApiErrorMessage } from "@/api/helper";
 import { notifications } from "@mantine/notifications";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import "./stories1.css";
 
 type TContentPage = {
   audio: string;
@@ -163,11 +163,10 @@ const AboutPage = ({
   const profileId = localStorage.getItem("profileId");
   const { data, refetch } = useGetLikedContent(profileId!);
   const likeContents: TStoryContent[] = data?.data.data.records;
-  // console.log("data", likeContents);
   const { mutate } = useLikedContent();
   const { mutate: unFavoriteMutate } = useUnLikedContent();
   const isLiked = likeContents?.filter((content) => content.id === story?.id);
-  // console.log("isLiked", isLiked);
+
   const handleLikedContent = () => {
     // handleShake();
     if (isLiked?.length === 0 || isLiked === undefined) {
@@ -177,8 +176,7 @@ const AboutPage = ({
           profile_id: Number(profileId),
         },
         {
-          onSuccess(data) {
-            console.log("success", data.data.message);
+          onSuccess() {
             // const res = data?.data?.data as TUser;
             // setUser({ ...res });
             refetch();
@@ -202,10 +200,7 @@ const AboutPage = ({
           profile_id: Number(profileId),
         },
         {
-          onSuccess(data) {
-            console.log("success", data.data.message);
-            // const res = data?.data?.data as TUser;
-            // setUser({ ...res });
+          onSuccess() {
             refetch();
             notifications.show({
               title: `Notification`,
@@ -224,51 +219,55 @@ const AboutPage = ({
   };
 
   return (
-    <div className="bg-[#5D0093]  w-[100%] flex rounded-3xl px-10 py-5">
-      <div className="flex basis-full gap-2  border-r-2 justify-center items-center border-[#BD6AFA]  ">
+    <div className="bg-[#5D0093]  w-[100%] flex rounded-3xl pad-x-40 about-card-px py-5">
+      <div className="flex basis-full  border-r-2 justify-center items-center border-[#BD6AFA]  ">
         <p className="flex flex-col w-full">
           {story ? (
             <LazyLoadImage
               src={story?.thumbnail}
               placeholderSrc={AfamBlur}
               effect="blur"
-              className="rounded-2xl"
-              wrapperClassName=""
-              width={300}
-              height={300}
+              className="rounded-2xl about-img "
+              wrapperClassName="about-img"
             />
           ) : (
             <LazyLoadImage
               placeholderSrc={AfamBlur}
               effect="blur"
-              className="rounded-2xl"
-              wrapperClassName=""
-              width={300}
-              height={300}
+              className="rounded-2xl about-img "
+              wrapperClassName="about-img"
             />
           )}
         </p>
-        <p className="flex flex-col w-full  ">
-          <span className="font-bold font-Recoleta text-white text-[24px]">
+        <p className="grid flex-col w-full   h-full py-2 ">
+          <span className="font-bold font-Recoleta text-white text25 justify-self-start">
             {story?.name}
           </span>
-          <span className="mt-4 text-[#BD6AFA]  ">Dele and Louisa Olafuyi</span>
-          <p className="mt-40 flex gap-4">
+          <span className=" text-[#BD6AFA]  ">Dele and Louisa Olafuyi</span>
+          <p className="grid grid-cols-2   gap-4 ">
             <button
               onClick={setStartRead}
-              className="px-16 py-3 border text-white border-white rounded-3xl"
+              className=" py-3 inline self-end text-white border-white border-[2px] rounded-2xl"
             >
               Read
             </button>
-            <button onClick={handleLikedContent}>
-              <img loading="lazy" src={Bookmark} alt="bookmark" />
+            <button
+              onClick={handleLikedContent}
+              className="inline self-end text-start"
+            >
+              <img
+                loading="lazy"
+                src={Bookmark}
+                alt="bookmark"
+                className=" inline "
+              />
             </button>
           </p>
         </p>
       </div>
-      <div className=" basis-3/4 text-[#BD6AFA] px-10">
+      <div className=" basis-3/4 text-[#BD6AFA] pad-x-40">
         <div>
-          <h1 className="text-white font-bold  font-Hanken text-[25px] my-4">
+          <h1 className="text-white font-bold  font-Hanken text25 my-2">
             About the author
           </h1>
           <p>
@@ -279,7 +278,7 @@ const AboutPage = ({
           </p>
         </div>
         <div>
-          <h1 className="text-white font-bold  font-Hanken text-[25px] my-4">
+          <h1 className="text-white font-bold  font-Hanken text25 my-2">
             Overview
           </h1>
           <p>
@@ -314,7 +313,7 @@ const ReadPage = ({
           loading="lazy"
           src={thumbnail}
           alt="image"
-          className="w-[400px] rounded-xl"
+          className="read-img rounded-xl"
         />
       </div>
       <div className=" basis-full flex flex-col ">
@@ -380,7 +379,7 @@ const BookPagination = ({
   setPage: (val: number) => void;
   pageTotal: number;
 }) => {
-  const { mutate } = useLogBookProgress();
+  const { mutate } = useContentTracking();
   const profileId = localStorage.getItem("profileId");
   const contentId = localStorage.getItem("contentId");
   const [currentPage, setCurrentage] = useState(1);
@@ -398,8 +397,9 @@ const BookPagination = ({
       {
         profile_id: Number(profileId),
         content_id: Number(contentId),
-        current_page: Number(currentPage + 1),
-        current_time: 4,
+        status: "ongoing",
+        pages_read: Number(currentPage + 1),
+        timespent: 23,
       },
       {
         onSuccess(data) {
@@ -407,10 +407,10 @@ const BookPagination = ({
           // const res = data?.data?.data as TUser;
           // setUser({ ...res });
 
-          notifications.show({
-            title: `Notification`,
-            message: data?.data.message,
-          });
+          // notifications.show({
+          //   title: `Notification`,
+          //   message: data?.data.message,
+          // });
         },
         onError(err) {
           notifications.show({

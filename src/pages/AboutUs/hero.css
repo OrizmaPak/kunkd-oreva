@@ -1,0 +1,3 @@
+.hero-banner-w {
+  width: clamp(11.25rem, -10.8056rem + 100.8257vw, 79.9375rem) !important;
+}

@@ -40,7 +40,7 @@ export type TAudioBooks = {};
 export type TVerifyPinData = {};
 export type TPayStackInitData = {};
 export type TLikedContentData = {};
-export type TLogBookProgress = {};
+export type TContentTracking = {};
 export type TAddTeacherData = {};
 
 export type TProfileData = {

@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import React from "react";
+import "./packagecard.css";
 
 type Props = {
   recommended?: boolean;
   title?: React.ReactNode;
   price?: React.ReactNode;
   btn?: string;
-  content?: string[];
+  content?: React.ReactNode[];
   noBorder?: boolean;
   isIcon?: boolean;
   plan?: TPlan;
@@ -41,22 +42,20 @@ const PackageCard = ({
   };
   return (
     <div
-      className={` min-w-[176px] ${
-        noBorder ? "" : "border border-[#E7D4F4]  "
-      } ${
+      className={`packageCard-w ${noBorder ? "" : " bg-[#fffbff]  "} ${
         recommended ? "bg-[#8530C1] " : ""
-      } px-4 rounded-3xl py-2 pt-8 relative`}
+      }  rounded-3xl py-2  relative`}
     >
       {recommended && (
         <div className=" absolute left-[0px] top-[-20px] bg-[#FBC70D] p-[7px] rounded-t-3xl w-full text-center">
-          <strong className="text-[13px] text-center"> RECOMMENDED</strong>
+          <strong className="text3 text-center"> RECOMMENDED</strong>
         </div>
       )}
       {title && (
         <div
           className={`${
             recommended ? "text-white" : ""
-          } text-lg font-Hanken font-bold text-center`}
+          } text-lg font-Hanken font-bold text-center pt-2`}
         >
           {title}
         </div>
@@ -74,7 +73,9 @@ const PackageCard = ({
         <div className=" flex flex-col ">
           {content.map((item, index) => (
             <div className="mt-2 " key={index}>
-              <p className="text-sm my-4">{item}</p>
+              <p className="text-sm  py-[10.5px]  border-b-[0.5px] border-[#FBECFF]">
+                {item}
+              </p>
             </div>
           ))}
         </div>
@@ -84,13 +85,14 @@ const PackageCard = ({
         <div className=" flex flex-col ">
           {content.map((item, index) => (
             <div className="mt-2" key={index}>
-              <p className=" flex justify-center items-center">
-                <img
+              <p className=" flex py-2 justify-center items-center border-b-[0.5px] border-[#FBECFF]">
+                {/* <img
                   loading="lazy"
                   src={item}
                   alt="icon"
-                  className="w-[10px] my-5"
-                />
+                  className="w-[10px] my-3 object-cover"
+                /> */}
+                {item}
               </p>
             </div>
           ))}
@@ -101,7 +103,7 @@ const PackageCard = ({
         <div className="flex justify-center items-center">
           <button
             onClick={() => handlePaln(plan?.id!)}
-            className="mt-8 bg-[#E7D4F4] text-[#8530C1] p-3 rounded-2xl"
+            className="mt-8 pad-x-40 bg-[#E7D4F4] text-[#8530C1] p-3 rounded-2xl"
           >
             {btn}
           </button>

@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 // import { getProfileState } from "@/store/profileStore";
 // import useStore from "@/store/index";
 import { selectAvatarType } from "./SelectProfile";
-
+import { MdClose } from "react-icons/md";
 export type avatarType = {
   name: string;
   image: string;
@@ -115,11 +115,15 @@ export const ChildNameModal = ({
   goBack,
   showGoBackIcon,
   setName,
+  close,
+  showCancelBtn,
 }: {
   onContinue: () => void;
   goBack: () => void;
   showGoBackIcon: boolean;
   setName: (val: string) => void;
+  close?: () => void;
+  showCancelBtn?: boolean;
 }) => {
   const schema: ZodType<Pick<FormData, "name">> = z.object({
     name: z
@@ -146,19 +150,28 @@ export const ChildNameModal = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className=" max-w-[600px] rounded-3xl w-[100%] py-10"
+      className="  rounded-3xl w-[100%] py-7 "
     >
-      {showGoBackIcon && (
-        <p onClick={goBack} className="pl-10">
-          <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
-        </p>
-      )}
-      <div className="px-14">
+      <div className="flex px-10 justify-between items-center">
+        <span></span>
+        {showGoBackIcon && (
+          <p onClick={goBack} className="">
+            <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
+          </p>
+        )}
+        <h1 className="text-center font-bold text-[35px] font-Recoleta text30">
+          What is your child’s name?
+        </h1>
+        <span>
+          {showCancelBtn && (
+            <MdClose onClick={close} size={35} className=" cursor-pointer" />
+          )}
+        </span>
+      </div>
+
+      <div className="px-28">
         <div>
-          <h1 className="text-center font-bold text-[35px] font-Recoleta">
-            What is your child’s name?
-          </h1>
-          <p className="text-center">Input your child’s full name</p>
+          <p className="text-center text2">Input your child’s full name</p>
         </div>
         <div className="flex justify-center items-center p-4">
           <img loading="lazy" src={YaJump} alt="jump" />
@@ -187,10 +200,14 @@ export const ChildAgeModal = ({
   onContinue,
   goBack,
   setAge,
+  close,
+  showCancelBtn,
 }: {
   onContinue: () => void;
   goBack: () => void;
   setAge: (val: string) => void;
+  close?: () => void;
+  showCancelBtn?: boolean;
 }) => {
   const schema: ZodType<FormData> = z.object({
     dob: z
@@ -216,16 +233,23 @@ export const ChildAgeModal = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className=" max-w-[600px] rounded-3xl w-[100%] py-10"
+      className="  rounded-3xl w-[100%] py-7  "
     >
-      <p onClick={goBack} className="pl-10 ">
-        {} <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
-      </p>
-      <div className="px-14">
+      <div className="flex px-10 justify-between items-center">
+        <p onClick={goBack} className="">
+          <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
+        </p>
+        <h1 className="text-center font-bold text30 font-Recoleta">
+          What is your child’s age?
+        </h1>
+        <span>
+          {showCancelBtn && (
+            <MdClose onClick={close} size={35} className=" cursor-pointer" />
+          )}
+        </span>
+      </div>
+      <div className="px-28">
         <div>
-          <h1 className="text-center font-bold text-[35px] font-Recoleta">
-            What is your child’s age?
-          </h1>
           <p className="text-center">
             We will try to customize the app for your child’s age.
           </p>
@@ -260,12 +284,16 @@ export const SelectAvatar = ({
   // arrayAvatar,
   name,
   age,
+  close,
+  showCancelBtn,
 }: {
   onContinue: () => void;
   goBack: () => void;
   // arrayAvatar: avatarType[];
   age: string;
   name: string;
+  close?: () => void;
+  showCancelBtn?: boolean;
 }) => {
   const [selected, setSelected] = useState("");
   const { isLoading: isLoadingAvatar, data, error } = useGetAvatars();
@@ -312,26 +340,38 @@ export const SelectAvatar = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className=" max-w-[600px] rounded-3xl w-[100%] py-5"
+      className="  rounded-3xl  py-7  px-5  "
     >
       {error ? (
         <h1>something went wrong</h1>
       ) : (
         <div>
-          <p onClick={goBack} className="pl-10 ">
-            <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
-          </p>
+          <div className="flex px-10 justify-between items-center  ">
+            <p onClick={goBack} className=" ">
+              <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
+            </p>
+            <h1 className="text-center font-bold  text30 font-Recoleta">
+              Select Avatar
+            </h1>
+            <span>
+              {showCancelBtn && (
+                <MdClose
+                  onClick={close}
+                  size={35}
+                  className=" cursor-pointer"
+                />
+              )}
+            </span>
+          </div>
+
           <div className="px-14">
             <div>
-              <h1 className="text-center font-bold text-[35px] font-Recoleta">
-                Select Avatar
-              </h1>
-              <p className="text-center mb-4">
+              <p className="text-center mb-4 text2">
                 Pick an avatar you think your child might like
               </p>
             </div>
             <div className="flex justify-center items-center">
-              <div className="grid grid-cols-4 gap-x-8 gap-y-4">
+              <div className="grid grid-cols-4 gap-x-4 gap-y-4">
                 {isLoadingAvatar
                   ? new Array(12).fill(1).map((el, index) => (
                       <Skeleton
@@ -432,7 +472,7 @@ export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
-      className=" max-w-[600px] rounded-3xl w-[100%] py-10"
+      className="  rounded-3xl w-[100%] py-10"
     >
       <div className="px-14 rounded-3xl">
         <div className="flex justify-center items-center p-4">

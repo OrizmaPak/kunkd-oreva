@@ -15,7 +15,7 @@ const Header = ({
   return (
     <div>
       <div className="flex justify-between items-center py-10 px-24">
-        <h1 className="font-bold font-Recoleta text-[30px]">My List</h1>
+        <h1 className="font-bold font-Recoleta text30">My List</h1>
         <span>
           <img loading="lazy" src={SearchIcon} alt="SearchIcon " className="" />
         </span>
@@ -25,7 +25,7 @@ const Header = ({
         <div className="flex gap-4 pb-4 pl-24">
           <button
             onClick={() => setMyListType("stories")}
-            className={`${
+            className={`pad-x-40 text2 transition-all duration-300 ${
               myListType === "stories" ? "bg-[#8530C1]" : "bg-[#FBECFF]"
             } flex py-2 px-8 gap-4 rounded-full items-center justify-center`}
           >
@@ -44,7 +44,7 @@ const Header = ({
           </button>
           <button
             onClick={() => setMyListType("audiobooks")}
-            className={`${
+            className={`pad-x-40 text2 transition-all duration-300  ${
               myListType === "audiobooks" ? "bg-[#8530C1]" : "bg-[#FFEDEA]"
             }   flex py-2 px-8 gap-4 rounded-full items-center justify-center`}
           >
@@ -63,7 +63,7 @@ const Header = ({
           </button>
           <button
             onClick={() => setMyListType("languages")}
-            className={`${
+            className={`pad-x-40 text2 transition-all duration-300  ${
               myListType === "languages" ? "bg-[#8530C1]" : "bg-[#EBFFE8]"
             }  flex py-2 px-8 gap-4 rounded-full items-center justify-center`}
           >
@@ -73,16 +73,16 @@ const Header = ({
               color={myListType === "languages" ? "white" : "#2BB457"}
             />
             <span
-              className={
-                myListType === "languages" ? "text-white" : "text-[#2BB457]"
-              }
+              className={`
+                ${myListType === "languages" ? "text-white" : "text-[#2BB457]"}
+              `}
             >
               African Languages
             </span>
           </button>
         </div>
 
-        <span className="flex mr-14 gap-4">
+        <span className="text3 flex mr-14 gap-4">
           Recently Added <img loading="lazy" src={ArrowDown} alt="arrow down" />
         </span>
       </div>

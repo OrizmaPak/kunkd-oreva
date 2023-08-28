@@ -1,0 +1,12 @@
+.about-img {
+  width: clamp(9.375rem, 0.5068rem + 20.2703vw, 18.75rem) !important;
+  height: clamp(9.375rem, 0.5068rem + 20.2703vw, 18.75rem) !important;
+}
+.read-img {
+  width: clamp(10.625rem, -2.973rem + 31.0811vw, 25rem) !important;
+  height: clamp(10.625rem, -2.973rem + 31.0811vw, 25rem) !important;
+}
+
+.about-card-px {
+  padding-block: clamp(0.9375rem, -1.723rem + 6.0811vw, 3.75rem) !important;
+}

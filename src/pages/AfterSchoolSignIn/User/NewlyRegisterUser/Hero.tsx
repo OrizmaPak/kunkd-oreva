@@ -2,7 +2,8 @@ import SchImage1 from "@/assets/SchHero.svg";
 import SchImage2 from "@/assets/Pimage2.svg";
 import Slider from "react-slick";
 // import { Skeleton } from "@mantine/core";
-// import { useState } from "react";
+// import { useState } from "reac
+import "./hero.css";
 
 const Hero = () => {
   const settings = {
@@ -30,7 +31,7 @@ const Hero = () => {
             loading="lazy"
             src={SchImage1}
             alt="image"
-            className="absolute right-0 bottom-[0px]"
+            className="absolute right-0 bottom-[0px] banner-img-w"
           />
         </div>
         <div className="bg-[#2BB457] h-[256px] rounded-bl-2xl rounded-tl-2xl rounded-tr-2xl">
@@ -41,7 +42,7 @@ const Hero = () => {
             loading="lazy"
             src={SchImage2}
             alt="image"
-            className="absolute right-0 bottom-[0px]"
+            className="absolute right-0 bottom-[0px] banner-img-w"
           />
         </div>
       </Slider>

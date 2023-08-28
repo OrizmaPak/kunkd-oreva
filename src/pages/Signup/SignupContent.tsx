@@ -138,68 +138,74 @@ const SignContent = () => {
     }
   };
   return (
-    <div className="w-[100%] max-w-[500px] mx-auto relative">
-      <Link to="/">
-        <span className="absolute">
-          <img loading="lazy" src={Cancel} alt="cancel" />
-        </span>
-      </Link>
+    <div className="flex justify-center items-center relative h-full">
+      <div className="inner-form-w  mx-auto relative">
+        <Link to="/">
+          <span className="absolute top-[-60px]">
+            <img loading="lazy" src={Cancel} alt="cancel" />
+          </span>
+        </Link>
 
-      <div className="w-[100%] pt-20">
-        <span></span>
-        <h1 className="font-bold text-[40px] font-Recoleta">Get Started</h1>
-        <p className="text-[15px] text-[#A7A7A7] font-Hanken">
-          Let's create account that fits you!
-        </p>
-        <div className="mb-14 ">
-          {options.map((option) => (
-            <OptionButton
-              clicked={to === option.to}
-              title={option.title}
-              body={option.desc}
-              key={option.to}
-              onClick={() => setTo(option.to)}
-              image={
-                to === option.to ? (
-                  <IoCheckmarkCircleOutline size={25} color="#8530C1" />
-                ) : (
-                  <IoEllipseOutline size={25} />
-                )
-              }
-            />
-          ))}
-          {/* // <OptionButton title="'I'm a Parent" body="I want to manage my child's access to this platform" image={UnChecked}/> */}
-          <div className="mt-10">
-            <Link to={to}>
-              <Link to={`/${to}`}>
-                <Button onClick={handleClick} size="full">
-                  Continue
-                </Button>
+        <div className="w-[100%]">
+          <span></span>
+          <h1 className="font-bold header2 font-Recoleta">Get Started</h1>
+          <p className="text3 text-[#A7A7A7] font-Hanken">
+            Let's create account that fits you!
+          </p>
+          <div className="mb-8 ">
+            {options.map((option) => (
+              <OptionButton
+                clicked={to === option.to}
+                title={option.title}
+                body={option.desc}
+                key={option.to}
+                onClick={() => setTo(option.to)}
+                image={
+                  to === option.to ? (
+                    <IoCheckmarkCircleOutline size={25} color="#8530C1" />
+                  ) : (
+                    <IoEllipseOutline size={25} />
+                  )
+                }
+              />
+            ))}
+            {/* // <OptionButton title="'I'm a Parent" body="I want to manage my child's access to this platform" image={UnChecked}/> */}
+            <div className="mt-5">
+              <Link to={to}>
+                <Link to={`/${to}`}>
+                  <Button onClick={handleClick} size="full">
+                    Continue
+                  </Button>
+                </Link>
               </Link>
-            </Link>
+            </div>
           </div>
-        </div>
-        <div className="flex gap-8">
-          <Button onClick={handleGoogleSignUp} size="full" varient="outlined">
-            <FcGoogle size={30} className={" mx-auto"} />
-          </Button>
-          <Button size="full" varient="outlined">
-            <BsApple size={30} className={" mx-auto"} color={"black"} />
-          </Button>
-          <Button onClick={handleFacebookSignUp} size="full" varient="outlined">
-            <AiFillFacebook size={30} className={" mx-auto"} color="black" />
-          </Button>
-        </div>
-        <p className="mt-2 text-center text-[] text-gray-400 ">
-          <span>Already signed up? </span>
-          <button
-            onClick={() => navigate("/login")}
-            className="mt-8 text-[#8530C1] font-bold
+          <div className="flex gap-8">
+            <Button onClick={handleGoogleSignUp} size="full" varient="outlined">
+              <FcGoogle size={20} className={" mx-auto"} />
+            </Button>
+            <Button size="full" varient="outlined">
+              <BsApple size={20} className={" mx-auto"} color={"black"} />
+            </Button>
+            <Button
+              onClick={handleFacebookSignUp}
+              size="full"
+              varient="outlined"
+            >
+              <AiFillFacebook size={20} className={" mx-auto"} color="black" />
+            </Button>
+          </div>
+          <p className="mt-4  text-gray-400 text-center ">
+            <span>Already signed up? </span>
+            <button
+              onClick={() => navigate("/login")}
+              className=" text-[#8530C1] font-bold
               "
-          >
-            Login
-          </button>
-        </p>
+            >
+              Login
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ const CategoriesCard = ({
           className="w-[70px] h-[70px]"
         />
       </span>
-      <p className="font-bold font-Recoleta">{label}</p>
+      <p className="font-bold font-Recoleta text1">{label}</p>
     </div>
   );
 };

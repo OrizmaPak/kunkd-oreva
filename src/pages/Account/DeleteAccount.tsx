@@ -7,11 +7,12 @@ const DeleteAccount = ({ onCancel }: { onCancel: () => void }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
+      className="py-5"
     >
-      <h1 className="font-bold text-[30px] text-center font-Recoleta">
-        Are you sure you want to delete your account?
+      <h1 className="font-bold text25 text-center font-Recoleta mb-2">
+        Are you sure you want to delete <br /> your account?
       </h1>
-      <p className="text-center mb-10 ">
+      <p className="text-center mb-16 text2  ">
         If you delete your account, you can’t recover it.
       </p>
 

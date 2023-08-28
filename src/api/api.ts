@@ -21,7 +21,7 @@ import type {
   TUdateParentImageData,
   TPayStackInitData,
   TLikedContentData,
-  TLogBookProgress,
+  TContentTracking,
   TAddTeacherData,
 } from "./types";
 
@@ -143,7 +143,9 @@ export const UnLikedContent = (payload: TLikedContentData) => {
 //   return axios.get("/user/content/favourites/:id", payload);
 // };
 export const GetLikedContent = (profileId: string) => {
-  return axios.get(`/user/content/favourites/${profileId}`);
+  return axios.get(`/user/content/favourites?id=`, {
+    params: { id: profileId },
+  });
 };
 
 // Socila Login
@@ -219,8 +221,8 @@ export const StripeInit = (payload: TPayStackInitData) => {
   return axios.post("/subscribe/stripe/init", payload);
 };
 
-export const LogBookProgress = (payload: TLogBookProgress) => {
-  return axios.post("/content/track/book", payload);
+export const ContentTracking = (payload: TContentTracking) => {
+  return axios.post("/content/track", payload);
 };
 
 export const AddTeacherData = (payload: TAddTeacherData) => {
@@ -251,7 +253,7 @@ export const GetAdmittedStudents = () => {
 };
 
 export const GetAttemptStudentConnect = () => {
-  return axios.get("school/student/connect/list");
+  return axios.get("/school/student/connect/list");
 };
 
 export const ReAssignTeacher = (payload: TAddTeacherData) => {
@@ -264,4 +266,16 @@ export const GetOngoingContents = () => {
 
 export const GetCompletedContents = () => {
   return axios.get("/content/tracking/completed");
+};
+
+export const GetContentsLog = (profileId: string) => {
+  return axios.get(`/content/profile/status/${profileId ? profileId : ""}`);
+};
+
+export const AcceptStudentAdmission = (payload: TAddTeacherData) => {
+  return axios.post(`/school/student/admit`, payload);
+};
+
+export const RejectStudentAdmission = (payload: TAddTeacherData) => {
+  return axios.post(`/school/student/admit`, payload);
 };

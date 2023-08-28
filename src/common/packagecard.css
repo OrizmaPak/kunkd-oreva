@@ -1,0 +1,6 @@
+.packageCard-w {
+  width: clamp(5rem, 2.9931rem + 9.1743vw, 11.25rem) !important;
+  height: clamp(9.375rem, 4.3578rem + 22.9358vw, 25rem) !important;
+  /* display: flex; */
+  /* flex-direction: column; */
+}

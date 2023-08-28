@@ -39,7 +39,7 @@ import {
   LikedContent,
   GetLikedContent,
   UnLikedContent,
-  LogBookProgress,
+  ContentTracking,
   AddTeacherData,
   AddClassData,
   GetClassList,
@@ -51,6 +51,9 @@ import {
   ReAssignTeacher,
   GetOngoingContents,
   GetCompletedContents,
+  GetContentsLog,
+  AcceptStudentAdmission,
+  RejectStudentAdmission,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -340,9 +343,9 @@ export const useGetLikedContent = (profileId: string) => {
   });
 };
 
-export const useLogBookProgress = () => {
+export const useContentTracking = () => {
   return useMutation({
-    mutationFn: LogBookProgress,
+    mutationFn: ContentTracking,
   });
 };
 
@@ -406,4 +409,22 @@ export const useGetCompletedContents = () => {
   });
 };
 
+export const useGetContentsLog = (profileId: string) => {
+  return useQuery({
+    queryKey: ["GetOngoingForParent", profileId],
+    queryFn: () => GetContentsLog(profileId),
+  });
+};
+
+export const useAcceptStudentAdmission = () => {
+  return useMutation({
+    mutationFn: AcceptStudentAdmission,
+  });
+};
+
+export const useRejectStudentAdmission = () => {
+  return useMutation({
+    mutationFn: RejectStudentAdmission,
+  });
+};
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

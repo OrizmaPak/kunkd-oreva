@@ -69,72 +69,74 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
 
   return (
     <FormWrapper>
-      <div className="w-[100%] max-w-[500px] mx-auto relative">
-        <Link to="/">
-          <span className="absolute right-0 top-[-30px]">
-            <img loading="lazy" src={Cancel} alt="cancel" />
-          </span>
-        </Link>
-        <div className="w-[100%] pt-20">
-          <span></span>
-          <h1 className="font-bold fon text-[40px] font-Recoleta">
-            Sign up of parent
-          </h1>
-          <p className="text-[15px] text-[#A7A7A7] font-Hanken">
-            Start learning and reading without restrictions.{" "}
-          </p>
-          <form className="mt-8" onSubmit={handleSubmit(submitData)}>
-            <p className="my-8 flex  w-full justify-between">
-              <InputFormat
-                type="text"
-                placeholder="First Name"
-                reg={register("firstname")}
-                errorMsg={errors.name?.message}
-              />
-
-              <InputFormat
-                type="text"
-                placeholder="Last Name"
-                reg={register("lastname")}
-                errorMsg={errors.address?.message}
-              />
+      <div className=" w-full h-full flex justify-center items-center ">
+        <div className="inner-form-w2 mx-auto relative ">
+          <Link to="/">
+            <span className="absolute right-0 top-[-60px]">
+              <img loading="lazy" src={Cancel} alt="cancel" />
+            </span>
+          </Link>
+          <div className="w-[100%] ">
+            <span></span>
+            <h1 className="font-bold fon header2 font-Recoleta">
+              Sign up of parent
+            </h1>
+            <p className="text2 text-[#A7A7A7] font-Hanken">
+              Start learning and reading without restrictions.{" "}
             </p>
+            <form className="mt-8" onSubmit={handleSubmit(submitData)}>
+              <p className="my-8 flex  w-full justify-between gap-2">
+                <InputFormat
+                  type="text"
+                  placeholder="First Name"
+                  reg={register("firstname")}
+                  errorMsg={errors.name?.message}
+                />
 
-            <p className="my-8">
-              <InputFormat
-                type="text"
-                placeholder="Email"
-                leftIcon={<AiOutlineMail size={20} color="#c4ccd0" />}
-                reg={register("email")}
-                errorMsg={errors.email?.message}
-              />
-            </p>
+                <InputFormat
+                  type="text"
+                  placeholder="Last Name"
+                  reg={register("lastname")}
+                  errorMsg={errors.address?.message}
+                />
+              </p>
 
-            <p className="text-center font-Hanken m-3 mt-4 text-gray-400">
-              By continuing you agree to Kunda Kids{" "}
-              <strong className=" text-black"> Terms of Service </strong>and{" "}
-              <strong className="text-black"> Privacy Policy </strong>
-            </p>
-            <Button size="full" type="submit">
-              {isLoading ? (
-                <p className="flex justify-center items-center">
-                  <Loader color="white" size="sm" />
-                </p>
-              ) : (
-                <span>Create free account</span>
-              )}
-            </Button>
-          </form>
+              <p className="my-8">
+                <InputFormat
+                  type="text"
+                  placeholder="Email"
+                  leftIcon={<AiOutlineMail size={20} color="#c4ccd0" />}
+                  reg={register("email")}
+                  errorMsg={errors.email?.message}
+                />
+              </p>
 
-          <p className="mt-2 text-center text-[] text-gray-400 ">
-            <span className="font-Hanken">Already hava an account? </span>
-            <button
-              className="mt-6 text-[#8530C1] font-bold
+              <p className="text-center text3 font-Hanken m-3 mt-4 text-gray-400">
+                By continuing you agree to Kunda Kids{" "}
+                <strong className=" text-black"> Terms of Service </strong>and{" "}
+                <strong className="text-black"> Privacy Policy </strong>
+              </p>
+              <Button size="full" type="submit">
+                {isLoading ? (
+                  <p className="flex justify-center items-center">
+                    <Loader color="white" size="sm" />
+                  </p>
+                ) : (
+                  <span className="text2">Create free account</span>
+                )}
+              </Button>
+            </form>
+
+            <p className="mt-2  text-center text2 text-gray-400 ">
+              <span className="font-Hanken">Already hava an account? </span>
+              <button
+                className="mt-6 text-[#8530C1] font-bold
               "
-            >
-              Login
-            </button>
-          </p>
+              >
+                Login
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </FormWrapper>

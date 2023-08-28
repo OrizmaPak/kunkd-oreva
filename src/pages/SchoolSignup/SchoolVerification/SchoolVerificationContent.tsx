@@ -84,48 +84,50 @@ const SchoolVerificationContent = () => {
   };
 
   return (
-    <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">
-      <Link to="/">
-        <span className="absolute">
-          <img loading="lazy" src={Cancel} alt="cancel" />
-        </span>
-      </Link>
-      <div className="w-[100%]  my-auto ">
-        <span></span>
-        <h1 className=" font-semibold text-[40px] font-Recoleta">
-          Verify account
-        </h1>
-        <p className="text-[14px] text-[#A7A7A7] font-Hanken">
-          A code has been sent to mail, enter to verify your account{" "}
-        </p>
-        <form onSubmit={handleSubmit(submitData)}>
-          <div className="mt-8 flex justify-center items-center flex-col">
-            <Group position="center">
-              <PinInput value={otp} onChange={handlePinChange} />
-            </Group>
-            <br />
-            {formState.errors.otp && (
-              <p className="text-red-700">
-                PIN must be exactly 4 characters long
-              </p>
-            )}
-          </div>
-
-          <p className="mt-10">
-            <Button type="submit" size="full">
-              {isLoading ? (
-                <p className="flex justify-center items-center">
-                  <Loader color="white" size="sm" />
-                </p>
-              ) : (
-                <span>Verify</span>
-              )}
-            </Button>
+    <div className="h-full w-full flex justify-center items-center">
+      <div className="inner-form-w mx-auto relative">
+        <Link to="/">
+          <span className="absolute top-[-60px]">
+            <img loading="lazy" src={Cancel} alt="cancel" />
+          </span>
+        </Link>
+        <div className="w-[100%]  my-auto ">
+          <span></span>
+          <h1 className=" font-semibold header2 font-Recoleta">
+            Verify account
+          </h1>
+          <p className="text3 text-[#A7A7A7] font-Hanken">
+            A code has been sent to mail, enter to verify your account{" "}
           </p>
-        </form>
-        <p className="mt-6 text-center text-[]  ">
-          <strong>Resend in {secondsLeft}s</strong>
-        </p>
+          <form onSubmit={handleSubmit(submitData)}>
+            <div className="mt-8 flex justify-center items-center flex-col">
+              <Group position="center">
+                <PinInput value={otp} onChange={handlePinChange} />
+              </Group>
+              <br />
+              {formState.errors.otp && (
+                <p className="text-red-700 text3">
+                  PIN must be exactly 4 characters long
+                </p>
+              )}
+            </div>
+
+            <p className="mt-4">
+              <Button type="submit" size="full">
+                {isLoading ? (
+                  <p className="flex justify-center items-center">
+                    <Loader color="white" size="sm" />
+                  </p>
+                ) : (
+                  <span className="text2">Verify</span>
+                )}
+              </Button>
+            </p>
+          </form>
+          <p className="mt-4 text-center text3  ">
+            <strong>Resend in {secondsLeft}s</strong>
+          </p>
+        </div>
       </div>
     </div>
   );

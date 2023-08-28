@@ -1,0 +1,3 @@
+.home-footer-w {
+  width: clamp(21.875rem, 0rem + 100vw, 90rem) !important;
+}

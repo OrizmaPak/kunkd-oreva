@@ -1,6 +1,7 @@
 import Slider from "react-slick";
 import PImages1 from "@/assets/pimages.svg";
 import PImages2 from "@/assets/Pimage2.svg";
+import "./hero.css";
 
 type Props = {
   //   banner: string;
@@ -30,18 +31,18 @@ const Hero = ({ username, userimage }: Props) => {
               loading="lazy"
               src={userimage}
               alt="userimage"
-              className="w-[150px] h-[150px] object-cover rounded-full"
+              className="hero-img object-cover rounded-full"
             />
           </p>
-          <h1 className="font-bold font-Recoleta text-[22px]">
-            Hello {username},
-          </h1>
-          <p className=" font-Hanken text-lg text-gray-400">Start reading.</p>
+          <h1 className="font-bold font-Recoleta text25">Hello {username},</h1>
+          <p className=" font-Hanken text-lg text-gray-400 text2">
+            Start reading.
+          </p>
         </div>
-        <div className=" w-[900px]  h-[256px]">
+        <div className="hero-w h-[256px]">
           <Slider {...settings}>
-            <div className="w-[900px] h-[256px] relative bg-[#8530C1]  rounded-bl-2xl rounded-tr-3xl">
-              <h1 className="text-[24px] text-white font-semibold mx-10  my-14">
+            <div className=" h-[256px]   w-full relative bg-[#8530C1]  rounded-bl-2xl rounded-tr-3xl">
+              <h1 className="text25 text-white font-semibold mx-10  my-14">
                 Beautifully illustrated storybooks for <br /> your child
               </h1>
               <img
@@ -51,8 +52,8 @@ const Hero = ({ username, userimage }: Props) => {
               />
             </div>
 
-            <div className="bg-[#2BB457] relative w-[900px] h-[256px]  rounded-bl-2xl rounded-tr-3xl">
-              <h1 className="text-[24px] text-white mx-10  my-14 font-semibold">
+            <div className="bg-[#2BB457] w-full relative h-[256px]  rounded-bl-2xl rounded-tr-3xl">
+              <h1 className="text25 text-white mx-10  my-14 font-semibold">
                 Watch educational videos on the
                 <br /> African Culture
               </h1>

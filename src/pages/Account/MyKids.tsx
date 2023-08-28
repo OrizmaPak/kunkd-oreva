@@ -36,6 +36,7 @@ import {
 import { STEP_1, STEP_2, STEP_3, STEP_4 } from "@/utils/constants";
 import { motion } from "framer-motion";
 import { useGetProfile } from "@/api/queries";
+import { MdClose } from "react-icons/md";
 
 const MyKids = () => {
   const [profile] = useStore(getProfileState);
@@ -61,7 +62,7 @@ const MyKids = () => {
           centered
           size="lg"
           radius={"xl"}
-          closeOnClickOutside={false}
+          // closeOnClickOutside={false}
           withCloseButton={false}
         >
           {currentStep === STEP_1 && (
@@ -70,6 +71,8 @@ const MyKids = () => {
               goBack={() => currentStep - 1}
               showGoBackIcon={false}
               setName={setName}
+              close={() => close()}
+              showCancelBtn={true}
             />
           )}
           {currentStep === STEP_2 && (
@@ -77,6 +80,8 @@ const MyKids = () => {
               onContinue={() => setCurrentStep(STEP_3)}
               goBack={() => setCurrentStep(currentStep - 1)}
               setAge={setAge}
+              close={() => close()}
+              showCancelBtn={true}
             />
           )}
           {currentStep === STEP_3 && (
@@ -85,6 +90,8 @@ const MyKids = () => {
               goBack={() => setCurrentStep(currentStep - 1)}
               age={age}
               name={name}
+              close={() => close()}
+              showCancelBtn={true}
             />
           )}
           {currentStep === STEP_4 && (
@@ -157,11 +164,10 @@ const KidCard = ({
       <Modal
         radius={"xl"}
         size="lg"
+        px="md"
         opened={openedEditModal}
         onClose={closeEditModal}
-        closeButtonProps={{
-          size: "xl",
-        }}
+        withCloseButton={false}
         centered
       >
         <EditProfile
@@ -178,9 +184,7 @@ const KidCard = ({
         size="lg"
         opened={openedConnectModal}
         onClose={closeConnectModal}
-        closeButtonProps={{
-          size: "xl",
-        }}
+        withCloseButton={false}
         centered
       >
         <ConnectTOSchool profileId={id!} closeModal={closeConnectModal} />
@@ -204,7 +208,7 @@ const KidCard = ({
         </div>
         <div className="ml-3 mt-8">
           <h1 className="font-bold text-[16px] px-3 font-Recoleta">{name}</h1>
-          <p className="text-gray-400 flex text-[15px] mt-4 ">
+          <p className="text-gray-400 flex text2 mt-4 ">
             <span className="border-l-gray-600 border-r-2 mr-4 px-3">
               Age - {age}
             </span>
@@ -226,7 +230,7 @@ const KidCard = ({
                     className="p-2 px-4   flex gap-2  justify-start items-center"
                   >
                     <img loading="lazy" src={PencilIcon} alt="pencil icon" />
-                    <span>Edit profile</span>
+                    <span className="text3">Edit profile</span>
                   </button>
                 </Menu.Item>
                 <Menu.Item>
@@ -235,13 +239,13 @@ const KidCard = ({
                     className="p-2 px-4  flex gap-2  justify-start items-center"
                   >
                     <img loading="lazy" src={LinkIcon} alt="link icon" />
-                    <span> Connect school</span>
+                    <span className="text3"> Connect school</span>
                   </button>
                 </Menu.Item>
                 <Menu.Item>
                   <button className="p-2 px-4  flex gap-2  justify-start items-center">
                     <img loading="lazy" src={DeleteIcon} alt="delete icon" />
-                    <span> Remove profile</span>
+                    <span className="text3"> Remove profile</span>
                   </button>
                 </Menu.Item>
               </div>
@@ -342,84 +346,88 @@ const EditProfile = ({
   };
 
   return (
-    <div className="px-16">
-      <h1 className="text-center font-Recoleta font-bold text-[32px] ">
-        Edit Profile
-      </h1>
-      <div className="flex justify-between items-center">
-        <p className="flex gap-2 justify-end items-center">
-          <img
-            loading="lazy"
-            src={!selectedFile ? image : URL.createObjectURL(selectedFile!)}
-            alt="Avatar"
-            className="h-[100px] w-[100px]  object-cover"
-          />
-          <span>Profile Picture</span>
-        </p>
-        <button onClick={handleButtonClick} className="text-blue-400">
-          Upload picture
-        </button>
+    <div className="px-5 py-4">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-center font-Recoleta font-bold text30  flex-grow">
+          Edit Profile
+        </h1>
+        <MdClose size={35} onClick={closeModal} className="cursor-pointer" />
       </div>
-      <div>
-        <form onSubmit={handleSubmit(submitData)}>
-          <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          />
-          <p className="my-2 mt-4">
-            <label htmlFor="name" className="text-[12px] text-[#7E7E89]">
-              Name
-            </label>
-            <InputFormat
-              type="text"
-              reg={register("name")}
-              errorMsg={errors && errors?.name?.message}
-              value={name}
+      <div className="px-10">
+        <div className="flex justify-between items-center ">
+          <p className="flex gap-2 justify-end items-center">
+            <img
+              loading="lazy"
+              src={!selectedFile ? image : URL.createObjectURL(selectedFile!)}
+              alt="Avatar"
+              className="h-[100px] w-[100px]  object-cover"
             />
+            <span className="text3">Profile Picture</span>
           </p>
-
-          <p className="my-2 flex gap-4">
-            <p className=" flex-grow">
-              <label htmlFor="name" className="text-[12px] text-[#7E7E89]">
-                Gender
-              </label>
-              <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-1  mb-2 ">
-                <select
-                  id=""
-                  className="w-full  h-full flex-1  focus:outline-none text-[14px]"
-                  {...register("genderid")}
-                >
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </select>
-              </p>
-              <span className="text-red-700">
-                {errors && errors?.genderid?.message}
-              </span>
-            </p>
-
-            <p className=" flex-grow">
-              <label htmlFor="dob" className="text-[12px] text-[#7E7E89]">
-                DOB
+          <button onClick={handleButtonClick} className="text-blue-400 text3">
+            Upload picture
+          </button>
+        </div>
+        <div>
+          <form onSubmit={handleSubmit(submitData)}>
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
+            <p className="my-2 mt-4">
+              <label htmlFor="name" className="text3 text-[#7E7E89]">
+                Name
               </label>
               <InputFormat
-                type="date"
-                reg={register("dob")}
-                errorMsg={errors && errors?.dob?.message}
-                value={dob!}
+                type="text"
+                reg={register("name")}
+                errorMsg={errors && errors?.name?.message}
+                value={name}
               />
             </p>
-          </p>
-          {/* 
+
+            <p className="my-2 flex gap-4">
+              <p className=" flex-grow">
+                <label htmlFor="name" className="text3 text-[#7E7E89]">
+                  Gender
+                </label>
+                <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-1  mb-2 ">
+                  <select
+                    id=""
+                    className="w-full  h-full flex-1  focus:outline-none text-[14px]"
+                    {...register("genderid")}
+                  >
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </p>
+                <span className="text-red-700">
+                  {errors && errors?.genderid?.message}
+                </span>
+              </p>
+
+              <p className=" flex-grow">
+                <label htmlFor="dob" className="text3 text-[#7E7E89]">
+                  DOB
+                </label>
+                <InputFormat
+                  type="date"
+                  reg={register("dob")}
+                  errorMsg={errors && errors?.dob?.message}
+                  value={dob!}
+                />
+              </p>
+            </p>
+            {/* 
           <p className="my-2">
             <label htmlFor="school" className="text-[12px] text-[#7E7E89]">
               School
             </label>
             <InputFormat type="text" />
           </p> */}
-          {/* <p className="my-2 flex gap-4">
+            {/* <p className="my-2 flex gap-4">
             <p className="flex-grow">
               <label htmlFor="class" className="text-[12px] text-[#7E7E89]">
                 Class
@@ -433,18 +441,19 @@ const EditProfile = ({
               <InputFormat type="text" />
             </p>
           </p> */}
-          <p className="my-5">
-            <Button type="submit">
-              {isLoading ? (
-                <p className="flex justify-center items-center">
-                  <Loader color="white" size="sm" />
-                </p>
-              ) : (
-                <span>Save</span>
-              )}
-            </Button>
-          </p>
-        </form>
+            <p className="my-5">
+              <Button type="submit">
+                {isLoading ? (
+                  <p className="flex justify-center items-center">
+                    <Loader color="white" size="sm" />
+                  </p>
+                ) : (
+                  <span className="text2">Save</span>
+                )}
+              </Button>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   );
@@ -529,14 +538,17 @@ const ConnectTOSchool = ({
   };
 
   return (
-    <div className="px-16">
-      <h1 className="text-center font-Recoleta font-bold text-[30px] ">
-        Connect to school
-      </h1>
+    <div className="px-4">
+      <div className="flex justify-between items-center  ">
+        <h1 className="text-center font-Recoleta font-bold text-[30px] flex-grow ">
+          Connect to school
+        </h1>
+        <MdClose size={35} onClick={closeModal} className="cursor-pointer" />
+      </div>
       <p className="text-center my-5">
         Connect your child to his/her school to enjoy...
       </p>
-      <div>
+      <div className="px-10">
         <form onSubmit={handleSubmit(submitData)}>
           <p className="my-5">
             <InputFormat
