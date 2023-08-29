@@ -119,7 +119,7 @@ const CardHome = ({ name, thumbnail, id, goTo }: CardProps) => {
           }}
           onMouseMoveCapture={() => setVisiblee(false)}
         />
-        <span className=" group-hover:block  bg-[rgba(0,0,0,.5)] hidden absolute left-0 top-0   transition-all duration-100  h-[200px] w-[200px] z-50  rounded-xl">
+        <span className=" group-hover:block  bg-[rgba(0,0,0,.5)] hidden absolute left-0 top-0   card transition-all duration-100   z-50  rounded-xl">
           <button
             onClick={handleLikedContent}
             // className="px-4 py-2"
