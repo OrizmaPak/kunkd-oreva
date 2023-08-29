@@ -143,10 +143,14 @@ export const UnLikedContent = (payload: TLikedContentData) => {
 //   return axios.get("/user/content/favourites/:id", payload);
 // };
 export const GetLikedContent = (profileId: string) => {
-  return axios.get(`/user/content/favourites?id=`, {
-    params: { id: profileId },
-  });
+  return axios.get(`/user/content/favourites?id= ${profileId}`);
 };
+
+// export const GetLikedContent = (profileId: string) => {
+//   return axios.get(`/user/content/favourites?id=`, {
+//     params: { id: profileId },
+//   });
+// };
 
 // Socila Login
 export const SocialLogin = (payload: TLoginData) => {
