@@ -24,7 +24,7 @@ const CustomTTSComponent = ({
 }: CustomProps) => {
   // const voice = speechSynthesis.getVoices()[5];
 
-  const { ttsChildren, state, play, stop, pause } = useTts({
+  const { ttsChildren, play, pause } = useTts({
     children,
     markTextAsSpoken: highlight,
     rate: 0.6,
