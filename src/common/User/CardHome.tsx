@@ -105,7 +105,7 @@ const CardHome = ({ name, thumbnail, id, goTo }: CardProps) => {
     }, 500); // Reset shaking after 0.5 seconds
   };
   return (
-    <div className="w-[200px] z-[1]  hover:scale-[102%] transition-all">
+    <div className="card z-[1]  hover:scale-[102%] transition-all">
       <span className="relative group hover:block">
         <LazyLoadImage
           src={thumbnail}

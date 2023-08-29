@@ -118,7 +118,7 @@ const MyKids = () => {
               </p>
             </Button>
           </div>
-          <div className="grid grid-cols-2 gap-y-10 gap-x-28">
+          <div className="grid grid-cols-2 gap-y-10 gap-x-4">
             {profile.map((item, index) => (
               <KidCard
                 refetch={refetch}
@@ -139,16 +139,15 @@ export default MyKids;
 const KidCard = ({
   image,
   name,
-  age,
-  gender,
+  dob,
+
   id,
   isLoading,
   refetch,
 }: {
   image?: string;
   name?: string;
-  age?: string;
-  gender?: string;
+  dob?: string;
   id?: number;
   isLoading?: boolean;
   refetch: () => void;
@@ -159,6 +158,13 @@ const KidCard = ({
     openedConnectModal,
     { open: openConnectModal, close: closeConnectModal },
   ] = useDisclosure(false);
+
+  const year = dob?.split("-")[0];
+  const date = new Date();
+
+  const currentYear = date.getFullYear();
+  const childaAge = currentYear - Number(year);
+  console.log(childaAge);
   return (
     <>
       <Modal
@@ -175,7 +181,7 @@ const KidCard = ({
           id={id!}
           image={image!}
           name={name!}
-          dob={age!}
+          dob={dob!}
           closeModal={closeEditModal}
         />
       </Modal>
@@ -210,9 +216,15 @@ const KidCard = ({
           <h1 className="font-bold text-[16px] px-3 font-Recoleta">{name}</h1>
           <p className="text-gray-400 flex text2 mt-4 ">
             <span className="border-l-gray-600 border-r-2 mr-4 px-3">
-              Age - {age}
+              Age - {childaAge}
             </span>
-            <span>Gender - {gender}</span>
+            <button
+              onClick={openConnectModal}
+              className="text2 flex gap-1 justify-center items-center"
+            >
+              <img loading="lazy" src={LinkIcon} alt="link icon" />
+              <span>Connect school</span>
+            </button>
           </p>
         </div>
         <div className="">
@@ -233,15 +245,7 @@ const KidCard = ({
                     <span className="text3">Edit profile</span>
                   </button>
                 </Menu.Item>
-                <Menu.Item>
-                  <button
-                    onClick={openConnectModal}
-                    className="p-2 px-4  flex gap-2  justify-start items-center"
-                  >
-                    <img loading="lazy" src={LinkIcon} alt="link icon" />
-                    <span className="text3"> Connect school</span>
-                  </button>
-                </Menu.Item>
+
                 <Menu.Item>
                   <button className="p-2 px-4  flex gap-2  justify-start items-center">
                     <img loading="lazy" src={DeleteIcon} alt="delete icon" />

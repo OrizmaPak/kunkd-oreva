@@ -164,6 +164,11 @@ const LoginContent = () => {
             navigate("/school");
           } else if (res?.role === "parent") {
             navigate("/selectprofile");
+          } else if (
+            res?.role === "teacher" &&
+            res?.default_password === false
+          ) {
+            navigate("/school");
           } else if (res?.role === "teacher") {
             setTeacherModal(true);
             console.log("it's teacher ", teacherModal);

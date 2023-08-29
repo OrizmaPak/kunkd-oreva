@@ -26,6 +26,9 @@ import { getApiErrorMessage } from "@/api/helper";
 import { notifications } from "@mantine/notifications";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import "./stories1.css";
+import { Slider, MantineProvider } from "@mantine/core";
+import { useReducedMotion } from "@mantine/hooks";
+import { useRef } from "react";
 
 type TContentPage = {
   audio: string;
@@ -306,6 +309,17 @@ const ReadPage = ({
   const [page, setPage] = useState(0);
   const pageTotal = content.length - 1;
   const [pageNumber, setPageNumber] = useState(1);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const reducedMotion = useReducedMotion();
+  const [volume, setVolume] = useState(50);
+  const handleVolumeChange = (value: number) => {
+    setVolume(value);
+    const volume = Number(value) / max;
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  };
+  const max = 20;
   return (
     <div className="flex py-16 bg-white  rounded-3xl px-16">
       <div className=" basis-3/4 flex  items-center">
@@ -318,7 +332,7 @@ const ReadPage = ({
       </div>
       <div className=" basis-full flex flex-col ">
         <div className="flex-grow">
-          <p className="mb-5">
+          <p className="mb-5 flex justify-between items-center ">
             <button
               onClick={() => setIsReading(!isReading)}
               className={`flex border py-2 ${
@@ -332,6 +346,36 @@ const ReadPage = ({
               ></p>
               <p className="inline">Read to me</p>
             </button>
+            <p className="w-[100px]">
+              <MantineProvider
+                theme={{
+                  colors: {
+                    "ocean-blue": [
+                      "#8530c1",
+                      "#5FCCDB",
+                      "#44CADC",
+                      "#2AC9DE",
+                      "#1AC2D9",
+                      "#11B7CD",
+                      "#09ADC3",
+                      "#0E99AC",
+                      "#128797",
+                      "#147885",
+                    ],
+                  },
+                }}
+              >
+                <Slider
+                  color="ocean-blue.0"
+                  value={volume}
+                  onChange={handleVolumeChange}
+                  min={0}
+                  max={max}
+                  disabled={reducedMotion}
+                  size={"sm"}
+                />
+              </MantineProvider>
+            </p>
           </p>
           {!isReading && (
             <p className=" leading-10 flex h-[350px] overflow-y-auto  text-[20px] font-medium font-Hanken pr-8 text-justify ">

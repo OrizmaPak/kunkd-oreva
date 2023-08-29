@@ -69,7 +69,7 @@ const ParentHomePage = () => {
               />
             </div>
           </div>
-          <div className="my-10">
+          {/* <div className="my-10">
             <CardScreenHome
               data={ongooingContent}
               header="Continue Reading"
@@ -89,7 +89,7 @@ const ParentHomePage = () => {
                 />
               )}
             />
-          </div>
+          </div> */}
           <CardScreenHome
             data={newTrending}
             header="New & Trending"

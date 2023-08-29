@@ -8,7 +8,7 @@ import "./homefooter.css";
 
 const HomeFooter = () => {
   return (
-    <div className="py-8 pad-x-40 home-footer-w mx-auto">
+    <div className="py-8 pad-x-40 home-footer-w mx-auto ">
       <div className="flex items-center justify-between">
         <div>
           <img loading="lazy" src={Logo} alt="Logo" />
