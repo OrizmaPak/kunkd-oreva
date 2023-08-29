@@ -39,7 +39,7 @@ const CustomTTSComponent = ({
   const [showPlay, setShowPlay] = useState(true);
   return (
     <div>
-      <p className=" leading-10  h-[350px] overflow-y-auto  text-[16px] font-medium font-Hanken pr-8 text-justify ">
+      <p className=" leading-10  h-[350px] overflow-y-auto  text-[16px] font-medium font-Hanken  text-justify ">
         {ttsChildren}
       </p>
 
