@@ -1,4 +1,3 @@
-import EmailLogo from "@/assets/emaillogo.svg";
 import Cancel from "@/assets/Cancel.svg";
 import InputFormat from "@/common/InputFormat";
 import Button from "@/components/Button";
