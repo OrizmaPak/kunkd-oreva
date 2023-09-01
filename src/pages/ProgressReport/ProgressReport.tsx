@@ -56,19 +56,41 @@ const ProgressReport = () => {
     completedContents
   );
 
-  // const categoryCalculator = (category:string, arrayContent:TStoryContent[] )=>{
-  //  let  total = 0
-  //   for (let i = 0; i < arrayContent?.length; i += 1) {
-  //     if (arrayContent[i].category === category) {
-  //       total += 1;
-  //     }
-  //   }
-  //   return total
-  // }
+  const categoryCalculator = (
+    category: string,
+    arrayContent: TStoryContent[]
+  ) => {
+    let total = 0;
+    for (let i = 0; i < arrayContent?.length; i += 1) {
+      if (arrayContent[i].category === category) {
+        total += 1;
+      }
+    }
+    return total;
+  };
 
-  // const ongoingStories:number = categoryCalculator("strory", ongoingContents);
-  // const ongoingAudiobooks:number = categoryCalculator("audiobooks", ongoingContents);
-  // const ongoingAfricanLanguage: number = categoryCalculator("africanlanguages", ongoingContents);
+  const ongoingStories: number = categoryCalculator("Stories", ongoingContents);
+  const ongoingAudiobooks: number = categoryCalculator(
+    "audiobooks",
+    ongoingContents
+  );
+  const ongoingAfricanLanguage: number = categoryCalculator(
+    "africanlanguages",
+    ongoingContents
+  );
+
+  const completedStories: number = categoryCalculator(
+    "Stories",
+    completedContents
+  );
+  const completedAudiobooks: number = categoryCalculator(
+    "audiobooks",
+    completedContents
+  );
+  const completedAfricanLanguage: number = categoryCalculator(
+    "africanlanguages",
+    completedContents
+  );
 
   const [currentStep, setCurrentStep] = useState(STEP_1);
   console.log(currentStep);
@@ -93,7 +115,13 @@ const ProgressReport = () => {
             </div>
             <hr className="mx-20  mb-5" />
             <div className="pt-5 pb-1 pad-x-40 ">
-              <Chart />
+              <Chart
+                stories={ongoingStories + completedStories}
+                africanLanguages={
+                  ongoingAfricanLanguage + completedAfricanLanguage
+                }
+                audioBooks={ongoingAudiobooks + completedAudiobooks}
+              />
             </div>
 
             <div>

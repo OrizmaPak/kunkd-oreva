@@ -41,36 +41,40 @@ const ResetPasswordContent = ({}: { onSubmit?: () => void }) => {
   };
 
   return (
-    <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">
-      <Link to="/">
-        <span className="absolute">
-          <img loading="lazy" src={Cancel} alt="cancel" />
-        </span>
-      </Link>
-      <div className="w-[90%] tracking-wide  my-auto ">
-        <span></span>
-        <h1 className="font-bold text-[40px] font-Recoleta tracking-wide">
-          Reset password
-        </h1>
-        <p className="text-[15px] text-[#A7A7A7] font-Hanken tracking-wide">
-          Enter the reset code that was sent to your email.
-        </p>
-        <form onSubmit={handleSubmit(submitData)}>
-          <div className="mt-8 text-black flex justify-center items-center">
-            <Group position="center">
-              <PinInput value={otp} onChange={handlePinChange} />
-            </Group>
-          </div>
-
-          <p className="mt-10">
-            {/* <Link to="/newpassword"> */}
-            <Button type="submit" size="full">
-              Reset
-            </Button>
-            {/* </Link> */}
+    <div className="flex justify-center items-center w-full h-full">
+      <div className="inner-form-w relative  my-auto flex justify-end items-center ">
+        <Link to="/">
+          <span className="absolute top-[-60px]">
+            <img loading="lazy" src={Cancel} alt="cancel" />
+          </span>
+        </Link>
+        <div className="w-[90%] tracking-wide  my-auto ">
+          <span></span>
+          <h1 className="font-bold text-[40px] font-Recoleta tracking-wide">
+            Reset password
+          </h1>
+          <p className="text-[15px] text-[#A7A7A7] font-Hanken tracking-wide">
+            Enter the reset code that was sent to your email.
           </p>
-        </form>
-        <p className="mt-2 text-center text-[] text-gray-400 ">Resend in 59s</p>
+          <form onSubmit={handleSubmit(submitData)}>
+            <div className="mt-8 text-black flex justify-center items-center">
+              <Group position="center">
+                <PinInput value={otp} onChange={handlePinChange} />
+              </Group>
+            </div>
+
+            <p className="mt-10">
+              {/* <Link to="/newpassword"> */}
+              <Button type="submit" size="full">
+                Reset
+              </Button>
+              {/* </Link> */}
+            </p>
+          </form>
+          <p className="mt-2 text-center text-[] text-gray-400 ">
+            Resend in 59s
+          </p>
+        </div>
       </div>
     </div>
   );

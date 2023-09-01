@@ -4,7 +4,15 @@ import BookIcon from "@/assets/bookbg.svg";
 import PieChart from "./PieChart";
 import "./chart.css";
 
-const Chart = () => {
+const Chart = ({
+  stories,
+  africanLanguages,
+  audioBooks,
+}: {
+  stories: number;
+  africanLanguages: number;
+  audioBooks: number;
+}) => {
   return (
     <div>
       <div className="flex justify-around  pad-x-40">
@@ -20,8 +28,10 @@ const Chart = () => {
               className="chart-icon"
             />
             <p className="flex flex-col my-2">
-              <span className="text-start  text-[24px] font-semibold">36</span>
-              <span className="text-[#B5B5C3] text-[14px]">Videos</span>
+              <span className="text-start  text-[24px] font-semibold">
+                {stories ? stories : 0}
+              </span>
+              <span className="text-[#B5B5C3] text-[14px]">Stories</span>
             </p>
           </button>
           <button className="p-4 flex  gap-4 flex-col  border-2 border-[#FBECFF] rounded-3xl chart-icon-container my-4">
@@ -32,7 +42,9 @@ const Chart = () => {
               className="chart-icon"
             />
             <p className="flex flex-col my-2">
-              <span className=" text-start text-[24px] font-semibold">42</span>
+              <span className=" text-start text-[24px] font-semibold">
+                {audioBooks ? audioBooks : 0}
+              </span>
               <span className="text-[#B5B5C3] text-[14px]">Audiobooks</span>
             </p>
           </button>
@@ -44,7 +56,9 @@ const Chart = () => {
               className="chart-icon"
             />
             <p className="flex flex-col my-2">
-              <span className="text-start  text-[24px] font-semibold">71</span>
+              <span className="text-start  text-[24px] font-semibold">
+                {africanLanguages ? africanLanguages : 0}
+              </span>
               <span className="text-[#B5B5C3] text-[14px]">
                 African Languages
               </span>
