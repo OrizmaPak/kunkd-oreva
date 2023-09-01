@@ -175,7 +175,7 @@ const LoginContent = () => {
             open1();
           }
         },
-        onError(err) {
+        onError() {
           notifications.show({
             title: `Notification`,
             message: "Invalid username or password",
