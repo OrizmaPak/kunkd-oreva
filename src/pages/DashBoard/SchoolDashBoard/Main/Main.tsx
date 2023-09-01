@@ -5,7 +5,6 @@ import ClassLeaderboard from "./ClassLeaderboard";
 import StudentLeaderboard from "./StudentLeaderboard";
 import ArrowDown from "@/assets/arrowdown.svg";
 import ProgressLog from "../Students/Profile/ProgressLog";
-import { dashboardData } from "../Teachers/Teachers";
 import {
   useGetTeacherList,
   useGetAdmittedStudentsInSchool,

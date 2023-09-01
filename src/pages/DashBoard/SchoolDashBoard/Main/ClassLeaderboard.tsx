@@ -1,6 +1,3 @@
-import Teacher1 from "@/assets/usericon.svg";
-import Teacher2 from "@/assets/Male01.svg";
-import Teacher3 from "@/assets/Female03.svg";
 import { TTeacherList } from "../Teachers/Teachers";
 import { BsChevronRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
