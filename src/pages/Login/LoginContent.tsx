@@ -102,10 +102,10 @@ const LoginContent = () => {
             navigate("/selectprofile");
           },
 
-          onError(err) {
+          onError() {
             notifications.show({
               title: `Notification`,
-              message: getApiErrorMessage(err),
+              message: "Invalid username or password",
             });
           },
         }

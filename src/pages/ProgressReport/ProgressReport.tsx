@@ -16,6 +16,7 @@ import {
   useGetCompletedContents,
   useGetContentsLog,
 } from "@/api/queries";
+import { TStoryContent } from "../Stories/Stories1/Stories1";
 
 export type TContentLog = {
   content: {
@@ -37,14 +38,32 @@ const ProgressReport = () => {
   // const [displaySectio, setDisplaySection] = useState<number>(STEP_1);
   const profileId = localStorage.getItem("profileId");
   console.log(profileId);
-  const { data: contentLogData } = useGetContentsLog(
-    profileId ? profileId : ""
-  );
-  console.log("contentLogData", contentLogData);
-  const contentsLog: TContentLog[] = contentLogData?.data.data;
+  // const { data: contentLogData } = useGetContentsLog(
+  //   profileId ? profileId : ""
+  // );
+  // console.log("contentLogData", contentLogData);
+  // const contentsLog: TContentLog[] = contentLogData?.data.data;
   const { data } = useGetOngoingContents(profileId!);
   const { data: completedData } = useGetCompletedContents(profileId!);
-  console.log("ongtion", data, " completed", completedData);
+  const ongoingContents: TStoryContent[] = data?.data.data.ongoing_contents;
+  const completedContents: TStoryContent[] =
+    completedData?.data.data.completed_contents;
+
+  console.log(
+    "---------ongtion---------",
+    ongoingContents,
+    " -------completed--------",
+    completedContents
+  );
+
+  let totalNumberOfStories = 0;
+
+  for (let i = 0; i < ongoingContents?.length; i += 1) {
+    if (ongoingContents[i].category === "stories") {
+      totalNumberOfStories += 1;
+    }
+  }
+
   const [currentStep, setCurrentStep] = useState(STEP_1);
   console.log(currentStep);
   // const [activePage, setPage] = useState(1);
@@ -75,9 +94,11 @@ const ProgressReport = () => {
               <ProgressAction onClick={setCurrentStep} active={currentStep} />
             </div>
             <div className="px-20">
-              {currentStep === STEP_1 && <All data={contentsLog} />}
-              {currentStep === STEP_2 && <Ongoing data={contentsLog} />}
-              {currentStep === STEP_3 && <Completed data={contentsLog} />}
+              {currentStep === STEP_1 && <All data={ongoingContents} />}
+              {currentStep === STEP_2 && <Ongoing data={ongoingContents} />}
+              {currentStep === STEP_3 && (
+                <Completed data={completedContents!} />
+              )}
             </div>
             <div className="px-28 flex justify-end py-5">
               <Pagination

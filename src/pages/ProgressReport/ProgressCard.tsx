@@ -1,9 +1,10 @@
 import { Progress } from "@mantine/core";
 import "./progresscard.css";
-import { TContentLog } from "./ProgressReport";
+// import { TContentLog } from "./ProgressReport";
 import AfamBlur from "@/assets/afamblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import { TStoryContent } from "../Stories/Stories1/Stories1";
 
 import { DataType } from "../AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import Button from "@/components/Button";
@@ -11,7 +12,7 @@ const ProgressCard = ({
   isCompleted,
   range,
   data,
-}: DataType & { isCompleted?: boolean; data: TContentLog }) => {
+}: DataType & { isCompleted?: boolean; data: TStoryContent }) => {
   return (
     <div className="flex progress-card-w h-[160px]  border-[#FBECFF] border-2  rounded-xl">
       <div className=" basis-1/2">
@@ -22,7 +23,7 @@ const ProgressCard = ({
         /> */}
 
         <LazyLoadImage
-          src={data?.content?.image}
+          src={data?.thumbnail}
           placeholderSrc={AfamBlur}
           effect="blur"
           className=" rounded-xl object-cover h-full sss  progress-card-img"
@@ -30,9 +31,7 @@ const ProgressCard = ({
         />
       </div>
       <div className="basis- basis-1/2 p-5 ">
-        <h1 className="my-1 font-Hanken font-bold text3">
-          {data.content.name}
-        </h1>
+        <h1 className="my-1 font-Hanken font-bold text3">{data?.name}</h1>
         <div className=" w-full">
           {isCompleted ? (
             <div className="flex justify-center  gap-4 flex-col ">
