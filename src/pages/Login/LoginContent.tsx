@@ -102,10 +102,10 @@ const LoginContent = () => {
             navigate("/selectprofile");
           },
 
-          onError() {
+          onError(err) {
             notifications.show({
               title: `Notification`,
-              message: "Invalid username or password",
+              message: getApiErrorMessage(err),
             });
           },
         }
@@ -178,7 +178,7 @@ const LoginContent = () => {
         onError(err) {
           notifications.show({
             title: `Notification`,
-            message: getApiErrorMessage(err),
+            message: "Invalid username or password",
           });
         },
       }
