@@ -308,7 +308,7 @@ const ReadPage = ({
   const [isReading, setIsReading] = useState(false);
   const [page, setPage] = useState(0);
   const pageTotal = content.length - 1;
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
   const reducedMotion = useReducedMotion();
   const [volume, setVolume] = useState(50);
@@ -378,7 +378,7 @@ const ReadPage = ({
             </p>
           </p>
           {!isReading && (
-            <p className=" leading-10 flex h-[350px] overflow-y-auto  text-[20px] font-medium font-Hanken pr-8 text-justify ">
+            <p className=" leading-10 flex h-[350px] overflow-y-auto  text20 font-medium font-Hanken pr-8 text-justify ">
               {content[page].web_body}
             </p>
           )}
@@ -390,7 +390,7 @@ const ReadPage = ({
               setIsFinish={setIsFinish}
               pageNumber={pageNumber}
               pageTotal={pageTotal}
-              autoPlay={pageNumber !== 1}
+              autoPlay={true}
               setPageNumber={() => {
                 if (pageNumber === pageTotal) {
                   return;
@@ -399,13 +399,14 @@ const ReadPage = ({
               }}
               highlight
             >
-              {content[pageNumber].web_body}
+              <p className="text20">{content[pageNumber].web_body}</p>
             </CustomTTSComponent>
           ) : (
             <BookPagination
               setIsFinish={setIsFinish}
               setPage={setPage}
               pageTotal={pageTotal}
+              setPageNumber={setPageNumber}
             />
           )}
         </div>
@@ -418,16 +419,19 @@ const BookPagination = ({
   setIsFinish,
   setPage,
   pageTotal,
+  setPageNumber,
 }: {
   setIsFinish: () => void;
   setPage: (val: number) => void;
   pageTotal: number;
+  setPageNumber: (val: number) => void;
 }) => {
   const { mutate } = useContentTracking();
   const profileId = localStorage.getItem("profileId");
   const contentId = localStorage.getItem("contentId");
   const [currentPage, setCurrentage] = useState(1);
   setPage(currentPage);
+  setPageNumber(currentPage);
   const pageItirate = (itirateControl: string) => {
     if (currentPage < pageTotal && itirateControl === "next") {
       setCurrentage((val) => (val += 1));

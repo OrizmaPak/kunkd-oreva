@@ -34,7 +34,9 @@ const CardHome = ({ name, thumbnail, id, goTo }: CardProps) => {
   };
   const [visiblee, setVisiblee] = useState(false);
   const profileId = localStorage.getItem("profileId");
+
   const { data, refetch } = useGetLikedContent(profileId!);
+
   const likeContents: TStoryContent[] = data?.data.data.records;
   // console.log("data", likeContents);
   const { mutate } = useLikedContent();

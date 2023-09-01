@@ -3,6 +3,7 @@ import type { TTSHookProps } from "tts-react";
 // import Button from "./Button";
 import { BsFillPlayCircleFill, BsPauseCircleFill } from "react-icons/bs";
 import { useState } from "react";
+import { Slider, MantineProvider } from "@mantine/core";
 
 interface CustomProps extends TTSHookProps {
   highlight?: boolean;
@@ -29,6 +30,7 @@ const CustomTTSComponent = ({
     markTextAsSpoken: highlight,
     rate: 0.6,
     autoPlay,
+
     // markBackgroundColor: "red",
     // markColor: "blue",
     // voice,
@@ -36,17 +38,17 @@ const CustomTTSComponent = ({
       setPageNumber();
     },
   });
-  const [showPlay, setShowPlay] = useState(true);
+  const [showPlay, setShowPlay] = useState(false);
   return (
     <div>
       <p className=" leading-10  h-[350px] overflow-y-auto  text-[16px] font-medium font-Hanken  text-justify ">
         {ttsChildren}
       </p>
 
-      <div className="flex gap-3">
+      <div className="flex gap-3 items-center">
         {showPlay && (
           <button
-            className="  py-1 px-8 rounded-3xl ml-2"
+            className="  py-1 px-8 rounded-3xl "
             // disabled={state.isPlaying}
             onClick={() => {
               setShowPlay(false);
@@ -82,6 +84,37 @@ const CustomTTSComponent = ({
             <BsFillPlayCircleFill size={40} color="#8530C1" />
           )}
         </button> */}
+        <div className="flex-grow pt-4 ">
+          <MantineProvider
+            theme={{
+              colors: {
+                "ocean-blue": [
+                  "#8530c1",
+                  "#5FCCDB",
+                  "#44CADC",
+                  "#2AC9DE",
+                  "#1AC2D9",
+                  "#11B7CD",
+                  "#09ADC3",
+                  "#0E99AC",
+                  "#128797",
+                  "#147885",
+                ],
+              },
+            }}
+          >
+            <Slider
+              color="ocean-blue.0"
+              defaultValue={pageTotal! / pageNumber!}
+              value={pageNumber}
+              max={pageTotal}
+              styles={{ markLabel: { display: "none" } }}
+            />
+          </MantineProvider>
+          <p className="text-center text2">
+            <span>{pageNumber}</span> of <span>{pageTotal}</span>
+          </p>
+        </div>
 
         {pageNumber === pageTotal && (
           <>
@@ -93,7 +126,7 @@ const CustomTTSComponent = ({
             </button> */}
             <button
               onClick={setIsFinish}
-              className=" bg-green-600 rounded-3xl text-white px-8"
+              className=" bg-green-600 rounded-3xl text-white py-3 px-8"
             >
               Finish
             </button>

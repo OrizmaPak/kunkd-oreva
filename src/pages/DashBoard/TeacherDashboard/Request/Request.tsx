@@ -3,12 +3,14 @@ import {
   useGetAttemptStudentConnect,
   useAcceptStudentAdmission,
   useRejectStudentAdmission,
+  useGetAdmittedStudentsInClass,
 } from "@/api/queries";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
+import { Skeleton } from "@mantine/core";
 
-type TRequestStudents = {
+export type TRequestStudents = {
   parent: {
     firstname: string;
     lastname: string;
@@ -18,14 +20,22 @@ type TRequestStudents = {
     class_id: number;
     class_name: string;
   };
+  student: {
+    id: number;
+    image: string;
+  };
   firstname: string;
   lastname: string;
   image: string;
   status: string;
+  student_id: number;
 };
 
 const Request = () => {
-  const { data, refetch } = useGetAttemptStudentConnect();
+  const { data, refetch, isLoading } = useGetAttemptStudentConnect();
+
+  const { data: admittedStudentInClass } = useGetAdmittedStudentsInClass();
+  console.log("Admitted student", admittedStudentInClass);
   const attemptConnectStudents: TRequestStudents[] = data?.data.data.records;
 
   console.log("attempting students", data?.data.data.records);
@@ -43,9 +53,15 @@ const Request = () => {
           </div>
         </div>
         <div>
-          {attemptConnectStudents?.map((res: TRequestStudents, index) => (
-            <Row key={index} requestData={res} refetch={refetch} />
-          ))}
+          {isLoading
+            ? new Array(8).fill(1).map((array) => (
+                <Skeleton height={60} my={10} visible={true}>
+                  <h1 className="w-full">{array}</h1>
+                </Skeleton>
+              ))
+            : attemptConnectStudents?.map((res: TRequestStudents, index) => (
+                <Row key={index} requestData={res} refetch={refetch} />
+              ))}
         </div>
       </div>
       <style>
@@ -121,7 +137,7 @@ const Row = ({
       <div className="flex">
         <p className="mr-6">
           <img
-            src={requestData.image ? requestData.image : Blxst}
+            src={requestData.student.image ? requestData.student.image : Blxst}
             alt="image"
             className=" rounded-full w-[60px]"
           />
@@ -144,7 +160,7 @@ const Row = ({
       <div className="flex  text-white gap-5">
         <button
           onClick={() => {
-            handleReject(requestData.parent.user_id);
+            handleReject(requestData.student.id);
           }}
           className=" pad-x-40   text-[16px]   h-[42px] flex justify-center items-center rounded-2xl bg-[#E2B6FF] "
         >
@@ -158,7 +174,7 @@ const Row = ({
         </button>
         <button
           onClick={() => {
-            handleAccept(requestData.parent.user_id);
+            handleAccept(requestData.student.id);
           }}
           className="pad-x-40 text-[16px]  h-[42px]  flex justify-center items-center rounded-2xl bg-[#8530C1]"
         >

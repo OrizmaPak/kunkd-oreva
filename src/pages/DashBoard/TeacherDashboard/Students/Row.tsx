@@ -32,7 +32,7 @@ const Row = ({
               loading="lazy"
               src={data.student.image}
               alt="image"
-              className=" w-[46px]"
+              className="w-[46px]"
             />
           </span>
           <span>

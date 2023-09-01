@@ -36,13 +36,14 @@ export type TContentLog = {
 const ProgressReport = () => {
   // const [displaySectio, setDisplaySection] = useState<number>(STEP_1);
   const profileId = localStorage.getItem("profileId");
+  console.log(profileId);
   const { data: contentLogData } = useGetContentsLog(
     profileId ? profileId : ""
   );
   console.log("contentLogData", contentLogData);
   const contentsLog: TContentLog[] = contentLogData?.data.data;
-  const { data } = useGetOngoingContents();
-  const { data: completedData } = useGetCompletedContents();
+  const { data } = useGetOngoingContents(profileId!);
+  const { data: completedData } = useGetCompletedContents(profileId!);
   console.log("ongtion", data, " completed", completedData);
   const [currentStep, setCurrentStep] = useState(STEP_1);
   console.log(currentStep);

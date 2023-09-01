@@ -46,7 +46,7 @@ import {
   GetSchool,
   ConnectStudentData,
   GetTeacherList,
-  GetAdmittedStudents,
+  GetAdmittedStudentsInSchool,
   GetAttemptStudentConnect,
   ReAssignTeacher,
   GetOngoingContents,
@@ -54,6 +54,7 @@ import {
   GetContentsLog,
   AcceptStudentAdmission,
   RejectStudentAdmission,
+  GetAdmittedStudentsInClass,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -378,14 +379,17 @@ export const useGetTeacherList = () => {
   return useQuery({ queryKey: ["GetTeacherList"], queryFn: GetTeacherList });
 };
 
-export const useGetAdmittedStudents = () => {
-  return useQuery({ queryKey: ["GetStudents"], queryFn: GetAdmittedStudents });
+export const useGetAdmittedStudentsInSchool = () => {
+  return useQuery({
+    queryKey: ["GetStudents"],
+    queryFn: GetAdmittedStudentsInSchool,
+  });
 };
 
-export const useGetOngoingContents = () => {
+export const useGetOngoingContents = (profileId: string) => {
   return useQuery({
-    queryKey: ["GetOngoingContents"],
-    queryFn: GetOngoingContents,
+    queryKey: ["GetOngoingContents", profileId],
+    queryFn: () => GetOngoingContents(profileId),
   });
 };
 
@@ -402,10 +406,10 @@ export const useReAssignTeacher = () => {
   });
 };
 
-export const useGetCompletedContents = () => {
+export const useGetCompletedContents = (profileId: string) => {
   return useQuery({
-    queryKey: ["GetCompletedContents"],
-    queryFn: GetCompletedContents,
+    queryKey: ["GetCompletedContents", profileId],
+    queryFn: () => GetCompletedContents(profileId),
   });
 };
 
@@ -425,6 +429,13 @@ export const useAcceptStudentAdmission = () => {
 export const useRejectStudentAdmission = () => {
   return useMutation({
     mutationFn: RejectStudentAdmission,
+  });
+};
+
+export const useGetAdmittedStudentsInClass = () => {
+  return useQuery({
+    queryKey: ["GetAdmittedStudentsInClass"],
+    queryFn: GetAdmittedStudentsInClass,
   });
 };
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

@@ -12,7 +12,7 @@ const DataList = ({ data }: { data: TStoryContent[] }) => {
   const user = JSON.parse(userInLocalStr!);
   console.log("user", user?.role);
   return (
-    <div className="px-14 my-4">
+    <div className="px-14 my-4 pb-10 ">
       {data && data.length < 1 && <EmptyList />}
       {data ? (
         data.length > 0 && (

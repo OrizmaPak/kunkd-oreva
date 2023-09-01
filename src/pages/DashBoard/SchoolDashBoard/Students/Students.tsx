@@ -1,18 +1,20 @@
 import ArrowDown from "@/assets/arrowdown.svg";
 import Rectangle from "@/assets/boxIcon.svg";
-import { dashboardData } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";
 import Row from "./Row";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "@mantine/core";
 import DeleteProfile from "../Teachers/DeleteProfile";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
-import { useGetAttemptStudentConnect } from "@/api/queries";
+import { useGetAdmittedStudentsInSchool } from "@/api/queries";
+import { TRequestStudents } from "../../TeacherDashboard/Request/Request";
+import { Skeleton } from "@mantine/core";
 
 const Students = () => {
-  const { data } = useGetAttemptStudentConnect();
+  const { data, isLoading } = useGetAdmittedStudentsInSchool();
+  const admittedStudents: TRequestStudents[] = data?.data.data.records;
 
-  console.log("attempting students", data);
+  console.log("Admitted student", admittedStudents);
   const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
   return (
@@ -22,13 +24,13 @@ const Students = () => {
         size="lg"
         opened={opened}
         onClose={close}
-        closeButtonProps={{ size: "lg" }}
+        withCloseButton={false}
         centered
       >
         <DeleteProfile onCancel={close} />
       </Modal>
 
-      <div className=" flex-grow flex flex-col  rounded-3xl bg-white py-2  ">
+      <div className=" flex-grow flex flex-col  rounded-3xl bg-white py-2  bg-red-500 ">
         <div className="grid grid-cols-2 justify-center items-center w-full px-8 ">
           <div>
             <h1 className="text-[25px] font-bold">Students (35)</h1>
@@ -56,17 +58,22 @@ const Students = () => {
 
         <hr className="my-4 mx-8" />
         <div className="flex flex-col flex-grow">
-          {dashboardData &&
-            dashboardData.slice(1, 10).map((data, index) => {
-              return (
-                <Row
-                  key={index}
-                  onClick={() => navigate("profile/" + data.id)}
-                  {...data}
-                  onDeleteProfile={open}
-                />
-              );
-            })}
+          {isLoading
+            ? new Array(8).fill(1).map((array) => (
+                <Skeleton height={60} my={10} visible={true}>
+                  <h1 className="w-full">{array}</h1>
+                </Skeleton>
+              ))
+            : admittedStudents?.map((data: TRequestStudents, index) => {
+                return (
+                  <Row
+                    key={index}
+                    onClick={() => navigate("profile/" + data.student_id)}
+                    data={data}
+                    onDeleteProfile={open}
+                  />
+                );
+              })}
         </div>
       </div>
       <div className="flex  justify-between mt-2 px-4">

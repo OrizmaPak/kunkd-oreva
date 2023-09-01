@@ -252,8 +252,12 @@ export const GetTeacherList = () => {
   return axios.get("/school/teacher");
 };
 
-export const GetAdmittedStudents = () => {
+export const GetAdmittedStudentsInSchool = () => {
   return axios.get("/school/student");
+};
+
+export const GetAdmittedStudentsInClass = () => {
+  return axios.get("/school/class/student");
 };
 
 export const GetAttemptStudentConnect = () => {
@@ -264,16 +268,22 @@ export const ReAssignTeacher = (payload: TAddTeacherData) => {
   return axios.post("/school/teacher/reassign", payload);
 };
 
-export const GetOngoingContents = () => {
-  return axios.get("/content/tracking/ongoing");
+export const GetOngoingContents = (profileId: string) => {
+  return axios.get(
+    `/content/tracking/ongoing${profileId ? `?id= ${profileId}` : ""}`
+  );
 };
 
-export const GetCompletedContents = () => {
-  return axios.get("/content/tracking/completed");
+export const GetCompletedContents = (profileId: string) => {
+  return axios.get(
+    `/content/tracking/completed${profileId ? `?id=${profileId}` : ""}`
+  );
 };
 
 export const GetContentsLog = (profileId: string) => {
-  return axios.get(`/content/profile/status/${profileId ? profileId : ""}`);
+  return axios.get(
+    `/content/profile/status${profileId ? `?id=${profileId}` : ""}`
+  );
 };
 
 export const AcceptStudentAdmission = (payload: TAddTeacherData) => {
@@ -281,5 +291,5 @@ export const AcceptStudentAdmission = (payload: TAddTeacherData) => {
 };
 
 export const RejectStudentAdmission = (payload: TAddTeacherData) => {
-  return axios.post(`/school/student/admit`, payload);
+  return axios.post(`/school/student/decline`, payload);
 };

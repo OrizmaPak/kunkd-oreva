@@ -79,6 +79,10 @@ body {
   font-size: clamp(0.875rem, 0.7306rem + 0.9244vw, 1.5625rem) !important;
 }
 
+.text20 {
+  font-size: clamp(0.875rem, 0.7962rem + 0.5042vw, 1.25rem) !important;
+}
+
 .hero-text-container {
   left: clamp(0.625rem, -0.2941rem + 5.8824vw, 5rem) !important;
 }
