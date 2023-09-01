@@ -14,7 +14,7 @@ import Completed from "./Completed";
 import {
   useGetOngoingContents,
   useGetCompletedContents,
-  useGetContentsLog,
+  // useGetContentsLog,
 } from "@/api/queries";
 import { TStoryContent } from "../Stories/Stories1/Stories1";
 
@@ -56,13 +56,19 @@ const ProgressReport = () => {
     completedContents
   );
 
-  let totalNumberOfStories = 0;
+  // const categoryCalculator = (category:string, arrayContent:TStoryContent[] )=>{
+  //  let  total = 0
+  //   for (let i = 0; i < arrayContent?.length; i += 1) {
+  //     if (arrayContent[i].category === category) {
+  //       total += 1;
+  //     }
+  //   }
+  //   return total
+  // }
 
-  for (let i = 0; i < ongoingContents?.length; i += 1) {
-    if (ongoingContents[i].category === "stories") {
-      totalNumberOfStories += 1;
-    }
-  }
+  // const ongoingStories:number = categoryCalculator("strory", ongoingContents);
+  // const ongoingAudiobooks:number = categoryCalculator("audiobooks", ongoingContents);
+  // const ongoingAfricanLanguage: number = categoryCalculator("africanlanguages", ongoingContents);
 
   const [currentStep, setCurrentStep] = useState(STEP_1);
   console.log(currentStep);
