@@ -58,7 +58,7 @@ const index = () => {
           </div>
         </div>
 
-        <div className="  flex basis-3/5   flex-col  ">
+        <div className="  flex basis-3/5   flex-col">
           <ProgressLog />
           <LearningHour />
         </div>

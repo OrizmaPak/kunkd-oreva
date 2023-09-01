@@ -1,4 +1,3 @@
-// import PasswordIcon from "@/assets/passwordIcon.svg";
 import Cancel from "@/assets/Cancel.svg";
 import InputFormat from "@/common/InputFormat";
 import Button from "@/components/Button";
@@ -12,14 +11,10 @@ import { useSetPassword } from "@/api/queries";
 import { notifications } from "@mantine/notifications";
 import { Loader } from "@mantine/core";
 import { getApiErrorMessage } from "@/api/helper";
-// import { AiOutlineEye } from "react-icons/ai";
 import { RiLockLine } from "react-icons/ri";
-// import useStore from "@/store";
-// import { getUserState } from "@/store/authStore";
 
 const SecureAccountContent = () => {
   const navigate = useNavigate();
-  // const [user] = useStore(getUserState);
   const { isLoading, mutate } = useSetPassword();
 
   const schema: ZodType<FormData> = z

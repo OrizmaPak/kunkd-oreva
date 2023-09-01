@@ -164,7 +164,9 @@ const CardHome = ({ name, thumbnail, id, goTo }: CardProps) => {
         </span>
       </span>
       {name ? (
-        <p className="mt-[10px]  text2 font-Hanken font-semibold ">{name}</p>
+        <p className="mt-[2px]  text3 font-Hanken font-semibold  leading-2">
+          {name}
+        </p>
       ) : null}
     </div>
   );

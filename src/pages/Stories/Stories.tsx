@@ -2,8 +2,6 @@ import Wrapper from "@/common/User/Wrapper";
 import Hero from "@/pages/Library/LibraryNotPaid/Hero";
 import CardHome, { CardProps } from "@/common/User/CardHome";
 import CardScreenHome from "@/common/User/CardScreenHome";
-// import { data } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
-// import { DataType } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import Banner from "@/assets/banner5.svg";
 import InnerWrapper from "../../common/User/InnerWrapper";
 import Button from "@/components/Button";

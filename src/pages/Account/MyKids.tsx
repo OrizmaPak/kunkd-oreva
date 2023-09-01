@@ -161,7 +161,6 @@ const KidCard = ({
 
   const year = dob?.split("-")[0];
   const date = new Date();
-
   const currentYear = date.getFullYear();
   const childaAge = currentYear - Number(year);
   console.log(childaAge);

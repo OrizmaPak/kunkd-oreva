@@ -3,7 +3,6 @@ import StudentIcon from "@/assets/student3.svg";
 import Card from "./Card";
 import TotalTimeSpent from "./TotalTimeSpent";
 import StudentLeaderboard from "../../SchoolDashBoard/Main/StudentLeaderboard";
-import { dashboardData } from "../../SchoolDashBoard/Teachers/Teachers";
 import ProgressLog from "../../SchoolDashBoard/Students/Profile/ProgressLog";
 import { useGetAdmittedStudentsInClass } from "@/api/queries";
 import { TRequestStudents } from "../Request/Request";

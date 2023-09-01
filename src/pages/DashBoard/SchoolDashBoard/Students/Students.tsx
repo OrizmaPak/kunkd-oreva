@@ -30,7 +30,7 @@ const Students = () => {
         <DeleteProfile onCancel={close} />
       </Modal>
 
-      <div className=" flex-grow flex flex-col  rounded-3xl bg-white py-2  bg-red-500 ">
+      <div className=" flex-grow flex flex-col  rounded-3xl bg-white py-2   ">
         <div className="grid grid-cols-2 justify-center items-center w-full px-8 ">
           <div>
             <h1 className="text-[25px] font-bold">Students (35)</h1>

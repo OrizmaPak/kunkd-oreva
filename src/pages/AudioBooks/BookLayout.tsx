@@ -200,7 +200,7 @@ const AboutPage = ({
               onClick={setStartRead}
               className=" py-3 inline self-end text-white border-white border-[2px] rounded-2xl"
             >
-              Read
+              Play
             </button>
             <button
               onClick={handleLikedContent}
