@@ -15,6 +15,7 @@ import { getApiErrorMessage } from "@/api/helper";
 import { notifications } from "@mantine/notifications";
 import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
 import "./cardhome.css";
+import { Progress } from "@mantine/core";
 
 export type CardProps = {
   id?: number;
@@ -23,10 +24,22 @@ export type CardProps = {
   thumbnail?: string;
   category?: string;
   theme?: string;
+  pages?: TStoryContent[];
+  pages_read?: number;
   goTo?: () => void;
 };
 
-const CardHome = ({ name, thumbnail, id, goTo }: CardProps) => {
+const CardHome = ({
+  name,
+  thumbnail,
+  id,
+  goTo,
+  pages_read,
+  pages,
+}: TStoryContent & { goTo?: () => void }) => {
+  const totalPage = pages?.length;
+  const range = Math.ceil((100 / totalPage!) * pages_read!);
+
   const handleClick = () => {
     if (goTo) goTo();
 
@@ -107,7 +120,7 @@ const CardHome = ({ name, thumbnail, id, goTo }: CardProps) => {
     }, 500); // Reset shaking after 0.5 seconds
   };
   return (
-    <div className="card z-[1]  hover:scale-[102%] transition-all">
+    <div className="card z-[1]  hover:scale-[102%] transition-all my-3">
       <span className="relative group hover:block">
         <LazyLoadImage
           src={thumbnail}
@@ -163,11 +176,28 @@ const CardHome = ({ name, thumbnail, id, goTo }: CardProps) => {
           </p>
         </span>
       </span>
-      {name ? (
+      {!pages_read ? (
         <p className="mt-[2px]  text3 font-Hanken font-semibold  leading-2">
           {name}
         </p>
-      ) : null}
+      ) : (
+        <p className="mt-[2px]  text3 font-Hanken font-semibold  leading-2">
+          <p className="mt-[10px] font-bold font-Hanken flex justify-between items-center gap-4 px-4 ">
+            <span>{range}%</span>
+            <p className="rounded-3xl flex-1 bg-red-500">
+              {range && range < 20 ? (
+                <Progress value={range} color="red" />
+              ) : range && range < 50 ? (
+                <Progress value={range} color="yellow" />
+              ) : (
+                <Progress value={range} color="green" />
+              )}
+
+              {/* <Progress value={20} size="xs" colorScheme="pink" /> */}
+            </p>
+          </p>
+        </p>
+      )}
     </div>
   );
 };

@@ -514,7 +514,7 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
             ref={audioRef}
             src={audio && audio}
             // src={
-            //   "https://file-examples.com/storage/fe7bb0e37864d66f29c40ee/2017/11/file_example_MP3_700KB.mp3"
+            //   "https://res.cloudinary.com/dapjcjyyr/video/upload/v1693643756/media1673970287_x1zxla.mp3"
             // }
             // onLoadedMetadata={() => setLoad(true)}
             // onLoad={() => setLoad(true)}

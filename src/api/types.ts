@@ -43,6 +43,7 @@ export type TPayStackInitData = {};
 export type TLikedContentData = {};
 export type TContentTracking = {};
 export type TAddTeacherData = {};
+export type TSaveQuiz = {};
 
 export type TProfileData = {
   name: string;

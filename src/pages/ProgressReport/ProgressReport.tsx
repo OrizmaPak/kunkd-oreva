@@ -128,7 +128,14 @@ const ProgressReport = () => {
               <ProgressAction onClick={setCurrentStep} active={currentStep} />
             </div>
             <div className="px-20">
-              {currentStep === STEP_1 && <All data={ongoingContents} />}
+              {currentStep === STEP_1 && (
+                <All
+                  data={[
+                    ...(ongoingContents ? ongoingContents : []),
+                    ...(completedContents ? completedContents : []),
+                  ]}
+                />
+              )}
               {currentStep === STEP_2 && <Ongoing data={ongoingContents} />}
               {currentStep === STEP_3 && (
                 <Completed data={completedContents!} />

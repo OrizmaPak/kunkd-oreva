@@ -1,10 +1,10 @@
 import StoriesNav from "./StoriesNav";
 import { useParams, useNavigate } from "react-router-dom";
 import CardScreenHome from "@/common/User/CardScreenHome";
-import CardHome, { CardProps } from "@/common/User/CardHome";
+import CardHome from "@/common/User/CardHome";
 import Bookmark from "@/assets/Bookmark.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Congrats from "@/assets/congrats.svg";
 import {
   useGetContentById,
@@ -44,25 +44,26 @@ type TSubCategory = {
   sub_category_name: string;
 };
 export type TStoryContent = {
-  sub_category_name: any;
-  category: string;
-  sub_categorie: TSubCategory[];
-  category_id: number;
-  content_type: string;
-  content_type_id: number;
-  has_quiz: boolean;
-  id: number;
-  is_liked: boolean;
-  media: string[];
-  media_type: string;
-  name: string;
-  pages: TContentPage[];
-  short_link: string;
-  slug: string;
-  synopsis: string;
-  tags: string;
-  theme: string;
-  thumbnail: string;
+  sub_category_name?: any;
+  category?: string;
+  sub_categorie?: TSubCategory[];
+  category_id?: number;
+  content_type?: string;
+  content_type_id?: number;
+  has_quiz?: boolean;
+  id?: number;
+  is_liked?: boolean;
+  media?: string[];
+  media_type?: string;
+  name?: string;
+  pages?: TContentPage[];
+  short_link?: string;
+  slug?: string;
+  pages_read?: number;
+  synopsis?: string;
+  tags?: string;
+  theme?: string;
+  thumbnail?: string;
 };
 
 const Stories1 = () => {
@@ -129,7 +130,7 @@ const Stories1 = () => {
                       isLoading={isLoading}
                       header="Recommended For You"
                       isTitled={false}
-                      card={(props: CardProps) => (
+                      card={(props: TStoryContent) => (
                         <CardHome
                           {...props}
                           goTo={() => {
@@ -320,6 +321,39 @@ const ReadPage = ({
     }
   };
   const max = 20;
+  const { mutate } = useContentTracking();
+  const profileId = localStorage.getItem("profileId");
+  const contentId = localStorage.getItem("contentId");
+
+  useEffect(() => {
+    mutate(
+      {
+        profile_id: Number(profileId),
+        content_id: Number(contentId),
+        status: "ongoing",
+        pages_read: Number(pageNumber + 1),
+        timespent: 23,
+      },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+          // const res = data?.data?.data as TUser;
+          // setUser({ ...res });
+
+          // notifications.show({
+          //   title: `Notification`,
+          //   message: data?.data.message,
+          // });
+        },
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  }, [pageNumber]);
   return (
     <div className="flex py-16 bg-white  rounded-3xl px-16">
       <div className=" basis-3/4 flex  items-center">
@@ -391,6 +425,7 @@ const ReadPage = ({
               pageNumber={pageNumber}
               pageTotal={pageTotal}
               autoPlay={true}
+              setPage={setPageNumber}
               setPageNumber={() => {
                 if (pageNumber === pageTotal) {
                   return;
@@ -440,18 +475,48 @@ const BookPagination = ({
       setCurrentage((val) => (val -= 1));
     }
   };
-  const handleBookProgress = () => {
+  // const handleBookProgress = () => {
+  //   mutate(
+  //     {
+  //       profile_id: Number(profileId),
+  //       content_id: Number(contentId),
+  //       status: "ongoing",
+  //       pages_read: Number(currentPage + 1),
+  //       timespent: 23,
+  //     },
+  //     {
+  //       onSuccess(data) {
+  //         console.log("success", data.data.message);
+  //         // const res = data?.data?.data as TUser;
+  //         // setUser({ ...res });
+
+  //         // notifications.show({
+  //         //   title: `Notification`,
+  //         //   message: data?.data.message,
+  //         // });
+  //       },
+  //       onError(err) {
+  //         notifications.show({
+  //           title: `Notification`,
+  //           message: getApiErrorMessage(err),
+  //         });
+  //       },
+  //     }
+  //   );
+  // };
+  const handleBookCompletedProgress = () => {
     mutate(
       {
         profile_id: Number(profileId),
         content_id: Number(contentId),
-        status: "ongoing",
-        pages_read: Number(currentPage + 1),
+        status: "complete",
+        pages_read: Number(pageTotal),
         timespent: 23,
       },
       {
         onSuccess(data) {
           console.log("success", data.data.message);
+          setIsFinish();
           // const res = data?.data?.data as TUser;
           // setUser({ ...res });
 
@@ -499,7 +564,6 @@ const BookPagination = ({
               <button
                 onClick={() => {
                   pageItirate("next");
-                  handleBookProgress();
                 }}
               >
                 <GrFormNext
@@ -517,7 +581,7 @@ const BookPagination = ({
           </p>
           {currentPage === pageTotal && (
             <button
-              onClick={setIsFinish}
+              onClick={handleBookCompletedProgress}
               className="p-4 bg-green-600 rounded-3xl text-white px-8"
             >
               Finish
@@ -558,7 +622,7 @@ const WelDone = ({ content }: { content: TStoryContent }) => {
             Well Done!
           </h1>
           <p className="text-[#7E7E89] text-[18px]">
-            You have just finished reading {content?.pages[0].name}
+            You have just finished reading {content?.name!}
           </p>
         </div>
         <p className="flex flex-col gap-y-3 mt-8">

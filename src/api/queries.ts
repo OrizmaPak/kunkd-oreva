@@ -55,6 +55,7 @@ import {
   AcceptStudentAdmission,
   RejectStudentAdmission,
   GetAdmittedStudentsInClass,
+  SaveQuiz,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -438,4 +439,11 @@ export const useGetAdmittedStudentsInClass = () => {
     queryFn: GetAdmittedStudentsInClass,
   });
 };
+
+export const useSaveQuiz = () => {
+  return useMutation({
+    mutationFn: SaveQuiz,
+  });
+};
+
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

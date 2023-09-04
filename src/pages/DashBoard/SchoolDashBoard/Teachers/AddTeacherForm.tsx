@@ -17,6 +17,7 @@ import { useGetClassList } from "@/api/queries";
 // import { notifications } from "@mantine/notifications";
 // import { getApiErrorMessage } from "@/api/helper";
 import { AiOutlineMail } from "react-icons/ai";
+import { MdClose } from "react-icons/md";
 
 export type Tclass = {
   id: number;
@@ -39,9 +40,11 @@ export type TTeacherData = {
 const AddTeacherForm = ({
   handleContinue,
   setTeacherData,
+  toggle,
 }: {
   handleContinue: () => void;
   setTeacherData: (val: TTeacherData) => void;
+  toggle: () => void;
 }) => {
   const { data } = useGetClassList();
   const classList = data?.data?.data.records;
@@ -99,9 +102,12 @@ const AddTeacherForm = ({
     >
       <div className="p-4 px-8">
         <div>
-          <h1 className="font-bold  font-Recoleta text-center mb-8">
-            Add New Teacher
-          </h1>
+          <div className="flex justify-between items-center mb-8">
+            <p className="font-bold text30  font-Recoleta text-center flex-grow ">
+              Add New Teacher
+            </p>
+            <MdClose size={35} onClick={toggle} className="cursor-pointer" />
+          </div>
         </div>
         <form onSubmit={handleSubmit(submitData)}>
           <div className="flex gap-2 mb-8">

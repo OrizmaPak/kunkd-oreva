@@ -2,8 +2,10 @@ import { useTts } from "tts-react";
 import type { TTSHookProps } from "tts-react";
 // import Button from "./Button";
 import { BsFillPlayCircleFill, BsPauseCircleFill } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Slider, MantineProvider } from "@mantine/core";
+import { useLocation } from "react-router-dom";
+import { useReducedMotion } from "@mantine/hooks";
 
 interface CustomProps extends TTSHookProps {
   highlight?: boolean;
@@ -12,6 +14,7 @@ interface CustomProps extends TTSHookProps {
   pageNumber?: number;
   pageTotal?: number;
   setIsFinish: () => void;
+  setPage: (val: number) => void;
 }
 
 const CustomTTSComponent = ({
@@ -19,13 +22,14 @@ const CustomTTSComponent = ({
   highlight = true,
   setPageNumber,
   autoPlay,
+  setPage,
   pageNumber,
   pageTotal,
   setIsFinish,
 }: CustomProps) => {
   // const voice = speechSynthesis.getVoices()[5];
 
-  const { ttsChildren, play, pause } = useTts({
+  const { ttsChildren, play, pause, stop } = useTts({
     children,
     markTextAsSpoken: highlight,
     rate: 0.6,
@@ -39,6 +43,19 @@ const CustomTTSComponent = ({
     },
   });
   const [showPlay, setShowPlay] = useState(false);
+  const location = useLocation();
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    return () => {
+      stop();
+    };
+  }, [location.pathname]);
+
+  const handleVolumeChange = (value: number) => {
+    console.log(value);
+    setPage(value);
+  };
   return (
     <div>
       <p className=" leading-10  h-[350px] overflow-y-auto  text-[16px] font-medium font-Hanken  text-justify ">
@@ -104,10 +121,13 @@ const CustomTTSComponent = ({
             }}
           >
             <Slider
+              onChange={handleVolumeChange}
               color="ocean-blue.0"
-              defaultValue={pageTotal! / pageNumber!}
+              // defaultValue={pageTotal! / pageNumber!}
               value={pageNumber}
               max={pageTotal}
+              min={1}
+              // disabled={reducedMotion}
               styles={{ markLabel: { display: "none" } }}
             />
           </MantineProvider>

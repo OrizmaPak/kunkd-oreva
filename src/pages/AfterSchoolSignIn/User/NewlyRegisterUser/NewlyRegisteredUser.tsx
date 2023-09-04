@@ -18,9 +18,10 @@ import musicIcon from "@/assets/musicIcon.svg";
 import videoIcon from "@/assets/videoicon.svg";
 import BookIcon from "@/assets/bookicon.svg";
 import CardScreenHome from "@/common/User/CardScreenHome";
-import { CardProps } from "@/common/User/CardHome";
+// import { CardProps } from "@/common/User/CardHome";
 import CardHome from "@/common/User/CardHome";
-import { useContentForHome } from "@/api/queries";
+import { useContentForHome, useGetOngoingContents } from "@/api/queries";
+import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
 
 export type DataType = {
   title?: string;
@@ -99,7 +100,10 @@ export const data: DataType[] = [
 
 const NewlyRegisteredUser = () => {
   const navigate = useNavigate();
-
+  const profileId = localStorage.getItem("profileId");
+  const { data: ongoingData } = useGetOngoingContents(profileId!);
+  const ongoingContents: TStoryContent[] =
+    ongoingData?.data.data.ongoing_contents;
   const { isLoading, data: contentData } = useContentForHome();
   console.log("Content for home", contentData?.data.data.recommended_stories);
   const recommendedStories = contentData?.data.data.recommended_stories;
@@ -136,13 +140,37 @@ const NewlyRegisteredUser = () => {
           </div>
         </div>
 
+        <div className="my-10">
+          {ongoingContents && (
+            <CardScreenHome
+              data={ongoingContents!}
+              header="Continue learning"
+              actiontitle=""
+              isLoading={isLoading}
+              isTitled={false}
+              card={(props: TStoryContent) => (
+                <CardHome
+                  {...props}
+                  goTo={() => {
+                    navigate(
+                      `stories/sub/${props?.name
+                        ?.toLocaleLowerCase()
+                        .replace(/\s/g, "-")}`
+                    );
+                  }}
+                />
+              )}
+            />
+          )}
+        </div>
+
         <CardScreenHome
           data={newTrending}
           header="New & Trending"
           actiontitle="View all"
           isTitled={false}
           isLoading={isLoading}
-          card={(props: CardProps) => (
+          card={(props: TStoryContent) => (
             <CardHome
               {...props}
               goTo={() => {
@@ -162,7 +190,7 @@ const NewlyRegisteredUser = () => {
           header="Recommended For You"
           isTitled={false}
           isLoading={isLoading}
-          card={(props: CardProps) => (
+          card={(props: TStoryContent) => (
             <CardHome
               {...props}
               goTo={() => {

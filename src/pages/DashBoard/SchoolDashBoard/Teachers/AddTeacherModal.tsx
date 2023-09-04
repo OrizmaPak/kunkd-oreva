@@ -82,6 +82,7 @@ const AddTeacherModal = ({
       size="xl"
       opened={opened}
       onClose={toggle}
+      withCloseButton={false}
       closeButtonProps={{
         size: "xl",
       }}
@@ -91,6 +92,7 @@ const AddTeacherModal = ({
         <AddTeacherForm
           handleContinue={handleContinue}
           setTeacherData={setTeacherData}
+          toggle={toggle}
         />
       )}
 

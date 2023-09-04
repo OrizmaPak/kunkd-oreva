@@ -1,14 +1,14 @@
 import React from "react";
-import { CardProps } from "./CardHome";
 import { Skeleton } from "@mantine/core";
+import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
 
 type Props = {
-  data?: CardProps[];
+  data?: TStoryContent[];
   header?: string;
   action?: () => void;
   actiontitle?: string;
   isTitled?: boolean;
-  card?: (props: CardProps) => React.ReactNode;
+  card?: (props: TStoryContent) => React.ReactNode;
   isLoading: boolean;
 };
 const CardScreen = ({
@@ -45,7 +45,7 @@ const CardScreen = ({
                     </div>
                   </Skeleton>
                 ))
-            : data?.map((data) => {
+            : data?.map((data: TStoryContent) => {
                 return card ? card(data) : null;
               })}
         </div>

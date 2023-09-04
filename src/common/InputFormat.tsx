@@ -1,6 +1,6 @@
 import { UseFormRegisterReturn } from "react-hook-form";
 import ErrorIcon from "@/assets/errorIcon.svg";
-import React from "react";
+import React, { useState } from "react";
 
 type Props = {
   type?: "text" | "password" | "email" | "number" | "date";
@@ -26,6 +26,15 @@ const InputFormat = ({
 
   errorMsg,
 }: Props) => {
+  const [ttype, setType] = useState(type);
+  const handlePaswordToggle = () => {
+    if (ttype === "password") {
+      setType("text");
+    }
+    if (ttype === "text") {
+      setType("password");
+    }
+  };
   return (
     <div>
       <div
@@ -39,12 +48,14 @@ const InputFormat = ({
         <input
           {...reg}
           placeholder={placeholder}
-          type={type}
+          type={ttype}
           defaultValue={value}
           readOnly={readonly}
           className="w-full  h-full flex-1 text-black text-[14px]  focus:outline-none"
         />
-        {rightIcon ? <span>{rightIcon}</span> : null}
+        {rightIcon ? (
+          <span onClick={handlePaswordToggle}>{rightIcon}</span>
+        ) : null}
         {errorMsg && <img loading="lazy" src={ErrorIcon} alt="error icon" />}
       </div>
       {errorMsg && <span className="text-red-700">{errorMsg}</span>}

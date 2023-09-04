@@ -23,6 +23,7 @@ import type {
   TLikedContentData,
   TContentTracking,
   TAddTeacherData,
+  TSaveQuiz,
 } from "./types";
 
 // School
@@ -292,4 +293,8 @@ export const AcceptStudentAdmission = (payload: TAddTeacherData) => {
 
 export const RejectStudentAdmission = (payload: TAddTeacherData) => {
   return axios.post(`/school/student/decline`, payload);
+};
+
+export const SaveQuiz = (payload: TSaveQuiz) => {
+  return axios.post(`/quiz/question/save`, payload);
 };

@@ -10,9 +10,9 @@ import { DataType } from "../AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegis
 import Button from "@/components/Button";
 const ProgressCard = ({
   isCompleted,
-  range,
   data,
 }: DataType & { isCompleted?: boolean; data: TStoryContent }) => {
+  const range = Math.ceil((100 / data?.pages?.length!) * data?.pages_read!);
   return (
     <div className="flex progress-card-w h-[160px]  border-[#FBECFF] border-2  rounded-xl">
       <div className=" basis-1/2">
@@ -44,7 +44,13 @@ const ProgressCard = ({
             <div className="flex justify-center  items-center gap-4 ">
               <span>{range}%</span>
               <span className="  flex-grow">
-                <Progress value={range} />
+                {range && range < 20 ? (
+                  <Progress value={range} color="red" />
+                ) : range && range < 50 ? (
+                  <Progress value={range} color="yellow" />
+                ) : (
+                  <Progress value={range} color="green" />
+                )}
               </span>
             </div>
           )}
