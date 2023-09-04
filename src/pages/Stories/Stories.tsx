@@ -114,8 +114,8 @@ const Story = () => {
                         {...story}
                         goTo={() => {
                           navigate(
-                            `../sub/${story.slug
-                              .toLocaleLowerCase()
+                            `../sub/${story
+                              ?.slug!.toLocaleLowerCase()
                               .replace(/\s/g, "_")}`
                           );
                         }}
@@ -144,7 +144,8 @@ const BrowseGenre = () => {
   const { data, isLoading: subIsLoading } = useGetSubCategories();
   const subCategory = data?.data.data[0].sub_categories;
   const { data: contentData, isLoading } = useContentForHome();
-  const newTrending: CardProps[] = contentData?.data.data.trending_stories;
+  const newTrending: CardProps[] & TStoryContent[] =
+    contentData?.data.data.trending_stories;
   return (
     <>
       <hr className="my-20 mx-[200px]" />
@@ -186,7 +187,7 @@ const BrowseGenre = () => {
         actiontitle=""
         isTitled={false}
         isLoading={isLoading}
-        card={(props: CardProps) => (
+        card={(props: TStoryContent) => (
           <CardHome
             {...props}
             goTo={() =>
@@ -239,7 +240,7 @@ const BrowseGenre = () => {
         actiontitle=""
         isTitled={false}
         isLoading={isLoading}
-        card={(props: CardProps) => (
+        card={(props: TStoryContent) => (
           <CardHome
             {...props}
             goTo={() =>

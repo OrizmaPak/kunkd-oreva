@@ -5,7 +5,6 @@ import { BsFillPlayCircleFill, BsPauseCircleFill } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { Slider, MantineProvider } from "@mantine/core";
 import { useLocation } from "react-router-dom";
-import { useReducedMotion } from "@mantine/hooks";
 
 interface CustomProps extends TTSHookProps {
   highlight?: boolean;
@@ -44,7 +43,6 @@ const CustomTTSComponent = ({
   });
   const [showPlay, setShowPlay] = useState(false);
   const location = useLocation();
-  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     return () => {
