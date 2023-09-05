@@ -3,7 +3,7 @@ import { GoBook } from "react-icons/go";
 import { MdOutlineAudiotrack } from "react-icons/md";
 import { BsCameraVideo } from "react-icons/bs";
 import { IoIosArrowDown } from "react-icons/io";
-import { Menu, Button, Text } from "@mantine/core";
+import { Menu } from "@mantine/core";
 
 const Header = ({
   setMyListType,
