@@ -73,7 +73,7 @@ const AddNewClass = ({ newClassClose }: { newClassClose: () => void }) => {
               placeholder="Enter classs name"
             />
           </p>
-          <p className="my-5 mb-8">
+          {/* <p className="my-5 mb-8">
             <label htmlFor="assignteacher">Assign teacher</label>
             <p className="border border-[#F3DAFF] py-4 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
               <select
@@ -88,7 +88,7 @@ const AddNewClass = ({ newClassClose }: { newClassClose: () => void }) => {
                 <option value="3">Teacher three</option>
               </select>
             </p>
-          </p>
+          </p> */}
           <p className="my-5">
             <Button type="submit">
               {" "}

@@ -222,7 +222,7 @@ const KidCard = ({
               className="text2 flex gap-1 justify-center items-center"
             >
               <img loading="lazy" src={LinkIcon} alt="link icon" />
-              <span>Connect school</span>
+              <span>Connect to School</span>
             </button>
           </p>
         </div>

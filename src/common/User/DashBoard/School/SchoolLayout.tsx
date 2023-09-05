@@ -23,6 +23,12 @@ const links = [
     icon: DasboardIcon,
   },
   {
+    label: "Classes",
+    href: "classes",
+    route: routeBaseUrl + "/classes",
+    icon: ClassesIcon,
+  },
+  {
     label: "Teachers",
     route: routeBaseUrl + "/teacher",
     href: "teacher",
@@ -36,12 +42,7 @@ const links = [
     icon: StudentIcon,
     hasSub: true,
   },
-  {
-    label: "Classes",
-    href: "classes",
-    route: routeBaseUrl + "/classes",
-    icon: ClassesIcon,
-  },
+
   // {
   //   label: "Setting",
   //   href: "setting",

@@ -1,9 +1,9 @@
 import SearchIcon from "@/assets/searchicon.svg";
-
-import ArrowDown from "@/assets/arrowdown.svg";
 import { GoBook } from "react-icons/go";
 import { MdOutlineAudiotrack } from "react-icons/md";
 import { BsCameraVideo } from "react-icons/bs";
+import { IoIosArrowDown } from "react-icons/io";
+import { Menu, Button, Text } from "@mantine/core";
 
 const Header = ({
   setMyListType,
@@ -82,9 +82,21 @@ const Header = ({
           </button>
         </div>
 
-        <span className="text3 flex mr-14 gap-4">
-          Recently Added <img loading="lazy" src={ArrowDown} alt="arrow down" />
-        </span>
+        <div className="text3 flex mr-14  flex-col ">
+          <p className="text-end">Sort By :</p>
+          <Menu shadow="md" width={150}>
+            <Menu.Target>
+              <div className="flex gap-2">
+                <p>Recently Added</p>
+                <IoIosArrowDown size={25} color="#8530C1" />
+              </div>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item>Title (A - Z)</Menu.Item>
+              <Menu.Item>Recently Added</Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        </div>
       </div>
     </div>
   );

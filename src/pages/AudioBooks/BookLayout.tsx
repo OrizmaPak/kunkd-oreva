@@ -512,10 +512,10 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
               setCurrentTTime(+event.currentTarget.currentTime);
             }}
             ref={audioRef}
-            src={audio && audio}
-            // src={
-            //   "https://res.cloudinary.com/dapjcjyyr/video/upload/v1693643756/media1673970287_x1zxla.mp3"
-            // }
+            // src={audio && audio}
+            src={
+              "https://res.cloudinary.com/dapjcjyyr/video/upload/v1693643756/media1673970287_x1zxla.mp3"
+            }
             // onLoadedMetadata={() => setLoad(true)}
             // onLoad={() => setLoad(true)}
             onCanPlay={(event) => {
