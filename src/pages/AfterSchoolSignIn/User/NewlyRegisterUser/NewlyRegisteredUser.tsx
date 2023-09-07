@@ -109,9 +109,12 @@ const NewlyRegisteredUser = () => {
   const recommendedStories = contentData?.data.data.recommended_stories;
   const newTrending = contentData?.data.data.trending_stories;
   console.log("newTrending", newTrending);
+  const userInLocalStr = localStorage.getItem("user");
+  const user = JSON.parse(userInLocalStr!);
+
   return (
-    // <div className="w-full  bg-[#EBEFF3] px-[130px] py-[40px]  ">
-    // <div className=" w-full rounded-[35px] bg-white h-full mx-auto   ">
+    // <div className="w-full  bg-[#EBEFF3] px-[130px] py-[40px] ">
+    // <div className=" w-full rounded-[35px] bg-white h-full mx-auto ">
     <Wrapper>
       <InnerWrapper>
         <Hero />
@@ -141,26 +144,68 @@ const NewlyRegisteredUser = () => {
         </div>
 
         <div className="my-10">
-          {ongoingContents && (
-            <CardScreenHome
-              data={ongoingContents!}
-              header="Continue learning"
-              actiontitle=""
-              isLoading={isLoading}
-              isTitled={false}
-              card={(props: TStoryContent) => (
-                <CardHome
-                  {...props}
-                  goTo={() => {
-                    navigate(
-                      `stories/sub/${props?.name
-                        ?.toLocaleLowerCase()
-                        .replace(/\s/g, "-")}`
-                    );
-                  }}
-                />
-              )}
-            />
+          {ongoingContents?.length > 0 && (
+            <div className=" mx-20 mt-4">
+              <span className=" text25 font-semibold font-Recoleta ">
+                Continue Learning
+              </span>
+              <div className="overflow-auto   p-4 ">
+                <div className="flex gap-5 mb-14 ">
+                  {ongoingContents?.map((data, index) => {
+                    if (data.category === "Stories") {
+                      return (
+                        <CardHome
+                          hasRage={true}
+                          key={index}
+                          {...data}
+                          goTo={() => {
+                            navigate(
+                              `../${
+                                user.role === "parent" ? "parent" : "school"
+                              }/${data.category?.toLowerCase()}/sub/${data.slug
+                                ?.toLocaleLowerCase()
+                                .replace(/\s/g, "-")}`
+                            );
+                          }}
+                        />
+                      );
+                    } else if (data.category === "Audiobooks") {
+                      return (
+                        <CardHome
+                          hasRage={true}
+                          key={index}
+                          {...data}
+                          goTo={() => {
+                            navigate(
+                              `../${
+                                user.role === "parent" ? "parent" : "school"
+                              }/${data.category?.toLowerCase()}/${data.slug
+                                ?.toLocaleLowerCase()
+                                .replace(/\s/g, "-")}`
+                            );
+                          }}
+                        />
+                      );
+                    } else if (data.category === "Languages") {
+                      return (
+                        <CardHome
+                          hasRage={true}
+                          key={index}
+                          {...data}
+                          goTo={() =>
+                            navigate(
+                              `../${
+                                user.role === "parent" ? "parent" : "school"
+                              }/africanlanguages/${data.slug}/${data.name}`
+                            )
+                          }
+                        />
+                      );
+                    }
+                  })}
+                </div>
+              </div>
+            </div>
           )}
         </div>
 

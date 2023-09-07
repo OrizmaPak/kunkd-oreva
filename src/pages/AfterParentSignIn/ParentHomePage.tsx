@@ -48,6 +48,8 @@ const ParentHomePage = () => {
   console.log(currentId);
   console.log(profiles);
   const navigate = useNavigate();
+  const userInLocalStr = localStorage.getItem("user");
+  const user = JSON.parse(userInLocalStr!);
 
   return (
     <div>
@@ -78,26 +80,88 @@ const ParentHomePage = () => {
             </div>
           </div>
           <div className="my-10">
-            {ongoingContents && (
-              <CardScreenHome
-                data={ongoingContents!}
-                header="Continue learning"
-                actiontitle=""
-                isLoading={isLoading}
-                isTitled={false}
-                card={(props: TStoryContent) => (
-                  <CardHome
-                    {...props}
-                    goTo={() => {
-                      navigate(
-                        `stories/sub/${props?.name
-                          ?.toLocaleLowerCase()
-                          .replace(/\s/g, "-")}`
-                      );
-                    }}
-                  />
-                )}
-              />
+            {ongoingContents?.length > 0 && (
+              <div className=" mx-20 mt-4">
+                <span className=" text25 font-semibold font-Recoleta ">
+                  Continue Learning
+                </span>
+                <div className="overflow-auto   p-4 ">
+                  <div className="flex gap-5 mb-14 ">
+                    {ongoingContents?.map((data, index) => {
+                      if (data.category === "Stories") {
+                        return (
+                          <CardHome
+                            hasRage={true}
+                            key={index}
+                            {...data}
+                            goTo={() => {
+                              navigate(
+                                `../${
+                                  user.role === "parent" ? "parent" : "school"
+                                }/${data.category?.toLowerCase()}/sub/${data.slug
+                                  ?.toLocaleLowerCase()
+                                  .replace(/\s/g, "-")}`
+                              );
+                            }}
+                          />
+                        );
+                      } else if (data.category === "Audiobooks") {
+                        return (
+                          <CardHome
+                            hasRage={true}
+                            key={index}
+                            {...data}
+                            goTo={() => {
+                              navigate(
+                                `../${
+                                  user.role === "parent" ? "parent" : "school"
+                                }/${data.category?.toLowerCase()}/${data.slug
+                                  ?.toLocaleLowerCase()
+                                  .replace(/\s/g, "-")}`
+                              );
+                            }}
+                          />
+                        );
+                      } else if (data.category === "Languages") {
+                        return (
+                          <CardHome
+                            hasRage={true}
+                            key={index}
+                            {...data}
+                            goTo={() =>
+                              navigate(
+                                `../${
+                                  user.role === "parent" ? "parent" : "school"
+                                }/africanlanguages/${data.slug}/${data.name}`
+                              )
+                            }
+                          />
+                        );
+                      }
+                    })}
+                  </div>
+                </div>
+              </div>
+              // <CardScreenHome
+              //   data={ongoingContents!}
+              //   header="Continue learning"
+              //   actiontitle=""
+              //   isLoading={isLoading}
+              //   isTitled={false}
+              //   card={(props: TStoryContent) => (
+              //     <CardHome
+              //       {...props}
+              //       goTo={() => {
+              //         navigate(
+              //           `stories/sub/${props?.name
+              //             ?.toLocaleLowerCase()
+              //             .replace(/\s/g, "-")}`
+              //         );
+              //       }}
+
+              //     />
+              //   )}
+              // />
             )}
           </div>
           <CardScreenHome

@@ -71,11 +71,11 @@ const ProgressReport = () => {
 
   const ongoingStories: number = categoryCalculator("Stories", ongoingContents);
   const ongoingAudiobooks: number = categoryCalculator(
-    "audiobooks",
+    "Audiobooks",
     ongoingContents
   );
   const ongoingAfricanLanguage: number = categoryCalculator(
-    "africanlanguages",
+    "Languages",
     ongoingContents
   );
 
@@ -84,11 +84,11 @@ const ProgressReport = () => {
     completedContents
   );
   const completedAudiobooks: number = categoryCalculator(
-    "audiobooks",
+    "Audiobooks",
     completedContents
   );
   const completedAfricanLanguage: number = categoryCalculator(
-    "africanlanguages",
+    "Languages",
     completedContents
   );
 

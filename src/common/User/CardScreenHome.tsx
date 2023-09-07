@@ -1,6 +1,7 @@
 import React from "react";
 import { Skeleton } from "@mantine/core";
 import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+import "./cardscreenhome.css";
 
 type Props = {
   data?: TStoryContent[];
@@ -20,7 +21,7 @@ const CardScreen = ({
   isLoading,
 }: Props) => {
   return (
-    <div className=" mx-20 mt-4 ">
+    <div className=" mx-20 mt-4 my-5">
       <div className="flex justify-between mb-8 ">
         <span className=" text25 font-semibold font-Recoleta ">{header}</span>
         <button onClick={action} className=" text-[#8530C1] text2">
@@ -28,7 +29,7 @@ const CardScreen = ({
         </button>
       </div>
       <div
-        className="overflow-auto  no-scrollbar p-4 "
+        className="overflow-auto  scrollbar px-4 "
         style={{ maxHeight: "500px" }}
       >
         <div className="flex gap-5 mb-14  ">

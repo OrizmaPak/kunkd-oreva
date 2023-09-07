@@ -42,14 +42,16 @@ const ProgressCard = ({
             </div>
           ) : (
             <div className="flex justify-center  items-center gap-4 ">
-              <span>{range}%</span>
+              <span>{range ? range : 60}%</span>
               <span className="  flex-grow">
-                {range && range < 20 ? (
+                {range < 20 ? (
                   <Progress value={range} color="red" />
-                ) : range && range < 50 ? (
+                ) : range < 50 ? (
                   <Progress value={range} color="yellow" />
-                ) : (
+                ) : range > 50 ? (
                   <Progress value={range} color="green" />
+                ) : (
+                  <Progress value={60} color="green" />
                 )}
               </span>
             </div>

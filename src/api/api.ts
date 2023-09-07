@@ -298,3 +298,7 @@ export const RejectStudentAdmission = (payload: TAddTeacherData) => {
 export const SaveQuiz = (payload: TSaveQuiz) => {
   return axios.post(`/quiz/question/save`, payload);
 };
+
+export const GetMainSearch = (payload: string) => {
+  return axios.get(`/search?s=${payload}`);
+};

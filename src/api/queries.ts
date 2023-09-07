@@ -56,6 +56,7 @@ import {
   RejectStudentAdmission,
   GetAdmittedStudentsInClass,
   SaveQuiz,
+  GetMainSearch,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -443,6 +444,13 @@ export const useGetAdmittedStudentsInClass = () => {
 export const useSaveQuiz = () => {
   return useMutation({
     mutationFn: SaveQuiz,
+  });
+};
+
+export const useGetMainSearch = (param: string) => {
+  return useQuery({
+    queryKey: ["GetMainSearch", param],
+    queryFn: () => GetMainSearch(param),
   });
 };
 

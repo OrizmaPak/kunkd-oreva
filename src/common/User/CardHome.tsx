@@ -36,7 +36,8 @@ const CardHome = ({
   goTo,
   pages_read,
   pages,
-}: TStoryContent & { goTo?: () => void }) => {
+  hasRage,
+}: TStoryContent & { goTo?: () => void; hasRage?: boolean }) => {
   const totalPage = pages?.length;
   const range = Math.ceil((100 / totalPage!) * pages_read!);
 
@@ -176,21 +177,27 @@ const CardHome = ({
           </p>
         </span>
       </span>
-      {!pages_read ? (
+      {!hasRage ? (
         <p className="mt-[2px]  text3 font-Hanken font-semibold  leading-2">
           {name}
         </p>
       ) : (
         <p className="mt-[2px]  text3 font-Hanken font-semibold  leading-2">
           <p className="mt-[10px] font-bold font-Hanken flex justify-between items-center gap-4 px-4 ">
-            <span>{range}%</span>
+            <span>{range ? range : 50}%</span>
             <p className="rounded-3xl flex-1 bg-red-500">
-              {range && range < 20 ? (
-                <Progress value={range} color="red" />
-              ) : range && range < 50 ? (
-                <Progress value={range} color="yellow" />
+              {hasRage ? (
+                range < 20 ? (
+                  <Progress value={range} color="red" />
+                ) : range && range < 50 ? (
+                  <Progress value={range} color="yellow" />
+                ) : range && range < 50 ? (
+                  <Progress value={range} color="green" />
+                ) : (
+                  <Progress value={50} color="green" />
+                )
               ) : (
-                <Progress value={range} color="green" />
+                ""
               )}
 
               {/* <Progress value={20} size="xs" colorScheme="pink" /> */}

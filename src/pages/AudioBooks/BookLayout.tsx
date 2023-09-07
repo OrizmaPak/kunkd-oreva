@@ -12,6 +12,7 @@ import {
   useGetContentById,
   useGetLikedContent,
   useLikedContent,
+  useContentTracking,
   useUnLikedContent,
 } from "@/api/queries";
 import { getUserState } from "@/store/authStore";
@@ -385,65 +386,49 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
       audioRef.current.volume = volume;
     }
   };
+  const { mutate } = useContentTracking();
+  const profileId = localStorage.getItem("profileId");
+  const contentId = localStorage.getItem("contentId");
+  const [delay, setDelay] = useState(0);
 
-  // const [currentTime, setCurrentTime] = useState(0);
-  // const fetchAudioData = async (currentTime: number) => {
-  //   const url = audio ?? ""; // Replace with your audio file URL
+  setInterval(() => {
+    setDelay((prev) => prev++);
+  }, 1000);
 
-  //   console.log("url", url);
-  //   const headers = {
-  //     Range: `bytes=${currentTime * 128}`, // Assuming 128 bytes per second
-  //   };
+  useEffect(() => {
+    mutate(
+      {
+        profile_id: Number(profileId),
+        content_id: Number(contentId),
+        status: "ongoing",
+        pages_read: Math.ceil(currentTTime),
+        timespent: Math.ceil(currentTTime),
+      },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+          // const res = data?.data?.data as TUser;
+          // setUser({ ...res });
 
-  //   const response = await axios.get(url, {
-  //     headers,
-  //     responseType: "blob",
-  //   });
-  //   return response.data;
-  // };
+          // notifications.show({
+          //   title: `Notification`,
+          //   message: data?.data.message,
+          // });
+        },
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  }, [delay]);
 
-  // const { data, error, status } = useQuery({
-  //   queryKey: ["audio", currentTime],
-  //   queryFn: () => fetchAudioData(currentTime),
-
-  //   // enabled: false, // Disabled by default, enabled on seek
-  // });
-
-  // console.log(" reess", data);
-
-  // const handleSeek = () => {
-  //   if (audioRef.current) {
-  //     console.log("seeking");
-  //     setCurrentTime(audioRef?.current?.currentTime);
-  //   }
-  // };
-
-  // const audioRef = React.createRef();
-
-  // const blbAudio = data ? URL.createObjectURL(data) : audio;
-  // console.log("blbAudio", blbAudio);
   return (
     <div className="h-[229px]">
-      {/* <audio ref={audioRef} controls autoPlay onTimeUpdate={handleSeek}>
-        <source src={blbAudio} />
-        Your browser does not support the audio element.
-      </audio> */}
-
       <h1 className="text-[22px] font-semibold text-[#151515]">{title}</h1>
       <div className="my-3 flex justify-center items-center gap-2 mt-8">
-        {/* <p className=" flex-grow w-20">
-          {currentTTime && calculateTime(currentTTime)}
-        </p> */}
-        {/* <input
-          type="range"
-          className="mr-2   text-[#8530C1] bg-[#8530C1]  flex-grow w-full slider"
-          ref={progressBar}
-          value={currentTTime}
-          onChange={changeRage}
-          id="input-range1"
-          defaultValue={0}
-        /> */}
-
         <p className="w-full flex-grow">
           <MantineProvider
             theme={{
@@ -482,14 +467,7 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
             />
           </MantineProvider>
         </p>
-
-        {/* <p className="flex-grow w-20">
-          {duration ? calculateTime(duration) : `0:00`}
-        </p> */}
-        {/* <Progress value={(currentTTime * 100) / duration} /> */}
       </div>
-
-      {/* <Progress value={(currentTTime * 100) / duration} /> */}
 
       <div className="flex  justify-between ">
         <p>{currentTTime && calculateTime(currentTTime)}</p>
@@ -502,11 +480,9 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
             id="audio-book"
             onTimeUpdate={(event) => {
               setCurrentTTime(+event.currentTarget.currentTime);
-              // handleSeek();
             }}
             onEnded={() => {
               setIsPlaying(false);
-              // setEnded(true);
             }}
             onCanPlayThrough={(event) => {
               setCurrentTTime(+event.currentTarget.currentTime);
@@ -516,24 +492,13 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
             src={
               "https://res.cloudinary.com/dapjcjyyr/video/upload/v1693643756/media1673970287_x1zxla.mp3"
             }
-            // onLoadedMetadata={() => setLoad(true)}
-            // onLoad={() => setLoad(true)}
             onCanPlay={(event) => {
               setCurrentTTime(+event.currentTarget.currentTime);
               setLoad(true);
             }}
-          >
-            {/* <source src={blbAudio} /> */}
-            {/* <source src={audio && audio} type="audio/mpeg" /> */}
-          </audio>
+          ></audio>
           <div className="flex h-[72px] justify-end rounded-full gap-10 px-10 py-4 bg-[#FBECFF] items-center ">
             <button onClick={handeSkip10("backward")}>
-              {/* <img
-                loading="lazy"
-                src={FastBackward}
-                alt="backward"
-                className="w-[50px] h-[50px]"
-              /> */}
               <GrBackTen size={25} color="red" className="u-react-icon" />
             </button>
             <button onClick={handlePlayControl}>
@@ -542,19 +507,8 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
               ) : (
                 <BsFillPlayCircleFill size={40} color="#8530C1" />
               )}
-              {/* <img
-                src={isPlaying ? PauseIcon : PlayIcon}
-                alt=""
-                className="w-[40px]"
-              /> */}
             </button>
             <button onClick={handeSkip10("forward")}>
-              {/* <img
-                loading="lazy"
-                src={FastForward}
-                alt="forward"
-                className="w-[50px] h-[50px]"
-              /> */}
               <GrForwardTen
                 size={25}
                 color="red"
@@ -566,21 +520,6 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
         </div>
         <div className=" flex justify-center items-center gap-2">
           <FiVolume1 size={25} />
-          {/* <img
-            loading="lazy"
-            src={VolumeIcon}
-            alt="volume"
-            className="w-[20px]"
-          /> */}
-
-          {/* <input
-          type="range"
-          className="mr-2   text-[#8530C1] bg-[#8530C1] w-[100px]"
-          min={0}
-          max={max}
-          id="input"
-          onChange={(e) => handleVolume(e)}
-        /> */}
           <p className="w-[100px]">
             <MantineProvider
               theme={{
