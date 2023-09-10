@@ -4,15 +4,16 @@ import insta from "@/assets/insta.svg";
 import twitter from "@/assets/twitter.svg";
 import GooglePlay from "@/pages/Home/GooglePlay";
 import AppleStore from "@/pages/Home/AppleStore";
+import "./homefooter.css";
 
 const HomeFooter = () => {
   return (
-    <div className="py-8 px-16 ">
+    <div className="py-8 pad-x-40 home-footer-w mx-auto ">
       <div className="flex items-center justify-between">
         <div>
           <img loading="lazy" src={Logo} alt="Logo" />
         </div>
-        <div className="w-[348px] flex justify-between items-center ">
+        <div className="w-[348px] flex justify-between items-center text3 ">
           <span className="cursor-pointer">Private Policy</span>
           <span className="cursor-pointer">Term of Use</span>
           <span className="cursor-pointer">Cookies Policy</span>
@@ -38,9 +39,9 @@ const HomeFooter = () => {
         </div>
       </div>
 
-      <hr className="my-6 " />
+      <hr className="my-4 " />
 
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center text3">
         <div>
           <p> &copy; Copyright 2023 Kunda Kids, All rights reserved.</p>
         </div>

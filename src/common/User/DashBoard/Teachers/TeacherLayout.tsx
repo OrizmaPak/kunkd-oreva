@@ -9,10 +9,12 @@ import { useMatch, useNavigate } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
 import LogoutModal from "@/pages/DashBoard/SchoolDashBoard/LogoutModal";
-import Teacher01 from "@/assets/teacher01.svg";
+// import Teacher01 from "@/assets/teacher01.svg";
 import SchoolIcon from "@/assets/schoolIcon.svg";
 import { Header } from "@/common/User/DashBoard/School/SchoolLayout";
 import React from "react";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
 
 const routeBaseUrl = "/teacherdashboard";
 const links = [
@@ -66,7 +68,7 @@ const TeacherLayout = () => {
       </Modal>
 
       <div className="w-full  bg-[#FFF7FD]  px-[100px] py-2 pb-4 mt-[8vh] h-[91vh]  ">
-        <div className="flex max-w-[1280px] w-full mx-auto  h-full gap-8  mt-[1vh]">
+        <div className="flex max-w-[1280px] w-full mx-auto  h-full gap-4  mt-[1vh]">
           <div className="basis-1/4 bg-white h-full rounded-[40px] px-4 flex  flex-col pb-4 ">
             <div className="flex-grow-1 flex-1">
               <Header
@@ -92,11 +94,7 @@ const TeacherLayout = () => {
               ))}
               <hr className="my-" />
 
-              <TeacherProfile
-                name="Mitchel Mccarty"
-                email="mitchelmccarty@mail.com"
-                image={Teacher01}
-              />
+              <TeacherProfile />
             </div>
             <div>
               <DasboardButton
@@ -173,23 +171,23 @@ const NavButton = (props: {
   );
 };
 
-const TeacherProfile = ({
-  image,
-  name,
-  email,
-}: {
-  image: string;
-  name: string;
-  email: string;
-}) => {
+const TeacherProfile = () => {
+  const [user, ,] = useStore(getUserState);
   return (
     <div className="mt-10">
       <div className="flex justify-center items-center">
-        <img loading="lazy" src={image} alt="image" />
+        <img
+          loading="lazy"
+          src={user?.user_image}
+          alt="image"
+          className="rounded-full h-[130px] w-[130px] object-cover"
+        />
       </div>
       <div className="text-center">
-        <p className="font-bold text-[20px]">{name}</p>
-        <p>{email}</p>
+        <p className="font-bold text-[20px]">
+          {user?.firstname} {user?.lastname}
+        </p>
+        <p>{user?.email}</p>
       </div>
     </div>
   );

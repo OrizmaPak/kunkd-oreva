@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import BellIcon from "@/assets/bellicon.svg";
+// import BellIcon from "@/assets/bellicon.svg";
 import UserIcon from "@/assets/usericon.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
-import SearchIcon from "@/assets/searchicon.svg";
-import { Menu } from "@mantine/core";
+// import SearchIcon from "@/assets/searchicon.svg";
+import { Menu, Popover } from "@mantine/core";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
@@ -15,6 +15,12 @@ import Blxst from "@/assets/Blxst.svg";
 import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
 import { getProfileState } from "@/store/profileStore";
+import { AiOutlineBell } from "react-icons/ai";
+import { AiOutlineSearch } from "react-icons/ai";
+import { useState } from "react";
+import { useGetMainSearch } from "@/api/queries";
+import useDebounce from "@/hooks/useDebounce";
+// import SchLogo from "@/assets/schLogo.svg";
 
 const notificationData = [
   {
@@ -28,6 +34,19 @@ const notificationData = [
     name: "Ella Mia",
   },
 ];
+
+type THints = {
+  id: number;
+  file: string;
+  name: string;
+  content_category: string;
+  content_id: number;
+  order: number;
+  slug: string;
+  content_type: string;
+  media_type: string;
+  thumbnail: string;
+};
 
 const SchoolHeader = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -51,9 +70,10 @@ const SchoolHeader = () => {
     localStorage.setItem("profileId", JSON.stringify(id));
     window.location.reload();
   };
+
   return (
     <div className="bg-white w-full fixed top-0 h-[8vh] z-50">
-      <div className="flex text-[#B5B5C3] text-[14px]  font-normal top-0 left-0 right-0  mx-auto  max-w-[1280px] w-full   py-4   justify-between items-center bg-white  z-[1000] gap-4  h-[8vh] ">
+      <div className="flex text-[#B5B5C3] text-[14px] text3  font-normal top-0 left-0 right-0  mx-auto  app-mai-nwidth-container  w-full   py-4   justify-between items-center bg-white  z-[1000] gap-4  h-[8vh] ">
         <Modal
           opened={opened}
           onClose={close}
@@ -153,29 +173,22 @@ const SchoolHeader = () => {
             <img loading="lazy" src={BellIcon} alt="bell icon" className="min-w-[17px]" />
           </span>
         </div> */}
-
-          <div className="max-w-[700px] w-full rounded-3xl  flex  px-4  bg-gray-100  ">
-            <img
-              loading="lazy"
-              src={SearchIcon}
-              alt="search icon"
-              className=""
-            />
-            <input
-              type="text"
-              className="w-full h-full py-4 rounded-3xl px-4 focus:outline-none  bg-inherit"
-            />
-          </div>
-
+          <SearchService />
           <Menu>
+            {" "}
             <Menu.Target>
               <div>
                 <span>
-                  <img
+                  {/* <img
                     loading="lazy"
                     src={BellIcon}
                     alt="bell icon"
                     className="min-w-[17px]"
+                  /> */}
+                  <AiOutlineBell
+                    size={20}
+                    className={" mx-auto"}
+                    color="black"
                   />
                 </span>
               </div>
@@ -184,11 +197,18 @@ const SchoolHeader = () => {
               <p className="text-center text-[18px] font-bold my-2">
                 Notification
               </p>
-              {notificationData.map((data, index) => (
-                // <Menu.Item>
-                <Notification key={index} {...data} />
-                // </Menu.Item>
-              ))}
+              {user?.role === "parent" &&
+                notificationData.slice(1).map((data, index) => (
+                  // <Menu.Item>
+                  <ParentNotification key={index} {...data} />
+                  // </Menu.Item>
+                ))}
+              {user?.role === "schoolAdmin" &&
+                notificationData.map((data, index) => (
+                  // <Menu.Item>
+                  <SchNotification key={index} {...data} />
+                  // </Menu.Item>
+                ))}
             </Menu.Dropdown>
           </Menu>
 
@@ -301,9 +321,73 @@ const SchoolHeader = () => {
   );
 };
 
+const SearchService = ({}) => {
+  const [search, setSearch] = useState("");
+  const debounceValue = useDebounce(search, 500);
+
+  const { data } = useGetMainSearch(debounceValue);
+
+  const arrayOfHint: THints[] = data?.data.data.hits;
+  const arrayOfHintId = arrayOfHint?.filter((data) => data?.content_id > 0);
+
+  // const uniqueObjects = Array.from(
+  //   new Set(arrayOfHintId.map(JSON.stringify))
+  // ).map(JSON.parse);
+
+  //  const uniqueObjects = Array.from(new Set(arrayOfHintId.map(JSON.stringify)))
+
+  //  const uniqueObjects = Object.values(
+  //    arrayOfHintId.reduce((unique:THints, obj) => {
+  //      unique[JSON.stringify(obj)]: = obj;
+  //      return unique;
+  //    }, {})
+  //  );
+
+  const removeDuplicatesByKey = (array: any[], key: string) => {
+    const seen = new Set();
+    return array?.filter((item) => {
+      const value = item[key];
+      return seen.has(value) ? false : seen.add(value);
+    });
+  };
+
+  // Call the function to remove duplicates based on the 'id' key
+  const uniqueObjects = removeDuplicatesByKey(arrayOfHintId, "id");
+
+  return (
+    <Popover opened={!!search} width={350}>
+      <Popover.Target>
+        <div className="max-w-[700px] w-full rounded-3xl  flex  px-4  bg-gray-100  ">
+          {/* <img
+              loading="lazy"
+              src={SearchIcon}
+              alt="search icon"
+              className=""
+            /> */}
+          <AiOutlineSearch size={30} className={" mx-auto my-auto"} />
+
+          <input
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            type="text"
+            className="w-full h-full py-4 rounded-3xl px-4 focus:outline-none  bg-inherit"
+          />
+        </div>
+      </Popover.Target>
+
+      <Popover.Dropdown>
+        {uniqueObjects?.map((data, index) => (
+          <p key={index}>{data.name}</p>
+        ))}
+      </Popover.Dropdown>
+    </Popover>
+  );
+};
+
 export default SchoolHeader;
 
-const Notification = ({
+const SchNotification = ({
   image,
   msg,
   name,
@@ -313,20 +397,40 @@ const Notification = ({
   name: string;
 }) => {
   return (
-    <div className="py-2 ">
+    <div className="py-1 ">
       <hr />
-      <p className="flex my-3 px-6 justify-center items-center gap-2">
+      <p className="flex my-2 px-6 justify-center items-center gap-2">
         <img
           src={image}
           alt="image"
-          className="w-[80px] h-[80px] rounded-full"
+          className="w-[70px] h-[70px] rounded-full"
         />
         <span className="text-[#8530C1] ml-4">{name}</span>
         <span>{msg}</span>
       </p>
-      <p className="my-3  pl-32  flex gap-4 text-white">
+      <p className="my-1  pl-32  flex gap-4 text-white">
         <button className="p-2 px-8 bg-[#F3DAFF] rounded-3xl">Delete</button>
         <button className="p-2 px-8 bg-[#8530C1] rounded-3xl">Accept</button>
+      </p>
+    </div>
+  );
+};
+
+const ParentNotification = ({ name }: { name: string }) => {
+  return (
+    <div className="py-2 w-[400px] ">
+      <hr />
+      <p className="flex my-2 px-6 justify-center items-center gap-2 ">
+        <img
+          src={Blxst}
+          alt="image"
+          className="w-[40px] h-[40px] rounded-full"
+        />
+        <span className=" text-[14px] font-medium ml-4">
+          <span className="text-[#8530C1]">{name} </span>
+          has accepted your request for your child join her class.
+        </span>
+        <span>Now</span>
       </p>
     </div>
   );

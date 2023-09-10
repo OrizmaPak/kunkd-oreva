@@ -2,8 +2,6 @@ import Wrapper from "@/common/User/Wrapper";
 import Hero from "@/pages/Library/LibraryNotPaid/Hero";
 import CardHome, { CardProps } from "@/common/User/CardHome";
 import CardScreenHome from "@/common/User/CardScreenHome";
-// import { data } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
-// import { DataType } from "@/pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import Banner from "@/assets/banner5.svg";
 import InnerWrapper from "../../common/User/InnerWrapper";
 import Button from "@/components/Button";
@@ -16,17 +14,7 @@ import {
   Outlet,
 } from "react-router-dom";
 import Stories1 from "./Stories1/Stories1";
-import Chisomcard from "@/assets/Chisomcard.svg";
-import Gorillacard from "@/assets/Gorillacard.svg";
-import Afamcard from "@/assets/afamcard.svg";
-import Africancard from "@/assets/africancard.svg";
-import Caterpillercard from "@/assets/caterpillercard.svg";
-import Dancercard from "@/assets/dancercard.svg";
-import Earniing2card from "@/assets/earniing2card.svg";
-import Earningcard from "@/assets/earningcard.svg";
-import Mamacard from "@/assets/mamacard.svg";
-import Puffcard from "@/assets/puffcard.svg";
-import AudioBookOne from "@/audiobooks/QueenMoremi.mp3";
+import "./stories.css";
 import Quiz from "./Stories1/Quiz";
 import { Skeleton } from "@mantine/core";
 import { useState } from "react";
@@ -49,184 +37,6 @@ export type StoriesType = {
   content?: string;
   audioBook?: string;
 };
-export const storiesData: StoriesType[] = [
-  {
-    title: "Bedtime Stories",
-    audioBook: AudioBookOne,
-    image: Chisomcard,
-    range: 56,
-    id: "1",
-    genre: ["Bedtime", "Inventors", "Folk Tales"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      " Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: "Fairy Tails Stories",
-    image: Gorillacard,
-    audioBook: AudioBookOne,
-    range: 80,
-    id: "2",
-    genre: ["Life & Growing up", "Inventors", "Inspiring Leaders"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      " Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: "Money Smarts",
-    image: Mamacard,
-    audioBook: AudioBookOne,
-    range: 86,
-    id: "3",
-    genre: ["Life & Growing up", "Fairy Tales", "Inspiring Leaders"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      " Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: "Sports",
-    image: Puffcard,
-    audioBook: AudioBookOne,
-    range: 56,
-    id: "4",
-    genre: ["Bedtime", "Fairy Tales", "Folk Tales"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      " Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: " Leaders",
-    image: Chisomcard,
-    audioBook: AudioBookOne,
-    range: 70,
-    id: "5",
-    genre: ["Sport", "Finance", "Money smart"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: "Inspiring Leaders",
-    image: Earniing2card,
-    audioBook: AudioBookOne,
-    range: 56,
-    id: "6",
-    genre: ["Sport", "Inventors", "Inspiring Leaders"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: "Inspiring Leaders",
-    image: Earningcard,
-    audioBook: AudioBookOne,
-    range: 66,
-    id: "7",
-    genre: ["Sport", "Bedtime", "Folk Tales"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: "Sports",
-    image: Dancercard,
-    audioBook: AudioBookOne,
-    range: 90,
-    id: "8",
-    genre: ["Life & Growing up", "Bedtime", "Money smart"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      " Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: "Afam",
-    image: Afamcard,
-    audioBook: AudioBookOne,
-    range: 36,
-    id: "9",
-    genre: ["Life & Growing up", "Bedtime", "Money smart"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: "African Leaders",
-    image: Africancard,
-    audioBook: AudioBookOne,
-    range: 56,
-    id: "10",
-    genre: ["Life & Growing up", "Bedtime", "Money smart"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      " Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: " Leaders",
-    image: Caterpillercard,
-    audioBook: AudioBookOne,
-    range: 86,
-    id: "11",
-    genre: ["Sport", "Finance", "Money smart"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-];
 
 const MainStoriesLayout = () => {
   return (
@@ -270,18 +80,18 @@ const Story = () => {
     <>
       <div>
         <hr className="my-20 mx-[200px]" />
-        <h1 className="text-center font-bold text-[30px] font-Recoleta mt-10 ">
+        <h1 className="text-center font-bold text30 font-Recoleta mt-10 ">
           {subCategory &&
             subCategory?.charAt(0).toUpperCase() +
               subCategory.substring(1).replace(/-/g, " ")}{" "}
           Stories
         </h1>
-        <p className="text-center text-[18px] text-[#B5B5C3] my-8">
+        <p className="text-center text1 text-[#B5B5C3] my-8">
           Whenever they request a new bedtime story
         </p>
       </div>
       <div className="flex justify-center items-center">
-        <div className="grid grid-cols-5 gap-8 px-24 py-10">
+        <div className="grid grid-cols-5 gap-8 pad-x-40 py-10">
           {isLoading
             ? Array(10)
                 .fill(5)
@@ -304,8 +114,8 @@ const Story = () => {
                         {...story}
                         goTo={() => {
                           navigate(
-                            `../sub/${story.slug
-                              .toLocaleLowerCase()
+                            `../sub/${story
+                              ?.slug!.toLocaleLowerCase()
                               .replace(/\s/g, "_")}`
                           );
                         }}
@@ -334,13 +144,14 @@ const BrowseGenre = () => {
   const { data, isLoading: subIsLoading } = useGetSubCategories();
   const subCategory = data?.data.data[0].sub_categories;
   const { data: contentData, isLoading } = useContentForHome();
-  const newTrending: CardProps[] = contentData?.data.data.trending_stories;
+  const newTrending: CardProps[] & TStoryContent[] =
+    contentData?.data.data.trending_stories;
   return (
     <>
       <hr className="my-20 mx-[200px]" />
 
       <div>
-        <h1 className="text-center font-bold text-[30px] font-Recoleta my-10 ">
+        <h1 className="text-center font-bold text30 font-Recoleta my-10 ">
           Browse Genres
         </h1>
       </div>
@@ -376,7 +187,7 @@ const BrowseGenre = () => {
         actiontitle=""
         isTitled={false}
         isLoading={isLoading}
-        card={(props: CardProps) => (
+        card={(props: TStoryContent) => (
           <CardHome
             {...props}
             goTo={() =>
@@ -398,12 +209,14 @@ const BrowseGenre = () => {
           <img
             src={GroupCard}
             alt="card"
-            className="absolute w-[700px] right-0 bottom-0 rounded-3xl "
+            className="absolute stories-hero2  right-0 bottom-0 rounded-3xl "
             onLoad={() => setIsLoadingImage(false)}
           />
           <div className="text-center text-white flex flex-col gap-3 justify-center items-center">
-            <h1 className="text-[30px] font-bold ">New Story Titles</h1>
-            <p className="mb-10">We published new audiobook just for you</p>
+            <h1 className="text30 font-bold ">New Story Titles</h1>
+            <p className="mb-10 text2">
+              We published new audiobook just for you
+            </p>
             <Button size="md" color="black" backgroundColor="white">
               See books
             </Button>
@@ -427,7 +240,7 @@ const BrowseGenre = () => {
         actiontitle=""
         isTitled={false}
         isLoading={isLoading}
-        card={(props: CardProps) => (
+        card={(props: TStoryContent) => (
           <CardHome
             {...props}
             goTo={() =>
@@ -456,7 +269,7 @@ const SubButton = ({
   return (
     <button
       onClick={handleClick}
-      className="py-3 my-3 rounded-3xl px-6 bg-[#FFF7FD]"
+      className="py-3 my-2 rounded-3xl text3 pad-x-40 bg-[#FFF7FD]"
     >
       {name}
     </button>

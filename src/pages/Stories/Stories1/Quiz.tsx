@@ -8,21 +8,26 @@ import Button from "@/components/Button";
 import { RingProgress, MantineProvider } from "@mantine/core";
 // import { Slider, MantineProvider } from "@mantine/core";
 
-import { useGetQuiz } from "@/api/queries";
+import { useGetQuiz, useSaveQuiz } from "@/api/queries";
 import { STEP_1, STEP_2, STEP_3, STEP_4 } from "@/utils/constants";
 import Contour from "@/assets/contour.svg";
 import DangerCircle from "@/assets/Danger Circle.svg";
 import CheckCircle from "@/assets/CheckCircle-f.svg";
 import SmileIcon from "@/assets/SmileyMeh-d.svg";
 import { Skeleton } from "@mantine/core";
+import { Loader } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { getApiErrorMessage } from "@/api/helper";
 
 const Quiz = () => {
   const contentId = localStorage.getItem("contentId");
   const { data: quiz, isLoading } = useGetQuiz(contentId?.toString()!);
   const questions = quiz?.data?.data?.questions;
+  const quizId = quiz?.data?.data?.quiz_id;
+  const profileId = localStorage.getItem("profileId");
   const contentString = localStorage.getItem("content");
   const content = JSON.parse(contentString!);
-
+  console.log("Quiz------------", quiz);
   const [currentQues, setCurrentQues] = useState<number>(0);
   const [answers, setAnswers] = useState<answerObj[]>([]);
 
@@ -36,16 +41,30 @@ const Quiz = () => {
   };
 
   const handleSelectAnswer = ({
-    answer,
     question,
     actual_answer,
+    question_id,
+    selected_option,
+    selected_option_value,
   }: answerObj) => {
     setAnswers((prev) => {
       const newAnswer = [...prev];
       if (newAnswer[currentQues]) {
-        newAnswer[currentQues] = { answer: answer!, question, actual_answer };
+        newAnswer[currentQues] = {
+          question_id: question_id,
+          question,
+          actual_answer,
+          selected_option,
+          selected_option_value,
+        };
       } else {
-        newAnswer.push({ answer: answer!, question, actual_answer });
+        newAnswer.push({
+          question_id: question_id,
+          question,
+          actual_answer,
+          selected_option,
+          selected_option_value,
+        });
       }
       return newAnswer;
     });
@@ -120,6 +139,8 @@ const Quiz = () => {
       {curentStep === STEP_2 && (
         <div className="flex-grow mt-5 pt-10 flex  justify-center items-center  mx-auto w-[100%]  flex-col py-14 bg-white m rounded-3xl ">
           <Result
+            profileId={+profileId!}
+            quizId={+quizId!}
             answers={answers}
             setShowRemark={() => setcurrentStep(STEP_3)}
           />
@@ -172,6 +193,8 @@ const Question = ({
       </h1>
       <div className=" flex flex-col gap-6">
         <AnsButton
+          selected_option={"a"}
+          question_id={quesObject?.question_id}
           title={quesObject?.option_a}
           actual_answer={
             quesObject?.answer
@@ -185,6 +208,8 @@ const Question = ({
           setSelected={setSelected}
         />
         <AnsButton
+          selected_option={"b"}
+          question_id={quesObject?.question_id}
           title={quesObject?.option_b}
           question={quesObject?.question}
           selected={selected[currentQuestion]}
@@ -198,6 +223,8 @@ const Question = ({
           setSelected={setSelected}
         />
         <AnsButton
+          selected_option={"c"}
+          question_id={quesObject?.question_id}
           title={quesObject?.option_c}
           question={quesObject?.question}
           selected={selected[currentQuestion]}
@@ -221,21 +248,31 @@ const AnsButton = ({
   selected,
   setSelected,
   actual_answer,
+  question_id,
+  selected_option,
 }: {
   title: string;
   question: string;
   selected: answerObj;
   setSelected: (val: answerObj) => void;
   actual_answer: string;
+  question_id: number;
+  selected_option: string;
 }) => {
   const handleSelected = () => {
-    setSelected({ answer: title, question, actual_answer });
+    setSelected({
+      selected_option_value: title,
+      question,
+      actual_answer,
+      question_id,
+      selected_option,
+    });
   };
   return (
     <button
       onClick={handleSelected}
       className={`py-3 px-10 w-[478px] ${
-        selected?.answer === title
+        selected?.selected_option_value === title
           ? "bg-[#8530C1] text-white "
           : "text-[#8530C1]"
       } border border-[#8530C1] rounded-2xl texx`}
@@ -245,7 +282,13 @@ const AnsButton = ({
   );
 };
 
-type answerObj = { answer?: string; question: string; actual_answer: string };
+type answerObj = {
+  selected_option_value?: string;
+  question: string;
+  actual_answer: string;
+  question_id?: number;
+  selected_option?: string;
+};
 const QuestionPagination = ({
   handlePagination,
   currentQues,
@@ -322,7 +365,7 @@ const GoodRemarkMsg = ({
   };
 
   const result = answers.filter(
-    (answer) => answer.answer === answer.actual_answer
+    (answer) => answer.selected_option_value === answer.actual_answer
   );
 
   return (
@@ -387,12 +430,47 @@ const GoodRemarkMsg = ({
 
 const Result = ({
   answers,
+  profileId,
+  quizId,
   setShowRemark,
 }: {
   answers: answerObj[];
+  profileId: number;
+  quizId: number;
   setShowRemark: () => void;
 }) => {
-  const attempted = answers.filter((answer) => answer.answer !== undefined);
+  const { mutate, isLoading } = useSaveQuiz();
+
+  const handleSaveQuiz = () => {
+    mutate(
+      {
+        quiz_id: quizId!,
+        profile_id: profileId! ? profileId : "",
+        questions: [...answers],
+      },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+          setShowRemark();
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+        },
+
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  };
+  console.log("way forward", answers);
+  const attempted = answers.filter(
+    (answer) => answer.selected_option_value !== undefined
+  );
   return (
     <div className="relative mx-auto flex-grow bg-white  w-[780px] rounded-3xl">
       <div className="flex mx-auto relative justify-center items-center gap-10 px-5 bg-[#2BB457] w-[672px] h-[385px] rounded-3xl">
@@ -434,10 +512,16 @@ const Result = ({
         ))}
         <p className="flex justify-center mt-14 items-center">
           <button
-            onClick={setShowRemark}
+            onClick={handleSaveQuiz}
             className="p-3 px-20 text-white bg-[#8530C1] rounded-3xl"
           >
-            Submit
+            {isLoading ? (
+              <p className="flex justify-center items-center">
+                <Loader color="white" size="sm" />
+              </p>
+            ) : (
+              <span className="text3">Submit</span>
+            )}
           </button>
         </p>
       </div>
@@ -447,6 +531,7 @@ const Result = ({
 
 const YourResult = ({ answers }: { answers: answerObj[] }) => {
   const navigate = useNavigate();
+  console.log("answers", answers);
   return (
     <div className="relative flex-grow    w-[780px] rounded-3xl">
       <div className="my-10 text-center">
@@ -471,47 +556,17 @@ const YourResult = ({ answers }: { answers: answerObj[] }) => {
 
 const ResultRow = ({
   question,
-  answer,
+  selected_option_value,
   index,
 }: {
   question?: string;
-  answer?: string;
+  selected_option_value?: string;
   index?: number;
-}) => {
-  return (
-    <div className={`pt-7 py-5 px-16 ${!answer && "bg-[#ED1C241A]"} `}>
-      <p className={`flex gap-10 items-center `}>
-        <p className="text-[#8530C1]  rounded-full p-3 bg-white w-[30px] h-[30px] flex justify-center items-center">
-          {index! + 1}
-        </p>
-        <p
-          className={`text-[20px]  w-full flex  justify-between font-semibold `}
-        >
-          {question} {!answer && <img src={DangerCircle} alt="image" />}
-        </p>
-      </p>
-      <p className="pl-20 text-[20px] text-[#B5B5C3] py-2">
-        {answer ? answer : "-"}
-      </p>
-    </div>
-  );
-};
-
-const ResultRow2 = ({
-  question,
-  answer,
-  index,
-  actual_answer,
-}: {
-  question?: string;
-  answer?: string;
-  index?: number;
-  actual_answer?: string;
 }) => {
   return (
     <div
       className={`pt-7 py-5 px-16 ${
-        answer !== actual_answer && "bg-[#ED1C241A]"
+        !selected_option_value && "bg-[#ED1C241A]"
       } `}
     >
       <p className={`flex gap-10 items-center `}>
@@ -522,19 +577,57 @@ const ResultRow2 = ({
           className={`text-[20px]  w-full flex  justify-between font-semibold `}
         >
           {question}{" "}
-          {!answer || answer !== actual_answer ? (
+          {!selected_option_value && <img src={DangerCircle} alt="image" />}
+        </p>
+      </p>
+      <p className="pl-20 text-[20px] text-[#B5B5C3] py-2">
+        {selected_option_value ? selected_option_value : "-"}
+      </p>
+    </div>
+  );
+};
+
+const ResultRow2 = ({
+  question,
+  selected_option_value,
+  index,
+  actual_answer,
+}: {
+  question?: string;
+  selected_option_value?: string;
+  index?: number;
+  actual_answer?: string;
+}) => {
+  return (
+    <div
+      className={`pt-7 py-5 px-16 ${
+        selected_option_value !== actual_answer && "bg-[#ED1C241A]"
+      } `}
+    >
+      <p className={`flex gap-10 items-center `}>
+        <p className="text-[#8530C1]  rounded-full p-3 bg-white w-[30px] h-[30px] flex justify-center items-center">
+          {index! + 1}
+        </p>
+        <p
+          className={`text-[20px]  w-full flex  justify-between font-semibold `}
+        >
+          {question}{" "}
+          {!selected_option_value || selected_option_value !== actual_answer ? (
             <img src={DangerCircle} alt="image" />
           ) : (
             <img src={CheckCircle} alt="iamge" />
           )}
         </p>
       </p>
-      {answer === actual_answer && (
-        <p className="pl-20 text-[20px] text-[#B5B5C3] py-2"> {answer}</p>
-      )}
-      {answer !== actual_answer ? (
+      {selected_option_value === actual_answer && (
         <p className="pl-20 text-[20px] text-[#B5B5C3] py-2">
-          {answer !== actual_answer ? answer : ""}
+          {" "}
+          {selected_option_value}
+        </p>
+      )}
+      {selected_option_value !== actual_answer ? (
+        <p className="pl-20 text-[20px] text-[#B5B5C3] py-2">
+          {selected_option_value !== actual_answer ? selected_option_value : ""}
           <br />
           <p className="text-red-500 font=semibold">Answer: {actual_answer}</p>
         </p>

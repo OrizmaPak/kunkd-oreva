@@ -9,6 +9,7 @@ import ZagR from "@/assets/ZagR.svg";
 import Phonesblur from "@/assets/phonesblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import "./WatchKundaContent.css";
 
 const WatchKundaContent = () => {
   return (
@@ -24,11 +25,11 @@ const WatchKundaContent = () => {
           onLoad={() => setPhonesImg(Phones)}
         /> */}
         <LazyLoadImage
-          width={1184}
-          height={926}
+          // width={1184}
+          // height={926}
           effect="blur"
-          className="z-[50] mt-[-00px]  "
-          wrapperClassName="z-[50] mt-[-500px] "
+          className="z-[50] mt-[-00px] phones "
+          wrapperClassName="z-[50] mt-[-500px] phones"
           src={Phones}
           placeholderSrc={Phonesblur}
         />
@@ -77,11 +78,11 @@ const WatchKundaContent = () => {
       </div> */}
 
       <div className=" max-w-[1000px] mx-auto text-center text-black mt-28 text-[18px] mb-14  mleading-10">
-        <h1 className="text-4xl font-bold mb-10 mt-60  font-Secondary">
+        <h1 className="text-4xl font-bold mb-10 mt-60  font-Secondary header2">
           Watch Kunda And Friends
         </h1>
 
-        <p className="font-primary">
+        <p className="font-primary text1">
           Kunda & Friends is a vibrant, music-led 3D preschool and primary
           animation series for children. A perfect mix of fun and learning for
           kids and families, with a soundtrack inspired by Afrobeats and
@@ -89,7 +90,7 @@ const WatchKundaContent = () => {
           culture with the world!
         </p>
       </div>
-      <div className="max-w-[1000px] mx-auto">
+      <div className="flex justify-center items-center">
         <VideoCard />
       </div>
     </div>

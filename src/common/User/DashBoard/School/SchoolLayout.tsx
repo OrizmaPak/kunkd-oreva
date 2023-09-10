@@ -23,6 +23,12 @@ const links = [
     icon: DasboardIcon,
   },
   {
+    label: "Classes",
+    href: "classes",
+    route: routeBaseUrl + "/classes",
+    icon: ClassesIcon,
+  },
+  {
     label: "Teachers",
     route: routeBaseUrl + "/teacher",
     href: "teacher",
@@ -36,12 +42,7 @@ const links = [
     icon: StudentIcon,
     hasSub: true,
   },
-  {
-    label: "Classes",
-    href: "classes",
-    route: routeBaseUrl + "/classes",
-    icon: ClassesIcon,
-  },
+
   // {
   //   label: "Setting",
   //   href: "setting",
@@ -67,8 +68,8 @@ const SchoolLayout = () => {
       </Modal>
 
       <div className="w-full   bg-[#FFF7FD] px-[100px] mt-[8vh] py-2  pb-4 h-[91vh]  ">
-        <div className="flex max-w-[1280px] w-full mx-auto  h-full gap-8 mt-[1vh]">
-          <div className="basis-1/4 bg-white   h-full rounded-[40px] px- flex  flex-col pb-4 px-2 ">
+        <div className="flex max-w-[1280px] w-full mx-auto  h-full gap-4 mt-[1vh]">
+          <div className="basis-1/4 bg-white   h-full rounded-[40px] px- flex  flex-col pb-4 px-2">
             <div className="flex-grow-1 flex-1">
               <Header
                 icon1={
@@ -131,7 +132,7 @@ const DasboardButton = ({
   return (
     <button
       onClick={onClick}
-      className={` transition-all duration-700 px-2 py-2  rounded-2xl flex items-center justify-between gap-8 w-full my-8 ${
+      className={` transition-all duration-700 px-2 py-2  rounded-2xl flex items-center justify-between gap-8 w-full my-8 text2 ${
         active
           ? "bg-[#8530c1] text-white"
           : "hover:bg-[#8530C1] hover:text-white"

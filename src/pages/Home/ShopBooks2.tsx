@@ -21,17 +21,17 @@ const BigCartCard = () => {
             />
           </div>
           <div className="basis-1/2 text-white">
-            <p className="mb-5 mt-8">New Books</p>
-            <h1 className="font-bold text-[25px] text-white">
+            <p className="mb-5 mt-8 text1">New Books</p>
+            <h1 className="font-bold text-[25px] text-white header2">
               Afam and the New Yam Festival <br /> [PRE-ORDER]
             </h1>
-            <p className="my-5 leading-8">
+            <p className="my-5 leading-8 text1">
               Afam and the New Yam Festival is a heartwarming children’s picture
               book, perfect for readers aged 3-8, that explores the beauty of
               family, heritage, and unity.
             </p>
-            <p className="font-bold text-[30px] mt-8">₦2,900.00 NGN</p>
-            <p className="mb-10">Tax incuded ssd</p>
+            <p className="font-bold text-[30px] mt-8 header2">₦2,900.00 NGN</p>
+            <p className="mb-10 text1ssss">Tax incuded ssd</p>
             <button className="bg-white text-[#447ADC] p-3  px-24 rounded-full">
               Add to cart
             </button>

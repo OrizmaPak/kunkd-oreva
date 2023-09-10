@@ -31,12 +31,12 @@ const index = () => {
       className=" h-[100%] flex flex-col  overflow-y-scroll "
     >
       {/* <div className=" bg-green-600   rounded-3xl py-4 "> */}
-      <div className="mb-2">
+      <div className="mb-2 ">
         <Header />
       </div>
 
-      <div className=" flex-grow gap-4 flex">
-        <div className=" flex flex-col w-[600px] gap-y-3 ">
+      <div className=" flex-grow gap-4 flex w-full ">
+        <div className=" flex w-full flex-col  fl gap-y-3  ">
           <div>
             <ProfileCard {...currentData} />
           </div>
@@ -58,7 +58,7 @@ const index = () => {
           </div>
         </div>
 
-        <div className="  flex   flex-col  ">
+        <div className="  flex basis-3/5   flex-col">
           <ProgressLog />
           <LearningHour />
         </div>

@@ -76,98 +76,101 @@ const SchoolSignupContent = () => {
   };
 
   return (
-    <div className="w-[100%] max-w-[500px] mx-auto relative mt-[-10px]">
-      <Link to="/">
-        <span className="absolute">
-          <img loading="lazy" src={Cancel} alt="cancel" />
-        </span>
-      </Link>
-      <div className="w-[100%] pt-20">
-        <span></span>
-        <h1 className="font-bold fon text-[40px] font-Recoleta">
-          Sign up for school
-        </h1>
-        <p className="text-[15px] text-[#A7A7A7] font-Hanken">
-          Start learning and reading without restrictions.{" "}
-        </p>
-        <form onSubmit={handleSubmit(submitData)} className="mt-8">
-          <p className="my-3">
-            <InputFormat
-              type="text"
-              placeholder="School Name"
-              reg={register("school_name")}
-              errorMsg={errors.school_name?.message}
-            />
+    <div className="flex justify-center items-center  w-full h-full">
+      <div className="inner-form-w mx-auto relative">
+        <Link to="/">
+          <span className="absolute">
+            <img loading="lazy" src={Cancel} alt="cancel" />
+          </span>
+        </Link>
+        <div className="w-[100%] pt-20">
+          <span></span>
+          <h1 className="font-bold fon header2 font-Recoleta">
+            Sign up for school
+          </h1>
+          <p className="text2 text-[#A7A7A7]  font-Hanken">
+            Start learning and reading without restrictions.{" "}
           </p>
+          <form onSubmit={handleSubmit(submitData)} className="text3">
+            <p className="my-3">
+              <InputFormat
+                type="text"
+                placeholder="School Name"
+                reg={register("school_name")}
+                errorMsg={errors.school_name?.message}
+              />
+            </p>
 
-          <p className="my-3">
-            <InputFormat
-              type="text"
-              placeholder="School Address"
-              reg={register("school_address")}
-              errorMsg={errors.school_address?.message}
-            />
-          </p>
+            <p className="my-3">
+              <InputFormat
+                type="text"
+                placeholder="School Address"
+                reg={register("school_address")}
+                errorMsg={errors.school_address?.message}
+              />
+            </p>
 
-          <p className="my-3">
-            <InputFormat
-              type="text"
-              placeholder="Contact Name"
-              reg={register("name")}
-              errorMsg={errors.name?.message}
-            />
-          </p>
-          <p className="my-3">
-            <InputFormat
-              type="text"
-              placeholder="Email"
-              leftIcon={
-                <img loading="lazy" src={EmailLogo} alt="pasword icon" />
-              }
-              reg={register("email")}
-              errorMsg={errors.email?.message}
-            />
-          </p>
-          <p className="my-4">
-            <InputFormat
-              type="password"
-              placeholder="Password"
-              leftIcon={
-                <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
-              }
-              rightIcon={
-                <img loading="lazy" src={PasswordEye} alt="paswordeye icon" />
-              }
-              reg={register("password")}
-              errorMsg={errors.password?.message}
-            />
-          </p>
-          <p className="text-center font-Hanken m-3 mt-4 text-gray-400">
-            By continuing you agree to Kunda Kids
-            <strong className=" text-black"> Terms of Service </strong>and{" "}
-            <strong className="text-black"> Privacy Policy </strong>
-          </p>
+            <p className="my-3">
+              <InputFormat
+                type="text"
+                placeholder="Contact Name"
+                reg={register("name")}
+                errorMsg={errors.name?.message}
+              />
+            </p>
+            <p className="my-3">
+              <InputFormat
+                type="text"
+                placeholder="Email"
+                leftIcon={
+                  <img loading="lazy" src={EmailLogo} alt="pasword icon" />
+                }
+                reg={register("email")}
+                errorMsg={errors.email?.message}
+              />
+            </p>
+            <p className="my-4">
+              <InputFormat
+                type="password"
+                placeholder="Password"
+                leftIcon={
+                  <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
+                }
+                rightIcon={
+                  <img loading="lazy" src={PasswordEye} alt="paswordeye icon" />
+                }
+                reg={register("password")}
+                errorMsg={errors.password?.message}
+              />
+            </p>
+            <p className="text-center text3 font-Hanken m-3 mt-2 text-gray-400">
+              By continuing you agree to Kunda Kids
+              <strong className=" text-black">Terms of Service</strong>and
+              <strong className="text-black"> Privacy Policy </strong>
+            </p>
 
-          <Button type="submit" size="full">
-            {isLoading ? (
-              <p className="flex justify-center items-center">
-                <Loader color="white" size="sm" />
-              </p>
-            ) : (
-              <span>Create free account</span>
-            )}
-          </Button>
-        </form>
+            <Button type="submit" size="full">
+              {isLoading ? (
+                <p className="flex justify-center items-center">
+                  <Loader color="white" size="sm" />
+                </p>
+              ) : (
+                <span className="text3">Create free account</span>
+              )}
+            </Button>
+          </form>
 
-        <p className="mt-2 text-center text-[] text-gray-400 ">
-          <span className="font-Hanken">Already hava an account? </span>
-          <button
-            className="mt-6 text-[#8530C1] font-bold
+          <p className="mt-1 text-center text3 text-gray-400 ">
+            <span className="font-Hanken">Already hava an account? </span>
+            <button
+              onClick={() => navigate("/login")}
+              className=" text-[#8530C1] font-bold
               "
-          >
-            Login
-          </button>
-        </p>
+            >
+              Login
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );

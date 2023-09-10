@@ -1,19 +1,19 @@
 import PackageCard from "@/common/PackageCard";
-import MarkGreen from "@/assets/markgreen.svg";
-import CancelGray from "@/assets/cancelgray.svg";
-import MarkWhite from "@/assets/markwhite.svg";
+
 import { useGetPlans } from "@/api/queries";
 import { Skeleton } from "@mantine/core";
+import { BsX, BsCheckLg } from "react-icons/bs";
 
 const ChoosePlanContent = () => {
   const { isLoading, data } = useGetPlans();
+  // console.log("")
 
   const plans = data?.data.data.plans;
   return (
     <div>
       <Skeleton visible={isLoading}>
         <div className="mx-auto  flex items-center justify-center">
-          <div className="flex gap-10 mt-16 ">
+          <div className="flex mt-16 w-full  justify-center  items-center ">
             <PackageCard
               title={<div className=" opacity-0">a</div>}
               price={<div className=" opacity-0">a</div>}
@@ -32,11 +32,11 @@ const ChoosePlanContent = () => {
               btn="Choose "
               price="Free"
               content={[
-                MarkGreen,
-                CancelGray,
-                CancelGray,
-                CancelGray,
-                CancelGray,
+                <BsCheckLg size={25} color="green" />,
+                <BsX size={25} color="#8530C1" />,
+                <BsX size={25} color="#8530C1" />,
+                <BsX size={25} color="#8530C1" />,
+                <BsX size={25} color="#8530C1" />,
               ]}
             ></PackageCard>
 
@@ -46,7 +46,13 @@ const ChoosePlanContent = () => {
               title="1 Month"
               btn="Choose"
               price="$4.99/m"
-              content={[MarkGreen, MarkGreen, MarkGreen, MarkGreen, MarkGreen]}
+              content={[
+                <BsCheckLg size={25} color="green" />,
+                <BsCheckLg size={25} color="green" />,
+                <BsCheckLg size={25} color="green" />,
+                <BsCheckLg size={25} color="green" />,
+                <BsCheckLg size={25} color="green" />,
+              ]}
             ></PackageCard>
             <PackageCard
               recommended={true}
@@ -56,7 +62,13 @@ const ChoosePlanContent = () => {
               noBorder={true}
               btn="Start Trial"
               price="$59.88/y"
-              content={[MarkWhite, MarkWhite, MarkWhite, MarkWhite, MarkWhite]}
+              content={[
+                <BsCheckLg size={25} color="white" />,
+                <BsCheckLg size={25} color="white" />,
+                <BsCheckLg size={25} color="white" />,
+                <BsCheckLg size={25} color="white" />,
+                <BsCheckLg size={25} color="white" />,
+              ]}
             ></PackageCard>
           </div>
         </div>

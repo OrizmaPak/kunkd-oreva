@@ -41,21 +41,6 @@ import UplaodIcon from "@/assets/uplaodIcon.svg";
 // import { FileWithPath } from "@mantine/dropzone";
 import { TUser } from "@/api/types";
 
-const parentData = {
-  image: Teacher01,
-  name: "Mitchel Mccarthy ",
-  email: " mitchelmccarty@gmail.com",
-  phone: "+1442023052906",
-  country: "United Kingdom",
-  city: "Leeds East london",
-};
-const teacherData = {
-  image: Teacher01,
-  name: "Mitchel Mccarthy ",
-  email: " mitchelmccarty@gmail.com",
-  phone: "+1442023052906",
-};
-
 const Profile = () => {
   const [parentEditMode, setParentEditMode] = useState(false);
   const [teacherEditMode, setTeacherEditMode] = useState(false);
@@ -72,7 +57,7 @@ const Profile = () => {
         transition={{ duration: 1 }}
       >
         <div className="px-4 ">
-          <h1 className="text-[30px] font-bold my-8 font-Hanken">Profile</h1>
+          <h1 className="text25 font-bold my-8 font-Hanken">Profile</h1>
 
           {user?.role === "teacher" && (
             <>
@@ -80,11 +65,11 @@ const Profile = () => {
               {teacherEditMode ? (
                 <EditTeacherPersonalInfomation
                   onSave={() => setTeacherEditMode(false)}
-                  {...teacherData}
+                  user={user}
                 />
               ) : (
                 <TeacherPersonalInfomation
-                  {...teacherData}
+                  user={user}
                   openEdit={() => setTeacherEditMode(true)}
                 />
               )}
@@ -112,7 +97,7 @@ const Profile = () => {
               {parentEditMode ? (
                 <EditParentPersonalInfomation
                   onSave={() => setParentEditMode(false)}
-                  {...parentData}
+                  {...user}
                 />
               ) : (
                 <ParentPersonalInfomation
@@ -140,6 +125,7 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
 
   const handleSubmit = (data: File) => {
     // if (!uploadType) return;
+    console.log("I'm getting it", data);
     mutate(
       {
         image: data as Blob | string,
@@ -168,6 +154,7 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
       }
     );
   };
+
   const [opened, { open, close }] = useDisclosure(false);
   return (
     <>
@@ -205,10 +192,10 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
             className="absolute left-[65px]"
           />
           <p>
-            <p className="font-bold text-[28px] font-Recoleta">
+            <p className="font-bold text25 text-[28px] font-Recoleta">
               {user?.firstname} {user?.lastname}
             </p>
-            <p className="text-[#B5B5C3] text-[16px]">{user?.email}</p>
+            <p className="text-[#B5B5C3] text-[16px] text3">{user?.email}</p>
           </p>
         </div>
         <div className="flex justify-center items-center">
@@ -243,12 +230,12 @@ const ParentPersonalInfomation = ({
           </p>
         </Button>
       </div>
-      <div className="grid grid-cols-[1fr_1fr_1fr_1fr] my-1 text-[12px] text-[#B5B5C3]">
+      <div className="grid grid-cols-[1fr_1fr_1fr_1fr] my-1 text3 text-[#B5B5C3]">
         <span>First Name</span>
         <span>Last Name</span>
         <span>Email</span>
       </div>
-      <div className="grid grid-cols-[1fr_1fr_1fr_1fr] mb-4 text-[14px]">
+      <div className="grid grid-cols-[1fr_1fr_1fr_1fr] text3 mb-4 text-[14px]">
         <span>{user?.firstname}</span>
         <span>{user?.lastname}</span>
         <span>{user?.email}</span>
@@ -273,16 +260,16 @@ const SchoolPersonalInfomation = ({
         <Button onClick={openEdit} size="sm" varient="outlined">
           <p className="gap-4 flex">
             <img loading="lazy" src={EditPencil} alt="pencil" />{" "}
-            <span className="text-[#8530C1]">Edit</span>
+            <span className="text-[#8530C1] text3">Edit</span>
           </p>
         </Button>
       </div>
-      <div className="grid grid-cols-[1fr_1fr_1fr_1fr] my-1 text-[12px] text-[#B5B5C3]">
+      <div className="grid grid-cols-[1fr_1fr_1fr_1fr] my-1 text3 text-[#B5B5C3]">
         <span>Contact Name</span>
         <span>Email</span>
         <span>Address</span>
       </div>
-      <div className="grid grid-cols-[1fr_1fr_1fr_1fr] mb-4 text-[14px]">
+      <div className="grid grid-cols-[1fr_1fr_1fr_1fr] text3 mb-4 text-[14px]">
         <span>{user?.school?.contact_name}</span>
         <span>{user?.email}</span>
         <span>{user?.school?.address}</span>
@@ -292,14 +279,10 @@ const SchoolPersonalInfomation = ({
 };
 
 const TeacherPersonalInfomation = ({
-  name,
-  phone,
-  email,
+  user,
   openEdit,
 }: {
-  name?: string;
-  phone?: string;
-  email?: string;
+  user: TUser;
   openEdit: () => void;
 }) => {
   return (
@@ -313,15 +296,15 @@ const TeacherPersonalInfomation = ({
           </p>
         </Button>
       </div>
-      <div className="grid grid-cols-[1fr_1fr_1fr] my-1 text-[12px] text-[#B5B5C3]">
-        <span>Name</span>
-        <span>Phone</span>
+      <div className="grid grid-cols-[1fr_1fr_1fr] my-1 text3 text-[#B5B5C3]">
+        <span>First Name</span>
+        <span>Last Name</span>
         <span>Email</span>
       </div>
-      <div className="grid grid-cols-[1fr_1fr_1fr] mb-4 text-[14px]">
-        <span>{name}</span>
-        <span>{phone}</span>
-        <span>{email}</span>
+      <div className="grid grid-cols-[1fr_1fr_1fr] text3 mb-4 text-[14px]">
+        <span>{user?.firstname}</span>
+        <span>{user?.lastname}</span>
+        <span>{user?.email}</span>
       </div>
     </div>
   );
@@ -470,7 +453,7 @@ const SchCard = ({ user }: { user: TUser }) => {
                   setUploadType("profileImage");
                 }}
               >
-                <p className="flex items-center gap-2">
+                <p className="flex items-center gap-2 text3">
                   <img src={UplaodIcon} alt="Icon" className="inline" /> Upload
                   <span> new profile picture</span>
                 </p>
@@ -479,7 +462,7 @@ const SchCard = ({ user }: { user: TUser }) => {
               <Menu.Item>
                 <p className="flex  items-center gap-2 text-red-500">
                   <img src={DeleteIcon} alt="Icon" className="inline" />
-                  <span>Delete picture</span>
+                  <span className="text3">Delete picture</span>
                 </p>
               </Menu.Item>
             </Menu.Dropdown>
@@ -643,7 +626,7 @@ const EditSchNameAddress = ({
                   <Loader color="blue" size="sm" />
                 </p>
               ) : (
-                <span className="text-[#8530C1]">Save</span>
+                <span className="text-[#8530C1] text3">Save</span>
               )}
             </p>
           </Button>
@@ -728,18 +711,18 @@ const EditParentPersonalInfomation = ({
     <div className="p-6 border border-[#8530C1]  rounded-3xl mt-8">
       <form onSubmit={handleSubmit(submitData)}>
         <div className="flex justify-between items-center mb-8">
-          <h1 className="font-bold text-[16px]">Personal Information</h1>
+          <h1 className="font-bold text2">Personal Information</h1>
           <Button type="submit" size="sm" varient="outlined">
             {isLoading ? (
               <p className="flex justify-center items-center">
                 <Loader color="blue" size="sm" />
               </p>
             ) : (
-              <span className="text-[#8530C1]">Save</span>
+              <span className="text-[#8530C1] text3">Save</span>
             )}
           </Button>
         </div>
-        <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] my-1 text-[12px] text-[#B5B5C3]">
+        <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] my-1  text-[#B5B5C3] text3">
           <span>First Name</span>
           <span>Last Name</span>
           {/* <span>Email</span> */}
@@ -774,36 +757,32 @@ const EditParentPersonalInfomation = ({
 };
 
 const EditTeacherPersonalInfomation = ({
-  name,
-  phone,
-  email,
+  user,
   onSave,
 }: {
-  name?: string;
-  phone?: string;
-  email?: string;
+  user: TUser;
   onSave: () => void;
 }) => {
   return (
     <div className="p-6 border border-[#8530C1]  rounded-3xl mt-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="font-bold text-[16px]">Personal Information</h1>
+        <h1 className="font-bold text2">Personal Information</h1>
         <Button onClick={onSave} size="sm" varient="outlined">
           <p className="gap-4 flex">
             <img loading="lazy" src={EditPencil} alt="pencil" />{" "}
-            <span className="text-[#8530C1]">Save</span>
+            <span className="text-[#8530C1] text3">Save</span>
           </p>
         </Button>
       </div>
-      <div className="grid gap-2 grid-cols-[1fr_1fr_1fr] my-1 text-[12px] text-[#B5B5C3]">
-        <span>Name</span>
-        <span>Phone</span>
+      <div className="grid gap-2 grid-cols-[1fr_1fr_1fr] my-1 text3 text-[#B5B5C3]">
+        <span>First Name</span>
+        <span>Last Name</span>
         <span>Email</span>
       </div>
       <div className="grid gap-2 grid-cols-[1fr_1fr_1fr] mb-4 text-[14px]">
-        <InputFormat type="text" value={name} />
-        <InputFormat type="text" value={phone} />
-        <InputFormat type="text" value={email} />
+        <InputFormat type="text" value={user?.firstname} />
+        <InputFormat type="text" value={user?.lastname} />
+        <InputFormat type="text" value={user?.email} />
       </div>
     </div>
   );
@@ -879,7 +858,7 @@ const EditSchoolPersonalInfomation = ({
     <div className="p-6 border border-[#8530C1]  rounded-3xl mt-8">
       <form onSubmit={handleSubmit(submitData)}>
         <div className="flex justify-between items-center mb-8">
-          <h1 className="font-bold text-[16px]">Personal Information</h1>
+          <h1 className="font-bold text2">Personal Information</h1>
           <Button type="submit" size="sm" varient="outlined">
             <p className="gap-4 flex">
               {isLoading ? (
@@ -892,7 +871,7 @@ const EditSchoolPersonalInfomation = ({
             </p>
           </Button>
         </div>
-        <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] my-1 text-[12px] text-[#B5B5C3]">
+        <div className="grid gap-2 grid-cols-[1fr_1fr_1fr_1fr] my-1 text3 text-[#B5B5C3]">
           <span>Contact Name</span>
           <span>Email</span>
           <span>Address</span>

@@ -1,22 +1,34 @@
 import StoriesNav from "./StoriesNav";
 import { useParams, useNavigate } from "react-router-dom";
 import CardScreenHome from "@/common/User/CardScreenHome";
-import CardHome, { CardProps } from "@/common/User/CardHome";
+import CardHome from "@/common/User/CardHome";
 import Bookmark from "@/assets/Bookmark.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
-import PreviousIcon from "@/assets/chevrondown.svg";
-import NextIcon from "@/assets/chevronup.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Congrats from "@/assets/congrats.svg";
-import { useGetContentById, useContentForHome } from "@/api/queries";
+import {
+  useGetContentById,
+  useContentForHome,
+  useContentTracking,
+  useGetLikedContent,
+  useLikedContent,
+  useUnLikedContent,
+} from "@/api/queries";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store";
 import AfamBlur from "@/assets/afamblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { Skeleton } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
 import CustomTTSComponent from "@/components/TTS";
+
+import { getApiErrorMessage } from "@/api/helper";
+import { notifications } from "@mantine/notifications";
+import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import "./stories1.css";
+import { Slider, MantineProvider } from "@mantine/core";
+import { useReducedMotion } from "@mantine/hooks";
+import { useRef } from "react";
 
 type TContentPage = {
   audio: string;
@@ -32,25 +44,26 @@ type TSubCategory = {
   sub_category_name: string;
 };
 export type TStoryContent = {
-  sub_category_name: any;
-  category: string;
-  sub_categorie: TSubCategory[];
-  category_id: number;
-  content_type: string;
-  content_type_id: number;
-  has_quiz: boolean;
-  id: number;
-  is_liked: boolean;
-  media: string[];
-  media_type: string;
-  name: string;
-  pages: TContentPage[];
-  short_link: string;
-  slug: string;
-  synopsis: string;
-  tags: string;
-  theme: string;
-  thumbnail: string;
+  sub_category_name?: any;
+  category?: string;
+  sub_categorie?: TSubCategory[];
+  category_id?: number;
+  content_type?: string;
+  content_type_id?: number;
+  has_quiz?: boolean;
+  id?: number;
+  is_liked?: boolean;
+  media?: string[];
+  media_type?: string;
+  name?: string;
+  pages?: TContentPage[];
+  short_link?: string;
+  slug?: string;
+  pages_read?: number;
+  synopsis?: string;
+  tags?: string;
+  theme?: string;
+  thumbnail?: string;
 };
 
 const Stories1 = () => {
@@ -117,7 +130,7 @@ const Stories1 = () => {
                       isLoading={isLoading}
                       header="Recommended For You"
                       isTitled={false}
-                      card={(props: CardProps) => (
+                      card={(props: TStoryContent) => (
                         <CardHome
                           {...props}
                           goTo={() => {
@@ -151,50 +164,114 @@ const AboutPage = ({
   story: TStoryContent;
   setStartRead: () => void;
 }) => {
+  const profileId = localStorage.getItem("profileId");
+  const { data, refetch } = useGetLikedContent(profileId!);
+  const likeContents: TStoryContent[] = data?.data.data.records;
+  const { mutate } = useLikedContent();
+  const { mutate: unFavoriteMutate } = useUnLikedContent();
+  const isLiked = likeContents?.filter((content) => content.id === story?.id);
+
+  const handleLikedContent = () => {
+    // handleShake();
+    if (isLiked?.length === 0 || isLiked === undefined) {
+      mutate(
+        {
+          content_id: Number(story.id),
+          profile_id: Number(profileId),
+        },
+        {
+          onSuccess() {
+            // const res = data?.data?.data as TUser;
+            // setUser({ ...res });
+            refetch();
+            notifications.show({
+              title: `Notification`,
+              message: story?.name + " added to list",
+            });
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    } else {
+      unFavoriteMutate(
+        {
+          content_id: Number(story?.id),
+          profile_id: Number(profileId),
+        },
+        {
+          onSuccess() {
+            refetch();
+            notifications.show({
+              title: `Notification`,
+              message: story?.name + " removed from the list",
+            });
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    }
+  };
+
   return (
-    <div className="bg-[#5D0093]  w-[100%] flex rounded-3xl px-10 py-5">
-      <div className="flex basis-full gap-2  border-r-2 justify-center items-center border-[#BD6AFA]  ">
+    <div className="bg-[#5D0093]  w-[100%] flex rounded-3xl pad-x-40 about-card-px py-5">
+      <div className="flex basis-full  border-r-2 justify-center items-center border-[#BD6AFA]  ">
         <p className="flex flex-col w-full">
           {story ? (
             <LazyLoadImage
               src={story?.thumbnail}
               placeholderSrc={AfamBlur}
               effect="blur"
-              className="rounded-2xl"
-              wrapperClassName=""
-              width={300}
-              height={300}
+              className="rounded-2xl about-img "
+              wrapperClassName="about-img"
             />
           ) : (
             <LazyLoadImage
               placeholderSrc={AfamBlur}
               effect="blur"
-              className="rounded-2xl"
-              wrapperClassName=""
-              width={300}
-              height={300}
+              className="rounded-2xl about-img "
+              wrapperClassName="about-img"
             />
           )}
         </p>
-        <p className="flex flex-col w-full  ">
-          <span className="font-bold font-Recoleta text-white text-[24px]">
+        <p className="grid flex-col w-full   h-full py-2 ">
+          <span className="font-bold font-Recoleta text-white text25 justify-self-start">
             {story?.name}
           </span>
-          <span className="mt-4 text-[#BD6AFA]  ">Dele and Louisa Olafuyi</span>
-          <p className="mt-40 flex gap-4">
+          <span className=" text-[#BD6AFA]  ">Dele and Louisa Olafuyi</span>
+          <p className="grid grid-cols-2   gap-4 ">
             <button
               onClick={setStartRead}
-              className="px-16 py-3 border text-white border-white rounded-3xl"
+              className=" py-3 inline self-end text-white border-white border-[2px] rounded-2xl"
             >
               Read
             </button>
-            <img loading="lazy" src={Bookmark} alt="bookmark" />
+            <button
+              onClick={handleLikedContent}
+              className="inline self-end text-start"
+            >
+              <img
+                loading="lazy"
+                src={Bookmark}
+                alt="bookmark"
+                className=" inline "
+              />
+            </button>
           </p>
         </p>
       </div>
-      <div className=" basis-3/4 text-[#BD6AFA] px-10">
+      <div className=" basis-3/4 text-[#BD6AFA] pad-x-40">
         <div>
-          <h1 className="text-white font-bold  font-Hanken text-[25px] my-4">
+          <h1 className="text-white font-bold  font-Hanken text25 my-2">
             About the author
           </h1>
           <p>
@@ -205,7 +282,7 @@ const AboutPage = ({
           </p>
         </div>
         <div>
-          <h1 className="text-white font-bold  font-Hanken text-[25px] my-4">
+          <h1 className="text-white font-bold  font-Hanken text25 my-2">
             Overview
           </h1>
           <p>
@@ -232,7 +309,51 @@ const ReadPage = ({
   const [isReading, setIsReading] = useState(false);
   const [page, setPage] = useState(0);
   const pageTotal = content.length - 1;
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = useState(0);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const reducedMotion = useReducedMotion();
+  const [volume, setVolume] = useState(50);
+  const handleVolumeChange = (value: number) => {
+    setVolume(value);
+    const volume = Number(value) / max;
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  };
+  const max = 20;
+  const { mutate } = useContentTracking();
+  const profileId = localStorage.getItem("profileId");
+  const contentId = localStorage.getItem("contentId");
+
+  useEffect(() => {
+    mutate(
+      {
+        profile_id: Number(profileId),
+        content_id: Number(contentId),
+        status: "ongoing",
+        pages_read: Number(pageNumber + 1),
+        timespent: 23,
+      },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+          // const res = data?.data?.data as TUser;
+          // setUser({ ...res });
+
+          // notifications.show({
+          //   title: `Notification`,
+          //   message: data?.data.message,
+          // });
+        },
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  }, [pageNumber]);
   return (
     <div className="flex py-16 bg-white  rounded-3xl px-16">
       <div className=" basis-3/4 flex  items-center">
@@ -240,12 +361,12 @@ const ReadPage = ({
           loading="lazy"
           src={thumbnail}
           alt="image"
-          className="w-[400px] rounded-xl"
+          className="read-img rounded-xl"
         />
       </div>
       <div className=" basis-full flex flex-col ">
         <div className="flex-grow">
-          <p className="mb-5">
+          <p className="mb-5 flex justify-between items-center ">
             <button
               onClick={() => setIsReading(!isReading)}
               className={`flex border py-2 ${
@@ -259,9 +380,39 @@ const ReadPage = ({
               ></p>
               <p className="inline">Read to me</p>
             </button>
+            <p className="w-[100px]">
+              <MantineProvider
+                theme={{
+                  colors: {
+                    "ocean-blue": [
+                      "#8530c1",
+                      "#5FCCDB",
+                      "#44CADC",
+                      "#2AC9DE",
+                      "#1AC2D9",
+                      "#11B7CD",
+                      "#09ADC3",
+                      "#0E99AC",
+                      "#128797",
+                      "#147885",
+                    ],
+                  },
+                }}
+              >
+                <Slider
+                  color="ocean-blue.0"
+                  value={volume}
+                  onChange={handleVolumeChange}
+                  min={0}
+                  max={max}
+                  disabled={reducedMotion}
+                  size={"sm"}
+                />
+              </MantineProvider>
+            </p>
           </p>
           {!isReading && (
-            <p className=" leading-10 flex h-[350px] overflow-y-auto  text-[16px] font-medium font-Hanken pr-8 text-justify ">
+            <p className=" leading-10 flex h-[350px] overflow-y-auto  text20 font-medium font-Hanken pr-8 text-justify ">
               {content[page].web_body}
             </p>
           )}
@@ -273,7 +424,8 @@ const ReadPage = ({
               setIsFinish={setIsFinish}
               pageNumber={pageNumber}
               pageTotal={pageTotal}
-              autoPlay={pageNumber !== 1}
+              autoPlay={true}
+              setPage={setPageNumber}
               setPageNumber={() => {
                 if (pageNumber === pageTotal) {
                   return;
@@ -282,13 +434,14 @@ const ReadPage = ({
               }}
               highlight
             >
-              {content[pageNumber].web_body}
+              <p className="text20">{content[pageNumber].web_body}</p>
             </CustomTTSComponent>
           ) : (
             <BookPagination
               setIsFinish={setIsFinish}
               setPage={setPage}
               pageTotal={pageTotal}
+              setPageNumber={setPageNumber}
             />
           )}
         </div>
@@ -301,13 +454,19 @@ const BookPagination = ({
   setIsFinish,
   setPage,
   pageTotal,
+  setPageNumber,
 }: {
   setIsFinish: () => void;
   setPage: (val: number) => void;
   pageTotal: number;
+  setPageNumber: (val: number) => void;
 }) => {
+  const { mutate } = useContentTracking();
+  const profileId = localStorage.getItem("profileId");
+  const contentId = localStorage.getItem("contentId");
   const [currentPage, setCurrentage] = useState(1);
   setPage(currentPage);
+  setPageNumber(currentPage);
   const pageItirate = (itirateControl: string) => {
     if (currentPage < pageTotal && itirateControl === "next") {
       setCurrentage((val) => (val += 1));
@@ -315,6 +474,65 @@ const BookPagination = ({
     if (currentPage > 1 && itirateControl === "prev") {
       setCurrentage((val) => (val -= 1));
     }
+  };
+  // const handleBookProgress = () => {
+  //   mutate(
+  //     {
+  //       profile_id: Number(profileId),
+  //       content_id: Number(contentId),
+  //       status: "ongoing",
+  //       pages_read: Number(currentPage + 1),
+  //       timespent: 23,
+  //     },
+  //     {
+  //       onSuccess(data) {
+  //         console.log("success", data.data.message);
+  //         // const res = data?.data?.data as TUser;
+  //         // setUser({ ...res });
+
+  //         // notifications.show({
+  //         //   title: `Notification`,
+  //         //   message: data?.data.message,
+  //         // });
+  //       },
+  //       onError(err) {
+  //         notifications.show({
+  //           title: `Notification`,
+  //           message: getApiErrorMessage(err),
+  //         });
+  //       },
+  //     }
+  //   );
+  // };
+  const handleBookCompletedProgress = () => {
+    mutate(
+      {
+        profile_id: Number(profileId),
+        content_id: Number(contentId),
+        status: "complete",
+        pages_read: Number(pageTotal),
+        timespent: 23,
+      },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+          setIsFinish();
+          // const res = data?.data?.data as TUser;
+          // setUser({ ...res });
+
+          // notifications.show({
+          //   title: `Notification`,
+          //   message: data?.data.message,
+          // });
+        },
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
   };
   return (
     <div>
@@ -331,11 +549,10 @@ const BookPagination = ({
         <div className="flex gap-4">
           <p className="bg-[#8530C1] text-white p-3 rounded-3xl px-8 gap-8 flex justify-between  items-center">
             <button onClick={() => pageItirate("prev")}>
-              <img
-                loading="lazy"
-                src={PreviousIcon}
-                alt="icon"
-                className="w-[25px]"
+              <GrFormPrevious
+                size={30}
+                color="white"
+                className="u-react-icon"
               />
             </button>
             <span className=" space-x-1">
@@ -344,19 +561,27 @@ const BookPagination = ({
               {currentPage !== pageTotal && <span>{pageTotal}</span>}
             </span>
             {currentPage !== pageTotal && (
-              <button onClick={() => pageItirate("next")}>
-                <img
-                  loading="lazy"
-                  src={NextIcon}
-                  alt="icon"
-                  className="w-[25px]"
+              <button
+                onClick={() => {
+                  pageItirate("next");
+                }}
+              >
+                <GrFormNext
+                  size={30}
+                  color="white"
+                  className="u-react-icon"
+                  style={{
+                    polyline: {
+                      stroke: "white",
+                    },
+                  }}
                 />
               </button>
             )}
           </p>
           {currentPage === pageTotal && (
             <button
-              onClick={setIsFinish}
+              onClick={handleBookCompletedProgress}
               className="p-4 bg-green-600 rounded-3xl text-white px-8"
             >
               Finish
@@ -397,7 +622,7 @@ const WelDone = ({ content }: { content: TStoryContent }) => {
             Well Done!
           </h1>
           <p className="text-[#7E7E89] text-[18px]">
-            You have just finished reading {content?.pages[0].name}
+            You have just finished reading {content?.name!}
           </p>
         </div>
         <p className="flex flex-col gap-y-3 mt-8">

@@ -1,0 +1,7 @@
+.amina-w {
+  width: clamp(18.75rem, 10.7225rem + 36.6972vw, 43.75rem) !important;
+}
+
+.amina-container {
+  right: clamp(6.25rem, 3.6411rem + 11.9266vw, 14.375rem) !important;
+}

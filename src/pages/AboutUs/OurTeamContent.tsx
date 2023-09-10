@@ -71,10 +71,10 @@ const data = [
 const OurTeamContent = () => {
   return (
     <div className="max-w-[1000px] w-full mx-auto text-center">
-      <h1 className=" font-semibold font-Recoleta text-[46px] text-black text-center mb-8">
+      <h1 className=" font-semibold font-Recoleta header2 text-black text-center mb-8">
         Our Amazing Team
       </h1>
-      <p className=" text-[18px] leading-[30px] mb-20">
+      <p className=" text1 leading-[30px] mb-20">
         Our team is made up of passionate team of artists, writers, producers,
         and content and business leaders who share our vision for creating
         diverse and inclusive children's literature. Together, we work to create

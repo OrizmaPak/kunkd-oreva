@@ -3,10 +3,13 @@ import StudentIcon from "@/assets/student3.svg";
 import Card from "./Card";
 import TotalTimeSpent from "./TotalTimeSpent";
 import StudentLeaderboard from "../../SchoolDashBoard/Main/StudentLeaderboard";
-import { dashboardData } from "../../SchoolDashBoard/Teachers/Teachers";
 import ProgressLog from "../../SchoolDashBoard/Students/Profile/ProgressLog";
+import { useGetAdmittedStudentsInClass } from "@/api/queries";
+import { TRequestStudents } from "../Request/Request";
 
 const Main = () => {
+  const { data } = useGetAdmittedStudentsInClass();
+  const studentList: TRequestStudents[] = data?.data.data.records;
   return (
     <div className="h-full flex flex-col overflow-y-scroll">
       <div className="flex justify-between px-8 gap-2">
@@ -19,13 +22,15 @@ const Main = () => {
       </div>
       <div className=" flex gap-5 flex-grow">
         <div className=" basis-full flex-grow flex  ">
-          <StudentLeaderboard
-            data={dashboardData.slice(1, 9).map((el) => el)}
-          />
+          <StudentLeaderboard data={studentList} />
         </div>
 
-        <div className=" basis-2/4 flex flex-col ">
-          <Card image={StudentIcon} title="Students" amount="37" />
+        <div className=" basis-3/5 flex flex-col ">
+          <Card
+            image={StudentIcon}
+            title="Students"
+            amount={studentList?.length}
+          />
 
           <ProgressLog />
 

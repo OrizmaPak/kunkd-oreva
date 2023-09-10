@@ -12,6 +12,7 @@ export type selectAvatarType = {
   name: string;
   image: string;
   id: number;
+  dob?: string;
 };
 
 const SelectProfile = () => {

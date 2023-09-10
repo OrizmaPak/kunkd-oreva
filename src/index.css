@@ -9,7 +9,7 @@
 
 @font-face {
   font-family: "Hanken-Grotest";
-  src: url("/public/fonts/HankenGrotesk-Bold.ttf");
+  src: url("/public/fonts/HankenGrotesk-Medium.ttf");
 }
 
 @layer utilities {
@@ -31,4 +31,82 @@
   outline: none;
   border-color: transparent;
   box-shadow: none;
+}
+
+.u-react-icon polyline {
+  stroke: white !important;
+}
+
+.u-react-icon path {
+  /* fill: white;  */
+  stroke: #8530c1;
+}
+
+body {
+  scroll-behavior: smooth;
+}
+
+.header2 {
+  /* font-size: clamp(1.125rem, 0.8887rem + 1.5126vw, 2.25rem) !important; */
+  font-size: clamp(1rem, 0.7374rem + 1.6807vw, 2.25rem) !important;
+}
+
+.header1 {
+  /* font-size: clamp(1.875rem, 1.4548rem + 2.6891vw, 3.875rem) !important; */
+  font-size: clamp(1.25rem, 0.6985rem + 3.5294vw, 3.875rem) !important;
+  line-height: clamp(1.75rem, 1.1985rem + 3.5294vw, 4.375rem) !important;
+}
+/* 18 */
+.text1 {
+  font-size: clamp(0.75rem, 0.6712rem + 0.5042vw, 1.125rem) !important;
+  line-height: clamp(1.125rem, 0.9543rem + 1.0924vw, 1.9375rem) !important;
+}
+/* 16 */
+.text2 {
+  font-size: clamp(0.75rem, 0.6975rem + 0.3361vw, 1rem) !important;
+}
+
+/* 14px */
+.text3 {
+  font-size: clamp(0.5rem, 0.4212rem + 0.5042vw, 0.875rem) !important;
+}
+
+.text30 {
+  font-size: clamp(1.125rem, 0.9674rem + 1.0084vw, 1.875rem) !important;
+}
+
+.text25 {
+  font-size: clamp(0.875rem, 0.7306rem + 0.9244vw, 1.5625rem) !important;
+}
+
+.text20 {
+  font-size: clamp(0.875rem, 0.7962rem + 0.5042vw, 1.25rem) !important;
+}
+
+.hero-text-container {
+  left: clamp(0.625rem, -0.2941rem + 5.8824vw, 5rem) !important;
+}
+
+/* App body width responsive */
+.app-mai-nwidth-container {
+  width: clamp(34.375rem, -8.7838rem + 98.6486vw, 80rem) !important;
+}
+
+.pad-x-40 {
+  padding-inline: clamp(0.625rem, -1.1486rem + 4.0541vw, 2.5rem);
+}
+.pad-x-10 {
+  padding-inline: clamp(0.25rem, 0.1296rem + 0.5505vw, 0.625rem);
+}
+
+.content-nav {
+  height: clamp(2.5rem, 1.3176rem + 2.7027vw, 3.75rem) !important;
+}
+
+.inner-form-w {
+  width: clamp(12.5rem, 8.0648rem + 20.2752vw, 26.3125rem) !important;
+}
+
+.inner-form-w2 {
+  width: clamp(1.5625rem, -5.9633rem + 34.4037vw, 25rem) !important;
 }

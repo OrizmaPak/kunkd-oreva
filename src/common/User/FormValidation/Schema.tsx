@@ -17,7 +17,7 @@ export type FormData = {
   dob?: string;
   current_password?: string;
   new_password?: string;
-  gender?: string;
+  genderid?: string;
   teacher?: string;
   class?: string;
   file?: string;
@@ -26,4 +26,7 @@ export type FormData = {
   post_code?: string;
   tax_id?: string;
   phone?: string;
+  classid?: string;
+  teacher_id?: string;
+  schoolid?: string;
 };

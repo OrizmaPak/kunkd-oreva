@@ -12,7 +12,7 @@ import {
   GetProfile,
   UpdatePassword,
   UpdateProfile,
-  GoogleSignUp,
+  SocialSignUp,
   ContentForHome,
   GetContentById,
   GetSubCategories,
@@ -35,6 +35,28 @@ import {
   StripeInit,
   GetTrendingAudioBooks,
   GetRecommendedVideo,
+  GetIntroVideo,
+  LikedContent,
+  GetLikedContent,
+  UnLikedContent,
+  ContentTracking,
+  AddTeacherData,
+  AddClassData,
+  GetClassList,
+  GetSchool,
+  ConnectStudentData,
+  GetTeacherList,
+  GetAdmittedStudentsInSchool,
+  GetAttemptStudentConnect,
+  ReAssignTeacher,
+  GetOngoingContents,
+  GetCompletedContents,
+  GetContentsLog,
+  AcceptStudentAdmission,
+  RejectStudentAdmission,
+  GetAdmittedStudentsInClass,
+  SaveQuiz,
+  GetMainSearch,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -149,9 +171,9 @@ export const useUpdateProfile = () => {
 };
 
 // Google Sign up
-export const useGoogleSignup = () => {
+export const useSocialSignUp = () => {
   return useMutation({
-    mutationFn: GoogleSignUp,
+    mutationFn: SocialSignUp,
   });
 };
 
@@ -190,6 +212,13 @@ export const useGetAudioBoks = () => {
   return useQuery({
     queryKey: ["getAudioBooks"],
     queryFn: () => GetAudioBooks(),
+  });
+};
+
+export const useGetIntroVideo = () => {
+  return useQuery({
+    queryKey: ["getIntroVideo"],
+    queryFn: () => GetIntroVideo(),
   });
 };
 
@@ -291,6 +320,137 @@ export const useVerifyCompletePayStack = () => {
 export const useStripeInit = () => {
   return useMutation({
     mutationFn: StripeInit,
+  });
+};
+
+export const useLikedContent = () => {
+  return useMutation({
+    mutationFn: LikedContent,
+  });
+};
+
+export const useUnLikedContent = () => {
+  return useMutation({
+    mutationFn: UnLikedContent,
+  });
+};
+
+// export const useGetLikedContent = () => {
+//   return useQuery({ queryKey: ["GetLikedContent"], queryFn: GetLikedContent });
+// };
+
+export const useGetLikedContent = (profileId: string) => {
+  return useQuery({
+    queryKey: ["GetLikedContent", profileId],
+    queryFn: () => GetLikedContent(profileId),
+  });
+};
+
+export const useContentTracking = () => {
+  return useMutation({
+    mutationFn: ContentTracking,
+  });
+};
+
+export const useAddTeacherData = () => {
+  return useMutation({
+    mutationFn: AddTeacherData,
+  });
+};
+
+export const useAddClassData = () => {
+  return useMutation({
+    mutationFn: AddClassData,
+  });
+};
+
+export const useConnectStudentData = () => {
+  return useMutation({
+    mutationFn: ConnectStudentData,
+  });
+};
+export const useGetClassList = () => {
+  return useQuery({ queryKey: ["GetClassList"], queryFn: GetClassList });
+};
+
+export const useGetSchool = () => {
+  return useQuery({ queryKey: ["GetSchool"], queryFn: GetSchool });
+};
+
+export const useGetTeacherList = () => {
+  return useQuery({ queryKey: ["GetTeacherList"], queryFn: GetTeacherList });
+};
+
+export const useGetAdmittedStudentsInSchool = () => {
+  return useQuery({
+    queryKey: ["GetStudents"],
+    queryFn: GetAdmittedStudentsInSchool,
+  });
+};
+
+export const useGetOngoingContents = (profileId: string) => {
+  return useQuery({
+    queryKey: ["GetOngoingContents", profileId],
+    queryFn: () => GetOngoingContents(profileId),
+  });
+};
+
+export const useGetAttemptStudentConnect = () => {
+  return useQuery({
+    queryKey: ["GetAttemptStudentConnect"],
+    queryFn: GetAttemptStudentConnect,
+  });
+};
+
+export const useReAssignTeacher = () => {
+  return useMutation({
+    mutationFn: ReAssignTeacher,
+  });
+};
+
+export const useGetCompletedContents = (profileId: string) => {
+  return useQuery({
+    queryKey: ["GetCompletedContents", profileId],
+    queryFn: () => GetCompletedContents(profileId),
+  });
+};
+
+export const useGetContentsLog = (profileId: string) => {
+  return useQuery({
+    queryKey: ["GetOngoingForParent", profileId],
+    queryFn: () => GetContentsLog(profileId),
+  });
+};
+
+export const useAcceptStudentAdmission = () => {
+  return useMutation({
+    mutationFn: AcceptStudentAdmission,
+  });
+};
+
+export const useRejectStudentAdmission = () => {
+  return useMutation({
+    mutationFn: RejectStudentAdmission,
+  });
+};
+
+export const useGetAdmittedStudentsInClass = () => {
+  return useQuery({
+    queryKey: ["GetAdmittedStudentsInClass"],
+    queryFn: GetAdmittedStudentsInClass,
+  });
+};
+
+export const useSaveQuiz = () => {
+  return useMutation({
+    mutationFn: SaveQuiz,
+  });
+};
+
+export const useGetMainSearch = (param: string) => {
+  return useQuery({
+    queryKey: ["GetMainSearch", param],
+    queryFn: () => GetMainSearch(param),
   });
 };
 

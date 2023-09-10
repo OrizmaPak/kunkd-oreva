@@ -35,7 +35,7 @@ const Videos = () => {
           Learning a new language is so important...
         </p>
         <hr className="my-16 mx-20" />
-        <div className="grid grid-cols-5 gap-5 px-20 mt-10">
+        <div className="grid grid-cols-5 gap-5 pad-x-40 mt-10">
           {isLoading
             ? Array(10)
                 .fill(5)
@@ -53,9 +53,7 @@ const Videos = () => {
                 <CardHome
                   key={index}
                   {...data}
-                  goTo={() =>
-                    navigate(`../${data.sub_category_name}/${data.slug}`)
-                  }
+                  goTo={() => navigate(`../${data.slug}/${data.name}`)}
                 />
               ))}
         </div>

@@ -5,7 +5,11 @@ import { useState, useRef } from "react";
 import SaveIcon from "@/assets/saveIcon.svg";
 import ShareIcon from "@/assets/shareIcon.svg";
 import Congrats from "@/assets/congrats.svg";
-import { useGetContentById, useGetRecommendedVideo } from "@/api/queries";
+import {
+  useGetContentById,
+  useGetRecommendedVideo,
+  useContentTracking,
+} from "@/api/queries";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store";
 import "video-react/dist/video-react.css";
@@ -14,6 +18,9 @@ import { Skeleton } from "@mantine/core";
 import AfamBlur from "@/assets/afamblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import { useEffect } from "react";
+import { getApiErrorMessage } from "@/api/helper";
+import { notifications } from "@mantine/notifications";
 
 type TRecommendedVideo = {
   id: number;
@@ -53,6 +60,46 @@ const VideoPlayer = () => {
   const videoData = data?.data.data.sub_categories[0];
   console.log("_____cont", video);
   console.log("_____cont", videoData);
+  const [currentVideoTime, setCurrentVideotime] = useState(0);
+  // setCurrentVideotime(videoRef?.current?.currentTime!);
+  // console.log("current video time", currentVideoTime);
+  const { mutate } = useContentTracking();
+  const profileId = localStorage.getItem("profileId");
+  const [delay, setDelay] = useState(0);
+
+  setInterval(() => {
+    setDelay((prev) => prev++);
+  }, 1000);
+
+  useEffect(() => {
+    mutate(
+      {
+        profile_id: Number(profileId),
+        content_id: Number(contentId),
+        status: "ongoing",
+        pages_read: Math.ceil(currentVideoTime),
+        timespent: Math.ceil(currentVideoTime),
+      },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+          // const res = data?.data?.data as TUser;
+          // setUser({ ...res });
+
+          // notifications.show({
+          //   title: `Notification`,
+          //   message: data?.data.message,
+          // });
+        },
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  }, [delay]);
 
   return (
     <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col  bg-[#fff7fd]">
@@ -84,9 +131,12 @@ const VideoPlayer = () => {
                       className=" rounded-t-3xl flex-grow"
                       // poster={video.thumbnail}
                       src={video?.file}
-                      autoPlay={false}
+                      autoPlay
                       controls={true}
                       playerRef={videoRef}
+                      onTimeUpdate={(event) => {
+                        setCurrentVideotime(+event.currentTarget.currentTime);
+                      }}
                       width="100%"
                       height={"200px"}
                     />
@@ -117,7 +167,13 @@ const VideoPlayer = () => {
                 </div>
 
                 <div className="mt-4 bg-white left-10 p-10 rounded-3xl leading-10">
-                  <p>{video?.content}</p>
+                  <p>
+                    {video?.content} Lorem ipsum dolor, sit amet consectetur
+                    adipisicing elit. Suscipit iste beatae veritatis, corrupti
+                    porro minima fugit tempore dicta cum eaque, vero dolore quas
+                    unde obcaecati perferendis. Voluptate deserunt similique
+                    veniam.
+                  </p>
                 </div>
               </div>
 

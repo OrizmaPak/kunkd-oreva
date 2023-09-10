@@ -1,60 +1,32 @@
-import Teacher1 from "@/assets/usericon.svg";
-import Teacher2 from "@/assets/Male01.svg";
-import Teacher3 from "@/assets/Female03.svg";
-import { Pagination } from "@mantine/core";
+import { TTeacherList } from "../Teachers/Teachers";
+import { BsChevronRight } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
-const arrayOfTopTeacher = [
-  {
-    name: "Chul Lins",
-    image: Teacher1,
-    grade: "Grade 1",
-  },
-  {
-    name: "Cora Zoni",
-    image: Teacher2,
-    grade: "Grade 2",
-  },
-  {
-    name: "Gwen Ayo",
-    image: Teacher3,
-    grade: "Grade 3",
-  },
-  {
-    name: "Fabiola  Davi",
-    image: Teacher3,
-    grade: "Grade 4",
-  },
-];
-
-const ClassLeaderboard = () => {
+const ClassLeaderboard = ({ data }: { data: TTeacherList[] }) => {
+  const navigate = useNavigate();
   return (
-    <div className="p-4 bg-white rounded-3xl flex flex-col flex-grow mt-3">
+    <div className="p-4 bg-white rounded-3xl flex flex-col flex-grow px-10 mt-2">
       <div className="flex justify-between">
-        <h1 className="text-[20px] font-bold">Class Leaderboard</h1>
+        <h1 className="text2 font-semibold">Class List</h1>
       </div>
 
-      <div className="flex justify-between my-4 ">
+      <div className="flex justify-between mt-4 text3 ">
         <span>Classes</span>
         <span>Teacher</span>
       </div>
-      <hr className="my-3" />
+      <hr className="mb-3" />
       <div className="flex flex-grow  flex-col">
-        {arrayOfTopTeacher.map((data) => {
-          return <Row {...data} />;
+        {data?.map((data: TTeacherList, index) => {
+          return <Row key={index} data={data} />;
         })}
       </div>
-      <div className="flex  justify-end h-8">
-        <Pagination
-          total={4}
-          size="sm"
-          styles={() => ({
-            control: {
-              "&[data-active]": {
-                backgroundColor: "#8530C1 !important",
-              },
-            },
-          })}
-        />
+      <div className="flex  justify-end ">
+        <span>
+          <button onClick={() => navigate("classes")} className="flex gap-2">
+            <span className="text3 font-medium">See more</span>
+            <BsChevronRight size={18} />
+          </button>
+        </span>
       </div>
     </div>
   );
@@ -62,22 +34,21 @@ const ClassLeaderboard = () => {
 
 export default ClassLeaderboard;
 
-const Row = ({
-  image,
-  name,
-  grade,
-}: {
-  image: string;
-  name: string;
-  grade: string;
-}) => {
+const Row = ({ data }: { data: TTeacherList }) => {
   return (
-    <div className="flex justify-between items-center my-3 flex-grow">
+    <div className="flex justify-between items-center my-3  text3">
       <span className="flex gap-2 items-center justify-center">
-        <img loading="lazy" src={image} alt="image" className="w-[30px]" />
-        <span>{grade}</span>
+        <img
+          loading="lazy"
+          src={data?.user.image}
+          alt="image"
+          className="w-[30px] h-[30px] rounded-full object-cover"
+        />
+        <span>{data?.class.class_name}</span>
       </span>
-      <span>{name}</span>
+      <span>
+        {data?.user.firstname} {data?.user.lastname}
+      </span>
     </div>
   );
 };

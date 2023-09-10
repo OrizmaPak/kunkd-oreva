@@ -5,33 +5,51 @@ import AdsButton from "@/common/User/AdsButton";
 import useStore from "@/store/index";
 import { getProfileState } from "@/store/profileStore";
 import { selectAvatarType } from "./SelectProfile";
-import { useContentForHome } from "@/api/queries";
+import {
+  useContentForHome,
+  // useGetContentsLog,
+  useGetOngoingContents,
+} from "@/api/queries";
 import CardScreenHome from "@/common/User/CardScreenHome";
-import { CardProps } from "@/common/User/CardHome";
 import CardHome from "@/common/User/CardHome";
 import CategoriesCard from "../Library/LibraryNotPaid/CategoriesCard";
 import { useNavigate } from "react-router-dom";
 import musicIcon from "@/assets/musicIcon.svg";
 import videoIcon from "@/assets/videoicon.svg";
 import BookIcon from "@/assets/bookicon.svg";
+import "./parenthomepage.css";
+import { TStoryContent } from "../Stories/Stories1/Stories1";
 
 const ParentHomePage = () => {
   let profiles: selectAvatarType;
   const [profile] = useStore(getProfileState);
+  const profileId = localStorage.getItem("profileId");
+  const { data: ongoingData } = useGetOngoingContents(profileId!);
+  const ongoingContents: TStoryContent[] =
+    ongoingData?.data.data.ongoing_contents;
   const { isLoading, data: contentData } = useContentForHome();
   const recommendedStories = contentData?.data.data.recommended_stories;
   const newTrending = contentData?.data.data.trending_stories;
   const currentId = Number(localStorage.getItem("profileId"));
-
+  // const { data: ongoingData } = useGetContentsLog(currentId.toString());
+  // const ongooingContent = ongoingData?.data.data.records;
+  // console.log("contentLog", ongooingContent, currentId);
   if (
     // data2?.data.data.filter((each: profileType) => each.id !== currentProfile)
     !currentId
   ) {
     profiles = profile[0];
+    localStorage.setItem("profileId", profile[0].id.toString());
   } else {
     profiles = profile?.find((each) => each.id === currentId)!;
   }
+
+  console.log(profile);
+  console.log(currentId);
+  console.log(profiles);
   const navigate = useNavigate();
+  const userInLocalStr = localStorage.getItem("user");
+  const user = JSON.parse(userInLocalStr!);
 
   return (
     <div>
@@ -39,11 +57,11 @@ const ParentHomePage = () => {
         <InnerWrapper>
           <Hero userimage={profiles?.image} username={profiles?.name} />
 
-          <h1 className="text-center font-bold text-[30px] font-Recoleta my-10 ">
+          <h1 className="text-center font-bold text30 font-Recoleta my-10 ">
             Our Library
           </h1>
           <div className="flex justify-center items-center my-8 mb-14">
-            <div className="flex justify-center items-center gap-[150px]  ">
+            <div className=" justify-center items-center category-gap  ">
               <CategoriesCard
                 image={BookIcon}
                 label="Stories"
@@ -61,13 +79,98 @@ const ParentHomePage = () => {
               />
             </div>
           </div>
+          <div className="my-10">
+            {ongoingContents?.length > 0 && (
+              <div className=" mx-20 mt-4">
+                <span className=" text25 font-semibold font-Recoleta ">
+                  Continue Learning
+                </span>
+                <div className="overflow-auto   p-4 ">
+                  <div className="flex gap-5 mb-14 ">
+                    {ongoingContents?.map((data, index) => {
+                      if (data.category === "Stories") {
+                        return (
+                          <CardHome
+                            hasRage={true}
+                            key={index}
+                            {...data}
+                            goTo={() => {
+                              navigate(
+                                `../${
+                                  user.role === "parent" ? "parent" : "school"
+                                }/${data.category?.toLowerCase()}/sub/${data.slug
+                                  ?.toLocaleLowerCase()
+                                  .replace(/\s/g, "-")}`
+                              );
+                            }}
+                          />
+                        );
+                      } else if (data.category === "Audiobooks") {
+                        return (
+                          <CardHome
+                            hasRage={true}
+                            key={index}
+                            {...data}
+                            goTo={() => {
+                              navigate(
+                                `../${
+                                  user.role === "parent" ? "parent" : "school"
+                                }/${data.category?.toLowerCase()}/${data.slug
+                                  ?.toLocaleLowerCase()
+                                  .replace(/\s/g, "-")}`
+                              );
+                            }}
+                          />
+                        );
+                      } else if (data.category === "Languages") {
+                        return (
+                          <CardHome
+                            hasRage={true}
+                            key={index}
+                            {...data}
+                            goTo={() =>
+                              navigate(
+                                `../${
+                                  user.role === "parent" ? "parent" : "school"
+                                }/africanlanguages/${data.slug}/${data.name}`
+                              )
+                            }
+                          />
+                        );
+                      }
+                    })}
+                  </div>
+                </div>
+              </div>
+              // <CardScreenHome
+              //   data={ongoingContents!}
+              //   header="Continue learning"
+              //   actiontitle=""
+              //   isLoading={isLoading}
+              //   isTitled={false}
+              //   card={(props: TStoryContent) => (
+              //     <CardHome
+              //       {...props}
+              //       goTo={() => {
+              //         navigate(
+              //           `stories/sub/${props?.name
+              //             ?.toLocaleLowerCase()
+              //             .replace(/\s/g, "-")}`
+              //         );
+              //       }}
+
+              //     />
+              //   )}
+              // />
+            )}
+          </div>
           <CardScreenHome
             data={newTrending}
             header="New & Trending"
-            actiontitle="View all"
+            actiontitle=""
             isLoading={isLoading}
             isTitled={false}
-            card={(props: CardProps) => (
+            card={(props: TStoryContent) => (
               <CardHome
                 {...props}
                 goTo={() => {
@@ -87,7 +190,7 @@ const ParentHomePage = () => {
             header="Recommended For You"
             isTitled={false}
             isLoading={isLoading}
-            card={(props: CardProps) => (
+            card={(props: TStoryContent) => (
               <CardHome
                 {...props}
                 goTo={() => {

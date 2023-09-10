@@ -271,7 +271,7 @@ const Books = () => {
         </p>
       </div>
       <div className="flex justify-center items-center">
-        <div className="grid grid-cols-5 gap-8 px-24 py-10">
+        <div className="grid grid-cols-5 gap-14 pad-x-40 py-10">
           {isLoading &&
             Array(10)
               .fill(1)

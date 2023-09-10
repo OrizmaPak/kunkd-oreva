@@ -2,17 +2,18 @@ import DadBoy from "@/assets/dadboy.svg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import DadSonBlur from "@/assets/dadsonblur.jpg";
+import "./mission.css";
 
 const Mission = () => {
   return (
-    <div className=" bg-[rgba(237,28,36,0.06);] pt-14 pb-20 ">
-      <div className="max-w-[1200px] w-full mx-auto  ">
-        <div className="max-w-[1000px] mx-auto flex gap-14">
-          <div className="basis-1/2 mt-16">
-            <h1 className="font-bold font-Recoleta text-[46px] mb-4">
+    <div className=" bg-[rgba(237,28,36,0.06);] pt-14 pb-20 pad-x-40">
+      <div className="mission-container  mx-auto ">
+        <div className=" mx-auto flex gap-4 ">
+          <div className="basis-1/2 mt-16 px-10">
+            <h1 className="font-bold font-Recoleta header2 mb-4">
               Our mission
             </h1>
-            <p className="leading-[30px] text-[18px]">
+            <p className="leading-[30px] text1 ">
               At Kunda Kids, we believe in the importance of promoting diversity
               and inclusion in children's literature and media. Our mission is
               to create engaging and inspiring stories that celebrate African
@@ -20,20 +21,13 @@ const Mission = () => {
               teamwork, and kindness.
             </p>
           </div>
-          <div className="basis-1/2 flex justify-end">
-            {/* <img
-              loading="lazy"
-              src={DadBoy}
-              alt="parentImage"
-              className="w-[70%]"
-            /> */}
+          <div className="basis-1/2 flex justify-center">
             <LazyLoadImage
               src={DadBoy}
               placeholderSrc={DadSonBlur}
               effect="blur"
-              wrapperClassName=""
-              width={408}
-              height={408}
+              wrapperClassName="mission-img"
+              className="mission-img"
             />
           </div>
         </div>

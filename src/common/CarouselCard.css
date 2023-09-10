@@ -1,0 +1,4 @@
+.carousel-card {
+  width: clamp(9.375rem, 3.4664rem + 37.8151vw, 37.5rem) !important;
+  height: clamp(5rem, 1.9407rem + 19.5798vw, 19.5625rem) !important;
+}

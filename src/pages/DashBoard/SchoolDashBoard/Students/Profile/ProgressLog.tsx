@@ -4,7 +4,7 @@ import VideoBg from "@/assets/videobg.svg";
 import QuizBg from "@/assets/quizbg.svg";
 const ProgressLog = () => {
   return (
-    <div className="bg-white flex flex-col  flex-grow rounded-3xl px-4 py-2 pb-6">
+    <div className="bg-white flex flex-col  flex-grow rounded-3xl px-6 py-2 pb-6 ">
       <div>
         <div className="flex justify-between my-5 ">
           <h1 className="text-[20px] font-bold">Progress Log</h1>
@@ -31,14 +31,15 @@ const Card = ({
   title: string;
   total: string;
 }) => {
+  console.log(total);
   return (
-    <div className=" rounded-3xl py-4 px-3 border border-purple-300">
+    <div className=" rounded-3xl  p-6 border border-purple-300">
       <div>
-        <img loading="lazy" src={image} alt="image" className="w-[60px]" />
+        <img loading="lazy" src={image} alt="image" className="w-[38px]" />
       </div>
       <div className="flex flex-col">
-        <span className="font-bold text-[30px]">{total}</span>
-        <span>{title}</span>
+        <span className="font-bold text25 ">{0}</span>
+        <span className="text3">{title}</span>
       </div>
     </div>
   );

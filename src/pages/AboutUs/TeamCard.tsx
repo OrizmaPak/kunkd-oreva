@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import "./teamcard.css";
 
 const TeamCard = ({
   name,
@@ -18,7 +19,7 @@ const TeamCard = ({
   const [showMessage, setShowMessage] = useState(false);
 
   return (
-    <div className="w-[340px] h-[440px] relative transition-all duration-500 ease-in-out  ">
+    <div className="card-w relative transition-all duration-500 ease-in-out  ">
       {/* <img
         loading="lazy"
         src={image}
@@ -48,16 +49,16 @@ const TeamCard = ({
         onMouseEnter={() => setShowMessage(true)}
         onMouseLeave={() => setShowMessage(false)}
       >
-        <h1 className=" font-bold text-[26px] text-white">{name}</h1>
+        <h1 className=" font-bold text25 text-white">{name}</h1>
         <div className="mt-1 h-0 group-hover:h-[120px] transition-all duration-300">
           {!showMessage ? (
-            <span className="group-hover:opacity-0 text-white font-bold">
+            <span className="group-hover:opacity-0 text-white font-bold text1">
               {title}
             </span>
           ) : (
             <p
               className={
-                "opacity-0 group-hover:opacity-100 text-white text-left "
+                "opacity-0 group-hover:opacity-100 text-white text-left text2"
               }
             >
               {message}

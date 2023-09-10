@@ -1,0 +1,4 @@
+.card-w {
+  width: clamp(11.875rem, 8.8647rem + 13.7615vw, 21.25rem) !important;
+  height: clamp(16.25rem, 12.6376rem + 16.5138vw, 27.5rem) !important;
+}

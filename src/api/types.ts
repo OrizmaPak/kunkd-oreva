@@ -20,6 +20,7 @@ export type returnUser = {
   user_image: string;
   contact_name: string;
   school: TSchool;
+  default_password: boolean;
   // post_code: string;
   // tax_id: string;
   // country_id: string;
@@ -39,6 +40,10 @@ export type TResetPasswordData = {};
 export type TAudioBooks = {};
 export type TVerifyPinData = {};
 export type TPayStackInitData = {};
+export type TLikedContentData = {};
+export type TContentTracking = {};
+export type TAddTeacherData = {};
+export type TSaveQuiz = {};
 
 export type TProfileData = {
   name: string;

@@ -4,36 +4,48 @@ const Profile = ({
   name,
   image,
   email,
+  asignClass,
   handleClick,
   onEdit,
 }: {
   name: string;
   image: string;
   email: string;
+  asignClass: string;
   handleClick: () => void;
   onEdit: () => void;
 }) => {
   return (
-    <div className="p-3">
+    <div className="p-3 ">
       <div className="flex gap-4">
         <div>
-          <img loading="lazy" src={image} alt="image" className="w-[250px]" />
+          <img
+            loading="lazy"
+            src={image}
+            alt="image"
+            className="w-[176px] h-[176px] rounded-full "
+          />
         </div>
         <div className=" flex-1 px-8">
           <div className="flex flex-col  ">
-            <span className="text-[30px] font-bold font-Recoleta my-4">
+            <span className="text-[30px] font-bold font-Recoleta  ">
               {name}
             </span>
             <span>{email}</span>
           </div>
 
-          <hr className="my-4" />
+          <hr className="my-4 " />
           <div className="flex gap-4">
-            <p className="flex flex-col border-r-2  pr-4">
+            <p className="flex flex-col border-r-2  pr-2">
               <span>Assigned class</span>
               <p onClick={onEdit} className="flex gap-2">
-                <span className="font-bold">Purple</span>
-                <img loading="lazy" src={BlcakPencil} alt="pencil" />
+                <span className="font-bold"> {asignClass}</span>
+                <img
+                  loading="lazy"
+                  src={BlcakPencil}
+                  alt="pencil"
+                  className=" cursor-pointer"
+                />
               </p>
             </p>
             <p className="flex flex-col">
@@ -83,7 +95,7 @@ const Profile = ({
         </button> */}
         <button
           onClick={handleClick}
-          className="p-4 px-10 bg-red-600 text-white rounded-full flex-grow"
+          className="p-3 px-10 bg-red-600 text-white rounded-full flex-grow"
         >
           Remove
         </button>

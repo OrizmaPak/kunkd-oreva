@@ -16,11 +16,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { z, ZodType } from "zod";
 import { notifications } from "@mantine/notifications";
-import { useUpdateProfile } from "@/api/queries";
+import {
+  useUpdateProfile,
+  useGetSchool,
+  useConnectStudentData,
+} from "@/api/queries";
 import { getApiErrorMessage } from "@/api/helper";
 import { Loader } from "@mantine/core";
 import { useQueryClient } from "@tanstack/react-query";
 import { querykeys } from "@/api/queries";
+import { Tclass } from "../DashBoard/SchoolDashBoard/Teachers/AddTeacherForm";
 
 import {
   ChildNameModal,
@@ -31,6 +36,7 @@ import {
 import { STEP_1, STEP_2, STEP_3, STEP_4 } from "@/utils/constants";
 import { motion } from "framer-motion";
 import { useGetProfile } from "@/api/queries";
+import { MdClose } from "react-icons/md";
 
 const MyKids = () => {
   const [profile] = useStore(getProfileState);
@@ -56,7 +62,7 @@ const MyKids = () => {
           centered
           size="lg"
           radius={"xl"}
-          closeOnClickOutside={false}
+          // closeOnClickOutside={false}
           withCloseButton={false}
         >
           {currentStep === STEP_1 && (
@@ -65,6 +71,8 @@ const MyKids = () => {
               goBack={() => currentStep - 1}
               showGoBackIcon={false}
               setName={setName}
+              close={() => close()}
+              showCancelBtn={true}
             />
           )}
           {currentStep === STEP_2 && (
@@ -72,6 +80,8 @@ const MyKids = () => {
               onContinue={() => setCurrentStep(STEP_3)}
               goBack={() => setCurrentStep(currentStep - 1)}
               setAge={setAge}
+              close={() => close()}
+              showCancelBtn={true}
             />
           )}
           {currentStep === STEP_3 && (
@@ -80,6 +90,8 @@ const MyKids = () => {
               goBack={() => setCurrentStep(currentStep - 1)}
               age={age}
               name={name}
+              close={() => close()}
+              showCancelBtn={true}
             />
           )}
           {currentStep === STEP_4 && (
@@ -106,7 +118,7 @@ const MyKids = () => {
               </p>
             </Button>
           </div>
-          <div className="grid grid-cols-2 gap-y-10 gap-x-28">
+          <div className="grid grid-cols-2 gap-y-10 gap-x-4">
             {profile.map((item, index) => (
               <KidCard
                 refetch={refetch}
@@ -127,16 +139,15 @@ export default MyKids;
 const KidCard = ({
   image,
   name,
-  age,
-  gender,
+  dob,
+
   id,
   isLoading,
   refetch,
 }: {
   image?: string;
   name?: string;
-  age?: string;
-  gender?: string;
+  dob?: string;
   id?: number;
   isLoading?: boolean;
   refetch: () => void;
@@ -147,16 +158,21 @@ const KidCard = ({
     openedConnectModal,
     { open: openConnectModal, close: closeConnectModal },
   ] = useDisclosure(false);
+
+  const year = dob?.split("-")[0];
+  const date = new Date();
+  const currentYear = date.getFullYear();
+  const childaAge = currentYear - Number(year);
+  console.log(childaAge);
   return (
     <>
       <Modal
         radius={"xl"}
         size="lg"
+        px="md"
         opened={openedEditModal}
         onClose={closeEditModal}
-        closeButtonProps={{
-          size: "xl",
-        }}
+        withCloseButton={false}
         centered
       >
         <EditProfile
@@ -164,7 +180,7 @@ const KidCard = ({
           id={id!}
           image={image!}
           name={name!}
-          dob={age!}
+          dob={dob!}
           closeModal={closeEditModal}
         />
       </Modal>
@@ -173,15 +189,13 @@ const KidCard = ({
         size="lg"
         opened={openedConnectModal}
         onClose={closeConnectModal}
-        closeButtonProps={{
-          size: "xl",
-        }}
+        withCloseButton={false}
         centered
       >
-        <ConnectTOSchool />
+        <ConnectTOSchool profileId={id!} closeModal={closeConnectModal} />
       </Modal>
 
-      <div className=" relative flex border border-gray-300 px-6 py-6 rounded-3xl">
+      <div className=" relative flex  border-[#FBECFF] border-[2px] px-6 py-6 rounded-3xl">
         <div>
           {isLoading ? (
             <span>
@@ -199,11 +213,17 @@ const KidCard = ({
         </div>
         <div className="ml-3 mt-8">
           <h1 className="font-bold text-[16px] px-3 font-Recoleta">{name}</h1>
-          <p className="text-gray-400 flex text-[15px] mt-4 ">
+          <p className="text-gray-400 flex text2 mt-4 ">
             <span className="border-l-gray-600 border-r-2 mr-4 px-3">
-              Age - {age}
+              Age - {childaAge}
             </span>
-            <span>Gender - {gender}</span>
+            <button
+              onClick={openConnectModal}
+              className="text2 flex gap-1 justify-center items-center"
+            >
+              <img loading="lazy" src={LinkIcon} alt="link icon" />
+              <span>Connect to School</span>
+            </button>
           </p>
         </div>
         <div className="">
@@ -221,22 +241,14 @@ const KidCard = ({
                     className="p-2 px-4   flex gap-2  justify-start items-center"
                   >
                     <img loading="lazy" src={PencilIcon} alt="pencil icon" />
-                    <span>Edit profile</span>
+                    <span className="text3">Edit profile</span>
                   </button>
                 </Menu.Item>
-                <Menu.Item>
-                  <button
-                    onClick={openConnectModal}
-                    className="p-2 px-4  flex gap-2  justify-start items-center"
-                  >
-                    <img loading="lazy" src={LinkIcon} alt="link icon" />
-                    <span> Connect school</span>
-                  </button>
-                </Menu.Item>
+
                 <Menu.Item>
                   <button className="p-2 px-4  flex gap-2  justify-start items-center">
                     <img loading="lazy" src={DeleteIcon} alt="delete icon" />
-                    <span> Remove profile</span>
+                    <span className="text3"> Remove profile</span>
                   </button>
                 </Menu.Item>
               </div>
@@ -286,7 +298,7 @@ const EditProfile = ({
       .string()
       .min(4, { message: "School name must be at least 4 characters long" })
       .max(40, { message: "School name must not exceed 20 characters" }),
-    gender: z
+    genderid: z
       .string()
       .min(4, { message: "Invalid gender" })
       .max(10, { message: "Invalid gender" }),
@@ -337,84 +349,88 @@ const EditProfile = ({
   };
 
   return (
-    <div className="px-16">
-      <h1 className="text-center font-Recoleta font-bold text-[32px] ">
-        Edit Profile
-      </h1>
-      <div className="flex justify-between items-center">
-        <p className="flex gap-2 justify-end items-center">
-          <img
-            loading="lazy"
-            src={!selectedFile ? image : URL.createObjectURL(selectedFile!)}
-            alt="Avatar"
-            className="h-[100px] w-[100px]  object-cover"
-          />
-          <span>Profile Picture</span>
-        </p>
-        <button onClick={handleButtonClick} className="text-blue-400">
-          Upload picture
-        </button>
+    <div className="px-5 py-4">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-center font-Recoleta font-bold text30  flex-grow">
+          Edit Profile
+        </h1>
+        <MdClose size={35} onClick={closeModal} className="cursor-pointer" />
       </div>
-      <div>
-        <form onSubmit={handleSubmit(submitData)}>
-          <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          />
-          <p className="my-2 mt-4">
-            <label htmlFor="name" className="text-[12px] text-[#7E7E89]">
-              Name
-            </label>
-            <InputFormat
-              type="text"
-              reg={register("name")}
-              errorMsg={errors && errors?.name?.message}
-              value={name}
+      <div className="px-10">
+        <div className="flex justify-between items-center ">
+          <p className="flex gap-2 justify-end items-center">
+            <img
+              loading="lazy"
+              src={!selectedFile ? image : URL.createObjectURL(selectedFile!)}
+              alt="Avatar"
+              className="h-[100px] w-[100px]  object-cover"
             />
+            <span className="text3">Profile Picture</span>
           </p>
-
-          <p className="my-2 flex gap-4">
-            <p className=" flex-grow">
-              <label htmlFor="name" className="text-[12px] text-[#7E7E89]">
-                Gender
-              </label>
-              <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-1  mb-2 ">
-                <select
-                  id=""
-                  className="w-full  h-full flex-1  focus:outline-none text-[14px]"
-                  {...register("gender")}
-                >
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </select>
-              </p>
-              <span className="text-red-700">
-                {errors && errors?.gender?.message}
-              </span>
-            </p>
-
-            <p className=" flex-grow">
-              <label htmlFor="dob" className="text-[12px] text-[#7E7E89]">
-                DOB
+          <button onClick={handleButtonClick} className="text-blue-400 text3">
+            Upload picture
+          </button>
+        </div>
+        <div>
+          <form onSubmit={handleSubmit(submitData)}>
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
+            <p className="my-2 mt-4">
+              <label htmlFor="name" className="text3 text-[#7E7E89]">
+                Name
               </label>
               <InputFormat
-                type="date"
-                reg={register("dob")}
-                errorMsg={errors && errors?.dob?.message}
-                value={dob!}
+                type="text"
+                reg={register("name")}
+                errorMsg={errors && errors?.name?.message}
+                value={name}
               />
             </p>
-          </p>
-          {/* 
+
+            <p className="my-2 flex gap-4">
+              <p className=" flex-grow">
+                <label htmlFor="name" className="text3 text-[#7E7E89]">
+                  Gender
+                </label>
+                <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-1  mb-2 ">
+                  <select
+                    id=""
+                    className="w-full  h-full flex-1  focus:outline-none text-[14px]"
+                    {...register("genderid")}
+                  >
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </p>
+                <span className="text-red-700">
+                  {errors && errors?.genderid?.message}
+                </span>
+              </p>
+
+              <p className=" flex-grow">
+                <label htmlFor="dob" className="text3 text-[#7E7E89]">
+                  DOB
+                </label>
+                <InputFormat
+                  type="date"
+                  reg={register("dob")}
+                  errorMsg={errors && errors?.dob?.message}
+                  value={dob!}
+                />
+              </p>
+            </p>
+            {/* 
           <p className="my-2">
             <label htmlFor="school" className="text-[12px] text-[#7E7E89]">
               School
             </label>
             <InputFormat type="text" />
           </p> */}
-          {/* <p className="my-2 flex gap-4">
+            {/* <p className="my-2 flex gap-4">
             <p className="flex-grow">
               <label htmlFor="class" className="text-[12px] text-[#7E7E89]">
                 Class
@@ -428,51 +444,150 @@ const EditProfile = ({
               <InputFormat type="text" />
             </p>
           </p> */}
-          <p className="my-5">
-            <Button type="submit">
-              {isLoading ? (
-                <p className="flex justify-center items-center">
-                  <Loader color="white" size="sm" />
-                </p>
-              ) : (
-                <span>Save</span>
-              )}
-            </Button>
-          </p>
-        </form>
+            <p className="my-5">
+              <Button type="submit">
+                {isLoading ? (
+                  <p className="flex justify-center items-center">
+                    <Loader color="white" size="sm" />
+                  </p>
+                ) : (
+                  <span className="text2">Save</span>
+                )}
+              </Button>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   );
 };
 
-const ConnectTOSchool = () => {
-  return (
-    <div className="px-16">
-      <h1 className="text-center font-Recoleta font-bold text-[30px] ">
-        Connect to school
-      </h1>
+type TSchools = {
+  id: number;
+  name: string;
+  slug: string;
+  classes: [];
+};
 
+const ConnectTOSchool = ({
+  closeModal,
+  profileId,
+}: {
+  closeModal: () => void;
+  profileId: number;
+}) => {
+  const { mutate, isLoading } = useConnectStudentData();
+  const { data: schoolData } = useGetSchool();
+  // const profileId = localStorage.getItem("profileId");
+  console.log("Profile", profileId);
+  const schoolList = schoolData?.data.data.records;
+  console.log(schoolList);
+  const [selectedSCH, setSelectedSHC] = useState<number>();
+
+  const schema: ZodType<FormData> = z.object({
+    firstname: z
+      .string()
+      .min(4, { message: "First name must be at least 4 characters long" })
+      .max(40, { message: "First name must not exceed 20 characters" }),
+    lastname: z
+      .string()
+      .min(4, { message: "Last name must be at least 4 characters long" })
+      .max(40, { message: "Last name must not exceed 20 characters" }),
+    schoolid: z
+      .string()
+      .min(1, { message: "Select School Id" })
+      .max(10, { message: "Invalid School Id" }),
+    classid: z
+      .string()
+      .min(1, { message: "Select a class" })
+      .max(20, { message: "invalid class id" }),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const submitData = async (data: FormData) => {
+    console.log("TeacherDta", data);
+    mutate(
+      {
+        profile_id: Number(profileId),
+        firstname: data.firstname,
+        lastname: data.lastname,
+        school_id: Number(data?.schoolid),
+        class_id: Number(data?.classid),
+      },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+          closeModal();
+
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+        },
+
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  };
+
+  return (
+    <div className="px-4">
+      <div className="flex justify-between items-center  ">
+        <h1 className="text-center font-Recoleta font-bold text-[30px] flex-grow ">
+          Connect to school
+        </h1>
+        <MdClose size={35} onClick={closeModal} className="cursor-pointer" />
+      </div>
       <p className="text-center my-5">
         Connect your child to his/her school to enjoy...
       </p>
-
-      <div>
-        <form>
+      <div className="px-10">
+        <form onSubmit={handleSubmit(submitData)}>
           <p className="my-5">
-            <InputFormat type="text" placeholder="Enter full name" />
+            <InputFormat
+              reg={register("firstname")}
+              errorMsg={errors?.firstname?.message}
+              type="text"
+              placeholder="First name"
+            />
           </p>
           <p className="my-5">
-            <InputFormat type="text" placeholder="Enter school code" />
+            <InputFormat
+              reg={register("lastname")}
+              errorMsg={errors?.lastname?.message}
+              type="text"
+              placeholder="Last name"
+            />
           </p>
 
           <p className="my-5">
             <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
               <select
-                name=""
-                id=""
+                {...register("schoolid")}
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setSelectedSHC(Number(e.target.value)!);
+                }}
+                name="schoolid"
+                id="schoold"
                 className="w-full  h-full flex-1  focus:outline-none text-[14px]"
               >
                 <option value="male">Select school</option>
+                {schoolList?.map((school: TSchools, index: number) => (
+                  <option key={index} value={school.id}>
+                    {school.name}
+                  </option>
+                ))}
                 <option value="SchoolA">School A</option>
                 <option value="SchoolB">School B</option>
                 <option value="SchoolC">School C</option>
@@ -483,20 +598,34 @@ const ConnectTOSchool = () => {
           <p className="my-5">
             <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
               <select
-                name=""
-                id=""
+                disabled={!selectedSCH}
+                {...register("classid")}
+                name="classid"
+                id="classid"
                 className="w-full  h-full flex-1  focus:outline-none text-[14px]"
               >
-                <option value="male">Select class</option>
-                <option value="ClassA">Class A</option>
-                <option value="ClassB">Class B</option>
-                <option value="ClassC">Class C</option>
+                <option value="">Select class</option>
+                {schoolList
+                  ?.find((sch: TSchools) => sch.id === selectedSCH)
+                  ?.classes?.map((classs: Tclass, index: number) => (
+                    <option key={index} value={classs.id}>
+                      {classs.name}
+                    </option>
+                  ))}
               </select>
             </p>
           </p>
 
           <p className="my-5">
-            <Button>Continue</Button>
+            <Button type="submit">
+              {isLoading ? (
+                <p className="flex justify-center items-center">
+                  <Loader color="white" size="sm" />
+                </p>
+              ) : (
+                <span>Continue</span>
+              )}
+            </Button>
           </p>
         </form>
       </div>

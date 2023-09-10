@@ -15,6 +15,7 @@ import { FormData } from "@/common/User/FormValidation/Schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TUser } from "@/api/types";
 import { useState, useEffect } from "react";
+// import { motion } from "framer-motion";
 
 const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
   const { isLoading, mutate } = useVerifyOtp();
@@ -103,48 +104,55 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
   };
   return (
     <FormWrapper>
-      <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex">
-        <Link to="/">
-          <span className="absolute right-0 top[-50px]">
-            <img loading="lazy" src={Cancel} alt="cancel" />
-          </span>
-        </Link>
-        <div className="w-[100%]  my-auto ">
-          <span></span>
-          <h1 className="font-bold text-[40px] font-Recoleta">Enter OTP</h1>
-          <p className="text-[15px] text-[#A7A7A7] font-Hanken">
-            A code has been sent to your email, enter to verify your account.
-          </p>
-          <form onSubmit={handleSubmit(submitData)}>
-            <div className="mt-8 flex justify-center items-center relative">
-              <Group position="center">
-                <PinInput value={otp} onChange={handlePinChange} />
-              </Group>
-            </div>
-
-            <p className="mt-10">
-              <Button type="submit" size="full">
-                {isLoading ? (
-                  <p className="flex justify-center items-center">
-                    <Loader color="white" size="sm" />
-                  </p>
-                ) : (
-                  <span>Verify</span>
-                )}
-              </Button>
+      {/* <motion.div
+        animate={{ x: 100 }}
+        transition={{ ease: "easeOut", duration: 2 }}
+      > */}
+      <div className=" w-full h-full flex justify-center items-center">
+        <div className="inner-form-w2 mx-auto relative">
+          <Link to="/">
+            <span className="absolute right-0 top-[-80px]">
+              <img loading="lazy" src={Cancel} alt="cancel" />
+            </span>
+          </Link>
+          <div className="w-[100%]  my-auto ">
+            <span></span>
+            <h1 className="font-bold text-[40px] font-Recoleta">Enter OTP</h1>
+            <p className="text-[15px] text-[#A7A7A7] font-Hanken">
+              A code has been sent to your email, enter to verify your account.
             </p>
-          </form>
-          <p className="mt-2 text-center text-[] text-gray-400 ">
-            {secondsLeft === 0 ? (
-              <button onClick={handleResendOTP} className="font-semibold">
-                Resend
-              </button>
-            ) : (
-              <strong>Resend in {secondsLeft}s</strong>
-            )}
-          </p>
+            <form onSubmit={handleSubmit(submitData)}>
+              <div className="mt-8 flex justify-center items-center relative">
+                <Group position="center">
+                  <PinInput value={otp} onChange={handlePinChange} />
+                </Group>
+              </div>
+
+              <p className="mt-8">
+                <Button type="submit" size="full">
+                  {isLoading ? (
+                    <p className="flex justify-center items-center">
+                      <Loader color="white" size="sm" />
+                    </p>
+                  ) : (
+                    <span>Verify</span>
+                  )}
+                </Button>
+              </p>
+            </form>
+            <p className="mt-2 text-center text-[] text-gray-400 ">
+              {secondsLeft === 0 ? (
+                <button onClick={handleResendOTP} className="font-semibold">
+                  Resend
+                </button>
+              ) : (
+                <strong>Resend in {secondsLeft}s</strong>
+              )}
+            </p>
+          </div>
         </div>
       </div>
+      {/* </motion.div> */}
     </FormWrapper>
   );
 };

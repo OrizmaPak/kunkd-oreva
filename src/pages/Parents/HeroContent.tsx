@@ -4,13 +4,13 @@ import Amina from "@/assets/Amina (1) 1.svg";
 import AminaBlur from "@/assets/aminablur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-
+import "./herocontent.css";
 const HeroContentContent = () => {
   return (
     <div>
       <div>
-        <div className="absolute top-40  left-40">
-          <h1 className="text-[62px] font-bold   font-Recoleta ">
+        <div className="absolute top-40  left-40 hero-text-container">
+          <h1 className="text-[62px] font-bold   font-Recoleta  header1">
             <span>
               <span className="text-[#8530C1]">Empowering</span> your child's
             </span>
@@ -20,7 +20,7 @@ const HeroContentContent = () => {
             <span className="mr-4 ">
               <img loading="lazy" src={Arrow} alt="" className="w-20 pt-2 " />
             </span>
-            <p className="  font-Hanken leading-[30px]">
+            <p className="  font-Hanken leading-[30px] text1">
               Embark on a reading adventure with Kunda Kids and empower your
               child's literacy journey. Join us today and unlock the boundless
               possiblities of literacy
@@ -28,8 +28,13 @@ const HeroContentContent = () => {
           </div>
           <Button size="md">Create free account</Button>
         </div>
-        <div className="absolute bottom-0  right-60  z-50">
-          <LazyLoadImage effect="blur" src={Amina} placeholderSrc={AminaBlur} />
+        <div className="absolute bottom-[70px]  right-[230px] amina-container  z-50">
+          <LazyLoadImage
+            effect="blur"
+            src={Amina}
+            placeholderSrc={AminaBlur}
+            className=" amina-w"
+          />
           {/* <img loading="lazy" src={Book} alt="" className='absolute  bottom-[34%]  right-[34%] z-50 ' /> */}
           {/* <img loading="lazy" src={Music} alt="" className='absolute  bottom-[25%]  right-[9%] z-50 ' /> */}
         </div>

@@ -1,4 +1,4 @@
-import Pupils from "@/assets/pupils.svg";
+// import Pupils from "@/assets/pupils.svg";
 import ServiceCard from "./ServiceCard";
 import { CardTypes } from "../Home/ClientCard";
 import Service4 from "@/assets/service1.svg";
@@ -11,7 +11,9 @@ import MacBookBlur from "@/assets/MacBook1blur.jpg";
 import LadyBgBlur from "@/assets/ladybgBlur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import PupilsBlur from "@/assets/pupilsblur.jpg";
+// import PupilsBlur from "@/assets/pupilsblur.jpg";
+import VideoCard from "@/components/VideoCard";
+import "./ServiceContent.css";
 
 const Serviceontent = () => {
   const servicesData: CardTypes[] = [
@@ -38,7 +40,7 @@ const Serviceontent = () => {
   ];
 
   return (
-    <div className="relative">
+    <div className="relative ">
       <div className="flex items-center justify-center">
         {/* <img
           loading="lazy"
@@ -57,13 +59,13 @@ const Serviceontent = () => {
       </div>
 
       <div className="max-w-[1000px] mx-auto text-center">
-        <h1 className="text-[46px] text-black font-Recoleta my-8 ">
+        <h1 className="text-[46px] text-black font-Recoleta my-8 header2">
           WE ARE AT YOUR SERVICE
         </h1>
       </div>
 
-      <div className="flex mt-14 mb-10 max-w-[1300px] gap-20 mx-auto ">
-        <div className="h-[632px]  flex  flex-col justify-between ">
+      <div className="flex mt-14 mb-10 max-w-[1300px] gap-20 mx-auto  justify-center items-center ">
+        <div className="h-[632px]  flex  flex-col justify-between service-content-W">
           {servicesData.map((el) => {
             return <ServiceCard {...el} />;
           })}
@@ -73,9 +75,11 @@ const Serviceontent = () => {
             src={LadyBg}
             placeholderSrc={LadyBgBlur}
             effect="blur"
-            width={518}
-            height={632}
-            // wrapperClassName="absolute bottom-0  right-72 top-32 z-50"
+            // width={518}
+            // height={632}
+            wrapperClassName="lady-pic"
+            className="lady-pic"
+
             // width={300}
             // height={400}
           />
@@ -83,23 +87,24 @@ const Serviceontent = () => {
       </div>
       <div className="mt-[100px] mb-[50px] max-w-[1000px] mx-auto text-center">
         {/* <KundaApp /> */}
-        <h1 className="text-[46px] text-black font-Recoleta mb-6 ">
+        <h1 className="text-[46px] text-black font-Recoleta mb-6  header2">
           Unlimited Books and Resources
         </h1>
-        <p className=" font-Hanken left-8 leading-[30px] text-[18px]">
+        <p className=" font-Hanken left-8 leading-[30px]  text1">
           With Kunda Kids’ informative non-fiction texts, our extensive
           collection covers a wide range of topics and genres that will
           captivate and inspire your child's love for reading.
         </p>
         <div className="mt-14">
-          {/* <img loading="lazy" src={Pupils} alt="pupils" /> */}
+          {/* <img loading="lazy" src={Pupils} alt="pupils" />
           <LazyLoadImage
             src={Pupils}
             placeholderSrc={PupilsBlur}
             effect="blur"
             width={1075.79}
             height={605.13}
-          />
+          /> */}
+          <VideoCard />
         </div>
       </div>
     </div>

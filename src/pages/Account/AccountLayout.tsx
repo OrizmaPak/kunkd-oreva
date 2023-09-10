@@ -33,12 +33,15 @@ const links = [
     route: baseUrl + "/subscriptionplan",
     href: "subscriptionplan",
     isParent: true,
-    isSchool: true,
+    isSchool: false,
   },
   {
     name: "Billing",
     route: baseUrl + "/billing",
     href: "billing",
+    isTeacher: false,
+    isSchool: false,
+    isParent: true,
   },
   {
     name: "Password",
@@ -62,7 +65,7 @@ const SettingsLayout = () => {
           size="lg"
           opened={opened}
           onClose={close}
-          closeButtonProps={{ size: "lg" }}
+          withCloseButton={false}
           centered
         >
           <DeleteAccount onCancel={close} />
@@ -130,7 +133,7 @@ const SideMenuButton = ({
     <div className="my-8 w-[100%]">
       <button
         onClick={onClick}
-        className={`py-3 px-10 rounded-full ${
+        className={`py-2 pad-x-40 text3 rounded-full ${
           active ? "bg-[#FFF7FD] text-[#8530C1]" : "text-[#B5B5C3] "
         }  `}
       >

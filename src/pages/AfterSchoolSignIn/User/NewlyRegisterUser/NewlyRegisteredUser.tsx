@@ -18,9 +18,10 @@ import musicIcon from "@/assets/musicIcon.svg";
 import videoIcon from "@/assets/videoicon.svg";
 import BookIcon from "@/assets/bookicon.svg";
 import CardScreenHome from "@/common/User/CardScreenHome";
-import { CardProps } from "@/common/User/CardHome";
+// import { CardProps } from "@/common/User/CardHome";
 import CardHome from "@/common/User/CardHome";
-import { useContentForHome } from "@/api/queries";
+import { useContentForHome, useGetOngoingContents } from "@/api/queries";
+import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
 
 export type DataType = {
   title?: string;
@@ -99,15 +100,21 @@ export const data: DataType[] = [
 
 const NewlyRegisteredUser = () => {
   const navigate = useNavigate();
-
+  const profileId = localStorage.getItem("profileId");
+  const { data: ongoingData } = useGetOngoingContents(profileId!);
+  const ongoingContents: TStoryContent[] =
+    ongoingData?.data.data.ongoing_contents;
   const { isLoading, data: contentData } = useContentForHome();
   console.log("Content for home", contentData?.data.data.recommended_stories);
   const recommendedStories = contentData?.data.data.recommended_stories;
   const newTrending = contentData?.data.data.trending_stories;
   console.log("newTrending", newTrending);
+  const userInLocalStr = localStorage.getItem("user");
+  const user = JSON.parse(userInLocalStr!);
+
   return (
-    // <div className="w-full  bg-[#EBEFF3] px-[130px] py-[40px]  ">
-    // <div className=" w-full rounded-[35px] bg-white h-full mx-auto   ">
+    // <div className="w-full  bg-[#EBEFF3] px-[130px] py-[40px] ">
+    // <div className=" w-full rounded-[35px] bg-white h-full mx-auto ">
     <Wrapper>
       <InnerWrapper>
         <Hero />
@@ -136,13 +143,79 @@ const NewlyRegisteredUser = () => {
           </div>
         </div>
 
+        <div className="my-10">
+          {ongoingContents?.length > 0 && (
+            <div className=" mx-20 mt-4">
+              <span className=" text25 font-semibold font-Recoleta ">
+                Continue Learning
+              </span>
+              <div className="overflow-auto   p-4 ">
+                <div className="flex gap-5 mb-14 ">
+                  {ongoingContents?.map((data, index) => {
+                    if (data.category === "Stories") {
+                      return (
+                        <CardHome
+                          hasRage={true}
+                          key={index}
+                          {...data}
+                          goTo={() => {
+                            navigate(
+                              `../${
+                                user.role === "parent" ? "parent" : "school"
+                              }/${data.category?.toLowerCase()}/sub/${data.slug
+                                ?.toLocaleLowerCase()
+                                .replace(/\s/g, "-")}`
+                            );
+                          }}
+                        />
+                      );
+                    } else if (data.category === "Audiobooks") {
+                      return (
+                        <CardHome
+                          hasRage={true}
+                          key={index}
+                          {...data}
+                          goTo={() => {
+                            navigate(
+                              `../${
+                                user.role === "parent" ? "parent" : "school"
+                              }/${data.category?.toLowerCase()}/${data.slug
+                                ?.toLocaleLowerCase()
+                                .replace(/\s/g, "-")}`
+                            );
+                          }}
+                        />
+                      );
+                    } else if (data.category === "Languages") {
+                      return (
+                        <CardHome
+                          hasRage={true}
+                          key={index}
+                          {...data}
+                          goTo={() =>
+                            navigate(
+                              `../${
+                                user.role === "parent" ? "parent" : "school"
+                              }/africanlanguages/${data.slug}/${data.name}`
+                            )
+                          }
+                        />
+                      );
+                    }
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
         <CardScreenHome
           data={newTrending}
           header="New & Trending"
           actiontitle="View all"
           isTitled={false}
           isLoading={isLoading}
-          card={(props: CardProps) => (
+          card={(props: TStoryContent) => (
             <CardHome
               {...props}
               goTo={() => {
@@ -162,7 +235,7 @@ const NewlyRegisteredUser = () => {
           header="Recommended For You"
           isTitled={false}
           isLoading={isLoading}
-          card={(props: CardProps) => (
+          card={(props: TStoryContent) => (
             <CardHome
               {...props}
               goTo={() => {

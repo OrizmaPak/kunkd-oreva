@@ -76,19 +76,19 @@ const SigninDash = ({
 }) => {
   //   console.log("--- active", active);
   return (
-    <div className="flex  mt-16 gap-4">
+    <div className="flex  mt-10 gap-4">
       <div>
         <img loading="lazy" src={Checked} alt="roundmark" />
       </div>
       <div>
         <h1
-          className={`text-[20] ${
+          className={`text1 ${
             active ? "opacity-100" : "opacity-50"
-          } font-bold text-[18px] `}
+          } font-bold  `}
         >
           {title}
         </h1>
-        <p>{body}</p>
+        <p className="text3">{body}</p>
       </div>
     </div>
   );

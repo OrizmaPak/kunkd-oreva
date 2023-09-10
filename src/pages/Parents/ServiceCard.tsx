@@ -16,8 +16,8 @@ const ServiceCard = ({ title, image, body }: CardTypes) => {
         />
       </div>
       <div className="flex-1">
-        <h1 className="font-bold  text-[24px]">{title}</h1>
-        <p className="text-[18px] leading-[30px]">{body}</p>
+        <h1 className="font-bold  text-[24px] text1">{title}</h1>
+        <p className="text-[18px] leading-[30px] text2">{body}</p>
       </div>
     </div>
   );

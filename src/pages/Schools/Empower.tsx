@@ -1,14 +1,15 @@
-import Pupils from "@/assets/pupils.svg";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import PupilsBlur from "@/assets/pupilsblur.jpg";
+// import Pupils from "@/assets/pupils.svg";
+// import { LazyLoadImage } from "react-lazy-load-image-component";
+// import PupilsBlur from "@/assets/pupilsblur.jpg";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import VideoCard from "@/components/VideoCard";
 
 const Empower = () => {
   return (
     <div>
       <div className="mt-[100px] mb-[50px] max-w-[1000px] mx-auto text-center">
         {/* <KundaApp /> */}
-        <h1 className="text-[46px] text-black font-semibold font-Recoleta my-4">
+        <h1 className="header2 text-black font-semibold font-Recoleta my-4">
           Empower Educators with Valuable Resources
         </h1>
         <p className=" font-Hanken left-8 text-[#7E7E89] text-[18px] leading-[30px]">
@@ -18,13 +19,14 @@ const Empower = () => {
           reading.
         </p>
         <div className="mt-8">
-          <LazyLoadImage
+          {/* <LazyLoadImage
             src={Pupils}
             placeholderSrc={PupilsBlur}
             effect="blur"
             width={1075.79}
             height={605.13}
-          />
+          /> */}
+          <VideoCard />
         </div>
       </div>
     </div>

@@ -20,6 +20,10 @@ import type {
   TVerifyPinData,
   TUdateParentImageData,
   TPayStackInitData,
+  TLikedContentData,
+  TContentTracking,
+  TAddTeacherData,
+  TSaveQuiz,
 } from "./types";
 
 // School
@@ -89,7 +93,7 @@ export const UpdateProfile = (payload: TUdateProfileData) => {
   return axios.patch("/profile", formData);
 };
 
-export const GoogleSignUp = (payload: TGoogleSignUpData) => {
+export const SocialSignUp = (payload: TGoogleSignUpData) => {
   return axios.post("/social/auth/web", payload);
 };
 
@@ -117,6 +121,10 @@ export const GetTrendingAudioBooks = () => {
   return axios.get("/audiobook/content/trending");
 };
 
+export const GetIntroVideo = () => {
+  return axios.get("intro/video");
+};
+
 export const GetPlans = () => {
   return axios.get("/subscription/plans");
 };
@@ -124,10 +132,30 @@ export const GetPlans = () => {
 export const ResendOTP = (payload: TLoginData) => {
   return axios.post("/otp/resend", payload);
 };
+export const LikedContent = (payload: TLikedContentData) => {
+  return axios.post("/user/content/favourite", payload);
+};
+
+export const UnLikedContent = (payload: TLikedContentData) => {
+  return axios.post("/user/content/unfavourite", payload);
+};
+
+// export const GetLikedContent = (payload: TLikedContentData) => {
+//   return axios.get("/user/content/favourites/:id", payload);
+// };
+export const GetLikedContent = (profileId: string) => {
+  return axios.get(`/user/content/favourites?id= ${profileId}`);
+};
+
+// export const GetLikedContent = (profileId: string) => {
+//   return axios.get(`/user/content/favourites?id=`, {
+//     params: { id: profileId },
+//   });
+// };
 
 // Socila Login
 export const SocialLogin = (payload: TLoginData) => {
-  return axios.post("/signup/login", payload);
+  return axios.post("/social/auth/web", payload);
 };
 
 export const UpdateSchProfile = (payload: TUdateSchProfileData) => {
@@ -196,4 +224,81 @@ export const VerifyCompletePayStack = (payload: TPayStackInitData) => {
 
 export const StripeInit = (payload: TPayStackInitData) => {
   return axios.post("/subscribe/stripe/init", payload);
+};
+
+export const ContentTracking = (payload: TContentTracking) => {
+  return axios.post("/content/track", payload);
+};
+
+export const AddTeacherData = (payload: TAddTeacherData) => {
+  return axios.post("/school/teacher", payload);
+};
+
+export const AddClassData = (payload: TAddTeacherData) => {
+  return axios.post("/school/class", payload);
+};
+export const ConnectStudentData = (payload: TAddTeacherData) => {
+  return axios.post("/school/student/connect", payload);
+};
+
+export const GetClassList = () => {
+  return axios.get("/school/class");
+};
+
+export const GetSchool = () => {
+  return axios.get("/school");
+};
+
+export const GetTeacherList = () => {
+  return axios.get("/school/teacher");
+};
+
+export const GetAdmittedStudentsInSchool = () => {
+  return axios.get("/school/student");
+};
+
+export const GetAdmittedStudentsInClass = () => {
+  return axios.get("/school/class/student");
+};
+
+export const GetAttemptStudentConnect = () => {
+  return axios.get("/school/student/connect/list");
+};
+
+export const ReAssignTeacher = (payload: TAddTeacherData) => {
+  return axios.post("/school/teacher/reassign", payload);
+};
+
+export const GetOngoingContents = (profileId: string) => {
+  return axios.get(
+    `/content/tracking/ongoing${profileId ? `?id= ${profileId}` : ""}`
+  );
+};
+
+export const GetCompletedContents = (profileId: string) => {
+  return axios.get(
+    `/content/tracking/completed${profileId ? `?id=${profileId}` : ""}`
+  );
+};
+
+export const GetContentsLog = (profileId: string) => {
+  return axios.get(
+    `/content/profile/status${profileId ? `?id=${profileId}` : ""}`
+  );
+};
+
+export const AcceptStudentAdmission = (payload: TAddTeacherData) => {
+  return axios.post(`/school/student/admit`, payload);
+};
+
+export const RejectStudentAdmission = (payload: TAddTeacherData) => {
+  return axios.post(`/school/student/decline`, payload);
+};
+
+export const SaveQuiz = (payload: TSaveQuiz) => {
+  return axios.post(`/quiz/question/save`, payload);
+};
+
+export const GetMainSearch = (payload: string) => {
+  return axios.get(`/search?s=${payload}`);
 };

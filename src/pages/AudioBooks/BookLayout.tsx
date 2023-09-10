@@ -1,27 +1,32 @@
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import { audioBooksData, StoriesType } from "./AudioBooks";
 import CardScreen from "@/common/User/CardScreen";
 import Card from "@/common/User/Card";
 import Bookmark from "@/assets/Bookmark.svg";
-
 import React, { useState, useRef, useEffect } from "react";
-import FastForward from "@/assets/fastforward.svg";
-import FastBackward from "@/assets/fastbackward.svg";
-import PauseIcon from "@/assets/pause.svg";
-import PlayIcon from "@/assets/play.svg";
-import VolumeIcon from "@/assets/volumeIcon.svg";
-
+// import VolumeIcon from "@/assets/volumeIcon.svg";
 import AudioBooksNav from "./AudioBooksNav";
 import { Slider, MantineProvider } from "@mantine/core";
 import { useReducedMotion } from "@mantine/hooks";
-import { useGetContentById, useGetTrendingAudioBooks } from "@/api/queries";
+import {
+  useGetContentById,
+  useGetLikedContent,
+  useLikedContent,
+  useContentTracking,
+  useUnLikedContent,
+} from "@/api/queries";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store";
 import AfamBlur from "@/assets/afamblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { Skeleton } from "@mantine/core";
-// import { Badge, Button, MantineProvider } from "@mantine/core";
+import { GrForwardTen, GrBackTen } from "react-icons/gr";
+import { BsFillPlayCircleFill, BsPauseCircleFill } from "react-icons/bs";
+import { FiVolume1 } from "react-icons/fi";
+import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+import { getApiErrorMessage } from "@/api/helper";
+import { notifications } from "@mantine/notifications";
 
 type TAudioBook = {
   name: string;
@@ -29,6 +34,7 @@ type TAudioBook = {
   order: number;
   file: string;
   thumbnail: string;
+  id: number;
 };
 const BookLayout = () => {
   // const { audiobooks,  } = useParams();
@@ -38,13 +44,15 @@ const BookLayout = () => {
     contentId?.toString()!,
     user?.user_id?.toString()!
   );
+  const audioBookId = data?.data.data.id;
+  console.log("audioBookId ", audioBookId);
   const audiobook = data?.data.data.media[0];
-  // console.log(audiobook);
+  console.log("audiobooks data", audiobook, data);
   const [startRead, setStartRead] = useState(false);
-  const { state } = useLocation();
-  console.log(state);
-  const { data: trendingData } = useGetTrendingAudioBooks();
-  console.log("Trending Audios ", trendingData);
+  // const { state } = useLocation();
+  // console.log(state);
+  // const { data: trendingData } = useGetTrendingAudioBooks();
+  // console.log("Trending Audios ", trendingData);
   return (
     <div className=" ">
       <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd]  ">
@@ -67,6 +75,7 @@ const BookLayout = () => {
                   <AboutPage
                     audiobook={audiobook}
                     setStartRead={() => setStartRead(true)}
+                    audioBookId={audioBookId!}
                   />
                 )}
               </Skeleton>
@@ -97,72 +106,138 @@ export default BookLayout;
 const AboutPage = ({
   audiobook,
   setStartRead,
+  audioBookId,
 }: {
   audiobook: TAudioBook;
   setStartRead: () => void;
+  audioBookId: number;
 }) => {
+  const profileId = localStorage.getItem("profileId");
+  const { data, refetch } = useGetLikedContent(profileId!);
+  const likeContents: TStoryContent[] = data?.data.data.records;
+  const { mutate } = useLikedContent();
+  const { mutate: unFavoriteMutate } = useUnLikedContent();
+  const isLiked = likeContents?.filter((content) => content.id === audioBookId);
+
+  const handleLikedContent = () => {
+    // handleShake();
+    console.log("audioBookId", audioBookId);
+    if (isLiked?.length === 0 || isLiked === undefined) {
+      mutate(
+        {
+          content_id: audioBookId!,
+          profile_id: Number(profileId),
+        },
+        {
+          onSuccess() {
+            // const res = data?.data?.data as TUser;
+            // setUser({ ...res });
+            refetch();
+            notifications.show({
+              title: `Notification`,
+              message: audiobook?.name + " added to list",
+            });
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    } else {
+      unFavoriteMutate(
+        {
+          content_id: audioBookId,
+          profile_id: Number(profileId),
+        },
+        {
+          onSuccess() {
+            refetch();
+            notifications.show({
+              title: `Notification`,
+              message: audiobook?.name + " removed from the list",
+            });
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    }
+  };
   return (
-    <div className="bg-[#003914]  w-[100%] flex rounded-3xl px-10 py-5">
-      <div className="flex basis-full  border-r-2 justify-center items-center gap-4 border-[#008A3B]  ">
-        <p className="flex flex-col w-full ">
+    <div className="bg-[#003914]   w-[100%] flex rounded-3xl pad-x-40 about-card-px py-5">
+      <div className="flex basis-full  border-r-2 justify-center items-center border-[#008A3B]  ">
+        <p className="flex flex-col w-full">
           {audiobook ? (
             <LazyLoadImage
               src={audiobook?.thumbnail}
               placeholderSrc={AfamBlur}
               effect="blur"
-              className="rounded-2xl"
-              wrapperClassName=""
-              width={300}
-              height={300}
+              className="rounded-2xl about-img "
+              wrapperClassName="about-img"
             />
           ) : (
             <LazyLoadImage
               placeholderSrc={AfamBlur}
               effect="blur"
-              className="rounded-2xl"
-              wrapperClassName=""
-              width={300}
-              height={300}
+              className="rounded-2xl about-img "
+              wrapperClassName="about-img"
             />
           )}
         </p>
-        <p className="flex flex-col w-full  ">
-          <span className="font-bold font-Recoleta text-white text-[30px]">
+        <p className="grid flex-col w-full   h-full py-2 ">
+          <span className="font-bold font-Recoleta text-white text25 justify-self-start">
             {audiobook?.name}
           </span>
-          <span className="mt-4 text-[#008A3B]  "></span>
-          <p className="mt-40 flex gap-4">
+          <span className=" text-[#008A3B]">Dele and Louisa Olafuyi</span>
+          <p className="grid grid-cols-2   gap-4 ">
             <button
               onClick={setStartRead}
-              className="px-16 py-3 border text-white border-white rounded-3xl"
+              className=" py-3 inline self-end text-white border-white border-[2px] rounded-2xl"
             >
               Play
             </button>
-            <img loading="lazy" src={Bookmark} alt="bookmark" />
+            <button
+              onClick={handleLikedContent}
+              className="inline self-end text-start"
+            >
+              <img
+                loading="lazy"
+                src={Bookmark}
+                alt="bookmark"
+                className=" inline "
+              />
+            </button>
           </p>
         </p>
       </div>
-      <div className=" basis-3/4 text-[#BD6AFA] px-10">
+      <div className=" basis-3/4 text-[#008A3B] pad-x-40">
         <div>
-          <h1 className="text-white font-bold  font-Hanken text-[25px] my-4">
+          <h1 className="text-white font-bold  font-Hanken text25 my-2">
             About the author
           </h1>
-          <p className="text-[#008A3B]">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati
-            sed blanditiis dolorem voluptate doloremque culpa fugiat neque,
-            adipisci, vero unde ipsa incidunt, ullam animi voluptatem. Ab
-            cupiditate obcaecati officiis nesciunt.
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam
+            at ullam incidunt maiores ut officiis adipisci in quod accusamus
+            fugit. Quia illum, inventore id tempora recusandae ut consectetur
+            veniam reiciendis.
           </p>
         </div>
         <div>
-          <h1 className="text-white font-bold  font-Hanken text-[25px] my-4">
+          <h1 className="text-white font-bold  font-Hanken text25 my-2">
             Overview
           </h1>
-          <p className="text-[#008A3B]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-            repudiandae veniam sequi odio, itaque autem. Odio iste ad
-            accusantium impedit atque ea recusandae quo, non fugit alias
-            eligendi quisquam voluptates?
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero
+            harum eligendi cupiditate labore possimus deleniti fugit consequatur
+            ducimus in eum, ullam voluptate eveniet accusantium reprehenderit
+            magni qui. Aliquam, quia reiciendis!
           </p>
         </div>
       </div>
@@ -213,11 +288,13 @@ const ReadPage = ({ audiobook }: { audiobook: TAudioBook }) => {
 };
 
 const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
+  console.log("file", audio);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   // const progressBar = useRef<HTMLInputElement>(null);
   const [currentTTime, setCurrentTTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [durationn, setDuration] = useState(0);
+  const [load, setLoad] = useState(false);
 
   const handlePlayControl = () => {
     const audioCon = audioRef.current;
@@ -234,42 +311,46 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
     const duration = audioCon?.duration || 0;
     console.log(direction, duration);
     const currentTime = audioCon?.currentTime || 0;
-    console.log(currentTime + 0.1);
-    if (!audioCon) return;
-    audioCon.currentTime = currentTime + 0.2;
+    console.log({ currentTime, currentPlus: currentTTime + 1 });
+    if (!audioCon?.currentTime) return;
+    // audioCon.currentTime = currentTime + 1;
     // console.log("duration", audioCon?.duration, audioCon?.currentTime);
-    // if (audioCon && direction === "forward") {
-    //   audioCon.currentTime += 0.1;
-    //   // currentTime + 10 > duration ? duration - currentTime : 10;
-    //   return;
-    // } else if (audioCon && direction === "backward") {
-    //   audioCon.currentTime -= currentTime - 10 < 0 ? currentTime : 10;
-    //   return;
-    // }
+    if (audioCon?.currentTime && load && direction === "forward") {
+      audioCon.currentTime += 2;
+      // currentTime + 5 > duration ? duration - currentTime : 5;
+    } else if (audioCon.currentTime && load && direction === "backward") {
+      audioCon.currentTime -= currentTime - 5 < 0 ? currentTime : 5;
+      // audioCon.currentTime += 2;
+    }
   };
 
   const max = 20;
 
   useEffect(() => {
     let seconds;
-    console.log("effect duration", audioRef.current?.duration);
     if (audioRef.current) {
+      console.log("effect duration", audioRef.current?.duration);
       seconds = Math.floor(audioRef?.current.duration);
       setDuration(+seconds);
     }
     // if (progressBar?.current) {
     //   progressBar.current.max = seconds?.toString() || "";
     // }
-  }, [audioRef?.current?.onloadedmetadata, audioRef?.current?.readyState]);
+  }, [
+    audioRef?.current?.onloadedmetadata,
+    audioRef?.current?.readyState,
+    audioRef?.current?.onload,
+    audioRef?.current?.oncanplaythrough,
+  ]);
 
-  useEffect(() => {
-    audioRef?.current?.addEventListener("ontimeupdate", (event) => {
-      setCurrentTTime(+event?.currentTarget! as number);
-    });
-    audioRef?.current?.addEventListener("onend", () => {
-      setIsPlaying(false);
-    });
-  }, []);
+  // useEffect(() => {
+  //   audioRef?.current?.addEventListener("ontimeupdate", (event) => {
+  //     setCurrentTTime(+event?.currentTarget! as number);
+  //   });
+  //   audioRef?.current?.addEventListener("onend", () => {
+  //     setIsPlaying(false);
+  //   });
+  // }, []);
 
   const calculateTime = (secs: number) => {
     // console.log("sec", secs);
@@ -288,9 +369,9 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
   const reducedMotion = useReducedMotion();
 
   const handleSliderChange = (value: number) => {
-    console.log("new current time", value);
     setCurrentTTime(value);
-    if (audioRef.current) {
+    console.log("new current time", audioRef.current?.duration, value, load);
+    if (load && audioRef.current) {
       audioRef.current.currentTime = value;
     }
     return value;
@@ -305,24 +386,49 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
       audioRef.current.volume = volume;
     }
   };
-  const [, setLoad] = useState(false);
+  const { mutate } = useContentTracking();
+  const profileId = localStorage.getItem("profileId");
+  const contentId = localStorage.getItem("contentId");
+  const [delay, setDelay] = useState(0);
+
+  setInterval(() => {
+    setDelay((prev) => prev++);
+  }, 1000);
+
+  useEffect(() => {
+    mutate(
+      {
+        profile_id: Number(profileId),
+        content_id: Number(contentId),
+        status: "ongoing",
+        pages_read: Math.ceil(currentTTime),
+        timespent: Math.ceil(currentTTime),
+      },
+      {
+        onSuccess(data) {
+          console.log("success", data.data.message);
+          // const res = data?.data?.data as TUser;
+          // setUser({ ...res });
+
+          // notifications.show({
+          //   title: `Notification`,
+          //   message: data?.data.message,
+          // });
+        },
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  }, [delay]);
+
   return (
     <div className="h-[229px]">
       <h1 className="text-[22px] font-semibold text-[#151515]">{title}</h1>
       <div className="my-3 flex justify-center items-center gap-2 mt-8">
-        {/* <p className=" flex-grow w-20">
-          {currentTTime && calculateTime(currentTTime)}
-        </p> */}
-        {/* <input
-          type="range"
-          className="mr-2   text-[#8530C1] bg-[#8530C1]  flex-grow w-full slider"
-          ref={progressBar}
-          value={currentTTime}
-          onChange={changeRage}
-          id="input-range1"
-          defaultValue={0}
-        /> */}
-
         <p className="w-full flex-grow">
           <MantineProvider
             theme={{
@@ -345,30 +451,27 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
             <Slider
               color="ocean-blue.0"
               // backgroundColor=""
+
               value={currentTTime}
-              onChange={handleSliderChange}
+              onChange={(event) => {
+                handleSliderChange(event);
+                // handleSeek();
+              }}
               min={0}
-              max={duration}
+              max={durationn}
               step={0.1}
               label={`Duration: ${calculateTime(currentTTime)}`}
               disabled={reducedMotion}
               // onLoadedMetadata={handleTimeUpdate}
-              // onTimeUpdate={handleTimeUpdate}
+              // onTimeUpdate={handleUpdate}
             />
           </MantineProvider>
         </p>
-
-        {/* <p className="flex-grow w-20">
-          {duration ? calculateTime(duration) : `0:00`}
-        </p> */}
-        {/* <Progress value={(currentTTime * 100) / duration} /> */}
       </div>
-
-      {/* <Progress value={(currentTTime * 100) / duration} /> */}
 
       <div className="flex  justify-between ">
         <p>{currentTTime && calculateTime(currentTTime)}</p>
-        <p>{duration ? calculateTime(duration) : `0:00`}</p>
+        <p>{durationn ? calculateTime(durationn) : `0:00`}</p>
       </div>
 
       <div className="flex justify-between mt-8">
@@ -380,53 +483,43 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
             }}
             onEnded={() => {
               setIsPlaying(false);
-              // setEnded(true);
+            }}
+            onCanPlayThrough={(event) => {
+              setCurrentTTime(+event.currentTarget.currentTime);
             }}
             ref={audioRef}
-            src={audio!}
-            onLoad={() => setLoad(true)}
+            // src={audio && audio}
+            src={
+              "https://res.cloudinary.com/dapjcjyyr/video/upload/v1693643756/media1673970287_x1zxla.mp3"
+            }
+            onCanPlay={(event) => {
+              setCurrentTTime(+event.currentTarget.currentTime);
+              setLoad(true);
+            }}
           ></audio>
           <div className="flex h-[72px] justify-end rounded-full gap-10 px-10 py-4 bg-[#FBECFF] items-center ">
             <button onClick={handeSkip10("backward")}>
-              <img
-                loading="lazy"
-                src={FastBackward}
-                alt="backward"
-                className="w-[50px] h-[50px]"
-              />
+              <GrBackTen size={25} color="red" className="u-react-icon" />
             </button>
             <button onClick={handlePlayControl}>
-              <img
-                src={isPlaying ? PauseIcon : PlayIcon}
-                alt=""
-                className="w-[40px]"
-              />
+              {isPlaying ? (
+                <BsPauseCircleFill size={40} color="#8530C1" x />
+              ) : (
+                <BsFillPlayCircleFill size={40} color="#8530C1" />
+              )}
             </button>
             <button onClick={handeSkip10("forward")}>
-              <img
-                loading="lazy"
-                src={FastForward}
-                alt="forward"
-                className="w-[50px] h-[50px]"
+              <GrForwardTen
+                size={25}
+                color="red"
+                text="red"
+                className="u-react-icon"
               />
             </button>
           </div>
         </div>
-        <div className=" flex justify-center items-center gap-5 ">
-          <img
-            loading="lazy"
-            src={VolumeIcon}
-            alt="volume"
-            className="w-[20px]"
-          />
-          {/* <input
-          type="range"
-          className="mr-2   text-[#8530C1] bg-[#8530C1] w-[100px]"
-          min={0}
-          max={max}
-          id="input"
-          onChange={(e) => handleVolume(e)}
-        /> */}
+        <div className=" flex justify-center items-center gap-2">
+          <FiVolume1 size={25} />
           <p className="w-[100px]">
             <MantineProvider
               theme={{
