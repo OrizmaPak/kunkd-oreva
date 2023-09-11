@@ -8,7 +8,7 @@ import { useGetAdmittedStudentsInClass } from "@/api/queries";
 import { TRequestStudents } from "../Request/Request";
 
 const Main = () => {
-  const { data } = useGetAdmittedStudentsInClass();
+  const { data, isLoading } = useGetAdmittedStudentsInClass();
   const studentList: TRequestStudents[] = data?.data.data.records;
   return (
     <div className="h-full flex flex-col overflow-y-scroll">
@@ -22,7 +22,7 @@ const Main = () => {
       </div>
       <div className=" flex gap-5 flex-grow">
         <div className=" basis-full flex-grow flex  ">
-          <StudentLeaderboard data={studentList} />
+          <StudentLeaderboard data={studentList} isLoading={isLoading} />
         </div>
 
         <div className=" basis-3/5 flex flex-col ">
