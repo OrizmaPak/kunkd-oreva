@@ -2,8 +2,15 @@
 import { TRequestStudents } from "../../TeacherDashboard/Request/Request";
 import { BsChevronRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { Skeleton } from "@mantine/core";
 
-const StudentLeaderboard = ({ data }: { data: TRequestStudents[] }) => {
+const StudentLeaderboard = ({
+  data,
+  isLoading,
+}: {
+  data: TRequestStudents[];
+  isLoading: boolean;
+}) => {
   const navigate = useNavigate();
   return (
     <div className="py-4 bg-white rounded-3xl mt-1  flex flex-col flex-grow  pad-x-40">
@@ -18,10 +25,15 @@ const StudentLeaderboard = ({ data }: { data: TRequestStudents[] }) => {
       <hr className="my-2" />
 
       <div className="weight-700 font-medium flex-grow flex flex-col">
-        {data &&
-          data?.slice(0, 6).map((data: TRequestStudents, index) => {
-            return <Row key={index} data={data} />;
-          })}
+        {isLoading
+          ? new Array(8).fill(1).map((array) => (
+              <Skeleton height={60} my={10} visible={true}>
+                <h1 className="w-full">{array}</h1>
+              </Skeleton>
+            ))
+          : data?.slice(0, 2).map((data: TRequestStudents, index) => {
+              return <Row key={index} data={data} />;
+            })}
       </div>
 
       <div className="flex justify-end items-center gap-4 ">

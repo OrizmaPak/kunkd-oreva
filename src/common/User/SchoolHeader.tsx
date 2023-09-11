@@ -21,6 +21,7 @@ import { useState } from "react";
 import { useGetMainSearch } from "@/api/queries";
 import useDebounce from "@/hooks/useDebounce";
 // import SchLogo from "@/assets/schLogo.svg";
+import { selectAvatarType } from "@/pages/AfterParentSignIn/SelectProfile";
 
 const notificationData = [
   {
@@ -70,6 +71,12 @@ const SchoolHeader = () => {
     localStorage.setItem("profileId", JSON.stringify(id));
     window.location.reload();
   };
+  const currentId = localStorage.getItem("profileId");
+  const profiles = localStorage.getItem("profile");
+  const profileArray = JSON.parse(profiles!);
+  const currentProfile: selectAvatarType = profileArray?.find(
+    (profile: selectAvatarType) => profile.id === Number(currentId)
+  );
 
   return (
     <div className="bg-white w-full fixed top-0 h-[8vh] z-50">
@@ -218,9 +225,9 @@ const SchoolHeader = () => {
                 <div className="flex justify-center items-center gap-5  px-10 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
                   <img
                     loading="lazy"
-                    src={UserIcon}
+                    src={currentProfile ? currentProfile.image : UserIcon}
                     alt="user icon"
-                    className="w-[30px]"
+                    className="w-[30px] object-contain"
                   />
 
                   <span>
@@ -270,7 +277,7 @@ const SchoolHeader = () => {
                 <div className="flex justify-center items-center gap-7  px-6 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
                   <img
                     loading="lazy"
-                    src={UserIcon}
+                    src={user?.user_image ? user.user_image : UserIcon}
                     alt="user icon"
                     className="w-[25px]"
                   />

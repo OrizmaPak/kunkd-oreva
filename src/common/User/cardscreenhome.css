@@ -12,6 +12,7 @@
   position: absolute;
   top: 0;
   border-radius: 5px;
+  width: 20px !important;
 }
 
 /* Handle */
@@ -20,4 +21,9 @@
   position: absolute;
   top: 0;
   border-radius: 5px;
+  width: 20px !important;
+}
+
+.react-icon polyline {
+  stroke: #8530c1 !important;
 }

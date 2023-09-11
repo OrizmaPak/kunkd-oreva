@@ -108,7 +108,7 @@ const Hero = ({ username, userimage }: Props) => {
           {/* <span className="absolute h-[20px] w-16 bg-[#782caf] bottom-[65px] left-[40px]"></span> */}
         </div>
       </div>
-      <hr className="mt-[60px] mx-16 " />
+      <hr className="mt-[16px] mx-16 " />
     </div>
     // </Skeleton>
   );

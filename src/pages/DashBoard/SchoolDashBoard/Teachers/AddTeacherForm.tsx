@@ -47,8 +47,11 @@ const AddTeacherForm = ({
   toggle: () => void;
 }) => {
   const { data } = useGetClassList();
-  const classList = data?.data?.data.records;
-  // console.log("Class list", classList);
+  const classList: Tclass[] = data?.data?.data.records;
+  const availableClassList = classList.filter(
+    (klass: Tclass) => klass.teacher_count < 1
+  );
+  console.log("Class list", classList);
   const schema: ZodType<FormData> = z
     .object({
       firstname: z
@@ -191,7 +194,7 @@ const AddTeacherForm = ({
                 >
                   <option value="">Select Class</option>
                   {/* <div> */}
-                  {classList?.map((classs: Tclass, index: number) => (
+                  {availableClassList?.map((classs: Tclass, index: number) => (
                     <option key={index} value={classs.id}>
                       {classs.name}
                     </option>

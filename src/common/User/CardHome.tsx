@@ -45,6 +45,10 @@ const CardHome = ({
     if (goTo) goTo();
 
     localStorage.setItem("contentId", id?.toString()!);
+    localStorage.setItem(
+      "continuePage",
+      pages_read ? pages_read?.toString()! : "1"
+    );
   };
   const [visiblee, setVisiblee] = useState(false);
   const profileId = localStorage.getItem("profileId");
@@ -121,21 +125,23 @@ const CardHome = ({
     }, 500); // Reset shaking after 0.5 seconds
   };
   return (
-    <div className="card z-[1]  hover:scale-[102%] transition-all my-3">
-      <span className="relative group hover:block">
+    <div className="card z-[1]  hover:scale-[102%] transition-all my-2  mx-2">
+      <span className="relative image-card ">
         <LazyLoadImage
           src={thumbnail}
           placeholderSrc={AfamBlur}
           effect="blur"
           className=" rounded-xl card"
-          wrapperClassName="card"
+          wrapperClassName="card relative
+          "
           onMouseMove={() => {
             setVisiblee(true);
             console.log(visiblee);
           }}
           onMouseMoveCapture={() => setVisiblee(false)}
         />
-        <span className=" group-hover:block  bg-[rgba(0,0,0,.5)] hidden absolute left-0 top-0   card transition-all duration-100   z-50  rounded-xl">
+
+        <span className=" card-hover bg-[rgba(0,0,0,.5)] hidden  absolute left-0 top-[-182px] card transition-all duration-100   z-50  rounded-xl">
           <button
             onClick={handleLikedContent}
             // className="px-4 py-2"
@@ -162,7 +168,7 @@ const CardHome = ({
 }
 
 .animate-shake {
-  animation: shake 0.5s infinite;
+  animation: shake 0.3s infinite;
 }`}</style>
           </button>
           <p className="">
@@ -177,15 +183,16 @@ const CardHome = ({
           </p>
         </span>
       </span>
+
       {!hasRage ? (
         <p className="mt-[2px]  text3 font-Hanken font-semibold  leading-2">
           {name}
         </p>
       ) : (
         <p className="mt-[2px]  text3 font-Hanken font-semibold  leading-2">
-          <p className="mt-[10px] font-bold font-Hanken flex justify-between items-center gap-4 px-4 ">
+          <p className="mt-[0px] font-bold font-Hanken flex justify-between items-center gap-4 px-4 ">
             <span>{range ? range : 50}%</span>
-            <p className="rounded-3xl flex-1 bg-red-500">
+            <p className="rounded-3xl flex-1 ">
               {hasRage ? (
                 range < 20 ? (
                   <Progress value={range} color="red" />

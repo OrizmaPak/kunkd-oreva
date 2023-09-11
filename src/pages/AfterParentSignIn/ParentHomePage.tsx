@@ -19,6 +19,8 @@ import videoIcon from "@/assets/videoicon.svg";
 import BookIcon from "@/assets/bookicon.svg";
 import "./parenthomepage.css";
 import { TStoryContent } from "../Stories/Stories1/Stories1";
+import { Carousel } from "@mantine/carousel";
+import { GrNext, GrPrevious } from "react-icons/gr";
 
 const ParentHomePage = () => {
   let profiles: selectAvatarType;
@@ -74,71 +76,107 @@ const ParentHomePage = () => {
               />
               <CategoriesCard
                 image={videoIcon}
-                label="African Language"
+                label="African Languages"
                 goTo={() => navigate("africanlanguages")}
               />
             </div>
           </div>
-          <div className="my-10">
+          <div className="mt-20 ">
             {ongoingContents?.length > 0 && (
-              <div className=" mx-20 mt-4">
-                <span className=" text25 font-semibold font-Recoleta ">
+              <div className=" mx-20 mt-4 mb-10">
+                <p className=" text25 font-semibold font-Recoleta  mb-6">
                   Continue Learning
-                </span>
-                <div className="overflow-auto   p-4 ">
-                  <div className="flex gap-5 mb-14 ">
-                    {ongoingContents?.map((data, index) => {
-                      if (data.category === "Stories") {
-                        return (
-                          <CardHome
-                            hasRage={true}
-                            key={index}
-                            {...data}
-                            goTo={() => {
-                              navigate(
-                                `../${
-                                  user.role === "parent" ? "parent" : "school"
-                                }/${data.category?.toLowerCase()}/sub/${data.slug
-                                  ?.toLocaleLowerCase()
-                                  .replace(/\s/g, "-")}`
-                              );
-                            }}
-                          />
-                        );
-                      } else if (data.category === "Audiobooks") {
-                        return (
-                          <CardHome
-                            hasRage={true}
-                            key={index}
-                            {...data}
-                            goTo={() => {
-                              navigate(
-                                `../${
-                                  user.role === "parent" ? "parent" : "school"
-                                }/${data.category?.toLowerCase()}/${data.slug
-                                  ?.toLocaleLowerCase()
-                                  .replace(/\s/g, "-")}`
-                              );
-                            }}
-                          />
-                        );
-                      } else if (data.category === "Languages") {
-                        return (
-                          <CardHome
-                            hasRage={true}
-                            key={index}
-                            {...data}
-                            goTo={() =>
-                              navigate(
-                                `../${
-                                  user.role === "parent" ? "parent" : "school"
-                                }/africanlanguages/${data.slug}/${data.name}`
-                              )
-                            }
-                          />
-                        );
+                </p>
+                <div className="overflow-auto    ">
+                  <div className=" gap-5  ">
+                    <Carousel
+                      className="group"
+                      height={250}
+                      slideSize="200px"
+                      slideGap="md"
+                      align="start"
+                      slidesToScroll={3}
+                      loop={false}
+                      // controlsOffset="-40px"
+                      // withIndicators={false}
+
+                      styles={{
+                        control: {
+                          "&[data-inactive]": {
+                            opacity: 0,
+                            cursor: "default",
+                            path: "0px",
+                          },
+                        },
+                      }}
+                      nextControlIcon={
+                        <GrNext
+                          size={40}
+                          color="#8530C1"
+                          className=" react-icon invisible group-hover:visible  "
+                        />
                       }
-                    })}
+                      previousControlIcon={
+                        <GrPrevious
+                          size={40}
+                          color="#8530C1"
+                          className=" react-icon invisible group-hover:visible"
+                        />
+                      }
+                    >
+                      {ongoingContents?.map((data, index) => {
+                        if (data.category === "Stories") {
+                          return (
+                            <CardHome
+                              hasRage={true}
+                              key={index}
+                              {...data}
+                              goTo={() => {
+                                navigate(
+                                  `../${
+                                    user.role === "parent" ? "parent" : "school"
+                                  }/${data.category?.toLowerCase()}/sub/${data.slug
+                                    ?.toLocaleLowerCase()
+                                    .replace(/\s/g, "-")}`
+                                );
+                              }}
+                            />
+                          );
+                        } else if (data.category === "Audiobooks") {
+                          return (
+                            <CardHome
+                              hasRage={true}
+                              key={index}
+                              {...data}
+                              goTo={() => {
+                                navigate(
+                                  `../${
+                                    user.role === "parent" ? "parent" : "school"
+                                  }/${data.category?.toLowerCase()}/${data.slug
+                                    ?.toLocaleLowerCase()
+                                    .replace(/\s/g, "-")}`
+                                );
+                              }}
+                            />
+                          );
+                        } else if (data.category === "Languages") {
+                          return (
+                            <CardHome
+                              hasRage={true}
+                              key={index}
+                              {...data}
+                              goTo={() =>
+                                navigate(
+                                  `../${
+                                    user.role === "parent" ? "parent" : "school"
+                                  }/africanlanguages/${data.slug}/${data.name}`
+                                )
+                              }
+                            />
+                          );
+                        }
+                      })}
+                    </Carousel>
                   </div>
                 </div>
               </div>

@@ -462,9 +462,13 @@ const BookPagination = ({
   setPageNumber: (val: number) => void;
 }) => {
   const { mutate } = useContentTracking();
+  const continuePage = localStorage.getItem("continuePage");
+
   const profileId = localStorage.getItem("profileId");
   const contentId = localStorage.getItem("contentId");
-  const [currentPage, setCurrentage] = useState(1);
+  const [currentPage, setCurrentage] = useState(
+    continuePage ? Number(continuePage) : 1
+  );
   setPage(currentPage);
   setPageNumber(currentPage);
   const pageItirate = (itirateControl: string) => {

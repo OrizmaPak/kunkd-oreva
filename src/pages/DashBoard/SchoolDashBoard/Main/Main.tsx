@@ -14,7 +14,7 @@ import { TTeacherList } from "../Teachers/Teachers";
 const Main = () => {
   const { data: teacherData } = useGetTeacherList();
   const teacherList: TTeacherList[] = teacherData?.data.data.records;
-  const { data: studentData } = useGetAdmittedStudentsInSchool();
+  const { data: studentData, isLoading } = useGetAdmittedStudentsInSchool();
   const studentList = studentData?.data.data.records;
   const totalStudent: number = studentList?.length;
   const totalTeacher: number = teacherList?.length;
@@ -45,7 +45,7 @@ const Main = () => {
             <Card title="Students" image={StudentIcon} amount={totalStudent} />
           </div>
           <div className="flex-grow flex ">
-            <StudentLeaderboard data={studentList} />
+            <StudentLeaderboard data={studentList} isLoading={isLoading} />
           </div>
         </div>
         <div className="basis- basis-3/5  flex flex-col  h-full ">

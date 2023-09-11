@@ -20,7 +20,7 @@ const Hero = () => {
   // const [isLoading, setIsLoadind] = useState(true);
   return (
     // <Skeleton visible={isLoading}>
-    <div className="h-[256px] mb-20 relative ">
+    <div className="h-[256px] mb-16 relative ">
       <Slider {...settings}>
         <div className="bg-[#8530C1] h-[256px] rounded-bl-2xl rounded-tl-2xl rounded-tr-2xl">
           <h1 className="text-[32px] text-white font-semibold mx-10  my-14">
