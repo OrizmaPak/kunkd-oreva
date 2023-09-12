@@ -22,8 +22,6 @@ const SchoolSignupContent = () => {
   const { isLoading, mutate } = useCreateSchoolUser();
   const [pushToken] = useStore(getPushTokenState);
 
-  console.log("token ", pushToken);
-
   const schema: ZodType<FormData> = z.object({
     school_name: z
       .string()
@@ -55,8 +53,6 @@ const SchoolSignupContent = () => {
       { ...data, fcm_token: pushToken },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
-
           notifications.show({
             title: `Notification`,
             message: data.data.message,

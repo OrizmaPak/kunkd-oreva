@@ -16,7 +16,6 @@ const MyList = () => {
   const storiesLikedContents = likedContent?.filter(
     (content) => content.category === "Stories"
   );
-  console.log("storiesLikedContents", storiesLikedContents);
   const audiobooksLikedContents = likedContent?.filter(
     (content) => content.category === "Audiobooks"
   );

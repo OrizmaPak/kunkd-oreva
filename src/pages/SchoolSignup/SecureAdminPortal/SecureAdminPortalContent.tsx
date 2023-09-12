@@ -34,15 +34,10 @@ const SecureAdminPortalContent = () => {
   const pin = watch("pin");
 
   const submitData = (data: Pick<FormData, "pin">) => {
-    console.log("testing");
-    console.log("It is working", data);
-
     mutate(
       { ...data },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
-
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -61,7 +56,6 @@ const SecureAdminPortalContent = () => {
   };
 
   const handlePinChange = (value: string) => {
-    console.log("-- pin value: ", value);
     setValue("pin", value);
     trigger("pin");
   };

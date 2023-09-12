@@ -1,15 +1,5 @@
 import ArrowDown from "@/assets/arrowdown.svg";
-
 import Rectangle from "@/assets/boxIcon.svg";
-import Chiks from "@/assets/chiks.svg";
-import Jessica from "@/assets/jessica.svg";
-import Grease from "@/assets/grease.svg";
-import Blxst from "@/assets/Blxst.svg";
-import Godwin from "@/assets/godwin.svg";
-import Mitchel from "@/assets/godwin.svg";
-import Pemela from "@/assets/pamela.svg";
-import Spa from "@/assets/spa.svg";
-import Bella from "@/assets/bella.svg";
 import { Pagination, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
@@ -21,7 +11,6 @@ import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
 import DeleteProfile from "./DeleteProfile";
 import EditAssignedClass from "./EditAssignedClass";
 import { useGetTeacherList } from "@/api/queries";
-// import { Skeleton } from "@mantine/core";
 
 export type DashBoardDataType = {
   noOfTeacher: number;
@@ -34,129 +23,6 @@ export type DashBoardDataType = {
   gender: string;
   image: string;
 };
-export const dashboardData = [
-  {
-    noOfTeacher: 15,
-    noOfStudents: 23,
-    classCode: "A",
-    classs: "Green",
-    id: 1,
-    name: "Chiks Olowo",
-    email: "chiks@pamers.school",
-    gender: "Female",
-    image: Chiks,
-  },
-  {
-    noOfTeacher: 5,
-    noOfStudents: 43,
-    classCode: "C",
-    classs: "Purple",
-    id: 2,
-    name: "Jessica Deji",
-    email: "jessica@pamers.school",
-    gender: "Female",
-    image: Jessica,
-  },
-  {
-    noOfTeacher: 5,
-    noOfStudents: 43,
-    classCode: "C",
-    classs: "Purple",
-    id: 2,
-    name: "Jessica Deji",
-    email: "jessica@pamers.school",
-    gender: "Female",
-    image: Jessica,
-  },
-  {
-    noOfTeacher: 6,
-    noOfStudents: 23,
-    classCode: "C",
-    classs: "Black",
-    id: 3,
-    name: "Grease Kemma",
-    email: "grease@pamers.school",
-    gender: "Male",
-    image: Grease,
-  },
-  {
-    noOfTeacher: 6,
-    noOfStudents: 23,
-    classCode: "C",
-    classs: "Black",
-    id: 3,
-    name: "Grease Kemma",
-    email: "grease@pamers.school",
-    gender: "Male",
-    image: Grease,
-  },
-  {
-    noOfTeacher: 1,
-    noOfStudents: 26,
-    classCode: "D",
-    classs: "Yellow",
-    id: 4,
-    name: "Blxst Ojo",
-    email: "blxst@pamers.school",
-    gender: "Female",
-    image: Blxst,
-  },
-  {
-    noOfTeacher: 6,
-    noOfStudents: 38,
-    classCode: "E",
-    classs: "Indingo",
-    id: 5,
-    name: "Godwin Oshodi",
-    email: "godwin@pamers.school",
-    gender: "Male",
-    image: Godwin,
-  },
-  {
-    noOfTeacher: 2,
-    noOfStudents: 29,
-    classCode: "F",
-    classs: "Blue",
-    id: 6,
-    name: "Mitchel Obi",
-    email: "mitchel@pamers.school",
-    gender: "Male",
-    image: Mitchel,
-  },
-  {
-    noOfTeacher: 5,
-    noOfStudents: 41,
-    classCode: "G",
-    classs: "White",
-    id: 7,
-    name: "Pamela Azunda",
-    email: "pamela@pamers.school",
-    gender: "Male",
-    image: Pemela,
-  },
-  {
-    noOfTeacher: 3,
-    noOfStudents: 53,
-    classCode: "H",
-    classs: "Pink",
-    id: 8,
-    name: "spa Chine",
-    email: "chiks@pamers.school",
-    gender: "Male",
-    image: Spa,
-  },
-  {
-    noOfTeacher: 1,
-    noOfStudents: 33,
-    classCode: "I",
-    classs: "Red",
-    id: 9,
-    name: "Bella Pepple",
-    email: "chiks@pamers.school",
-    gender: "Male",
-    image: Bella,
-  },
-];
 
 export type TTeacherList = {
   class: { class_id: number; class_name: string };
@@ -174,7 +40,6 @@ export type TTeacherList = {
 const Teachers = () => {
   const { data, isLoading } = useGetTeacherList();
   const teacherList: TTeacherList[] = data?.data.data.records;
-  console.log("Teacher list", teacherList);
   const [opened, { open, close }] = useDisclosure(false);
   const [modalStep, setModalStep] = useState(STEP_1);
   const handleClick = () => {
@@ -182,7 +47,6 @@ const Teachers = () => {
   };
 
   const [currentClicked, setCucrrentClicked] = useState(0);
-  console.log(currentClicked);
   const currentClickedProfile = teacherList?.find(
     (el) => el.class_teacher_id == currentClicked
   );
@@ -191,7 +55,6 @@ const Teachers = () => {
       <Modal
         radius={50}
         padding={30}
-        // title={<h1></h1>}
         size={currentClickedProfile && modalStep === STEP_1 ? 645 : "lg"}
         opened={opened}
         onClose={close}

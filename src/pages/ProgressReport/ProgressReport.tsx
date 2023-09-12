@@ -35,26 +35,12 @@ export type TContentLog = {
 };
 
 const ProgressReport = () => {
-  // const [displaySectio, setDisplaySection] = useState<number>(STEP_1);
   const profileId = localStorage.getItem("profileId");
-  console.log(profileId);
-  // const { data: contentLogData } = useGetContentsLog(
-  //   profileId ? profileId : ""
-  // );
-  // console.log("contentLogData", contentLogData);
-  // const contentsLog: TContentLog[] = contentLogData?.data.data;
   const { data } = useGetOngoingContents(profileId!);
   const { data: completedData } = useGetCompletedContents(profileId!);
   const ongoingContents: TStoryContent[] = data?.data.data.ongoing_contents;
   const completedContents: TStoryContent[] =
     completedData?.data.data.completed_contents;
-
-  console.log(
-    "---------ongtion---------",
-    ongoingContents,
-    " -------completed--------",
-    completedContents
-  );
 
   const categoryCalculator = (
     category: string,
@@ -93,8 +79,6 @@ const ProgressReport = () => {
   );
 
   const [currentStep, setCurrentStep] = useState(STEP_1);
-  console.log(currentStep);
-  // const [activePage, setPage] = useState(1);
   return (
     <div>
       <Wrapper>

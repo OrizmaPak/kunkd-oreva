@@ -3,7 +3,6 @@ import {
   useGetAttemptStudentConnect,
   useAcceptStudentAdmission,
   useRejectStudentAdmission,
-  useGetAdmittedStudentsInClass,
 } from "@/api/queries";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -34,11 +33,7 @@ export type TRequestStudents = {
 const Request = () => {
   const { data, refetch, isLoading } = useGetAttemptStudentConnect();
 
-  const { data: admittedStudentInClass } = useGetAdmittedStudentsInClass();
-  console.log("Admitted student", admittedStudentInClass);
   const attemptConnectStudents: TRequestStudents[] = data?.data.data.records;
-
-  console.log("attempting students", data?.data.data.records);
 
   return (
     <div className="h-full flex flex-col overflow-y-scroll">
@@ -46,10 +41,6 @@ const Request = () => {
         <div className="flex  justify-between items-center w-full px-8 ">
           <div>
             <h1 className="text-[24px] font-semibold">Request (35)</h1>
-          </div>
-          <div className="flex gap-8 font-semibold">
-            <span className="text-[16px] text-[#8530C1]">Pending</span>
-            <span className="text-[16px] text-[#B5B5C3]">Accepted</span>
           </div>
         </div>
         <div>
@@ -94,7 +85,6 @@ const Row = ({
       { student_id: id },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
           refetch();
           notifications.show({
             title: `Notification`,
@@ -115,7 +105,6 @@ const Row = ({
       { student_id: id },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
           refetch();
           notifications.show({
             title: `Notification`,

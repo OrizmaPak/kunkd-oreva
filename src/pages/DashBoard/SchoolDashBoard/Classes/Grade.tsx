@@ -6,11 +6,13 @@ const Grade = ({
   data,
   handleClick,
   onEdit,
+  student_count,
 }: {
   name1?: string;
   data?: TTeacherList;
   handleClick?: () => void;
   onEdit?: (e: any) => void;
+  student_count: number;
 }) => {
   return (
     <motion.div
@@ -57,7 +59,9 @@ const Grade = ({
           </div>
           <div>
             <p>No of students in class </p>
-            <span className="font-bold">{50}</span>
+            <span className="font-bold">
+              {student_count ? student_count : 0}
+            </span>
           </div>
         </div>
 

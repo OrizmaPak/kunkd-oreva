@@ -5,11 +5,8 @@ import UploadPicture from "./UploadPicture";
 import { useState } from "react";
 import { TTeacherData } from "./AddTeacherForm";
 import { useAddTeacherData } from "@/api/queries";
-// import { getPushTokenState } from "@/store/pushTokenStore";
-// import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
-// import { string } from "zod";
 import { useQueryClient } from "@tanstack/react-query";
 
 const AddTeacherModal = ({
@@ -29,15 +26,11 @@ const AddTeacherModal = ({
   const { mutate, isLoading } = useAddTeacherData();
 
   const handleAddTeacherForm = (val: File) => {
-    console.log("select image", val);
-
     const reader = new FileReader();
 
-    // Listen for the 'load' event when the file is loaded
     reader.onload = function (event) {
       const result = event?.target?.result as string; // Extract base64 data
       const base64String = result;
-      console.log(base64String);
 
       mutate(
         {
@@ -51,7 +44,6 @@ const AddTeacherModal = ({
         },
         {
           onSuccess(data) {
-            console.log("success", data.data.message);
             queryClient.invalidateQueries(["GetTeacherList"]);
             toggle();
             notifications.show({
@@ -68,11 +60,8 @@ const AddTeacherModal = ({
           },
         }
       );
-      // Now you can use the base64String as needed
-      console.log(base64String);
     };
 
-    // Read the file as a data URL (Base64 encoded)
     reader.readAsDataURL(val);
   };
 

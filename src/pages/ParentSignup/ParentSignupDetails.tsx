@@ -38,8 +38,6 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    console.log("testing");
-    console.log("It is working", data);
     setUser({ email: data.email });
 
     mutate(
@@ -47,8 +45,6 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
 
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
-
           notifications.show({
             title: `Notification`,
             message: data.data.message,

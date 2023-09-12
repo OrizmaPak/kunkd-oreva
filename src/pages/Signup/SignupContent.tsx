@@ -35,21 +35,12 @@ const SignContent = () => {
   const [to, setTo] = useState("");
   const { mutate } = useSocialSignUp();
   const [pushToken, ,] = useStore(getPushTokenState);
-  const handleClick = () => {
-    console.log(to);
-  };
+  const handleClick = () => {};
 
   const handleGoogleSignUp = async () => {
     try {
       const returnValue = await googleSignIn();
-      console.log("Request object", {
-        displayName: returnValue.user.displayName,
-        uid: returnValue.user.uid,
-        email: returnValue.user.email,
-        phoneNumber: returnValue.user.phoneNumber,
-        photoURL: returnValue.user.photoURL,
-        fcmToken: pushToken,
-      });
+
       mutate(
         {
           providerId: returnValue.providerId,
@@ -62,7 +53,6 @@ const SignContent = () => {
         },
         {
           onSuccess(data) {
-            console.log("success", data.data.message);
             const res = data?.data?.data as TUser;
 
             notifications.show({
@@ -91,14 +81,7 @@ const SignContent = () => {
   const handleFacebookSignUp = async () => {
     try {
       const returnValue = await facebookSignIn();
-      console.log("Request object", {
-        displayName: returnValue?.user.displayName,
-        uid: returnValue?.user.uid,
-        email: returnValue?.user.email,
-        phoneNumber: returnValue?.user.phoneNumber,
-        photoURL: returnValue?.user.photoURL,
-        fcmToken: pushToken,
-      });
+
       mutate(
         {
           providerId: returnValue?.providerId,
@@ -111,7 +94,6 @@ const SignContent = () => {
         },
         {
           onSuccess(data) {
-            console.log("success", data.data.message);
             const res = data?.data?.data as TUser;
 
             notifications.show({

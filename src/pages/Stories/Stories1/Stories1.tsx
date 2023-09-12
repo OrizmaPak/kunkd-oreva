@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import CardScreenHome from "@/common/User/CardScreenHome";
 import CardHome from "@/common/User/CardHome";
 import Bookmark from "@/assets/Bookmark.svg";
-import ArrowDown from "@/assets/arrowdown.svg";
 import { useEffect, useState } from "react";
 import Congrats from "@/assets/congrats.svg";
 import {
@@ -337,13 +336,6 @@ const ReadPage = ({
       {
         onSuccess(data) {
           console.log("success", data.data.message);
-          // const res = data?.data?.data as TUser;
-          // setUser({ ...res });
-
-          // notifications.show({
-          //   title: `Notification`,
-          //   message: data?.data.message,
-          // });
         },
         onError(err) {
           notifications.show({
@@ -479,35 +471,7 @@ const BookPagination = ({
       setCurrentage((val) => (val -= 1));
     }
   };
-  // const handleBookProgress = () => {
-  //   mutate(
-  //     {
-  //       profile_id: Number(profileId),
-  //       content_id: Number(contentId),
-  //       status: "ongoing",
-  //       pages_read: Number(currentPage + 1),
-  //       timespent: 23,
-  //     },
-  //     {
-  //       onSuccess(data) {
-  //         console.log("success", data.data.message);
-  //         // const res = data?.data?.data as TUser;
-  //         // setUser({ ...res });
 
-  //         // notifications.show({
-  //         //   title: `Notification`,
-  //         //   message: data?.data.message,
-  //         // });
-  //       },
-  //       onError(err) {
-  //         notifications.show({
-  //           title: `Notification`,
-  //           message: getApiErrorMessage(err),
-  //         });
-  //       },
-  //     }
-  //   );
-  // };
   const handleBookCompletedProgress = () => {
     mutate(
       {
@@ -521,13 +485,6 @@ const BookPagination = ({
         onSuccess(data) {
           console.log("success", data.data.message);
           setIsFinish();
-          // const res = data?.data?.data as TUser;
-          // setUser({ ...res });
-
-          // notifications.show({
-          //   title: `Notification`,
-          //   message: data?.data.message,
-          // });
         },
         onError(err) {
           notifications.show({
@@ -538,17 +495,35 @@ const BookPagination = ({
       }
     );
   };
+
+  const options = [];
+
+  // Generate ten options with values 1 to 10
+  for (let i = 1; i <= pageTotal; i++) {
+    options.push(
+      <option id="pages" key={i} value={i}>
+        {i}
+      </option>
+    );
+  }
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setCurrentage(Number(event.target.value));
+  };
   return (
     <div>
       <div className="flex  justify-between   items-center">
         <span className="flex gap-2">
-          <p>Pages: {pageTotal} </p>
-          <img
-            loading="lazy"
-            src={ArrowDown}
-            alt="arrow"
-            className="w-[15px]"
-          />
+          <p>
+            Pages:
+            <select
+              name=""
+              id="pages"
+              onChange={handleSelectChange}
+              value={currentPage}
+            >
+              {options}
+            </select>
+          </p>
         </span>
         <div className="flex gap-4">
           <p className="bg-[#8530C1] text-white p-3 rounded-3xl px-8 gap-8 flex justify-between  items-center">

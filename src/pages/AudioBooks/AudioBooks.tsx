@@ -2,7 +2,6 @@ import Wrapper from "@/common/User/Wrapper";
 import Hero from "@/pages/Library/LibraryNotPaid/Hero";
 import CardHome from "@/common/User/CardHome";
 import InnerWrapper from "../../common/User/InnerWrapper";
-
 import { Route, Routes, useNavigate, Outlet } from "react-router-dom";
 import BookLayout from "./BookLayout";
 import Chisomcard from "@/assets/Chisomcard.svg";
@@ -17,14 +16,8 @@ import Mamacard from "@/assets/mamacard.svg";
 import Puffcard from "@/assets/puffcard.svg";
 import AudioBookOne from "@/audiobooks/QueenMoremi.mp3";
 import AudioBanner from "@/assets/audiobanner.svg";
-// import TimeIcon from "@/assets/timeIcon.svg";
-// import PlayIcon from "@/assets/play.svg";
-// import Slider from "react-slick";
 import { Skeleton } from "@mantine/core";
-// import { useState } from "react";
 import { useGetAudioBoks } from "@/api/queries";
-// import { useNavigate } from "react-router-dom";
-
 export type StoriesType = {
   title?: string;
   image?: string;
@@ -254,14 +247,11 @@ type TAudioBooks = {
 const Books = () => {
   const navigate = useNavigate();
   const { isLoading, data } = useGetAudioBoks();
-  console.log("____testing", data?.data?.data.new_audiobook_titles);
   const audioBooks = data?.data?.data.new_audiobook_titles;
 
   return (
     <>
-      {/* <div className="bg-white rounded-3xl"> */}
       <div>
-        {/* <Hero image={AudioBanner} /> */}
         <hr className="my-20 mx-[200px]" />
         <h1 className="text-center font-bold text-[30px] font-Recoleta mt-10 ">
           Audiobooks
@@ -302,7 +292,6 @@ const Books = () => {
           })}
         </div>
       </div>
-      {/* </div> */}
     </>
   );
 };

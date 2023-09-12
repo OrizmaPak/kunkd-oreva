@@ -6,7 +6,6 @@ import { BsX, BsCheckLg } from "react-icons/bs";
 
 const ChoosePlanContent = () => {
   const { isLoading, data } = useGetPlans();
-  // console.log("")
 
   const plans = data?.data.data.plans;
   return (

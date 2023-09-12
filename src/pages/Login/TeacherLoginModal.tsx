@@ -39,9 +39,7 @@ const TeacherLoginModal = ({ onContinue }: { onContinue: () => void }) => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  console.log("--- errors", errors);
   const submitData = (data: FormData) => {
-    console.log("testing");
     console.log("It is working", data);
 
     mutate(
@@ -51,8 +49,6 @@ const TeacherLoginModal = ({ onContinue }: { onContinue: () => void }) => {
       },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
-
           notifications.show({
             title: `Notification`,
             message: data.data.message,

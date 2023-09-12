@@ -83,7 +83,6 @@ const CheckoutForm = ({ data }: { data: TStripe }) => {
         id="link-authentication-element"
         onChange={(e) => {
           console.log("e", e);
-          // setEmail(e.value.email);
         }}
       />
       <PaymentElement
@@ -111,8 +110,6 @@ const PaymentOutlet = ({ planId }: { planId: string }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [stripeData, setStripeData] = useState<TStripe>();
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null>>();
-  console.log("StripeInit", isLoading);
-  console.log("strip data", planId);
   const handleStripeInit = () => {
     mutate(
       {
@@ -121,7 +118,6 @@ const PaymentOutlet = ({ planId }: { planId: string }) => {
       },
       {
         onSuccess(data) {
-          console.log("success", data);
           setStripeData({ ...data.data.data });
           const publishableKey = data.data.data?.public_key;
           const stripe = loadStripe(publishableKey);

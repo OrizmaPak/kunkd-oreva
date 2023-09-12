@@ -50,14 +50,10 @@ const SchoolVerificationContent = () => {
   const otp = watch("otp");
 
   const submitData = (data: Pick<FormData, "otp">) => {
-    console.log("testing");
-    console.log("It is working", data);
-
     mutate(
       { ...data },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
           const res = data?.data?.data as TUser;
 
           notifications.show({
@@ -78,7 +74,6 @@ const SchoolVerificationContent = () => {
   };
 
   const handlePinChange = (value: string) => {
-    console.log("-- pin value: ", value);
     setValue("otp", value);
     trigger("pin");
   };

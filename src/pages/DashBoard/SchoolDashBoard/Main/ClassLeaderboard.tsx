@@ -16,7 +16,7 @@ const ClassLeaderboard = ({ data }: { data: TTeacherList[] }) => {
       </div>
       <hr className="mb-3" />
       <div className="flex flex-grow  flex-col">
-        {data?.map((data: TTeacherList, index) => {
+        {data?.slice(0, 3).map((data: TTeacherList, index) => {
           return <Row key={index} data={data} />;
         })}
       </div>

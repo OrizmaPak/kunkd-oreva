@@ -13,10 +13,8 @@ import { Skeleton } from "@mantine/core";
 
 const Students = () => {
   const { data, isLoading } = useGetAdmittedStudentsInClass();
-  console.log("Admitted student", data);
   const admittedStudents: TRequestStudents[] = data?.data.data.records;
 
-  console.log("Admitted student", admittedStudents);
   const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
   return (

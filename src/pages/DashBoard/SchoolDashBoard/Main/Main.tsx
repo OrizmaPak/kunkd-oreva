@@ -8,8 +8,11 @@ import ProgressLog from "../Students/Profile/ProgressLog";
 import {
   useGetTeacherList,
   useGetAdmittedStudentsInSchool,
+  useGetOngoingContents,
+  useGetCompletedContents,
 } from "@/api/queries";
 import { TTeacherList } from "../Teachers/Teachers";
+import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
 
 const Main = () => {
   const { data: teacherData } = useGetTeacherList();
@@ -18,6 +21,49 @@ const Main = () => {
   const studentList = studentData?.data.data.records;
   const totalStudent: number = studentList?.length;
   const totalTeacher: number = teacherList?.length;
+
+  const profileId = localStorage.getItem("profileId");
+  const { data } = useGetOngoingContents(profileId!);
+  const { data: completedData } = useGetCompletedContents(profileId!);
+  const ongoingContents: TStoryContent[] = data?.data.data.ongoing_contents;
+  const completedContents: TStoryContent[] =
+    completedData?.data.data.completed_contents;
+
+  const categoryCalculator = (
+    category: string,
+    arrayContent: TStoryContent[]
+  ) => {
+    let total = 0;
+    for (let i = 0; i < arrayContent?.length; i += 1) {
+      if (arrayContent[i].category === category) {
+        total += 1;
+      }
+    }
+    return total;
+  };
+
+  const ongoingStories: number = categoryCalculator("Stories", ongoingContents);
+  const ongoingAudiobooks: number = categoryCalculator(
+    "Audiobooks",
+    ongoingContents
+  );
+  const ongoingAfricanLanguage: number = categoryCalculator(
+    "Languages",
+    ongoingContents
+  );
+
+  const completedStories: number = categoryCalculator(
+    "Stories",
+    completedContents
+  );
+  const completedAudiobooks: number = categoryCalculator(
+    "Audiobooks",
+    completedContents
+  );
+  const completedAfricanLanguage: number = categoryCalculator(
+    "Languages",
+    completedContents
+  );
 
   return (
     <div className="h-[100%]  flex flex-col  overflow-y-scroll">
@@ -49,7 +95,11 @@ const Main = () => {
           </div>
         </div>
         <div className="basis- basis-3/5  flex flex-col  h-full ">
-          <ProgressLog />
+          <ProgressLog
+            stories={ongoingStories + completedStories}
+            audiobooks={ongoingAudiobooks + completedAudiobooks}
+            languages={ongoingAfricanLanguage + completedAfricanLanguage}
+          />
           <ClassLeaderboard data={teacherList} />
         </div>
       </div>

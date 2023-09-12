@@ -10,7 +10,6 @@ const DataList = ({ data }: { data: TStoryContent[] }) => {
 
   const userInLocalStr = localStorage.getItem("user");
   const user = JSON.parse(userInLocalStr!);
-  console.log("user", user?.role);
   return (
     <div className="px-14 my-4 pb-10 ">
       {data && data.length < 1 && <EmptyList />}

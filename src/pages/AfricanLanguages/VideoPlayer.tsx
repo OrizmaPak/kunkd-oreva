@@ -9,6 +9,9 @@ import {
   useGetContentById,
   useGetRecommendedVideo,
   useContentTracking,
+  useUnLikedContent,
+  useGetLikedContent,
+  useLikedContent,
 } from "@/api/queries";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store";
@@ -21,6 +24,14 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 import { useEffect } from "react";
 import { getApiErrorMessage } from "@/api/helper";
 import { notifications } from "@mantine/notifications";
+import {
+  FacebookShareButton,
+  WhatsappShareButton,
+  TwitterShareButton,
+} from "react-share";
+import { FacebookIcon, TwitterIcon, WhatsappIcon } from "react-share";
+import { Menu } from "@mantine/core";
+import { TStoryContent } from "../Stories/Stories1/Stories1";
 
 type TRecommendedVideo = {
   id: number;
@@ -43,8 +54,6 @@ type TRecommendedVideo = {
 const VideoPlayer = () => {
   const [isfinish, setIsFinsh] = useState(false);
   const { lan_type } = useParams();
-  // const video = africanLanguagesData.find((data) => data.id === id);
-  // console.log(video);
   const contentId = localStorage.getItem("contentId");
   const videoRef = useRef<HTMLVideoElement>(null);
   const [user] = useStore(getUserState);
@@ -55,14 +64,9 @@ const VideoPlayer = () => {
   const { data: recommendedData, isLoading: recommendedIsLoading } =
     useGetRecommendedVideo(contentId?.toString()!);
   const recommendedVideos = recommendedData?.data?.data.recommended_contents;
-  console.log("recommendedData", recommendedVideos);
   const video = data?.data.data.media[0];
   const videoData = data?.data.data.sub_categories[0];
-  console.log("_____cont", video);
-  console.log("_____cont", videoData);
   const [currentVideoTime, setCurrentVideotime] = useState(0);
-  // setCurrentVideotime(videoRef?.current?.currentTime!);
-  // console.log("current video time", currentVideoTime);
   const { mutate } = useContentTracking();
   const profileId = localStorage.getItem("profileId");
   const [delay, setDelay] = useState(0);
@@ -83,13 +87,6 @@ const VideoPlayer = () => {
       {
         onSuccess(data) {
           console.log("success", data.data.message);
-          // const res = data?.data?.data as TUser;
-          // setUser({ ...res });
-
-          // notifications.show({
-          //   title: `Notification`,
-          //   message: data?.data.message,
-          // });
         },
         onError(err) {
           notifications.show({
@@ -100,6 +97,64 @@ const VideoPlayer = () => {
       }
     );
   }, [delay]);
+
+  const { data: likeData, refetch } = useGetLikedContent(profileId!);
+  const likeContents: TStoryContent[] = likeData?.data.data.records;
+  const { mutate: likeMutate } = useLikedContent();
+  const { mutate: unFavoriteMutate } = useUnLikedContent();
+  const isLiked = likeContents?.filter(
+    (content) => content.id === Number(contentId)
+  );
+  const handleLikedContent = () => {
+    // handleShake();
+    if (isLiked?.length === 0 || isLiked === undefined) {
+      likeMutate(
+        {
+          content_id: Number(contentId)!,
+          profile_id: Number(profileId),
+        },
+        {
+          onSuccess() {
+            // const res = data?.data?.data as TUser;
+            // setUser({ ...res });
+            refetch();
+            notifications.show({
+              title: `Notification`,
+              message: video?.name + " added to list",
+            });
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    } else {
+      unFavoriteMutate(
+        {
+          content_id: Number(contentId)!,
+          profile_id: Number(profileId),
+        },
+        {
+          onSuccess() {
+            refetch();
+            notifications.show({
+              title: `Notification`,
+              message: video?.name + " removed from the list",
+            });
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    }
+  };
 
   return (
     <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col  bg-[#fff7fd]">
@@ -145,7 +200,10 @@ const VideoPlayer = () => {
                 <div className=" bg-white py-8  rounded-b-3xl px-24 flex justify-between  items-center">
                   <p className="text-[20px] font-bold ">{video?.name}</p>
                   <p className="flex gap-5 text-[#8530C1]">
-                    <button className="py-3 px-7 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]">
+                    <button
+                      onClick={handleLikedContent}
+                      className="py-3 px-7 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]"
+                    >
                       <img
                         loading="lazy"
                         src={SaveIcon}
@@ -154,15 +212,40 @@ const VideoPlayer = () => {
                       />
                       <span>Save</span>
                     </button>
-                    <button className="py-3 px-7 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]">
-                      <img
-                        loading="lazy"
-                        src={ShareIcon}
-                        alt="icon"
-                        className="w-[20px]"
-                      />
-                      <span>Share</span>
-                    </button>
+                    <Menu shadow="md" width={200}>
+                      <Menu.Target>
+                        <button className="py-3 px-7 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]">
+                          <img
+                            loading="lazy"
+                            src={ShareIcon}
+                            alt="icon"
+                            className="w-[20px]"
+                          />
+
+                          <span>Share</span>
+                        </button>
+                      </Menu.Target>
+
+                      <Menu.Dropdown>
+                        <div className="flex justify-center items-center">
+                          <Menu.Item>
+                            <TwitterShareButton url={video?.file}>
+                              <TwitterIcon size={30} />
+                            </TwitterShareButton>
+                          </Menu.Item>
+                          <Menu.Item>
+                            <FacebookShareButton url={video?.file}>
+                              <FacebookIcon size={30} />
+                            </FacebookShareButton>
+                          </Menu.Item>
+                          <Menu.Item>
+                            <WhatsappShareButton url={video?.file}>
+                              <WhatsappIcon size={30} />
+                            </WhatsappShareButton>
+                          </Menu.Item>
+                        </div>
+                      </Menu.Dropdown>
+                    </Menu>
                   </p>
                 </div>
 

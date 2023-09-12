@@ -14,8 +14,6 @@ import AfricanStory from "@/assets/AfricanStory.svg";
 import Hero from "./Hero";
 import NewRelease from "./NewRelease";
 import AfricanHsitory from "./AfricanHistory";
-// import BookTrailer from "./BookTrailer";
-// import PaymentType from "./PaymentType";
 
 const datas = [
   {

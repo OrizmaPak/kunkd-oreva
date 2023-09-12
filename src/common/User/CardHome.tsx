@@ -52,15 +52,11 @@ const CardHome = ({
   };
   const [visiblee, setVisiblee] = useState(false);
   const profileId = localStorage.getItem("profileId");
-
   const { data, refetch } = useGetLikedContent(profileId!);
-
   const likeContents: TStoryContent[] = data?.data.data.records;
-  // console.log("data", likeContents);
   const { mutate } = useLikedContent();
   const { mutate: unFavoriteMutate } = useUnLikedContent();
   const isLiked = likeContents?.filter((content) => content.id === id);
-  // console.log("isLiked", isLiked);
   const handleLikedContent = () => {
     handleShake();
     if (isLiked?.length === 0 || isLiked === undefined) {

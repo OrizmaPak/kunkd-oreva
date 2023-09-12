@@ -1,6 +1,5 @@
 import { useParams, Navigate } from "react-router-dom";
 import Header from "./Header";
-import { dashboardData } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";
 import ProfileCard from "./ProfileCard";
 import TotalTimeSpent from "./TotalTimeSpent";
 import RecentQuiz from "./RecentQuiz";
@@ -13,16 +12,12 @@ import { motion } from "framer-motion";
 
 const index = () => {
   const params = useParams();
-  // const [currentClicked, setCurrentClicked] = useState(0);
   const id = params.studentId;
-  console.log("bossssss", id);
   if (!id) {
     return <Navigate to="../" replace />;
   }
-  const currentData = dashboardData.find((data) => data.id == +id);
 
   return (
-    // <div>
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -30,7 +25,6 @@ const index = () => {
       transition={{ duration: 1 }}
       className=" h-[100%] flex flex-col  overflow-y-scroll "
     >
-      {/* <div className=" bg-green-600   rounded-3xl py-4 "> */}
       <div className="mb-2 ">
         <Header />
       </div>
@@ -38,7 +32,7 @@ const index = () => {
       <div className=" flex-grow gap-4 flex w-full ">
         <div className=" flex w-full flex-col  fl gap-y-3  ">
           <div>
-            <ProfileCard {...currentData} />
+            <ProfileCard />
           </div>
 
           <div className="flex justify-center gap-5  ">
@@ -72,7 +66,6 @@ const index = () => {
         `}
       </style>
     </motion.div>
-    // </div>
   );
 };
 

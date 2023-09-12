@@ -27,7 +27,6 @@ const Quiz = () => {
   const profileId = localStorage.getItem("profileId");
   const contentString = localStorage.getItem("content");
   const content = JSON.parse(contentString!);
-  console.log("Quiz------------", quiz);
   const [currentQues, setCurrentQues] = useState<number>(0);
   const [answers, setAnswers] = useState<answerObj[]>([]);
 
@@ -450,7 +449,6 @@ const Result = ({
       },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
           setShowRemark();
           notifications.show({
             title: `Notification`,
@@ -467,7 +465,6 @@ const Result = ({
       }
     );
   };
-  console.log("way forward", answers);
   const attempted = answers.filter(
     (answer) => answer.selected_option_value !== undefined
   );
@@ -531,7 +528,6 @@ const Result = ({
 
 const YourResult = ({ answers }: { answers: answerObj[] }) => {
   const navigate = useNavigate();
-  console.log("answers", answers);
   return (
     <div className="relative flex-grow    w-[780px] rounded-3xl">
       <div className="my-10 text-center">

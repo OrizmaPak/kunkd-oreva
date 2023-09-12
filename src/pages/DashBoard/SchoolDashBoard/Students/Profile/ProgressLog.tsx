@@ -2,7 +2,15 @@ import Bookbg from "@/assets/bookbg.svg";
 import MusicBg from "@/assets/musicbg.svg";
 import VideoBg from "@/assets/videobg.svg";
 import QuizBg from "@/assets/quizbg.svg";
-const ProgressLog = () => {
+const ProgressLog = ({
+  stories,
+  audiobooks,
+  languages,
+}: {
+  stories?: number;
+  audiobooks?: number;
+  languages?: number;
+}) => {
   return (
     <div className="bg-white flex flex-col  flex-grow rounded-3xl px-6 py-2 pb-6 ">
       <div>
@@ -11,10 +19,10 @@ const ProgressLog = () => {
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3 flex-grow py-4 ">
-        <Card image={Bookbg} title="Stories" total="38" />
-        <Card image={MusicBg} title="Audiobooks" total="42" />
-        <Card image={VideoBg} title="Videos" total="71" />
-        <Card image={QuizBg} title="quiz" total="20" />
+        <Card image={Bookbg} title="Stories" total={stories!} />
+        <Card image={MusicBg} title="Audiobooks" total={audiobooks!} />
+        <Card image={VideoBg} title="Videos" total={languages!} />
+        <Card image={QuizBg} title="quiz" total={0} />
       </div>
     </div>
   );
@@ -29,16 +37,15 @@ const Card = ({
 }: {
   image: string;
   title: string;
-  total: string;
+  total: number;
 }) => {
-  console.log(total);
   return (
     <div className=" rounded-3xl  p-6 border border-purple-300">
       <div>
         <img loading="lazy" src={image} alt="image" className="w-[38px]" />
       </div>
       <div className="flex flex-col">
-        <span className="font-bold text25 ">{0}</span>
+        <span className="font-bold text25 ">{total ? total : 0}</span>
         <span className="text3">{title}</span>
       </div>
     </div>

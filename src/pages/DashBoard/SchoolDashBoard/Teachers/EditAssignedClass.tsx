@@ -5,7 +5,6 @@ import { TClassList } from "../Classes/Classes";
 const EditAssignedClass = ({ onClose }: { onClose: () => void }) => {
   const { data } = useGetClassList();
   const classList = data?.data.data.records;
-  console.log("HI", classList);
   return (
     <div className="px-10 mt-12">
       <div>
@@ -24,8 +23,6 @@ const EditAssignedClass = ({ onClose }: { onClose: () => void }) => {
                   .map((data: TClassList) => (
                     <option value={data.id}>{data.name}</option>
                   ))}
-                {/* <option value="classA">Class A</option>
-                <option value="classB">Class B</option> */}
               </select>
             </p>
           </div>

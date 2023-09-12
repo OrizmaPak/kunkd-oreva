@@ -33,22 +33,14 @@ const ParentHomePage = () => {
   const recommendedStories = contentData?.data.data.recommended_stories;
   const newTrending = contentData?.data.data.trending_stories;
   const currentId = Number(localStorage.getItem("profileId"));
-  // const { data: ongoingData } = useGetContentsLog(currentId.toString());
-  // const ongooingContent = ongoingData?.data.data.records;
-  // console.log("contentLog", ongooingContent, currentId);
-  if (
-    // data2?.data.data.filter((each: profileType) => each.id !== currentProfile)
-    !currentId
-  ) {
+
+  if (!currentId) {
     profiles = profile[0];
     localStorage.setItem("profileId", profile[0].id.toString());
   } else {
     profiles = profile?.find((each) => each.id === currentId)!;
   }
 
-  console.log(profile);
-  console.log(currentId);
-  console.log(profiles);
   const navigate = useNavigate();
   const userInLocalStr = localStorage.getItem("user");
   const user = JSON.parse(userInLocalStr!);

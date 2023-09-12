@@ -18,7 +18,6 @@ import musicIcon from "@/assets/musicIcon.svg";
 import videoIcon from "@/assets/videoicon.svg";
 import BookIcon from "@/assets/bookicon.svg";
 import CardScreenHome from "@/common/User/CardScreenHome";
-// import { CardProps } from "@/common/User/CardHome";
 import CardHome from "@/common/User/CardHome";
 import { useContentForHome, useGetOngoingContents } from "@/api/queries";
 import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
@@ -107,16 +106,12 @@ const NewlyRegisteredUser = () => {
   const ongoingContents: TStoryContent[] =
     ongoingData?.data.data.ongoing_contents;
   const { isLoading, data: contentData } = useContentForHome();
-  console.log("Content for home", contentData?.data.data.recommended_stories);
   const recommendedStories = contentData?.data.data.recommended_stories;
   const newTrending = contentData?.data.data.trending_stories;
-  console.log("newTrending", newTrending);
   const userInLocalStr = localStorage.getItem("user");
   const user = JSON.parse(userInLocalStr!);
 
   return (
-    // <div className="w-full  bg-[#EBEFF3] px-[130px] py-[40px] ">
-    // <div className=" w-full rounded-[35px] bg-white h-full mx-auto ">
     <Wrapper>
       <InnerWrapper>
         <Hero />
@@ -161,9 +156,6 @@ const NewlyRegisteredUser = () => {
                     align="start"
                     slidesToScroll={3}
                     loop={true}
-                    // controlsOffset="-40px"
-                    // withIndicators={false}
-
                     styles={{
                       control: {
                         "&[data-inactive]": {

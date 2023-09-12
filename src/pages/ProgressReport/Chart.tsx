@@ -17,7 +17,7 @@ const Chart = ({
     <div>
       <div className="flex justify-around  pad-x-40">
         <div className=" chart-w ">
-          <PieChart />
+          <PieChart data={[stories, africanLanguages, audioBooks]} />
         </div>
         <div className=" flex  justify-between gap-4 items-center  ">
           <button className="p-4  flex flex-col gap-4 border-2 border-[#FBECFF] rounded-3xl  chart-icon-container my-4 ">

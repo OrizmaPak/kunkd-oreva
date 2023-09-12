@@ -50,14 +50,10 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
   }, [secondsLeft]);
 
   const submitData = (data: Pick<FormData, "otp">) => {
-    console.log("testing");
-    console.log("It is working", data);
-
     mutate(
       { ...data },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
           const res = data?.data?.data as TUser;
 
           notifications.show({
@@ -78,7 +74,6 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
   };
 
   const handlePinChange = (value: string) => {
-    console.log("-- pin value: ", value);
     setValue("otp", value);
     trigger("pin");
   };
@@ -104,10 +99,6 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
   };
   return (
     <FormWrapper>
-      {/* <motion.div
-        animate={{ x: 100 }}
-        transition={{ ease: "easeOut", duration: 2 }}
-      > */}
       <div className=" w-full h-full flex justify-center items-center">
         <div className="inner-form-w2 mx-auto relative">
           <Link to="/">

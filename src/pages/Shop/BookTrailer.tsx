@@ -10,7 +10,6 @@ import { useState } from "react";
 import YoutubeIcon from "@/assets/youtube.svg";
 
 const imageStyle = (active: number, index: number) => {
-  console.log(active === index, active, index);
   return {
     // width: "300px",
     paddingTop: "20px",
@@ -33,7 +32,6 @@ const BookTrailer = () => {
     slideToScroll: 1,
     speed: 500,
     beforeChange: (index: number) => {
-      console.log("--- index", index);
       setActive(index);
     },
     centerModeSettings: {

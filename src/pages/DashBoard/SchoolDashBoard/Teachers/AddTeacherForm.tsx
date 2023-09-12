@@ -51,7 +51,6 @@ const AddTeacherForm = ({
   const availableClassList = classList.filter(
     (klass: Tclass) => klass.teacher_count < 1
   );
-  console.log("Class list", classList);
   const schema: ZodType<FormData> = z
     .object({
       firstname: z
@@ -93,7 +92,6 @@ const AddTeacherForm = ({
   const submitData = async (data: FormData) => {
     setTeacherData(data as TTeacherData);
     handleContinue();
-    console.log("TeacherDta", data);
   };
 
   return (

@@ -19,19 +19,8 @@ import SixB from "@/assets/six.svg";
 import "./ShopBooks.css";
 
 import ClientCard from "./ClientCard";
-// import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const ShopBooks = () => {
-  // const settings = {
-  //   dots: true,
-  //   infinite: true,
-  //   speed: 500,
-  //   slidesToShow: 1,
-  //   arrows: false,
-  //   slidesToScroll: 1,
-  //   autoplay: true,
-  //   autoplaySpeed: 2000,
-  // };
   var settings2 = {
     className: "center",
     arrows: false,

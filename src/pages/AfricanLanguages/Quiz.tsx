@@ -23,7 +23,6 @@ type ObjAnsQuestionType = {
 };
 const Quiz = () => {
   const { id, story_type } = useParams();
-  console.log(story_type);
 
   const questions = [
     {
@@ -137,7 +136,6 @@ const Quiz = () => {
       answers.length >= currentQues + 1
     ) {
       setCurrentQues((el) => (el += 1));
-      console.log("currentpage", currentQues, "answer", answers);
     }
     if (paginationType === "prev" && currentQues >= 1) {
       setCurrentQues((el) => (el -= 1));
@@ -161,7 +159,6 @@ const Quiz = () => {
       }
       return newAnswer;
     });
-    console.log(answers);
   };
   const progress = 100 / questions.length;
   // const [showRemark, setShowRemark] = useState(false);
@@ -264,8 +261,6 @@ const AnsButton = ({
 }) => {
   const handleSelected = () => {
     setSelected({ question: question, answer: name });
-    console.log(name);
-    console.log(selected);
   };
   return (
     <button

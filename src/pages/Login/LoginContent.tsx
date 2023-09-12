@@ -1,14 +1,11 @@
 import Button from "@/components/Button";
 import InputFormat from "../../common/InputFormat";
-// import PasswordIcon from "@/assets/passwordIcon.svg";
-// import PasswordEye from "@/assets/passwordeye.svg";
 import Cancel from "@/assets/Cancel.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { z, ZodType } from "zod";
-import { userContext } from "@/Context/StateProvider";
 import { googleSignIn, facebookSignIn } from "@/auth/sdk";
 import { useLogin, useSocialLogin } from "@/api/queries";
 import { Loader } from "@mantine/core";
@@ -20,7 +17,6 @@ import { getUserState } from "@/store/authStore";
 import { FcGoogle } from "react-icons/fc";
 import { BsApple } from "react-icons/bs";
 import { AiFillFacebook, AiOutlineMail } from "react-icons/ai";
-// import { IconName } from "react-icons/ai";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
 import { useState } from "react";
@@ -45,18 +41,15 @@ const LoginContent = () => {
           email: returnValue?.user.email,
           phoneNumber: returnValue?.user.phoneNumber,
           photoURL: returnValue?.user.photoURL,
-          // fcmToken: pushToken,
         },
         {
           onSuccess(data) {
-            console.log("success", data.data.message);
             const res = data?.data?.data as TUser;
             notifications.show({
               title: `Notification`,
               message: data.data.message,
             });
             setUser({ ...res });
-            console.log("work in progress", res);
             navigate("/selectprofile");
           },
 
@@ -87,18 +80,15 @@ const LoginContent = () => {
           email: returnValue?.user.email,
           phoneNumber: returnValue?.user.phoneNumber,
           photoURL: returnValue?.user.photoURL,
-          // fcmToken: pushToken,
         },
         {
           onSuccess(data) {
-            console.log("success", data.data.message);
             const res = data?.data?.data as TUser;
             notifications.show({
               title: `Notification`,
               message: data.data.message,
             });
             setUser({ ...res });
-            console.log("work in progress", res);
             navigate("/selectprofile");
           },
 
@@ -118,8 +108,6 @@ const LoginContent = () => {
     }
   };
 
-  const [{ userType, email }] = userContext();
-  console.log("testing one", userType, email);
   const navigate = useNavigate();
   const schema: ZodType<FormData> = z.object({
     email: z.string().email(),
@@ -138,12 +126,9 @@ const LoginContent = () => {
   const [opened1, { open: open1, close: close1 }] = useDisclosure(false);
 
   const [modalStep, setModalStep] = useState(STEP_1);
-  // const [studentModal, setStudentModal] = useState(false);
   const [teacherModal, setTeacherModal] = useState(false);
-  console.log("--- errors", errors);
 
   const submitData = (data: FormData) => {
-    console.log("It is working", data);
     localStorage.setItem("userPassword", data?.password!);
 
     mutate(
@@ -152,7 +137,6 @@ const LoginContent = () => {
       },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
           const res = data?.data?.data as TUser;
           setUser({ ...res });
           notifications.show({
@@ -171,7 +155,6 @@ const LoginContent = () => {
             navigate("/school");
           } else if (res?.role === "teacher") {
             setTeacherModal(true);
-            console.log("it's teacher ", teacherModal);
             open1();
           }
         },

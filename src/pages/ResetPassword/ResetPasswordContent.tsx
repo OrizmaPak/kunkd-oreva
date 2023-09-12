@@ -34,8 +34,6 @@ const ResetPasswordContent = ({}: { onSubmit?: () => void }) => {
   };
 
   const handlePinChange = (value: string) => {
-    console.log("-- pin value: ", value);
-
     setValue("otp", value);
     trigger("pin");
   };

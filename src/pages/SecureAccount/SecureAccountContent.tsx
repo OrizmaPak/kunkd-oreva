@@ -40,15 +40,10 @@ const SecureAccountContent = () => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = (data: FormData) => {
-    console.log("testing");
-    console.log("It is working", data);
-
     mutate(
       { password: data.password },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
-
           notifications.show({
             title: `Notification`,
             message: data.data.message,

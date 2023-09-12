@@ -7,7 +7,6 @@ import "./VideoCard.css";
 
 const VideoCard = () => {
   const { data, isLoading } = useGetIntroVideo();
-  console.log(data);
   const { ref, inView } = useInView({
     /* Optional options */
     threshold: 0,
@@ -33,7 +32,6 @@ const VideoCard = () => {
     }
   }, [inView]);
 
-  console.log(inView);
   return (
     <div className="flex justify-center items-center mb-28">
       {/* <Status inView={inView} /> */}

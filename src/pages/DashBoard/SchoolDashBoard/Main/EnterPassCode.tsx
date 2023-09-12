@@ -17,36 +17,8 @@ import { getApiErrorMessage } from "@/api/helper";
 
 const EnterPassCode = ({ onSubmit }: { onSubmit: () => void }) => {
   const navigate = useNavigate();
-  // const [pinValue, setPinValue] = useState("");
-  // const [user, ,] = useStore(getUserState);
-
-  // const [{ userType }] = userContext();
-  // const goToSchoolDashboard = () => {
-  //   console.log("usertype", userType);
-  //   if (user?.role === "schoolAdmin") {
-  //     navigate("../schooldashboard");
-  //   }
-  // };
-
-  // const handlePinChange = (value: string) => {
-  //   setPinValue(value);
-  //   // console.log(value);
-  // };
-
-  // const submitData = () => {
-  //   console.log("It is working");
-  //   console.log(pinValue);
-  //   if (pinValue.length < 4) {
-  //     console.log(pinValue.length);
-  //     return;
-  //   } else {
-  //     onSubmit();
-  //     goToSchoolDashboard();
-  //   }
-  // };
 
   const { isLoading, mutate } = useVerifyPin();
-  // const [user] = useStore(getUserState);
 
   const schema: ZodType<Pick<FormData, "pin">> = z.object({
     pin: z
@@ -61,15 +33,10 @@ const EnterPassCode = ({ onSubmit }: { onSubmit: () => void }) => {
   const pin = watch("pin");
 
   const submitData = (data: Pick<FormData, "pin">) => {
-    console.log("testing");
-    console.log("It is working", data);
-
     mutate(
       { ...data },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
-
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -88,7 +55,6 @@ const EnterPassCode = ({ onSubmit }: { onSubmit: () => void }) => {
   };
 
   const handlePinChange = (value: string) => {
-    console.log("-- pin value: ", value);
     setValue("pin", value);
     trigger("pin");
   };

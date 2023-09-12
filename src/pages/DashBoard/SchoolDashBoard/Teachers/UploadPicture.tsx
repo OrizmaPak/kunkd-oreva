@@ -9,19 +9,16 @@ import { motion } from "framer-motion";
 import { Loader } from "@mantine/core";
 
 const UploadPicture = ({
-  // toggle,
   isLoading,
   btnTitle,
   handleSubmit,
 }: {
-  // toggle: () => void;
   btnTitle: string;
   isLoading?: boolean;
   handleSubmit?: (val: File) => void;
 }) => {
   const [files, setFiles] = useState<FileWithPath[]>([]);
 
-  console.log(files);
   const handleClick = () => {
     if (handleSubmit) handleSubmit(files[0] as File)!;
   };

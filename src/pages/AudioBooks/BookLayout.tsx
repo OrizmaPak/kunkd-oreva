@@ -37,7 +37,6 @@ type TAudioBook = {
   id: number;
 };
 const BookLayout = () => {
-  // const { audiobooks,  } = useParams();
   const contentId = localStorage.getItem("contentId");
   const [user] = useStore(getUserState);
   const { data, isLoading } = useGetContentById(
@@ -45,14 +44,8 @@ const BookLayout = () => {
     user?.user_id?.toString()!
   );
   const audioBookId = data?.data.data.id;
-  console.log("audioBookId ", audioBookId);
   const audiobook = data?.data.data.media[0];
-  console.log("audiobooks data", audiobook, data);
   const [startRead, setStartRead] = useState(false);
-  // const { state } = useLocation();
-  // console.log(state);
-  // const { data: trendingData } = useGetTrendingAudioBooks();
-  // console.log("Trending Audios ", trendingData);
   return (
     <div className=" ">
       <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd]  ">
@@ -61,7 +54,6 @@ const BookLayout = () => {
             {
               <AudioBooksNav
                 category="Audiobooks"
-                // genre={audiobooks}
                 title={audiobook && audiobook?.name}
               />
             }
@@ -121,7 +113,6 @@ const AboutPage = ({
 
   const handleLikedContent = () => {
     // handleShake();
-    console.log("audioBookId", audioBookId);
     if (isLiked?.length === 0 || isLiked === undefined) {
       mutate(
         {
@@ -298,7 +289,6 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
 
   const handlePlayControl = () => {
     const audioCon = audioRef.current;
-    console.log("audio played", audioCon);
     setIsPlaying(!isPlaying);
     if (audioCon && !audioCon.paused) {
       return audioCon.pause();
@@ -309,18 +299,17 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
   const handeSkip10 = (direction: "forward" | "backward") => () => {
     const audioCon = audioRef.current;
     const duration = audioCon?.duration || 0;
-    console.log(direction, duration);
     const currentTime = audioCon?.currentTime || 0;
-    console.log({ currentTime, currentPlus: currentTTime + 1 });
     if (!audioCon?.currentTime) return;
-    // audioCon.currentTime = currentTime + 1;
-    // console.log("duration", audioCon?.duration, audioCon?.currentTime);
-    if (audioCon?.currentTime && load && direction === "forward") {
-      audioCon.currentTime += 2;
-      // currentTime + 5 > duration ? duration - currentTime : 5;
+    if (
+      audioCon?.currentTime &&
+      load &&
+      direction === "forward" &&
+      audioCon?.currentTime < duration
+    ) {
+      audioCon.currentTime += 10;
     } else if (audioCon.currentTime && load && direction === "backward") {
-      audioCon.currentTime -= currentTime - 5 < 0 ? currentTime : 5;
-      // audioCon.currentTime += 2;
+      audioCon.currentTime -= currentTime - 10 < 0 ? currentTime : 10;
     }
   };
 
@@ -329,13 +318,9 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
   useEffect(() => {
     let seconds;
     if (audioRef.current) {
-      console.log("effect duration", audioRef.current?.duration);
       seconds = Math.floor(audioRef?.current.duration);
       setDuration(+seconds);
     }
-    // if (progressBar?.current) {
-    //   progressBar.current.max = seconds?.toString() || "";
-    // }
   }, [
     audioRef?.current?.onloadedmetadata,
     audioRef?.current?.readyState,
@@ -343,18 +328,7 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
     audioRef?.current?.oncanplaythrough,
   ]);
 
-  // useEffect(() => {
-  //   audioRef?.current?.addEventListener("ontimeupdate", (event) => {
-  //     setCurrentTTime(+event?.currentTarget! as number);
-  //   });
-  //   audioRef?.current?.addEventListener("onend", () => {
-  //     setIsPlaying(false);
-  //   });
-  // }, []);
-
   const calculateTime = (secs: number) => {
-    // console.log("sec", secs);
-
     if (audioRef.current) {
       const minutes = Math.floor(secs / 60);
       const returnedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
@@ -364,13 +338,10 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
     }
   };
 
-  // console.log("actual currentTime", currentTTime);
-
   const reducedMotion = useReducedMotion();
 
   const handleSliderChange = (value: number) => {
     setCurrentTTime(value);
-    console.log("new current time", audioRef.current?.duration, value, load);
     if (load && audioRef.current) {
       audioRef.current.currentTime = value;
     }
@@ -407,13 +378,6 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
       {
         onSuccess(data) {
           console.log("success", data.data.message);
-          // const res = data?.data?.data as TUser;
-          // setUser({ ...res });
-
-          // notifications.show({
-          //   title: `Notification`,
-          //   message: data?.data.message,
-          // });
         },
         onError(err) {
           notifications.show({

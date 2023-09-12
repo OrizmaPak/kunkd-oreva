@@ -257,7 +257,6 @@ const LanguagesVideo = () => {
   // const params = useParams();
   const { data, isLoading } = useGetSubCategories();
   const subCategory = data?.data.data[2].sub_categories;
-  console.log(subCategory);
   return (
     <>
       {/* <div className="bg-white rounded-3xl"> */}

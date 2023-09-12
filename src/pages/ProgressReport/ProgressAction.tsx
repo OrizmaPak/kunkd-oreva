@@ -11,7 +11,7 @@ const ProgressAction = ({
     <div className="rounded-full w-[85%] flex   mx-auto   bg-[#F9F9F9]  my-16">
       <button
         onClick={() => {
-          onClick(STEP_1), console.log(active);
+          onClick(STEP_1);
         }}
         className={` transition-all duration-300 ${
           active === STEP_1 ? "bg-[#8530C1] text-white " : ""
@@ -21,7 +21,7 @@ const ProgressAction = ({
       </button>
       <button
         onClick={() => {
-          onClick(STEP_2), console.log(active);
+          onClick(STEP_2);
         }}
         className={`transition-all duration-300 ${
           active === STEP_2 ? "bg-[#8530C1]  text-white " : ""

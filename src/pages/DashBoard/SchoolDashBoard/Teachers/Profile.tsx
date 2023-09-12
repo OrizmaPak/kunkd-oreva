@@ -7,13 +7,15 @@ const Profile = ({
   asignClass,
   handleClick,
   onEdit,
-}: {
+}: // totalStudent,
+{
   name: string;
   image: string;
   email: string;
   asignClass: string;
   handleClick: () => void;
   onEdit: () => void;
+  // totalStudent: number;
 }) => {
   return (
     <div className="p-3 ">
@@ -50,7 +52,7 @@ const Profile = ({
             </p>
             <p className="flex flex-col">
               <span>No of students in class</span>
-              <span className="font-bold">23</span>
+              <span className="font-bold">{0}</span>
             </p>
           </div>
         </div>

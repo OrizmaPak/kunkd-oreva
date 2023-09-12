@@ -31,7 +31,7 @@ const StudentLeaderboard = ({
                 <h1 className="w-full">{array}</h1>
               </Skeleton>
             ))
-          : data?.slice(0, 2).map((data: TRequestStudents, index) => {
+          : data?.slice(0, 6).map((data: TRequestStudents, index) => {
               return <Row key={index} data={data} />;
             })}
       </div>

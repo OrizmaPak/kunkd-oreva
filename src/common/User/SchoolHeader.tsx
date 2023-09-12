@@ -222,12 +222,12 @@ const SchoolHeader = () => {
           {user?.role === "parent" ? (
             <Menu>
               <Menu.Target>
-                <div className="flex justify-center items-center gap-5  px-10 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
+                <div className="flex justify-center items-center gap-5  px-6 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
                   <img
                     loading="lazy"
                     src={currentProfile ? currentProfile.image : UserIcon}
                     alt="user icon"
-                    className="w-[30px] object-contain"
+                    className="w-[24px] h-[24px] object-cover rounded-full"
                   />
 
                   <span>
@@ -274,12 +274,12 @@ const SchoolHeader = () => {
           ) : (
             <Menu>
               <Menu.Target>
-                <div className="flex justify-center items-center gap-7  px-6 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
+                <div className="flex justify-center items-center gap-7  h-[42px] px-6 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
                   <img
                     loading="lazy"
                     src={user?.user_image ? user.user_image : UserIcon}
                     alt="user icon"
-                    className="w-[25px]"
+                    className="w-[24px] h-[24px] object-cover rounded-full"
                   />
 
                   <span>
@@ -297,7 +297,7 @@ const SchoolHeader = () => {
                   <Menu.Item>
                     <button
                       onClick={handleDashboard}
-                      className="p-2 px-14  hover:cursor-pointer hover:text-[#8530C1]"
+                      className="p-2 px-4  hover:cursor-pointer hover:text-[#8530C1]"
                     >
                       Admin
                     </button>
@@ -305,7 +305,7 @@ const SchoolHeader = () => {
                   <Menu.Item>
                     <button
                       onClick={() => navigate("/account")}
-                      className="p-2 px-14  hover:cursor-pointer hover:text-[#8530C1]"
+                      className="p-2 px-4  hover:cursor-pointer hover:text-[#8530C1]"
                     >
                       Account
                     </button>
@@ -313,7 +313,7 @@ const SchoolHeader = () => {
                   <Menu.Item>
                     <button
                       onClick={handLogOut}
-                      className="p-2 px-14  hover:cursor-pointer  text-red-500"
+                      className="p-2 px-4  hover:cursor-pointer  text-red-500"
                     >
                       Sign out of Kunda kids
                     </button>
@@ -378,14 +378,16 @@ const SearchService = ({}) => {
               setSearch(e.target.value);
             }}
             type="text"
-            className="w-full h-full py-4 rounded-3xl px-4 focus:outline-none  bg-inherit"
+            className="w-full h-[42px] text-black  py-4 rounded-3xl px-4 focus:outline-none  bg-inherit"
           />
         </div>
       </Popover.Target>
 
       <Popover.Dropdown>
         {uniqueObjects?.map((data, index) => (
-          <p key={index}>{data.name}</p>
+          <p className="text-black" key={index}>
+            {data.name}
+          </p>
         ))}
       </Popover.Dropdown>
     </Popover>

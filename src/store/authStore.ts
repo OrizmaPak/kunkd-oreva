@@ -41,7 +41,6 @@ const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
   user: getLocalStorage("user") || null,
   setUser: (user) =>
     set((state) => {
-      console.log("----- sate auth setter", state, user);
       setLocalStorage("user", user);
       return { ...state, user };
     }),
