@@ -238,10 +238,7 @@ function App() {
             ></Route>
 
             <Route path="selectprofile" element={<SelectProfile />}></Route>
-            <Route
-              path="techerpasswordsetup"
-              element={<TeacherSignup />}
-            ></Route>
+            <Route path="passwordsetup" element={<TeacherSignup />}></Route>
           </Route>
         </Routes>
       </div>
