@@ -246,7 +246,10 @@ const SchoolHeader = () => {
                       key={index}
                       onClick={() => handleChangeProfile(profile.id)}
                     >
-                      <button key={index}>{profile.name}</button>
+                      <button key={index}>
+                        {profile?.name.charAt(0).toUpperCase() +
+                          profile?.name.slice(1)}
+                      </button>
                     </Menu.Item>
                   ))}
 

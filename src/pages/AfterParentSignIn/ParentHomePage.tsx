@@ -63,7 +63,7 @@ const ParentHomePage = () => {
               />
               <CategoriesCard
                 image={musicIcon}
-                label="Audio books"
+                label="Audiobooks"
                 goTo={() => navigate("audiobooks")}
               />
               <CategoriesCard
