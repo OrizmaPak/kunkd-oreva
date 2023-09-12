@@ -65,6 +65,7 @@ import PaymentCongratulations from "./pages/MakePayment/PaymentCompletedContent"
 import { TUser } from "./api/types";
 // import { googleSignIn } from "./auth/sdk";
 import Request from "./pages/DashBoard/TeacherDashboard/Request/Request";
+import TeacherSignup from "@/pages/TeacherLogin/index";
 
 function App() {
   const [, setUser] = useStore(getUserState);
@@ -237,6 +238,10 @@ function App() {
             ></Route>
 
             <Route path="selectprofile" element={<SelectProfile />}></Route>
+            <Route
+              path="techerpasswordsetup"
+              element={<TeacherSignup />}
+            ></Route>
           </Route>
         </Routes>
       </div>
