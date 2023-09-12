@@ -18,8 +18,8 @@ export const options = (data: number[]) => ({
   ],
 });
 
-function KundaChart({ data }: { data: number[] }) {
-  return <Doughnut data={options(data)} />;
+function KundaChart({ data }: { data?: number[] }) {
+  return <Doughnut data={options(data!)} />;
 }
 
 export default KundaChart;
