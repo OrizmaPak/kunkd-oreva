@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Congrat from "@/assets/congrats.svg";
 import useStore from "@/store";
 import { getUserState } from "@/store/authStore";
-import { useUpdatePassword } from "@/api/queries";
+import { useSetPassword } from "@/api/queries";
 import { notifications } from "@mantine/notifications";
 import { Loader } from "@mantine/core";
 import { getApiErrorMessage } from "@/api/helper";
@@ -22,7 +22,7 @@ const index = () => {
   const [user, ,] = useStore(getUserState);
   // const navigate = useNavigate();
   const [stage, setStage] = useState(STEP_1);
-  const { isLoading, mutate } = useUpdatePassword();
+  const { isLoading, mutate } = useSetPassword();
   const schema: ZodType<FormData> = z
     .object({
       password: z
@@ -49,7 +49,7 @@ const index = () => {
     mutate(
       {
         current_password: localStorage.getItem("userPassword"),
-        new_password: data?.password,
+        password: data?.password,
       },
       {
         onSuccess(data) {
@@ -82,8 +82,8 @@ const index = () => {
 
             <div className="px-10">
               <h1 className="font-bold text1">Create password</h1>
-              <p className="mb-10 text3">
-                create a password that you dont't use for other websites
+              <p className="mb-10 text2">
+                Create a password that you dont't use for other websites
               </p>
               <form onSubmit={handleSubmit(submitData)}>
                 <div className="mb-4">

@@ -37,7 +37,7 @@ const AddTeacherModal = ({
           firstname: teacherData?.firstname,
           lastname: teacherData?.lastname,
           email: teacherData?.email,
-          password: teacherData?.password,
+          // password: teacherData?.password,
           class_id: Number(teacherData?.classid),
           gender_id: Number(teacherData?.genderid),
           image: base64String,

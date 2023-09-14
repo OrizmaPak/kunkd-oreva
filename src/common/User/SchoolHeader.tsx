@@ -5,9 +5,9 @@ import ArrowDown from "@/assets/arrowdown.svg";
 // import SearchIcon from "@/assets/searchicon.svg";
 import { Menu, Popover } from "@mantine/core";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useDisclosure } from "@mantine/hooks";
-import { Modal } from "@mantine/core";
-import EnterPassCode from "@/pages/DashBoard/SchoolDashBoard/Main/EnterPassCode";
+// import { useDisclosure } from "@mantine/hooks";
+// import { Modal } from "@mantine/core";
+// import EnterPassCode from "@/pages/DashBoard/SchoolDashBoard/Main/EnterPassCode";
 // import { userContext } from "@/Context/StateProvider";
 import UserIcon2 from "@/assets/userIcon2.svg";
 import KundaLogo from "@/assets/schoolIcon.svg";
@@ -50,7 +50,7 @@ type THints = {
 };
 
 const SchoolHeader = () => {
-  const [opened, { open, close }] = useDisclosure(false);
+  // const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
   const [user] = useStore(getUserState);
   const [profile] = useStore(getProfileState);
@@ -59,7 +59,8 @@ const SchoolHeader = () => {
       navigate("../teacherdashboard");
     }
     if (user?.role === "schoolAdmin") {
-      open();
+      // open();
+      navigate("../schooldashboard");
     }
   };
   const handLogOut = () => {
@@ -81,7 +82,7 @@ const SchoolHeader = () => {
   return (
     <div className="bg-white w-full fixed top-0 h-[8vh] z-50">
       <div className="flex text-[#B5B5C3] text-[14px] text3  font-normal top-0 left-0 right-0  mx-auto  app-mai-nwidth-container  w-full   py-4   justify-between items-center bg-white  z-[1000] gap-4  h-[8vh] ">
-        <Modal
+        {/* <Modal
           opened={opened}
           onClose={close}
           centered
@@ -101,7 +102,7 @@ const SchoolHeader = () => {
           
                 `}
           </style>
-        </Modal>
+        </Modal> */}
         <div className="flex items-center gap-10">
           <Link to="/">
             <div>
@@ -124,14 +125,7 @@ const SchoolHeader = () => {
             >
               <button>Home</button>
             </NavLink>
-            {/* <NavLink
-              to="/librarynotpaid"
-              className={({ isActive }) =>
-                isActive ? " text-[#8530C1]" : "text-black"
-              }
-            >
-              <button>Library</button>
-            </NavLink> */}
+
             <NavLink
               to="/mylist"
               className={({ isActive }) =>
@@ -151,47 +145,25 @@ const SchoolHeader = () => {
           </div>
         </div>
 
-        {/* <div className="max-w-[700px] w-full rounded-3xl  flex  px-4  bg-gray-100  ">
-        <img loading="lazy" src={SearchIcon} alt="search icon" className="" />
-        <input
-          type="text"
-          className="w-full h-full py-4 rounded-3xl px-4 focus:outline-none  bg-inherit"
-        />
-      </div> */}
-
-        <div className="flex items-center justify-center pl-2 gap-10">
-          {/* <div className="flex gap-14">
-          <button>Home</button>
-          <button>Library</button>
-          <button>My List</button>
-          <button>Progress Report</button>
-
-          <span>
-            <img loading="lazy" src={BadgeIcon} alt="badge icon" className="min-w-[17px]" />
-          </span>
-          <span>
-            <img
-              src={BatteryIcon}
-              alt="battery icon"
-              className="min-w-[17px]"
-            />
-          </span>
-          <span>
-            <img loading="lazy" src={BellIcon} alt="bell icon" className="min-w-[17px]" />
-          </span>
-        </div> */}
+        <div className="flex items-center justify-center pl-2 gap-10 ">
           <SearchService />
+          <p className="w-40">
+            {user?.role === "schoolAdmin" && (
+              <button onClick={handleDashboard} className="text-black block  ">
+                School Dashboard
+              </button>
+            )}
+            {user?.role === "teacher" && (
+              <button onClick={handleDashboard} className="text-black block  ">
+                Teacher Dashboard
+              </button>
+            )}
+          </p>
           <Menu>
             {" "}
             <Menu.Target>
               <div>
                 <span>
-                  {/* <img
-                    loading="lazy"
-                    src={BellIcon}
-                    alt="bell icon"
-                    className="min-w-[17px]"
-                  /> */}
                   <AiOutlineBell
                     size={20}
                     className={" mx-auto"}
@@ -297,14 +269,14 @@ const SchoolHeader = () => {
 
               <Menu.Dropdown>
                 <div className="flex flex-col py-2 px-1">
-                  <Menu.Item>
+                  {/* <Menu.Item>
                     <button
                       onClick={handleDashboard}
                       className="p-2 px-4  hover:cursor-pointer hover:text-[#8530C1]"
                     >
                       Admin
                     </button>
-                  </Menu.Item>
+                  </Menu.Item> */}
                   <Menu.Item>
                     <button
                       onClick={() => navigate("/account")}
@@ -367,7 +339,7 @@ const SearchService = ({}) => {
   return (
     <Popover opened={!!search} width={350}>
       <Popover.Target>
-        <div className="max-w-[700px] w-full rounded-3xl  flex  px-4  bg-gray-100  ">
+        <div className="max-w-[300px] w-full rounded-3xl  flex  px-4  bg-gray-100  ">
           {/* <img
               loading="lazy"
               src={SearchIcon}
