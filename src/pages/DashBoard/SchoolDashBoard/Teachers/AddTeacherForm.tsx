@@ -3,8 +3,7 @@ import InputFormat from "@/common/InputFormat";
 // import PasswordIcon from "@/assets/passwordIcon.svg";
 // import PasswordEye from "@/assets/passwordeye.svg";
 import { motion } from "framer-motion";
-import { AiOutlineEye } from "react-icons/ai";
-import { RiLockLine } from "react-icons/ri";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
