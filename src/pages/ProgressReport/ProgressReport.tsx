@@ -125,7 +125,7 @@ const ProgressReport = () => {
                 <Completed data={completedContents!} />
               )}
             </div>
-            <div className="px-28 flex justify-end py-5">
+            <div className="px-28 flex justify-end pt-14">
               <Pagination
                 total={5}
                 styles={() => ({

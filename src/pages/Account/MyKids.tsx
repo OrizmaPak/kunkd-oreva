@@ -26,6 +26,7 @@ import { Loader } from "@mantine/core";
 import { useQueryClient } from "@tanstack/react-query";
 import { querykeys } from "@/api/queries";
 import { Tclass } from "../DashBoard/SchoolDashBoard/Teachers/AddTeacherForm";
+import { PiStudent } from "react-icons/pi";
 
 import {
   ChildNameModal,
@@ -37,6 +38,8 @@ import { STEP_1, STEP_2, STEP_3, STEP_4 } from "@/utils/constants";
 import { motion } from "framer-motion";
 import { useGetProfile } from "@/api/queries";
 import { MdClose } from "react-icons/md";
+import { AiOutlineClose } from "react-icons/ai";
+import { Skeleton } from "@mantine/core";
 
 const MyKids = () => {
   const [profile] = useStore(getProfileState);
@@ -136,11 +139,21 @@ const MyKids = () => {
 
 export default MyKids;
 
+type TStudent = {
+  assigned_teacher_id: number;
+  assigned_teacher_name: string;
+  class_id: number;
+  class_name: string;
+  school_id: number;
+  school_name: string;
+  status: string;
+};
+
 const KidCard = ({
   image,
   name,
   dob,
-
+  student,
   id,
   isLoading,
   refetch,
@@ -149,10 +162,13 @@ const KidCard = ({
   name?: string;
   dob?: string;
   id?: number;
+  student?: TStudent;
   isLoading?: boolean;
   refetch: () => void;
 }) => {
   const [openedEditModal, { open: openEditModal, close: closeEditModal }] =
+    useDisclosure(false);
+  const [openedSchModal, { open: openSchModal, close: closeSchModal }] =
     useDisclosure(false);
   const [
     openedConnectModal,
@@ -194,13 +210,23 @@ const KidCard = ({
       >
         <ConnectTOSchool profileId={id!} closeModal={closeConnectModal} />
       </Modal>
+      <Modal
+        radius={"xl"}
+        size="md"
+        px="md"
+        opened={openedSchModal}
+        onClose={closeSchModal}
+        withCloseButton={false}
+        centered
+      >
+        <SchoolProfile student={student!} closeSchModal={closeSchModal} />
+      </Modal>
 
       <div className=" relative flex  border-[#FBECFF] border-[2px] px-6 py-6 rounded-3xl">
         <div>
           {isLoading ? (
             <span>
-              Loading........
-              <Loader color="white" size={"lg"} />
+              <Skeleton height={100} circle mb="xl" />
             </span>
           ) : (
             <img
@@ -212,18 +238,43 @@ const KidCard = ({
           )}
         </div>
         <div className="ml-3 mt-8">
-          <h1 className="font-bold text-[16px] px-3 font-Recoleta">{name}</h1>
+          <h1 className="font-bold text-[16px] px-3 font-Recoleta">
+            {name && name?.charAt(0)?.toUpperCase() + name?.slice(1)}
+          </h1>
           <p className="text-gray-400 flex text2 mt-4 ">
             <span className="border-l-gray-600 border-r-2 mr-4 px-3">
               Age - {childaAge}
             </span>
-            <button
-              onClick={openConnectModal}
-              className="text2 flex gap-1 justify-center items-center"
-            >
-              <img loading="lazy" src={LinkIcon} alt="link icon" />
-              <span>Connect to School</span>
-            </button>
+            <div>
+              {" "}
+              {student?.status === "approved" ? (
+                <button
+                  onClick={openSchModal}
+                  className="text2 flex gap-1 justify-center items-center mt-1"
+                >
+                  <PiStudent size={25} color="#8530C1" />
+                  <p className="text2 text-[#8530C1]"> View School Info</p>
+                </button>
+              ) : student?.status === "declined" ? (
+                <button className=" mt-1 flex justify-center items-center gap-2 bg-[#FEF3F2] px-2 py-1 rounded-2xl">
+                  <p className="h-2 w-2 rounded-full bg-[#F04438]"></p>
+                  <p className="text2  text-[#B42318]">Request declined</p>
+                </button>
+              ) : student?.status === "" && student.school_name.length > 0 ? (
+                <button className="mt-1 flex justify-center items-center gap-2 bg-[#FFFAEB] px-2 py-1 rounded-2xl">
+                  <p className="h-2 w-2 rounded-full bg-[#F79009]"></p>
+                  <p className="text2  text-[#B54708]">Request Pending</p>
+                </button>
+              ) : (
+                <button
+                  onClick={openConnectModal}
+                  className="text2 flex gap-1 justify-center items-center  mt-1"
+                >
+                  <img loading="lazy" src={LinkIcon} alt="link icon" />
+                  <p className="text2 text-[#8530C1]">Connect to School</p>
+                </button>
+              )}
+            </div>
           </p>
         </div>
         <div className="">
@@ -588,9 +639,9 @@ const ConnectTOSchool = ({
                     {school.name}
                   </option>
                 ))}
-                <option value="SchoolA">School A</option>
+                {/* <option value="SchoolA">School A</option>
                 <option value="SchoolB">School B</option>
-                <option value="SchoolC">School C</option>
+                <option value="SchoolC">School C</option> */}
               </select>
             </p>
           </p>
@@ -628,6 +679,56 @@ const ConnectTOSchool = ({
             </Button>
           </p>
         </form>
+      </div>
+    </div>
+  );
+};
+
+const SchoolProfile = ({
+  student,
+  closeSchModal,
+}: {
+  student: TStudent;
+  closeSchModal: () => void;
+}) => {
+  return (
+    <div className="px-10">
+      <div className="flex  justify-between items-center">
+        <p className="text25 text-center font-semibold flex-grow ">
+          School information
+        </p>
+        <button onClick={closeSchModal}>
+          <AiOutlineClose size={25} />
+        </button>
+      </div>
+      <p className="my-5">
+        <label htmlFor="school">School</label>
+        <InputFormat
+          value={student?.school_name}
+          type="text"
+          readonly={true}
+          placeholder="First name"
+        />
+      </p>
+      <div>
+        <p className="my-5">
+          <label htmlFor="school">Class</label>
+          <InputFormat
+            value={student?.class_name}
+            type="text"
+            readonly={true}
+            placeholder="First name"
+          />
+        </p>
+        <p className="my-5">
+          <label htmlFor="school">Teacher</label>
+          <InputFormat
+            value={student?.assigned_teacher_name}
+            type="text"
+            readonly={true}
+            placeholder="First name"
+          />
+        </p>
       </div>
     </div>
   );

@@ -15,7 +15,9 @@ import { useGetClassList } from "@/api/queries";
 // import { Loader } from "@mantine/core";
 // import { notifications } from "@mantine/notifications";
 // import { getApiErrorMessage } from "@/api/helper";
-import { AiOutlineMail } from "react-icons/ai";
+import { AiOutlineMail, AiOutlineEye } from "react-icons/ai";
+import { RiLockLine } from "react-icons/ri";
+
 import { MdClose } from "react-icons/md";
 
 export type Tclass = {
@@ -50,37 +52,38 @@ const AddTeacherForm = ({
   const availableClassList = classList?.filter(
     (klass: Tclass) => klass?.teacher_count < 1
   );
-  const schema: ZodType<FormData> = z.object({
-    firstname: z
-      .string()
-      .min(4, { message: "First name must be at least 4 characters long" })
-      .max(40, { message: "First name must not exceed 20 characters" }),
-    lastname: z
-      .string()
-      .min(4, { message: "Last name must be at least 4 characters long" })
-      .max(50, { message: "Last name must not exceed 40 characters" }),
-    genderid: z
-      .string()
-      .min(1, { message: "Select gender" })
-      .max(20, { message: "Gender must not exceed 20 characters" }),
-    classid: z
-      .string()
-      .min(1, { message: "Select a class" })
-      .max(20, { message: "Class must not exceed 20 characters" }),
-    email: z.string().email(),
-    // password: z
-    //   .string()
-    //   .min(4, { message: "Password must be at least 4 characters long" })
-    //   .max(20, { message: "Password must not exceed 20 characters" }),
-    // confirmPassword: z
-    //   .string()
-    //   .min(4, { message: "Password must be at least 4 characters long" })
-    //   .max(20, { message: "Password must not exceed 20 characters" }),
-  });
-  // .refine((data) => data.password === data.confirmPassword, {
-  //   message: "passwords do not match",
-  //   path: ["confirmPassword"],
-  // });
+  const schema: ZodType<FormData> = z
+    .object({
+      firstname: z
+        .string()
+        .min(4, { message: "First name must be at least 4 characters long" })
+        .max(40, { message: "First name must not exceed 20 characters" }),
+      lastname: z
+        .string()
+        .min(4, { message: "Last name must be at least 4 characters long" })
+        .max(50, { message: "Last name must not exceed 40 characters" }),
+      genderid: z
+        .string()
+        .min(1, { message: "Select gender" })
+        .max(20, { message: "Gender must not exceed 20 characters" }),
+      classid: z
+        .string()
+        .min(1, { message: "Select a class" })
+        .max(20, { message: "Class must not exceed 20 characters" }),
+      email: z.string().email(),
+      password: z
+        .string()
+        .min(4, { message: "Password must be at least 4 characters long" })
+        .max(20, { message: "Password must not exceed 20 characters" }),
+      confirmPassword: z
+        .string()
+        .min(4, { message: "Password must be at least 4 characters long" })
+        .max(20, { message: "Password must not exceed 20 characters" }),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "passwords do not match",
+      path: ["confirmPassword"],
+    });
   const {
     register,
     handleSubmit,
@@ -139,7 +142,7 @@ const AddTeacherForm = ({
               leftIcon={<AiOutlineMail size={25} color="#c4ccd0" />}
             />
           </div>
-          {/* <div className="flex gap-2 mb-2">
+          <div className="flex gap-2 mb-2">
             <div className=" flex-grow">
               <label htmlFor="password">Enter Password</label>
               <InputFormat
@@ -175,7 +178,7 @@ const AddTeacherForm = ({
                 }
               />
             </div>
-          </div> */}
+          </div>
 
           <div className="flex gap-2 mb-8">
             <div className="flex-grow">

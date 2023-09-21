@@ -6,7 +6,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 export const options = (data: number[]) => ({
   datasets: [
     {
-      data: data ?? [42, 76, 38],
+      data: data[0]! > 1 || data[1]! > 1 || data[2]! > 1 ? data : [1, 1, 1],
       backgroundColor: [
         "rgba(43, 180, 87, 1)",
         "rgba(133, 48, 193, 1)",

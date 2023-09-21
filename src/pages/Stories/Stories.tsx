@@ -24,6 +24,7 @@ import {
   useContentForHome,
 } from "@/api/queries";
 import { TStoryContent } from "./Stories1/Stories1";
+import { Pagination } from "@mantine/core";
 
 export type StoriesType = {
   title?: string;
@@ -71,11 +72,16 @@ const Stories = () => {
 export default Stories;
 
 const Story = () => {
+  const [activePage, setPage] = useState(1);
   const { subCategory } = useParams();
   const navigate = useNavigate();
   const subCategoryId = localStorage.getItem("subCategoryId");
-  const { data, isLoading } = useGetContebtBySubCategories(subCategoryId!);
+  const { data, isLoading, refetch } = useGetContebtBySubCategories(
+    subCategoryId!,
+    activePage.toString()
+  );
   const subCategoryContents = data?.data.data.records;
+  const totalPage = Math.ceil(data?.data.data.totalRecord / 10);
   return (
     <>
       <div>
@@ -91,7 +97,7 @@ const Story = () => {
         </p>
       </div>
       <div className="flex justify-center items-center">
-        <div className="grid grid-cols-5 gap-8 pad-x-40 py-10">
+        <div className="grid grid-cols-5 gap-8 gap-y-12 pad-x-40 py-10">
           {isLoading
             ? Array(10)
                 .fill(5)
@@ -126,6 +132,27 @@ const Story = () => {
               })}
         </div>
       </div>
+      {totalPage > 1 && (
+        <div className="px-10  mr-2 flex justify-end ">
+          <Pagination
+            total={totalPage}
+            value={activePage}
+            defaultChecked={true}
+            onChange={setPage}
+            onClick={() => {
+              console.log(activePage);
+              refetch();
+            }}
+            styles={() => ({
+              control: {
+                "&[data-active]": {
+                  backgroundColor: "#8530C1 !important",
+                },
+              },
+            })}
+          />
+        </div>
+      )}
     </>
   );
 };
@@ -181,23 +208,26 @@ const BrowseGenre = () => {
         </div>
       </div>
 
-      <CardScreenHome
-        data={newTrending}
-        header="Stories we love"
-        actiontitle=""
-        isTitled={false}
-        isLoading={isLoading}
-        card={(props: TStoryContent) => (
-          <CardHome
-            {...props}
-            goTo={() =>
-              navigate(
-                `sub/${props?.slug?.replace(/\s/g, "_")!?.toLowerCase()}`
-              )
-            }
-          />
-        )}
-      />
+      <div className="mb-[76px]">
+        <CardScreenHome
+          data={newTrending}
+          header="Stories we love"
+          actiontitle=""
+          isTitled={false}
+          isLoading={isLoading}
+          card={(props: TStoryContent) => (
+            <CardHome
+              {...props}
+              goTo={() =>
+                navigate(
+                  `sub/${props?.slug?.replace(/\s/g, "_")!?.toLowerCase()}`
+                )
+              }
+            />
+          )}
+        />
+      </div>
+
       <Skeleton visible={isLoadingImage}>
         <div
           style={{

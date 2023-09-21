@@ -13,6 +13,15 @@ export type selectAvatarType = {
   image: string;
   id: number;
   dob?: string;
+  student?: {
+    assigned_teacher_id: number;
+    assigned_teacher_name: string;
+    class_id: number;
+    class_name: string;
+    school_id: number;
+    school_name: string;
+    status: string;
+  };
 };
 
 const SelectProfile = () => {
@@ -106,7 +115,9 @@ const AvatarCard = ({
             width={100}
             height={100}
           />
-          <p className="text-black font-normal text-[20px]  mt-4 ">{name}</p>
+          <p className="text-black font-normal text-[20px]  mt-4 ">
+            {name.charAt(0).toUpperCase() + name.slice(1)}
+          </p>
         </button>
       )}
     </div>

@@ -21,8 +21,10 @@ import CardScreenHome from "@/common/User/CardScreenHome";
 import CardHome from "@/common/User/CardHome";
 import { useContentForHome, useGetOngoingContents } from "@/api/queries";
 import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
-import { Carousel } from "@mantine/carousel";
 import { GrNext, GrPrevious } from "react-icons/gr";
+import Slider from "react-slick";
+import { useRef } from "react";
+import "./newlyregistereduser.css";
 
 export type DataType = {
   title?: string;
@@ -111,6 +113,16 @@ const NewlyRegisteredUser = () => {
   const userInLocalStr = localStorage.getItem("user");
   const user = JSON.parse(userInLocalStr!);
 
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 5,
+    swipeToSlide: true,
+    slidesToScroll: 5,
+  };
+  const sliderReff = useRef<Slider>(null);
+
   return (
     <Wrapper>
       <InnerWrapper>
@@ -140,46 +152,27 @@ const NewlyRegisteredUser = () => {
           </div>
         </div>
 
-        <div className="mt-10">
+        <div className="mt-[100px]">
           {ongoingContents?.length > 0 && (
             <div className=" mx-20 mt-4 mb-10">
-              <p className=" text25 font-semibold font-Recoleta  mb-6">
+              <p className=" text25 font-semibold font-Recoleta  mb-[50px]">
                 Continue Learning
               </p>
-              <div className="overflow-auto   ">
-                <div className=" gap-5 ">
-                  <Carousel
-                    className="group"
-                    height={250}
-                    slideSize="200px"
-                    slideGap="md"
-                    align="start"
-                    slidesToScroll={3}
-                    loop={true}
-                    styles={{
-                      control: {
-                        "&[data-inactive]": {
-                          opacity: 0,
-                          cursor: "default",
-                          path: "0px",
-                        },
-                      },
-                    }}
-                    nextControlIcon={
-                      <GrNext
-                        size={40}
-                        color="#8530C1"
-                        className=" react-icon invisible group-hover:visible  "
-                      />
-                    }
-                    previousControlIcon={
-                      <GrPrevious
-                        size={40}
-                        color="#8530C1"
-                        className=" react-icon invisible group-hover:visible"
-                      />
-                    }
+              <div className="  ">
+                <div className=" gap-5 relative group ">
+                  <button
+                    className="p-4 bg-[rgba(238,238,238,0.7)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-10 "
+                    onClick={() => sliderReff?.current?.slickPrev()}
                   >
+                    <GrPrevious size={30} />
+                  </button>
+                  <button
+                    className="p-4 bg-[rgba(238,238,238,0.7)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-[95.7%]"
+                    onClick={() => sliderReff?.current?.slickNext()}
+                  >
+                    <GrNext size={30} />
+                  </button>
+                  <Slider ref={sliderReff} {...settings}>
                     {ongoingContents?.map((data, index) => {
                       if (data.category === "Stories") {
                         return (
@@ -232,52 +225,56 @@ const NewlyRegisteredUser = () => {
                         );
                       }
                     })}
-                  </Carousel>
+                  </Slider>
                 </div>
               </div>
             </div>
           )}
         </div>
 
-        <CardScreenHome
-          data={newTrending}
-          header="New & Trending"
-          actiontitle=""
-          isTitled={false}
-          isLoading={isLoading}
-          card={(props: TStoryContent) => (
-            <CardHome
-              {...props}
-              goTo={() => {
-                navigate(
-                  `${props.category?.toLowerCase()}/sub/${props.slug
-                    ?.toLocaleLowerCase()
-                    .replace(/\s/g, "-")}`
-                );
-              }}
-            />
-          )}
-        />
+        <div className="my-[100px]">
+          <CardScreenHome
+            data={newTrending}
+            header="New & Trending"
+            actiontitle=""
+            isTitled={false}
+            isLoading={isLoading}
+            card={(props: TStoryContent) => (
+              <CardHome
+                {...props}
+                goTo={() => {
+                  navigate(
+                    `${props.category?.toLowerCase()}/sub/${props.slug
+                      ?.toLocaleLowerCase()
+                      .replace(/\s/g, "-")}`
+                  );
+                }}
+              />
+            )}
+          />
+        </div>
 
         <AdsButton />
-        <CardScreenHome
-          data={recommendedStories}
-          header="Recommended For You"
-          isTitled={false}
-          isLoading={isLoading}
-          card={(props: TStoryContent) => (
-            <CardHome
-              {...props}
-              goTo={() => {
-                navigate(
-                  `${props.category?.toLowerCase()}/sub/${props.slug
-                    ?.toLocaleLowerCase()
-                    .replace(/\s/g, "-")}`
-                );
-              }}
-            />
-          )}
-        />
+        <div className="mt-[100px]">
+          <CardScreenHome
+            data={recommendedStories}
+            header="Recommended For You"
+            isTitled={false}
+            isLoading={isLoading}
+            card={(props: TStoryContent) => (
+              <CardHome
+                {...props}
+                goTo={() => {
+                  navigate(
+                    `${props.category?.toLowerCase()}/sub/${props.slug
+                      ?.toLocaleLowerCase()
+                      .replace(/\s/g, "-")}`
+                  );
+                }}
+              />
+            )}
+          />
+        </div>
       </InnerWrapper>
     </Wrapper>
   );

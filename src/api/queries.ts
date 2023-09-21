@@ -195,10 +195,10 @@ export const useGetSubCategories = () => {
   });
 };
 
-export const useGetContebtBySubCategories = (subId: string) => {
+export const useGetContebtBySubCategories = (subId: string, page: string) => {
   return useQuery({
-    queryKey: ["getContentBySubId", subId],
-    queryFn: () => GetContebtBySubCategories(subId),
+    queryKey: ["getContentBySubId", subId, page],
+    queryFn: () => GetContebtBySubCategories(subId, page),
   });
 };
 
