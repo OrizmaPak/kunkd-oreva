@@ -1,6 +1,7 @@
 import { UseFormRegisterReturn } from "react-hook-form";
 import ErrorIcon from "@/assets/errorIcon.svg";
 import React, { useState } from "react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 type Props = {
   type?: "text" | "password" | "email" | "number" | "date";
@@ -54,7 +55,13 @@ const InputFormat = ({
           className="w-full  h-full flex-1 text-black text-[14px]  focus:outline-none"
         />
         {rightIcon ? (
-          <span onClick={handlePaswordToggle}>{rightIcon}</span>
+          <span onClick={handlePaswordToggle}>
+            {ttype === "text" ? (
+              <AiOutlineEyeInvisible size={20} color="#c4ccd0" />
+            ) : (
+              <AiOutlineEye size={20} color="#c4ccd0" />
+            )}
+          </span>
         ) : null}
         {errorMsg && <img loading="lazy" src={ErrorIcon} alt="error icon" />}
       </div>

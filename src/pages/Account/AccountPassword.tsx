@@ -9,6 +9,8 @@ import { useUpdatePassword } from "@/api/queries";
 import { notifications } from "@mantine/notifications";
 import { Loader } from "@mantine/core";
 import { getApiErrorMessage } from "@/api/helper";
+import { AiOutlineEye } from "react-icons/ai";
+import { RiLockLine } from "react-icons/ri";
 
 const SettingPassword = () => {
   const { isLoading, mutate } = useUpdatePassword();
@@ -83,6 +85,8 @@ const SettingPassword = () => {
                 errorMsg={errors.current_password?.message}
                 type="password"
                 placeholder="xxxxxxxx"
+                leftIcon={<RiLockLine size={20} color="#c4ccd0" />}
+                rightIcon={<AiOutlineEye size={22} color="#c4ccd0" />}
               />
             </span>
           </div>
@@ -99,6 +103,8 @@ const SettingPassword = () => {
                 errorMsg={errors.new_password?.message}
                 type="password"
                 placeholder="xxxxxxxx"
+                leftIcon={<RiLockLine size={20} color="#c4ccd0" />}
+                rightIcon={<AiOutlineEye size={22} color="#c4ccd0" />}
               />
               <span className="text-gray-400 mt-6 text3 ml-4">
                 Minimum 4 characters
