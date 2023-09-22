@@ -57,9 +57,13 @@ const InputFormat = ({
         {rightIcon ? (
           <span onClick={handlePaswordToggle}>
             {ttype === "text" ? (
-              <AiOutlineEyeInvisible size={20} color="#c4ccd0" />
+              <button>
+                <AiOutlineEyeInvisible size={20} color="#c4ccd0" />
+              </button>
             ) : (
-              <AiOutlineEye size={20} color="#c4ccd0" />
+              <button>
+                <AiOutlineEye size={20} color="#c4ccd0" />
+              </button>
             )}
           </span>
         ) : null}
