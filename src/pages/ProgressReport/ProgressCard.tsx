@@ -14,7 +14,7 @@ const ProgressCard = ({
 }: DataType & { isCompleted?: boolean; data: TStoryContent }) => {
   const range = Math.ceil((100 / data?.pages?.length!) * data?.pages_read!);
   return (
-    <div className="flex progress-card-w h-[160px]  border-[#FBECFF] border-2  rounded-xl">
+    <div className="flex progress-card-w h-[160px]  bg-[#fffbff]  border-[#FBECFF] border-2  rounded-xl">
       <div className=" basis-1/2">
         {/* <img
           src={data?.content?.image}
@@ -33,14 +33,7 @@ const ProgressCard = ({
       <div className="basis- basis-1/2 p-5 ">
         <h1 className="my-1 font-Hanken font-bold text3">{data?.name}</h1>
         <div className=" w-full">
-          {isCompleted ? (
-            <div className="flex justify-center  gap-4 flex-col ">
-              <p className="text3  ">Quiz score: 8.0</p>
-              <Button size="md">
-                <span className="text3">Completed</span>
-              </Button>
-            </div>
-          ) : (
+          {!isCompleted ? (
             <div className="flex justify-center  items-center gap-4 ">
               <span>{range ? range : 60}%</span>
               <span className="  flex-grow">
@@ -54,6 +47,13 @@ const ProgressCard = ({
                   <Progress value={60} color="green" />
                 )}
               </span>
+            </div>
+          ) : (
+            <div className="flex justify-center  gap-4 flex-col ">
+              <p className="text3  ">Quiz score: 8.0</p>
+              <Button size="md">
+                <span className="text3">Completed</span>
+              </Button>
             </div>
           )}
         </div>

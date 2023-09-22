@@ -329,7 +329,7 @@ const ReadPage = ({
       {
         profile_id: Number(profileId),
         content_id: Number(contentId),
-        status: "ongoing",
+        status: `${pageNumber === pageTotal ? "complete" : "ongoing"}`,
         pages_read: Number(pageNumber + 1),
         timespent: 23,
       },
@@ -478,7 +478,7 @@ const BookPagination = ({
         profile_id: Number(profileId),
         content_id: Number(contentId),
         status: "complete",
-        pages_read: Number(pageTotal),
+        pages_read: Number(pageTotal + 1),
         timespent: 23,
       },
       {

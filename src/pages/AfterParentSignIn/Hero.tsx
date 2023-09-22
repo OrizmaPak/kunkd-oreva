@@ -35,7 +35,8 @@ const Hero = ({ username, userimage }: Props) => {
             />
           </p>
           <h1 className="font-bold font-Recoleta text25">
-            Hello {username.charAt(0).toUpperCase() + username.slice(1)},
+            Hello{" "}
+            {username && username.charAt(0).toUpperCase() + username.slice(1)},
           </h1>
           <p className=" font-Hanken text-lg text-gray-400 text2">
             Start reading.
