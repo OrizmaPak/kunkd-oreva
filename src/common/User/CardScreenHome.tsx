@@ -29,6 +29,7 @@ const CardScreen = ({
     speed: 500,
     slidesToShow: 5,
     swipeToSlide: true,
+    slidesToScroll: 5,
   };
   const sliderReff = useRef<Slider>(null);
 
