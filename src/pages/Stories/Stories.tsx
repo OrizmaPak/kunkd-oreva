@@ -183,7 +183,7 @@ const BrowseGenre = () => {
         </h1>
       </div>
       <div className="flex justify-center items-center my-14">
-        <div className="flex flex-wrap justify-center items-center  max-w-[900px]  gap-x-8 gap-y-4">
+        <div className="flex flex-wrap justify-center items-center  max-w-[1000px]  gap-x-8 gap-y-4">
           {subIsLoading
             ? Array(10)
                 .fill(1)
