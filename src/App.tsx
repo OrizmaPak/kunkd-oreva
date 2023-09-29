@@ -66,6 +66,7 @@ import { TUser } from "./api/types";
 // import { googleSignIn } from "./auth/sdk";
 import Request from "./pages/DashBoard/TeacherDashboard/Request/Request";
 import TeacherSignup from "@/pages/TeacherLogin/index";
+import SchoolRquest from "@/pages/DashBoard/SchoolDashBoard/Request/Request";
 
 function App() {
   const [, setUser] = useStore(getUserState);
@@ -158,6 +159,8 @@ function App() {
                   ></Route>
                 </Route>
                 <Route path="classes" element={<Classes />}></Route>
+                <Route path="request" element={<SchoolRquest />}></Route>
+
                 {/* <Route path="setting" element={<Setting />}></Route> */}
               </Route>
               {/* Teacher Teacher Teacher Teacher DashBoard */}

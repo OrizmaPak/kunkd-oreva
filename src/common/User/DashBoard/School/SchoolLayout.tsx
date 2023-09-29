@@ -43,6 +43,13 @@ const links = [
     hasSub: true,
   },
 
+  {
+    label: "Requests",
+    href: "request",
+    route: routeBaseUrl + "/request/",
+    icon: StudentIcon,
+  },
+
   // {
   //   label: "Setting",
   //   href: "setting",
@@ -83,7 +90,7 @@ const SchoolLayout = () => {
                 title="Pampers Schools"
                 icon2={<img loading="lazy" src={Arrow} alt="icon" />}
               />
-              {links.slice(0, 4).map((link) => (
+              {links.map((link) => (
                 <NavButton
                   key={link.label}
                   title={link.label}

@@ -28,7 +28,8 @@ const InputFormat = ({
   errorMsg,
 }: Props) => {
   const [ttype, setType] = useState(type);
-  const handlePaswordToggle = () => {
+  const handlePaswordToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (ttype === "password") {
       setType("text");
     }
@@ -55,13 +56,16 @@ const InputFormat = ({
           className="w-full  h-full flex-1 text-black text-[14px]  focus:outline-none"
         />
         {rightIcon ? (
-          <span onClick={handlePaswordToggle}>
+          <span
+            onClick={handlePaswordToggle}
+            className="flex justify-center items-center"
+          >
             {ttype === "text" ? (
-              <button>
+              <button className="flex justify-between items-center">
                 <AiOutlineEyeInvisible size={20} color="#c4ccd0" />
               </button>
             ) : (
-              <button>
+              <button className="flex justify-between items-center">
                 <AiOutlineEye size={20} color="#c4ccd0" />
               </button>
             )}

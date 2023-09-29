@@ -256,7 +256,10 @@ const KidCard = ({
                   <p className="text2 text-[#8530C1]"> View School Info</p>
                 </button>
               ) : student?.status === "declined" ? (
-                <button className=" mt-1 flex justify-center items-center gap-2 bg-[#FEF3F2] px-2 py-1 rounded-2xl">
+                <button
+                  onClick={openConnectModal}
+                  className=" mt-1 flex justify-center items-center gap-2 bg-[#FEF3F2] px-2 py-1 rounded-2xl"
+                >
                   <p className="h-2 w-2 rounded-full bg-[#F04438]"></p>
                   <p className="text2  text-[#B42318]">Request declined</p>
                 </button>
