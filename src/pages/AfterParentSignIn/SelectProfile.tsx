@@ -7,7 +7,7 @@ import { Skeleton } from "@mantine/core";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import BlurImage from "@/assets/BlxstBlur.jpg";
-import { Navigate } from "react-router-dom";
+// import { Navigate } from "react-router-dom";
 
 export type selectAvatarType = {
   name: string;
