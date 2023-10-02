@@ -32,7 +32,8 @@ const SelectProfile = ({
 }) => {
   const [profiles] = useStore(getProfileState);
 
-  const { isLoading } = useGetProfile();
+  const { data, isLoading } = useGetProfile();
+  if (profiles) console.log(data, "profiles-----------", profiles);
   return (
     <>
       <div
@@ -44,7 +45,7 @@ const SelectProfile = ({
         }}
         className="relative h-screen w-full flex justify-center items-center  "
       >
-        {profiles?.length > 0 ? (
+        {
           <div>
             <div className="text-center  font-bold  mb-10 text-black">
               <h1 className="text-[60px] font-Recoleta">Who's Learning?</h1>
@@ -74,9 +75,7 @@ const SelectProfile = ({
                   ))}
             </div>
           </div>
-        ) : (
-          <Navigate to={"/childprofilesetup"}></Navigate>
-        )}
+        }
       </div>
     </>
   );
