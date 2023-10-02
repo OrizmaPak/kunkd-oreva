@@ -14,6 +14,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { z, ZodType } from "zod";
+// import useStore from "@/store/index";
+// import { getProfileState } from "@/store/profileStore";
 
 import GroupIcon from "@/assets/groupIcons.svg";
 import { STEP_1, STEP_2, STEP_3, STEP_4, STEP_5 } from "@/utils/constants";
@@ -26,7 +28,11 @@ export type avatarType = {
   name: string;
   image: string;
 };
-const ChildProfileSetUp = () => {
+const ChildProfileSetUp = ({
+  setChildProfile,
+}: {
+  setChildProfile: (val: string) => void;
+}) => {
   const [currentStep, setCurrentStep] = useState(STEP_1);
   const [name, setName] = useState<string>("");
   const [age, setAge] = useState<string>("");
@@ -67,6 +73,7 @@ const ChildProfileSetUp = () => {
         )}
         {currentStep === STEP_4 && (
           <SelectAvatar
+            setChildProfile={setChildProfile}
             onContinue={() => setCurrentStep(STEP_5)}
             goBack={() => setCurrentStep(currentStep - 1)}
             age={age}
@@ -279,6 +286,7 @@ export const ChildAgeModal = ({
 };
 
 export const SelectAvatar = ({
+  setChildProfile,
   onContinue,
   goBack,
   // arrayAvatar,
@@ -289,6 +297,7 @@ export const SelectAvatar = ({
 }: {
   onContinue: () => void;
   goBack: () => void;
+  setChildProfile?: (val: string) => void;
   // arrayAvatar: avatarType[];
   age: string;
   name: string;
@@ -316,6 +325,8 @@ export const SelectAvatar = ({
 
       {
         onSuccess(data) {
+          console.log("morning", data);
+          if (setChildProfile) setChildProfile(data?.data.data.profile_id)!;
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -458,13 +469,15 @@ const AvatarCard = ({
 
 export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
   const [enabled, setEnabled] = useState(false);
-
+  // const [profiles] = useStore(getProfileState);
   const {} = useGetProfile(enabled, () => {
     onContinue();
   });
 
   const handleSubmit = () => {
+    // console.log("toomuch----", profiles[0].id);
     setEnabled(true);
+    // setChildProfile(profiles[0].id.toString());
   };
   return (
     <motion.div

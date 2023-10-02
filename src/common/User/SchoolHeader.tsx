@@ -21,6 +21,7 @@ import { useState } from "react";
 import { useGetMainSearch } from "@/api/queries";
 import useDebounce from "@/hooks/useDebounce";
 // import SchLogo from "@/assets/schLogo.svg";
+import { useQueryClient } from "@tanstack/react-query";
 import { selectAvatarType } from "@/pages/AfterParentSignIn/SelectProfile";
 
 const notificationData = [
@@ -49,12 +50,20 @@ type THints = {
   thumbnail: string;
 };
 
-const SchoolHeader = () => {
+const SchoolHeader = ({
+  childProfile,
+  setChildProfile,
+}: {
+  childProfile: string;
+  setChildProfile: (val: string) => void;
+}) => {
   // const [opened, { open, close }] = useDisclosure(false);
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [user] = useStore(getUserState);
-  const [profile] = useStore(getProfileState);
-  const handleDashboard = () => {
+  const [profiles] = useStore(getProfileState);
+  const handleDashboard = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (user?.role === "teacher") {
       navigate("../teacherdashboard");
     }
@@ -69,15 +78,14 @@ const SchoolHeader = () => {
   };
 
   const handleChangeProfile = (id: number) => {
-    localStorage.setItem("profileId", JSON.stringify(id));
-    window.location.reload();
+    setChildProfile(id.toString());
+    queryClient.invalidateQueries(["GetOngoingContents"]);
   };
-  const currentId = localStorage.getItem("profileId");
-  const profiles = localStorage.getItem("profile");
-  const profileArray = JSON.parse(profiles!);
-  const currentProfile: selectAvatarType = profileArray?.find(
+
+  const currentId = childProfile;
+  const currentProfile: selectAvatarType = profiles?.find(
     (profile: selectAvatarType) => profile.id === Number(currentId)
-  );
+  )!;
 
   return (
     <div className="bg-white w-full fixed top-0 h-[8vh] z-50">
@@ -213,7 +221,7 @@ const SchoolHeader = () => {
               </Menu.Target>
               <Menu.Dropdown>
                 <div className="flex flex-col py-2 px-2 ">
-                  {profile.map((profile, index) => (
+                  {profiles?.map((profile, index) => (
                     <Menu.Item
                       key={index}
                       onClick={() => handleChangeProfile(profile.id)}

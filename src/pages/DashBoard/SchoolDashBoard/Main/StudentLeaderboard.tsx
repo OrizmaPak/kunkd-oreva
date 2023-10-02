@@ -1,4 +1,3 @@
-// import { dashboardData } from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";
 import { TRequestStudents } from "../../TeacherDashboard/Request/Request";
 import { BsChevronRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";

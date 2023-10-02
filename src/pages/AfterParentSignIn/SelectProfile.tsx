@@ -7,6 +7,7 @@ import { Skeleton } from "@mantine/core";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import BlurImage from "@/assets/BlxstBlur.jpg";
+import { Navigate } from "react-router-dom";
 
 export type selectAvatarType = {
   name: string;
@@ -24,11 +25,14 @@ export type selectAvatarType = {
   };
 };
 
-const SelectProfile = () => {
+const SelectProfile = ({
+  setChildProfile,
+}: {
+  setChildProfile: (val: string) => void;
+}) => {
   const [profiles] = useStore(getProfileState);
 
   const { isLoading } = useGetProfile();
-
   return (
     <>
       <div
@@ -40,30 +44,39 @@ const SelectProfile = () => {
         }}
         className="relative h-screen w-full flex justify-center items-center  "
       >
-        <div>
-          <div className="text-center  font-bold  mb-10 text-black">
-            <h1 className="text-[60px] font-Recoleta">Who's Learning?</h1>
-            <p className=" font-Hanken">Select which kid is learning now </p>
-          </div>
-          <div className="flex text-white text-center gap-10 justify-center items-center bg-transparent">
-            {isLoading
-              ? Array(3)
-                  .fill(1)
-                  .map((arr, index) => (
-                    <Skeleton
+        {profiles?.length > 1 ? (
+          <div>
+            <div className="text-center  font-bold  mb-10 text-black">
+              <h1 className="text-[60px] font-Recoleta">Who's Learning?</h1>
+              <p className=" font-Hanken">Select which kid is learning now </p>
+            </div>
+            <div className="flex text-white text-center gap-10 justify-center items-center bg-transparent">
+              {isLoading
+                ? Array(3)
+                    .fill(1)
+                    .map((arr, index) => (
+                      <Skeleton
+                        key={index}
+                        height={100}
+                        circle
+                        visible={isLoading}
+                      >
+                        {arr}
+                      </Skeleton>
+                    ))
+                : profiles?.map((avatar, index) => (
+                    <AvatarCard
                       key={index}
-                      height={100}
-                      circle
-                      visible={isLoading}
-                    >
-                      {arr}
-                    </Skeleton>
-                  ))
-              : profiles?.map((avatar, index) => (
-                  <AvatarCard key={index} {...avatar} isLoading={isLoading} />
-                ))}
+                      {...avatar}
+                      isLoading={isLoading}
+                      setChildProfile={setChildProfile}
+                    />
+                  ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          <Navigate to={"/childprofilesetup"}></Navigate>
+        )}
       </div>
     </>
   );
@@ -76,20 +89,23 @@ const AvatarCard = ({
   name,
   id,
   isLoading,
+  setChildProfile,
 }: {
   image: string;
   name: string;
   id: number;
   isLoading: boolean;
   setSelected?: (val: string) => void;
+  setChildProfile: (val: string) => void;
 }) => {
   const navigate = useNavigate();
   const handleClick = () => {
     image = "";
-    localStorage.setItem("profileId", JSON.stringify(id));
+    setChildProfile(id.toString());
+
     navigate("/parent");
   };
-  // const [imageLoding, setImageLoding] = useState(true);
+
   return (
     <div>
       {isLoading ? (

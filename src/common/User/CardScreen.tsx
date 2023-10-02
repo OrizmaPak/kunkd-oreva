@@ -25,7 +25,7 @@ const CardScreen = ({ data, header, action, actiontitle, card }: Props) => {
         style={{ maxHeight: "500px" }}
       >
         <div className="flex  gap-5 mb-14  ">
-          {data?.map((data) => {
+          {data?.slice(1, 3).map((data) => {
             return card ? card(data) : null;
             // <Card key={index} image={data?.image} title={data?.title} />
           })}

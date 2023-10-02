@@ -56,7 +56,7 @@ import ChildProfileSetUp from "./pages/AfterParentSignIn/ChildProfileSetUp";
 import AudioBooks from "@/pages/AudioBooks/AudioBooks";
 import AfricanLanguages from "@/pages/AfricanLanguages/AfricanLanguages";
 import ScrollToTop from "./components/ScrollToTop";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import useStore from "./store";
 import { auth } from "./firebase";
@@ -82,6 +82,12 @@ function App() {
       unsubscribe();
     };
   }, []);
+  const [childProfile, setChildProfile] = useState(
+    localStorage.getItem("profileId") ? localStorage.getItem("profileId") : ""
+  );
+  useEffect(() => {
+    localStorage.setItem("profileId", childProfile!);
+  }, [childProfile]);
   return (
     <BrowserRouter>
       {/* <div className="App max-w-[1444px] mx-auto "></div> */}
@@ -103,7 +109,14 @@ function App() {
             </Route>
 
             {/* Routes for School Teaher and Parent After  login */}
-            <Route element={<AppLayout />}>
+            <Route
+              element={
+                <AppLayout
+                  childProfile={childProfile!}
+                  setChildProfile={setChildProfile}
+                />
+              }
+            >
               {/* <Route path="newlyregistereduser/*"> */}
               <Route path="school/*">
                 <Route index element={<NewlyRegisteredUser />}></Route>
@@ -138,7 +151,15 @@ function App() {
 
               {/* ///////  <Route path="parenthomepage///////*"> */}
               <Route path="parent/*">
-                <Route index element={<ParentHomePage />}></Route>
+                <Route
+                  index
+                  element={
+                    <ParentHomePage
+                      childProfile={childProfile!}
+                      // setChildProfile={setChildProfile}
+                    />
+                  }
+                ></Route>
                 <Route path=":category/*" element={<Stories />}></Route>
                 <Route path="audiobooks/*" element={<AudioBooks />}></Route>
                 <Route
@@ -237,10 +258,13 @@ function App() {
             <Route path="packages" element={<ChoosePlan />}></Route>
             <Route
               path="childprofilesetup"
-              element={<ChildProfileSetUp />}
+              element={<ChildProfileSetUp setChildProfile={setChildProfile} />}
             ></Route>
 
-            <Route path="selectprofile" element={<SelectProfile />}></Route>
+            <Route
+              path="selectprofile"
+              element={<SelectProfile setChildProfile={setChildProfile} />}
+            ></Route>
             <Route path="passwordsetup" element={<TeacherSignup />}></Route>
           </Route>
         </Routes>
@@ -267,16 +291,24 @@ const WebLayoutNoNewsLetter = () => {
     <>
       <HomeHeader />
       <Outlet />
-
       <HomeFooter />
     </>
   );
 };
 
-const AppLayout = () => {
+const AppLayout = ({
+  childProfile,
+  setChildProfile,
+}: {
+  childProfile: string;
+  setChildProfile: (val: string) => void;
+}) => {
   return (
     <>
-      <ShoolHeader />
+      <ShoolHeader
+        childProfile={childProfile}
+        setChildProfile={setChildProfile}
+      />
       <Outlet />
     </>
   );

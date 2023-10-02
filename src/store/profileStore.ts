@@ -3,35 +3,35 @@ import { StateCreator } from "zustand";
 import { selectAvatarType } from "@/pages/AfterParentSignIn/SelectProfile";
 
 type State = {
-  profile: selectAvatarType[];
+  profiles: selectAvatarType[];
 };
 
 type Action = {
-  setProfile: (user: State["profile"]) => void;
+  setProfiles: (user: State["profiles"]) => void;
 };
 
-const getLocalStorage = (key: string): State["profile"] => {
+const getLocalStorage = (key: string): State["profiles"] => {
   const localData = localStorage.getItem(key);
   return localData ? JSON.parse(localData) : null;
 };
-const setLocalStorage = (key: string, value: State["profile"]) =>
+const setLocalStorage = (key: string, value: State["profiles"]) =>
   window.localStorage.setItem(key, JSON.stringify(value));
 
 export type ProfileSlice = State & Action;
 
 const createProfileSlice: StateCreator<ProfileSlice> = (set) => ({
-  profile: getLocalStorage("profile") || null,
-  setProfile: (profile) =>
+  profiles: getLocalStorage("profiles") || null,
+  setProfiles: (profiles) =>
     set((state) => {
-      setLocalStorage("profile", profile);
-      return { ...state, profile };
+      setLocalStorage("profiles", profiles);
+      return { ...state, profiles };
     }),
 });
 export default createProfileSlice;
 
 export const getProfileState = (
   state: ProfileSlice
-): [State["profile"], Action["setProfile"]] => [
-  state.profile,
-  state.setProfile,
+): [State["profiles"], Action["setProfiles"]] => [
+  state.profiles,
+  state.setProfiles,
 ];

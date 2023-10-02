@@ -547,6 +547,10 @@ const ConnectTOSchool = ({
       .string()
       .min(4, { message: "Last name must be at least 4 characters long" })
       .max(40, { message: "Last name must not exceed 20 characters" }),
+    schoolCode: z
+      .string()
+      .min(4, { message: "School code must be at least 4 characters long" })
+      .max(4, { message: "School code must be at least 4 characters long" }),
     schoolid: z
       .string()
       .min(1, { message: "Select School Id" })
@@ -621,6 +625,14 @@ const ConnectTOSchool = ({
               errorMsg={errors?.lastname?.message}
               type="text"
               placeholder="Last name"
+            />
+          </p>
+          <p className="my-5">
+            <InputFormat
+              reg={register("schoolCode")}
+              errorMsg={errors?.schoolCode?.message}
+              type="text"
+              placeholder="School Code"
             />
           </p>
 

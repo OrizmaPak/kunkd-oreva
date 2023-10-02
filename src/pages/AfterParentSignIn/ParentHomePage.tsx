@@ -23,9 +23,9 @@ import { GrNext, GrPrevious } from "react-icons/gr";
 import { useRef } from "react";
 import Slider from "react-slick";
 
-const ParentHomePage = () => {
-  let profiles: selectAvatarType;
-  const [profile] = useStore(getProfileState);
+const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
+  let profile: selectAvatarType;
+  const [profiles] = useStore(getProfileState);
   const profileId = localStorage.getItem("profileId");
   const { data: ongoingData } = useGetOngoingContents(profileId!);
   const ongoingContents: TStoryContent[] =
@@ -33,13 +33,24 @@ const ParentHomePage = () => {
   const { isLoading, data: contentData } = useContentForHome();
   const recommendedStories = contentData?.data.data.recommended_stories;
   const newTrending = contentData?.data.data.trending_stories;
-  const currentId = Number(localStorage.getItem("profileId"));
+  const currentId = childProfile;
 
-  if (!currentId) {
-    profiles = profile[0];
-    localStorage.setItem("profileId", profile[0].id.toString());
+  console.log("test1- nad ----------", +currentId, +childProfile, profiles);
+
+  // if (childProfile) {
+  //   console.log("Profilessssss-------", profiles);
+  //   profile = profiles[0];
+  //   setChildProfile(profiles[0].id.toString());
+  //   // localStorage.setItem("profileId", profiles[0].id.toString());
+  // } else {
+  //   profile = profiles?.find((each) => each.id === currentId)!;
+  // }
+
+  if (childProfile) {
+    profile = profiles?.find((each) => each.id === +childProfile)!;
+    console.log(profile);
   } else {
-    profiles = profile?.find((each) => each.id === currentId)!;
+    return;
   }
 
   const navigate = useNavigate();
@@ -47,7 +58,8 @@ const ParentHomePage = () => {
   const user = JSON.parse(userInLocalStr!);
   const settings = {
     dots: false,
-    infinite: true,
+    centerMode: false,
+    infinite: false,
     speed: 800,
     slidesToShow: 5,
     swipeToSlide: true,
@@ -59,7 +71,7 @@ const ParentHomePage = () => {
     <div>
       <Wrapper>
         <InnerWrapper>
-          <Hero userimage={profiles?.image} username={profiles?.name} />
+          <Hero userimage={profile?.image} username={profile?.name} />
 
           <h1 className="text-center font-bold text30 font-Recoleta my-10 ">
             Our Library
@@ -83,7 +95,8 @@ const ParentHomePage = () => {
               />
             </div>
           </div>
-          <div className="mt-[98px] ">
+
+          <div className="mt-[98px]  ">
             {ongoingContents?.length > 0 && (
               <div className=" mx-20 mt-4">
                 <p className=" text25 font-semibold font-Recoleta  mb-[50px]">
@@ -184,6 +197,7 @@ const ParentHomePage = () => {
               // />
             )}
           </div>
+
           <div className="my-[100px]">
             <CardScreenHome
               data={newTrending}
