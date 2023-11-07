@@ -46,7 +46,7 @@ const BookLayout = () => {
     user?.user_id?.toString()!
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const audioBookId = data?.data.data.id;
-  const audiobook = data?.data.data.media[0];
+  const audiobook = data?.data.data.media?.[0];
   const [startRead, setStartRead] = useState(false);
   return (
     <div className=" ">

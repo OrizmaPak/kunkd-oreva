@@ -65,9 +65,10 @@ const VideoPlayer = () => {
   const { data: recommendedData, isLoading: recommendedIsLoading } =
     useGetRecommendedVideo(contentId?.toString()!);
   const recommendedVideos = recommendedData?.data?.data.recommended_contents;
-  const video = data?.data?.data?.media[0];
+  const media = data?.data?.data?.media;
+  const video = media?.[0];
   console.log("video", video);
-  const videoData = data?.data.data.sub_categories[0];
+  const videoData = data?.data.data.sub_categories?.[0];
   const [currentVideoTime, setCurrentVideotime] = useState(0);
   const { mutate } = useContentTracking();
   const profileId = localStorage.getItem("profileId");

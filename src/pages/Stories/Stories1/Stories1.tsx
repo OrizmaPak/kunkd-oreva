@@ -55,14 +55,14 @@ export type TMedia = {
 export type TStoryContent = {
   sub_category_name?: any;
   category?: string;
-  sub_categories: TSubCategory[];
+  sub_categories?: TSubCategory[];
   category_id?: number;
   content_type?: string;
   content_type_id?: number;
   has_quiz?: boolean;
   id?: number;
   is_liked?: boolean;
-  media: TMedia[];
+  media?: TMedia[];
   media_type?: string;
   name?: string;
   pages?: TContentPage[];
