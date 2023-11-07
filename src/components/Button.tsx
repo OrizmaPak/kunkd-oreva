@@ -48,7 +48,7 @@ const getClassName = (options: TClassName) => {
       : borderColors[borderColor || "default"];
   // varient  || backgroundColor - border -
 
-  return `rounded-[15px]  text-[16px] ${sizes[size || "md"]} ${
+  return `rounded  text-[16px] ${sizes[size || "md"]} ${
     colors[color || "default"]
   } ${btnVarientStyle}`;
 };

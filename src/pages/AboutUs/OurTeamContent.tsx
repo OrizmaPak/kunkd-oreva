@@ -88,7 +88,7 @@ const OurTeamContent = () => {
           - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
           - - - - - -- - - - - - - - - - - - - - - - - - - - - - - - - - -
         </p>
-        <div className="grid grid-cols-3 gap-14 my-8">
+        <div className="grid grid-cols-3 gap-x-28  gap-y-10 my-8">
           {data &&
             data.map((data, index) => {
               return <TeamCard key={index} {...data} />;

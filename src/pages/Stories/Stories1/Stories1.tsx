@@ -28,6 +28,8 @@ import "./stories1.css";
 import { Slider, MantineProvider } from "@mantine/core";
 import { useReducedMotion } from "@mantine/hooks";
 import { useRef } from "react";
+import { UseQueryResult } from "@tanstack/react-query";
+import ReactHtmlParser from "html-react-parser";
 
 type TContentPage = {
   audio: string;
@@ -45,7 +47,7 @@ type TSubCategory = {
 export type TStoryContent = {
   sub_category_name?: any;
   category?: string;
-  sub_categorie?: TSubCategory[];
+  sub_categories?: TSubCategory[];
   category_id?: number;
   content_type?: string;
   content_type_id?: number;
@@ -77,7 +79,7 @@ const Stories1 = () => {
   const { data, isLoading: contentIsLoading } = useGetContentById(
     contentId?.toString()!,
     user?.user_id?.toString()!
-  );
+  ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const content = data?.data.data;
   const { data: recommendedData, isLoading } = useContentForHome();
   const recommendedStories = recommendedData?.data.data.recommended_stories;
@@ -91,12 +93,16 @@ const Stories1 = () => {
             <Skeleton visible={contentIsLoading}>
               <StoriesNav
                 category={category && category}
-                genre={content && content.sub_categories[0].sub_category_name!}
+                genre={
+                  content && content?.sub_categories?.[0]?.sub_category_name!
+                }
                 title={content && content.name}
                 subCategoryId={
-                  content && content.sub_categories[0].sub_category_id!
+                  content && content?.sub_categories?.[0]?.sub_category_id!
                 }
-                slug={content && content.sub_categories[0].sub_category_name!}
+                slug={
+                  content && content?.sub_categories?.[0]?.sub_category_name!
+                }
               />
             </Skeleton>
           }
@@ -108,7 +114,7 @@ const Stories1 = () => {
                 {!startRead && (
                   <Skeleton visible={contentIsLoading}>
                     <AboutPage
-                      story={content}
+                      story={content!}
                       setStartRead={() => setStartRead(true)}
                     />
                   </Skeleton>
@@ -116,8 +122,8 @@ const Stories1 = () => {
 
                 {content && startRead && (
                   <ReadPage
-                    thumbnail={content.thumbnail}
-                    content={content.pages}
+                    thumbnail={content.thumbnail!}
+                    content={content.pages!}
                     setIsFinish={() => setIsFinish(true)}
                   />
                 )}
@@ -143,7 +149,7 @@ const Stories1 = () => {
                 </div>
               </div>
             ) : (
-              <WelDone content={content} />
+              <WelDone content={content!} />
             )}
           </div>
         </div>
@@ -405,7 +411,12 @@ const ReadPage = ({
           </p>
           {!isReading && (
             <p className=" leading-10 flex h-[350px] overflow-y-auto  text20 font-medium font-Hanken pr-8 text-justify ">
-              {content[page].web_body}
+              {/* {content[page].web_body} */}
+
+              <p
+                className="content_cont leading-10 [&>img]:hidden"
+                dangerouslySetInnerHTML={{ __html: content[page].web_body }}
+              ></p>
             </p>
           )}
         </div>
@@ -426,7 +437,15 @@ const ReadPage = ({
               }}
               highlight
             >
-              <p className="text20">{content[pageNumber].web_body}</p>
+              {/* <p
+                className="text20"
+                dangerouslySetInnerHTML={{ __html:  content[page].web_body }}
+              ></p> */}
+              <p className="content_cont leading-10 text20  [&>img]:hidden">
+                {ReactHtmlParser(content[pageNumber].web_body)}
+              </p>
+
+              {/* <p>{content[pageNumber].web_body}</p> */}
             </CustomTTSComponent>
           ) : (
             <BookPagination

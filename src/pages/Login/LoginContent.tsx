@@ -146,7 +146,7 @@ const LoginContent = () => {
 
           if (res?.role === "schoolAdmin") {
             navigate("/school");
-          } else if (res?.role === "parent") {
+          } else if (res?.role === "parent" || "user") {
             navigate("/selectprofile");
           } else if (
             res?.role === "teacher" &&

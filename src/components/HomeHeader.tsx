@@ -24,7 +24,7 @@ const HomeHeader = () => {
           </div>
         </NavLink>
 
-        <div className="flex justify-between cursor-pointer pl-2 w-[517px]">
+        <div className="flex justify-between cursor-pointer pl-2 w-[565px]">
           <NavLink
             to="/"
             className={({ isActive }) =>
@@ -50,6 +50,31 @@ const HomeHeader = () => {
             <span>Schools</span>
           </NavLink>
           <NavLink
+            to="#"
+            className={({ isActive }) =>
+              isActive ? " text-black" : "text-black"
+            }
+          >
+            <span>Animation</span>
+          </NavLink>
+          <NavLink
+            to="#"
+            className={({ isActive }) =>
+              isActive ? " text-black" : "text-black"
+            }
+          >
+            <span>Publishing</span>
+          </NavLink>
+          <NavLink
+            to="#"
+            className={({ isActive }) =>
+              isActive ? " text-black" : "text-black"
+            }
+          >
+            <span>Shop</span>
+          </NavLink>
+
+          <NavLink
             to="/aboutus"
             className={({ isActive }) =>
               isActive ? " text-[#8530C1]" : "text-black"
@@ -57,15 +82,14 @@ const HomeHeader = () => {
           >
             <span>About Us</span>
           </NavLink>
-          <NavLink
+          {/* <NavLink
             to="/shop"
             className={({ isActive }) =>
               isActive ? " text-[#8530C1]" : "text-black"
             }
           >
-            <span>Visit Store</span>
-          </NavLink>
-          <span>| EN </span>
+            <span>Shop</span>
+          </NavLink> */}
         </div>
 
         <div className="flex items-center justify-center pl-2 gap-8">

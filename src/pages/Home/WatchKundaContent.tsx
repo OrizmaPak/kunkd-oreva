@@ -78,15 +78,14 @@ const WatchKundaContent = () => {
       </div> */}
 
       <div className=" max-w-[1000px] mx-auto text-center text-black mt-28 text-[18px] mb-14  mleading-10">
-        <h1 className="text-4xl font-bold mb-10 mt-60  font-Secondary header2">
-          Watch Kunda And Friends
+        <h1 className=" font-Recoleta font-bold mb-10 mt-60  font-Secondary header-1">
+          Animation
         </h1>
 
-        <p className="font-primary text1">
+        <p className="text20 font-semibold text-[#7E7E89]">
           Kunda & Friends is a vibrant, music-led 3D preschool and primary
-          animation series for children. A perfect mix of fun and learning for
-          kids and families, with a soundtrack inspired by Afrobeats and
-          Amapiano, we aim to celebrate and share the richness of African
+          animation series for children, with a soundtrack inspired by Afrobeats
+          and Amapiano. We aim to celebrate and share the richness of African
           culture with the world!
         </p>
       </div>

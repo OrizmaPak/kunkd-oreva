@@ -34,8 +34,8 @@ const CardScreen = ({
   const sliderReff = useRef<Slider>(null);
 
   return (
-    <div className="   mx-20 ">
-      <div className="flex justify-between mb-[50px] ">
+    <div className="   mx-20   pb-8">
+      <div className="flex justify-between mb-[50px] pt-8 ">
         <span className=" text25 font-semibold font-Recoleta ">{header}</span>
         <button onClick={action} className=" text-[#8530C1] text2">
           {actiontitle}

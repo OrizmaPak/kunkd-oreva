@@ -7,23 +7,27 @@ import SchHeroBlur3 from "@/assets/schheroblur3.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import "./hero.css";
+import { useNavigate } from "react-router-dom";
 
 import Button from "@/components/Button";
 const Hero = () => {
+  const naivagte = useNavigate();
   return (
     <div className="bg-[rgba(237,28,36,0.06);] pt-14">
       <div className="max-w-[1000px] w-full mx-auto ">
         <h1 className="font-bold font-Recoleta text-center header1 mt-[100px]">
           Empowering Literacy Education
         </h1>
-        <p className=" leading-[30px] text1   text-center">
+        <p className=" leading-[30px] text1   text-center mt-4">
           Embark on a reading adventure with Kunda Kids and empower your child's
           literacy journey.
           <br /> Join us today and unlock the boundless possibilities of
           literacy.
         </p>
         <p className="flex justify-center items-center mt-4 ">
-          <Button size="md">Get Stated</Button>
+          <Button onClick={() => naivagte("/signup")} size="md">
+            Get Stated
+          </Button>
         </p>
 
         <div className="flex gap-10 justify-center items-center">

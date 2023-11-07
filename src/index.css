@@ -56,6 +56,11 @@ body {
   font-size: clamp(1.25rem, 0.6985rem + 3.5294vw, 3.875rem) !important;
   line-height: clamp(1.75rem, 1.1985rem + 3.5294vw, 4.375rem) !important;
 }
+
+.header-1 {
+  font-size: clamp(1.875rem, 1.6387rem + 1.5126vw, 3rem) !important;
+  line-height: clamp(1.75rem, 1.1985rem + 3.5294vw, 4.375rem) !important;
+}
 /* 18 */
 .text1 {
   font-size: clamp(0.75rem, 0.6712rem + 0.5042vw, 1.125rem) !important;

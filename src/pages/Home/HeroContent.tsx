@@ -12,7 +12,7 @@ import "./herocontent.css";
 const HeroContent = () => {
   const navigate = useNavigate();
   return (
-    <div className=" z-[1000]  bg-yellow-300 block ">
+    <div className=" z-[1000]  block ">
       <div className="absolute top-40  left-[80px] hero-text-container">
         <p className="font-bold text-[36px] text-[#8530C1]  font-Recoleta header2 ">
           Introducing Kunda Kids

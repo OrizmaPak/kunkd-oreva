@@ -18,23 +18,25 @@ import "./ServiceContent.css";
 const Serviceontent = () => {
   const servicesData: CardTypes[] = [
     {
+      title: "When You require a reset",
+      body: "Kids of any age may enjoy Kunda Kinds on their own, from Read-To-Me books through chapter novels.",
+      image: Service1,
+    },
+    {
       title: "When You are driving",
       body: "For offline reading, you can download books and audiobooks.",
-      image: Service1,
+
+      image: Service2,
     },
     {
       title: "Whenever they request a new bedtime story",
       body: "Let them fall asleep while listening to one of our many audiobooks.",
-      image: Service2,
+
+      image: Service3,
     },
     {
       title: "Anytime anywhere",
       body: "Everyone can find something to read at our library, and almost any gadget can be used.",
-      image: Service3,
-    },
-    {
-      title: "When You require a reset",
-      body: "Kids of any age may enjoy Kunda Kinds on their own, from Read-To-Me books through chapter novels.",
       image: Service4,
     },
   ];
@@ -87,10 +89,10 @@ const Serviceontent = () => {
       </div>
       <div className="mt-[100px] mb-[50px] max-w-[1000px] mx-auto text-center">
         {/* <KundaApp /> */}
-        <h1 className="text-[46px] text-black font-Recoleta mb-6  header2">
+        <h1 className="text-[46px] text-black font-Recoleta mb-6  header-1">
           Unlimited Books and Resources
         </h1>
-        <p className=" font-Hanken left-8 leading-[30px]  text1">
+        <p className=" font-Hanken left-8 leading-[30px]  text1  font-mediumsss text-[#7E7E89]">
           With Kunda Kids’ informative non-fiction texts, our extensive
           collection covers a wide range of topics and genres that will
           captivate and inspire your child's love for reading.

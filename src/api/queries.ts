@@ -185,6 +185,15 @@ export const useGetContentById = (contentId: string, userId: string) => {
   return useQuery({
     queryKey: ["getContentById", contentId, userId],
     queryFn: () => GetContentById(contentId, userId),
+    onSuccess: (response: unknown) => {
+      console.log("response:", response);
+
+      const res = response as ApiResponse<unknown>;
+      const status = res.data.status;
+      console.log("response:", res);
+      if (status === false) {
+      }
+    },
   });
 };
 

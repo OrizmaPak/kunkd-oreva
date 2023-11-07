@@ -76,7 +76,7 @@ const CustomTTSComponent = ({
 
         {!showPlay && (
           <button
-            className="py-1 px-8 rounded-3xl ml-2"
+            className="py-1 px-8 rounded-3xl "
             // disabled={!state.isPlaying}
             onClick={() => {
               setShowPlay(true);

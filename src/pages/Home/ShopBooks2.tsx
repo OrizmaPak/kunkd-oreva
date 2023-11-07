@@ -32,7 +32,7 @@ const BigCartCard = () => {
             </p>
             <p className="font-bold text-[30px] mt-8 header2">₦2,900.00 NGN</p>
             <p className="mb-10 text1ssss">Tax incuded ssd</p>
-            <button className="bg-white text-[#447ADC] p-3  px-24 rounded-full">
+            <button className="bg-white text-[#447ADC] p-3  px-24 rounded">
               Add to cart
             </button>
           </div>

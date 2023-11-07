@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { z, ZodType } from "zod";
+
 // import useStore from "@/store/index";
 // import { getProfileState } from "@/store/profileStore";
 
@@ -396,6 +397,7 @@ export const SelectAvatar = ({
                     ))
                   : data?.data.data.avatars?.map(
                       (avatar: selectAvatarType, index: number) => {
+                        console.log("avatar", avatar);
                         return (
                           <AvatarCard
                             key={index}

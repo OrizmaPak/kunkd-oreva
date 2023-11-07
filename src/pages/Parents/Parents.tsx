@@ -1,18 +1,19 @@
 import HeroContent from "./HeroContent";
-import Hero from "../Home/Hero";
 import Stat from "../Home/Stat";
 import KundaParent from "../Home/KundaApp";
 import KundaParentContent from "./KundaParentContent";
 import Service from "../Home/WatchKunda";
 import ServiceContent from "./ServiceContent";
 import KundaApp from "./KundaApp";
+import ParentHero from "./ParentHero";
+import SayAbouyUs from "./SayAbouyUs";
 
 const Parents = () => {
   return (
     <div>
-      <Hero>
+      <ParentHero>
         <HeroContent />
-      </Hero>
+      </ParentHero>
       <Stat>
         <div>
           <KundaApp />
@@ -27,6 +28,7 @@ const Parents = () => {
       <Service>
         <ServiceContent />
       </Service>
+      <SayAbouyUs />
     </div>
   );
 };

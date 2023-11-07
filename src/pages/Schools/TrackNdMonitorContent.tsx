@@ -11,10 +11,10 @@ const TrackNdMonitorContent = () => {
   return (
     <div className="w-full flex justify-center items-center">
       <div className="container-w ">
-        <h1 className=" font-semibold font-Recoleta header2 text-center">
+        <h1 className=" font-semibold font-Recoleta header-1 text-center mt-8">
           Track and Monitor Student Progress
         </h1>
-        <p className=" leading-[30px] text-center text1  mt-4 text-[#7E7E89] ">
+        <p className=" leading-[30px] text-center text1   text-[#7E7E89] font-medium mt-10 ">
           With comprehensive tracking features, you can easily assess each
           student's reading proficiency, identify
           <br /> areas for improvement, and tailor instructions accordingly.

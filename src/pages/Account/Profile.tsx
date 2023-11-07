@@ -91,7 +91,7 @@ const Profile = () => {
               )}
             </>
           )}
-          {user?.role === "parent" && (
+          {user?.role === "user" && (
             <>
               <PTCard user={user} />
               {parentEditMode ? (

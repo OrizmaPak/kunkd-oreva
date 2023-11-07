@@ -11,7 +11,7 @@ export type CardTypes = {
 };
 const ClientCard = ({ image, name, location, story }: CardTypes) => {
   return (
-    <div className="w-[450px] h-[258px] p-7 rounded-xl  bg-[#FFFFFF] shadow-md ml-[20px] mb-8 pb-20">
+    <div className="w-[450px]  p-7 rounded-xl  bg-[#FFFFFF] shadow-md ml-[20px] mb-8 pb-4">
       <div className="flex items-center mb-6">
         {/* <img
           loading="lazy"
@@ -23,7 +23,7 @@ const ClientCard = ({ image, name, location, story }: CardTypes) => {
           src={image}
           placeholderSrc={BlxstBlur}
           effect="blur"
-          className="rounded-[50%] w-[100px] h-[100px]"
+          className="rounded-[50%] w-[90px] h-[90px]"
           wrapperClassName="rounded-[50%] w-[100px] h-[100px]"
           width={100}
           height={100}
@@ -33,8 +33,8 @@ const ClientCard = ({ image, name, location, story }: CardTypes) => {
           <span>{location}</span>
         </span>
       </div>
-      <div>
-        <p className="mb-10">{story}</p>
+      <div className="mt-8">
+        <p className="mb-10 ">{story}</p>
       </div>
     </div>
   );

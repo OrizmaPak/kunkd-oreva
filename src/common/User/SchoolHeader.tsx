@@ -61,7 +61,8 @@ const SchoolHeader = ({
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [user] = useStore(getUserState);
-  const [profiles] = useStore(getProfileState);
+  // console.log("userrrrrr-------", user);`
+  const [profiles, setProfiles] = useStore(getProfileState);
   const handleDashboard = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (user?.role === "teacher") {
@@ -75,6 +76,7 @@ const SchoolHeader = ({
   const handLogOut = () => {
     navigate("/");
     localStorage.clear();
+    setProfiles([]);
   };
 
   const handleChangeProfile = (id: number) => {
@@ -126,7 +128,8 @@ const SchoolHeader = ({
 
           <div className="flex gap-8">
             <NavLink
-              to={user?.role === "parent" ? "parent" : "/school"}
+              to={user?.role === "user" ? "/parent" : "/school"}
+              // to={"/school"}
               className={({ isActive }) =>
                 isActive ? " text-[#8530C1]" : "text-black"
               }
@@ -184,12 +187,13 @@ const SchoolHeader = ({
               <p className="text-center text-[18px] font-bold my-2">
                 Notification
               </p>
-              {user?.role === "parent" &&
-                notificationData.slice(1).map((data, index) => (
-                  // <Menu.Item>
-                  <ParentNotification key={index} {...data} />
-                  // </Menu.Item>
-                ))}
+              {user?.role === "parent" ||
+                ("user" &&
+                  notificationData.slice(1).map((data, index) => (
+                    // <Menu.Item>
+                    <ParentNotification key={index} {...data} />
+                    // </Menu.Item>
+                  )))}
               {user?.role === "schoolAdmin" &&
                 notificationData.map((data, index) => (
                   // <Menu.Item>
@@ -199,7 +203,7 @@ const SchoolHeader = ({
             </Menu.Dropdown>
           </Menu>
 
-          {user?.role === "parent" ? (
+          {user?.role === "parent" || "user" ? (
             <Menu>
               <Menu.Target>
                 <div className="flex justify-center items-center gap-5  px-6 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">

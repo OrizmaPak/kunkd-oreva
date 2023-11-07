@@ -8,12 +8,14 @@ import "./homefooter.css";
 
 const HomeFooter = () => {
   return (
-    <div className="py-8 pad-x-40 home-footer-w mx-auto ">
+    <div className="py-14 pad-x-40 home-footer-w mx-auto ">
       <div className="flex items-center justify-between">
         <div>
           <img loading="lazy" src={Logo} alt="Logo" />
         </div>
-        <div className="w-[348px] flex justify-between items-center text3 ">
+        <div className="w-[540px] flex justify-between items-center text3  font-semibold">
+          <span className="cursor-pointer">About Us</span>
+          <span className="cursor-pointer">Blog</span>
           <span className="cursor-pointer">Private Policy</span>
           <span className="cursor-pointer">Term of Use</span>
           <span className="cursor-pointer">Cookies Policy</span>
@@ -39,9 +41,9 @@ const HomeFooter = () => {
         </div>
       </div>
 
-      <hr className="my-4 " />
+      <hr className="my-10" />
 
-      <div className="flex justify-between items-center text3">
+      <div className="flex justify-between items-center text3 font-semibold">
         <div>
           <p> &copy; Copyright 2023 Kunda Kids, All rights reserved.</p>
         </div>

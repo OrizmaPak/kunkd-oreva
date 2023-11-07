@@ -10,3 +10,15 @@
 .about-card-px {
   padding-block: clamp(0.9375rem, -1.723rem + 6.0811vw, 3.75rem) !important;
 }
+
+.content_cont img {
+  display: none !important;
+}
+
+.content_cont br {
+  display: none !important;
+}
+
+/* .content_cont p:last-child {
+  text-align: center;
+} */

@@ -39,7 +39,7 @@ const ShopBooks = () => {
 
   const sliderRef = useRef<Slider>(null);
   return (
-    <div className="relative">
+    <div className="relative ">
       <img
         loading="lazy"
         src={Lines}
@@ -77,17 +77,14 @@ const ShopBooks = () => {
         style={{ backgroundImage: `url(${WaveThree})` }}
       ></div>
       <div className="bg-[#EBEFF3]  w-[100%] pb-[40px] ">
-        <div className="max-w-[800px] mx-auto mb-[70px] leading-8 text-center ">
-          <h1 className="text-black text-3xl font-bold text-center mb-4 leading-8 header2">
+        <div className="max-w-[1000px] mx-auto mb-[70px] leading-8 text-center ">
+          <h1 className="text-black  font-bold text-center mb-4 leading-8 header-1 font-Recoleta ">
             Shop Our Books
           </h1>
-          <p className="text1">
-            Discover a world of literary treasures at the Kunda Kids store,
-            where you can find carefully curated books, educational materials,
-            and engaging resources. From beautifully illustrated storybooks to
-            interactive learning kits, we provide everything you need to create
-            a nurturing environment that sparks a love for reading in your
-            child.
+          <p className="text20 font-semibold text-[#7E7E89]">
+            From beautifully illustrated storybooks to interactive learning
+            kits, we provide everything you need to create a nurturing
+            environment that sparks a love for reading in your child.
           </p>
         </div>
 
@@ -117,7 +114,7 @@ const ShopBooks = () => {
                 </p>
                 <p className="font-bold text-[30px] ">₦2,900.00 NGN</p>
                 <p className="mb-10">Tax incuded</p>
-                <button className="bg-white text-[#8530C1] p-3  px-24 rounded-full">
+                <button className="bg-white text-[#8530C1] p-3  px-24 rounded">
                   Add to cart
                 </button>
               </div>
@@ -125,29 +122,29 @@ const ShopBooks = () => {
           </div>
         </div>
 
-        <div className="max-w-[800px] mx-auto leading-8 text-center">
-          <h1 className="pt-8 text-3xl font-bold my-4 ">
-            What Our Client's Have To say
+        <div className=" mx-auto leading-8 text-center  mb-20">
+          <h1 className="pt-8 header-1 font-bold  font-Recoleta ">
+            What our clients have to Say about us
           </h1>
-          <p>
+          {/* <p>
             Kunda & Friends is a beautiful new music-led 3D animation and for
             children that takes preschoolers on a fun and adventurous ride with
             Kunda and his friends
-          </p>
+          </p> */}
         </div>
 
-        <div className="max-w-[1000px] mx-auto gap-4 mb-20 mt-14  relative">
+        <div className="max-w-[1000px] mx-auto gap-4 mb-20 mt-14  relative ">
           <button
             onClick={() => sliderRef?.current?.slickPrev()}
-            className="absolute z-10 -left-8 top-[45%] hover:text-white bg-[#ffff] hover:bg-[#8530C1] rounded-full p-1"
+            className="absolute z-10 -left-14 top-[45%] hover:text-white bg-[#ffff] hover:bg-[#8530C1] rounded-full p-2"
           >
-            <BsChevronLeft />
+            <BsChevronLeft size={30} />
           </button>
           <button
             onClick={() => sliderRef?.current?.slickNext()}
-            className="absolute z-10 -right-8 top-[45%] hover:text-white bg-[#ffff] hover:bg-[#8530C1] rounded-full p-1"
+            className="absolute z-10 -right-14 top-[45%] hover:text-white bg-[#ffff] hover:bg-[#8530C1] rounded-full p-2"
           >
-            <BsChevronRight />
+            <BsChevronRight size={30} />
           </button>
           <Slider ref={sliderRef} {...settings2}>
             <div className="mr-4">
@@ -155,7 +152,7 @@ const ShopBooks = () => {
                 name="Bolu Watife"
                 location="Lagos Nigeria"
                 image={client1}
-                story=" It's good for my own children to maintain a connection to the African continent. What you do is just so amazing and necessary. More African characters and experiences please!"
+                story="It's good for my own children to maintain a connection to the African continent. They grew up in DRCongo but we're moving to Paraguay so I want those stories to be in their lives."
               />
             </div>
             <div className="mr-4">
@@ -163,7 +160,7 @@ const ShopBooks = () => {
                 name="Bolu Watife"
                 location="Lagos Nigeria"
                 image={client1}
-                story=" It's good for my own children to maintain a connection to the African continent. What you do is just so amazing and necessary. More African characters and experiences please!"
+                story="It's good for my own children to maintain a connection to the African continent. What you do is just so amazing and necessary. More African characters and experiences please!"
               />
             </div>
             <div className="mr-4">
@@ -187,7 +184,7 @@ const ShopBooks = () => {
                 name="Bolu Watife"
                 location="Lagos Nigeria"
                 image={client1}
-                story=" It's good for my own children to maintain a connection to the African continent. What you do is just so amazing and necessary. More African characters and experiences please!"
+                story="It's good for my own children to maintain a connection to the African continent. They grew up in DRCongo but we're moving to Paraguay so I want those stories to be in their lives."
               />
             </div>
             <div className="mr-4">
@@ -221,6 +218,7 @@ const ShopBooks = () => {
       line-height: 1; /* Adjust the line height of the dots */
       width: 16px; /* Increase the width of the dots */
       height: 16px; /* Increase the height of the dots */
+      top:28px
       
     }
     .slick-dots li button:before {
