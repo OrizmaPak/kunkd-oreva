@@ -32,6 +32,7 @@ import {
 import { FacebookIcon, TwitterIcon, WhatsappIcon } from "react-share";
 import { Menu } from "@mantine/core";
 import { TStoryContent } from "../Stories/Stories1/Stories1";
+import { UseQueryResult } from "@tanstack/react-query";
 
 type TRecommendedVideo = {
   id: number;
@@ -60,11 +61,12 @@ const VideoPlayer = () => {
   const { data, isLoading } = useGetContentById(
     contentId?.toString()!,
     user?.user_id?.toString()!
-  );
+  ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const { data: recommendedData, isLoading: recommendedIsLoading } =
     useGetRecommendedVideo(contentId?.toString()!);
   const recommendedVideos = recommendedData?.data?.data.recommended_contents;
-  const video = data?.data.data.media[0];
+  const video = data?.data?.data?.media[0];
+  console.log("video", video);
   const videoData = data?.data.data.sub_categories[0];
   const [currentVideoTime, setCurrentVideotime] = useState(0);
   const { mutate } = useContentTracking();
@@ -164,7 +166,7 @@ const VideoPlayer = () => {
             category="Africanlanguages"
             lanType={lan_type}
             title={video && video.name}
-            subCategoryId={videoData?.sub_category_id}
+            subCategoryId={videoData?.sub_category_id.toString()}
             subCategoryName={videoData?.sub_category_name}
           />
         </Skeleton>
@@ -229,17 +231,17 @@ const VideoPlayer = () => {
                       <Menu.Dropdown>
                         <div className="flex justify-center items-center">
                           <Menu.Item>
-                            <TwitterShareButton url={video?.file}>
+                            <TwitterShareButton url={video?.file!}>
                               <TwitterIcon size={30} />
                             </TwitterShareButton>
                           </Menu.Item>
                           <Menu.Item>
-                            <FacebookShareButton url={video?.file}>
+                            <FacebookShareButton url={video?.file!}>
                               <FacebookIcon size={30} />
                             </FacebookShareButton>
                           </Menu.Item>
                           <Menu.Item>
-                            <WhatsappShareButton url={video?.file}>
+                            <WhatsappShareButton url={video?.file!}>
                               <WhatsappIcon size={30} />
                             </WhatsappShareButton>
                           </Menu.Item>
@@ -251,11 +253,10 @@ const VideoPlayer = () => {
 
                 <div className="mt-4 bg-white left-10 p-10 rounded-3xl leading-10">
                   <p>
-                    {video?.content} Lorem ipsum dolor, sit amet consectetur
-                    adipisicing elit. Suscipit iste beatae veritatis, corrupti
-                    porro minima fugit tempore dicta cum eaque, vero dolore quas
-                    unde obcaecati perferendis. Voluptate deserunt similique
-                    veniam.
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Suscipit iste beatae veritatis, corrupti porro minima fugit
+                    tempore dicta cum eaque, vero dolore quas unde obcaecati
+                    perferendis. Voluptate deserunt similique veniam.
                   </p>
                 </div>
               </div>

@@ -8,7 +8,6 @@ import Ellipse7 from "@/assets/Video Icon.svg";
 import Ellipse8 from "@/assets/Ellipse 58.svg";
 import Ellipse9 from "@/assets/Ellipse 57.svg";
 import Ellipse10 from "@/assets/Ellipse 51.svg";
-import Ellipse11 from "@/assets/Rectangle 2304.svg";
 import Ellipse12 from "@/assets/Ellipse 59.svg";
 import React from "react";
 import "./ParentHero.css";

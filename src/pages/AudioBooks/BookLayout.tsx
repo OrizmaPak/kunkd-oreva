@@ -27,22 +27,24 @@ import { FiVolume1 } from "react-icons/fi";
 import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
 import { getApiErrorMessage } from "@/api/helper";
 import { notifications } from "@mantine/notifications";
+import { UseQueryResult } from "@tanstack/react-query";
+import { TMedia } from "@/pages/Stories/Stories1/Stories1";
 
-type TAudioBook = {
-  name: string;
-  slug: string;
-  order: number;
-  file: string;
-  thumbnail: string;
-  id: number;
-};
+// type TAudioBook = {
+//   name: string;
+//   slug: string;
+//   order: number;
+//   file: string;
+//   thumbnail: string;
+//   id: number;
+// };
 const BookLayout = () => {
   const contentId = localStorage.getItem("contentId");
   const [user] = useStore(getUserState);
   const { data, isLoading } = useGetContentById(
     contentId?.toString()!,
     user?.user_id?.toString()!
-  );
+  ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const audioBookId = data?.data.data.id;
   const audiobook = data?.data.data.media[0];
   const [startRead, setStartRead] = useState(false);
@@ -65,7 +67,7 @@ const BookLayout = () => {
               <Skeleton visible={isLoading}>
                 {!startRead && (
                   <AboutPage
-                    audiobook={audiobook}
+                    audiobook={audiobook!}
                     setStartRead={() => setStartRead(true)}
                     audioBookId={audioBookId!}
                   />
@@ -100,7 +102,7 @@ const AboutPage = ({
   setStartRead,
   audioBookId,
 }: {
-  audiobook: TAudioBook;
+  audiobook: TMedia;
   setStartRead: () => void;
   audioBookId: number;
 }) => {
@@ -236,7 +238,7 @@ const AboutPage = ({
   );
 };
 
-const ReadPage = ({ audiobook }: { audiobook: TAudioBook }) => {
+const ReadPage = ({ audiobook }: { audiobook: TMedia }) => {
   return (
     <div className="flex bg-[#fff7fd]  gap-16 rounded-3xl ">
       <div className=" basis-full flex   bg-[white]  p-10 rounded-3xl gap-24 ">
