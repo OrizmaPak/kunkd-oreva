@@ -1,6 +1,5 @@
 import Cancel from "@/assets/Cancel.svg";
 import Button from "@/components/Button";
-import { Link } from "react-router-dom";
 import { usePayStackInit, useVerifyCompletePayStack } from "@/api/queries";
 import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
