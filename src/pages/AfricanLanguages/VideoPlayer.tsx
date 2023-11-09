@@ -67,16 +67,25 @@ const VideoPlayer = () => {
   const recommendedVideos = recommendedData?.data?.data.recommended_contents;
   const media = data?.data?.data?.media;
   const video = media?.[0];
-  console.log("video", video);
+  // console.log("video", video);
   const videoData = data?.data.data.sub_categories?.[0];
   const [currentVideoTime, setCurrentVideotime] = useState(0);
   const { mutate } = useContentTracking();
   const profileId = localStorage.getItem("profileId");
   const [delay, setDelay] = useState(0);
 
-  setInterval(() => {
-    setDelay((prev) => prev++);
-  }, 1000);
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+    if (!videoRef.current?.paused) {
+      interval = setInterval(() => {
+        console.log("interval ran inside");
+        setDelay((prev) => prev + 1);
+      }, 5000);
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  }, [!videoRef.current?.paused]);
 
   useEffect(() => {
     mutate(

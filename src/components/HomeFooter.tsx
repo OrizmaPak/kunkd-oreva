@@ -7,37 +7,87 @@ import AppleStore from "@/pages/Home/AppleStore";
 import "./homefooter.css";
 
 const HomeFooter = () => {
+  const openInNewTab = (url: string) => {
+    const newWindow: Window | null = window.open(url, "_blank");
+    if (newWindow) {
+      newWindow.opener = null; // Ensure no access to the current window
+    }
+  };
   return (
     <div className="py-14 pad-x-40 home-footer-w mx-auto ">
       <div className="flex items-center justify-between">
         <div>
           <img loading="lazy" src={Logo} alt="Logo" />
         </div>
-        <div className="w-[540px] flex justify-between items-center text3  font-semibold">
-          <span className="cursor-pointer">About Us</span>
-          <span className="cursor-pointer">Blog</span>
-          <span className="cursor-pointer">Private Policy</span>
-          <span className="cursor-pointer">Term of Use</span>
-          <span className="cursor-pointer">Cookies Policy</span>
+        <div className="w-[540px] flex justify-between items-center text3  font-medium ">
+          <button className="cursor-pointer">About Us</button>
+          <button
+            onClick={() => {
+              openInNewTab("https://kundakids.com/en-ng/blogs/news");
+            }}
+            className="cursor-pointer font-medium"
+          >
+            Blog
+          </button>
+          <button
+            onClick={() => {
+              openInNewTab(
+                "https://kundakids.com/en-ng/policies/privacy-policy"
+              );
+            }}
+            className="cursor-pointer"
+          >
+            Private Policy
+          </button>
+          <button
+            onClick={() => {
+              openInNewTab(" https://kundakids.com/policies/terms-of-service");
+            }}
+            className="cursor-pointer"
+          >
+            Term of Use
+          </button>
+          <button
+            onClick={() => {
+              openInNewTab("");
+            }}
+            className="cursor-pointer"
+          >
+            Cookies Policy
+          </button>
         </div>
         <div className="flex items-center justify-between w-[150px] cursor-pointer">
-          <span>
+          <button
+            onClick={() => {
+              openInNewTab("https://m.facebook.com/kundakids/");
+            }}
+          >
             <img
               loading="lazy"
               src={facebook}
               alt="facebookLogo cursor-pointer"
             />
-          </span>
-          <span>
+          </button>
+          <button
+            onClick={() => {
+              openInNewTab(
+                " https://instagram.com/kundakids?igshid=NzZlODBkYWE4Ng=="
+              );
+            }}
+          >
             <img loading="lazy" src={insta} alt="instaLogo cursor-pointer" />
-          </span>
-          <span>
+          </button>
+          <button
+            onClick={() => {
+              openInNewTab(" https://twitter.com/kundakids?lang=en");
+            }}
+          >
             <img
               loading="lazy"
               src={twitter}
               alt="twitterLogo cursor-pointer"
             />
-          </span>
+          </button>
         </div>
       </div>
 

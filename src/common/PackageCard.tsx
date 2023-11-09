@@ -35,6 +35,11 @@ const PackageCard = ({
   const handlePaln = (planId: number) => {
     if (!plan) {
       navigate("/childprofilesetup");
+      if (localStorage.getItem("gotToHome") === "true") {
+        navigate("/parent");
+      } else {
+        navigate("/childprofilesetup");
+      }
     } else {
       localStorage.setItem("planId", planId?.toString());
       navigate("/makepayment");
@@ -66,7 +71,7 @@ const PackageCard = ({
             recommended ? "text-white" : ""
           } `}
         >
-          {plan?.dollar_value || price}
+          {price}
         </div>
       )}
       {content && !isIcon && (

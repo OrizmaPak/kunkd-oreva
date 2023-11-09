@@ -181,7 +181,7 @@ const CardHome = ({
       </span>
 
       {!hasRage ? (
-        <p className="mt-[2px]  text3 font-Hanken font-semibold  leading-2">
+        <p className="mt-[2px]  text2 font-Hanken font-semibold  leading-2">
           {name}
         </p>
       ) : (

@@ -20,7 +20,7 @@ import BookIcon from "@/assets/bookicon.svg";
 import "./parenthomepage.css";
 import { TStoryContent } from "../Stories/Stories1/Stories1";
 import { GrNext, GrPrevious } from "react-icons/gr";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Slider from "react-slick";
 
 const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
@@ -34,6 +34,10 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
   const recommendedStories = contentData?.data.data.recommended_stories;
   const newTrending = contentData?.data.data.trending_stories;
   const currentId = childProfile;
+
+  useEffect(() => {
+    localStorage.setItem("gotToHome", "true");
+  }, []);
 
   console.log("test1- nad ----------", +currentId, +childProfile, profiles);
 

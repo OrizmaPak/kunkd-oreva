@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import CardScreenHome from "@/common/User/CardScreenHome";
 import CardHome from "@/common/User/CardHome";
 import Bookmark from "@/assets/Bookmark.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useState, RefObject } from "react";
 import Congrats from "@/assets/congrats.svg";
 import {
   useGetContentById,
@@ -92,6 +92,7 @@ const Stories1 = () => {
   const { data: recommendedData, isLoading } = useContentForHome();
   const recommendedStories = recommendedData?.data.data.recommended_stories;
   const navigate = useNavigate();
+  const myRef: RefObject<HTMLDivElement> = useRef(null);
 
   return (
     <div className=" ">
@@ -133,6 +134,7 @@ const Stories1 = () => {
                     thumbnail={content.thumbnail!}
                     content={content.pages!}
                     setIsFinish={() => setIsFinish(true)}
+                    divRef={myRef}
                   />
                 )}
 
@@ -314,10 +316,12 @@ const ReadPage = ({
   content,
   setIsFinish,
   thumbnail,
+  divRef,
 }: {
   content: TContentPage[];
   setIsFinish: () => void;
   thumbnail: string;
+  divRef: RefObject<HTMLDivElement>;
 }) => {
   const [isReading, setIsReading] = useState(false);
   const [page, setPage] = useState(0);
@@ -418,7 +422,10 @@ const ReadPage = ({
             </p>
           </p>
           {!isReading && (
-            <p className=" leading-10 flex h-[350px] overflow-y-auto  text20 font-medium font-Hanken pr-8 text-justify ">
+            <p
+              ref={divRef}
+              className=" leading-10 flex h-[350px] overflow-y-auto  text20 font-medium font-Hanken pr-8 text-justify "
+            >
               {/* {content[page].web_body} */}
 
               <p
@@ -461,6 +468,7 @@ const ReadPage = ({
               setPage={setPage}
               pageTotal={pageTotal}
               setPageNumber={setPageNumber}
+              divRef={divRef}
             />
           )}
         </div>
@@ -474,11 +482,13 @@ const BookPagination = ({
   setPage,
   pageTotal,
   setPageNumber,
+  divRef,
 }: {
   setIsFinish: () => void;
   setPage: (val: number) => void;
   pageTotal: number;
   setPageNumber: (val: number) => void;
+  divRef: RefObject<HTMLDivElement>;
 }) => {
   const { mutate } = useContentTracking();
   const continuePage = localStorage.getItem("continuePage");
@@ -554,7 +564,14 @@ const BookPagination = ({
         </span>
         <div className="flex gap-4">
           <p className="bg-[#8530C1] text-white p-3 rounded-3xl px-8 gap-8 flex justify-between  items-center">
-            <button onClick={() => pageItirate("prev")}>
+            <button
+              onClick={() => {
+                pageItirate("prev");
+                if (divRef.current) {
+                  divRef.current.scrollTop = 0;
+                }
+              }}
+            >
               <GrFormPrevious
                 size={30}
                 color="white"
@@ -570,6 +587,9 @@ const BookPagination = ({
               <button
                 onClick={() => {
                   pageItirate("next");
+                  if (divRef.current) {
+                    divRef.current.scrollTop = 0;
+                  }
                 }}
               >
                 <GrFormNext

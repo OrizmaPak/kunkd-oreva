@@ -153,23 +153,31 @@ const SchoolHeader = ({
             >
               <button>Progress Report</button>
             </NavLink>
+
+            <p className="w-40">
+              {user?.role === "schoolAdmin" && (
+                <button
+                  onClick={handleDashboard}
+                  className="text-black block  "
+                >
+                  School Dashboard
+                </button>
+              )}
+              {user?.role === "teacher" && (
+                <button
+                  onClick={handleDashboard}
+                  className="text-black block  "
+                >
+                  Teacher Dashboard
+                </button>
+              )}
+            </p>
           </div>
         </div>
 
         <div className="flex items-center justify-center pl-2 gap-10 ">
           <SearchService />
-          <p className="w-40">
-            {user?.role === "schoolAdmin" && (
-              <button onClick={handleDashboard} className="text-black block  ">
-                School Dashboard
-              </button>
-            )}
-            {user?.role === "teacher" && (
-              <button onClick={handleDashboard} className="text-black block  ">
-                Teacher Dashboard
-              </button>
-            )}
-          </p>
+
           <Menu>
             {" "}
             <Menu.Target>

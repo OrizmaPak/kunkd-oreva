@@ -66,6 +66,9 @@ import { selectAvatarType } from "@/pages/AfterParentSignIn/SelectProfile";
 import { ApiResponse } from "./types";
 import { getProfileState } from "@/store/profileStore";
 import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
+import { useNavigate } from "react-router-dom";
+import { notifications } from "@mantine/notifications";
 
 export const querykeys = {
   profiles: ["GetProfile"],
@@ -182,6 +185,8 @@ export const useContentForHome = () => {
 };
 
 export const useGetContentById = (contentId: string, userId: string) => {
+  const [user] = useStore(getUserState);
+  const navigate = useNavigate();
   return useQuery({
     queryKey: ["getContentById", contentId, userId],
     queryFn: () => GetContentById(contentId, userId),
@@ -191,7 +196,27 @@ export const useGetContentById = (contentId: string, userId: string) => {
       const res = response as ApiResponse<unknown>;
       const status = res.data.status;
       console.log("response:", res);
-      if (status === false) {
+      console.log("user,", user);
+      console.log("navigate");
+
+      if (
+        status === false ||
+        res.data.message === "Number of allowed contents reached!"
+      ) {
+        if (user?.role === "user") {
+          console.log("hello-------");
+          navigate("/packages");
+          notifications.show({
+            title: `Notification`,
+            message: res.data.message,
+          });
+        } else if (user?.role === "schoolAdmin") {
+          navigate("/kundakidsunlimited");
+          notifications.show({
+            title: `Notification`,
+            message: res.data.message,
+          });
+        }
       }
     },
   });

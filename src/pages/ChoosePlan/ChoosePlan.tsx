@@ -1,7 +1,9 @@
 import ParentSignupLayout from "@/common/ParentSignupLayout";
 import MonthPackage from "@/pages/ChoosePlan/ChoosePlanContent";
 import Cancel from "@/assets/Cancel.svg";
-import { Link } from "react-router-dom";
+import useStore from "@/store/index";
+import { useNavigate } from "react-router-dom";
+import { getProfileState } from "@/store/profileStore";
 
 const ChoosePlan = () => {
   // const [isMonth, setIsMonth] = useState(true);
@@ -12,15 +14,28 @@ const ChoosePlan = () => {
   // const handleYear = () => {
   //   setIsMonth(false);
   // };
+  const [, setProfiles] = useStore(getProfileState);
+  const navigate = useNavigate();
+
   return (
     <>
       <ParentSignupLayout active={2}>
         <div className="mt-20 relative">
-          <Link to="/">
+          <button
+            onClick={() => {
+              if (localStorage.getItem("gotToHome") === "true") {
+                navigate("/parent");
+              } else {
+                navigate("/");
+                localStorage.clear();
+                setProfiles([]);
+              }
+            }}
+          >
             <span className="absolute top-0 right-32">
               <img loading="lazy" src={Cancel} alt="cancel" />
             </span>
-          </Link>
+          </button>
           <h1 className="text-center font-Recoleta font-bold text-[30px]">
             Get KundaKids Unlimited
           </h1>

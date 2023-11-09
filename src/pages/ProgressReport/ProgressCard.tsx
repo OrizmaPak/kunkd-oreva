@@ -33,7 +33,7 @@ const ProgressCard = ({
       <div className="basis- basis-1/2 p-5 ">
         <h1 className="my-1 font-Hanken font-bold text3">{data?.name}</h1>
         <div className=" w-full">
-          {!isCompleted ? (
+          {data.pages_read != data?.pages?.length ? (
             <div className="flex justify-center  items-center gap-4 ">
               <span>{range ? range : 60}%</span>
               <span className="  flex-grow">

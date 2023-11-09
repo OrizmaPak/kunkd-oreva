@@ -14,7 +14,7 @@ import Completed from "./Completed";
 import {
   useGetOngoingContents,
   useGetCompletedContents,
-  // useGetContentsLog,
+  useGetContentsLog,
 } from "@/api/queries";
 import { TStoryContent } from "../Stories/Stories1/Stories1";
 
@@ -36,11 +36,13 @@ export type TContentLog = {
 
 const ProgressReport = () => {
   const profileId = localStorage.getItem("profileId");
+  const { data: statusData } = useGetContentsLog(profileId!);
   const { data } = useGetOngoingContents(profileId!);
   const { data: completedData } = useGetCompletedContents(profileId!);
   const ongoingContents: TStoryContent[] = data?.data.data.ongoing_contents;
   const completedContents: TStoryContent[] =
     completedData?.data.data.completed_contents;
+  console.log("statusData", statusData);
 
   const categoryCalculator = (
     category: string,
@@ -125,7 +127,7 @@ const ProgressReport = () => {
                 <Completed data={completedContents!} />
               )}
             </div>
-            <div className="px-28 flex justify-end pt-14">
+            <div className="px-28 flex justify-end pt-14 pb-8">
               <Pagination
                 total={5}
                 styles={() => ({

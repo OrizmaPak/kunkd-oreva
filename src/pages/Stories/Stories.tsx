@@ -133,7 +133,7 @@ const Story = () => {
         </div>
       </div>
       {totalPage > 1 && (
-        <div className="px-10  mr-2 flex justify-end ">
+        <div className="px-10  mr-2 flex justify-end  pb-8">
           <Pagination
             total={totalPage}
             value={activePage}

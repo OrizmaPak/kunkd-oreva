@@ -281,13 +281,14 @@ const ReadPage = ({ audiobook }: { audiobook: TMedia }) => {
 };
 
 const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
-  console.log("file", audio);
+  // console.log("file", audio);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   // const progressBar = useRef<HTMLInputElement>(null);
   const [currentTTime, setCurrentTTime] = useState(0);
   const [durationn, setDuration] = useState(0);
   const [load, setLoad] = useState(false);
+  const [delay, setDelay] = useState(0);
 
   const handlePlayControl = () => {
     const audioCon = audioRef.current;
@@ -362,33 +363,49 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
   const { mutate } = useContentTracking();
   const profileId = localStorage.getItem("profileId");
   const contentId = localStorage.getItem("contentId");
-  const [delay, setDelay] = useState(0);
-
-  setInterval(() => {
-    setDelay((prev) => prev++);
-  }, 1000);
 
   useEffect(() => {
-    mutate(
-      {
-        profile_id: Number(profileId),
-        content_id: Number(contentId),
-        status: "ongoing",
-        pages_read: Math.ceil(currentTTime),
-        timespent: Math.ceil(currentTTime),
-      },
-      {
-        onSuccess(data) {
-          console.log("success", data.data.message);
+    let interval: ReturnType<typeof setInterval>;
+
+    if (isPlaying) {
+      console.log("interval ran outside");
+      interval = setInterval(() => {
+        console.log("interval ran inside");
+        setDelay((prev) => prev + 1);
+      }, 5000);
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isPlaying]);
+
+  console.log("delay", delay);
+
+  useEffect(() => {
+    if (delay > 0) {
+      console.log("currentTTTTTT---", currentTTime);
+
+      mutate(
+        {
+          profile_id: Number(profileId),
+          content_id: Number(contentId),
+          status: "ongoing",
+          pages_read: Math.ceil(currentTTime),
+          timespent: Math.ceil(currentTTime),
         },
-        onError(err) {
-          notifications.show({
-            title: `Notification`,
-            message: getApiErrorMessage(err),
-          });
-        },
-      }
-    );
+        {
+          onSuccess(data) {
+            console.log("success", data.data.message);
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    }
   }, [delay]);
 
   return (

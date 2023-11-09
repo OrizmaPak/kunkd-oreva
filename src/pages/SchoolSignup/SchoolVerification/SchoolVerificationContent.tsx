@@ -61,7 +61,7 @@ const SchoolVerificationContent = () => {
             message: data.data.message,
           });
           setUser({ ...res });
-          navigate("/secureadminportal");
+          navigate("/schoolcongratulations");
         },
         onError(err) {
           notifications.show({

@@ -19,6 +19,10 @@
   display: none !important;
 }
 
+.content_cont strong {
+  text-align: center;
+}
+
 /* .content_cont p:last-child {
   text-align: center;
 } */

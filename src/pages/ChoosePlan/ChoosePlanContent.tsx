@@ -7,7 +7,8 @@ import { BsX, BsCheckLg } from "react-icons/bs";
 const ChoosePlanContent = () => {
   const { isLoading, data } = useGetPlans();
 
-  const plans = data?.data.data.plans;
+  const planData = data?.data.data;
+
   return (
     <div>
       <Skeleton visible={isLoading}>
@@ -41,10 +42,14 @@ const ChoosePlanContent = () => {
 
             <PackageCard
               isIcon={true}
-              plan={plans && plans[0]}
+              plan={planData && planData?.plans[0]}
               title="1 Month"
               btn="Choose"
-              price="$4.99/m"
+              price={
+                planData && planData?.countryCode === "NG"
+                  ? planData?.plans[0]?.naira_value
+                  : planData?.plans[0]?.dollar_value
+              }
               content={[
                 <BsCheckLg size={25} color="green" />,
                 <BsCheckLg size={25} color="green" />,
@@ -55,12 +60,16 @@ const ChoosePlanContent = () => {
             ></PackageCard>
             <PackageCard
               recommended={true}
-              plan={plans && plans[1]}
+              plan={planData && planData?.plans[1]}
               isIcon={true}
               title="12 Months"
               noBorder={true}
               btn="Start Trial"
-              price="$59.88/y"
+              price={
+                planData && planData?.countryCode == "NG"
+                  ? planData?.plans[1]?.naira_value
+                  : planData?.plans[1]?.dollar_value
+              }
               content={[
                 <BsCheckLg size={25} color="white" />,
                 <BsCheckLg size={25} color="white" />,

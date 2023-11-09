@@ -271,7 +271,7 @@ export const ReAssignTeacher = (payload: TAddTeacherData) => {
 
 export const GetOngoingContents = (profileId: string) => {
   return axios.get(
-    `/content/tracking/ongoing${profileId ? `?id= ${profileId}` : ""}`
+    `/content/tracking/ongoing${profileId ? `?id=${profileId}` : ""}`
   );
 };
 
