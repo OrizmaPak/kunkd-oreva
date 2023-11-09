@@ -1,6 +1,5 @@
 import Button from "@/components/Button";
 import Congrats from "@/assets/congrats.svg";
-import { Link } from "react-router-dom";
 import ParentSignupLayout from "@/common/ParentSignupLayout";
 import { useNavigate } from "react-router-dom";
 

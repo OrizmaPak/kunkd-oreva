@@ -9,7 +9,7 @@ const Completed = ({ data }: { data: TStoryContent[] }) => {
       <div className="py-8 grid grid-cols-3 gap-4 gap-x-14">
         {data &&
           data.map((data: TStoryContent, index) => {
-            return <ProgressCard key={index} isCompleted={true} data={data} />;
+            return <ProgressCard key={index} data={data} />;
           })}
       </div>
     </div>

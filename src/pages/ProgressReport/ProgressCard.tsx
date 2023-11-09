@@ -9,7 +9,6 @@ import { TStoryContent } from "../Stories/Stories1/Stories1";
 import { DataType } from "../AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import Button from "@/components/Button";
 const ProgressCard = ({
-  isCompleted,
   data,
 }: DataType & { isCompleted?: boolean; data: TStoryContent }) => {
   const range = Math.ceil((100 / data?.pages?.length!) * data?.pages_read!);
