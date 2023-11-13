@@ -1,45 +1,43 @@
-import DotIcon from "@/assets/dotIcon.svg";
-import { Menu } from "@mantine/core";
+import { getApiErrorMessage } from "@/api/helper";
+import {
+  querykeys,
+  useConnectStudentData,
+  useGetSchool,
+  useUpdateProfile,
+} from "@/api/queries";
 import PencilIcon from "@/assets/blackPencilIcon.svg";
+import DotIcon from "@/assets/dotIcon.svg";
+import Kidmeme from "@/assets/kidmeme.svg";
 import LinkIcon from "@/assets/linkIcon.svg";
 import DeleteIcon from "@/assets/redDeleteIcon.svg";
 import InputFormat from "@/common/InputFormat";
-import Button from "@/components/Button";
-import { useDisclosure } from "@mantine/hooks";
-import { Modal } from "@mantine/core";
-import Kidmeme from "@/assets/kidmeme.svg";
-import { useRef, useState, ChangeEvent } from "react";
-import { getProfileState } from "@/store/profileStore";
-import useStore from "@/store/index";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
-import { z, ZodType } from "zod";
+import Button from "@/components/Button";
+import useStore from "@/store/index";
+import { getProfileState } from "@/store/profileStore";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader, Menu, Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import {
-  useUpdateProfile,
-  useGetSchool,
-  useConnectStudentData,
-} from "@/api/queries";
-import { getApiErrorMessage } from "@/api/helper";
-import { Loader } from "@mantine/core";
 import { useQueryClient } from "@tanstack/react-query";
-import { querykeys } from "@/api/queries";
-import { Tclass } from "../DashBoard/SchoolDashBoard/Teachers/AddTeacherForm";
+import { ChangeEvent, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { PiStudent } from "react-icons/pi";
+import { ZodType, z } from "zod";
+import { Tclass } from "../DashBoard/SchoolDashBoard/Teachers/AddTeacherForm";
 
+import { useGetProfile } from "@/api/queries";
 import {
-  ChildNameModal,
   ChildAgeModal,
+  ChildNameModal,
   SelectAvatar,
   WellDoneModal,
 } from "@/pages/AfterParentSignIn/ChildProfileSetUp";
 import { STEP_1, STEP_2, STEP_3, STEP_4 } from "@/utils/constants";
-import { motion } from "framer-motion";
-import { useGetProfile } from "@/api/queries";
-import { MdClose } from "react-icons/md";
-import { AiOutlineClose } from "react-icons/ai";
 import { Skeleton } from "@mantine/core";
+import { motion } from "framer-motion";
+import { AiOutlineClose } from "react-icons/ai";
+import { MdClose } from "react-icons/md";
 
 const MyKids = () => {
   const [profile] = useStore(getProfileState);
@@ -64,7 +62,7 @@ const MyKids = () => {
           onClose={close}
           centered
           size="lg"
-          radius={"xl"}
+          radius={10}
           // closeOnClickOutside={false}
           withCloseButton={false}
         >
@@ -193,10 +191,10 @@ const KidCard = ({
       >
         <EditProfile
           refetch={refetch}
-          id={id!}
-          image={image!}
-          name={name!}
-          dob={dob!}
+          id={id as number}
+          image={image as string}
+          name={name as string }
+          dob={dob as string}
           closeModal={closeEditModal}
         />
       </Modal>
@@ -208,7 +206,7 @@ const KidCard = ({
         withCloseButton={false}
         centered
       >
-        <ConnectTOSchool profileId={id!} closeModal={closeConnectModal} />
+        <ConnectTOSchool profileId={id as number} closeModal={closeConnectModal} />
       </Modal>
       <Modal
         radius={"xl"}
@@ -219,7 +217,7 @@ const KidCard = ({
         withCloseButton={false}
         centered
       >
-        <SchoolProfile student={student!} closeSchModal={closeSchModal} />
+        <SchoolProfile student={student as object} closeSchModal={closeSchModal} />
       </Modal>
 
       <div className=" relative flex  border-[#FBECFF] border-[2px] px-6 py-6 rounded-3xl">
@@ -335,7 +333,7 @@ const EditProfile = ({
   const queryClient = useQueryClient();
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files! && event.target.files[0]!;
+    const file = event.target.files as array && event.target.files[0] as object;
     setSelectedFile(file);
     console.log(file);
     console.log("name", name, dob);
@@ -373,8 +371,8 @@ const EditProfile = ({
     console.log("hjbn bnbhjjhjkkj", data, selectedFile, id);
     mutate(
       {
-        name: data.name!,
-        age: data.dob!,
+        name: data.name as string,
+        age: data.dob as string,
         image: selectedFile as File, // Changed the type here to `File`
         profile_id: `${id}`,
       },
@@ -415,7 +413,7 @@ const EditProfile = ({
           <p className="flex gap-2 justify-end items-center">
             <img
               loading="lazy"
-              src={!selectedFile ? image : URL.createObjectURL(selectedFile!)}
+              src={!selectedFile ? image : URL.createObjectURL(selectedFile as string)}
               alt="Avatar"
               className="h-[100px] w-[100px]  object-cover"
             />
@@ -473,7 +471,7 @@ const EditProfile = ({
                   type="date"
                   reg={register("dob")}
                   errorMsg={errors && errors?.dob?.message}
-                  value={dob!}
+                  value={dob as sting}
                 />
               </p>
             </p>

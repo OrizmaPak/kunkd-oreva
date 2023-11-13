@@ -1,74 +1,76 @@
 import {
-  ParentSignUp,
-  SchoolSignUp,
-  VerifyOtp,
-  SecurePortal,
-  SetPassword,
-  Login,
-  ForgotPassword,
-  ResetPassword,
-  GetAvatars,
-  Profile,
-  GetProfile,
-  UpdatePassword,
-  UpdateProfile,
-  SocialSignUp,
-  ContentForHome,
-  GetContentById,
-  GetSubCategories,
-  SocialLogin,
-  GetContebtBySubCategories,
-  GetAudioBooks,
-  ResendOTP,
-  UpdateSchProfile,
-  GetCountries,
-  GetStates,
-  UpdateParentProfile,
-  VerifyPin,
-  UpdateSchImage,
-  UpdateSchoolNameAddress,
-  GetQuiz,
-  UpdateParentImage,
-  GetPlans,
-  PayStackInit,
-  VerifyCompletePayStack,
-  StripeInit,
-  GetTrendingAudioBooks,
-  GetRecommendedVideo,
-  GetIntroVideo,
-  LikedContent,
-  GetLikedContent,
-  UnLikedContent,
-  ContentTracking,
-  AddTeacherData,
+  AcceptStudentAdmission,
   AddClassData,
-  GetClassList,
-  GetSchool,
+  AddTeacherData,
+  CancelSubscription,
   ConnectStudentData,
-  GetTeacherList,
+  ContentForHome,
+  ContentTracking,
+  ForgotPassword,
+  GetAdmittedStudentsInClass,
   GetAdmittedStudentsInSchool,
   GetAttemptStudentConnect,
-  ReAssignTeacher,
-  GetOngoingContents,
+  GetAudioBooks,
+  GetAvatars,
+  GetClassList,
   GetCompletedContents,
+  GetContebtBySubCategories,
+  GetContentById,
   GetContentsLog,
-  AcceptStudentAdmission,
-  RejectStudentAdmission,
-  GetAdmittedStudentsInClass,
-  SaveQuiz,
+  GetCountries,
+  GetIntroVideo,
+  GetLikedContent,
   GetMainSearch,
+  GetOngoingContents,
+  GetPlans,
+  GetProfile,
+  GetQuiz,
+  GetRecommendedVideo,
+  GetSchool,
+  GetStates,
+  GetSubCategories,
+  GetTeacherList,
+  GetTrendingAudioBooks,
+  LikedContent,
+  Login,
+  ParentSignUp,
+  PayStackInit,
+  Profile,
+  ReAssignTeacher,
+  RejectStudentAdmission,
+  ResendOTP,
+  ResetPassword,
+  SaveQuiz,
+  SchoolSignUp,
+  SecurePortal,
+  SetPassword,
+  SetTeacherPassword,
+  SocialLogin,
+  SocialSignUp,
+  StripeInit,
+  UnLikedContent,
+  UpdateParentImage,
+  UpdateParentProfile,
+  UpdatePassword,
+  UpdateProfile,
+  UpdateSchImage,
+  UpdateSchProfile,
+  UpdateSchoolNameAddress,
+  VerifyCompletePayStack,
+  VerifyOtp,
+  VerifyPin
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 // import { TProfileData } from "./types";
 // import { AxiosResponse } from "axios";
 import { selectAvatarType } from "@/pages/AfterParentSignIn/SelectProfile";
-import { ApiResponse } from "./types";
-import { getProfileState } from "@/store/profileStore";
-import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
-import { useNavigate } from "react-router-dom";
+import useStore from "@/store/index";
+import { getProfileState } from "@/store/profileStore";
 import { notifications } from "@mantine/notifications";
+import { useNavigate } from "react-router-dom";
+import { ApiResponse } from "./types";
 
 export const querykeys = {
   profiles: ["GetProfile"],
@@ -108,6 +110,12 @@ export const useSetPassword = () => {
   });
 };
 
+// Set Teacher password
+export const useTeacherSetPassword = () => {
+  return useMutation({
+    mutationFn: SetTeacherPassword ,
+  });
+};
 // Login
 export const useLogin = () => {
   return useMutation({
@@ -141,7 +149,7 @@ export const useProfle = () => {
 
 // Fetch Profile
 export const useGetProfile = (
-  enabled: boolean = true,
+  enabled?: true,
   onSucces?: (val: selectAvatarType[]) => void
 ) => {
   const [, setProfile] = useStore(getProfileState);
@@ -487,5 +495,11 @@ export const useGetMainSearch = (param: string) => {
     queryFn: () => GetMainSearch(param),
   });
 };
+
+export const useCancelSubscription = () => {
+  return useMutation({
+    mutationFn: CancelSubscription,
+  });
+}
 
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

@@ -1,15 +1,48 @@
-import { useState } from "react";
+import { getApiErrorMessage } from "@/api/helper";
+import { useCancelSubscription, useGetPlans } from "@/api/queries";
+import ArrowDown from "@/assets/colorArrowDown.svg";
+import ArrowUp from "@/assets/colorArrowup.svg";
 import Starr from "@/assets/starr.svg";
 import Button from "@/components/Button";
-import ArrowUp from "@/assets/colorArrowup.svg";
-import ArrowDown from "@/assets/colorArrowDown.svg";
+// import useStore from "@/store";
+// import { getUserState } from "@/store/authStore";
+import { Loader } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { motion } from "framer-motion";
-import useStore from "@/store";
-import { getUserState } from "@/store/authStore";
+import { useState } from "react";
+import { BiSolidEdit } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
+
 
 const Subscriptionplan = () => {
+  const navigate = useNavigate();
+  const {data} = useGetPlans()
+  const {mutate, isLoading} = useCancelSubscription()
+  console.log("data---->",data?.data?.data)
+  const planData = data?.data?.data
   const [openPlan, setOpenPlan] = useState(false);
-  const [user] = useStore(getUserState);
+  // const [user] = useStore(getUserState);
+  const stringObject = localStorage.getItem('user');
+const userObject = JSON.parse(stringObject as string);
+console.log("user----->",userObject)
+const handleCancelSubscription = () => {
+  mutate({},{
+          onSuccess(data) {
+            notifications.show({
+              title: `Notification`,
+              message: data.data.message,
+            });
+           
+          },
+
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        })
+}
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -19,7 +52,11 @@ const Subscriptionplan = () => {
     >
       <div className="px-4 ">
         <h1 className="text25 font-bold my-8">Subscription Plan</h1>
-        <div className="px-6 border border-[#8530C1]  py-10 rounded-3xl my-8 ">
+
+        { userObject?.subscription?.plan === "" || userObject?.subscription?.plan === undefined || userObject?.subscription?.cancelled_subscription === true
+ ?
+          <div>
+          <div className="px-6 border border-[#8530C1]  py-10 rounded-3xl my-8 ">
           <div className="grid grid-cols-[1fr_1fr_300px]">
             <p className="flex flex-col">
               <span className="text-[#B5B5C3] text-[16px]">Plan</span>
@@ -31,7 +68,7 @@ const Subscriptionplan = () => {
             </p>
 
             <p className="flex justify-center items-center">
-              <Button size="md">
+              <Button onClick={()=>navigate("/packages")} size="md">
                 <p className="flex gap-3">
                   <img loading="lazy" src={Starr} alt="starr" />
                   <span className="text1">Upgrade</span>
@@ -43,8 +80,7 @@ const Subscriptionplan = () => {
             <span></span>
           </div> */}
         </div>
-        {user?.role === "parent" && (
-          <div>
+           <div>
             <div className="flex items-center gap-4">
               <span
                 onClick={() => setOpenPlan((el) => !el)}
@@ -66,7 +102,35 @@ const Subscriptionplan = () => {
               </div>
             )}
           </div>
-        )}
+        </div>
+          :
+           <div>
+            <div className="flex justify-end ">
+              <button onClick={handleCancelSubscription } className="p-3 border-[#FDA29B] border-[2px] rounded text-[#B42318] text2" > 
+                {isLoading ? (
+                <p className="flex justify-center items-center">
+                  <Loader color="red" size="sm" />
+                </p>
+              ) : (
+                <span>Cancel Subscription</span>
+              )}</button>
+            </div>
+            <div className="border border-[#8530C1]  py-10 rounded-3xl my-8 ">
+         <div className="flex justify-between  px-3">
+          <p ><button className=" p-2  flex item-center justisfy-center gap-2 rounded">  <span>{userObject?.subscription?.plan.charAt(0).toUpperCase() + userObject?.subscription?.plan.slice(1)} plan </span> </button></p>
+          <p><button onClick={()=>navigate("/packages")} className="bg-[#F3DAFF] p-2 text-[#8530C1] flex item-center justisfy-center gap-2 rounded"> <BiSolidEdit size={20} color="#8530C1"/><span>change plan</span>  </button></p>
+         </div>
+         <hr  className="border-[#8530C1] my-2"/>
+         <div className="px-3"> 
+          <p><span className="text25">{userObject?.subscription?.plan === "standard" ? planData?.plans[0]?.dollar_value : planData.plans[0]?.dollar_value }{" "} </span>  per{" "}{userObject?.subscription?.plan === "standard"? "Month" : "Year"}</p>
+         </div>
+        </div>
+          </div>
+         
+        }
+        
+        
+        
       </div>
     </motion.div>
   );

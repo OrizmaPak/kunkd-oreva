@@ -1,33 +1,32 @@
-import InnerWrapper from "@/common/User/InnerWrapper";
-import Wrapper from "@/common/User/Wrapper";
-import Hero from "./Hero";
-import AdsButton from "@/common/User/AdsButton";
-import useStore from "@/store/index";
-import { getProfileState } from "@/store/profileStore";
-import { selectAvatarType } from "./SelectProfile";
 import {
   useContentForHome,
   // useGetContentsLog,
   useGetOngoingContents,
 } from "@/api/queries";
-import CardScreenHome from "@/common/User/CardScreenHome";
-import CardHome from "@/common/User/CardHome";
-import CategoriesCard from "../Library/LibraryNotPaid/CategoriesCard";
-import { useNavigate } from "react-router-dom";
+import BookIcon from "@/assets/bookicon.svg";
 import musicIcon from "@/assets/musicIcon.svg";
 import videoIcon from "@/assets/videoicon.svg";
-import BookIcon from "@/assets/bookicon.svg";
-import "./parenthomepage.css";
-import { TStoryContent } from "../Stories/Stories1/Stories1";
-import { GrNext, GrPrevious } from "react-icons/gr";
+import AdsButton from "@/common/User/AdsButton";
+import CardHome from "@/common/User/CardHome";
+import CardScreenHome from "@/common/User/CardScreenHome";
+import InnerWrapper from "@/common/User/InnerWrapper";
+import Wrapper from "@/common/User/Wrapper";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
+import { getProfileState } from "@/store/profileStore";
 import { useEffect, useRef } from "react";
+import { GrNext, GrPrevious } from "react-icons/gr";
+import { Navigate, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
+import CategoriesCard from "../Library/LibraryNotPaid/CategoriesCard";
+import { TStoryContent } from "../Stories/Stories1/Stories1";
+import Hero from "./Hero";
+import "./parenthomepage.css";
 
 const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
-  let profile: selectAvatarType;
   const [profiles] = useStore(getProfileState);
-  const profileId = localStorage.getItem("profileId");
-  const { data: ongoingData } = useGetOngoingContents(profileId!);
+  const profileId = localStorage.getItem("profileId") as string;
+  const { data: ongoingData } = useGetOngoingContents(profileId);
   const ongoingContents: TStoryContent[] =
     ongoingData?.data.data.ongoing_contents;
   const { isLoading, data: contentData } = useContentForHome();
@@ -50,16 +49,10 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
   //   profile = profiles?.find((each) => each.id === currentId)!;
   // }
 
-  if (childProfile) {
-    profile = profiles?.find((each) => each.id === +childProfile)!;
-    console.log(profile);
-  } else {
-    return;
-  }
-
+  
   const navigate = useNavigate();
-  const userInLocalStr = localStorage.getItem("user");
-  const user = JSON.parse(userInLocalStr!);
+  // const user = JSON.parse(userInLocalStr!);
+  const [user ]= useStore(getUserState)
   const settings = {
     dots: false,
     centerMode: false,
@@ -70,6 +63,11 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
     slidesToScroll: 5,
   };
   const sliderReff = useRef<Slider>(null);
+
+  const profile = childProfile ? profiles?.find((each) => each.id === +childProfile) : profiles[0];
+  if(!user || !profile){
+    return <Navigate to="/"  replace />
+  }
 
   return (
     <div>

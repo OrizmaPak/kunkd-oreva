@@ -1,7 +1,11 @@
-import DeleteIcon from "@/assets/deleteicon.svg";
 // import ToggleIcon from "@/assets/toggleicon.svg";
 import Rectangle from "@/assets/boxIcon.svg";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { MdChangeCircle } from "react-icons/md";
+import ChangeProfileStatus from "../Teachers/ChangeProfileStatus";
 import { TClassList } from "./Classes";
+
 
 const Row = ({
   data,
@@ -11,16 +15,38 @@ const Row = ({
   data: TClassList;
   onClick?: () => void;
 }) => {
+
+  const [opened, { open, close }] = useDisclosure(false);
+
   return (
-    <div className="hover:cursor-pointer   my-auto border-b-[2px] border-[#eee]  py-5 font-medium ">
-      <div onClick={onClick}>
+    <>
+     <Modal
+        radius={10}
+        padding={30}
+        size={"md"}
+        opened={opened}
+        onClose={close}
+        // title={
+        //   modalStep && modalStep === STEP_3 ? (
+        //     <h1 className="text-[22px] font-semibold text-center  ml-20 font-Recoleta">
+        //       Edit Assigned Class
+        //     </h1>
+        //   ) : null
+        // }
+        withCloseButton={false}
+        centered
+      >
+        <ChangeProfileStatus onCancel={close} label="Class" />
+      </Modal>
+ <div className="   my-auto border-b-[2px] border-[#eee]  py-5 font-medium ">
+      <div >
         <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px]   px-8 ">
           <div className="flex justify-start items-center ">
             <span className=" ">
               <img loading="lazy" src={Rectangle} alt="" />
             </span>
           </div>
-          <div className="flex items-center justify-start gap-2 ">
+          <div onClick={onClick} className="flex hover:cursor-pointer items-center justify-start gap-2 ">
             <span>{data.name}</span>
           </div>
           <div className="flex justify-start items-center ">
@@ -31,14 +57,16 @@ const Row = ({
           </div>
           <div className="flex justify-end  gap-4  items-center">
             <span>{/* <img loading="lazy" src={ToggleIcon} alt="" /> */}</span>
-            <span>
-              <img loading="lazy" src={DeleteIcon} alt="delete" />
-            </span>
+            <button  onClick={open} className="flex justify-center items-center gap-2">
+              <MdChangeCircle size={30} color="#8530C1"/> <span>Active</span>
+            </button>
             <span></span>
           </div>
         </div>
       </div>
     </div>
+    </>
+   
   );
 };
 

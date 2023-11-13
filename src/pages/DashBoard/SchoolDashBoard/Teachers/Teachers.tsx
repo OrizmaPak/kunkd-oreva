@@ -1,16 +1,14 @@
+import { useGetTeacherList } from "@/api/queries";
 import ArrowDown from "@/assets/arrowdown.svg";
 import Rectangle from "@/assets/boxIcon.svg";
-import { Pagination, Skeleton } from "@mantine/core";
+import { STEP_1, STEP_3 } from "@/utils/constants";
+import { Modal, Pagination, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal } from "@mantine/core";
 import { useState } from "react";
+import EditAssignedClass from "./EditAssignedClass";
 import NewTeacher from "./NewTeacher";
 import Profile from "./Profile";
 import Row from "./Row";
-import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
-import DeleteProfile from "./DeleteProfile";
-import EditAssignedClass from "./EditAssignedClass";
-import { useGetTeacherList } from "@/api/queries";
 
 export type DashBoardDataType = {
   noOfTeacher: number;
@@ -42,9 +40,7 @@ const Teachers = () => {
   const teacherList: TTeacherList[] = data?.data.data.records;
   const [opened, { open, close }] = useDisclosure(false);
   const [modalStep, setModalStep] = useState(STEP_1);
-  const handleClick = () => {
-    setModalStep(STEP_2);
-  };
+ 
 
   const [currentClicked, setCucrrentClicked] = useState(0);
   const currentClickedProfile = teacherList?.find(
@@ -53,19 +49,19 @@ const Teachers = () => {
   return (
     <div className="h-full flex flex-col overflow-y-scroll">
       <Modal
-        radius={50}
+        radius={10}
         padding={30}
-        size={currentClickedProfile && modalStep === STEP_1 ? 645 : "lg"}
+        size={currentClickedProfile && modalStep === STEP_1 ? "700" : "md"}
         opened={opened}
         onClose={close}
         title={
           modalStep && modalStep === STEP_3 ? (
-            <h1 className="text-[24] font-semibold ml-36 font-Recoleta">
+            <h1 className="text-[22px] font-semibold text-center  ml-20 font-Recoleta">
               Edit Assigned Class
             </h1>
           ) : null
         }
-        closeButtonProps={{ size: "lg" }}
+        withCloseButton={false}
         centered
       >
         {modalStep === STEP_1 && currentClickedProfile && (
@@ -78,13 +74,13 @@ const Teachers = () => {
             asignClass={currentClickedProfile.class.class_name}
             image={currentClickedProfile?.user.image}
             email={currentClickedProfile?.user.email}
-            handleClick={handleClick}
+            handleClick={()=>close()}
             onEdit={() => setModalStep(STEP_3)}
           />
         )}
-        {modalStep === STEP_2 && <DeleteProfile onCancel={close} />}
+    
 
-        {modalStep === STEP_3 && <EditAssignedClass onClose={close} />}
+      {modalStep === STEP_3 && <EditAssignedClass onClose={close} currentClicked={currentClicked} />}
       </Modal>
       <div className="  flex-grow flex flex-col rounded-3xl p-4 bg-white">
         <div className="grid grid-cols-3 justify-center items-center w-full px-8 ">
@@ -132,7 +128,7 @@ const Teachers = () => {
                   <Row
                     onClick={() => {
                       open();
-                      setCucrrentClicked(data.class_teacher_id);
+                      setCucrrentClicked(data?.class_teacher_id );
                       setModalStep(STEP_1);
                     }}
                     key={index}

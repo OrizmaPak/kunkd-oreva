@@ -1,30 +1,33 @@
-import TeacherIcon from "@/assets/teacher3.svg";
+import {
+  useGetAdmittedStudentsInSchool,
+  useGetClassList,
+  useGetCompletedContents,
+  useGetOngoingContents,
+  useGetTeacherList
+} from "@/api/queries";
+import ArrowDown from "@/assets/arrowdown.svg";
 import StudentIcon from "@/assets/student3.svg";
+import TeacherIcon from "@/assets/teacher3.svg";
+import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+import ProgressLog from "../Students/Profile/ProgressLog";
+import { TTeacherList } from "../Teachers/Teachers";
 import Card from "./Card";
 import ClassLeaderboard from "./ClassLeaderboard";
 import StudentLeaderboard from "./StudentLeaderboard";
-import ArrowDown from "@/assets/arrowdown.svg";
-import ProgressLog from "../Students/Profile/ProgressLog";
-import {
-  useGetTeacherList,
-  useGetAdmittedStudentsInSchool,
-  useGetOngoingContents,
-  useGetCompletedContents,
-} from "@/api/queries";
-import { TTeacherList } from "../Teachers/Teachers";
-import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
 
 const Main = () => {
   const { data: teacherData } = useGetTeacherList();
   const teacherList: TTeacherList[] = teacherData?.data.data.records;
   const { data: studentData, isLoading } = useGetAdmittedStudentsInSchool();
+  const {data:classData, } = useGetClassList()
   const studentList = studentData?.data.data.records;
   const totalStudent: number = studentList?.length;
   const totalTeacher: number = teacherList?.length;
+  const totalClass: number = classData?.data.data.records?.length;
 
   const profileId = localStorage.getItem("profileId");
-  const { data } = useGetOngoingContents(profileId!);
-  const { data: completedData } = useGetCompletedContents(profileId!);
+  const { data } = useGetOngoingContents(profileId as string);
+  const { data: completedData } = useGetCompletedContents(profileId as string);
   const ongoingContents: TStoryContent[] = data?.data.data.ongoing_contents;
   const completedContents: TStoryContent[] =
     completedData?.data.data.completed_contents;
@@ -87,8 +90,9 @@ const Main = () => {
       <div className="flex flex-grow items-start  gap-4  ">
         <div className=" basis-full flex-grow  flex flex-col h-full ">
           <div className="flex  gap-4 items-center justify-center py-2">
-            <Card title="Teachers" image={TeacherIcon} amount={totalTeacher} />
-            <Card title="Students" image={StudentIcon} amount={totalStudent} />
+            <Card title="Teachers" image={TeacherIcon} amount={totalTeacher} max={3} />
+            <Card title="Students" image={StudentIcon} amount={totalStudent} max={10} />
+            <Card title="Classes" image={StudentIcon} amount={totalClass}  max={3}/>
           </div>
           <div className="flex-grow flex ">
             <StudentLeaderboard data={studentList} isLoading={isLoading} />

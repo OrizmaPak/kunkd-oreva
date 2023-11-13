@@ -1,30 +1,23 @@
-import Button from "@/components/Button";
-import InputFormat from "../../common/InputFormat";
-import Cancel from "@/assets/Cancel.svg";
-import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FormData } from "@/common/User/FormValidation/Schema";
-import { z, ZodType } from "zod";
-import { googleSignIn, facebookSignIn } from "@/auth/sdk";
+import { getApiErrorMessage } from "@/api/helper";
 import { useLogin, useSocialLogin } from "@/api/queries";
+import { TUser } from "@/api/types";
+import Cancel from "@/assets/Cancel.svg";
+import { facebookSignIn, googleSignIn } from "@/auth/sdk";
+import { FormData } from "@/common/User/FormValidation/Schema";
+import Button from "@/components/Button";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { getApiErrorMessage } from "@/api/helper";
-import { TUser } from "@/api/types";
-import useStore from "@/store/index";
-import { getUserState } from "@/store/authStore";
-import { FcGoogle } from "react-icons/fc";
+import { useForm } from "react-hook-form";
+import { AiFillFacebook, AiOutlineEye, AiOutlineMail } from "react-icons/ai";
 import { BsApple } from "react-icons/bs";
-import { AiFillFacebook, AiOutlineMail } from "react-icons/ai";
-import { useDisclosure } from "@mantine/hooks";
-import { Modal } from "@mantine/core";
-import { useState } from "react";
-import TeacherLoginModal from "./TeacherLoginModal";
-import { CongratulationsModal } from "./TeacherLoginModal";
-import { STEP_1, STEP_2 } from "@/utils/constants";
-import { AiOutlineEye } from "react-icons/ai";
+import { FcGoogle } from "react-icons/fc";
 import { RiLockLine } from "react-icons/ri";
+import { Link, useNavigate } from "react-router-dom";
+import { ZodType, z } from "zod";
+import InputFormat from "../../common/InputFormat";
 
 const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
@@ -123,13 +116,9 @@ const LoginContent = () => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const [opened1, { open: open1, close: close1 }] = useDisclosure(false);
 
-  const [modalStep, setModalStep] = useState(STEP_1);
-  const [teacherModal, setTeacherModal] = useState(false);
 
   const submitData = (data: FormData) => {
-    localStorage.setItem("userPassword", data?.password!);
 
     mutate(
       {
@@ -144,20 +133,11 @@ const LoginContent = () => {
             message: data.data.message,
           });
 
-          if (res?.role === "schoolAdmin") {
+          if (res?.role === "schoolAdmin" || res?.role === "teacher" ) {
             navigate("/school");
-          } else if (res?.role === "parent" || "user") {
+          } else if (res?.role === "parent" || res?.role === "user") {
             navigate("/selectprofile");
-          } else if (
-            res?.role === "teacher" &&
-            res?.default_password === false
-          ) {
-            navigate("/school");
-          } else if (res?.role === "teacher") {
-            setTeacherModal(true);
-            open1();
-          }
-        },
+        }},
         onError() {
           notifications.show({
             title: `Notification`,
@@ -191,23 +171,7 @@ const LoginContent = () => {
   return (
     <div className="flex justify-center items-center w-full h-full">
       <div className="inner-form-w relative  my-auto flex justify-end items-center ">
-        <Modal
-          radius={"xl"}
-          size="lg"
-          opened={opened1}
-          onClose={close1}
-          closeButtonProps={{
-            size: "xl",
-          }}
-          centered
-        >
-          {teacherModal && modalStep === STEP_1 ? (
-            <TeacherLoginModal onContinue={() => setModalStep(STEP_2)} />
-          ) : (
-            ""
-          )}
-          {teacherModal && modalStep === STEP_2 ? <CongratulationsModal /> : ""}
-        </Modal>
+       
 
         <Link to="/">
           <span className="absolute top-[-60px] ">

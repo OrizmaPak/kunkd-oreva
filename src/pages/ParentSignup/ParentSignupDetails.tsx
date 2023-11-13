@@ -1,22 +1,23 @@
-import Button from "@/components/Button";
-import InputFormat from "@/common/InputFormat";
-import Cancel from "@/assets/Cancel.svg";
-import { Link } from "react-router-dom";
-import FormWrapper from "@/common/FormWrapper";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FormData } from "@/common/User/FormValidation/Schema";
-import { z, ZodType } from "zod";
+import { getApiErrorMessage } from "@/api/helper";
 import { useCreateParentUser } from "@/api/queries";
+import Cancel from "@/assets/Cancel.svg";
+import FormWrapper from "@/common/FormWrapper";
+import InputFormat from "@/common/InputFormat";
+import { FormData } from "@/common/User/FormValidation/Schema";
+import Button from "@/components/Button";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { getApiErrorMessage } from "@/api/helper";
-import { getUserState } from "@/store/authStore";
-import useStore from "@/store";
+import { useForm } from "react-hook-form";
 import { AiOutlineMail } from "react-icons/ai";
+import { Link, useNavigate } from "react-router-dom";
+import { ZodType, z } from "zod";
 // import { motion } from "framer-motion";
 
 const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
+  const navigate = useNavigate();
   const { isLoading, mutate } = useCreateParentUser();
   const [, setUser] = useStore(getUserState);
   const schema: ZodType<FormData> = z.object({
@@ -125,7 +126,7 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
 
             <p className="mt-2  text-center text2 text-gray-400 ">
               <span className="font-Hanken">Already hava an account? </span>
-              <button
+              <button onClick={() => navigate("/login")}
                 className="mt-6 text-[#8530C1] font-bold
               "
               >

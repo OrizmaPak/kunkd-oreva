@@ -1,23 +1,34 @@
-import Cancel from "@/assets/Cancel.svg";
-import Button from "@/components/Button";
-import { usePayStackInit, useVerifyCompletePayStack } from "@/api/queries";
-import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
-import { usePaystackPayment } from "react-paystack";
-import { Loader } from "@mantine/core";
-import { useState, useEffect } from "react";
-import StripeButton from "@/assets/paymentStripe.svg";
+import { usePayStackInit, useVerifyCompletePayStack } from "@/api/queries";
+import Cancel from "@/assets/Cancel.svg";
 import PayStackButton from "@/assets/paymentPaystack.svg";
-import StripWrapper from "./StripWrapper";
+// import StripeButton from "@/assets/paymentStripe.svg";
+import Button from "@/components/Button";
+import { Loader } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { Stripe } from "@stripe/stripe-js";
+import { useEffect, useState } from "react";
+import { usePaystackPayment } from "react-paystack";
 import { useNavigate } from "react-router-dom";
+import PayWitStripButton from "./StripButton";
+import StripWrapper, { TStripe } from "./StripWrapper";
 
 type TPayStack = {
   access_code: string;
   amount: number;
   email: string;
   public_key: string;
-  transaction_reference: string;
+  transaction_reference: string;  
 };
+
+
+const payInit : TPayStack = {
+    transaction_reference: "",
+    email: "",
+    amount: 0, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+    public_key: "",
+    access_code: ""
+  };
 
 const MakePaymentContent = () => {
   const planId = localStorage.getItem("planId");
@@ -25,9 +36,12 @@ const MakePaymentContent = () => {
 
   const { mutate: verifyMutate } = useVerifyCompletePayStack();
   const { mutate, isLoading } = usePayStackInit();
-  const [payStatckData, setPayStatckData] = useState<TPayStack>();
-  const [verifyResponse, setVerifyResponse] = useState("");
-  console.log(verifyResponse);
+  const [payStatckData, setPayStatckData] = useState<TPayStack>(payInit);
+  // const [verifyResponse, setVerifyResponse] = useState("");
+
+   const [stripeData, setStripeData] = useState<TStripe>();
+  const [stripePromise, setStripePromise] = useState<Promise<Stripe | null>>();
+
   const handlePayStackInit = () => {
     mutate(
       {
@@ -54,15 +68,16 @@ const MakePaymentContent = () => {
   const [isPaymentLoading, setLoading] = useState(false);
 
   const options = {
-    reference: payStatckData?.transaction_reference!,
-    email: payStatckData?.email!,
-    amount: payStatckData?.amount!, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
-    publicKey: payStatckData?.public_key!,
+    reference: payStatckData?.transaction_reference,
+    email: payStatckData?.email,
+    amount: payStatckData?.amount, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+    publicKey: payStatckData?.public_key,
   };
 
   const initializePayment = usePaystackPayment(options);
+
   useEffect(() => {
-    let res = payStatckData;
+    const res = payStatckData;
     if (!isPaymentLoading && res?.transaction_reference && res.amount) {
       setLoading(true);
       initializePayment(
@@ -78,7 +93,7 @@ const MakePaymentContent = () => {
                 // window.location.href =
                 //   "http://localhost:5173/congratulations";
                 navigate("/congratulations");
-                setVerifyResponse(data.data.data.transaction_reference);
+                // setVerifyResponse(data.data.data.transaction_reference);
                 notifications.show({
                   title: `Notification`,
                   message: data.data.message,
@@ -103,7 +118,9 @@ const MakePaymentContent = () => {
         }
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [payStatckData]);
+
 
   const [patmentType, setPaymentType] = useState(true);
   const [showStripe, setShowStripe] = useState(false);
@@ -133,18 +150,13 @@ const MakePaymentContent = () => {
           Kindly complete your payment using a valid credit card.
         </p>
 
-        {patmentType && (
+        { planId && patmentType && (
           <div className="flex gap-10 justify-center items-center mt-10">
-            <button
-              onClick={() => {
-                setShowStripe(true);
-                setPaymentType(false);
-              }}
-              className="flex justify-center items-center border border-[#F3DAFF]  px-16  py-3 gap-2 rounded-3xl"
-            >
-              <span className="text-[16px] font-semibold"> pay with </span>
-              <img src={StripeButton} alt="image" className="inline-block" />
-            </button>
+            <PayWitStripButton 
+            planId={planId}
+            setStripeData={setStripeData}
+            setStripePromise={setStripePromise}
+            setShowStripe={setShowStripe} setPaymentType={setPaymentType} />
             <button
               onClick={() => {
                 setShowPatStack(true);
@@ -170,10 +182,13 @@ const MakePaymentContent = () => {
             </Button>
           </p>
         )}
-        {showStripe && (
+        {planId && showStripe && (
           // <Skeleton height={400} width={800} visible={isLoading}>
           <p className="mt-10 flex items-center justify-center">
-            <StripWrapper planId={planId!} />
+            <StripWrapper 
+            stripeData={stripeData}
+            stripePromise={stripePromise}
+            />
           </p>
           // </Skeleton>
         )}
@@ -183,3 +198,5 @@ const MakePaymentContent = () => {
 };
 
 export default MakePaymentContent;
+
+

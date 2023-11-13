@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 // import BellIcon from "@/assets/bellicon.svg";
-import UserIcon from "@/assets/usericon.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
+import UserIcon from "@/assets/usericon.svg";
 // import SearchIcon from "@/assets/searchicon.svg";
 import { Menu, Popover } from "@mantine/core";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -9,20 +9,19 @@ import { NavLink, useNavigate } from "react-router-dom";
 // import { Modal } from "@mantine/core";
 // import EnterPassCode from "@/pages/DashBoard/SchoolDashBoard/Main/EnterPassCode";
 // import { userContext } from "@/Context/StateProvider";
-import UserIcon2 from "@/assets/userIcon2.svg";
-import KundaLogo from "@/assets/schoolIcon.svg";
-import Blxst from "@/assets/Blxst.svg";
-import useStore from "@/store/index";
-import { getUserState } from "@/store/authStore";
-import { getProfileState } from "@/store/profileStore";
-import { AiOutlineBell } from "react-icons/ai";
-import { AiOutlineSearch } from "react-icons/ai";
-import { useState } from "react";
 import { useGetMainSearch } from "@/api/queries";
+import Blxst from "@/assets/Blxst.svg";
+import KundaLogo from "@/assets/schoolIcon.svg";
+import UserIcon2 from "@/assets/userIcon2.svg";
 import useDebounce from "@/hooks/useDebounce";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
+import { getProfileState } from "@/store/profileStore";
+import { useState } from "react";
+import { AiOutlineBell, AiOutlineSearch } from "react-icons/ai";
 // import SchLogo from "@/assets/schLogo.svg";
-import { useQueryClient } from "@tanstack/react-query";
 import { selectAvatarType } from "@/pages/AfterParentSignIn/SelectProfile";
+import { useQueryClient } from "@tanstack/react-query";
 
 const notificationData = [
   {
@@ -85,9 +84,9 @@ const SchoolHeader = ({
   };
 
   const currentId = childProfile;
-  const currentProfile: selectAvatarType = profiles?.find(
+  const currentProfile: selectAvatarType | undefined = profiles?.find(
     (profile: selectAvatarType) => profile.id === Number(currentId)
-  )!;
+  );
 
   return (
     <div className="bg-white w-full fixed top-0 h-[8vh] z-50">
@@ -154,7 +153,7 @@ const SchoolHeader = ({
               <button>Progress Report</button>
             </NavLink>
 
-            <p className="w-40">
+            <p className="w-40  flex justisfy-center item-center">
               {user?.role === "schoolAdmin" && (
                 <button
                   onClick={handleDashboard}
@@ -211,7 +210,7 @@ const SchoolHeader = ({
             </Menu.Dropdown>
           </Menu>
 
-          {user?.role === "parent" || "user" ? (
+          {user?.role === "parent" || user?.role === "user" ? (
             <Menu>
               <Menu.Target>
                 <div className="flex justify-center items-center gap-5  px-6 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
@@ -323,7 +322,7 @@ const SchoolHeader = ({
   );
 };
 
-const SearchService = ({}) => {
+const SearchService = () => {
   const [search, setSearch] = useState("");
   const debounceValue = useDebounce(search, 500);
 
@@ -345,7 +344,8 @@ const SearchService = ({}) => {
   //    }, {})
   //  );
 
-  const removeDuplicatesByKey = (array: any[], key: string) => {
+ 
+  const removeDuplicatesByKey = (array: THints[], key:  keyof THints) => {
     const seen = new Set();
     return array?.filter((item) => {
       const value = item[key];

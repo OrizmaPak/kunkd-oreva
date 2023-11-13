@@ -1,29 +1,29 @@
 import axios from "./axios.config";
 import type {
-  TSchoolSignupData,
-  TVerifyOtpData,
-  TSecurePortalData,
-  TParentSignupData,
-  TSetPasswordData,
-  TLoginData,
-  TForgotPasswordData,
-  TResetPasswordData,
-  TProfileData,
-  TGetProfileData,
-  TUpdatePassword,
-  TUdateProfileData,
-  TGoogleSignUpData,
-  TContentForHome,
-  TUdateSchProfileData,
-  TUdateParentProfileData,
-  TUdateSchImageData,
-  TVerifyPinData,
-  TUdateParentImageData,
-  TPayStackInitData,
-  TLikedContentData,
-  TContentTracking,
   TAddTeacherData,
+  TContentForHome,
+  TContentTracking,
+  TForgotPasswordData,
+  TGetProfileData,
+  TGoogleSignUpData,
+  TLikedContentData,
+  TLoginData,
+  TParentSignupData,
+  TPayStackInitData,
+  TProfileData,
+  TResetPasswordData,
   TSaveQuiz,
+  TSchoolSignupData,
+  TSecurePortalData,
+  TSetPasswordData,
+  TUdateParentImageData,
+  TUdateParentProfileData,
+  TUdateProfileData,
+  TUdateSchImageData,
+  TUdateSchProfileData,
+  TUpdatePassword,
+  TVerifyOtpData,
+  TVerifyPinData,
 } from "./types";
 
 // School
@@ -45,6 +45,10 @@ export const ParentSignUp = (payload: TParentSignupData) => {
 };
 export const SetPassword = (payload: TSetPasswordData) => {
   return axios.post("/password/set", payload);
+};
+
+export const SetTeacherPassword = (payload: TSetPasswordData) => {
+  return axios.post("/teacher/password/set", payload);
 };
 
 // Login
@@ -302,3 +306,7 @@ export const SaveQuiz = (payload: TSaveQuiz) => {
 export const GetMainSearch = (payload: string) => {
   return axios.get(`/search?s=${payload}`);
 };
+
+export const CancelSubscription = () => {
+  return axios.post(`/subscribe/cancel`);
+}

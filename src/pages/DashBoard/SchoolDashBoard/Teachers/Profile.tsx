@@ -18,7 +18,7 @@ const Profile = ({
   // totalStudent: number;
 }) => {
   return (
-    <div className="p-3 ">
+    <div className="p-3 py-1">
       <div className="flex gap-4">
         <div>
           <img
@@ -91,15 +91,15 @@ const Profile = ({
         </div>
       </div> */}
 
-      <div className="flex  gap-4  justify-center my-10 px-28">
+      <div className="flex  gap-4 mt-8 justify-center my-3 px-16">
         {/* <button className="p-4 px-10 bg-red-200 text-red-600 rounded-full flex-grow">
           Cancel
         </button> */}
         <button
           onClick={handleClick}
-          className="p-3 px-10 bg-red-600 text-white rounded-full flex-grow"
+          className="p-3 px-10 bg-[#8530C1] text-white rounded flex-grow"
         >
-          Remove
+          Cancel
         </button>
       </div>
     </div>

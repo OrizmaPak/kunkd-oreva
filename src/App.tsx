@@ -1,72 +1,68 @@
+import SchoolCongrtulations from "@/pages/SchoolSignup/SchoolCongratulations/SchoolCongratulations";
+import Shop from "@/pages/Shop/Shop";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Home from "./pages/Home/Home";
-import Parents from "./pages/Parents/Parents";
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import ShoolHeader from "./common/User/SchoolHeader";
 import HomeFooter from "./components/HomeFooter";
 import HomeHeader from "./components/HomeHeader";
 import HomeNewsLetter from "./components/HomeNewsLetter";
-import Login from "./pages/Login/Login";
+import AboutUs from "./pages/AboutUs/AboutUs";
+import NewlyRegisteredUser from "./pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
+import ChoosePlan from "./pages/ChoosePlan/ChoosePlan";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import Home from "./pages/Home/Home";
+import Login from "./pages/Login/Login";
+import MakePayment from "./pages/MakePayment/MakePayment";
 import NewPassword from "./pages/NewPassword/NewPassword";
+import ParentSignup from "./pages/ParentSignup/ParentSignup";
+import Parents from "./pages/Parents/Parents";
 import PasswordCongratulations from "./pages/PasswordCongratulations/PasswordCongratulations";
-import Signup from "./pages/Signup/Signup";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import KundaKidsUnlimited from "./pages/SchoolSignup/KundaKidsUnlimited/KundaKidsUnlimited";
 import SchoolSignup from "./pages/SchoolSignup/SchoolSignup";
 import SchoolVerification from "./pages/SchoolSignup/SchoolVerification/SchoolVerification";
-import KundaKidsUnlimited from "./pages/SchoolSignup/KundaKidsUnlimited/KundaKidsUnlimited";
-import ParentSignup from "./pages/ParentSignup/ParentSignup";
-import SchoolCongrtulations from "@/pages/SchoolSignup/SchoolCongratulations/SchoolCongratulations";
-import SecureAccount from "./pages/SecureAccount/SecureAccount";
-import MakePayment from "./pages/MakePayment/MakePayment";
-import ChoosePlan from "./pages/ChoosePlan/ChoosePlan";
 import Schools from "./pages/Schools/Schools";
-import AboutUs from "./pages/AboutUs/AboutUs";
-import Shop from "@/pages/Shop/Shop";
-import ShoolHeader from "./common/User/SchoolHeader";
-import NewlyRegisteredUser from "./pages/AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
-import ExistingUserNotPaid from "./pages/AfterSchoolSignIn/User/ExistingUserNotPaid/ExistingUserNotPaid";
-import PaidUser from "./pages/AfterSchoolSignIn/User/PaidUser/PaidUser";
-import LibraryNotPaid from "./pages/Library/LibraryNotPaid/LibraryNotPaid";
-import LibraryPaid from "./pages/Library/LibraryPaid/LibraryPaid";
+import SecureAccount from "./pages/SecureAccount/SecureAccount";
+import Signup from "./pages/Signup/Signup";
 import Stories from "./pages/Stories/Stories";
 // import BedTimeStories from "./pages/Stories/BedTimeStories";
 // import Stories1 from "./pages/Stories/Stories1/Stories1";
+import TeacherLayout from "@/common/User/DashBoard/Teachers/TeacherLayout";
+import Classes from "@/pages/DashBoard/SchoolDashBoard/Classes/Classes";
+import Main from "@/pages/DashBoard/SchoolDashBoard/Main/Main";
+import StudentProfile from "@/pages/DashBoard/SchoolDashBoard/Students/Profile";
+import Students from "@/pages/DashBoard/SchoolDashBoard/Students/Students";
+import Teachers from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";
+import TStudents from "@/pages/DashBoard/TeacherDashboard/Students/Students";
+import SchoolLayout from "./common/User/DashBoard/School/SchoolLayout";
 import MyList from "./pages/MyList/MyList";
 import ProgressReport from "./pages/ProgressReport/ProgressReport";
-import Main from "@/pages/DashBoard/SchoolDashBoard/Main/Main";
-import SchoolLayout from "./common/User/DashBoard/School/SchoolLayout";
-import Teachers from "@/pages/DashBoard/SchoolDashBoard/Teachers/Teachers";
-import Classes from "@/pages/DashBoard/SchoolDashBoard/Classes/Classes";
-import Students from "@/pages/DashBoard/SchoolDashBoard/Students/Students";
-import StudentProfile from "@/pages/DashBoard/SchoolDashBoard/Students/Profile";
-import TeacherLayout from "@/common/User/DashBoard/Teachers/TeacherLayout";
-import TStudents from "@/pages/DashBoard/TeacherDashboard/Students/Students";
 // import TClasses from "@/pages/DashBoard/TeacherDashboard/Classes/Classes";
+import AfricanLanguages from "@/pages/AfricanLanguages/AfricanLanguages";
+import AudioBooks from "@/pages/AudioBooks/AudioBooks";
 import TMain from "@/pages/DashBoard/TeacherDashboard/Main/Main";
+import { onAuthStateChanged } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { TUser } from "./api/types";
+import ScrollToTop from "./components/ScrollToTop";
+import { auth } from "./firebase";
 import AccountLayout from "./pages/Account/AccountLayout";
-import Profile from "./pages/Account/Profile";
 import SettingPassword from "./pages/Account/AccountPassword";
 import Billing from "./pages/Account/Billing";
 import MyKids from "./pages/Account/MyKids";
+import Profile from "./pages/Account/Profile";
 import SubscriptionPlan from "./pages/Account/Subscriptionplan";
-import SecureAdminPortal from "./pages/SchoolSignup/SecureAdminPortal/SecureAdminPortal";
+import ChildProfileSetUp from "./pages/AfterParentSignIn/ChildProfileSetUp";
 import ParentHomePage from "./pages/AfterParentSignIn/ParentHomePage";
 import SelectProfile from "./pages/AfterParentSignIn/SelectProfile";
-import ChildProfileSetUp from "./pages/AfterParentSignIn/ChildProfileSetUp";
-import AudioBooks from "@/pages/AudioBooks/AudioBooks";
-import AfricanLanguages from "@/pages/AfricanLanguages/AfricanLanguages";
-import ScrollToTop from "./components/ScrollToTop";
-import { useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import useStore from "./store";
-import { auth } from "./firebase";
-import { getUserState } from "./store/authStore";
 import PaymentCongratulations from "./pages/MakePayment/PaymentCompletedContent";
-import { TUser } from "./api/types";
+import SecureAdminPortal from "./pages/SchoolSignup/SecureAdminPortal/SecureAdminPortal";
+import useStore from "./store";
+import { getUserState } from "./store/authStore";
 // import { googleSignIn } from "./auth/sdk";
-import Request from "./pages/DashBoard/TeacherDashboard/Request/Request";
-import TeacherSignup from "@/pages/TeacherLogin/index";
 import SchoolRquest from "@/pages/DashBoard/SchoolDashBoard/Request/Request";
+import TeacherSignup from "@/pages/TeacherLogin/index";
+import Request from "./pages/DashBoard/TeacherDashboard/Request/Request";
 
 function App() {
   const [, setUser] = useStore(getUserState);
@@ -81,12 +77,12 @@ function App() {
     return () => {
       unsubscribe();
     };
-  }, []);
-  const [childProfile, setChildProfile] = useState(
-    localStorage.getItem("profileId") ? localStorage.getItem("profileId") : ""
+  }, [setUser]);
+  const [childProfile, setChildProfile] = useState<string>(
+    (localStorage.getItem("profileId") ? localStorage.getItem("profileId") : "") as string
   );
   useEffect(() => {
-    localStorage.setItem("profileId", childProfile!);
+    localStorage.setItem("profileId", childProfile as string) ;
   }, [childProfile]);
   return (
     <BrowserRouter>
@@ -112,7 +108,7 @@ function App() {
             <Route
               element={
                 <AppLayout
-                  childProfile={childProfile!}
+                  childProfile={childProfile}
                   setChildProfile={setChildProfile}
                 />
               }
@@ -129,12 +125,9 @@ function App() {
               </Route>
               <Route
                 path="existingusernotpaid"
-                element={<ExistingUserNotPaid />}
               ></Route>
-              <Route path="paiduser" element={<PaidUser />}></Route>
 
               <Route path="librarynotpaid/*">
-                <Route index element={<LibraryNotPaid />}></Route>
                 <Route path=":category/*" element={<Stories />}></Route>
                 <Route path="audiobooks/*" element={<AudioBooks />}></Route>
                 <Route
@@ -142,7 +135,6 @@ function App() {
                   element={<AfricanLanguages />}
                 ></Route>
               </Route>
-              <Route path="librarypaid" element={<LibraryPaid />}></Route>
               {/* <Route path="stories" element={<Stories />}></Route> */}
               {/* <Route path="bedtimestories" element={<BedTimeStories />}></Route> */}
               {/* <Route path="stories1/:id" element={<Stories1 />}></Route> */}
@@ -155,7 +147,7 @@ function App() {
                   index
                   element={
                     <ParentHomePage
-                      childProfile={childProfile!}
+                      childProfile={childProfile}
                       // setChildProfile={setChildProfile}
                     />
                   }

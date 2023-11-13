@@ -1,29 +1,18 @@
-import Hero from "./Hero";
-import Chisomcard from "@/assets/Chisomcard.svg";
-import Gorillacard from "@/assets/Gorillacard.svg";
-import Afamcard from "@/assets/afamcard.svg";
-import Africancard from "@/assets/africancard.svg";
-import Caterpillercard from "@/assets/caterpillercard.svg";
-import Dancercard from "@/assets/dancercard.svg";
-import Earniing2card from "@/assets/earniing2card.svg";
-import Earningcard from "@/assets/earningcard.svg";
-import Mamacard from "@/assets/mamacard.svg";
-import Puffcard from "@/assets/puffcard.svg";
-import AdsButton from "@/common/User/AdsButton";
-import Wrapper from "@/common/User/Wrapper";
-import InnerWrapper from "@/common/User/InnerWrapper";
-import CategoriesCard from "@/pages/Library/LibraryNotPaid/CategoriesCard";
-import { useNavigate } from "react-router-dom";
+import { useContentForHome, useGetOngoingContents } from "@/api/queries";
+import BookIcon from "@/assets/bookicon.svg";
 import musicIcon from "@/assets/musicIcon.svg";
 import videoIcon from "@/assets/videoicon.svg";
-import BookIcon from "@/assets/bookicon.svg";
-import CardScreenHome from "@/common/User/CardScreenHome";
 import CardHome from "@/common/User/CardHome";
-import { useContentForHome, useGetOngoingContents } from "@/api/queries";
+import CardScreenHome from "@/common/User/CardScreenHome";
+import InnerWrapper from "@/common/User/InnerWrapper";
+import Wrapper from "@/common/User/Wrapper";
+import CategoriesCard from "@/pages/Library/LibraryNotPaid/CategoriesCard";
 import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
-import { GrNext, GrPrevious } from "react-icons/gr";
-import Slider from "react-slick";
 import { useRef } from "react";
+import { GrNext, GrPrevious } from "react-icons/gr";
+import { useNavigate } from "react-router-dom";
+import Slider from "react-slick";
+import Hero from "./Hero";
 import "./newlyregistereduser.css";
 
 export type DataType = {
@@ -32,86 +21,18 @@ export type DataType = {
   range?: number;
   id?: string;
 };
-export const data: DataType[] = [
-  {
-    title: "Bedtime Stories",
-    image: Chisomcard,
-    range: 56,
-    id: "1",
-  },
-  {
-    title: "Fairy Tails Stories",
-    image: Gorillacard,
-    range: 80,
-    id: "2",
-  },
-  {
-    title: "Money Smarts",
-    image: Mamacard,
-    range: 86,
-    id: "3",
-  },
-  {
-    title: "Sports",
-    image: Puffcard,
-    range: 56,
-    id: "4",
-  },
-  {
-    title: " Leaders",
-    image: Chisomcard,
-    range: 70,
-    id: "5",
-  },
-  {
-    title: "Inspiring Leaders",
-    image: Earniing2card,
-    range: 56,
-    id: "6",
-  },
-  {
-    title: "Inspiring Leaders",
-    image: Earningcard,
-    range: 66,
-    id: "7",
-  },
-  {
-    title: "Sports",
-    image: Dancercard,
-    range: 90,
-    id: "8",
-  },
-  {
-    title: "Afam",
-    image: Afamcard,
-    range: 36,
-    id: "9",
-  },
-  {
-    title: "African Leaders",
-    image: Africancard,
-    range: 56,
-    id: "10",
-  },
-  {
-    title: " Leaders",
-    image: Caterpillercard,
-    range: 86,
-    id: "11",
-  },
-];
 
 const NewlyRegisteredUser = () => {
   const navigate = useNavigate();
   const profileId = localStorage.getItem("profileId");
-  const { data: ongoingData } = useGetOngoingContents(profileId!);
+  const { data: ongoingData } = useGetOngoingContents(profileId as string);
   const ongoingContents: TStoryContent[] =
     ongoingData?.data.data.ongoing_contents;
   const { isLoading, data: contentData } = useContentForHome();
   const recommendedStories = contentData?.data.data.recommended_stories;
   const newTrending = contentData?.data.data.trending_stories;
   const userInLocalStr = localStorage.getItem("user");
-  const user = JSON.parse(userInLocalStr!);
+  const user = JSON.parse(userInLocalStr as string);
 
   const settings = {
     dots: false,
@@ -254,7 +175,7 @@ const NewlyRegisteredUser = () => {
           />
         </div>
 
-        <AdsButton />
+        {/* <AdsButton /> */}
         <div className="mt-[100px]">
           <CardScreenHome
             data={recommendedStories}

@@ -1,19 +1,19 @@
+import { getApiErrorMessage } from "@/api/helper";
+import { useGetAvatars, useGetProfile, useProfle } from "@/api/queries";
 import AddAvatarIcon from "@/assets/AddAvatarIcon.svg";
 import YaJump from "@/assets/Yaa jump 1.svg";
-import InputFormat from "@/common/InputFormat";
-import Button from "@/components/Button";
+import LessDOwnIcon from "@/assets/lessthanIcon.svg";
 import YajSucces from "@/assets/yupsuccess.svg";
+import InputFormat from "@/common/InputFormat";
+import { FormData } from "@/common/User/FormValidation/Schema";
+import Button from "@/components/Button";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader, Skeleton } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { getApiErrorMessage } from "@/api/helper";
-import { useState } from "react";
 import { motion } from "framer-motion";
-import LessDOwnIcon from "@/assets/lessthanIcon.svg";
-import { useGetAvatars, useGetProfile, useProfle } from "@/api/queries";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FormData } from "@/common/User/FormValidation/Schema";
-import { z, ZodType } from "zod";
+import { ZodType, z } from "zod";
 
 // import useStore from "@/store/index";
 // import { getProfileState } from "@/store/profileStore";
@@ -23,8 +23,8 @@ import { STEP_1, STEP_2, STEP_3, STEP_4, STEP_5 } from "@/utils/constants";
 import { useNavigate } from "react-router-dom";
 // import { getProfileState } from "@/store/profileStore";
 // import useStore from "@/store/index";
-import { selectAvatarType } from "./SelectProfile";
 import { MdClose } from "react-icons/md";
+import { selectAvatarType } from "./SelectProfile";
 export type avatarType = {
   name: string;
   image: string;
@@ -232,7 +232,7 @@ export const ChildAgeModal = ({
 
   const submitData = async (data: FormData) => {
     onContinue();
-    setAge(data?.dob!);
+    setAge(data?.dob as string) ;
   };
   // const [isKid, setIsKid] = useState(false)
   return (
@@ -327,7 +327,7 @@ export const SelectAvatar = ({
       {
         onSuccess(data) {
           console.log("morning", data);
-          if (setChildProfile) setChildProfile(data?.data.data.profile_id)!;
+          if (setChildProfile) setChildProfile(data?.data.data.profile_id);
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -414,9 +414,9 @@ export const SelectAvatar = ({
               <button
                 disabled={!selected}
                 onClick={onSubmit}
-                className={`p-3 px-20 ${
+                className={`p-3  ${
                   selected ? "bg-[#782caf]" : "bg-[#d9beeb]"
-                }  rounded-2xl w-full my-4`}
+                }  rounded w-full my-4`}
               >
                 {isLoading ? (
                   <p className="flex justify-center items-center">
@@ -446,7 +446,8 @@ const AvatarCard = ({
   setSelected: (val: string) => void;
 }) => {
   const handleClick = () => {
-    setSelected(name!);
+    setSelected(name as str
+      );
   };
   return (
     <div>

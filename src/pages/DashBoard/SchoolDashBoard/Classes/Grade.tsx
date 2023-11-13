@@ -11,7 +11,7 @@ const Grade = ({
   name1?: string;
   data?: TTeacherList;
   handleClick?: () => void;
-  onEdit?: (e: any) => void;
+  onEdit?: () => void;
   student_count: number;
 }) => {
   return (
@@ -57,7 +57,7 @@ const Grade = ({
               <span>{name2}</span>
             </div> */}
           </div>
-          <div>
+          <div className=" flex gap-5">
             <p>No of students in class </p>
             <span className="font-bold">
               {student_count ? student_count : 0}
@@ -68,9 +68,9 @@ const Grade = ({
         <div className="flex  gap-4  justify-center mt-5 px-10">
           <button
             onClick={handleClick}
-            className="py-2 px-5 h-[42px] w-[260px] bg-red-600 text-white rounded-full flex-grow"
+            className="py-2 px-5 h-[42px] w-[260px] bg-[#8530C1] text-white rounded flex-grow"
           >
-            Delete class
+            Cancel
           </button>
         </div>
       </div>

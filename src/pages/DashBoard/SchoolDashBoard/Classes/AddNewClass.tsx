@@ -1,16 +1,16 @@
 import InputFormat from "@/common/InputFormat";
-import Button from "@/components/Button";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
+import Button from "@/components/Button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { z, ZodType } from "zod";
 // import { useNavigate } from "react-router-dom";
 // import useStore from "@/store";
 import { useAddClassData } from "@/api/queries";
 // import { getPushTokenState } from "@/store/pushTokenStore";
+import { getApiErrorMessage } from "@/api/helper";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { getApiErrorMessage } from "@/api/helper";
 import { useQueryClient } from "@tanstack/react-query";
 
 const AddNewClass = ({ newClassClose }: { newClassClose: () => void }) => {
@@ -61,7 +61,7 @@ const AddNewClass = ({ newClassClose }: { newClassClose: () => void }) => {
 
   return (
     <div className="px-10">
-      <h1 className="text-center font-Recoleta text-[30px]">Add new class</h1>
+      <h1 className="text-center font-Recoleta text3">Add new class</h1>
       <div>
         <form onSubmit={handleSubmit(submitData)}>
           <p className="my-5  mb-8">

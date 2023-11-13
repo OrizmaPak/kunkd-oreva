@@ -1,13 +1,12 @@
-import { Modal } from "@mantine/core";
-import { STEP_1, STEP_2 } from "@/utils/constants";
-import AddTeacherForm from "./AddTeacherForm";
-import UploadPicture from "./UploadPicture";
-import { useState } from "react";
-import { TTeacherData } from "./AddTeacherForm";
-import { useAddTeacherData } from "@/api/queries";
-import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
+import { useAddTeacherData } from "@/api/queries";
+import { STEP_1, STEP_2 } from "@/utils/constants";
+import { Modal } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import AddTeacherForm, { TTeacherData } from "./AddTeacherForm";
+import UploadPicture from "./UploadPicture";
 
 const AddTeacherModal = ({
   opened,
@@ -37,7 +36,8 @@ const AddTeacherModal = ({
           firstname: teacherData?.firstname,
           lastname: teacherData?.lastname,
           email: teacherData?.email,
-          password: teacherData?.password,
+          redirect_url:"http://localhost:5173/passwordsetup",
+          // password: teacherData?.password,
           class_id: Number(teacherData?.classid),
           gender_id: Number(teacherData?.genderid),
           image: base64String,
@@ -67,8 +67,8 @@ const AddTeacherModal = ({
 
   return (
     <Modal
-      radius={"xl"}
-      size="xl"
+      radius={10}
+      size={"lg"}
       opened={opened}
       onClose={toggle}
       withCloseButton={false}

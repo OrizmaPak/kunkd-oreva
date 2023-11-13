@@ -1,12 +1,12 @@
-import Button from "@/components/Button";
 import InputFormat from "@/common/InputFormat";
+import Button from "@/components/Button";
 // import PasswordIcon from "@/assets/passwordIcon.svg";
 // import PasswordEye from "@/assets/passwordeye.svg";
 import { motion } from "framer-motion";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { z, ZodType } from "zod";
 // import { useNavigate } from "react-router-dom";
 // import useStore from "@/store";
@@ -15,8 +15,7 @@ import { useGetClassList } from "@/api/queries";
 // import { Loader } from "@mantine/core";
 // import { notifications } from "@mantine/notifications";
 // import { getApiErrorMessage } from "@/api/helper";
-import { AiOutlineMail, AiOutlineEye } from "react-icons/ai";
-import { RiLockLine } from "react-icons/ri";
+import { AiOutlineMail } from "react-icons/ai";
 
 import { MdClose } from "react-icons/md";
 
@@ -67,23 +66,11 @@ const AddTeacherForm = ({
         .min(1, { message: "Select gender" })
         .max(20, { message: "Gender must not exceed 20 characters" }),
       classid: z
-        .string()
-        .min(1, { message: "Select a class" })
-        .max(20, { message: "Class must not exceed 20 characters" }),
+        .string().optional(),
       email: z.string().email(),
-      password: z
-        .string()
-        .min(4, { message: "Password must be at least 4 characters long" })
-        .max(20, { message: "Password must not exceed 20 characters" }),
-      confirmPassword: z
-        .string()
-        .min(4, { message: "Password must be at least 4 characters long" })
-        .max(20, { message: "Password must not exceed 20 characters" }),
+    
     })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: "passwords do not match",
-      path: ["confirmPassword"],
-    });
+   
   const {
     register,
     handleSubmit,
@@ -91,6 +78,7 @@ const AddTeacherForm = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
+    console.log(data)
     setTeacherData(data as TTeacherData);
     handleContinue();
   };
@@ -142,7 +130,7 @@ const AddTeacherForm = ({
               leftIcon={<AiOutlineMail size={25} color="#c4ccd0" />}
             />
           </div>
-          <div className="flex gap-2 mb-2">
+          {/* <div className="flex gap-2 mb-2">
             <div className=" flex-grow">
               <label htmlFor="password">Enter Password</label>
               <InputFormat
@@ -178,7 +166,7 @@ const AddTeacherForm = ({
                 }
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="flex gap-2 mb-8">
             <div className="flex-grow">

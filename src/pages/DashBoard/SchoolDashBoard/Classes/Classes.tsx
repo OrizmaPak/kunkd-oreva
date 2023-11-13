@@ -1,18 +1,16 @@
-import Button from "@/components/Button";
-import ArrowDown from "@/assets/arrowdown.svg";
-import ClassesIcon from "@/assets/classes.svg";
-import Box from "@/assets/box.svg";
-import Row from "./Row";
-import { Pagination } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { Modal } from "@mantine/core";
-import Grade from "./Grade";
-import { useState } from "react";
-import EditClassTeachers from "./EditClassTeachers";
-import AddNewClass from "./AddNewClass";
 import { useGetClassList, useGetTeacherList } from "@/api/queries";
+import ArrowDown from "@/assets/arrowdown.svg";
+import Box from "@/assets/box.svg";
+import ClassesIcon from "@/assets/classes.svg";
+import Button from "@/components/Button";
+import { Modal, Pagination, Skeleton } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { useState } from "react";
 import { TTeacherList } from "../Teachers/Teachers";
-import { Skeleton } from "@mantine/core";
+import AddNewClass from "./AddNewClass";
+import EditClassTeachers from "./EditClassTeachers";
+import Grade from "./Grade";
+import Row from "./Row";
 
 export type TClassList = {
   id: number;
@@ -50,7 +48,7 @@ const Classes = () => {
   return (
     <div className="h-full flex flex-col overflow-y-scroll">
       <Modal
-        radius={60}
+        radius={10}
         padding={"xl"}
         xOffset={500}
         title={
@@ -75,8 +73,8 @@ const Classes = () => {
       </Modal>
 
       <Modal
-        radius={"xl"}
-        size="lg"
+        radius={10}
+        size="md"
         opened={newClass}
         onClose={newClassClose}
         closeButtonProps={{ size: "lg" }}
@@ -86,7 +84,7 @@ const Classes = () => {
       </Modal>
 
       <Modal
-        radius={"xl"}
+        radius={10}
         size="md"
         opened={editOpened}
         onClose={editClose}
@@ -112,7 +110,7 @@ const Classes = () => {
             <img loading="lazy" src={ArrowDown} alt="Arrowdown" />
           </div>
           <div className="flex justify-center">
-            <Button onClick={() => newClassOpen()} size="md">
+            <Button onClick={() => newClassOpen()} size="sm">
               <span className="flex  h-[32px] w-[] justify-center items-center gap-2">
                 <img loading="lazy" src={ClassesIcon} alt="" />
                 <span>Add new class</span>

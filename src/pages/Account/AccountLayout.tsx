@@ -1,14 +1,13 @@
-import Wrapper from "@/common/User/Wrapper";
 import InnerWrapper from "@/common/User/InnerWrapper";
-import Header from "./Header";
-import { useMatch, useNavigate } from "react-router-dom";
-import { Outlet } from "react-router-dom";
-import { useDisclosure } from "@mantine/hooks";
+import Wrapper from "@/common/User/Wrapper";
 import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { Outlet, useMatch, useNavigate } from "react-router-dom";
 import DeleteAccount from "./DeleteAccount";
+import Header from "./Header";
 // import { userContext } from "@/Context/StateProvider";
-import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
 
 const baseUrl = "/account";
 
@@ -35,14 +34,14 @@ const links = [
     isParent: true,
     isSchool: false,
   },
-  {
-    name: "Billing",
-    route: baseUrl + "/billing",
-    href: "billing",
-    isTeacher: false,
-    isSchool: false,
-    isParent: true,
-  },
+  // {
+  //   name: "Billing",
+  //   route: baseUrl + "/billing",
+  //   href: "billing",
+  //   isTeacher: false,
+  //   isSchool: false,
+  //   isParent: true,
+  // },
   {
     name: "Password",
     route: baseUrl + "/accountpassword",

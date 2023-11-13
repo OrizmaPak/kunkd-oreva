@@ -1,22 +1,37 @@
-import DeleteIcon from "@/assets/deleteicon.svg";
 // import ToggleIcon from "@/assets/toggleicon.svg";
 import Rectangle from "@/assets/boxIcon.svg";
+import ChangeProfileStatus from "@/pages/DashBoard/SchoolDashBoard/Teachers/ChangeProfileStatus";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { MdChangeCircle } from "react-icons/md";
 import { TRequestStudents } from "../../TeacherDashboard/Request/Request";
 
 const Row = ({
   data,
-  onClick = () => {},
-  onDeleteProfile,
+  onClick,
 }: {
   data: TRequestStudents;
 
   classCode?: string;
   onClick?: () => void;
-  onDeleteProfile: () => void;
 }) => {
+  const [opened, { open, close }] = useDisclosure(false);
+
   return (
     // <div className="  py-3  h-[72px] hover:cursor-pointer flex-grow font-medium">
-    <div>
+    <>
+     <Modal
+        radius={10}
+        padding={30}
+        size={"md"}
+        opened={opened}
+        onClose={close}
+        withCloseButton={false}
+        centered
+      >
+        <ChangeProfileStatus onCancel={close} label="Student" />
+      </Modal>
+     <div>
       <div className="grid   grid-cols-[100px_300px_1fr_150px] mt-2  px-8">
         <div className="flex justify-start items-center ">
           <span className=" ">
@@ -45,14 +60,16 @@ const Row = ({
 
         <div className="flex justify-end  gap-4  items-center">
           <span>{/* <img loading="lazy" src={ToggleIcon} alt="" /> */}</span>
-          <span onClick={onDeleteProfile}>
-            <img loading="lazy" src={DeleteIcon} alt="delete" />
-          </span>
+          <button onClick={open} className="flex justify-center items-center gap-2">
+              <MdChangeCircle size={30} color="#8530C1"/> <span>Active</span>
+            </button>
           <span></span>
         </div>
       </div>
       <hr className="my-[10px] mx-8" />
     </div>
+    </>
+   
     // </div>
   );
 };

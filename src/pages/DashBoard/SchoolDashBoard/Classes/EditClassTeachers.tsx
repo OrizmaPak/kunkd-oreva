@@ -3,51 +3,15 @@
 import Button from "@/components/Button";
 
 import { useGetTeacherList } from "@/api/queries";
-import { TClassList } from "../Classes/Classes";
 import { TTeacherList } from "../Teachers/Teachers";
 
 const EditClassTeachers = ({ editClose }: { editClose: () => void }) => {
   const { data } = useGetTeacherList();
   const teacherList = data?.data.data.records;
-  // console.log("HI", classList);
+  console.log("HI", teacherList );
 
   return (
     <div className="px-10">
-      {/* <h1 className="text-center font-bold font-Recoleta text-[25px]">
-        Edit Class Teachers
-      </h1> */}
-      {/* <div>
-      <div>
-        <div>
-          <p className="flex  justify-between my-8 ">
-            <p className="flex  justify-center items-center">
-              <img loading="lazy" src={DeleteIcon} alt="deleteIcon" />
-              <p className="flex justify-center items-center ml-5 gap-2">
-                <img loading="lazy" src={image1} alt="image1" />
-                <span>{name1}</span>
-              </p>
-            </p>
-            <img loading="lazy" src={ArrowDown} alt="arrowdown" />
-          </p>
-          {name2 && (
-            <p className="flex  justify-between  my-8">
-              <p className="flex  justify-center items-center">
-                <img loading="lazy" src={DeleteIcon} alt="deleteIcon" />
-                <p className="flex justify-center items-center ml-5 gap-2">
-                  <img loading="lazy" src={image2} alt="image1" />
-                  <span>{name2}</span>
-                </p>
-              </p>
-              <img loading="lazy" src={ArrowDown} alt="arrowdown" />
-            </p>
-          )}
-        </div>
-      </div>
-      <p className=" my-10">
-        <Button>Save</Button>
-      </p>
-      </div> */}
-
       <div>
         <form>
           <div>
@@ -60,9 +24,9 @@ const EditClassTeachers = ({ editClose }: { editClose: () => void }) => {
               >
                 <option value="">Select Teacher</option>
                 {teacherList
-                  ?.filter((data: TTeacherList) => data.class === undefined)
-                  .map((data: TClassList) => (
-                    <option value={data.id}>{data.name}</option>
+                  ?.filter((data: TTeacherList) => data.class?.class_name === "" )
+                  .map((data: TTeacherList) => (
+                    <option value={data?.user?.id}>{data?.user.firstname } {data?.user?.lastname}</option>
                   ))}
                 {/* <option value="classA">Class A</option>
                 <option value="classB">Class B</option> */}

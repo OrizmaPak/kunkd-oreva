@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom";
 const AdsButton = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <div>
@@ -8,7 +10,7 @@ const AdsButton = () => {
             <span className="text-[#FBC70D] font-bold ml-2 text1">$59.88</span>
             /year
           </p>
-          <button className="bg-white text1 text-[#8530C1] text2 font-bold rounded-3xl px-4 py-2">
+          <button onClick={()=>navigate(`/packages`)} className="bg-white text1 text-[#8530C1] text2 font-bold rounded-3xl px-4 py-2">
             Upgrade Plan
           </button>
         </p>

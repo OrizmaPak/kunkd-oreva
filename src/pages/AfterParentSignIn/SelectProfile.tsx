@@ -1,13 +1,12 @@
-import { useNavigate } from "react-router-dom";
-import GroupIcon from "@/assets/groupIcons.svg";
 import { useGetProfile } from "@/api/queries";
+import BlurImage from "@/assets/BlxstBlur.jpg";
+import GroupIcon from "@/assets/groupIcons.svg";
 import useStore from "@/store/index";
 import { getProfileState } from "@/store/profileStore";
 import { Skeleton } from "@mantine/core";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import BlurImage from "@/assets/BlxstBlur.jpg";
-// import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export type selectAvatarType = {
   name: string;
@@ -32,11 +31,16 @@ const SelectProfile = ({
 }) => {
   const [profiles] = useStore(getProfileState);
 
-  const { data, isLoading } = useGetProfile();
+  const { data, isLoading} = useGetProfile();
   if (profiles) console.log(data, "profiles-----------", profiles);
+
+ 
+
   return (
     <>
-      <div
+     { !isLoading  && data?.data?.data?.length ===0 ? 
+     (<Navigate to="/childprofilesetup" replace /> ) : 
+     <div
         style={{
           backgroundImage: `url(${GroupIcon})`,
           backgroundRepeat: "no-repeat",
@@ -76,7 +80,7 @@ const SelectProfile = ({
             </div>
           </div>
         }
-      </div>
+      </div>}
     </>
   );
 };

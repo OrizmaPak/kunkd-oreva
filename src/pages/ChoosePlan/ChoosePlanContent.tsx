@@ -2,7 +2,7 @@ import PackageCard from "@/common/PackageCard";
 
 import { useGetPlans } from "@/api/queries";
 import { Skeleton } from "@mantine/core";
-import { BsX, BsCheckLg } from "react-icons/bs";
+import { BsCheckLg, BsX } from "react-icons/bs";
 
 const ChoosePlanContent = () => {
   const { isLoading, data } = useGetPlans();
@@ -44,7 +44,7 @@ const ChoosePlanContent = () => {
               isIcon={true}
               plan={planData && planData?.plans[0]}
               title="1 Month"
-              btn="Choose"
+              btn="Start Trial"
               price={
                 planData && planData?.countryCode === "NG"
                   ? planData?.plans[0]?.naira_value

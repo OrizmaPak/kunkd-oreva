@@ -1,14 +1,12 @@
+import { useGetAdmittedStudentsInSchool } from "@/api/queries";
 import ArrowDown from "@/assets/arrowdown.svg";
 import Rectangle from "@/assets/boxIcon.svg";
-import Row from "./Row";
-import { useNavigate } from "react-router-dom";
-import { Pagination } from "@mantine/core";
-import DeleteProfile from "../Teachers/DeleteProfile";
+import { Modal, Pagination, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal } from "@mantine/core";
-import { useGetAdmittedStudentsInSchool } from "@/api/queries";
+import { useNavigate } from "react-router-dom";
 import { TRequestStudents } from "../../TeacherDashboard/Request/Request";
-import { Skeleton } from "@mantine/core";
+import DeleteProfile from "../Teachers/ChangeProfileStatus";
+import Row from "./Row";
 
 const Students = () => {
   const { data, isLoading } = useGetAdmittedStudentsInSchool();
