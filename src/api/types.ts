@@ -7,6 +7,7 @@ export type TSchool = {
   contact_name?: string;
   name?: string;
   profileImage?: string;
+  code?:string
 };
 export type returnUser = {
   dob: string;
@@ -29,21 +30,21 @@ export type returnUser = {
   school_name: string;
 };
 
-export type TSchoolSignupData = {};
-export type TVerifyOtpData = {};
-export type TSecurePortalData = {};
-export type TParentSignupData = {};
-export type TSetPasswordData = {};
-export type TLoginData = {};
-export type TForgotPasswordData = {};
-export type TResetPasswordData = {};
-export type TAudioBooks = {};
-export type TVerifyPinData = {};
-export type TPayStackInitData = {};
-export type TLikedContentData = {};
-export type TContentTracking = {};
-export type TAddTeacherData = {};
-export type TSaveQuiz = {};
+export type TSchoolSignupData = object;
+export type TVerifyOtpData = object;
+export type TSecurePortalData = object;
+export type TParentSignupData = object;
+export type TSetPasswordData = object;
+export type TLoginData = object;
+export type TForgotPasswordData = object;
+export type TResetPasswordData = object;
+export type TAudioBooks = object;
+export type TVerifyPinData = object;
+export type TPayStackInitData = object;
+export type TLikedContentData = object;
+export type TContentTracking = object;
+export type TAddTeacherData = object;
+export type TSaveQuiz = object;
 
 export type TProfileData = {
   name: string;
@@ -51,8 +52,8 @@ export type TProfileData = {
   image: string;
   is_avatar: string;
 };
-export type TGetProfileData = {};
-export type TUpdatePassword = {};
+export type TGetProfileData = object;
+export type TUpdatePassword = object;
 export type TUdateProfileData = {
   name: string;
   age: string;
@@ -86,9 +87,9 @@ export type TApiError = AxiosError<{
   data: unknown;
 }>;
 
-export type TContentForHome = {};
+export type TContentForHome = object;
 
-export type TGoogleSignUpData = {};
+export type TGoogleSignUpData = object;
 export type TGetContentById = {
   contentId: string;
   userId: string;

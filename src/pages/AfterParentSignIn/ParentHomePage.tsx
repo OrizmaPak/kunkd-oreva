@@ -2,6 +2,7 @@ import {
   useContentForHome,
   // useGetContentsLog,
   useGetOngoingContents,
+  useGetUpdatedProfile
 } from "@/api/queries";
 import BookIcon from "@/assets/bookicon.svg";
 import musicIcon from "@/assets/musicIcon.svg";
@@ -24,6 +25,14 @@ import Hero from "./Hero";
 import "./parenthomepage.css";
 
 const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
+const [useri, setUser] = useStore(getUserState);
+  const {data } = useGetUpdatedProfile()
+  const currentUserProfile = data?.data?.data
+  useEffect(() => {
+    setUser({...useri, ...currentUserProfile})
+    //  eslint-disable-next-line react-hooks/exhaustive-deps
+  },[currentUserProfile])
+  console.log("Updataed user profile", data)
   const [profiles] = useStore(getProfileState);
   const profileId = localStorage.getItem("profileId") as string;
   const { data: ongoingData } = useGetOngoingContents(profileId);

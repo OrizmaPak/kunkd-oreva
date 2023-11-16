@@ -1,35 +1,36 @@
-import StoriesNav from "./StoriesNav";
-import { useParams, useNavigate } from "react-router-dom";
-import CardScreenHome from "@/common/User/CardScreenHome";
-import CardHome from "@/common/User/CardHome";
-import Bookmark from "@/assets/Bookmark.svg";
-import { useEffect, useState, RefObject } from "react";
-import Congrats from "@/assets/congrats.svg";
 import {
-  useGetContentById,
   useContentForHome,
   useContentTracking,
+  useGetContentById,
   useGetLikedContent,
   useLikedContent,
   useUnLikedContent,
 } from "@/api/queries";
-import { getUserState } from "@/store/authStore";
-import useStore from "@/store";
+import Bookmark from "@/assets/Bookmark.svg";
 import AfamBlur from "@/assets/afamblur.jpg";
+import Congrats from "@/assets/congrats.svg";
+import CardHome from "@/common/User/CardHome";
+import CardScreenHome from "@/common/User/CardScreenHome";
+import CustomTTSComponent from "@/components/TTS";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
+import { Skeleton } from "@mantine/core";
+import { RefObject, useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import { Skeleton } from "@mantine/core";
-import CustomTTSComponent from "@/components/TTS";
+import { useNavigate, useParams } from "react-router-dom";
+import StoriesNav from "./StoriesNav";
 
 import { getApiErrorMessage } from "@/api/helper";
+import TeacherNotificationModal from "@/components/TeacherWarningModal";
+import { MantineProvider, Modal, Slider } from "@mantine/core";
+import { useDisclosure, useReducedMotion } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { GrFormNext, GrFormPrevious } from "react-icons/gr";
-import "./stories1.css";
-import { Slider, MantineProvider } from "@mantine/core";
-import { useReducedMotion } from "@mantine/hooks";
-import { useRef } from "react";
 import { UseQueryResult } from "@tanstack/react-query";
 import ReactHtmlParser from "html-react-parser";
+import { useRef } from "react";
+import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import "./stories1.css";
 
 type TContentPage = {
   audio: string;
@@ -53,7 +54,7 @@ export type TMedia = {
   thumbnail: string;
 };
 export type TStoryContent = {
-  sub_category_name?: any;
+  sub_category_name?: unknown;
   category?: string;
   sub_categories?: TSubCategory[];
   category_id?: number;
@@ -83,10 +84,13 @@ const Stories1 = () => {
 
   const params = useParams();
   const { category } = params;
+  const [opened, { open, close }] = useDisclosure(false);
 
   const { data, isLoading: contentIsLoading } = useGetContentById(
-    contentId?.toString()!,
-    user?.user_id?.toString()!
+    contentId?.toString() as string,
+    // contentId!,
+    user?.user_id?.toString() || '',
+    open
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const content = data?.data.data;
   const { data: recommendedData, isLoading } = useContentForHome();
@@ -95,7 +99,25 @@ const Stories1 = () => {
   const myRef: RefObject<HTMLDivElement> = useRef(null);
 
   return (
-    <div className=" ">
+    <>
+      <Modal
+        radius={10}
+        padding={30}
+        size={"md"}
+        opened={opened}
+        onClose={close}
+        overlayProps={{
+          // style: { backgroundOpacity: 1 },
+          blur: 10,
+        }}
+        closeOnClickOutside={false}
+       
+        withCloseButton={false}
+        centered
+      >
+        <TeacherNotificationModal onCancel={close}/>
+      </Modal>
+       <div className=" ">
       <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] ">
         <div className=" ">
           {
@@ -103,14 +125,14 @@ const Stories1 = () => {
               <StoriesNav
                 category={category && category}
                 genre={
-                  content && content?.sub_categories?.[0]?.sub_category_name!
+                  content && content?.sub_categories?.[0]?.sub_category_name
                 }
                 title={content && content.name}
                 subCategoryId={
-                  content && content?.sub_categories?.[0]?.sub_category_id!
+                  content && content?.sub_categories?.[0]?.sub_category_id
                 }
                 slug={
-                  content && content?.sub_categories?.[0]?.sub_category_name!
+                  content && content?.sub_categories?.[0]?.sub_category_name
                 }
               />
             </Skeleton>
@@ -123,7 +145,7 @@ const Stories1 = () => {
                 {!startRead && (
                   <Skeleton visible={contentIsLoading}>
                     <AboutPage
-                      story={content!}
+                      story={content as TStoryContent}
                       setStartRead={() => setStartRead(true)}
                     />
                   </Skeleton>
@@ -131,8 +153,8 @@ const Stories1 = () => {
 
                 {content && startRead && (
                   <ReadPage
-                    thumbnail={content.thumbnail!}
-                    content={content.pages!}
+                    thumbnail={content.thumbnail as string}
+                    content={content.pages as TContentPage[]}
                     setIsFinish={() => setIsFinish(true)}
                     divRef={myRef}
                   />
@@ -159,7 +181,7 @@ const Stories1 = () => {
                 </div>
               </div>
             ) : (
-              <WelDone content={content!} />
+              <WelDone content={content as TStoryContent} />
             )}
           </div>
         </div>
@@ -167,6 +189,8 @@ const Stories1 = () => {
         {/* </div> */}
       </div>
     </div>
+    </>
+   
   );
 };
 
@@ -180,7 +204,7 @@ const AboutPage = ({
   setStartRead: () => void;
 }) => {
   const profileId = localStorage.getItem("profileId");
-  const { data, refetch } = useGetLikedContent(profileId!);
+  const { data, refetch } = useGetLikedContent(profileId as string);
   const likeContents: TStoryContent[] = data?.data.data.records;
   const { mutate } = useLikedContent();
   const { mutate: unFavoriteMutate } = useUnLikedContent();
@@ -363,7 +387,7 @@ const ReadPage = ({
         },
       }
     );
-  }, [pageNumber]);
+  }, [pageNumber, contentId, profileId, pageTotal, mutate]);
   return (
     <div className="flex py-16 bg-white  rounded-3xl px-16">
       <div className=" basis-3/4 flex  items-center">
@@ -648,7 +672,7 @@ const WelDone = ({ content }: { content: TStoryContent }) => {
             Well Done!
           </h1>
           <p className="text-[#7E7E89] text-[18px]">
-            You have just finished reading {content?.name!}
+            You have just finished reading {content?.name as string}
           </p>
         </div>
         <p className="flex flex-col gap-y-3 mt-8">

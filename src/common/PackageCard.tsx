@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./packagecard.css";
 
 type Props = {
@@ -107,7 +107,7 @@ const PackageCard = ({
       {btn && (
         <div className="flex justify-center items-center">
           <button
-            onClick={() => handlePaln(plan?.id!)}
+            onClick={() => handlePaln(plan?.id as number)}
             className="mt-8 pad-x-40 bg-[#E7D4F4] text-[#8530C1] p-3 rounded-2xl"
           >
             {btn}

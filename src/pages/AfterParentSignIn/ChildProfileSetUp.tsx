@@ -446,7 +446,7 @@ const AvatarCard = ({
   setSelected: (val: string) => void;
 }) => {
   const handleClick = () => {
-    setSelected(name as str
+    setSelected(name as string
       );
   };
   return (
@@ -473,9 +473,10 @@ const AvatarCard = ({
 export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
   const [enabled, setEnabled] = useState(false);
   // const [profiles] = useStore(getProfileState);
-  const {} = useGetProfile(enabled, () => {
+  const {data} = useGetProfile(enabled, () => {
     onContinue();
   });
+    console.log(data)
 
   const handleSubmit = () => {
     // console.log("toomuch----", profiles[0].id);

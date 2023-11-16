@@ -1,6 +1,8 @@
 import EditPencil from "@/assets/editPencil.svg";
+import UserIcon from "@/assets/usericon.svg";
 import { motion } from "framer-motion";
 import { TTeacherList } from "../Teachers/Teachers";
+
 
 const Grade = ({
   data,
@@ -40,10 +42,10 @@ const Grade = ({
           </p>
           <div className=" flex justify-start gap-10 items-center my-5">
             <div className="flex justify-center  gap-2 items-center  border-r-gray-500 ">
-              {data?.user.image && (
+              {data?.user.firstname && (
                 <img
                   loading="lazy"
-                  src={data?.user.image}
+                  src={data?.user.image || UserIcon }
                   alt="image"
                   className="w-[60px] h-[60px] rounded-full"
                 />

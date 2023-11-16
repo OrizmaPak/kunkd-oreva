@@ -1,43 +1,42 @@
-import Button from "@/components/Button";
 import EditPencil from "@/assets/editPencil.svg";
+import Button from "@/components/Button";
 // import Starr from "@/assets/starr.svg";
-import { motion } from "framer-motion";
-import SchoolBg from "@/assets/schoolImage.svg";
 import SchoolLogo from "@/assets/schoolIcon.svg";
+import SchoolBg from "@/assets/schoolImage.svg";
+import { motion } from "framer-motion";
 // import { userContext } from "@/Context/StateProvider";
-import EditIcon from "@/assets/editPencil.svg";
+import BigPencil from "@/assets/bigeditingpencil.svg";
 import CameraIcon from "@/assets/cameraIcon.svg";
 import CopyIcon from "@/assets/copyIcon.svg";
-import UploadPicture from "../DashBoard/SchoolDashBoard/Teachers/UploadPicture";
-import { useDisclosure } from "@mantine/hooks";
-import { Modal } from "@mantine/core";
+import EditIcon from "@/assets/editPencil.svg";
 import Teacher01 from "@/assets/teacher01.svg";
-import BigPencil from "@/assets/bigeditingpencil.svg";
 import InputFormat from "@/common/InputFormat";
-import { useState } from "react";
-import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { useState } from "react";
+import UploadPicture from "../DashBoard/SchoolDashBoard/Teachers/UploadPicture";
 // import { getProfileState } from "@/store/profileStore";
 // import { UseFormRegisterReturn } from "react-hook-form";
 
 // import useStore from "@/store/index";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FormData } from "@/common/User/FormValidation/Schema";
-import { z, ZodType } from "zod";
-import { notifications } from "@mantine/notifications";
+import { getApiErrorMessage } from "@/api/helper";
 import {
-  useUpdateSchProfile,
+  useUpdateParentImage,
   useUpdateParentProfile,
   useUpdateSchImage,
   useUpdateSchoolNameAddress,
-  useUpdateParentImage,
+  useUpdateSchProfile,
 } from "@/api/queries";
-import { getApiErrorMessage } from "@/api/helper";
-import { Loader } from "@mantine/core";
-import { Menu } from "@mantine/core";
 import DeleteIcon from "@/assets/delIcon.svg";
 import UplaodIcon from "@/assets/uplaodIcon.svg";
+import { FormData } from "@/common/User/FormValidation/Schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader, Menu } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { useForm } from "react-hook-form";
+import { z, ZodType } from "zod";
 // import { FileWithPath } from "@mantine/dropzone";
 import { TUser } from "@/api/types";
 
@@ -159,7 +158,7 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
   return (
     <>
       <Modal
-        radius={"xl"}
+        radius={10}
         size="xl"
         opened={opened}
         onClose={close}
@@ -360,7 +359,7 @@ const SchCard = ({ user }: { user: TUser }) => {
   console.log("Card two");
   const [opened, { open, close }] = useDisclosure(false);
 
-  const [textToCopy, ,] = useState("54577");
+  const [textToCopy, ] = useState(user?.school?.code as string);
 
   const handleCopy = () => {
     // Create a new textarea element to hold the text
@@ -385,7 +384,7 @@ const SchCard = ({ user }: { user: TUser }) => {
   return (
     <div>
       <Modal
-        radius={"xl"}
+        radius={10}
         size="xl"
         opened={opened}
         onClose={close}
@@ -472,12 +471,12 @@ const SchCard = ({ user }: { user: TUser }) => {
       <div className="pl-[270px] flex justify-between mt-2  ">
         <div className="w-[300px]">
           {!edit ? (
-            <SchNameAddress user={user} setEdit={setEdit!} />
+            <SchNameAddress user={user} setEdit={setEdit} />
           ) : (
             <EditSchNameAddress
-              schoolName={user?.school?.contact_name!}
-              schoolAddress={user?.school?.address!}
-              setEdit={setEdit!}
+              schoolName={user?.school?.contact_name as string} 
+              schoolAddress={user?.school?.address as string}
+              setEdit={setEdit}
             />
           )}
           {/* <h1 className="font-bold text-[28px] flex gap-4">
@@ -488,7 +487,7 @@ const SchCard = ({ user }: { user: TUser }) => {
         <div className="pr-5 pt-2">
           <p className="flex gap-3 justify-center items-baseline">
             School code:
-            <p className="font-bold text-[23px] pt-1">{textToCopy}</p>
+            <p className="font-bold text-[23px] pt-1">{user?.school?.code as string}</p>
             <img
               loading="lazy"
               onClick={handleCopy}
@@ -566,8 +565,8 @@ const EditSchNameAddress = ({
     mutate(
       {
         ...user?.school,
-        school_name: data.school_name!,
-        address: data.address!,
+        school_name: data.school_name as string,
+        address: data.address as string,
       },
 
       {
@@ -678,8 +677,8 @@ const EditParentPersonalInfomation = ({
     console.log("It is working", data);
     mutate(
       {
-        firstname: data.firstname!,
-        lastname: data.lastname!,
+        firstname: data.firstname as string,
+        lastname: data.lastname as string,
       },
 
       {
@@ -821,9 +820,9 @@ const EditSchoolPersonalInfomation = ({
     console.log("It is working", data);
     mutate(
       {
-        contact_name: data.contact_name!,
-        email: data.email!,
-        address: data.address!,
+        contact_name: data.contact_name as string,
+        email: data.email as string,
+        address: data.address as string,
       },
 
       {

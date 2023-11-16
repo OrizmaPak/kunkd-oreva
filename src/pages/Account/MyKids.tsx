@@ -3,7 +3,8 @@ import {
   querykeys,
   useConnectStudentData,
   useGetSchool,
-  useUpdateProfile,
+  useGetSchoolProfileForStudent,
+  useUpdateProfile
 } from "@/api/queries";
 import PencilIcon from "@/assets/blackPencilIcon.svg";
 import DotIcon from "@/assets/dotIcon.svg";
@@ -27,6 +28,7 @@ import { ZodType, z } from "zod";
 import { Tclass } from "../DashBoard/SchoolDashBoard/Teachers/AddTeacherForm";
 
 import { useGetProfile } from "@/api/queries";
+import useDebounce from "@/hooks/useDebounce";
 import {
   ChildAgeModal,
   ChildNameModal,
@@ -138,13 +140,13 @@ const MyKids = () => {
 export default MyKids;
 
 type TStudent = {
-  assigned_teacher_id: number;
-  assigned_teacher_name: string;
-  class_id: number;
-  class_name: string;
-  school_id: number;
-  school_name: string;
-  status: string;
+  assigned_teacher_id?: number;
+  assigned_teacher_name?: string;
+  class_id?: number;
+  class_name?: string;
+  school_id?: number;
+  school_name?: string;
+  status?: string;
 };
 
 const KidCard = ({
@@ -177,11 +179,11 @@ const KidCard = ({
   const date = new Date();
   const currentYear = date.getFullYear();
   const childaAge = currentYear - Number(year);
-  console.log(childaAge);
+  console.log("Student=----------",student);
   return (
     <>
       <Modal
-        radius={"xl"}
+        radius={10}
         size="lg"
         px="md"
         opened={openedEditModal}
@@ -199,7 +201,7 @@ const KidCard = ({
         />
       </Modal>
       <Modal
-        radius={"xl"}
+        radius={10}
         size="lg"
         opened={openedConnectModal}
         onClose={closeConnectModal}
@@ -209,7 +211,7 @@ const KidCard = ({
         <ConnectTOSchool profileId={id as number} closeModal={closeConnectModal} />
       </Modal>
       <Modal
-        radius={"xl"}
+        radius={10}
         size="md"
         px="md"
         opened={openedSchModal}
@@ -217,7 +219,7 @@ const KidCard = ({
         withCloseButton={false}
         centered
       >
-        <SchoolProfile student={student as object} closeSchModal={closeSchModal} />
+        <SchoolProfile student={student as TStudent} closeSchModal={closeSchModal} />
       </Modal>
 
       <div className=" relative flex  border-[#FBECFF] border-[2px] px-6 py-6 rounded-3xl">
@@ -261,7 +263,7 @@ const KidCard = ({
                   <p className="h-2 w-2 rounded-full bg-[#F04438]"></p>
                   <p className="text2  text-[#B42318]">Request declined</p>
                 </button>
-              ) : student?.status === "" && student.school_name.length > 0 ? (
+              ) : student?.status === "pending" && student?.school_name?.length as number > 0 ? (
                 <button className="mt-1 flex justify-center items-center gap-2 bg-[#FFFAEB] px-2 py-1 rounded-2xl">
                   <p className="h-2 w-2 rounded-full bg-[#F79009]"></p>
                   <p className="text2  text-[#B54708]">Request Pending</p>
@@ -333,10 +335,11 @@ const EditProfile = ({
   const queryClient = useQueryClient();
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files as array && event.target.files[0] as object;
-    setSelectedFile(file);
-    console.log(file);
-    console.log("name", name, dob);
+  const files = event.target.files as FileList;
+  const file = files && files[0];
+  setSelectedFile(file);
+  console.log(file);
+  console.log("name", name, dob);
   };
 
   const handleButtonClick = () => {
@@ -368,7 +371,6 @@ const EditProfile = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    console.log("hjbn bnbhjjhjkkj", data, selectedFile, id);
     mutate(
       {
         name: data.name as string,
@@ -413,7 +415,7 @@ const EditProfile = ({
           <p className="flex gap-2 justify-end items-center">
             <img
               loading="lazy"
-              src={!selectedFile ? image : URL.createObjectURL(selectedFile as string)}
+              src={!selectedFile ? image : URL.createObjectURL(selectedFile as Blob)}
               alt="Avatar"
               className="h-[100px] w-[100px]  object-cover"
             />
@@ -471,7 +473,7 @@ const EditProfile = ({
                   type="date"
                   reg={register("dob")}
                   errorMsg={errors && errors?.dob?.message}
-                  value={dob as sting}
+                  value={dob as string}
                 />
               </p>
             </p>
@@ -514,12 +516,12 @@ const EditProfile = ({
   );
 };
 
-type TSchools = {
-  id: number;
-  name: string;
-  slug: string;
-  classes: [];
-};
+// type TSchools = {
+//   id: number;
+//   name: string;
+//   slug: string;
+//   classes: [];
+// };
 
 const ConnectTOSchool = ({
   closeModal,
@@ -530,11 +532,19 @@ const ConnectTOSchool = ({
 }) => {
   const { mutate, isLoading } = useConnectStudentData();
   const { data: schoolData } = useGetSchool();
+   const [search, setSearch] = useState("");
+  const debounceValue = useDebounce(search, 500);
+  console.log("God Help me", search)
+  const {data:schoolCurData} = useGetSchoolProfileForStudent(debounceValue)
+  const  schData = schoolCurData?.data?.data
+  console.log("schoolCurData", schoolCurData?.data.data)
+
   // const profileId = localStorage.getItem("profileId");
   console.log("Profile", profileId);
   const schoolList = schoolData?.data.data.records;
   console.log(schoolList);
-  const [selectedSCH, setSelectedSHC] = useState<number>();
+  const queryClient = useQueryClient();
+
 
   const schema: ZodType<FormData> = z.object({
     firstname: z
@@ -545,14 +555,7 @@ const ConnectTOSchool = ({
       .string()
       .min(4, { message: "Last name must be at least 4 characters long" })
       .max(40, { message: "Last name must not exceed 20 characters" }),
-    schoolCode: z
-      .string()
-      .min(4, { message: "School code must be at least 4 characters long" })
-      .max(4, { message: "School code must be at least 4 characters long" }),
-    schoolid: z
-      .string()
-      .min(1, { message: "Select School Id" })
-      .max(10, { message: "Invalid School Id" }),
+   
     classid: z
       .string()
       .min(1, { message: "Select a class" })
@@ -572,14 +575,14 @@ const ConnectTOSchool = ({
         profile_id: Number(profileId),
         firstname: data.firstname,
         lastname: data.lastname,
-        school_id: Number(data?.schoolid),
+        school_id: schData?.id,
         class_id: Number(data?.classid),
       },
       {
         onSuccess(data) {
           console.log("success", data.data.message);
           closeModal();
-
+          queryClient.invalidateQueries({ queryKey: querykeys.profiles });
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -627,51 +630,41 @@ const ConnectTOSchool = ({
           </p>
           <p className="my-5">
             <InputFormat
-              reg={register("schoolCode")}
-              errorMsg={errors?.schoolCode?.message}
+              // reg={register("schoolCode")}
+              // errorMsg={errors?.schoolCode?.message}
+              onChange={e => setSearch(e.target.value)}
+              value={search}
               type="text"
               placeholder="School Code"
             />
           </p>
 
           <p className="my-5">
-            <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
-              <select
-                {...register("schoolid")}
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  setSelectedSHC(Number(e.target.value)!);
-                }}
-                name="schoolid"
-                id="schoold"
-                className="w-full  h-full flex-1  focus:outline-none text-[14px]"
-              >
-                <option value="male">Select school</option>
-                {schoolList?.map((school: TSchools, index: number) => (
-                  <option key={index} value={school.id}>
-                    {school.name}
-                  </option>
-                ))}
-                {/* <option value="SchoolA">School A</option>
-                <option value="SchoolB">School B</option>
-                <option value="SchoolC">School C</option> */}
-              </select>
+            <p className="border border-[#F3DAFF] py-2 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
+              {schData?.name ? schData?.name : "School Name"}
+              {/* <InputFormat
+              // disabled={true}
+              reg={register("school_name")}
+              errorMsg={errors?.school_name?.message}
+              value={schData?.name}
+              type="text"
+              placeholder="Last name"
+            /> */}
             </p>
           </p>
 
           <p className="my-5">
             <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
               <select
-                disabled={!selectedSCH}
+                
                 {...register("classid")}
                 name="classid"
                 id="classid"
                 className="w-full  h-full flex-1  focus:outline-none text-[14px]"
               >
                 <option value="">Select class</option>
-                {schoolList
-                  ?.find((sch: TSchools) => sch.id === selectedSCH)
-                  ?.classes?.map((classs: Tclass, index: number) => (
+                {schData?.classes?.length > 0 &&
+                  schData?.classes?.map((classs: Tclass, index: number) => (
                     <option key={index} value={classs.id}>
                       {classs.name}
                     </option>

@@ -1,3 +1,4 @@
+
 const Card = ({
   image,
   title,

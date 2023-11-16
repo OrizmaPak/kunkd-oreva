@@ -26,7 +26,7 @@ const Subscriptionplan = () => {
 const userObject = JSON.parse(stringObject as string);
 console.log("user----->",userObject)
 const handleCancelSubscription = () => {
-  mutate({},{
+  mutate("data",{
           onSuccess(data) {
             notifications.show({
               title: `Notification`,
@@ -53,7 +53,7 @@ const handleCancelSubscription = () => {
       <div className="px-4 ">
         <h1 className="text25 font-bold my-8">Subscription Plan</h1>
 
-        { userObject?.subscription?.plan === "" || userObject?.subscription?.plan === undefined || userObject?.subscription?.cancelled_subscription === true
+        { userObject?.subscription?.plan === "" 
  ?
           <div>
           <div className="px-6 border border-[#8530C1]  py-10 rounded-3xl my-8 ">

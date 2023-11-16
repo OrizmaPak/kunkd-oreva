@@ -4,18 +4,18 @@ import AfamBlur from "@/assets/afamblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 // import {useGetContentById} from "@/api/queries"
-import { MdFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
+import { getApiErrorMessage } from "@/api/helper";
 import {
   useGetLikedContent,
   useLikedContent,
   useUnLikedContent,
 } from "@/api/queries";
-import { getApiErrorMessage } from "@/api/helper";
+import { MdFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
 
-import { notifications } from "@mantine/notifications";
 import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
-import "./cardhome.css";
 import { Progress } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import "./cardhome.css";
 
 export type CardProps = {
   id?: number;
@@ -38,21 +38,23 @@ const CardHome = ({
   pages,
   hasRage,
 }: TStoryContent & { goTo?: () => void; hasRage?: boolean }) => {
-  const totalPage = pages?.length;
-  const range = Math.ceil((100 / totalPage!) * pages_read!);
+  // const totalPage = pages?.length;
+   const totalPage = pages?.length ?? 0;
+  const range = pages_read ? Math.ceil((100 / totalPage as number)  * pages_read as number)
+  : 0; // or some other default value
 
   const handleClick = () => {
     if (goTo) goTo();
 
-    localStorage.setItem("contentId", id?.toString()!);
+    localStorage.setItem("contentId", id?.toString() as string);
     localStorage.setItem(
       "continuePage",
-      pages_read ? pages_read?.toString()! : "1"
+      pages_read ? pages_read?.toString() : "1"
     );
   };
   const [visiblee, setVisiblee] = useState(false);
   const profileId = localStorage.getItem("profileId");
-  const { data, refetch } = useGetLikedContent(profileId!);
+  const { data, refetch } = useGetLikedContent(profileId as string);
   const likeContents: TStoryContent[] = data?.data.data.records;
   const { mutate } = useLikedContent();
   const { mutate: unFavoriteMutate } = useUnLikedContent();

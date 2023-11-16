@@ -1,6 +1,6 @@
-import { TTeacherList } from "../Teachers/Teachers";
 import { BsChevronRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { TTeacherList } from "../Teachers/Teachers";
 
 const ClassLeaderboard = ({ data }: { data: TTeacherList[] }) => {
   const navigate = useNavigate();
@@ -40,14 +40,14 @@ const Row = ({ data }: { data: TTeacherList }) => {
       <span className="flex gap-2 items-center justify-center">
         <img
           loading="lazy"
-          src={data?.user.image}
+          src={data?.user?.image}
           alt="image"
           className="w-[30px] h-[30px] rounded-full object-cover"
         />
-        <span>{data?.class.class_name}</span>
+        <span>{data?.user?.class_name}</span>
       </span>
       <span>
-        {data?.user.firstname} {data?.user.lastname}
+        {data?.user?.firstname} {data?.user?.lastname}
       </span>
     </div>
   );

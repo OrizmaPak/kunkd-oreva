@@ -1,6 +1,6 @@
-import { UseFormRegisterReturn } from "react-hook-form";
 import ErrorIcon from "@/assets/errorIcon.svg";
 import React, { useState } from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 type Props = {
@@ -14,6 +14,7 @@ type Props = {
   smallPadding?: "true";
   readonly?: true | false;
   errorMsg?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 const InputFormat = ({
   type,
@@ -24,7 +25,7 @@ const InputFormat = ({
   value,
   smallPadding,
   readonly,
-
+  onChange,
   errorMsg,
 }: Props) => {
   const [ttype, setType] = useState(type);
@@ -53,6 +54,7 @@ const InputFormat = ({
           type={ttype}
           defaultValue={value}
           readOnly={readonly}
+          onChange={onChange}
           className="w-full  h-full flex-1 text-black text-[14px]  focus:outline-none"
         />
         {rightIcon ? (

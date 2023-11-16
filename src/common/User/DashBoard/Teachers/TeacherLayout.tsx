@@ -1,20 +1,21 @@
 import DasboardIcon from "@/assets/adminIcon.svg";
 
 import StudentIcon from "@/assets/student.svg";
+import UserIcon from "@/assets/usericon.svg";
 
-import LogoutIcon from "@/assets/logout.svg";
+
 import Arrow from "@/assets/greatericon.svg";
-import { Outlet } from "react-router-dom";
-import { useMatch, useNavigate } from "react-router-dom";
-import { useDisclosure } from "@mantine/hooks";
-import { Modal } from "@mantine/core";
+import LogoutIcon from "@/assets/logout.svg";
 import LogoutModal from "@/pages/DashBoard/SchoolDashBoard/LogoutModal";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { Outlet, useMatch, useNavigate } from "react-router-dom";
 // import Teacher01 from "@/assets/teacher01.svg";
 import SchoolIcon from "@/assets/schoolIcon.svg";
 import { Header } from "@/common/User/DashBoard/School/SchoolLayout";
-import React from "react";
 import useStore from "@/store";
 import { getUserState } from "@/store/authStore";
+import React from "react";
 
 const routeBaseUrl = "/teacherdashboard";
 const links = [
@@ -116,13 +117,13 @@ export default TeacherLayout;
 const DasboardButton = ({
   title,
   icon,
-  onClick = () => {},
+  onClick,
   active = false,
 }: {
   title: string;
   icon: React.ReactNode;
   active?: boolean;
-  onClick?: () => void;
+  onClick: () => void;
 }) => {
   return (
     <button
@@ -178,7 +179,7 @@ const TeacherProfile = () => {
       <div className="flex justify-center items-center">
         <img
           loading="lazy"
-          src={user?.user_image}
+          src={user?.user_image || UserIcon}
           alt="image"
           className="rounded-full h-[130px] w-[130px] object-cover"
         />

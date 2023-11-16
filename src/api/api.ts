@@ -307,6 +307,14 @@ export const GetMainSearch = (payload: string) => {
   return axios.get(`/search?s=${payload}`);
 };
 
-export const CancelSubscription = () => {
-  return axios.post(`/subscribe/cancel`);
+export const CancelSubscription = (payload:string) => {
+  return axios.post(`/subscribe/cancel`, payload);
+}
+
+export const GetSchoolProfileForStudent = (payload:string) => {
+  return axios.get(`/school/profile/${payload}`);
+}
+
+export  const GetUpdatedProfile = () => {
+  return axios.get(`/auth/profile`);
 }

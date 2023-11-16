@@ -38,7 +38,7 @@ const Row = ({
         withCloseButton={false}
         centered
       >
-        <ChangeProfileStatus onCancel={close} label="Teacher" />
+        <ChangeProfileStatus onCancel={close} label="Student" />
       </Modal>
 
     <div>

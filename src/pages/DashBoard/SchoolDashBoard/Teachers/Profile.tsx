@@ -1,4 +1,5 @@
 import BlcakPencil from "@/assets/blackPencilIcon.svg";
+import UserIcon from "@/assets/usericon.svg";
 
 const Profile = ({
   name,
@@ -23,7 +24,7 @@ const Profile = ({
         <div>
           <img
             loading="lazy"
-            src={image}
+            src={image || UserIcon}
             alt="image"
             className="w-[176px] h-[176px] rounded-full "
           />

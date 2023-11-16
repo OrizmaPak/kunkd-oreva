@@ -1,23 +1,15 @@
-import InputFormat from "@/common/InputFormat";
-import Button from "@/components/Button";
-// import PasswordIcon from "@/assets/passwordIcon.svg";
-// import PasswordEye from "@/assets/passwordeye.svg";
-import { motion } from "framer-motion";
-
-import { FormData } from "@/common/User/FormValidation/Schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z, ZodType } from "zod";
-// import { useNavigate } from "react-router-dom";
-// import useStore from "@/store";
 import { useGetClassList } from "@/api/queries";
-// import { getPushTokenState } from "@/store/pushTokenStore";
-// import { Loader } from "@mantine/core";
-// import { notifications } from "@mantine/notifications";
-// import { getApiErrorMessage } from "@/api/helper";
+import InputFormat from "@/common/InputFormat";
+import { FormData } from "@/common/User/FormValidation/Schema";
+import Button from "@/components/Button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "framer-motion";
+import { useForm } from "react-hook-form";
 import { AiOutlineMail } from "react-icons/ai";
-
 import { MdClose } from "react-icons/md";
+import { z, ZodType } from "zod";
+
+
 
 export type Tclass = {
   id: number;

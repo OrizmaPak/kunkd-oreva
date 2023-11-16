@@ -23,16 +23,15 @@ export type DashBoardDataType = {
 };
 
 export type TTeacherList = {
-  class: { class_id: number; class_name: string };
-  class_teacher_id: number;
-  user: {
-    email: string;
-    firstname: string;
-    gender: string;
-    id: number;
-    image: string;
-    lastname: string;
-  };
+  user:{"class_id": number,
+  "class_name": string,
+  "email": string,
+  "firstname": string,
+  "gender": string,
+  "id":number,
+  "image": string,
+  "lastname": string}
+
 };
 
 const Teachers = () => {
@@ -44,8 +43,9 @@ const Teachers = () => {
 
   const [currentClicked, setCucrrentClicked] = useState(0);
   const currentClickedProfile = teacherList?.find(
-    (el) => el.class_teacher_id == currentClicked
+    (el) => el?.user?.id == currentClicked
   );
+  const activeClassTeacher = teacherList?.filter(data=> data?.user?.class_name !== "")
   return (
     <div className="h-full flex flex-col overflow-y-scroll">
       <Modal
@@ -67,13 +67,13 @@ const Teachers = () => {
         {modalStep === STEP_1 && currentClickedProfile && (
           <Profile
             name={
-              currentClickedProfile?.user.firstname +
+              currentClickedProfile?.user?.firstname +
               " " +
-              currentClickedProfile?.user.lastname
+              currentClickedProfile?.user?.lastname
             }
-            asignClass={currentClickedProfile.class.class_name}
-            image={currentClickedProfile?.user.image}
-            email={currentClickedProfile?.user.email}
+            asignClass={currentClickedProfile?.user?.class_name}
+            image={currentClickedProfile?.user?.image}
+            email={currentClickedProfile?.user?.email}
             handleClick={()=>close()}
             onEdit={() => setModalStep(STEP_3)}
           />
@@ -127,9 +127,11 @@ const Teachers = () => {
                 return (
                   <Row
                     onClick={() => {
+                      console.log("userId--------",data?.user?.id)
                       open();
-                      setCucrrentClicked(data?.class_teacher_id );
+                      setCucrrentClicked(data?.user?.id);
                       setModalStep(STEP_1);
+                      
                     }}
                     key={index}
                     data={data}

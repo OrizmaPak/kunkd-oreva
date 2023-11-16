@@ -25,7 +25,8 @@ const AddTeacherModal = ({
   const { mutate, isLoading } = useAddTeacherData();
 
   const handleAddTeacherForm = (val: File) => {
-    const reader = new FileReader();
+    if(val){
+       const reader = new FileReader();
 
     reader.onload = function (event) {
       const result = event?.target?.result as string; // Extract base64 data
@@ -63,6 +64,38 @@ const AddTeacherModal = ({
     };
 
     reader.readAsDataURL(val);
+    }else{
+       mutate(
+        {
+          firstname: teacherData?.firstname,
+          lastname: teacherData?.lastname,
+          email: teacherData?.email,
+          redirect_url:"http://localhost:5173/passwordsetup",
+          // password: teacherData?.password,
+          class_id: Number(teacherData?.classid),
+          gender_id: Number(teacherData?.genderid)
+        },
+        {
+          onSuccess(data) {
+            queryClient.invalidateQueries(["GetTeacherList"]);
+            toggle();
+            notifications.show({
+              title: `Notification`,
+              message: data.data.message,
+            });
+          },
+
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    }
+    
+   
   };
 
   return (

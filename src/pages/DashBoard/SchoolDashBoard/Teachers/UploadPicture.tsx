@@ -1,14 +1,14 @@
 import Button from "@/components/Button";
-import { useState } from "react";
 import { Text } from "@mantine/core";
 import { Dropzone, FileWithPath } from "@mantine/dropzone";
+import { useState } from "react";
 
-import DragIcon from "@/assets/draganddropicon.svg";
 import CameraIcon from "@/assets/cameralogo.svg";
-import { motion } from "framer-motion";
+import DragIcon from "@/assets/draganddropicon.svg";
 import { Loader } from "@mantine/core";
+import { motion } from "framer-motion";
 
-const UploadPicture = ({
+const UploadPicture = ({ 
   isLoading,
   btnTitle,
   handleSubmit,
@@ -20,7 +20,7 @@ const UploadPicture = ({
   const [files, setFiles] = useState<FileWithPath[]>([]);
 
   const handleClick = () => {
-    if (handleSubmit) handleSubmit(files[0] as File)!;
+    if (handleSubmit) handleSubmit(files[0] as File);
   };
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);

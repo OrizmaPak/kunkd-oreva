@@ -1,30 +1,29 @@
-import Wrapper from "@/common/User/Wrapper";
-import Hero from "@/pages/Library/LibraryNotPaid/Hero";
+import {
+  useContentForHome,
+  useGetContebtBySubCategories,
+  useGetSubCategories,
+} from "@/api/queries";
+import Banner from "@/assets/banner5.svg";
+import GroupCard from "@/assets/groupcard.svg";
 import CardHome, { CardProps } from "@/common/User/CardHome";
 import CardScreenHome from "@/common/User/CardScreenHome";
-import Banner from "@/assets/banner5.svg";
-import InnerWrapper from "../../common/User/InnerWrapper";
+import Wrapper from "@/common/User/Wrapper";
 import Button from "@/components/Button";
-import GroupCard from "@/assets/groupcard.svg";
+import Hero from "@/pages/Library/LibraryNotPaid/Hero";
+import { Pagination, Skeleton } from "@mantine/core";
+import { useState } from "react";
 import {
+  Outlet,
   Route,
   Routes,
   useNavigate,
   useParams,
-  Outlet,
 } from "react-router-dom";
-import Stories1 from "./Stories1/Stories1";
-import "./stories.css";
+import InnerWrapper from "../../common/User/InnerWrapper";
 import Quiz from "./Stories1/Quiz";
-import { Skeleton } from "@mantine/core";
-import { useState } from "react";
-import {
-  useGetSubCategories,
-  useGetContebtBySubCategories,
-  useContentForHome,
-} from "@/api/queries";
-import { TStoryContent } from "./Stories1/Stories1";
-import { Pagination } from "@mantine/core";
+import Stories1, { TStoryContent } from "./Stories1/Stories1";
+import "./stories.css";
+
 
 export type StoriesType = {
   title?: string;
@@ -77,13 +76,16 @@ const Story = () => {
   const navigate = useNavigate();
   const subCategoryId = localStorage.getItem("subCategoryId");
   const { data, isLoading, refetch } = useGetContebtBySubCategories(
-    subCategoryId!,
-    activePage.toString()
+    subCategoryId as string,
+    activePage.toString(),
+    
   );
   const subCategoryContents = data?.data.data.records;
   const totalPage = Math.ceil(data?.data.data.totalRecord / 10);
+
   return (
     <>
+     
       <div>
         <hr className="my-20 mx-[200px]" />
         <h1 className="text-center font-bold text30 font-Recoleta mt-10 ">
@@ -120,9 +122,7 @@ const Story = () => {
                         {...story}
                         goTo={() => {
                           navigate(
-                            `../sub/${story
-                              ?.slug!.toLocaleLowerCase()
-                              .replace(/\s/g, "_")}`
+                            `../sub/${story?.slug?.toLocaleLowerCase()?.replace(/\s/g, '')}`
                           );
                         }}
                       />
@@ -220,7 +220,7 @@ const BrowseGenre = () => {
               {...props}
               goTo={() =>
                 navigate(
-                  `sub/${props?.slug?.replace(/\s/g, "_")!?.toLowerCase()}`
+                  `sub/${props?.slug?.replace(/\s/g, "_")?.toLowerCase() as string}`
                 )
               }
             />

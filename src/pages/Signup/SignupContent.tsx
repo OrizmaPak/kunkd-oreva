@@ -1,20 +1,20 @@
-import Button from "@/components/Button";
-import Cancel from "@/assets/Cancel.svg";
-import OptionButton from "./OptionButton";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useSocialSignUp } from "@/api/queries";
-import { googleSignIn, facebookSignIn } from "@/auth/sdk";
-import { getPushTokenState } from "@/store/pushTokenStore";
-import useStore from "@/store";
-import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
-import { getUserState } from "@/store/authStore";
+import { useSocialSignUp } from "@/api/queries";
 import { TUser } from "@/api/types";
-import { FcGoogle } from "react-icons/fc";
-import { BsApple } from "react-icons/bs";
+import Cancel from "@/assets/Cancel.svg";
+import { facebookSignIn, googleSignIn } from "@/auth/sdk";
+import Button from "@/components/Button";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
+import { getPushTokenState } from "@/store/pushTokenStore";
+import { notifications } from "@mantine/notifications";
+import { useState } from "react";
 import { AiFillFacebook } from "react-icons/ai";
+import { BsApple } from "react-icons/bs";
+import { FcGoogle } from "react-icons/fc";
 import { IoCheckmarkCircleOutline, IoEllipseOutline } from "react-icons/io5";
+import { Link, useNavigate } from "react-router-dom";
+import OptionButton from "./OptionButton";
 
 const options = [
   {
@@ -35,7 +35,9 @@ const SignContent = () => {
   const [to, setTo] = useState("");
   const { mutate } = useSocialSignUp();
   const [pushToken, ,] = useStore(getPushTokenState);
-  const handleClick = () => {};
+  const handleClick = () => {
+    // todo
+  };
 
   const handleGoogleSignUp = async () => {
     try {

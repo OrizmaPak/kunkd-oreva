@@ -27,10 +27,12 @@ import {
   GetQuiz,
   GetRecommendedVideo,
   GetSchool,
+  GetSchoolProfileForStudent,
   GetStates,
   GetSubCategories,
   GetTeacherList,
   GetTrendingAudioBooks,
+  GetUpdatedProfile,
   LikedContent,
   Login,
   ParentSignUp,
@@ -149,7 +151,7 @@ export const useProfle = () => {
 
 // Fetch Profile
 export const useGetProfile = (
-  enabled?: true,
+  enabled?: boolean,
   onSucces?: (val: selectAvatarType[]) => void
 ) => {
   const [, setProfile] = useStore(getProfileState);
@@ -192,15 +194,13 @@ export const useContentForHome = () => {
   return useQuery({ queryKey: ["ContentForHome"], queryFn: ContentForHome });
 };
 
-export const useGetContentById = (contentId: string, userId: string) => {
+export const useGetContentById = (contentId: string, userId: string, open:()=>void) => {
   const [user] = useStore(getUserState);
   const navigate = useNavigate();
   return useQuery({
     queryKey: ["getContentById", contentId, userId],
     queryFn: () => GetContentById(contentId, userId),
     onSuccess: (response: unknown) => {
-      console.log("response:", response);
-
       const res = response as ApiResponse<unknown>;
       const status = res.data.status;
       console.log("response:", res);
@@ -218,12 +218,15 @@ export const useGetContentById = (contentId: string, userId: string) => {
             title: `Notification`,
             message: res.data.message,
           });
-        } else if (user?.role === "schoolAdmin") {
+        } 
+        else if (user?.role === "schoolAdmin") {
           navigate("/kundakidsunlimited");
           notifications.show({
             title: `Notification`,
             message: res.data.message,
-          });
+          })
+        }else if (user?.role === "teacher"){
+       open()
         }
       }
     },
@@ -500,6 +503,18 @@ export const useCancelSubscription = () => {
   return useMutation({
     mutationFn: CancelSubscription,
   });
+}
+
+
+export const useGetSchoolProfileForStudent = (payload = "") => {
+  return useQuery({ 
+    queryKey : ["get-profile-for-parent", payload], 
+    queryFn: ()=>GetSchoolProfileForStudent(payload), 
+    enabled : !!(payload.length > 0)})
+}
+
+export const useGetUpdatedProfile = () => {
+  return useQuery({queryKey:["GetUpdatedProfile"], queryFn:GetUpdatedProfile})
 }
 
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

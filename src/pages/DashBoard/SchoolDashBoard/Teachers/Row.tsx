@@ -1,10 +1,12 @@
 // import ToggleIcon from "@/assets/toggl.svg";
 import Rectangle from "@/assets/boxIcon.svg";
+import UserIcon from "@/assets/usericon.svg";
 import ChangeProfileStatus from "@/pages/DashBoard/SchoolDashBoard/Teachers/ChangeProfileStatus";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { MdChangeCircle } from "react-icons/md";
 import { TTeacherList } from "./Teachers";
+
 
 
 
@@ -54,7 +56,7 @@ const Row = ({
             <span>
               <img
                 loading="lazy"
-                src={data.user.image}
+                src={data.user.image || UserIcon}
                 alt="image"
                 className="w-[50px] h-[50px] object-cover rounded-xl "
               />

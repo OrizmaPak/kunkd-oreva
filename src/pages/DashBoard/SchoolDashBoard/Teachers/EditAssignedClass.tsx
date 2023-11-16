@@ -34,6 +34,7 @@ const EditAssignedClass = ({ onClose, currentClicked, }: { onClose: () => void ,
 
   const submitData = async (data: FormData) => {
     console.log(data)
+    console.log("userId--------",currentClicked)
 
      mutate(
         {
@@ -68,7 +69,7 @@ const EditAssignedClass = ({ onClose, currentClicked, }: { onClose: () => void ,
         <form onSubmit={handleSubmit(submitData)}>
           <div>
             <label htmlFor="assigntoclass">Assign to a class</label>
-            <p className="border border-[#F3DAFF] py-3 mb-10 px-8 rounded-full flex items-center gap-2 mt-2   ">
+            <p className="border border-[#F3DAFF] py-3  px-8 rounded-full flex items-center gap-2 mt-2   ">
               <select
                {...register("classid")}
                 name="classid"
@@ -83,9 +84,10 @@ const EditAssignedClass = ({ onClose, currentClicked, }: { onClose: () => void ,
                     <option value={data.id}>{data.name}</option>
                   ))}
               </select>
-              <span className="text-red-600">{errors.classid?.message}</span>
+             
 
             </p>
+             <span className="text-red-600 mb-10">{errors.classid?.message}</span>
           </div>
           <p className="my-5">
             <Button type="submit"> {isLoading ? (

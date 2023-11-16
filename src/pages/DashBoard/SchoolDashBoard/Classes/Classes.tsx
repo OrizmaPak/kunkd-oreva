@@ -39,10 +39,10 @@ const Classes = () => {
 
   const [currentClicked, setCucrrentClicked] = useState(0);
   const currentClickedTeacherData = teacherList?.find(
-    (el: TTeacherList) => el.class.class_id == currentClicked
+    (el: TTeacherList) => el?.user?.class_id == currentClicked
   );
   const currentClickedClassData: TClassList = listOfClass?.find(
-    (el: TClassList) => el.id == currentClicked
+    (el: TClassList) => el?.id == currentClicked
   );
 
   return (
@@ -64,7 +64,7 @@ const Classes = () => {
       >
         {
           <Grade
-            data={currentClickedTeacherData!}
+            data={currentClickedTeacherData}
             onEdit={() => (editOpen(), close())}
             handleClick={handleClick}
             student_count={currentClickedClassData?.student_count}
@@ -96,7 +96,7 @@ const Classes = () => {
         closeButtonProps={{ size: "lg" }}
         centered
       >
-        {<EditClassTeachers editClose={editClose} />}
+        {<EditClassTeachers currentClicked={currentClicked} editClose={editClose} />}
       </Modal>
 
       <div className=" flex-grow flex flex-col rounded-3xl p-4 bg-white">
