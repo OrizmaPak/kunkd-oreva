@@ -78,7 +78,7 @@ const EditClassTeachers = ({ editClose,currentClicked, }: { editClose: () => voi
               >
                 <option value="">Select Teacher</option>
                 {teacherList
-                  ?.filter((data: TTeacherList) => data.class?.class_name === "" && data.status.name == "active" )
+                  ?.filter((data: TTeacherList) => data?.user?.class_name === "")
                   .map((data: TTeacherList) => (
                     <option value={data?.user?.id}>{data?.user.firstname } {data?.user?.lastname}</option>
                   ))}

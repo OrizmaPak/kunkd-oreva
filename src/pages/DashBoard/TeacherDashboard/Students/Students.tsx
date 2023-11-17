@@ -5,20 +5,20 @@ import { useNavigate } from "react-router-dom";
 import Row from "./Row";
 // import DeleteProfile from "../Teachers/DeleteProfile";
 import { useGetAdmittedStudentsInClass } from "@/api/queries";
-import { Modal, Skeleton } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import DeleteProfile from "../../SchoolDashBoard/Teachers/ChangeProfileStatus";
+import { Skeleton } from "@mantine/core";
+// import { useDisclosure } from "@mantine/hooks";
+// import DeleteProfile from "../../SchoolDashBoard/Teachers/ChangeProfileStatus";
 import { TRequestStudents } from "../../TeacherDashboard/Request/Request";
 
 const Students = () => {
   const { data, isLoading } = useGetAdmittedStudentsInClass();
   const admittedStudents: TRequestStudents[] = data?.data.data.records;
 
-  const [opened, { open, close }] = useDisclosure(false);
+  // const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
   return (
     <div className="h-[100%] flex flex-col overflow-y-scroll ">
-      <Modal
+      {/* <Modal
         radius={"xl"}
         size="lg"
         padding={100}
@@ -28,7 +28,7 @@ const Students = () => {
         centered
       >
         <DeleteProfile onCancel={close} />
-      </Modal>
+      </Modal> */}
 
       <div className=" flex-grow flex flex-col  rounded-3xl bg-white py-2  ">
         <div className="grid grid-cols-2 justify-center items-center w-full px-8 ">
@@ -70,7 +70,7 @@ const Students = () => {
                     key={index}
                     onClick={() => navigate("profile/" + data.student_id)}
                     data={data}
-                    onDeleteProfile={open}
+                    // onDeleteProfile={open}
                   />
                 );
               })}

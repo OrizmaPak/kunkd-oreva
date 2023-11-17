@@ -194,7 +194,7 @@ export const useContentForHome = () => {
   return useQuery({ queryKey: ["ContentForHome"], queryFn: ContentForHome });
 };
 
-export const useGetContentById = (contentId: string, userId: string, open:()=>void) => {
+export const useGetContentById = (contentId: string, userId: string, open?:()=>void) => {
   const [user] = useStore(getUserState);
   const navigate = useNavigate();
   return useQuery({
@@ -225,8 +225,8 @@ export const useGetContentById = (contentId: string, userId: string, open:()=>vo
             title: `Notification`,
             message: res.data.message,
           })
-        }else if (user?.role === "teacher"){
-       open()
+        }else if (user?.role === "teacher" ){
+       open && open()
         }
       }
     },

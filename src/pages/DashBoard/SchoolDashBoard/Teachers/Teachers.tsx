@@ -45,7 +45,7 @@ const Teachers = () => {
   const currentClickedProfile = teacherList?.find(
     (el) => el?.user?.id == currentClicked
   );
-  const activeClassTeacher = teacherList?.filter(data=> data?.user?.class_name !== "")
+  // const activeClassTeacher = teacherList?.filter(data=> data?.user?.class_name !== "")
   return (
     <div className="h-full flex flex-col overflow-y-scroll">
       <Modal

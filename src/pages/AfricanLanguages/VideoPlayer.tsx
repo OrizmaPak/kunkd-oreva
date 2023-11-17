@@ -1,38 +1,38 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AfricanLanguagesNav from "./AfricanLanguagesNav";
 // import { africanLanguagesData } from "./AfricanLanguages";
-import { useState, useRef } from "react";
+import { getApiErrorMessage } from "@/api/helper";
+import {
+  useContentTracking,
+  useGetContentById,
+  useGetLikedContent,
+  useGetRecommendedVideo,
+  useLikedContent,
+  useUnLikedContent,
+} from "@/api/queries";
+import AfamBlur from "@/assets/afamblur.jpg";
+import Congrats from "@/assets/congrats.svg";
 import SaveIcon from "@/assets/saveIcon.svg";
 import ShareIcon from "@/assets/shareIcon.svg";
-import Congrats from "@/assets/congrats.svg";
-import {
-  useGetContentById,
-  useGetRecommendedVideo,
-  useContentTracking,
-  useUnLikedContent,
-  useGetLikedContent,
-  useLikedContent,
-} from "@/api/queries";
-import { getUserState } from "@/store/authStore";
 import useStore from "@/store";
-import "video-react/dist/video-react.css";
+import { getUserState } from "@/store/authStore";
+import { Menu, Skeleton } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { UseQueryResult } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 import ReactHlsPlayer from "react-hls-player";
-import { Skeleton } from "@mantine/core";
-import AfamBlur from "@/assets/afamblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import { useEffect } from "react";
-import { getApiErrorMessage } from "@/api/helper";
-import { notifications } from "@mantine/notifications";
 import {
+  FacebookIcon,
   FacebookShareButton,
-  WhatsappShareButton,
+  TwitterIcon,
   TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
 } from "react-share";
-import { FacebookIcon, TwitterIcon, WhatsappIcon } from "react-share";
-import { Menu } from "@mantine/core";
+import "video-react/dist/video-react.css";
 import { TStoryContent } from "../Stories/Stories1/Stories1";
-import { UseQueryResult } from "@tanstack/react-query";
 
 type TRecommendedVideo = {
   id: number;
@@ -59,11 +59,11 @@ const VideoPlayer = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [user] = useStore(getUserState);
   const { data, isLoading } = useGetContentById(
-    contentId?.toString()!,
-    user?.user_id?.toString()!
+    contentId?.toString() as string,
+    user?.user_id?.toString() as string
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const { data: recommendedData, isLoading: recommendedIsLoading } =
-    useGetRecommendedVideo(contentId?.toString()!);
+    useGetRecommendedVideo(contentId?.toString() as string);
   const recommendedVideos = recommendedData?.data?.data.recommended_contents;
   const media = data?.data?.data?.media;
   const video = media?.[0];
@@ -85,7 +85,7 @@ const VideoPlayer = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [!videoRef.current?.paused]);
+  }, [videoRef.current?.paused ]);
 
   useEffect(() => {
     mutate(
@@ -108,9 +108,9 @@ const VideoPlayer = () => {
         },
       }
     );
-  }, [delay]);
+  }, [delay,  contentId, currentVideoTime, profileId, mutate]);
 
-  const { data: likeData, refetch } = useGetLikedContent(profileId!);
+  const { data: likeData, refetch } = useGetLikedContent(profileId as string ) ;
   const likeContents: TStoryContent[] = likeData?.data.data.records;
   const { mutate: likeMutate } = useLikedContent();
   const { mutate: unFavoriteMutate } = useUnLikedContent();
@@ -122,7 +122,7 @@ const VideoPlayer = () => {
     if (isLiked?.length === 0 || isLiked === undefined) {
       likeMutate(
         {
-          content_id: Number(contentId)!,
+          content_id: Number(contentId),
           profile_id: Number(profileId),
         },
         {
@@ -146,7 +146,7 @@ const VideoPlayer = () => {
     } else {
       unFavoriteMutate(
         {
-          content_id: Number(contentId)!,
+          content_id: Number(contentId),
           profile_id: Number(profileId),
         },
         {
@@ -241,17 +241,17 @@ const VideoPlayer = () => {
                       <Menu.Dropdown>
                         <div className="flex justify-center items-center">
                           <Menu.Item>
-                            <TwitterShareButton url={video?.file!}>
+                            <TwitterShareButton url={video?.file as string}>
                               <TwitterIcon size={30} />
                             </TwitterShareButton>
                           </Menu.Item>
                           <Menu.Item>
-                            <FacebookShareButton url={video?.file!}>
+                            <FacebookShareButton url={video?.file as string}>
                               <FacebookIcon size={30} />
                             </FacebookShareButton>
                           </Menu.Item>
                           <Menu.Item>
-                            <WhatsappShareButton url={video?.file!}>
+                            <WhatsappShareButton url={video?.file as string}>
                               <WhatsappIcon size={30} />
                             </WhatsappShareButton>
                           </Menu.Item>
@@ -330,7 +330,7 @@ const RecommendedVideoCard = ({
   const navigate = useNavigate();
   const handleGoTo = () => {
     navigate(`../${subCategory}/${slug}`);
-    localStorage.setItem("contentId", id?.toString()!);
+    localStorage.setItem("contentId", id?.toString() as string);
   };
   return (
     <div

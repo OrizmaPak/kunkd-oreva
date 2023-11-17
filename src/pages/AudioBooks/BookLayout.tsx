@@ -1,34 +1,32 @@
 // import { useLocation } from "react-router-dom";
-import { audioBooksData, StoriesType } from "./AudioBooks";
-import CardScreen from "@/common/User/CardScreen";
-import Card from "@/common/User/Card";
 import Bookmark from "@/assets/Bookmark.svg";
-import React, { useState, useRef, useEffect } from "react";
+import Card from "@/common/User/Card";
+import CardScreen from "@/common/User/CardScreen";
+import React, { useEffect, useRef, useState } from "react";
+import { audioBooksData, StoriesType } from "./AudioBooks";
 // import VolumeIcon from "@/assets/volumeIcon.svg";
-import AudioBooksNav from "./AudioBooksNav";
-import { Slider, MantineProvider } from "@mantine/core";
-import { useReducedMotion } from "@mantine/hooks";
+import { getApiErrorMessage } from "@/api/helper";
 import {
+  useContentTracking,
   useGetContentById,
   useGetLikedContent,
   useLikedContent,
-  useContentTracking,
   useUnLikedContent,
 } from "@/api/queries";
-import { getUserState } from "@/store/authStore";
-import useStore from "@/store";
 import AfamBlur from "@/assets/afamblur.jpg";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import "react-lazy-load-image-component/src/effects/blur.css";
-import { Skeleton } from "@mantine/core";
-import { GrForwardTen, GrBackTen } from "react-icons/gr";
-import { BsFillPlayCircleFill, BsPauseCircleFill } from "react-icons/bs";
-import { FiVolume1 } from "react-icons/fi";
-import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
-import { getApiErrorMessage } from "@/api/helper";
+import { TMedia, TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
+import { MantineProvider, Skeleton, Slider } from "@mantine/core";
+import { useReducedMotion } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { UseQueryResult } from "@tanstack/react-query";
-import { TMedia } from "@/pages/Stories/Stories1/Stories1";
+import { BsFillPlayCircleFill, BsPauseCircleFill } from "react-icons/bs";
+import { FiVolume1 } from "react-icons/fi";
+import { GrBackTen, GrForwardTen } from "react-icons/gr";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import AudioBooksNav from "./AudioBooksNav";
 
 // type TAudioBook = {
 //   name: string;
@@ -42,8 +40,8 @@ const BookLayout = () => {
   const contentId = localStorage.getItem("contentId");
   const [user] = useStore(getUserState);
   const { data, isLoading } = useGetContentById(
-    contentId?.toString()!,
-    user?.user_id?.toString()!
+    contentId?.toString()as string,
+    user?.user_id?.toString() as string
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const audioBookId = data?.data.data.id;
   const audiobook = data?.data.data.media?.[0];
@@ -67,9 +65,9 @@ const BookLayout = () => {
               <Skeleton visible={isLoading}>
                 {!startRead && (
                   <AboutPage
-                    audiobook={audiobook!}
+                    audiobook={audiobook as TMedia}
                     setStartRead={() => setStartRead(true)}
-                    audioBookId={audioBookId!}
+                    audioBookId={audioBookId as number}
                   />
                 )}
               </Skeleton>
@@ -107,7 +105,7 @@ const AboutPage = ({
   audioBookId: number;
 }) => {
   const profileId = localStorage.getItem("profileId");
-  const { data, refetch } = useGetLikedContent(profileId!);
+  const { data, refetch } = useGetLikedContent(profileId as string);
   const likeContents: TStoryContent[] = data?.data.data.records;
   const { mutate } = useLikedContent();
   const { mutate: unFavoriteMutate } = useUnLikedContent();
@@ -118,7 +116,7 @@ const AboutPage = ({
     if (isLiked?.length === 0 || isLiked === undefined) {
       mutate(
         {
-          content_id: audioBookId!,
+          content_id: audioBookId,
           profile_id: Number(profileId),
         },
         {
@@ -406,7 +404,7 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
         }
       );
     }
-  }, [delay]);
+  }, [delay, currentTTime, contentId, profileId , mutate ]);
 
   return (
     <div className="h-[229px]">

@@ -1,23 +1,24 @@
 import { useGetAdmittedStudentsInSchool } from "@/api/queries";
 import ArrowDown from "@/assets/arrowdown.svg";
 import Rectangle from "@/assets/boxIcon.svg";
-import { Modal, Pagination, Skeleton } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { Pagination, Skeleton } from "@mantine/core";
+// import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
 import { TRequestStudents } from "../../TeacherDashboard/Request/Request";
-import DeleteProfile from "../Teachers/ChangeProfileStatus";
+// import DeleteProfile from "../Teachers/ChangeProfileStatus";
 import Row from "./Row";
+// import ChangeProfileStatus from "../Teachers/ChangeProfileStatus";
 
 const Students = () => {
   const { data, isLoading } = useGetAdmittedStudentsInSchool();
   const admittedStudents: TRequestStudents[] = data?.data.data.records;
 
   console.log("Admitted student", admittedStudents);
-  const [opened, { open, close }] = useDisclosure(false);
+  // const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
   return (
     <div className="h-[100%] flex flex-col overflow-y-scroll ">
-      <Modal
+      {/* <Modal
         radius={"xl"}
         size="lg"
         opened={opened}
@@ -25,8 +26,8 @@ const Students = () => {
         withCloseButton={false}
         centered
       >
-        <DeleteProfile onCancel={close} />
-      </Modal>
+        <ChangeProfileStatus onCancel={close} />
+      </Modal> */}
 
       <div className=" flex-grow flex flex-col  rounded-3xl bg-white py-2   ">
         <div className="grid grid-cols-2 justify-center items-center w-full px-8 ">
@@ -68,7 +69,7 @@ const Students = () => {
                     key={index}
                     onClick={() => navigate("profile/" + data.student_id)}
                     data={data}
-                    onDeleteProfile={open}
+                  
                   />
                 );
               })}
