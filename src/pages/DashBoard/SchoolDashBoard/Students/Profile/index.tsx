@@ -1,16 +1,16 @@
-import { useParams, Navigate } from "react-router-dom";
-import Header from "./Header";
-import ProfileCard from "./ProfileCard";
-import TotalTimeSpent from "./TotalTimeSpent";
-import RecentQuiz from "./RecentQuiz";
-import MyTeacher from "./MyTeacher";
-import TopSubCategories from "./TopSubCategories";
-import Assignment from "./Assignments/";
-import ProgressLog from "./ProgressLog";
-import LearningHour from "./LearningHour";
 import { motion } from "framer-motion";
+import { Navigate, useParams } from "react-router-dom";
+import Assignment from "./Assignments/";
+import Header from "./Header";
+import LearningHour from "./LearningHour";
+import MyTeacher from "./MyTeacher";
+import ProfileCard from "./ProfileCard";
+import ProgressLog from "./ProgressLog";
+import RecentQuiz from "./RecentQuiz";
+import TopSubCategories from "./TopSubCategories";
+import TotalTimeSpent from "./TotalTimeSpent";
 
-const index = () => {
+const StudentProfile = () => {
   const params = useParams();
   const id = params.studentId;
   if (!id) {
@@ -69,4 +69,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default StudentProfile;

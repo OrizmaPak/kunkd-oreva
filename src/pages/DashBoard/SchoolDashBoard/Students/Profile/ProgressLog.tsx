@@ -1,16 +1,19 @@
 import Bookbg from "@/assets/bookbg.svg";
 import MusicBg from "@/assets/musicbg.svg";
-import VideoBg from "@/assets/videobg.svg";
 import QuizBg from "@/assets/quizbg.svg";
+import VideoBg from "@/assets/videobg.svg";
+import { TLogData } from "../../Main/Main";
+
+
+
+
 const ProgressLog = ({
-  stories,
-  audiobooks,
-  languages,
+  logData
 }: {
-  stories?: number;
-  audiobooks?: number;
-  languages?: number;
+  logData?:TLogData
 }) => {
+
+ 
   return (
     <div className="bg-white flex flex-col  flex-grow rounded-3xl px-6 py-2 pb-6 ">
       <div>
@@ -19,9 +22,9 @@ const ProgressLog = ({
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3 flex-grow py-4 ">
-        <Card image={Bookbg} title="Stories" total={stories!} />
-        <Card image={MusicBg} title="Audiobooks" total={audiobooks!} />
-        <Card image={VideoBg} title="Videos" total={languages!} />
+        <Card image={Bookbg} title="Stories" total={logData?.Stories} />
+        <Card image={MusicBg} title="Audiobooks" total={logData?.Audiobooks} />
+        <Card image={VideoBg} title="Videos" total={logData?.Languages}  />
         <Card image={QuizBg} title="quiz" total={0} />
       </div>
     </div>
@@ -37,7 +40,7 @@ const Card = ({
 }: {
   image: string;
   title: string;
-  total: number;
+  total?: number;
 }) => {
   return (
     <div className=" rounded-3xl  p-6 border border-purple-300">

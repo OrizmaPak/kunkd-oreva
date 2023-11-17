@@ -5,13 +5,17 @@ import Button from "@/components/Button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { TClassList } from "../Classes/Classes";
 
 
 
+
 const EditAssignedClass = ({ onClose, currentClicked, }: { onClose: () => void , currentClicked:number}) => {
+  const queryClient = useQueryClient();
+
   const { data } = useGetClassList();
   const classList = data?.data.data.records;
   const { mutate, isLoading } = useReAssignTeacher()
@@ -44,6 +48,9 @@ const EditAssignedClass = ({ onClose, currentClicked, }: { onClose: () => void ,
         },
         {
           onSuccess(data) {
+             queryClient.invalidateQueries({ queryKey: ['GetClassList']});
+          queryClient.invalidateQueries({ queryKey: ['GetTeacherList']});
+
           onClose()
             notifications.show({
               title: `Notification`,

@@ -317,4 +317,13 @@ export const GetSchoolProfileForStudent = (payload:string) => {
 
 export  const GetUpdatedProfile = () => {
   return axios.get(`/auth/profile`);
+
+}
+
+export const GetSchoolContentStat = ()=>{
+  return axios.get(`/school/content/log`)
+}
+
+export const GetClassContentStat = (payload:string)=>{
+  return axios.get(`/school/content/class/log/${payload}`)
 }

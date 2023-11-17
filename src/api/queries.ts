@@ -12,6 +12,7 @@ import {
   GetAttemptStudentConnect,
   GetAudioBooks,
   GetAvatars,
+  GetClassContentStat,
   GetClassList,
   GetCompletedContents,
   GetContebtBySubCategories,
@@ -27,6 +28,7 @@ import {
   GetQuiz,
   GetRecommendedVideo,
   GetSchool,
+  GetSchoolContentStat,
   GetSchoolProfileForStudent,
   GetStates,
   GetSubCategories,
@@ -517,4 +519,12 @@ export const useGetUpdatedProfile = () => {
   return useQuery({queryKey:["GetUpdatedProfile"], queryFn:GetUpdatedProfile})
 }
 
+export const useGetSchoolContentStat = ()=>{
+  return useQuery({queryKey:["GetSchoolContentStat"], queryFn:GetSchoolContentStat})
+}
+
+
+export const useGetClassContentStat = (payload:string)=>{
+  return useQuery({queryKey:["GetClassContentStat", payload], queryFn:()=>GetClassContentStat(payload)})
+}
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

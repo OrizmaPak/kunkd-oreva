@@ -1,6 +1,6 @@
 import FoodFight from "@/assets/kojocard.svg";
 
-const RecentQuiz = ({}) => {
+const RecentQuiz = () => {
   return (
     <div className="bg-white p-4 rounded-3xl px-8 ">
       <h1 className="font-bold text-[16px]  mb-2">Recently Completed</h1>

@@ -1,21 +1,29 @@
 import {
   useGetAdmittedStudentsInSchool,
   useGetClassList,
-  useGetCompletedContents,
-  useGetOngoingContents,
+  useGetSchoolContentStat,
   useGetTeacherList
 } from "@/api/queries";
 import ArrowDown from "@/assets/arrowdown.svg";
 import StudentIcon from "@/assets/student3.svg";
 import TeacherIcon from "@/assets/teacher3.svg";
-import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
 import ProgressLog from "../Students/Profile/ProgressLog";
 import { TTeacherList } from "../Teachers/Teachers";
 import Card from "./Card";
 import ClassLeaderboard from "./ClassLeaderboard";
 import StudentLeaderboard from "./StudentLeaderboard";
 
+
+export  type TLogData = {
+  Stories: number;
+  Audiobooks: number;
+  Languages: number;
+
+};
+
 const Main = () => {
+   const { data:logData } = useGetSchoolContentStat()
+  const statLog:TLogData = logData ?.data.data
   const { data: teacherData } = useGetTeacherList();
   const teacherList: TTeacherList[] = teacherData?.data.data.records;
   const { data: studentData, isLoading } = useGetAdmittedStudentsInSchool();
@@ -25,49 +33,11 @@ const Main = () => {
   const totalTeacher: number = teacherList?.length;
   const totalClass: number = classData?.data.data.records?.length;
 
-  const profileId = localStorage.getItem("profileId");
-  const { data } = useGetOngoingContents(profileId as string);
-  const { data: completedData } = useGetCompletedContents(profileId as string);
-  const ongoingContents: TStoryContent[] = data?.data.data.ongoing_contents;
-  const completedContents: TStoryContent[] =
-    completedData?.data.data.completed_contents;
 
-  const categoryCalculator = (
-    category: string,
-    arrayContent: TStoryContent[]
-  ) => {
-    let total = 0;
-    for (let i = 0; i < arrayContent?.length; i += 1) {
-      if (arrayContent[i].category === category) {
-        total += 1;
-      }
-    }
-    return total;
-  };
 
-  const ongoingStories: number = categoryCalculator("Stories", ongoingContents);
-  const ongoingAudiobooks: number = categoryCalculator(
-    "Audiobooks",
-    ongoingContents
-  );
-  const ongoingAfricanLanguage: number = categoryCalculator(
-    "Languages",
-    ongoingContents
-  );
+ 
 
-  const completedStories: number = categoryCalculator(
-    "Stories",
-    completedContents
-  );
-  const completedAudiobooks: number = categoryCalculator(
-    "Audiobooks",
-    completedContents
-  );
-  const completedAfricanLanguage: number = categoryCalculator(
-    "Languages",
-    completedContents
-  );
-
+  
   return (
     <div className="h-[100%]  flex flex-col  overflow-y-scroll">
       <div className="flex justify-between                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ">
@@ -100,9 +70,7 @@ const Main = () => {
         </div>
         <div className="basis- basis-3/5  flex flex-col  h-full ">
           <ProgressLog
-            stories={ongoingStories + completedStories}
-            audiobooks={ongoingAudiobooks + completedAudiobooks}
-            languages={ongoingAfricanLanguage + completedAfricanLanguage}
+            logData={statLog}
           />
           <ClassLeaderboard data={teacherList} />
         </div>

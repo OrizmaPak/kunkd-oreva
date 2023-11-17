@@ -7,13 +7,17 @@ import Button from "@/components/Button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
+
 
 import { TTeacherList } from "../Teachers/Teachers";
 
 
 const EditClassTeachers = ({ editClose,currentClicked, }: { editClose: () => void, currentClicked:number }) => {
+  const queryClient = useQueryClient();
+
   const { data } = useGetTeacherList();
   const teacherList = data?.data.data.records;
   console.log("HI", teacherList );
@@ -44,6 +48,9 @@ const EditClassTeachers = ({ editClose,currentClicked, }: { editClose: () => voi
         },
         {
           onSuccess(data) {
+          queryClient.invalidateQueries({ queryKey: ['GetClassList']});
+          queryClient.invalidateQueries({ queryKey: ['GetTeacherList']});
+
           editClose()
             notifications.show({
               title: `Notification`,

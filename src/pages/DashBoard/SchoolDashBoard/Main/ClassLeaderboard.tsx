@@ -1,6 +1,8 @@
+import UserIcon from "@/assets/usericon.svg";
 import { BsChevronRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { TTeacherList } from "../Teachers/Teachers";
+
 
 const ClassLeaderboard = ({ data }: { data: TTeacherList[] }) => {
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ const Row = ({ data }: { data: TTeacherList }) => {
       <span className="flex gap-2 items-center justify-center">
         <img
           loading="lazy"
-          src={data?.user?.image}
+          src={data?.user?.image || UserIcon}
           alt="image"
           className="w-[30px] h-[30px] rounded-full object-cover"
         />
