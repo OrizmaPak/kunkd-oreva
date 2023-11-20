@@ -245,8 +245,8 @@ export const ConnectStudentData = (payload: TAddTeacherData) => {
   return axios.post("/school/student/connect", payload);
 };
 
-export const GetClassList = () => {
-  return axios.get("/school/class");
+export const GetClassList = (status:string) => {
+  return axios.get("/school/class",{params : {status }});
 };
 
 export const GetSchool = () => {
@@ -326,4 +326,16 @@ export const GetSchoolContentStat = ()=>{
 
 export const GetClassContentStat = (payload:string)=>{
   return axios.get(`/school/content/class/log/${payload}`)
+}
+
+export const ActiveClass = (payload:object)=>{
+  return axios.patch(`/school/class/activate`,payload)
+}
+
+export const DisableClass = (payload:object)=>{
+  return axios.patch(`/school/class/disable`,payload)
+} 
+
+export const DisableSchoolStudent = (payload:object)=>{
+  return axios.patch(`/school/student/disable`,payload)
 }

@@ -1,11 +1,14 @@
 import {
   AcceptStudentAdmission,
+  ActiveClass,
   AddClassData,
   AddTeacherData,
   CancelSubscription,
   ConnectStudentData,
   ContentForHome,
   ContentTracking,
+  DisableClass,
+  DisableSchoolStudent,
   ForgotPassword,
   GetAdmittedStudentsInClass,
   GetAdmittedStudentsInSchool,
@@ -416,8 +419,8 @@ export const useConnectStudentData = () => {
     mutationFn: ConnectStudentData,
   });
 };
-export const useGetClassList = () => {
-  return useQuery({ queryKey: ["GetClassList"], queryFn: GetClassList });
+export const useGetClassList = (status? : string)=> {
+  return useQuery({ queryKey: ["GetClassList", status], queryFn: ()=>GetClassList(status as string) });
 };
 
 export const useGetSchool = () => {
@@ -526,5 +529,17 @@ export const useGetSchoolContentStat = ()=>{
 
 export const useGetClassContentStat = (payload:string)=>{
   return useQuery({queryKey:["GetClassContentStat", payload], queryFn:()=>GetClassContentStat(payload)})
+}
+
+export const useActiveClass = ()=>{
+  return useMutation({mutationFn:ActiveClass})
+}
+
+export const useDisableClass = ()=>{
+  return useMutation({mutationFn:DisableClass})
+}
+
+export const useDisableSchoolStudent = ()=>{
+  return useMutation({mutationFn:DisableSchoolStudent})
 }
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

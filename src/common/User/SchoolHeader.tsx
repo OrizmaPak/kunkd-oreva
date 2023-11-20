@@ -125,7 +125,7 @@ const SchoolHeader = ({
             </div>
           </Link>
 
-          <div className="flex gap-8">
+          <div className="flex gap-8 ">
             <NavLink
               to={user?.role === "user" ? "/parent" : "/school"}
               // to={"/school"}

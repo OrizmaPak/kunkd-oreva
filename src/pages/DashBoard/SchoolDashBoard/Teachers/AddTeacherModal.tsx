@@ -70,8 +70,8 @@ const AddTeacherModal = ({
           firstname: teacherData?.firstname,
           lastname: teacherData?.lastname,
           email: teacherData?.email,
-          // redirect_url:"http://localhost:5173/passwordsetup",
-          redirect_url:"https://dev-kundakids.vercel.app/passwordsetup",
+          redirect_url:"http://localhost:5173/passwordsetup",
+          // redirect_url:"https://dev-kundakids.vercel.app/passwordsetup",
 
           // password: teacherData?.password,
           class_id: Number(teacherData?.classid),

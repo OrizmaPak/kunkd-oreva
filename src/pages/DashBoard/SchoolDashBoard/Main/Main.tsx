@@ -4,9 +4,9 @@ import {
   useGetSchoolContentStat,
   useGetTeacherList
 } from "@/api/queries";
-import ArrowDown from "@/assets/arrowdown.svg";
 import StudentIcon from "@/assets/student3.svg";
 import TeacherIcon from "@/assets/teacher3.svg";
+import MyDateFilter from "@/components/DateFilter";
 import ProgressLog from "../Students/Profile/ProgressLog";
 import { TTeacherList } from "../Teachers/Teachers";
 import Card from "./Card";
@@ -40,21 +40,16 @@ const Main = () => {
   
   return (
     <div className="h-[100%]  flex flex-col  overflow-y-scroll">
-      <div className="flex justify-between                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ">
+      <div className="flex justify-between                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ">
         <div>
           <h1 className="text-[25px] font-bold pl-4">Overview</h1>
         </div>
-        <div className="flex justify-end px-8 gap-2 items-center">
-          <span className="text-[#8530C1]">Last 7 days:</span>
-          <span className="flex gap-2 justify-center items-center">
-            <span> May 21 May 28 2023</span>
-            <img
-              loading="lazy"
-              src={ArrowDown}
-              alt="Arrowdown"
-              className="w-4"
-            />
-          </span>
+        <div className="flex justify-center  gap-2 items-center  ">
+          <span className="text-[#8530C1]">Sort by Date:</span>
+       
+          <div>
+            <MyDateFilter/>
+          </div>
         </div>
       </div>
       <div className="flex flex-grow items-start  gap-4  ">

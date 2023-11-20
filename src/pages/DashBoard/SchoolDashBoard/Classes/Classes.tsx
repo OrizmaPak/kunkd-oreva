@@ -3,14 +3,17 @@ import ArrowDown from "@/assets/arrowdown.svg";
 import Box from "@/assets/box.svg";
 import ClassesIcon from "@/assets/classes.svg";
 import Button from "@/components/Button";
-import { Modal, Pagination, Skeleton } from "@mantine/core";
+import { Menu, Modal, Pagination, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { TTeacherList } from "../Teachers/Teachers";
 import AddNewClass from "./AddNewClass";
 import EditClassTeachers from "./EditClassTeachers";
 import Grade from "./Grade";
 import Row from "./Row";
+
+
 
 export type TClassList = {
   id: number;
@@ -21,10 +24,12 @@ export type TClassList = {
 };
 
 const Classes = () => {
+  const queryClient = useQueryClient();
+
   const { data: teacherDataList } = useGetTeacherList();
   const teacherList: TTeacherList[] = teacherDataList?.data.data.records;
-  const { data: classDataList, isLoading } = useGetClassList();
-  const listOfClass = classDataList?.data.data.records;
+  const [status, setStatus] = useState("");
+  const { data: classDataList, isLoading } = useGetClassList(status);
   const [opened, { open, close }] = useDisclosure(false);
   const [editOpened, { open: editOpen, close: editClose }] =
     useDisclosure(false);
@@ -36,6 +41,15 @@ const Classes = () => {
   const handleClick = () => {
     close();
   };
+
+
+//   const classDataList =  useEffect(() =>{
+// const { data, isLoading } = useGetClassList(status);
+// return data
+//   },[status])
+
+  const listOfClass = classDataList?.data.data.records;
+
 
   const [currentClicked, setCucrrentClicked] = useState(0);
   const currentClickedTeacherData = teacherList?.find(
@@ -105,9 +119,37 @@ const Classes = () => {
             <h1 className="text-[25px] font-bold">Classes (35)</h1>
           </div>
           <div className="flex gap-2">
-            <span>Sort by</span>
-            <span>Newest</span>
-            <img loading="lazy" src={ArrowDown} alt="Arrowdown" />
+          
+             <Menu>
+            {" "}
+            <Menu.Target>
+              <div className="flex gap-2">
+                 <button>Sort by</button>
+                  <img loading="lazy" src={ArrowDown} alt="Arrowdown" />
+              </div>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item>
+               <button onClick={()=>{
+                 queryClient.invalidateQueries({ queryKey: ['GetClassList']});
+                setStatus('')}}>
+                Active
+                </button> 
+              </Menu.Item>
+              <Menu.Item>
+                <button onClick={()=>{
+          queryClient.invalidateQueries({ queryKey: ['GetClassList']});
+                  
+                  setStatus("disabled")}}>
+                  
+                Disabled
+                </button>
+                
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+            
+           
           </div>
           <div className="flex justify-center">
             <Button onClick={() => newClassOpen()} size="sm">
@@ -147,6 +189,7 @@ const Classes = () => {
                     key={index}
                     data={data}
                     onClick={() => (setCucrrentClicked(data.id), open())}
+                    status={status}
                   />
                 );
               })}

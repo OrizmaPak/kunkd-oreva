@@ -1,9 +1,9 @@
-import Button from "@/components/Button";
-import group from "@/assets/Group 425.svg";
-import Book from "@/assets/Book Icon.svg";
 import Music from "@/assets/Audio Icon.svg";
+import Book from "@/assets/Book Icon.svg";
+import group from "@/assets/Group 425.svg";
 import Arrow from "@/assets/arrow.svg";
 import GroupBlur from "@/assets/groupblur.jpg";
+import Button from "@/components/Button";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { useNavigate } from "react-router-dom";
@@ -12,8 +12,8 @@ import "./herocontent.css";
 const HeroContent = () => {
   const navigate = useNavigate();
   return (
-    <div className=" z-[1000]  block ">
-      <div className="absolute top-40  left-[80px] hero-text-container">
+    <div className=" z-[1000]  block bg-red-600 w-[700px] ">
+      <div className="absolute top-40  left-[80px] hero-text-container ">
         <p className="font-bold text-[36px] text-[#8530C1]  font-Recoleta header2 ">
           Introducing Kunda Kids
         </p>
@@ -37,7 +37,7 @@ const HeroContent = () => {
           Create free account
         </Button>
       </div>
-      <div>
+      <div className="bg-yellow-700">
         <LazyLoadImage
           src={group}
           placeholderSrc={GroupBlur}

@@ -1,10 +1,15 @@
 // import ToggleIcon from "@/assets/toggleicon.svg";
+import { getApiErrorMessage } from "@/api/helper";
+import { useDisableSchoolStudent } from "@/api/queries";
 import Rectangle from "@/assets/boxIcon.svg";
 import ChangeProfileStatus from "@/pages/DashBoard/SchoolDashBoard/Teachers/ChangeProfileStatus";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
+import { useQueryClient } from "@tanstack/react-query";
 import { MdChangeCircle } from "react-icons/md";
 import { TRequestStudents } from "../../TeacherDashboard/Request/Request";
+
 
 const Row = ({
   data,
@@ -17,6 +22,29 @@ const Row = ({
   onClick?: () => void;
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
+  const queryClient = useQueryClient();
+
+
+  const {mutate, isLoading} = useDisableSchoolStudent()
+  const handleDisableSchoolStudent = async ()=>{
+   mutate({student_id:data?.student?.id},  {
+          onSuccess(data) {
+             queryClient.invalidateQueries({ queryKey: ['GetClassList']});
+            notifications.show({
+              title: `Notification`,
+              message: data.data.message,
+            });
+            close()
+          },
+
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        })
+  }
 
   return (
     // <div className="  py-3  h-[72px] hover:cursor-pointer flex-grow font-medium">
@@ -30,7 +58,7 @@ const Row = ({
         withCloseButton={false}
         centered
       >
-        <ChangeProfileStatus onCancel={close} label="Student" />
+        <ChangeProfileStatus onContinue={handleDisableSchoolStudent} isLoading={isLoading} onCancel={close} label="Student" />
       </Modal>
      <div>
       <div className="grid   grid-cols-[100px_300px_1fr_150px] mt-2  px-8">

@@ -11,8 +11,7 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^2.6.1",
-    "@emotion/react": "^11.11.0",
-    "@emotion/styled": "^11.11.0",
+    "@emotion/react": "^11.11.1",
     "@hookform/resolvers": "^3.1.0",
     "@mantine/carousel": "^6.0.20",
     "@mantine/core": "^6.0.13",
@@ -44,6 +43,7 @@
     "react-router-dom": "^6.11.2",
     "react-share": "^4.4.1",
     "react-slick": "^0.29.0",
+    "rsuite": "^5.45.0",
     "slick-carousel": "^1.8.1",
     "tts-react": "^3.0.1",
     "video-react": "^0.16.0",

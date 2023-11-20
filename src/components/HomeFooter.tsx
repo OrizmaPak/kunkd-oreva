@@ -2,8 +2,9 @@ import Logo from "@/assets/KundaLogo.svg";
 import facebook from "@/assets/facebook.svg";
 import insta from "@/assets/insta.svg";
 import twitter from "@/assets/twitter.svg";
-import GooglePlay from "@/pages/Home/GooglePlay";
 import AppleStore from "@/pages/Home/AppleStore";
+import GooglePlay from "@/pages/Home/GooglePlay";
+import { useNavigate } from "react-router-dom";
 import "./homefooter.css";
 
 const HomeFooter = () => {
@@ -13,6 +14,7 @@ const HomeFooter = () => {
       newWindow.opener = null; // Ensure no access to the current window
     }
   };
+  const navigate = useNavigate()
   return (
     <div className="py-14 pad-x-40 home-footer-w mx-auto ">
       <div className="flex items-center justify-between">
@@ -20,7 +22,7 @@ const HomeFooter = () => {
           <img loading="lazy" src={Logo} alt="Logo" />
         </div>
         <div className="w-[540px] flex justify-between items-center text3  font-medium ">
-          <button className="cursor-pointer">About Us</button>
+          <button onClick={()=>navigate('/aboutus')} className="cursor-pointer">About Us</button>
           <button
             onClick={() => {
               openInNewTab("https://kundakids.com/en-ng/blogs/news");

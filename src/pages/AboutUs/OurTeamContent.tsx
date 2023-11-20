@@ -1,16 +1,16 @@
-import Dele from "@/assets/Dele1.svg";
-import Louisa from "@/assets/Louisa1.svg";
-import Chike from "@/assets/Chike1.svg";
 import Chidera from "@/assets/Chidera1.svg";
-import Toni from "@/assets/Toni1.svg";
-import Peter from "@/assets/Peter1.svg";
-import TeamCard from "./TeamCard";
-import DeleBlur from "@/assets/Deleblur.jpg";
-import LouisaBlur from "@/assets/Louisablur.jpg";
-import ChikeBlur from "@/assets/Chikeblur.jpg";
 import ChideraBlur from "@/assets/Chiderablur.jpg";
-import ToniBlur from "@/assets/Toniblur.jpg";
+import Chike from "@/assets/Chike1.svg";
+import ChikeBlur from "@/assets/Chikeblur.jpg";
+import Dele from "@/assets/Dele1.svg";
+import DeleBlur from "@/assets/Deleblur.jpg";
+import Louisa from "@/assets/Louisa1.svg";
+import LouisaBlur from "@/assets/Louisablur.jpg";
+import Peter from "@/assets/Peter1.svg";
 import PeterBlur from "@/assets/Peterblur.jpg";
+import Toni from "@/assets/Toni1.svg";
+import ToniBlur from "@/assets/Toniblur.jpg";
+import TeamCard from "./TeamCard";
 
 const data = [
   {
@@ -86,7 +86,7 @@ const OurTeamContent = () => {
         <p className="mb-20">
           <strong className="pr-6">Meet The Heads</strong> - - - - - - - - - - -
           - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-          - - - - - -- - - - - - - - - - - - - - - - - - - - - - - - - - -
+          - - - - - -- - - - - - - - - - - - - - - - - - - 
         </p>
         <div className="grid grid-cols-3 gap-x-28  gap-y-10 my-8">
           {data &&

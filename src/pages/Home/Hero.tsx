@@ -1,15 +1,13 @@
 import Ellipse1 from "@/assets/Ellipse 47.svg";
-import Ellipse2 from "@/assets/Ellipse 48.svg";
 import Ellipse3 from "@/assets/Ellipse 49.svg";
-import Ellipse4 from "@/assets/Ellipse 50.svg";
-import Ellipse5 from "@/assets/Ellipse 56.svg";
-import Ellipse6 from "@/assets/Ellipse 60.svg";
-import Ellipse7 from "@/assets/Video Icon.svg";
-import Ellipse8 from "@/assets/Ellipse 58.svg";
-import Ellipse9 from "@/assets/Ellipse 57.svg";
 import Ellipse10 from "@/assets/Ellipse 51.svg";
-import Ellipse11 from "@/assets/Rectangle 2304.svg";
+import Ellipse5 from "@/assets/Ellipse 56.svg";
+import Ellipse9 from "@/assets/Ellipse 57.svg";
+import Ellipse8 from "@/assets/Ellipse 58.svg";
 import Ellipse12 from "@/assets/Ellipse 59.svg";
+import Ellipse6 from "@/assets/Ellipse 60.svg";
+import Ellipse11 from "@/assets/Rectangle 2304.svg";
+import Ellipse7 from "@/assets/Video Icon.svg";
 import React from "react";
 import "./hero.css";
 
@@ -20,30 +18,42 @@ type Props = {
 const Hero = ({ children }: Props) => {
   return (
     <div className="w-full bg-[#F9F4FC]">
-      <div className=" w-full bg-[#F9F4FC] h-[879.61px] relative  z-[50] mx-auto">
+        {/* <img
+          loading="lazy"
+          src={Ellipse2}
+          alt=""
+          className="absolute    top-[0] right-0 "
+        /> */}
+        {/* <img
+          src={Ellipse4}
+          alt=""
+          className="absolute transform rotate-180 top-[300px] right-[-200px] "
+        /> */}
+      
+      <div className=" w-full max-w-[1440px] bg-[#F9F4FC] h-[879.61px] relative  z-[50] mx-auto">
         <img
           loading="lazy"
           src={Ellipse1}
           alt=""
           className="absolute left-0 "
         />
-        <img
+        {/* <img
           loading="lazy"
           src={Ellipse2}
           alt=""
           className="absolute    top-[0] right-0 "
-        />
+        /> */}
         <img
           loading="lazy"
           src={Ellipse3}
           alt=""
           className="absolute left-0  bottom-[-100px]"
         />
-        <img
+        {/* <img
           src={Ellipse4}
           alt=""
-          className="absolute     bottom-[-100px] right-0 "
-        />
+          className="absolute     bottom-[0px] right-0 "
+        /> */}
         <img
           src={Ellipse5}
           alt=""

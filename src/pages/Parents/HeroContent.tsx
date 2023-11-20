@@ -1,16 +1,16 @@
+import ManAndChild from "@/assets/Mask group (1).svg";
 import Arrow from "@/assets/arrow.svg";
-import Button from "@/components/Button";
-import ManAndChild from "@/assets/manandchild.svg";
 import ManAndChildBlur from "@/assets/manandchildblur.jpg";
+import Button from "@/components/Button";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import "./herocontent.css";
 import { useNavigate } from "react-router-dom";
+import "./herocontent.css";
 
 const HeroContentContent = () => {
   const navigate = useNavigate();
   return (
-    <div className="z-[1000]  block">
+    <div className="z-[1000]   block ">
       <div className="absolute top-40  left-40 hero-text-container ">
         <h1 className="text-[62px] font-bold   font-Recoleta  header1">
           <span>

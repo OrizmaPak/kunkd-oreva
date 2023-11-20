@@ -6,8 +6,8 @@ import SchHeroBlur2 from "@/assets/schheroblur2.jpg";
 import SchHeroBlur3 from "@/assets/schheroblur3.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import "./hero.css";
 import { useNavigate } from "react-router-dom";
+import "./hero.css";
 
 import Button from "@/components/Button";
 const Hero = () => {
@@ -26,7 +26,7 @@ const Hero = () => {
         </p>
         <p className="flex justify-center items-center mt-4 ">
           <Button onClick={() => naivagte("/signup")} size="md">
-            Get Stated
+            Get Started
           </Button>
         </p>
 

@@ -115,3 +115,11 @@ body {
 .inner-form-w2 {
   width: clamp(1.5625rem, -5.9633rem + 34.4037vw, 25rem) !important;
 }
+
+.rs-btn-primary {
+  background-color: #3498ff !important;
+  /* background-color: var(--rs-btn-primary-bg); */
+  border: none;
+  /* color: #fff; */
+  /* color: var(--rs-btn-primary-text); */
+}

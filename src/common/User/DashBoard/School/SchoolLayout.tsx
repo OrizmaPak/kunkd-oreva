@@ -1,15 +1,14 @@
 import DasboardIcon from "@/assets/adminIcon.svg";
-import TeacherIcon from "@/assets/teacher.svg";
-import StudentIcon from "@/assets/student.svg";
 import ClassesIcon from "@/assets/classes.svg";
-import LogoutIcon from "@/assets/logout.svg";
 import Arrow from "@/assets/greatericon.svg";
-import { Outlet } from "react-router-dom";
-import { useMatch, useNavigate } from "react-router-dom";
-import { useDisclosure } from "@mantine/hooks";
-import { Modal } from "@mantine/core";
+import LogoutIcon from "@/assets/logout.svg";
+import StudentIcon from "@/assets/student.svg";
+import TeacherIcon from "@/assets/teacher.svg";
 import LogoutModal from "@/pages/DashBoard/SchoolDashBoard/LogoutModal";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import React from "react";
+import { Outlet, useMatch, useNavigate } from "react-router-dom";
 
 import SchoolIcon from "@/assets/schoolIcon.svg";
 
@@ -139,7 +138,7 @@ const DasboardButton = ({
   return (
     <button
       onClick={onClick}
-      className={` transition-all duration-700 px-2 py-2  rounded-2xl flex items-center justify-between gap-8 w-full my-8 text2 ${
+      className={` transition-all duration-700 px-2 py-2  rounded flex items-center justify-between gap-8 w-full my-8 text2 ${
         active
           ? "bg-[#8530c1] text-white"
           : "hover:bg-[#8530C1] hover:text-white"
