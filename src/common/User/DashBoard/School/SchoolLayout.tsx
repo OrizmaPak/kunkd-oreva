@@ -127,7 +127,7 @@ export default SchoolLayout;
 const DasboardButton = ({
   title,
   icon,
-  onClick = () => {},
+  onClick,
   active = false,
 }: {
   title: string;
