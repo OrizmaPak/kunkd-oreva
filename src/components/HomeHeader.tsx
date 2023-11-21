@@ -1,9 +1,11 @@
 import KundaLogo from "@/assets/schoolIcon.svg";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import Button from "./Button";
 import "./homeheader.css";
 
+
 const HomeHeader = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
    const openInNewTab = (url: string) => {
     const newWindow: Window | null = window.open(url, "_blank");
     if (newWindow) {
@@ -101,12 +103,12 @@ const HomeHeader = () => {
         </div>
 
         <div className="flex items-center justify-center pl-2 gap-8">
-          {/* <NavLink to="login">
+          <NavLink to="login">
             <span className="text-[#8530C1] cursor-pointer">Login</span>
           </NavLink>
           <Button  onClick={() => navigate("/signup")} size="md">
             Enroll
-          </Button> */}
+          </Button>
         </div>
       </div>
     </div>
