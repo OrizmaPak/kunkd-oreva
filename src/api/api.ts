@@ -253,8 +253,8 @@ export const GetSchool = () => {
   return axios.get("/school");
 };
 
-export const GetTeacherList = () => {
-  return axios.get("/school/teacher");
+export const GetTeacherList = (status:string) => {
+  return axios.get("/school/teacher", {params : {status }});
 };
 
 export const GetAdmittedStudentsInSchool = () => {
@@ -267,6 +267,10 @@ export const GetAdmittedStudentsInClass = () => {
 
 export const GetAttemptStudentConnect = () => {
   return axios.get("/school/student/connect/list");
+};
+
+export const GetAttemptAllStudentConnect = () => {
+  return axios.get("/school/student/all/connect/list");
 };
 
 export const ReAssignTeacher = (payload: TAddTeacherData) => {
@@ -338,4 +342,12 @@ export const DisableClass = (payload:object)=>{
 
 export const DisableSchoolStudent = (payload:object)=>{
   return axios.patch(`/school/student/disable`,payload)
+}
+
+export const DisableSchoolTeacher = (payload:object)=>{
+  return axios.patch(`/school/teacher/disable`,payload)
+}
+
+export const EnableSchoolTeacher = (payload:object)=>{
+  return axios.patch(`/school/teacher/enable`,payload)
 }

@@ -108,7 +108,8 @@ const VideoPlayer = () => {
         },
       }
     );
-  }, [delay,  contentId, currentVideoTime, profileId, mutate]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [delay]);
 
   const { data: likeData, refetch } = useGetLikedContent(profileId as string ) ;
   const likeContents: TStoryContent[] = likeData?.data.data.records;

@@ -2,13 +2,16 @@ import { useGetTeacherList } from "@/api/queries";
 import ArrowDown from "@/assets/arrowdown.svg";
 import Rectangle from "@/assets/boxIcon.svg";
 import { STEP_1, STEP_3 } from "@/utils/constants";
-import { Modal, Pagination, Skeleton } from "@mantine/core";
+import { Menu, Modal, Pagination, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import EditAssignedClass from "./EditAssignedClass";
 import NewTeacher from "./NewTeacher";
 import Profile from "./Profile";
 import Row from "./Row";
+
+
 
 export type DashBoardDataType = {
   noOfTeacher: number;
@@ -35,10 +38,14 @@ export type TTeacherList = {
 };
 
 const Teachers = () => {
-  const { data, isLoading } = useGetTeacherList();
+  const queryClient = useQueryClient();
+  const [status, setStatus] = useState("active");
+
+  const { data, isLoading } = useGetTeacherList(status);
   const teacherList: TTeacherList[] = data?.data.data.records;
   const [opened, { open, close }] = useDisclosure(false);
   const [modalStep, setModalStep] = useState(STEP_1);
+
  
 
   const [currentClicked, setCucrrentClicked] = useState(0);
@@ -90,9 +97,33 @@ const Teachers = () => {
             </h1>
           </div>
           <div className="flex gap-2 justify-center font-bold">
-            <span className="text-[#8530C1] ">Sort by</span>
-            <span>Newest</span>
-            <img loading="lazy" src={ArrowDown} alt="Arrowdown" />
+             <Menu>
+            <Menu.Target>
+              <div className="flex gap-2">
+                 <button>Sort by</button>
+                  <img loading="lazy" src={ArrowDown} alt="Arrowdown" />
+              </div>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item>
+               <button onClick={()=>{
+                 queryClient.invalidateQueries({ queryKey: ['GetTeacherList']});
+                setStatus('active')}}>
+                Active
+                </button> 
+              </Menu.Item>
+              <Menu.Item>
+                <button onClick={()=>{
+          queryClient.invalidateQueries({ queryKey: ['GetTeacherList']});
+                  
+                  setStatus("disable")}}>
+                  
+                Disabled
+                </button>
+                
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
           </div>
           <div className="flex gap-3 justify-end">
             <NewTeacher />
@@ -125,12 +156,15 @@ const Teachers = () => {
               ))
             : teacherList?.map((data: TTeacherList, index: number) => {
                 return (
-                  <Row
+                  <Row 
+                  status={status}
+                  currentClicked={data?.user?.id}
                     onClick={() => {
                       console.log("userId--------",data?.user?.id)
                       open();
                       setCucrrentClicked(data?.user?.id);
                       setModalStep(STEP_1);
+                     
                       
                     }}
                     key={index}

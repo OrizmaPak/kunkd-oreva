@@ -3,7 +3,7 @@ import Bookmark from "@/assets/Bookmark.svg";
 import Card from "@/common/User/Card";
 import CardScreen from "@/common/User/CardScreen";
 import React, { useEffect, useRef, useState } from "react";
-import { audioBooksData, StoriesType } from "./AudioBooks";
+import { StoriesType, audioBooksData } from "./AudioBooks";
 // import VolumeIcon from "@/assets/volumeIcon.svg";
 import { getApiErrorMessage } from "@/api/helper";
 import {
@@ -404,7 +404,8 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
         }
       );
     }
-  }, [delay, currentTTime, contentId, profileId , mutate ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [delay]);
 
   return (
     <div className="h-[229px]">

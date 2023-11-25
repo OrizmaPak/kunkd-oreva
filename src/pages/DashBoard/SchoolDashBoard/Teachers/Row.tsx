@@ -1,11 +1,16 @@
 // import ToggleIcon from "@/assets/toggl.svg";
+import { getApiErrorMessage } from "@/api/helper";
+import { useDisableSchoolTeacher, useEnableSchoolTeacher } from "@/api/queries";
 import Rectangle from "@/assets/boxIcon.svg";
 import UserIcon from "@/assets/usericon.svg";
 import ChangeProfileStatus from "@/pages/DashBoard/SchoolDashBoard/Teachers/ChangeProfileStatus";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
+import { useQueryClient } from "@tanstack/react-query";
 import { MdChangeCircle } from "react-icons/md";
 import { TTeacherList } from "./Teachers";
+
 
 
 
@@ -13,10 +18,61 @@ import { TTeacherList } from "./Teachers";
 const Row = ({
   data,
   onClick,
+  currentClicked,
+  status
 }: {
   data: TTeacherList;
   onClick: () => void;
+  currentClicked: number;
+  status:string
 }) => {
+ const queryClient = useQueryClient()
+  const {mutate, isLoading} = useDisableSchoolTeacher()
+  const {mutate:enableMutate, isLoading:enableLoading} = useEnableSchoolTeacher()
+
+   const handleDisableTeacher = async ()=>{
+
+
+    if(status === "active"){
+      mutate({user_id:currentClicked},  {
+          onSuccess(data) {
+             queryClient.invalidateQueries({ queryKey: ['GetTeacherList']});
+            notifications.show({
+              title: `Notification`,
+              message: data.data.message,
+            });
+            close()
+          },
+
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        })  
+    } else if(status === "disable"){
+       enableMutate({user_id:currentClicked},  {
+          onSuccess(data) {
+             queryClient.invalidateQueries({ queryKey: ['GetTeacherList']});
+            notifications.show({
+              title: `Notification`,
+              message: data.data.message,
+            });
+            close()
+          },
+
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }) 
+    }
+  
+
+  }
 
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -39,7 +95,7 @@ const Row = ({
         withCloseButton={false}
         centered
       >
-        <ChangeProfileStatus onCancel={close} label="Teacher" />
+        <ChangeProfileStatus   onCancel={close} onContinue={handleDisableTeacher} isLoading={isLoading || enableLoading}   label="Teacher" />
       </Modal>
      <div className=" hover:cursor-pointer  font-medium">
       <div>
@@ -75,7 +131,9 @@ const Row = ({
             <span>
               {/* <img loading="lazy" src={ToggleIcon} alt="image" /> */}
             </span>
-           <button onClick={open} className="flex justify-center items-center gap-2">
+           <button onClick={()=>{
+            open()
+            }} className="flex justify-center items-center gap-2">
               <MdChangeCircle size={30} color="#8530C1"/> <span>Active</span>
             </button>
             <span></span>

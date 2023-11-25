@@ -1,13 +1,12 @@
-import Blxst from "@/assets/Blxst.svg";
+import { getApiErrorMessage } from "@/api/helper";
 import {
-  useGetAttemptStudentConnect,
   useAcceptStudentAdmission,
+  useGetAttemptAllStudentConnect,
   useRejectStudentAdmission,
 } from "@/api/queries";
-import { Loader } from "@mantine/core";
+import Blxst from "@/assets/Blxst.svg";
+import { Loader, Skeleton } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { getApiErrorMessage } from "@/api/helper";
-import { Skeleton } from "@mantine/core";
 
 export type TRequestStudents = {
   parent: {
@@ -31,7 +30,7 @@ export type TRequestStudents = {
 };
 
 const Request = () => {
-  const { data, refetch, isLoading } = useGetAttemptStudentConnect();
+  const { data, refetch, isLoading } = useGetAttemptAllStudentConnect();
 
   const attemptConnectStudents: TRequestStudents[] = data?.data.data.records;
 

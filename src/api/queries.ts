@@ -9,9 +9,12 @@ import {
   ContentTracking,
   DisableClass,
   DisableSchoolStudent,
+  DisableSchoolTeacher,
+  EnableSchoolTeacher,
   ForgotPassword,
   GetAdmittedStudentsInClass,
   GetAdmittedStudentsInSchool,
+  GetAttemptAllStudentConnect,
   GetAttemptStudentConnect,
   GetAudioBooks,
   GetAvatars,
@@ -427,8 +430,8 @@ export const useGetSchool = () => {
   return useQuery({ queryKey: ["GetSchool"], queryFn: GetSchool });
 };
 
-export const useGetTeacherList = () => {
-  return useQuery({ queryKey: ["GetTeacherList"], queryFn: GetTeacherList });
+export const useGetTeacherList = (status? :string) => {
+  return useQuery({ queryKey: ["GetTeacherList", status], queryFn:()=> GetTeacherList(status as string) });
 };
 
 export const useGetAdmittedStudentsInSchool = () => {
@@ -449,6 +452,14 @@ export const useGetAttemptStudentConnect = () => {
   return useQuery({
     queryKey: ["GetAttemptStudentConnect"],
     queryFn: GetAttemptStudentConnect,
+  });
+};
+
+
+export const useGetAttemptAllStudentConnect = () => {
+  return useQuery({
+    queryKey: ["GetAttemptAllStudentConnect"],
+    queryFn: GetAttemptAllStudentConnect,
   });
 };
 
@@ -541,5 +552,13 @@ export const useDisableClass = ()=>{
 
 export const useDisableSchoolStudent = ()=>{
   return useMutation({mutationFn:DisableSchoolStudent})
+}
+
+export const useDisableSchoolTeacher = ()=>{
+  return useMutation({mutationFn:DisableSchoolTeacher})
+}
+
+export const useEnableSchoolTeacher = ()=>{
+  return useMutation({mutationFn:EnableSchoolTeacher})
 }
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

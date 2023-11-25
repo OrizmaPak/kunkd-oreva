@@ -121,7 +121,6 @@ const Classes = () => {
           <div className="flex gap-2">
           
              <Menu>
-            {" "}
             <Menu.Target>
               <div className="flex gap-2">
                  <button>Sort by</button>

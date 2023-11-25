@@ -130,7 +130,7 @@ const CardHome = ({
           placeholderSrc={AfamBlur}
           effect="blur"
           className=" rounded-xl card"
-          wrapperClassName="card relative
+          wrapperClassName="card 
           "
           onMouseMove={() => {
             setVisiblee(true);
