@@ -17,7 +17,7 @@ const Main = () => {
   // const [user, ] = useStore(getUserState)
 
   // const {data:logData} = useGetClassContentStat(user?.class_id)
-  const { data, isLoading } = useGetAdmittedStudentsInClass();
+  const { data, isLoading } = useGetAdmittedStudentsInClass("active");
   const studentList: TRequestStudents[] = data?.data.data.records;
 
  

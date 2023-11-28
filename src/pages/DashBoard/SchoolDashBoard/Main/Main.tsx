@@ -26,7 +26,7 @@ const Main = () => {
   const statLog:TLogData = logData ?.data.data
   const { data: teacherData } = useGetTeacherList();
   const teacherList: TTeacherList[] = teacherData?.data.data.records;
-  const { data: studentData, isLoading } = useGetAdmittedStudentsInSchool();
+  const { data: studentData, isLoading } = useGetAdmittedStudentsInSchool("active");
   const {data:classData, } = useGetClassList()
   const studentList = studentData?.data.data.records;
   const totalStudent: number = studentList?.length;
