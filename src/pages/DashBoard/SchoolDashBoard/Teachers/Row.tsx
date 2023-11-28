@@ -8,7 +8,6 @@ import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
-import { MdChangeCircle } from "react-icons/md";
 import { TTeacherList } from "./Teachers";
 
 
@@ -99,7 +98,7 @@ const Row = ({
       </Modal>
      <div className=" hover:cursor-pointer  font-medium">
       <div>
-        <div className="grid  grid-cols-[100px_1fr_1fr_100px_100px] mt-2  px-8">
+        <div className="grid  grid-cols-[100px_1fr_1fr_100px_100px] mt-2  pr-4 pl-8">
           <div className="flex justify-start items-center ">
             <span className=" ">
               <img loading="lazy" src={Rectangle} alt="image" />
@@ -131,10 +130,10 @@ const Row = ({
             <span>
               {/* <img loading="lazy" src={ToggleIcon} alt="image" /> */}
             </span>
-           <button onClick={()=>{
+           <button  onClick={()=>{
             open()
-            }} className="flex justify-center items-center gap-2">
-              <MdChangeCircle size={30} color="#8530C1"/> <span>Active</span>
+            }} className="flex justify-center items-center gap-2 bg-[#8530C1]  rounded px-2 py-[4px] text-white ">
+              <span>{status === "active"? "Disable" : "Enable"}</span>
             </button>
             <span></span>
           </div>

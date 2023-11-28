@@ -265,8 +265,8 @@ const KidCard = ({
                 </button>
               ) : student?.status === "pending" && student?.school_name?.length as number > 0 ? (
                 <button className="mt-1 flex justify-center items-center gap-2 bg-[#FFFAEB] px-2 py-1 rounded-2xl">
-                  <p className="h-2 w-2 rounded-full bg-[#F79009]"></p>
-                  <p className="text2  text-[#B54708]">Request Pending</p>
+                  <span className="h-2 w-2 rounded-full bg-[#F79009]"></span>
+                  <span className="text2  text-[#B54708]">Request Pending</span>
                 </button>
               ) : (
                 <button

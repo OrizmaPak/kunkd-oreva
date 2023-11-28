@@ -1,15 +1,15 @@
 import client1 from "@/assets/client.svg";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { useRef } from "react";
-import { BsChevronRight, BsChevronLeft } from "react-icons/bs";
+import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
 
 import "react-lazy-load-image-component/src/effects/blur.css";
 
 import ClientCard from "../Home/ClientCard";
-const SayAbouyUs = () => {
-  var settings2 = {
+const SayAboutUs = () => {
+  const settings2 = {
     className: "center",
     arrows: false,
     dots: true,
@@ -29,7 +29,7 @@ const SayAbouyUs = () => {
   return (
     <div>
       {" "}
-      <div className=" mx-auto leading-8 text-center  mb-20">
+      <div className=" mx-auto leading-8 text-center  ">
         <h1 className="pt-8 header-1 font-bold  font-Recoleta ">
           What our clients have to Say about us
         </h1>
@@ -39,7 +39,7 @@ const SayAbouyUs = () => {
             Kunda and his friends
           </p> */}
       </div>
-      <div className="max-w-[1000px] mx-auto gap-4 mb-20 mt-14  relative ">
+      <div className="max-w-[1000px] mx-auto gap-4 mb-32 mt-14  relative ">
         <button
           onClick={() => sliderRef?.current?.slickPrev()}
           className="absolute z-10 -left-14 top-[45%] hover:text-white bg-[#ffff] hover:bg-[#8530C1] rounded-full p-2"
@@ -141,4 +141,4 @@ const SayAbouyUs = () => {
   );
 };
 
-export default SayAbouyUs;
+export default SayAboutUs;

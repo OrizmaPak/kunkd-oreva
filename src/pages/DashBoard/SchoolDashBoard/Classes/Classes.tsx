@@ -2,6 +2,7 @@ import { useGetClassList, useGetTeacherList } from "@/api/queries";
 import ArrowDown from "@/assets/arrowdown.svg";
 import Box from "@/assets/box.svg";
 import ClassesIcon from "@/assets/classes.svg";
+import EditPencil from "@/assets/editPencil.svg";
 import Button from "@/components/Button";
 import { Menu, Modal, Pagination, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -9,9 +10,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { TTeacherList } from "../Teachers/Teachers";
 import AddNewClass from "./AddNewClass";
+import EditClassName from "./EditClassName";
 import EditClassTeachers from "./EditClassTeachers";
 import Grade from "./Grade";
 import Row from "./Row";
+
 
 
 
@@ -35,6 +38,9 @@ const Classes = () => {
     useDisclosure(false);
 
   const [newClass, { open: newClassOpen, close: newClassClose }] =
+    useDisclosure(false);
+
+    const [newClassNameOpened, { open: newClassNameOpen, close: newClassNameClose }] =
     useDisclosure(false);
 
   // const [modalStep, setModalStep] = useState(STEP_1);
@@ -66,8 +72,15 @@ const Classes = () => {
         padding={"xl"}
         xOffset={500}
         title={
-          <h1 className=" pl-8 text-[24px] font-semibold">
-            {currentClickedClassData?.name}
+          <h1 className=" pl-8 text-[24px] font-semibold flex gap-2">
+            <span>
+ {currentClickedClassData?.name}
+            </span>
+           <img onClick={()=>{
+            newClassNameOpen()
+            close()
+           }
+           } src={EditPencil } alt="" />
           </h1>
         }
         size="md"
@@ -85,6 +98,33 @@ const Classes = () => {
           />
         }
       </Modal>
+
+
+
+
+       <Modal
+        radius={10}
+        padding={"xl"}
+        xOffset={500}
+        title={
+          <h1 className=" pl-8 text-[24px] font-semibold flex gap-2">
+   Edit Class Name
+          </h1>
+        }
+        size="md"
+        opened={newClassNameOpened}
+        onClose={newClassNameClose }
+        closeButtonProps={{ size: "lg" }}
+        centered
+      >
+        {
+          <EditClassName 
+          currentClicked={currentClicked}
+          editClose={newClassNameClose}
+          />
+        }
+      </Modal>
+
 
       <Modal
         radius={10}

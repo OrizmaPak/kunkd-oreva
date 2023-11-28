@@ -1,12 +1,12 @@
 import DadBoy from "@/assets/dadboy.svg";
+import DadSonBlur from "@/assets/dadsonblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import DadSonBlur from "@/assets/dadsonblur.jpg";
 import "./mission.css";
 
 const Mission = () => {
   return (
-    <div className=" bg-[rgba(237,28,36,0.06);] pt-14 pb-20 pad-x-40">
+    <div className=" bg-[rgba(237,28,36,0.06);] pb-20 pad-x-40 pt-40">
       <div className="mission-container  mx-auto ">
         <div className=" mx-auto flex gap-4 ">
           <div className="basis-1/2 mt-16 px-10">

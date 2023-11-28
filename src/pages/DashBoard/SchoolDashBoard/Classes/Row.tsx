@@ -7,7 +7,6 @@ import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { MdChangeCircle } from "react-icons/md";
 import ChangeProfileStatus from "../Teachers/ChangeProfileStatus";
 import { TClassList } from "./Classes";
 
@@ -98,7 +97,7 @@ mutate({class_id:currentClicked},  {
       </Modal>                                  
  <div className="   my-auto border-b-[2px] border-[#eee]  py-5 font-medium ">
       <div >
-        <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px]   px-8 ">
+        <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px]    pr-4 pl-8">
           <div className="flex justify-start items-center ">
             <span className=" ">
               <img loading="lazy" src={Rectangle} alt="" />
@@ -119,7 +118,7 @@ mutate({class_id:currentClicked},  {
                 setCucrrentClicked(data.id)
               open()
             }} className="flex justify-center items-center gap-1 bg-[#8530C1] rounded p-1 px-2">
-              <MdChangeCircle size={30} color="white"/> <span className="text-white">{status === "" ? "Disable": "Enable"}</span>
+             <span className="text-white">{status === "" ? "Disable": "Enable"}</span>
             </button>
             <span></span>
           </div>

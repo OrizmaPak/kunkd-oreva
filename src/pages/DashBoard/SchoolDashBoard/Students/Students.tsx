@@ -1,16 +1,21 @@
 import { useGetAdmittedStudentsInSchool } from "@/api/queries";
 import ArrowDown from "@/assets/arrowdown.svg";
 import Rectangle from "@/assets/boxIcon.svg";
-import { Pagination, Skeleton } from "@mantine/core";
 // import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
 import { TRequestStudents } from "../../TeacherDashboard/Request/Request";
 // import DeleteProfile from "../Teachers/ChangeProfileStatus";
+import { Menu, Pagination, Skeleton } from "@mantine/core";
+import { useState } from "react";
 import Row from "./Row";
+
+
 // import ChangeProfileStatus from "../Teachers/ChangeProfileStatus";
 
 const Students = () => {
-  const { data, isLoading } = useGetAdmittedStudentsInSchool();
+  const [status, setStatus] = useState("active");
+
+  const { data, isLoading } = useGetAdmittedStudentsInSchool(status);
   const admittedStudents: TRequestStudents[] = data?.data.data.records;
 
   console.log("Admitted student", admittedStudents);
@@ -35,9 +40,36 @@ const Students = () => {
             <h1 className="text-[25px] font-bold">Students (35)</h1>
           </div>
           <div className="flex gap-2 justify-end ">
-            <span className="text-[#8530C1]">Sort by</span>
-            <span>Newest</span>
-            <img loading="lazy" src={ArrowDown} alt="Arrowdown" />
+          <Menu>
+            <Menu.Target>
+              <div className="flex gap-2">
+                 <button>Sort by</button>
+                  <img loading="lazy" src={ArrowDown} alt="Arrowdown" />
+              </div>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item>
+               <button onClick={()=>{
+                setStatus('active')
+                //  queryClient.invalidateQueries({ queryKey: ['GetStudents']});
+                }}>
+                Active
+                </button> 
+              </Menu.Item>
+              <Menu.Item>
+                <button onClick={()=>{
+                  
+                  setStatus("disabled")
+          // queryClient.invalidateQueries({ queryKey: ['GetStudents']});
+                  }}>
+                  
+                Disabled
+                </button>
+                
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+            
           </div>
         </div>
 

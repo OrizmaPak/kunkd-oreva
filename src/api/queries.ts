@@ -10,6 +10,7 @@ import {
   DisableClass,
   DisableSchoolStudent,
   DisableSchoolTeacher,
+  EditClassName,
   EnableSchoolTeacher,
   ForgotPassword,
   GetAdmittedStudentsInClass,
@@ -434,10 +435,10 @@ export const useGetTeacherList = (status? :string) => {
   return useQuery({ queryKey: ["GetTeacherList", status], queryFn:()=> GetTeacherList(status as string) });
 };
 
-export const useGetAdmittedStudentsInSchool = () => {
+export const useGetAdmittedStudentsInSchool = (status? : string) => {
   return useQuery({
-    queryKey: ["GetStudents"],
-    queryFn: GetAdmittedStudentsInSchool,
+    queryKey: ["GetStudents", status],
+    queryFn: ()=>GetAdmittedStudentsInSchool(status as string),
   });
 };
 
@@ -495,10 +496,10 @@ export const useRejectStudentAdmission = () => {
   });
 };
 
-export const useGetAdmittedStudentsInClass = () => {
+export const useGetAdmittedStudentsInClass = (status: string) => {
   return useQuery({
-    queryKey: ["GetAdmittedStudentsInClass"],
-    queryFn: GetAdmittedStudentsInClass,
+    queryKey: ["GetAdmittedStudentsInClass", status],
+    queryFn: ()=>GetAdmittedStudentsInClass(status),
   });
 };
 
@@ -560,5 +561,9 @@ export const useDisableSchoolTeacher = ()=>{
 
 export const useEnableSchoolTeacher = ()=>{
   return useMutation({mutationFn:EnableSchoolTeacher})
+}
+
+export const useEditClassName = ()=>{
+  return useMutation({mutationFn:EditClassName})
 }
 // const {mutate, isLoading, isError} = useCreateSchoolUser();
