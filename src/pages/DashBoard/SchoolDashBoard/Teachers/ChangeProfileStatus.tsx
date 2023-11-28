@@ -2,7 +2,7 @@ import { Loader } from "@mantine/core";
 import { motion } from "framer-motion";
 
 
-const ChangeProfileStatus = ({ onCancel, onContinue, isLoading,activeIsLoading, label, }: { onCancel: () => void , isLoading?:boolean,activeIsLoading?:boolean, label?:string, onContinue?:()=>void}) => {
+const ChangeProfileStatus = ({ onCancel, onContinue, isLoading,activeIsLoading, label,}: { onCancel: () => void , isLoading?:boolean,activeIsLoading?:boolean, label?:string, onContinue?:()=>void}) => {
   return (
     <motion.div
       initial={{ opacity: 0 }}

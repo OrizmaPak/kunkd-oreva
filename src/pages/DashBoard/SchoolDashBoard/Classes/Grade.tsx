@@ -9,6 +9,7 @@ const Grade = ({
   handleClick,
   onEdit,
   student_count,
+  
 }: {
   name1?: string;
   data?: TTeacherList;
