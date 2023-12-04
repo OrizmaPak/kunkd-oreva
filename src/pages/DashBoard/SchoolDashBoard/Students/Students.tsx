@@ -73,7 +73,7 @@ const Students = () => {
           </div>
         </div>
 
-        <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px] mt-5 text-gray-400  px-8">
+        <div className="grid  grid-cols-[100px_400px_1fr_150px] mt-5 text-gray-400  px-8">
           <div className="flex justify-start items-center ">
             <span className=" ">
               <img loading="lazy" src={Rectangle} alt="" />
@@ -81,7 +81,6 @@ const Students = () => {
           </div>
           <div className=" ">Name</div>
           <div className="">Class</div>
-          <div className="">Gender</div>
           <div className="flex justify-end   items-center">
             <span>Actions</span>{" "}
           </div>
@@ -98,6 +97,7 @@ const Students = () => {
             : admittedStudents?.map((data: TRequestStudents, index) => {
                 return (
                   <Row
+                    status={status}
                     key={index}
                     onClick={() => navigate("profile/" + data.student_id)}
                     data={data}

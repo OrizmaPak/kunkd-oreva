@@ -61,7 +61,7 @@ const AddNewClass = ({ newClassClose }: { newClassClose: () => void }) => {
 
   return (
     <div className="px-10">
-      <h1 className="text-center font-Recoleta text3">Add new class</h1>
+      <h1 className="text-center font-Recoleta text20">Add new class</h1>
       <div>
         <form onSubmit={handleSubmit(submitData)}>
           <p className="my-5  mb-8">

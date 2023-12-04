@@ -74,7 +74,6 @@ const SigninDash = ({
   body: string;
   active?: boolean;
 }) => {
-  //   console.log("--- active", active);
   return (
     <div className="flex  mt-10 gap-4">
       <div>
@@ -93,7 +92,8 @@ const SigninDash = ({
     </div>
   );
 };
-const SigninDashIonsOnly = ({}: { active?: boolean }) => {
+const SigninDashIonsOnly = ({active}:{ active?: boolean }) => {
+  console.log(active)
   return (
     <div className="mb-20">
       <img loading="lazy" src={Checked} alt="roundmark" />

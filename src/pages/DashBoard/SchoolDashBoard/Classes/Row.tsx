@@ -95,7 +95,7 @@ mutate({class_id:currentClicked},  {
       >
         <ChangeProfileStatus  onContinue={handleDisableClass} activeIsLoading={activeLoading} isLoading={isLoading}  onCancel={close} label="Class" />
       </Modal>                                  
- <div className="   my-auto border-b-[2px] border-[#eee]  py-5 font-medium ">
+ <div className="   my-auto border-b-[2px] border-[#eee]  py-4 font-medium ">
       <div >
         <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px]    pr-4 pl-8">
           <div className="flex justify-start items-center ">

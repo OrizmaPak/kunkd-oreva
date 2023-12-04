@@ -204,7 +204,7 @@ const AddTeacherForm = ({
               <span className="text-red-600">{errors.genderid?.message}</span>
             </div>
           </div>
-          <div className="max-w-[60%] mx-auto my-4">
+          <div className=" mx-auto my-4">
             <Button type="submit">Continue</Button>
           </div>
         </form>

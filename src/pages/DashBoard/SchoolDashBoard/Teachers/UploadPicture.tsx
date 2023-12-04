@@ -75,7 +75,7 @@ const UploadPicture = ({
             </div>
           </Text>
         </Dropzone>
-        <div className="max-w-[70%] mx-auto my-4">
+        <div className=" mx-auto my-4">
           <Button onClick={handleClick}>
             {isLoading ? (
               <p className="flex justify-center items-center">

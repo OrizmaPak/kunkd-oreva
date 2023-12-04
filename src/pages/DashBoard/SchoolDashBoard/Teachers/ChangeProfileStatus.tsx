@@ -10,7 +10,7 @@ const ChangeProfileStatus = ({ onCancel, onContinue, isLoading,activeIsLoading, 
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
     >
-      <h1 className="font-bold text20  text-center mb-4">
+      <h1 className="font-bold text20  text-center  leading-8 mb-10">
         Are you sure you want to change the status of this {" "}{label}?
       </h1>
       {/* <p className="text-center mb-10 ">

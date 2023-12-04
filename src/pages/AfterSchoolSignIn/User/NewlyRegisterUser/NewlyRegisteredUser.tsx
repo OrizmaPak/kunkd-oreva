@@ -153,7 +153,7 @@ const NewlyRegisteredUser = () => {
           )}
         </div>
 
-        <div className="my-[100px]">
+        <div className="my-[px]">
           <CardScreenHome
             data={newTrending}
             header="New & Trending"
@@ -176,7 +176,7 @@ const NewlyRegisteredUser = () => {
         </div>
 
         {/* <AdsButton /> */}
-        <div className="mt-[100px]">
+        <div className="">
           <CardScreenHome
             data={recommendedStories}
             header="Recommended For You"

@@ -113,7 +113,7 @@ const Story = () => {
                     </div>
                   </Skeleton>
                 ))
-            : subCategoryContents.map((story: TStoryContent, index: number) => {
+            : subCategoryContents?.map((story: TStoryContent, index: number) => {
                 return (
                   <>
                     {

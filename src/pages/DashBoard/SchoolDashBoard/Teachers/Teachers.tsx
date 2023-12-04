@@ -144,7 +144,7 @@ const Teachers = () => {
               <span>Actions</span>{" "}
             </div>
           </div>
-          <hr className="my-4 mx-8" />
+          <hr className="my-2 mx-8" />
         </div>
 
         <div className="flex flex-col flex-grow">

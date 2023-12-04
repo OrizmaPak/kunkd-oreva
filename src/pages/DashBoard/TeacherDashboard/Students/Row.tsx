@@ -7,17 +7,17 @@ import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
-import { MdChangeCircle } from "react-icons/md";
 import { TRequestStudents } from "../../TeacherDashboard/Request/Request";
 
 
 const Row = ({
+  status,
   data,
   onClick,
   
 }: {
   data: TRequestStudents;
-
+  status:string
   classCode?: string;
   onClick?: () => void;
 }) => {
@@ -61,7 +61,7 @@ const Row = ({
         <ChangeProfileStatus onContinue={handleDisableSchoolStudent} isLoading={isLoading} onCancel={close} label="Student" />
       </Modal>
      <div>
-      <div className="grid   grid-cols-[100px_300px_1fr_150px] mt-2  px-8">
+      <div className="grid   grid-cols-[100px_400px_1fr_150px] mt-2  px-8">
         <div className="flex justify-start items-center ">
           <span className=" ">
             <img loading="lazy" src={Rectangle} alt="" />
@@ -88,9 +88,10 @@ const Row = ({
         </div>
 
         <div className="flex justify-end  gap-4  items-center">
-          <span>{/* <img loading="lazy" src={ToggleIcon} alt="" /> */}</span>
-          <button onClick={open} className="flex justify-center items-center gap-2">
-              <MdChangeCircle size={30} color="#8530C1"/> <span>Active</span>
+          <button disabled={status !== "active"}  onClick={()=>{
+          {status === "active" &&  open()}
+            }} className={`flex justify-center items-center gap-2 ${ status !== "active" ?"bg-gray-300" :"bg-[#8530C1]"}  rounded px-2 py-[4px] text-white `}>
+              <span>{status === "active"? "Disable" : "Disabled"}</span>
             </button>
           <span></span>
         </div>

@@ -11,7 +11,11 @@ import Button from "@/components/Button";
 const ProgressCard = ({
   data,
 }: DataType & { isCompleted?: boolean; data: TStoryContent }) => {
-  const range = Math.ceil((100 / data?.pages?.length!) * data?.pages_read!);
+const pagesLength = data?.pages?.length as number;
+const pagesRead = data?.pages_read as number | undefined;
+const range = pagesLength > 0 ? Math.ceil((100 / pagesLength) * (pagesRead || 0)) : 0;
+
+  // const range = Math.ceil((100 / data?.pages?.length as number) * data?.pages_read);
   return (
     <div className="flex progress-card-w h-[160px]  bg-[#fffbff]  border-[#FBECFF] border-2  rounded-xl">
       <div className=" basis-1/2">
@@ -29,8 +33,8 @@ const ProgressCard = ({
           wrapperClassName=" object-cover h-full rounded-xl  progress-card-img"
         />
       </div>
-      <div className="basis- basis-1/2 p-5 ">
-        <h1 className="my-1 font-Hanken font-bold text3">{data?.name}</h1>
+      <div className="basis- basis-1/2 px-2 ">
+        <h1 className=" font-Hanken font-bold text3 leading-5 mt-2">{data?.name}</h1>
         <div className=" w-full">
           {data.pages_read != data?.pages?.length ? (
             <div className="flex justify-center  items-center gap-4 ">

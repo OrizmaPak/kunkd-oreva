@@ -45,7 +45,7 @@ const Hero = ({ username, userimage }: Props) => {
         <div className="hero-w h-[256px]">
           <Slider {...settings}>
             <div className=" h-[256px]   w-full relative bg-[#8530C1]  rounded-bl-2xl rounded-tr-3xl">
-              <h1 className="text25 text-white font-semibold mx-10  my-14">
+              <h1 className="text25 text-white font-semibold mx-10  my-10 leading-10">
                 Beautifully illustrated storybooks for <br /> your child
               </h1>
               <img
@@ -56,7 +56,7 @@ const Hero = ({ username, userimage }: Props) => {
             </div>
 
             <div className="bg-[#2BB457] w-full relative h-[256px]  rounded-bl-2xl rounded-tr-3xl">
-              <h1 className="text25 text-white mx-10  my-14 font-semibold">
+              <h1 className="text25 text-white mx-10  my-10 font-semibold leading-10">
                 Watch educational videos on the
                 <br /> African Culture
               </h1>

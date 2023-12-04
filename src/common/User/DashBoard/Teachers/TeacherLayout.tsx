@@ -131,7 +131,7 @@ const DasboardButton = ({
         console.log("testing");
         onClick();
       }}
-      className={`transition-all duration-500 px-2 py-2  rounded-2xl flex items-center justify-between gap-8 w-full my-8 ${
+      className={`transition-all duration-500 px-2 py-2  rounded flex items-center justify-between gap-8 w-full my-8 ${
         active
           ? "bg-[#8530c1] text-white"
           : "hover:bg-[#8530C1] hover:text-white"

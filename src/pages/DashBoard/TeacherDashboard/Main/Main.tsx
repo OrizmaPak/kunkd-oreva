@@ -8,15 +8,18 @@ import ProgressLog from "../../SchoolDashBoard/Students/Profile/ProgressLog";
 import { TRequestStudents } from "../Request/Request";
 import Card from "./Card";
 import TotalTimeSpent from "./TotalTimeSpent";
-
-// import useStore from "@/store";
-// import { getUserState } from "@/store/authStore";
+import { useGetClassContentStat } from "@/api/queries";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
+import { TLogData } from "../../SchoolDashBoard/Main/Main";
 
 
 const Main = () => {
-  // const [user, ] = useStore(getUserState)
+  const [user, ] = useStore(getUserState)
 
-  // const {data:logData} = useGetClassContentStat(user?.class_id)
+  const {data:logData} = useGetClassContentStat(user?.school?.class?.class_id.toString() as string)
+  const statLog:TLogData = logData ?.data.data
+
   const { data, isLoading } = useGetAdmittedStudentsInClass("active");
   const studentList: TRequestStudents[] = data?.data.data.records;
 
@@ -45,6 +48,7 @@ const Main = () => {
           />
 
           <ProgressLog
+          logData={statLog}
            
           />
 

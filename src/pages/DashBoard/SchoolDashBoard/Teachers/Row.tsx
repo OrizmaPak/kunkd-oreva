@@ -98,7 +98,7 @@ const Row = ({
       </Modal>
      <div className=" hover:cursor-pointer  font-medium">
       <div>
-        <div className="grid  grid-cols-[100px_1fr_1fr_100px_100px] mt-2  pr-4 pl-8">
+        <div className="grid  grid-cols-[100px_1fr_1fr_100px_100px] mt-  pr-4 pl-8">
           <div className="flex justify-start items-center ">
             <span className=" ">
               <img loading="lazy" src={Rectangle} alt="image" />

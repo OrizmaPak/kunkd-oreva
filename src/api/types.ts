@@ -8,6 +8,7 @@ export type TSchool = {
   name?: string;
   profileImage?: string;
   code?:string
+  class?:{class_id:number, class_name:string }
 };
 export type returnUser = {
   dob: string;
@@ -27,6 +28,7 @@ export type returnUser = {
   // country_id: string;
   // state_id: string;
   address: string;
+  status:string;
   school_name: string;
 };
 

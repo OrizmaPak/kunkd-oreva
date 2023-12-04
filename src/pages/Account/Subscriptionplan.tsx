@@ -53,7 +53,7 @@ const handleCancelSubscription = () => {
       <div className="px-4 ">
         <h1 className="text25 font-bold my-8">Subscription Plan</h1>
 
-        { userObject?.subscription?.plan === "" 
+        { userObject?.subscription?.status === false 
  ?
           <div>
           <div className="px-6 border border-[#8530C1]  py-10 rounded-3xl my-8 ">
@@ -117,7 +117,7 @@ const handleCancelSubscription = () => {
             </div>
             <div className="border border-[#8530C1]  py-10 rounded-3xl my-8 ">
          <div className="flex justify-between  px-3">
-          <p ><button className=" p-2  flex item-center justisfy-center gap-2 rounded">  <span>{userObject?.subscription?.plan.charAt(0).toUpperCase() + userObject?.subscription?.plan.slice(1)} plan </span> </button></p>
+          <p ><button className=" p-2  flex item-center justisfy-center gap-2 rounded">  <span>{userObject?.subscription?.plan.charAt(0).toUpperCase() + userObject?.subscription?.plan.slice(1)} Standard plan </span> </button></p>
           <p><button onClick={()=>navigate("/packages")} className="bg-[#F3DAFF] p-2 text-[#8530C1] flex item-center justisfy-center gap-2 rounded"> <BiSolidEdit size={20} color="#8530C1"/><span>change plan</span>  </button></p>
          </div>
          <hr  className="border-[#8530C1] my-2"/>

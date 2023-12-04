@@ -50,7 +50,7 @@ export default StudentLeaderboard;
 const Row = ({ data }: { data: TRequestStudents }) => {
   return (
     <>
-      <div className="hover:cursor-pointer    border-b-[1px] border-[#eee]  py-5 font-medium   grid grid-cols-2 ">
+      <div className="hover:cursor-pointer    border-b-[1px] border-[#eee]  py-2 font-medium   grid grid-cols-2 ">
         <span className="flex gap-2 items-center  ">
           <img
             loading="lazy"

@@ -1,14 +1,8 @@
 import { Link } from "react-router-dom";
-// import BellIcon from "@/assets/bellicon.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
 import UserIcon from "@/assets/usericon.svg";
-// import SearchIcon from "@/assets/searchicon.svg";
 import { Menu, Popover } from "@mantine/core";
 import { NavLink, useNavigate } from "react-router-dom";
-// import { useDisclosure } from "@mantine/hooks";
-// import { Modal } from "@mantine/core";
-// import EnterPassCode from "@/pages/DashBoard/SchoolDashBoard/Main/EnterPassCode";
-// import { userContext } from "@/Context/StateProvider";
 import { useGetMainSearch } from "@/api/queries";
 import Blxst from "@/assets/Blxst.svg";
 import KundaLogo from "@/assets/schoolIcon.svg";
@@ -19,7 +13,6 @@ import useStore from "@/store/index";
 import { getProfileState } from "@/store/profileStore";
 import { useState } from "react";
 import { AiOutlineBell, AiOutlineSearch } from "react-icons/ai";
-// import SchLogo from "@/assets/schLogo.svg";
 import { selectAvatarType } from "@/pages/AfterParentSignIn/SelectProfile";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -56,11 +49,9 @@ const SchoolHeader = ({
   childProfile: string;
   setChildProfile: (val: string) => void;
 }) => {
-  // const [opened, { open, close }] = useDisclosure(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [user] = useStore(getUserState);
-  // console.log("userrrrrr-------", user);`
   const [profiles, setProfiles] = useStore(getProfileState);
   const handleDashboard = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -88,30 +79,11 @@ const SchoolHeader = ({
     (profile: selectAvatarType) => profile.id === Number(currentId)
   );
 
+  console.log("user status",user?.status)
+
   return (
     <div className="bg-white w-full fixed top-0 h-[8vh] z-50">
       <div className="flex text-[#B5B5C3] text-[14px] text3  font-normal top-0 left-0 right-0  mx-auto  app-mai-nwidth-container  w-full   py-4   justify-between items-center bg-white  z-[1000] gap-4  h-[8vh] ">
-        {/* <Modal
-          opened={opened}
-          onClose={close}
-          centered
-          size="lg"
-          radius={"xl"}
-          closeOnClickOutside={false}
-          withCloseButton={false}
-        >
-          <EnterPassCode onSubmit={close} />
-
-          <style>
-            {`
-         .mantine-kea9ny {
-            background-color: rgba(0, 0, 0, 0.9);
-          
-          }
-          
-                `}
-          </style>
-        </Modal> */}
         <div className="flex items-center gap-10">
           <Link to="/">
             <div>
@@ -162,14 +134,14 @@ const SchoolHeader = ({
                   School Dashboard
                 </button>
               )}
-              {user?.role === "teacher" && (
+              {user?.role === "teacher"  && user?.status === "active"  ?(
                 <button
                   onClick={handleDashboard}
                   className="text-black block  "
                 >
                   Teacher Dashboard
                 </button>
-              )}
+              ):""}
             </p>
           </div>
         </div>
