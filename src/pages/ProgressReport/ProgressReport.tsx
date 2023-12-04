@@ -17,6 +17,7 @@ import {
   useGetContentsLog,
 } from "@/api/queries";
 import { TStoryContent } from "../Stories/Stories1/Stories1";
+import InputFormat from "@/common/InputFormat";
 
 export type TContentLog = {
   content: {
@@ -90,14 +91,23 @@ const ProgressReport = () => {
               <h1 className="font-semibold font-Recoleta text30">
                 Progress Report
               </h1>
-              <span>
+              <p className="flex">
+              <InputFormat/>
+              <img
+                  loading="lazy"
+                  src={SearchIcon}
+                  alt="SearchIcon "
+                  className="ml-[-30px]"
+                />
+              </p>
+              {/* <span>
                 <img
                   loading="lazy"
                   src={SearchIcon}
                   alt="SearchIcon "
                   className=""
                 />
-              </span>
+              </span> */}
             </div>
             <hr className="mx-20  mb-5" />
             <div className="pt-5 pb-1 pad-x-40 ">
