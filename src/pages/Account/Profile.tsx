@@ -116,6 +116,7 @@ export default Profile;
 
 const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
   const { isLoading, mutate } = useUpdateParentImage();
+  const [, setUser] = useStore(getUserState);
   // const [edit, setEdit] = useState(false);
 
   // const [uploadType, ,] = useState<"profileImage" | "backgroundImage" | null>(
@@ -133,6 +134,7 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
       {
         onSuccess(data) {
           console.log("success", data.data.message);
+          setUser({...user, user_image:data?.data?.data?.image})
 
           notifications.show({
             title: `Notification`,
@@ -179,9 +181,9 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
           <img
             onClick={() => open()}
             loading="lazy"
-            src={Teacher01}
+            src={ user?.user_image ||Teacher01}
             alt="image"
-            className="w-[150px]"
+            className="w-[150px] h-[150px] rounded-full object-cover"
           />
           <img
             onClick={() => open()}

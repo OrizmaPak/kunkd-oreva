@@ -34,31 +34,28 @@ const range = pagesLength > 0 ? Math.ceil((100 / pagesLength) * (pagesRead || 0)
         />
       </div>
       <div className="basis- basis-1/2 px-2 ">
-        <h1 className=" font-Hanken font-bold text3 leading-5 mt-2">{data?.name}</h1>
+        <h1 className=" font-Hanken font-bold text3 leading-5 mt-4">{data?.name}</h1>
         <div className=" w-full">
-          {data.pages_read != data?.pages?.length ? (
+          {data.status === 'ongoing' && 
             <div className="flex justify-center  items-center gap-4 ">
-              <span>{range ? range : 60}%</span>
+              <span className="mt-2">{range ? range : 60}%</span>
               <span className="  flex-grow">
-                {range < 20 ? (
-                  <Progress value={range} color="red" />
-                ) : range < 50 ? (
-                  <Progress value={range} color="yellow" />
-                ) : range > 50 ? (
-                  <Progress value={range} color="green" />
-                ) : (
-                  <Progress value={60} color="green" />
-                )}
+                <Progress value={range || 60}color={range && range < 20 ? "red" : range && range < 50 ? "yellow" : "green"}/>
               </span>
-            </div>
-          ) : (
-            <div className="flex justify-center  gap-4 flex-col ">
-              <p className="text3  ">Quiz score: 8.0</p>
+            </div>}
+          
+          {data?.status === "complete" && data?.quiz_result?.status  && <div className="flex justify-center  gap-4 flex-col ">
+              <p className="text3 mt-2  ">Quiz score: {data?.quiz_result?.result}</p>
               <Button size="md">
                 <span className="text3">Completed</span>
               </Button>
-            </div>
-          )}
+            </div>}
+            {data?.status === "complete" && !data?.quiz_result?.status && <div className="flex justify-center  gap-4 flex-col ">
+              <button className="text3  bg-red-600 rounded p-2 mt-2 text-white" >
+                Quiz not done
+              </button>
+            </div>}
+          
         </div>
       </div>
     </div>

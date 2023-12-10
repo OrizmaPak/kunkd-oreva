@@ -11,9 +11,11 @@ import UploadPicture from "./UploadPicture";
 const AddTeacherModal = ({
   opened,
   toggle,
+  openSchNotifications
 }: {
   opened: boolean;
   toggle: () => void;
+  openSchNotifications:()=>void
 }) => {
   const [modalStep, setModalStep] = useState(STEP_1);
   const handleContinue = () => {
@@ -56,6 +58,8 @@ const AddTeacherModal = ({
           },
 
           onError(err) {
+            toggle();
+            openSchNotifications()
             notifications.show({
               title: `Notification`,
               message: getApiErrorMessage(err),
@@ -72,8 +76,8 @@ const AddTeacherModal = ({
           firstname: teacherData?.firstname,
           lastname: teacherData?.lastname,
           email: teacherData?.email,
-          redirect_url:"http://localhost:5173/passwordsetup",
-          // redirect_url:"https://dev-kundakids.vercel.app/passwordsetup",
+          // redirect_url:"http://localhost:5173/passwordsetup",
+          redirect_url:"https://dev-kundakids.vercel.app/passwordsetup",
 
           // password: teacherData?.password,
           class_id: Number(teacherData?.classid),
@@ -82,6 +86,8 @@ const AddTeacherModal = ({
         {
           onSuccess(data) {
             queryClient.invalidateQueries(["GetTeacherList"]);
+            queryClient.invalidateQueries(["GetLicense"]);
+
             toggle();
             notifications.show({
               title: `Notification`,
@@ -90,6 +96,8 @@ const AddTeacherModal = ({
           },
 
           onError(err) {
+            toggle();
+            openSchNotifications()
             notifications.show({
               title: `Notification`,
               message: getApiErrorMessage(err),

@@ -63,9 +63,13 @@ import { getUserState } from "./store/authStore";
 import SchoolRquest from "@/pages/DashBoard/SchoolDashBoard/Request/Request";
 import TeacherSignup from "@/pages/TeacherLogin/index";
 import Request from "./pages/DashBoard/TeacherDashboard/Request/Request";
+import { useResolvedPath } from "react-router-dom";
 
 function App() {
   const [, setUser] = useStore(getUserState);
+
+  const url = useResolvedPath("").pathname;
+  console.log("----URL------", url)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -85,8 +89,7 @@ function App() {
     localStorage.setItem("profileId", childProfile as string) ;
   }, [childProfile]);
   return (
-    <BrowserRouter>
-      {/* <div className="App max-w-[1444px] mx-auto "></div> */}
+   
       <div className="App ">
         <ScrollToTop />
         {/* <Button onClick={log}></Button> */}
@@ -261,7 +264,7 @@ function App() {
           </Route>
         </Routes>
       </div>
-    </BrowserRouter>
+    // </BrowserRouter>
   );
 }
 

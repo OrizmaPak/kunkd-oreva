@@ -1,3 +1,4 @@
+import { string } from "zod";
 import axios from "./axios.config";
 import type {
   TAddTeacherData,
@@ -227,11 +228,12 @@ export const VerifyCompletePayStack = (payload: TPayStackInitData) => {
 };
 
 export const StripeInit = (payload: TPayStackInitData) => {
-  return axios.post("/subscribe/stripe/init", payload);
+  return axios.post("/subscribe/stripe/init/web", payload);
 };
 
 export const ContentTracking = (payload: TContentTracking) => {
-  return axios.post("/content/track", payload);
+  const {signal, ...restPayload } = payload
+  return axios.post("/content/track", restPayload, {signal});
 };
 
 export const AddTeacherData = (payload: TAddTeacherData) => {
@@ -245,32 +247,32 @@ export const ConnectStudentData = (payload: TAddTeacherData) => {
   return axios.post("/school/student/connect", payload);
 };
 
-export const GetClassList = (status:string) => {
-  return axios.get("/school/class",{params : {status }});
+export const GetClassList = (status:string, page:string) => {
+  return axios.get("/school/class",{params : {status, page }});
 };
 
 export const GetSchool = () => {
   return axios.get("/school");
 };
 
-export const GetTeacherList = (status:string) => {
-  return axios.get("/school/teacher", {params : {status }});
+export const GetTeacherList = (status:string, page?:string) => {
+  return axios.get("/school/teacher", {params : {status , page}});
 };
 
-export const GetAdmittedStudentsInSchool = (status:string) => {
-  return axios.get("/school/student", {params: {status}} );
+export const GetAdmittedStudentsInSchool = (status:string, page:string) => {
+  return axios.get("/school/student", {params: {status, page}} );
 };
 
-export const GetAdmittedStudentsInClass = (status:string) => {
-return axios.get("/school/class/student", {params:{status}});
+export const GetAdmittedStudentsInClass = (status:string, page:string) => {
+return axios.get("/school/class/student", {params:{status, page}});
 };
 
-export const GetAttemptStudentConnect = () => {
-  return axios.get("/school/student/connect/list");
+export const GetAttemptStudentConnect = (page:string) => {
+  return axios.get("/school/student/connect/list", {params:{page}});
 };
 
-export const GetAttemptAllStudentConnect = () => {
-  return axios.get("/school/student/all/connect/list");
+export const GetAttemptAllStudentConnect = (page:string) => {
+  return axios.get("/school/student/all/connect/list",{params:{page}});
 };
 
 export const ReAssignTeacher = (payload: TAddTeacherData) => {
@@ -321,15 +323,14 @@ export const GetSchoolProfileForStudent = (payload:string) => {
 
 export  const GetUpdatedProfile = () => {
   return axios.get(`/auth/profile`);
-
 }
 
-export const GetSchoolContentStat = ()=>{
-  return axios.get(`/school/content/log`)
+export const GetSchoolContentStat = (start:string,end:string)=>{
+  return axios.get(`/school/content/log`, {params:{start, end}})
 }
 
-export const GetClassContentStat = (payload:string)=>{
-  return axios.get(`/school/content/class/log/${payload}`)
+export const GetClassContentStat = (id:string, start:string, end:string)=>{
+  return axios.get(`/school/content/class/log/${id}` ,{params:{start, end}})
 }
 
 export const ActiveClass = (payload:object)=>{
@@ -354,4 +355,29 @@ export const EnableSchoolTeacher = (payload:object)=>{
 
 export const EditClassName = (payload:object)=>{
   return axios.patch(`/school/class/edit`,payload)
+}
+
+
+export const AllProgressContent= (id:number)=>{
+  return axios.get(`/content/tracking/all`,{params:{id}})
+}
+
+export const GetLicense=()=>{
+  return axios.get(`license`)
+}
+
+export const GetSchoolStudentStat = (id:string, start:string, end:string )=>{
+  return axios.get(`/school/student/stat/${id}`, {params:{start, end}})
+}
+
+export const LearningHour = (payload:object)=>{
+  return axios.post(`/content/learn`, payload)
+}
+
+export const RecommendedAudiobooks  = (id:string)=>{
+  return axios.get(`/recommended/content/${id}`)
+}
+
+export const GetClassTotalTimeSpent = (id:string, start:string, end:string)=>{
+  return axios.get(`/school/class/timespent/${id}`,{params:{start, end}})
 }

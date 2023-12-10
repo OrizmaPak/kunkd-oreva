@@ -8,6 +8,7 @@ import App from "./App.tsx";
 import { UserProvider } from "./Context/StateProvider.tsx";
 import "./index.css";
 // import {useStore}
+import { BrowserRouter } from "react-router-dom";
 
 const queryClient = new QueryClient();
 
@@ -17,7 +18,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       <MantineProvider withGlobalStyles withNormalizeCSS>
         <UserProvider>
           <Notifications position="top-right" zIndex={2077} />
+            <BrowserRouter>
           <App />
+          </BrowserRouter>
         </UserProvider>
       </MantineProvider>
     </QueryClientProvider>

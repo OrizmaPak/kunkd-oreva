@@ -13,7 +13,7 @@ import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 
-const AddNewClass = ({ newClassClose }: { newClassClose: () => void }) => {
+const AddNewClass = ({ newClassClose, openSchNotifications }: { newClassClose: () => void , openSchNotifications:()=> void}) => {
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useAddClassData();
   const schema: ZodType<FormData> = z.object({
@@ -42,7 +42,7 @@ const AddNewClass = ({ newClassClose }: { newClassClose: () => void }) => {
           console.log("success", data.data.message);
           newClassClose();
           queryClient.invalidateQueries(["GetClassList"]);
-
+          queryClient.invalidateQueries(["GetLicense"]);
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -50,6 +50,8 @@ const AddNewClass = ({ newClassClose }: { newClassClose: () => void }) => {
         },
 
         onError(err) {
+          newClassClose();
+          openSchNotifications()
           notifications.show({
             title: `Notification`,
             message: getApiErrorMessage(err),

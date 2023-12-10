@@ -4,7 +4,7 @@ import AddTeacherIcon from "@/assets/addUserIcon.svg";
 import AddTeacherModal from "./AddTeacherModal";
 import { motion } from "framer-motion";
 
-const NewTeacher = () => {
+const NewTeacher = ({openSchNotifications}:{openSchNotifications:()=>void}) => {
   const [opened, { toggle }] = useDisclosure(false);
 
   return (
@@ -21,7 +21,7 @@ const NewTeacher = () => {
             <span className="py-1">Add new teacher</span>
           </span>
         </Button>
-        {opened ? <AddTeacherModal opened={opened} toggle={toggle} /> : null}
+        {opened ? <AddTeacherModal opened={opened} toggle={toggle} openSchNotifications={openSchNotifications} /> : null}
       </motion.div>
     </>
   );

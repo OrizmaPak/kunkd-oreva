@@ -26,7 +26,7 @@ import "./parenthomepage.css";
 
 const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
 const [useri, setUser] = useStore(getUserState);
-  const {data } = useGetUpdatedProfile()
+  const {data, isLoading:adsIsLoading } = useGetUpdatedProfile()
   const currentUserProfile = data?.data?.data
   useEffect(() => {
     setUser({...useri, ...currentUserProfile})
@@ -58,7 +58,8 @@ const [useri, setUser] = useStore(getUserState);
   //   profile = profiles?.find((each) => each.id === currentId)!;
   // }
 
-  
+  const user2 = localStorage.getItem("user")
+  const userObject = JSON.parse(user2 as string)
   const navigate = useNavigate();
   // const user = JSON.parse(userInLocalStr!);
   const [user ]= useStore(getUserState)
@@ -209,7 +210,7 @@ const [useri, setUser] = useStore(getUserState);
             )}
           </div>
 
-          <div className="my-[100px]">
+          <div className="my-[50px]">
             <CardScreenHome
               data={newTrending}
               header="New & Trending"
@@ -231,8 +232,8 @@ const [useri, setUser] = useStore(getUserState);
             />
           </div>
 
-          <AdsButton />
-          <div className="mt-[100px]">
+       { <AdsButton />}
+          <div className="">
             <CardScreenHome
               data={recommendedStories}
               header="Recommended For You"

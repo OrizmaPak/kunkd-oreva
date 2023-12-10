@@ -4,7 +4,6 @@ import UserIcon from "@/assets/usericon.svg";
 import { Menu, Popover } from "@mantine/core";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useGetMainSearch } from "@/api/queries";
-import Blxst from "@/assets/Blxst.svg";
 import KundaLogo from "@/assets/schoolIcon.svg";
 import UserIcon2 from "@/assets/userIcon2.svg";
 import useDebounce from "@/hooks/useDebounce";
@@ -15,19 +14,10 @@ import { useState } from "react";
 import { AiOutlineBell, AiOutlineSearch } from "react-icons/ai";
 import { selectAvatarType } from "@/pages/AfterParentSignIn/SelectProfile";
 import { useQueryClient } from "@tanstack/react-query";
+import { useGetAttemptAllStudentConnect, useGetAttemptStudentConnect } from "@/api/queries";
+import { TRequestStudents } from "@/pages/DashBoard/TeacherDashboard/Request/Request";
 
-const notificationData = [
-  {
-    image: Blxst,
-    msg: "  is trying to add her child to your class",
-    name: "Ella Mia",
-  },
-  {
-    image: Blxst,
-    msg: "  is trying to add her child to your class",
-    name: "Ella Mia",
-  },
-];
+
 
 type THints = {
   id: number;
@@ -80,6 +70,14 @@ const SchoolHeader = ({
   );
 
   console.log("user status",user?.status)
+
+  
+  const {data} = useGetAttemptAllStudentConnect(user?.role === "schoolAdmin")
+  const {data:classConnect} = useGetAttemptStudentConnect(user?.role === "teacher")
+  const schoolConnectList = data?.data?.data?.records 
+  const classConnectList =classConnect?.data?.data?.records
+   
+
 
   return (
     <div className="bg-white w-full fixed top-0 h-[8vh] z-50">
@@ -152,33 +150,25 @@ const SchoolHeader = ({
           <Menu>
             {" "}
             <Menu.Target>
-              <div>
-                <span>
+              <div className="relative">
+              {  user?.role === "schoolAdmin" || user?.role === "teacher" ? <div>
                   <AiOutlineBell
                     size={20}
                     className={" mx-auto"}
                     color="black"
                   />
-                </span>
+                  <p className={`absolute -top-4 text-white  right-[-14px] py-[1px] rounded-full px-[3px] ${schoolConnectList?.length > 0|| classConnectList?.length > 0 ? "bg-red-700": "bg-white"}  `} >{schoolConnectList?.length || classConnectList?.length || 0}</p>
+                </div> : ""}
               </div>
             </Menu.Target>
             <Menu.Dropdown>
               <p className="text-center text-[18px] font-bold my-2">
                 Notification
               </p>
-              {user?.role === "parent" ||
-                ("user" &&
-                  notificationData.slice(1).map((data, index) => (
-                    // <Menu.Item>
-                    <ParentNotification key={index} {...data} />
-                    // </Menu.Item>
-                  )))}
-              {user?.role === "schoolAdmin" &&
-                notificationData.map((data, index) => (
-                  // <Menu.Item>
-                  <SchNotification key={index} {...data} />
-                  // </Menu.Item>
-                ))}
+              <Menu.Item>
+                  <SchNotification  data={user?.role ==="schoolAdmin" ? schoolConnectList : classConnectList} />
+             </Menu.Item>
+            
             </Menu.Dropdown>
           </Menu>
 
@@ -363,51 +353,41 @@ const SearchService = () => {
 
 export default SchoolHeader;
 
-const SchNotification = ({
-  image,
-  msg,
-  name,
-}: {
-  image: string;
-  msg: string;
-  name: string;
-}) => {
+const SchNotification =({ data}: {data:TRequestStudents[]})=>{
+
+console.log("dataaaa--------",data)
+const [user] = useStore(getUserState);
   return (
     <div className="py-1 ">
+     {data?.map((each, index)=>
+      <div key={index}>
       <hr />
-      <p className="flex my-2 px-6 justify-center items-center gap-2">
-        <img
-          src={image}
-          alt="image"
-          className="w-[70px] h-[70px] rounded-full"
-        />
-        <span className="text-[#8530C1] ml-4">{name}</span>
-        <span>{msg}</span>
+      <p className="flex my-2 px-3 justify-center items-center gap-2">
+        <span className="text-[#8530C1] ml-4">{each?.firstname}{" "}{each.lastname} has made a request to your {user?.role === "schoolAdmin"? "School" : "class"}</span>
       </p>
-      <p className="my-1  pl-32  flex gap-4 text-white">
-        <button className="p-2 px-8 bg-[#F3DAFF] rounded-3xl">Delete</button>
-        <button className="p-2 px-8 bg-[#8530C1] rounded-3xl">Accept</button>
-      </p>
+      </div>
+     ) }
     </div>
   );
+
 };
 
-const ParentNotification = ({ name }: { name: string }) => {
-  return (
-    <div className="py-2 w-[400px] ">
-      <hr />
-      <p className="flex my-2 px-6 justify-center items-center gap-2 ">
-        <img
-          src={Blxst}
-          alt="image"
-          className="w-[40px] h-[40px] rounded-full"
-        />
-        <span className=" text-[14px] font-medium ml-4">
-          <span className="text-[#8530C1]">{name} </span>
-          has accepted your request for your child join her class.
-        </span>
-        <span>Now</span>
-      </p>
-    </div>
-  );
-};
+// const ParentNotification = ({ name }: { name: string }) => {
+//   return (
+//     <div className="py-2 w-[400px] ">
+//       <hr />
+//       <p className="flex my-2 px-6 justify-center items-center gap-2 ">
+//         <img
+//           src={Blxst}
+//           alt="image"
+//           className="w-[40px] h-[40px] rounded-full"
+//         />
+//         <span className=" text-[14px] font-medium ml-4">
+//           <span className="text-[#8530C1]">{name} </span>
+//           has accepted your request for your child join her class.
+//         </span>
+//         <span>Now</span>
+//       </p>
+//     </div>
+//   );
+// };

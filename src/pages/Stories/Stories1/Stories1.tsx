@@ -30,8 +30,9 @@ import { UseQueryResult } from "@tanstack/react-query";
 import ReactHtmlParser from "html-react-parser";
 import { useRef } from "react";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import useTimeSpent from "@/hooks/useTimeSpent";
 import "./stories1.css";
-
+// import { useQueryClient } from "@tanstack/react-query";
 type TContentPage = {
   audio: string;
   web_body: string;
@@ -53,6 +54,12 @@ export type TMedia = {
   file: string;
   thumbnail: string;
 };
+
+type TQuizResult= {
+  "status": boolean,
+  "id": number,
+  "result": number
+}
 export type TStoryContent = {
   sub_category_name?: unknown;
   category?: string;
@@ -74,6 +81,9 @@ export type TStoryContent = {
   tags?: string;
   theme?: string;
   thumbnail?: string;
+  status?:string;
+  web_synopsis?:string
+  quiz_result?:TQuizResult
 };
 
 const Stories1 = () => {
@@ -81,7 +91,8 @@ const Stories1 = () => {
   const [startRead, setStartRead] = useState(false);
   const [user] = useStore(getUserState);
   const contentId = localStorage.getItem("contentId");
-
+  const profileId = localStorage.getItem("profileId");
+  useTimeSpent(Number(contentId),Number(profileId) )
   const params = useParams();
   const { category } = params;
   const [opened, { open, close }] = useDisclosure(false);
@@ -289,7 +300,11 @@ const AboutPage = ({
           <span className=" text-[#BD6AFA]  ">Dele and Louisa Olafuyi</span>
           <p className="grid grid-cols-2   gap-4 ">
             <button
-              onClick={setStartRead}
+              onClick={(e)=>{
+                e.stopPropagation();
+                setStartRead()
+              }
+            }
               className=" py-3 inline self-end text-white border-white border-[2px] rounded-2xl"
             >
               Read
@@ -309,7 +324,7 @@ const AboutPage = ({
         </p>
       </div>
       <div className=" basis-3/4 text-[#BD6AFA] pad-x-40">
-        <div>
+        {/* <div>
           <h1 className="text-white font-bold  font-Hanken text25 my-2">
             About the author
           </h1>
@@ -319,16 +334,13 @@ const AboutPage = ({
             fugit. Quia illum, inventore id tempora recusandae ut consectetur
             veniam reiciendis.
           </p>
-        </div>
+        </div> */}
         <div>
           <h1 className="text-white font-bold  font-Hanken text25 my-2">
             Overview
           </h1>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero
-            harum eligendi cupiditate labore possimus deleniti fugit consequatur
-            ducimus in eum, ullam voluptate eveniet accusantium reprehenderit
-            magni qui. Aliquam, quia reiciendis!
+          <p dangerouslySetInnerHTML={{ __html: `${story?.synopsis}`}}>
+           
           </p>
         </div>
       </div>
@@ -366,7 +378,13 @@ const ReadPage = ({
   const profileId = localStorage.getItem("profileId");
   const contentId = localStorage.getItem("contentId");
 
-  useEffect(() => {
+  useEffect(() => 
+  {
+  const abortControllerRef = new AbortController();
+
+    // console.log("useEffect is running " ,pageNumber, page, pageTotal, isReading, volume)
+    const handleUpdateData = async () => {
+      try {
     mutate(
       {
         profile_id: Number(profileId),
@@ -374,6 +392,7 @@ const ReadPage = ({
         status: `${pageNumber === pageTotal ? "complete" : "ongoing"}`,
         pages_read: Number(pageNumber + 1),
         timespent: 23,
+        signal:abortControllerRef.signal
       },
       {
         onSuccess(data) {
@@ -386,14 +405,34 @@ const ReadPage = ({
           });
         },
       }
-    );
-  }, [pageNumber, contentId, profileId, pageTotal, mutate]);
+    )}
+    catch (err) {
+      // Handle errors if needed
+    }}
+
+    handleUpdateData();
+
+    // Cleanup function to cancel the request when the component unmounts
+    return () => {
+      abortControllerRef.abort();
+      // queryClient.cancelMutations();
+    };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[pageNumber]);
+
+
+
+
+
+
+  
   return (
     <div className="flex py-16 bg-white  rounded-3xl px-16">
       <div className=" basis-3/4 flex  items-center">
         <img
           loading="lazy"
-          src={thumbnail}
+          src={ content[page]?.image || thumbnail}
           alt="image"
           className="read-img rounded-xl"
         />
@@ -516,14 +555,17 @@ const BookPagination = ({
 }) => {
   const { mutate } = useContentTracking();
   const continuePage = localStorage.getItem("continuePage");
-
   const profileId = localStorage.getItem("profileId");
   const contentId = localStorage.getItem("contentId");
   const [currentPage, setCurrentage] = useState(
     continuePage ? Number(continuePage) : 1
   );
-  setPage(currentPage);
-  setPageNumber(currentPage);
+
+  useEffect(()=>{
+    setPage(currentPage);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[currentPage])
+  
   const pageItirate = (itirateControl: string) => {
     if (currentPage < pageTotal && itirateControl === "next") {
       setCurrentage((val) => (val += 1));
@@ -531,6 +573,7 @@ const BookPagination = ({
     if (currentPage > 1 && itirateControl === "prev") {
       setCurrentage((val) => (val -= 1));
     }
+    setPageNumber(currentPage);
   };
 
   const handleBookCompletedProgress = () => {

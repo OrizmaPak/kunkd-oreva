@@ -1,9 +1,9 @@
 // import { useLocation } from "react-router-dom";
 import Bookmark from "@/assets/Bookmark.svg";
-import Card from "@/common/User/Card";
-import CardScreen from "@/common/User/CardScreen";
+// import Card from "@/common/User/Card";
+// import CardScreen from "@/common/User/CardScreen";
 import React, { useEffect, useRef, useState } from "react";
-import { StoriesType, audioBooksData } from "./AudioBooks";
+// import { StoriesType, audioBooksData } from "./AudioBooks";
 // import VolumeIcon from "@/assets/volumeIcon.svg";
 import { getApiErrorMessage } from "@/api/helper";
 import {
@@ -12,6 +12,7 @@ import {
   useGetLikedContent,
   useLikedContent,
   useUnLikedContent,
+  useRecommendedAudiobooks
 } from "@/api/queries";
 import AfamBlur from "@/assets/afamblur.jpg";
 import { TMedia, TStoryContent } from "@/pages/Stories/Stories1/Stories1";
@@ -27,6 +28,13 @@ import { GrBackTen, GrForwardTen } from "react-icons/gr";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import AudioBooksNav from "./AudioBooksNav";
+import { Modal } from "@mantine/core";
+import { useDisclosure,  } from "@mantine/hooks";
+import TeacherNotificationModal from "@/components/TeacherWarningModal";
+import { TAudioBooks } from "@/api/types";
+import CardHome from "@/common/User/CardHome";
+import CardScreenHome from  "@/common/User/CardScreenHome"
+import { useNavigate } from "react-router-dom";
 
 // type TAudioBook = {
 //   name: string;
@@ -37,16 +45,43 @@ import AudioBooksNav from "./AudioBooksNav";
 //   id: number;
 // };
 const BookLayout = () => {
+  const [opened, { open, close }] = useDisclosure(false);
+  const navigate = useNavigate()
   const contentId = localStorage.getItem("contentId");
+  const {data:dataRecommended} = useRecommendedAudiobooks(contentId as string)
+  const recommendedContents:TAudioBooks[]  =  dataRecommended?.data?.data?.recommended_contents
+
+
+  console.log("recommended",recommendedContents)
   const [user] = useStore(getUserState);
   const { data, isLoading } = useGetContentById(
     contentId?.toString()as string,
-    user?.user_id?.toString() as string
+    user?.user_id?.toString() as string,
+    open
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const audioBookId = data?.data.data.id;
   const audiobook = data?.data.data.media?.[0];
   const [startRead, setStartRead] = useState(false);
   return (
+    <>
+    <Modal
+        radius={10}
+        padding={30}
+        size={"md"}
+        opened={opened}
+        onClose={close}
+        overlayProps={{
+          // style: { backgroundOpacity: 1 },
+          blur: 10,
+        }}
+        closeOnClickOutside={false}
+       
+        withCloseButton={false}
+        centered
+      >
+        <TeacherNotificationModal onCancel={close}/>
+      </Modal>
+        
     <div className=" ">
       <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd]  ">
         <div className=" ">
@@ -76,13 +111,32 @@ const BookLayout = () => {
 
               <div className="w-full bg-white rounded-3xl mt-4">
                 {
-                  <CardScreen
-                    data={audioBooksData?.slice(1, 6).map((el) => ({ ...el }))}
-                    card={(props: StoriesType) => <Card {...props} />}
-                    header="Trending"
-                    actiontitle="View all"
-                    isTitled={true}
-                  />
+
+<CardScreenHome
+data={recommendedContents}
+header="New & Trending"
+actiontitle=""
+isTitled={false}
+isLoading={isLoading}
+card={(props: TStoryContent) => (
+  <CardHome
+    {...props}
+    goTo={() =>
+      navigate(
+        `../${props?.slug?.replace(/\s/g, "_").toLowerCase()}`
+      )
+    }
+  />
+)}
+/>
+
+                  // <CardScreen
+                  //   data={recommendedContents?.slice(1, 6).map((el) => ({ ...el }))}
+                  //   card={(props: StoriesType) => <Card {...props} />}
+                  //   header="Trending"
+                  //   actiontitle="View all"
+                  //   isTitled={true}
+                  // />
                 }
               </div>
             </div>
@@ -90,6 +144,7 @@ const BookLayout = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
@@ -224,12 +279,7 @@ const AboutPage = ({
           <h1 className="text-white font-bold  font-Hanken text25 my-2">
             Overview
           </h1>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero
-            harum eligendi cupiditate labore possimus deleniti fugit consequatur
-            ducimus in eum, ullam voluptate eveniet accusantium reprehenderit
-            magni qui. Aliquam, quia reiciendis!
-          </p>
+          <p dangerouslySetInnerHTML={{ __html: `${audiobook?.slug}`}}></p>
         </div>
       </div>
     </div>

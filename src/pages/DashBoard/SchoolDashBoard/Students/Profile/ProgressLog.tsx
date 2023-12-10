@@ -22,10 +22,10 @@ const ProgressLog = ({
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3 flex-grow py-4 ">
-        <Card image={Bookbg} title="Stories" total={logData?.Stories} />
-        <Card image={MusicBg} title="Audiobooks" total={logData?.Audiobooks} />
-        <Card image={VideoBg} title="Videos" total={logData?.Languages}  />
-        <Card image={QuizBg} title="quiz" total={0} />
+        <Card image={Bookbg} title="Stories" total={logData?.stories} />
+        <Card image={MusicBg} title="Audiobooks" total={logData?.audio_books} />
+        <Card image={VideoBg} title="Videos" total={logData?.languages}  />
+        <Card image={QuizBg} title="quiz" total={logData?.quiz} />
       </div>
     </div>
   );

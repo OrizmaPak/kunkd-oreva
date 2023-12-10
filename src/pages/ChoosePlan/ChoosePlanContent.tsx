@@ -15,6 +15,7 @@ const ChoosePlanContent = () => {
         <div className="mx-auto  flex items-center justify-center">
           <div className="flex mt-16 w-full  justify-center  items-center ">
             <PackageCard
+            
               title={<div className=" opacity-0">a</div>}
               price={<div className=" opacity-0">a</div>}
               noBorder={true}
@@ -27,6 +28,8 @@ const ChoosePlanContent = () => {
               ]}
             ></PackageCard>
             <PackageCard
+            countryCode={planData && planData.countryCode}
+
               isIcon={true}
               title="Basic"
               btn="Choose "
@@ -40,7 +43,30 @@ const ChoosePlanContent = () => {
               ]}
             ></PackageCard>
 
+<PackageCard
+            countryCode={planData && planData.countryCode}
+
+              isIcon={true}
+              plan={planData && planData?.plans[2]}
+              title="A day"
+              btn="Start Trial"
+              price={
+                planData && planData?.countryCode === "NG"
+                  ? planData?.plans[2]?.naira_value
+                  : planData?.plans[2]?.dollar_value
+              }
+              content={[
+                <BsCheckLg size={25} color="green" />,
+                <BsCheckLg size={25} color="green" />,
+                <BsCheckLg size={25} color="green" />,
+                <BsCheckLg size={25} color="green" />,
+                <BsCheckLg size={25} color="green" />,
+              ]}
+            ></PackageCard>
+
             <PackageCard
+            countryCode={planData && planData.countryCode}
+
               isIcon={true}
               plan={planData && planData?.plans[0]}
               title="1 Month"
@@ -59,6 +85,7 @@ const ChoosePlanContent = () => {
               ]}
             ></PackageCard>
             <PackageCard
+            countryCode={planData && planData.countryCode}
               recommended={true}
               plan={planData && planData?.plans[1]}
               isIcon={true}

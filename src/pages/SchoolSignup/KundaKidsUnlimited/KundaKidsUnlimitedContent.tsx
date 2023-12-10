@@ -51,7 +51,8 @@ const KundaKidsUnlimitedContent = () => {
           </div>
           <p className="flex justify-center">
             <button className="text-[20px] my-8 py-3 px-14 font-bold rounded bg-slate-50 text-[#8530C1]">
-              <span className="text-[20px]">Contact us</span>
+              {/* <span className="text-[20px]">Contact us</span> */}
+              <a href="mailto:someone@yoursite.com?subject=Mail from Our Site">Contact us</a>  
             </button>
           </p>
         </div>

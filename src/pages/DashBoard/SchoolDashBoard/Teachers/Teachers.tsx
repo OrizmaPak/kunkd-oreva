@@ -10,6 +10,7 @@ import EditAssignedClass from "./EditAssignedClass";
 import NewTeacher from "./NewTeacher";
 import Profile from "./Profile";
 import Row from "./Row";
+import SchoolNotificationModal from "@/components/SchoolNotificationModal";
 
 
 
@@ -40,11 +41,16 @@ export type TTeacherList = {
 const Teachers = () => {
   const queryClient = useQueryClient();
   const [status, setStatus] = useState("active");
+  const [activePage, setPage] = useState(1);
 
-  const { data, isLoading } = useGetTeacherList(status);
+  const { data, isLoading, refetch } = useGetTeacherList(status, activePage?.toString());
   const teacherList: TTeacherList[] = data?.data.data.records;
+  const totalPage = data?.data.data.number_pages;
+
   const [opened, { open, close }] = useDisclosure(false);
   const [modalStep, setModalStep] = useState(STEP_1);
+  const [openedSchNotifications, { open:openSchNotifications, close:closeSchNotifications }] = useDisclosure(false);
+
 
  
 
@@ -89,6 +95,19 @@ const Teachers = () => {
 
       {modalStep === STEP_3 && <EditAssignedClass onClose={close} currentClicked={currentClicked} />}
       </Modal>
+
+
+      
+      <Modal
+        radius={10}
+        size="md"
+        opened={openedSchNotifications}
+        onClose={closeSchNotifications}
+        closeButtonProps={{ size: "lg" }}
+        centered
+      >
+        <SchoolNotificationModal onCancel={closeSchNotifications}   label="teachers"/>
+      </Modal>
       <div className="  flex-grow flex flex-col rounded-3xl p-4 bg-white">
         <div className="grid grid-cols-3 justify-center items-center w-full px-8 ">
           <div>
@@ -126,7 +145,7 @@ const Teachers = () => {
           </Menu>
           </div>
           <div className="flex gap-3 justify-end">
-            <NewTeacher />
+            <NewTeacher  openSchNotifications={openSchNotifications}/>
           </div>
         </div>
 
@@ -175,13 +194,22 @@ const Teachers = () => {
         </div>
       </div>
       <div>
-        <div className="flex  justify-between mt-2 px-4">
-          <span>
-            Showing <span className="text-[#8530C1]"> 1-9 </span> from
-            <span className="text-[#8530C1]"> 35 </span> data
-          </span>
+      <div className="flex  justify-end mt-2 px-4">
+        {/* <span>
+          Showing <span className="text-[#8530C1]"> 1-9 </span> from
+          <span className="text-[#8530C1]"> {totalPage * 5} </span> data
+        </span> */}
+        {totalPage > 1 && (
+        <div className="px-10  mr-2 flex justify-end  pb-8">
           <Pagination
-            total={10}
+            total={totalPage}
+            value={activePage}
+            defaultChecked={true}
+            onChange={setPage}
+            onClick={() => {
+              console.log(activePage);
+              refetch();
+            }}
             styles={() => ({
               control: {
                 "&[data-active]": {
@@ -191,6 +219,8 @@ const Teachers = () => {
             })}
           />
         </div>
+      )}
+      </div>
       </div>
       <style>
         {`

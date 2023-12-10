@@ -14,9 +14,11 @@ import Row from "./Row";
 
 const Students = () => {
   const [status, setStatus] = useState("active");
-
-  const { data, isLoading } = useGetAdmittedStudentsInSchool(status);
+  const [activePage, setPage] = useState(1);
+  const { data, isLoading, refetch } = useGetAdmittedStudentsInSchool(status, activePage?.toString());
   const admittedStudents: TRequestStudents[] = data?.data.data.records;
+
+  const totalPage = data?.data.data.number_pages;
 
   console.log("Admitted student", admittedStudents);
   // const [opened, { open, close }] = useDisclosure(false);
@@ -37,7 +39,7 @@ const Students = () => {
       <div className=" flex-grow flex flex-col  rounded-3xl bg-white py-2   ">
         <div className="grid grid-cols-2 justify-center items-center w-full px-8 ">
           <div>
-            <h1 className="text-[25px] font-bold">Students (35)</h1>
+            <h1 className="text-[25px] font-bold">Students ({admittedStudents?.length || 0})</h1>
           </div>
           <div className="flex gap-2 justify-end ">
           <Menu>
@@ -99,7 +101,7 @@ const Students = () => {
                   <Row
                     status={status}
                     key={index}
-                    onClick={() => navigate("profile/" + data.student_id)}
+                    onClick={() => navigate("profile/" + data?.id)}
                     data={data}
                   
                   />
@@ -107,21 +109,32 @@ const Students = () => {
               })}
         </div>
       </div>
-      <div className="flex  justify-between mt-2 px-4">
-        <span>
+      <div className="flex  justify-end item-end mt-2 px-4">
+        {/* <span>
           Showing <span className="text-[#8530C1]"> 1-9 </span> from
-          <span className="text-[#8530C1]"> 35 </span> data
-        </span>
-        <Pagination
-          total={10}
-          styles={() => ({
-            control: {
-              "&[data-active]": {
-                backgroundColor: "#8530C1 !important",
+          <span className="text-[#8530C1]"> {totalPage * 5} </span> data
+        </span> */}
+        {totalPage > 1 && (
+        <div className="px-10  mr-2 flex justify-end  pb-8">
+          <Pagination
+            total={totalPage}
+            value={activePage}
+            defaultChecked={true}
+            onChange={setPage}
+            onClick={() => {
+              console.log(activePage);
+              refetch();
+            }}
+            styles={() => ({
+              control: {
+                "&[data-active]": {
+                  backgroundColor: "#8530C1 !important",
+                },
               },
-            },
-          })}
-        />
+            })}
+          />
+        </div>
+      )}
       </div>
 
       <style>

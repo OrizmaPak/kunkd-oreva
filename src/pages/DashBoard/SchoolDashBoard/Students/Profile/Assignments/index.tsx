@@ -1,40 +1,18 @@
 import Header from "./Header";
-import Chisom from "@/assets/Chisom.svg";
 import Row from "./Row";
+import { TSchoolStudentStat } from "..";
 
-const data = [
-  {
-    title: "Chisom's Book Quis",
-    image: Chisom,
-    duration: "30 mins",
-    range: 90,
-    date: "3rd June",
-  },
-  {
-    title: "Chisom's Book Quis",
-    image: Chisom,
-    duration: "30 mins",
-    range: 50,
-    date: "3rd June",
-  },
-  {
-    title: "Chisom's Book Quis",
-    image: Chisom,
-    duration: "30 mins",
-    range: 50,
-    date: "3rd June",
-  },
-];
 
-const index = () => {
+const ContentInProgress = ({schoolStudentStat}:{schoolStudentStat:TSchoolStudentStat}) => {
   return (
-    <div className=" bg-white rounded-3xl flex flex-col px-6  w-[600px]">
+    <div className=" bg-white rounded-3xl  flex-col px-6  w-[600px]">
       <Header />
-      {data.map((data, index) => {
-        return <Row key={index} {...data} />;
+      {schoolStudentStat?.ongoing_contents?.length === 0? <p className="mt-4 font-bold ">Oops!!! No data available for content in progress😤 </p> : schoolStudentStat?.ongoing_contents?.slice(1,4)?.map((data, index) => {
+        return <Row key={index}  data={data} />;
       })}
+     
     </div>
   );
 };
 
-export default index;
+export default ContentInProgress;

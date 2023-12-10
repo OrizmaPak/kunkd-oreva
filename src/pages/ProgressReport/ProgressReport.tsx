@@ -1,23 +1,18 @@
 import Wrapper from "../../common/User/Wrapper";
 import InnerWrapper from "../../common/User/InnerWrapper";
-import SearchIcon from "@/assets/searchicon.svg";
-
 import Chart from "./Chart";
 import All from "./All";
-import { Pagination } from "@mantine/core";
-
+// import { Pagination } from "@mantine/core";
 import ProgressAction from "./ProgressAction";
 import { useState } from "react";
 import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
 import Ongoing from "./Ongoing";
 import Completed from "./Completed";
 import {
-  useGetOngoingContents,
-  useGetCompletedContents,
-  useGetContentsLog,
+ 
+  useAllProgressContent
 } from "@/api/queries";
 import { TStoryContent } from "../Stories/Stories1/Stories1";
-import InputFormat from "@/common/InputFormat";
 
 export type TContentLog = {
   content: {
@@ -37,49 +32,13 @@ export type TContentLog = {
 
 const ProgressReport = () => {
   const profileId = localStorage.getItem("profileId");
-  const { data: statusData } = useGetContentsLog(profileId!);
-  const { data } = useGetOngoingContents(profileId!);
-  const { data: completedData } = useGetCompletedContents(profileId!);
-  const ongoingContents: TStoryContent[] = data?.data.data.ongoing_contents;
-  const completedContents: TStoryContent[] =
-    completedData?.data.data.completed_contents;
-  console.log("statusData", statusData);
+  const {data:allContentProgress} = useAllProgressContent(Number(profileId) || 0)
+  const allContentProgressContents  =  allContentProgress?.data?.data;
+ 
+  const ongoingContents = allContentProgressContents?.records?.filter((conte:TStoryContent )=> conte?.status === "ongoing" && conte?.quiz_result?.status === false  )
+  const completedContents = allContentProgressContents?.records?.filter((conte:TStoryContent )=> conte?.status === "complete" && conte?.quiz_result?.status )
 
-  const categoryCalculator = (
-    category: string,
-    arrayContent: TStoryContent[]
-  ) => {
-    let total = 0;
-    for (let i = 0; i < arrayContent?.length; i += 1) {
-      if (arrayContent[i].category === category) {
-        total += 1;
-      }
-    }
-    return total;
-  };
-
-  const ongoingStories: number = categoryCalculator("Stories", ongoingContents);
-  const ongoingAudiobooks: number = categoryCalculator(
-    "Audiobooks",
-    ongoingContents
-  );
-  const ongoingAfricanLanguage: number = categoryCalculator(
-    "Languages",
-    ongoingContents
-  );
-
-  const completedStories: number = categoryCalculator(
-    "Stories",
-    completedContents
-  );
-  const completedAudiobooks: number = categoryCalculator(
-    "Audiobooks",
-    completedContents
-  );
-  const completedAfricanLanguage: number = categoryCalculator(
-    "Languages",
-    completedContents
-  );
+ 
 
   const [currentStep, setCurrentStep] = useState(STEP_1);
   return (
@@ -91,7 +50,7 @@ const ProgressReport = () => {
               <h1 className="font-semibold font-Recoleta text30">
                 Progress Report
               </h1>
-              <p className="flex">
+              {/* <p className="flex">
               <InputFormat/>
               <img
                   loading="lazy"
@@ -99,7 +58,7 @@ const ProgressReport = () => {
                   alt="SearchIcon "
                   className="ml-[-30px]"
                 />
-              </p>
+              </p> */}
               {/* <span>
                 <img
                   loading="lazy"
@@ -112,11 +71,11 @@ const ProgressReport = () => {
             <hr className="mx-20  mb-5" />
             <div className="pt-5 pb-1 pad-x-40 ">
               <Chart
-                stories={ongoingStories + completedStories}
+                stories={allContentProgressContents?.category_count?.story_count}
                 africanLanguages={
-                  ongoingAfricanLanguage + completedAfricanLanguage
+                  allContentProgressContents?.category_count?.language_count
                 }
-                audioBooks={ongoingAudiobooks + completedAudiobooks}
+                audioBooks={allContentProgressContents?.category_count?.audiobook_count}
               />
             </div>
 
@@ -126,18 +85,15 @@ const ProgressReport = () => {
             <div className="px-20">
               {currentStep === STEP_1 && (
                 <All
-                  data={[
-                    ...(ongoingContents ? ongoingContents : []),
-                    ...(completedContents ? completedContents : []),
-                  ]}
+                  data={allContentProgressContents?.records}
                 />
               )}
               {currentStep === STEP_2 && <Ongoing data={ongoingContents} />}
               {currentStep === STEP_3 && (
-                <Completed data={completedContents!} />
+                <Completed data={completedContents} />
               )}
             </div>
-            <div className="px-28 flex justify-end pt-14 pb-8">
+            {/* <div className="px-28 flex justify-end pt-14 pb-8">
               <Pagination
                 total={5}
                 styles={() => ({
@@ -148,7 +104,7 @@ const ProgressReport = () => {
                   },
                 })}
               />
-            </div>
+            </div> */}
           </div>
         </InnerWrapper>
       </Wrapper>

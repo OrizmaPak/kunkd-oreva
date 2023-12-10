@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import "./parentcongratulations.css";
 
-const ParentCongratulations = ({}: { onSubmit: () => void }) => {
+const ParentCongratulations = ({onSubmit}: { onSubmit: () => void }) => {
   return (
     <FormWrapper>
       {/* <motion.div animate={{}} transition={{ ease: "easeOut", duration: 2 }}> */}

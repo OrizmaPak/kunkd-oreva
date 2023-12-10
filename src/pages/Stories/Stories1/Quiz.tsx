@@ -21,12 +21,12 @@ import { getApiErrorMessage } from "@/api/helper";
 
 const Quiz = () => {
   const contentId = localStorage.getItem("contentId");
-  const { data: quiz, isLoading } = useGetQuiz(contentId?.toString()!);
+  const { data: quiz, isLoading } = useGetQuiz(contentId?.toString() as string);
   const questions = quiz?.data?.data?.questions;
   const quizId = quiz?.data?.data?.quiz_id;
-  const profileId = localStorage.getItem("profileId");
+  const profileId = localStorage.getItem("profileId") as string;
   const contentString = localStorage.getItem("content");
-  const content = JSON.parse(contentString!);
+  const content = JSON.parse(contentString as string);
   const [currentQues, setCurrentQues] = useState<number>(0);
   const [answers, setAnswers] = useState<answerObj[]>([]);
 
@@ -78,10 +78,10 @@ const Quiz = () => {
       <Skeleton visible={isLoading}>
         <StoriesNav
           category={category && category}
-          genre={content && content.sub_categories[0].sub_category_name!}
+          genre={content && content.sub_categories[0].sub_category_name}
           title={content && content.name}
-          subCategoryId={content && content.sub_categories[0].sub_category_id!}
-          slug={content && content.sub_categories[0].sub_category_name!}
+          subCategoryId={content && content.sub_categories[0].sub_category_id}
+          slug={content && content.sub_categories[0].sub_category_name}
           quiz="Quiz"
         />
       </Skeleton>
@@ -138,8 +138,8 @@ const Quiz = () => {
       {curentStep === STEP_2 && (
         <div className="flex-grow mt-5 pt-10 flex  justify-center items-center  mx-auto w-[100%]  flex-col py-14 bg-white m rounded-3xl ">
           <Result
-            profileId={+profileId!}
-            quizId={+quizId!}
+            profileId={+profileId}
+            quizId={+quizId as number}
             answers={answers}
             setShowRemark={() => setcurrentStep(STEP_3)}
           />
@@ -187,8 +187,7 @@ const Question = ({
 }) => {
   return (
     <div className=" flex justify-start mt-20 items-center flex-col gap-y-4 flex-grow ">
-      <h1 className="text-[24px] font-bold  text-center mb-8">
-        {quesObject?.question}
+      <h1 className="text-[24px] font-bold  text-center mb-8" dangerouslySetInnerHTML={{ __html: `${quesObject?.question}`}}>  
       </h1>
       <div className=" flex flex-col gap-6">
         <AnsButton
@@ -202,7 +201,7 @@ const Question = ({
                 ] as string)
               : ""
           }
-          question={quesObject?.question!}
+          question={quesObject?.question}
           selected={selected[currentQuestion]}
           setSelected={setSelected}
         />
@@ -275,11 +274,11 @@ const AnsButton = ({
           ? "bg-[#8530C1] text-white "
           : "text-[#8530C1]"
       } border border-[#8530C1] rounded-2xl texx`}
-    >
-      {title}
+      dangerouslySetInnerHTML={{ __html: title}}>
+      
     </button>
   );
-};
+}
 
 type answerObj = {
   selected_option_value?: string;
@@ -307,7 +306,7 @@ const QuestionPagination = ({
 }) => {
   const question = questions[currentQues];
   const actual_answer = question?.answer
-    ? (question[`option_${question?.answer}` as keyof questionType]! as string)
+    ? (question[`option_${question?.answer}` as keyof questionType] as string)
     : "";
   const handleNext = () => {
     if (!answers[currentQues]) {
@@ -324,7 +323,7 @@ const QuestionPagination = ({
       <div className="flex justify-between items-center">
         <button
           onClick={() => handlePagination("prev")}
-          className="py-3 px-16 bg-[#E2B6FF]   rounded-3xl text-white"
+          className="py-3 px-16 bg-[#E2B6FF]   roundedss text-white"
         >
           Prev
         </button>
@@ -335,14 +334,14 @@ const QuestionPagination = ({
         currentQues + 1 === totalQuestion ? (
           <button
             onClick={setShowResult}
-            className="py-3 px-16 bg-green-600 rounded-3xl  text-white"
+            className="py-3 px-16 bg-green-600 rounded  text-white"
           >
             Finish Quiz
           </button>
         ) : (
           <button
             onClick={handleNext}
-            className="py-3 px-16 bg-[#8530C1] rounded-3xl text-white"
+            className="py-3 px-16 bg-[#8530C1] rounded text-white"
           >
             Next
           </button>
@@ -416,7 +415,7 @@ const GoodRemarkMsg = ({
           <div className="flex gap-20">
             <button
               onClick={setShowYourResult}
-              className="py-3 px-16 bg-[#8530C1] rounded-3xl"
+              className="py-3 px-16 bg-[#8530C1] rounded"
             >
               Done
             </button>
@@ -443,8 +442,8 @@ const Result = ({
   const handleSaveQuiz = () => {
     mutate(
       {
-        quiz_id: quizId!,
-        profile_id: profileId! ? profileId : "",
+        quiz_id: quizId,
+        profile_id: profileId ? profileId : 0,
         questions: [...answers],
       },
       {
@@ -510,7 +509,7 @@ const Result = ({
         <p className="flex justify-center mt-14 items-center">
           <button
             onClick={handleSaveQuiz}
-            className="p-3 px-20 text-white bg-[#8530C1] rounded-3xl"
+            className="p-3 px-20 text-white bg-[#8530C1] rounded"
           >
             {isLoading ? (
               <p className="flex justify-center items-center">
@@ -540,7 +539,7 @@ const YourResult = ({ answers }: { answers: answerObj[] }) => {
         <p className="flex justify-center mt-14 items-center">
           <button
             onClick={() => navigate(-2)}
-            className="p-3 px-20 text-white bg-[#8530C1] rounded-3xl"
+            className="p-3 px-20 text-white bg-[#8530C1] rounded"
           >
             Done
           </button>
@@ -555,7 +554,7 @@ const ResultRow = ({
   selected_option_value,
   index,
 }: {
-  question?: string;
+  question: string;
   selected_option_value?: string;
   index?: number;
 }) => {
@@ -569,15 +568,19 @@ const ResultRow = ({
         <p className="text-[#8530C1]  rounded-full p-3 bg-white w-[30px] h-[30px] flex justify-center items-center">
           {index! + 1}
         </p>
+        <div   className={`text-[20px]  w-full flex  justify-between font-semibold `}>
+
         <p
-          className={`text-[20px]  w-full flex  justify-between font-semibold `}
-        >
-          {question}{" "}
-          {!selected_option_value && <img src={DangerCircle} alt="image" />}
+         
+          dangerouslySetInnerHTML={{ __html: question}}>
+       
+         
         </p>
+        <p > {!selected_option_value && <img src={DangerCircle} alt="image" />}</p>
+        </div>
       </p>
-      <p className="pl-20 text-[20px] text-[#B5B5C3] py-2">
-        {selected_option_value ? selected_option_value : "-"}
+      <p className="pl-20 text-[20px] text-[#B5B5C3] py-2"  dangerouslySetInnerHTML={{ __html: `${selected_option_value ? selected_option_value:"-"}`}}>
+       
       </p>
     </div>
   );
@@ -589,7 +592,7 @@ const ResultRow2 = ({
   index,
   actual_answer,
 }: {
-  question?: string;
+  question: string;
   selected_option_value?: string;
   index?: number;
   actual_answer?: string;
@@ -604,29 +607,34 @@ const ResultRow2 = ({
         <p className="text-[#8530C1]  rounded-full p-3 bg-white w-[30px] h-[30px] flex justify-center items-center">
           {index! + 1}
         </p>
-        <p
-          className={`text-[20px]  w-full flex  justify-between font-semibold `}
-        >
-          {question}{" "}
+        <div  className={`text-[20px]  w-full flex  justify-between font-semibold `}>
+        <p dangerouslySetInnerHTML={{ __html: question}}></p>
+         {/* <p  dangerouslySetInnerHTML={{ __html: `${!selected_option_value || selected_option_value !== actual_answer ? (
+            <img src={DangerCircle} alt="image" />
+          ) : (
+            <img src={CheckCircle} alt="iamge" />
+          )}`}}> </p> */}
+        </div>
+         <p>
           {!selected_option_value || selected_option_value !== actual_answer ? (
             <img src={DangerCircle} alt="image" />
           ) : (
             <img src={CheckCircle} alt="iamge" />
           )}
+          </p>
         </p>
-      </p>
-      {selected_option_value === actual_answer && (
-        <p className="pl-20 text-[20px] text-[#B5B5C3] py-2">
-          {" "}
-          {selected_option_value}
+
+       
+      
+      {selected_option_value === actual_answer && (<p className="pl-20 text-[20px] text-[#B5B5C3] py-2"  dangerouslySetInnerHTML={{ __html: `${selected_option_value}`}} >
+
         </p>
       )}
-      {selected_option_value !== actual_answer ? (
-        <p className="pl-20 text-[20px] text-[#B5B5C3] py-2">
-          {selected_option_value !== actual_answer ? selected_option_value : ""}
-          <br />
-          <p className="text-red-500 font=semibold">Answer: {actual_answer}</p>
-        </p>
+      {selected_option_value !== actual_answer ? (<div>
+
+        <p className="pl-16 text-[20px] text-[#B5B5C3] py-2"  dangerouslySetInnerHTML={{ __html: `${selected_option_value !== actual_answer ? selected_option_value : ""}`}}></p>
+          <p className="text-red-500 font=semibold ml-16 flex gap-2 "  dangerouslySetInnerHTML={{ __html:` Answer:${actual_answer}` }}></p>
+      </div>
       ) : (
         ""
       )}

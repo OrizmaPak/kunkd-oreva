@@ -4,20 +4,9 @@ import CardHome from "@/common/User/CardHome";
 import InnerWrapper from "../../common/User/InnerWrapper";
 import { Route, Routes, useNavigate, Outlet } from "react-router-dom";
 import BookLayout from "./BookLayout";
-import Chisomcard from "@/assets/Chisomcard.svg";
-import Gorillacard from "@/assets/Gorillacard.svg";
-import Afamcard from "@/assets/afamcard.svg";
-import Africancard from "@/assets/africancard.svg";
-import Caterpillercard from "@/assets/caterpillercard.svg";
-import Dancercard from "@/assets/dancercard.svg";
-import Earniing2card from "@/assets/earniing2card.svg";
-import Earningcard from "@/assets/earningcard.svg";
-import Mamacard from "@/assets/mamacard.svg";
-import Puffcard from "@/assets/puffcard.svg";
-import AudioBookOne from "@/audiobooks/QueenMoremi.mp3";
 import AudioBanner from "@/assets/audiobanner.svg";
 import { Skeleton } from "@mantine/core";
-import { useGetAudioBoks } from "@/api/queries";
+import { useGetAudioBoks, } from "@/api/queries";
 export type StoriesType = {
   title?: string;
   image?: string;
@@ -30,184 +19,7 @@ export type StoriesType = {
   content?: string;
   audioBook?: string;
 };
-export const audioBooksData: StoriesType[] = [
-  {
-    title: "Bedtime Stories",
-    audioBook: AudioBookOne,
-    image: Chisomcard,
-    range: 56,
-    id: "1",
-    genre: ["Bedtime", "Inventors", "Folk Tales"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      " Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
 
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: "Fairy Tails Stories",
-    image: Gorillacard,
-    audioBook: AudioBookOne,
-    range: 80,
-    id: "2",
-    genre: ["Life & Growing up", "Inventors", "Inspiring Leaders"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      " Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: "Money Smarts",
-    image: Mamacard,
-    audioBook: AudioBookOne,
-    range: 86,
-    id: "3",
-    genre: ["Life & Growing up", "Fairy Tales", "Inspiring Leaders"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      " Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: "Sports",
-    image: Puffcard,
-    audioBook: AudioBookOne,
-    range: 56,
-    id: "4",
-    genre: ["Bedtime", "Fairy Tales", "Folk Tales"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      " Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: " Leaders",
-    image: Chisomcard,
-    audioBook: AudioBookOne,
-    range: 70,
-    id: "5",
-    genre: ["Sport", "Finance", "Money smart"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: "Inspiring Leaders",
-    image: Earniing2card,
-    audioBook: AudioBookOne,
-    range: 56,
-    id: "6",
-    genre: ["Sport", "Inventors", "Inspiring Leaders"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: "Inspiring Leaders",
-    image: Earningcard,
-    audioBook: AudioBookOne,
-    range: 66,
-    id: "7",
-    genre: ["Sport", "Bedtime", "Folk Tales"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: "Sports",
-    image: Dancercard,
-    audioBook: AudioBookOne,
-    range: 90,
-    id: "8",
-    genre: ["Life & Growing up", "Bedtime", "Money smart"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      " Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: "Afam",
-    image: Afamcard,
-    audioBook: AudioBookOne,
-    range: 36,
-    id: "9",
-    genre: ["Life & Growing up", "Bedtime", "Money smart"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: "African Leaders",
-    image: Africancard,
-    audioBook: AudioBookOne,
-    range: 56,
-    id: "10",
-    genre: ["Life & Growing up", "Bedtime", "Money smart"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      " Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-  {
-    title: " Leaders",
-    image: Caterpillercard,
-    audioBook: AudioBookOne,
-    range: 86,
-    id: "11",
-    genre: ["Sport", "Finance", "Money smart"],
-    author: "Dele and Louisa Olatuyi",
-    aboutAuthor:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum cum laborum  sit amet consectetur adipisicing elit. Rerum cum lacommodi repellendus perspiciatis voluptatem iusto consectetur, asperiores natus hic.,",
-
-    overView:
-      "Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, error est eum adipisci repellendus necessitatibus omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-  },
-];
 
 const MainStoriesLayout = () => {
   return (
@@ -219,6 +31,8 @@ const MainStoriesLayout = () => {
 };
 
 const AudioBooks = () => {
+
+
   return (
     <div>
       <Wrapper bgColor="#fff7fd">
@@ -283,7 +97,7 @@ const Books = () => {
                   {...audiobook}
                   goTo={() =>
                     navigate(
-                      `${audiobook?.slug?.replace(/\s/g, "_")!?.toLowerCase()}`
+                      `${audiobook?.slug?.replace(/\s/g, "_").toLowerCase()}`
                     )
                   }
                 />

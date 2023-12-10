@@ -4,10 +4,13 @@ import {
   useAcceptStudentAdmission,
   useRejectStudentAdmission,
 } from "@/api/queries";
-import { Loader } from "@mantine/core";
+import { Loader, Pagination } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
-import { Skeleton } from "@mantine/core";
+import TeacherNotificationModal2 from "@/components/TeacherNotificationsModal";
+import { Modal, Skeleton } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { useState } from "react";
 
 export type TRequestStudents = {
   parent: {
@@ -27,11 +30,15 @@ export type TRequestStudents = {
   lastname: string;
   image: string;
   status: string;
-  student_id: number;
+  id: number;
 };
 
 const Request = () => {
-  const { data, refetch, isLoading } = useGetAttemptStudentConnect();
+  const [activePage, setPage] = useState(1);
+
+  const { data, refetch, isLoading } = useGetAttemptStudentConnect(true, activePage.toString());
+  const totalPage = data?.data.data.number_pages;
+
 
   const attemptConnectStudents: TRequestStudents[] = data?.data.data.records;
 
@@ -40,7 +47,7 @@ const Request = () => {
       <div className=" flex-grow flex flex-col rounded-3xl p-4 bg-white">
         <div className="flex  justify-between items-center w-full px-8 ">
           <div>
-            <h1 className="text-[24px] font-semibold">Request (35)</h1>
+            <h1 className="text-[24px] font-semibold">Request ({attemptConnectStudents?.length || 0})</h1>
           </div>
         </div>
         <div>
@@ -54,6 +61,33 @@ const Request = () => {
                 <Row key={index} requestData={res} refetch={refetch} />
               ))}
         </div>
+      </div>
+      <div className="flex  justify-end mt-2 px-4">
+        {/* <span>
+          Showing <span className="text-[#8530C1]"> 1-9 </span> from
+          <span className="text-[#8530C1]"> {totalPage * 5} </span> data
+        </span> */}
+        {totalPage > 1 && (
+        <div className="px-10  mr-2 flex justify-end  pb-8">
+          <Pagination
+            total={totalPage}
+            value={activePage}
+            defaultChecked={true}
+            onChange={setPage}
+            onClick={() => {
+              console.log(activePage);
+              refetch();
+            }}
+            styles={() => ({
+              control: {
+                "&[data-active]": {
+                  backgroundColor: "#8530C1 !important",
+                },
+              },
+            })}
+          />
+        </div>
+      )}
       </div>
       <style>
         {`
@@ -79,6 +113,8 @@ const Row = ({
   const { mutate, isLoading: acceptIsLoading } = useAcceptStudentAdmission();
   const { mutate: mutateReject, isLoading: rejectIsLoading } =
     useRejectStudentAdmission();
+  const [opened, { open, close }] = useDisclosure(false);
+
 
   const handleAccept = (id: number) => {
     mutate(
@@ -92,6 +128,7 @@ const Row = ({
           });
         },
         onError(err) {
+          open()
           notifications.show({
             title: `Notification`,
             message: getApiErrorMessage(err),
@@ -122,36 +159,46 @@ const Row = ({
   };
 
   return (
-    <div className="grid grid-cols-[1fr_300px] my-8">
-      <div className="flex">
-        <p className="mr-6">
+    <>
+    
+    <Modal
+        radius={10}
+        size="md"
+        opened={opened}
+        onClose={close}
+        closeButtonProps={{ size: "lg" }}
+        centered
+      >
+        <TeacherNotificationModal2 onCancel={close}   label="Students"/>
+      </Modal>
+      <div className="grid grid-cols-[1fr_300px] my-4 ">
+      <div className="flex item-center ">
+        <p className="mr-6 flex justify-center ">
           <img
-            src={requestData.student.image ? requestData.student.image : Blxst}
+            src={requestData?.image ? requestData?.image : Blxst}
             alt="image"
             className=" rounded-full w-[60px]"
           />
         </p>
-        <p>
-          <span className="text-[#7E7E89] text2 font-medium">
+        <div className="flex justify-center items-center">
+          <p className="text-[#7E7E89] text2 font-medium  text-center inline  items-center">
             <span className="text-[#8530C1] ">
-              {requestData.parent.firstname.charAt(0).toUpperCase() +
-                requestData.parent.firstname.slice(1)}{" "}
-              {requestData.parent.lastname}
+              {requestData?.firstname.charAt(0).toUpperCase() +
+                requestData?.firstname.slice(1)}{" "}
+              {requestData?.lastname}
             </span>{" "}
-            is requesting for her child to join your class
-          </span>
-          <span className=" text-[#7E7E89]  block mt-3 text-[14px]">
-            1 hour ago
-          </span>
-        </p>
+            is requesting to join your class
+          </p>
+         
+        </div>
       </div>
 
-      <div className="flex  text-white gap-5">
+      <div className="flex  text-white gap-5 items-center justify-center ">
         <button
           onClick={() => {
             handleReject(requestData.student.id);
           }}
-          className=" pad-x-40   text-[16px]   h-[42px] flex justify-center items-center rounded-2xl bg-[#E2B6FF] "
+          className=" pad-x-40   text-[16px]   h-[38px] flex justify-center items-center rounded bg-[#E2B6FF] "
         >
           {rejectIsLoading ? (
             <p className="flex justify-center items-center">
@@ -165,7 +212,7 @@ const Row = ({
           onClick={() => {
             handleAccept(requestData.student.id);
           }}
-          className="pad-x-40 text-[16px]  h-[42px]  flex justify-center items-center rounded-2xl bg-[#8530C1]"
+          className="pad-x-40 text-[16px]  h-[38px]  flex justify-center items-center rounded bg-[#8530C1]"
         >
           {acceptIsLoading ? (
             <p className="flex justify-center items-center">
@@ -177,5 +224,6 @@ const Row = ({
         </button>
       </div>
     </div>
+    </>
   );
 };

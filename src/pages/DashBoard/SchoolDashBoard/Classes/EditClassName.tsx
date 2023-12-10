@@ -87,7 +87,7 @@ const EditClassName = ({ editClose,currentClicked, }: { editClose: () => void, c
                   <Loader color="white" size="sm" />
                 </p>
               ) : (
-                <span>Assign</span>
+                <span>Continue</span>
               )}</Button>
           </p>
         </form>

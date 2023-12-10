@@ -8,6 +8,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { TSchoolStudentStat } from ".";
 
 ChartJS.register(
   CategoryScale,
@@ -54,7 +55,7 @@ export function BarChart() {
   return <Bar options={options} data={data} />;
 }
 
-const LearningHour = () => {
+const LearningHour = ({schoolStudentStat}:{schoolStudentStat:TSchoolStudentStat}) => {
   return (
     <div className="bg-white rounded-3xl flex-grow py-2 px-4 mt-2">
       <div className="flex justify-between">

@@ -44,7 +44,14 @@ export type TAudioBooks = object;
 export type TVerifyPinData = object;
 export type TPayStackInitData = object;
 export type TLikedContentData = object;
-export type TContentTracking = object;
+export type TContentTracking = {
+  signal?:AbortSignal
+  profile_id: number,
+        content_id: number
+        status: string,
+        pages_read: number
+        timespent:number
+};
 export type TAddTeacherData = object;
 export type TSaveQuiz = object;
 

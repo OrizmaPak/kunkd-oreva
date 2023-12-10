@@ -33,6 +33,10 @@ import {
 } from "react-share";
 import "video-react/dist/video-react.css";
 import { TStoryContent } from "../Stories/Stories1/Stories1";
+import {  Modal,  } from "@mantine/core";
+import { useDisclosure,  } from "@mantine/hooks";
+import TeacherNotificationModal from "@/components/TeacherWarningModal";
+
 
 type TRecommendedVideo = {
   id: number;
@@ -52,16 +56,52 @@ type TRecommendedVideo = {
   is_liked: boolean;
   short_link: string;
 };
+type TMediaContent ={
+  "id": number,
+  "category_id": number,
+  "category": string,
+  "sub_categories": [
+      {
+          "sub_category_id": number,
+          "sub_category_name": string
+      }
+  ],
+  "content_type_id": number,
+  "content_type": string,
+  "name": string,
+  "slug": string,
+  "synopsis": string,
+  "web_synopsis": string,
+  "theme": string,
+  "tags": string,
+  "has_quiz": false,
+  "media_type":string,
+  "media": [
+      {
+          "name": string,
+          "slug": string,
+          "order": number,
+          "file": string,
+          "thumbnail": string
+      }
+  ],
+  "is_liked": boolean,
+  "short_link": string
+}
 const VideoPlayer = () => {
   const [isfinish, setIsFinsh] = useState(false);
   const { lan_type } = useParams();
+  const [opened, { open, close }] = useDisclosure(false);
+
   const contentId = localStorage.getItem("contentId");
   const videoRef = useRef<HTMLVideoElement>(null);
   const [user] = useStore(getUserState);
   const { data, isLoading } = useGetContentById(
     contentId?.toString() as string,
-    user?.user_id?.toString() as string
+    user?.user_id?.toString() as string,
+    open
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
+  const mediaContent = data?.data.data
   const { data: recommendedData, isLoading: recommendedIsLoading } =
     useGetRecommendedVideo(contentId?.toString() as string);
   const recommendedVideos = recommendedData?.data?.data.recommended_contents;
@@ -88,6 +128,13 @@ const VideoPlayer = () => {
   }, [videoRef.current?.paused ]);
 
   useEffect(() => {
+
+
+    const abortControllerRef = new AbortController();
+
+    // console.log("useEffect is running " ,pageNumber, page, pageTotal, isReading, volume)
+    const handleUpdateData = async () => {
+      try {
     mutate(
       {
         profile_id: Number(profileId),
@@ -95,6 +142,7 @@ const VideoPlayer = () => {
         status: "ongoing",
         pages_read: Math.ceil(currentVideoTime),
         timespent: Math.ceil(currentVideoTime),
+        signal:abortControllerRef.signal
       },
       {
         onSuccess(data) {
@@ -107,7 +155,43 @@ const VideoPlayer = () => {
           });
         },
       }
-    );
+    )}
+    catch (err) {
+      // Handle errors if needed
+    }}
+
+    handleUpdateData();
+
+    // Cleanup function to cancel the request when the component unmounts
+    return () => {
+      abortControllerRef.abort();
+      // queryClient.cancelMutations();
+    };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+
+
+    // mutate(
+    //   {
+    //     profile_id: Number(profileId),
+    //     content_id: Number(contentId),
+    //     status: "ongoing",
+    //     pages_read: Math.ceil(currentVideoTime),
+    //     timespent: Math.ceil(currentVideoTime),
+    //   },
+    //   {
+    //     onSuccess(data) {
+    //       console.log("success", data.data.message);
+    //     },
+    //     onError(err) {
+    //       notifications.show({
+    //         title: `Notification`,
+    //         message: getApiErrorMessage(err),
+    //       });
+    //     },
+    //   }
+    // );
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [delay]);
 
@@ -169,7 +253,28 @@ const VideoPlayer = () => {
     }
   };
 
+
+
   return (
+    <>
+    <Modal
+        radius={10}
+        padding={30}
+        size={"md"}
+        opened={opened}
+        onClose={close}
+        overlayProps={{
+          // style: { backgroundOpacity: 1 },
+          blur: 10,
+        }}
+        closeOnClickOutside={false}
+       
+        withCloseButton={false}
+        centered
+      >
+        <TeacherNotificationModal onCancel={close}/>
+      </Modal>
+    
     <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col  bg-[#fff7fd]">
       <div className="">
         <Skeleton visible={isLoading} radius={"xl"}>
@@ -202,6 +307,9 @@ const VideoPlayer = () => {
                       autoPlay
                       controls={true}
                       playerRef={videoRef}
+                      // hlsConfig={{
+                      //   startPosition: 10,
+                      // }}
                       onTimeUpdate={(event) => {
                         setCurrentVideotime(+event.currentTarget.currentTime);
                       }}
@@ -262,12 +370,8 @@ const VideoPlayer = () => {
                   </p>
                 </div>
 
-                <div className="mt-4 bg-white left-10 p-10 rounded-3xl leading-10">
-                  <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Suscipit iste beatae veritatis, corrupti porro minima fugit
-                    tempore dicta cum eaque, vero dolore quas unde obcaecati
-                    perferendis. Voluptate deserunt similique veniam.
+                <div className="mt-4 bg-white left-10 p-10 rounded-3xl leading-10" >
+                  <p  dangerouslySetInnerHTML={{ __html: `${mediaContent?.web_synopsis}`}}> 
                   </p>
                 </div>
               </div>
@@ -310,6 +414,7 @@ const VideoPlayer = () => {
         <WelDone />
       )}
     </div>
+    </>
   );
 };
 

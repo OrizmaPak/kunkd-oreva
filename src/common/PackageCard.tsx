@@ -11,6 +11,7 @@ type Props = {
   noBorder?: boolean;
   isIcon?: boolean;
   plan?: TPlan;
+  countryCode?:string
 };
 
 export type TPlan = {
@@ -30,9 +31,11 @@ const PackageCard = ({
   noBorder,
   isIcon,
   plan,
+  countryCode
 }: Props) => {
   const navigate = useNavigate();
   const handlePaln = (planId: number) => {
+    const currencyIso = countryCode === "NG" ? "NGN" : countryCode ==="UK" ? "GBP" : "USD" ;
     if (!plan) {
       navigate("/childprofilesetup");
       if (localStorage.getItem("gotToHome") === "true") {
@@ -42,6 +45,7 @@ const PackageCard = ({
       }
     } else {
       localStorage.setItem("planId", planId?.toString());
+      localStorage.setItem("currency_iso3",currencyIso )
       navigate("/makepayment");
     }
   };

@@ -8,9 +8,12 @@ import { useGetLikedContent } from "@/api/queries";
 import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
 import { useState } from "react";
 
+
 const MyList = () => {
+  const user = localStorage.getItem("user")
+  const userObject = JSON.parse(user as string)
   const profileId = localStorage.getItem("profileId");
-  const { data } = useGetLikedContent(profileId!);
+  const { data } = useGetLikedContent(profileId  as string);
   const [myListType, setMyListType] = useState("stories");
   const likedContent: TStoryContent[] = data?.data.data.records;
   const storiesLikedContents = likedContent?.filter(
@@ -23,6 +26,8 @@ const MyList = () => {
   const languagesLikedContents = likedContent?.filter(
     (content) => content.category === "Languages"
   );
+
+  
 
   // const [myListData, setMyListData] = useState(storiesLikedContents);
 
@@ -57,7 +62,7 @@ const MyList = () => {
             }
           />
           <div className="pb-14">
-            <AdsButton />
+          {userObject.subscription.status === false &&  <AdsButton />}
           </div>
         </InnerWrapper>
       </Wrapper>

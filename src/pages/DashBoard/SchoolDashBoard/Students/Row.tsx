@@ -29,7 +29,8 @@ const Row = ({
   const handleDisableSchoolStudent = async ()=>{
    mutate({student_id:data?.student?.id},  {
           onSuccess(data) {
-             queryClient.invalidateQueries({ queryKey: ['GetClassList']});
+             queryClient.invalidateQueries({ queryKey: ['GetStudents']});
+             
             notifications.show({
               title: `Notification`,
               message: data.data.message,
@@ -69,12 +70,12 @@ const Row = ({
         </div>
         <div
           onClick={onClick}
-          className="flex items-center justify-start gap-4 "
+          className="flex items-center justify-start gap-4 cursor-pointer "
         >
           <span>
             <img
               loading="lazy"
-              src={data.student.image}
+              src={data.image}
               alt="image"
               className=" w-[46px]"
             />

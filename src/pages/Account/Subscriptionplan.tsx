@@ -18,7 +18,7 @@ const Subscriptionplan = () => {
   const navigate = useNavigate();
   const {data} = useGetPlans()
   const {mutate, isLoading} = useCancelSubscription()
-  console.log("data---->",data?.data?.data)
+  console.log("plansdata---->",data?.data?.data)
   const planData = data?.data?.data
   const [openPlan, setOpenPlan] = useState(false);
   // const [user] = useStore(getUserState);
@@ -117,12 +117,12 @@ const handleCancelSubscription = () => {
             </div>
             <div className="border border-[#8530C1]  py-10 rounded-3xl my-8 ">
          <div className="flex justify-between  px-3">
-          <p ><button className=" p-2  flex item-center justisfy-center gap-2 rounded">  <span>{userObject?.subscription?.plan.charAt(0).toUpperCase() + userObject?.subscription?.plan.slice(1)} Standard plan </span> </button></p>
-          <p><button onClick={()=>navigate("/packages")} className="bg-[#F3DAFF] p-2 text-[#8530C1] flex item-center justisfy-center gap-2 rounded"> <BiSolidEdit size={20} color="#8530C1"/><span>change plan</span>  </button></p>
+          <p ><button className=" p-2  flex item-center justisfy-center gap-2 rounded">  <span className="font-semibold">{userObject?.subscription?.plan.charAt(0).toUpperCase() + userObject?.subscription?.plan.slice(1)}  Plan </span> </button></p>
+          <p><button disabled={userObject?.subscription?.status} onClick={()=>navigate("/packages")} className="bg-[#F3DAFF] p-2 text-[#8530C1] flex item-center justisfy-center gap-2 rounded"> <BiSolidEdit size={20} color="#8530C1"/><span>change plan</span>  </button></p>
          </div>
          <hr  className="border-[#8530C1] my-2"/>
          <div className="px-3"> 
-          <p><span className="text25">{userObject?.subscription?.plan === "standard" ? planData?.plans[0]?.dollar_value : planData.plans[0]?.dollar_value }{" "} </span>  per{" "}{userObject?.subscription?.plan === "standard"? "Month" : "Year"}</p>
+        { planData && <p><span className="text25">{userObject?.subscription?.amount }{" "} </span>  per{" "}{userObject?.subscription?.plan === "standard"? "Month" : "Year"}</p>}
          </div>
         </div>
           </div>

@@ -21,11 +21,13 @@ const options = [
     title: "I'm a school",
     to: "schoolsignup",
     desc: "I want to manage my school's access to this platform",
+    id:1
   },
   {
     title: "'I'm a Parent",
     desc: "I want to manage my child's access to this platform",
     to: "parentsignup",
+    id:2
   },
 ];
 
@@ -35,6 +37,7 @@ const SignContent = () => {
   const [to, setTo] = useState("");
   const { mutate } = useSocialSignUp();
   const [pushToken, ,] = useStore(getPushTokenState);
+  const [userId, setUserId] = useState(0)
   const handleClick = () => {
     // todo
   };
@@ -142,6 +145,9 @@ const SignContent = () => {
                 clicked={to === option.to}
                 title={option.title}
                 body={option.desc}
+                id={option.id}
+                userId = {userId}
+                setUserId={setUserId}
                 key={option.to}
                 onClick={() => setTo(option.to)}
                 image={
@@ -164,21 +170,21 @@ const SignContent = () => {
               </Link>
             </div>
           </div>
-          <div className="flex gap-8">
-            <Button onClick={handleGoogleSignUp} size="full" varient="outlined">
-              <FcGoogle size={20} className={" mx-auto"} />
-            </Button>
-            <Button size="full" varient="outlined">
-              <BsApple size={20} className={" mx-auto"} color={"black"} />
-            </Button>
-            <Button
-              onClick={handleFacebookSignUp}
-              size="full"
-              varient="outlined"
-            >
-              <AiFillFacebook size={20} className={" mx-auto"} color="black" />
-            </Button>
-          </div>
+        {userId === 2 || userId === 0 ? <div className="flex gap-8">
+          <Button onClick={handleGoogleSignUp} size="full" varient="outlined">
+            <FcGoogle size={20} className={" mx-auto"} />
+          </Button>
+          <Button size="full" varient="outlined">
+            <BsApple size={20} className={" mx-auto"} color={"black"} />
+          </Button>
+          <Button
+            onClick={handleFacebookSignUp}
+            size="full"
+            varient="outlined"
+          >
+            <AiFillFacebook size={20} className={" mx-auto"} color="black" />
+          </Button>
+        </div>: null}
           <p className="mt-4  text-gray-400 text-center ">
             <span>Already signed up? </span>
             <button

@@ -4,16 +4,28 @@ const OptionButton = ({
   image,
   onClick,
   clicked,
+  id,
+  setUserId,
+  userId
 }: {
   onClick: () => void;
   clicked: boolean;
   title: string;
   image: React.ReactNode;
   body: string;
+  id:number;
+  userId:number;
+  setUserId:(val:number)=> void
 }) => {
+
+  const handlleContinue = ()=>{
+    onClick()
+    setUserId(id)
+    console.log("hello----",id,userId)
+  }
   return (
     <div
-      onClick={onClick}
+      onClick={handlleContinue}
       className={`relative border-[2px]  transition-all duration-300 rounded-md py-3 my-3  pad-x-10 cursor-pointer  bg-[#F9F5FC] ${
         clicked ? "border-[2px] border-[#8530C1]" : "border-[#F9F5FC]"
       }`}

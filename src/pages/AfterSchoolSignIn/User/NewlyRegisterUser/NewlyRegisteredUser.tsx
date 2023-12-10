@@ -1,4 +1,4 @@
-import { useContentForHome, useGetOngoingContents } from "@/api/queries";
+import { useContentForHome, useGetOngoingContents,useGetUpdatedProfile } from "@/api/queries";
 import BookIcon from "@/assets/bookicon.svg";
 import musicIcon from "@/assets/musicIcon.svg";
 import videoIcon from "@/assets/videoicon.svg";
@@ -14,6 +14,9 @@ import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import Hero from "./Hero";
 import "./newlyregistereduser.css";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
+import { useEffect } from "react";
 
 export type DataType = {
   title?: string;
@@ -23,6 +26,13 @@ export type DataType = {
 };
 
 const NewlyRegisteredUser = () => {
+  const [useri, setUser] = useStore(getUserState);
+  const {data } = useGetUpdatedProfile()
+  const currentUserProfile = data?.data?.data
+  useEffect(() => {
+    setUser({...useri, ...currentUserProfile})
+    //  eslint-disable-next-line react-hooks/exhaustive-deps
+  },[currentUserProfile])
   const navigate = useNavigate();
   const profileId = localStorage.getItem("profileId");
   const { data: ongoingData } = useGetOngoingContents(profileId as string);

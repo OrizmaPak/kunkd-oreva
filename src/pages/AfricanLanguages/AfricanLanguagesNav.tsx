@@ -38,7 +38,7 @@ const AfricanLanguagesNav = ({
           }
           {
             subCategoryId &&
-              localStorage.setItem("subCategoryId", subCategoryId?.toString()!);
+              localStorage.setItem("subCategoryId", subCategoryId?.toString());
           }
         }}
       >

@@ -1,5 +1,6 @@
 import {
   useGetAdmittedStudentsInClass,
+  useGetClassTotalTimeSpent
 } from "@/api/queries";
 import StudentIcon from "@/assets/student3.svg";
 import MyDateFilter from "@/components/DateFilter";
@@ -12,12 +13,20 @@ import { useGetClassContentStat } from "@/api/queries";
 import useStore from "@/store";
 import { getUserState } from "@/store/authStore";
 import { TLogData } from "../../SchoolDashBoard/Main/Main";
+import { useState } from "react";
 
 
 const Main = () => {
   const [user, ] = useStore(getUserState)
+  const [startDate, setStartDate] = useState("")
+  const [endDate, setEndDate] = useState("")
 
-  const {data:logData} = useGetClassContentStat(user?.school?.class?.class_id.toString() as string)
+
+
+const {data:totalTimeSpentData} = useGetClassTotalTimeSpent(user?.school?.class?.class_id.toString() as string, startDate, endDate)
+  const totalTimeSpent = totalTimeSpentData?.data?.data
+  console.log("mytime-----",totalTimeSpent)
+  const {data:logData} = useGetClassContentStat(user?.school?.class?.class_id.toString() as string, startDate, endDate)
   const statLog:TLogData = logData ?.data.data
 
   const { data, isLoading } = useGetAdmittedStudentsInClass("active");
@@ -31,7 +40,8 @@ const Main = () => {
         <span className="flex gap-2 justify-center items-center">
           <span className="text-[#8530C1]">Sort by Date:</span>
           <span> 
-            <MyDateFilter/>
+          <MyDateFilter setStartDate={setStartDate} setEndDate={setEndDate}/>
+
         </span>
         </span>
       </div>
@@ -52,7 +62,7 @@ const Main = () => {
            
           />
 
-          <TotalTimeSpent />
+          <TotalTimeSpent totalTimeSpent={totalTimeSpent} />
         </div>
       </div>
       <style>

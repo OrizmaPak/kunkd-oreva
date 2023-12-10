@@ -7,13 +7,14 @@ import Button from "@/components/Button";
 import { Menu, Modal, Pagination, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { TTeacherList } from "../Teachers/Teachers";
 import AddNewClass from "./AddNewClass";
 import EditClassName from "./EditClassName";
+import { TTeacherList } from "../Teachers/Teachers";
+import { useState } from "react";
 import EditClassTeachers from "./EditClassTeachers";
 import Grade from "./Grade";
 import Row from "./Row";
+import SchoolNotificationModal from "@/components/SchoolNotificationModal";
 
 
 
@@ -28,11 +29,12 @@ export type TClassList = {
 
 const Classes = () => {
   const queryClient = useQueryClient();
-
+  const [activePage, setPage] = useState(1);
   const { data: teacherDataList } = useGetTeacherList();
   const teacherList: TTeacherList[] = teacherDataList?.data.data.records;
-  const [status, setStatus] = useState("");
-  const { data: classDataList, isLoading } = useGetClassList(status);
+  const [status, setStatus] = useState("active");
+  const { data: classDataList, isLoading, refetch } = useGetClassList(status, activePage.toString());
+  const totalPage = classDataList?.data.data.number_pages;
   const [opened, { open, close }] = useDisclosure(false);
   const [editOpened, { open: editOpen, close: editClose }] =
     useDisclosure(false);
@@ -42,6 +44,9 @@ const Classes = () => {
 
     const [newClassNameOpened, { open: newClassNameOpen, close: newClassNameClose }] =
     useDisclosure(false);
+
+  const [openedSchNotifications, { open:openSchNotifications, close:closeSchNotifications }] = useDisclosure(false);
+
 
   // const [modalStep, setModalStep] = useState(STEP_1);
   const handleClick = () => {
@@ -134,7 +139,7 @@ const Classes = () => {
         closeButtonProps={{ size: "lg" }}
         centered
       >
-        <AddNewClass newClassClose={newClassClose} />
+        <AddNewClass newClassClose={newClassClose} openSchNotifications={openSchNotifications} />
       </Modal>
 
       <Modal
@@ -153,10 +158,22 @@ const Classes = () => {
         {<EditClassTeachers currentClicked={currentClicked} editClose={editClose} />}
       </Modal>
 
+
+      <Modal
+        radius={10}
+        size="md"
+        opened={openedSchNotifications}
+        onClose={closeSchNotifications}
+        closeButtonProps={{ size: "lg" }}
+        centered
+      >
+        <SchoolNotificationModal onCancel={closeSchNotifications}   label="Classes"/>
+      </Modal>
+
       <div className=" flex-grow flex flex-col rounded-3xl p-4 bg-white">
         <div className="grid grid-cols-3 justify-center items-center w-full px-8 ">
           <div>
-            <h1 className="text-[25px] font-bold">Classes (35)</h1>
+            <h1 className="text-[25px] font-bold">Classes ({listOfClass?.length|| 0})</h1>
           </div>
           <div className="flex gap-2">
           
@@ -235,13 +252,22 @@ const Classes = () => {
         </div>
       </div>
       <div>
-        <div className="flex  justify-between mt-2 px-4">
-          <span>
-            Showing <span className="text-[#8530C1]"> 1-9 </span> from
-            <span className="text-[#8530C1]"> 35 </span> data
-          </span>
+      <div className="flex  justify-end mt-2 px-4">
+        {/* <span>
+          Showing <span className="text-[#8530C1]"> 1-9 </span> from
+          <span className="text-[#8530C1]"> {totalPage * 5} </span> data
+        </span> */}
+        {totalPage > 1 && (
+        <div className="px-10  mr-2 flex justify-end  pb-8">
           <Pagination
-            total={10}
+            total={totalPage}
+            value={activePage}
+            defaultChecked={true}
+            onChange={setPage}
+            onClick={() => {
+              console.log(activePage);
+              refetch();
+            }}
             styles={() => ({
               control: {
                 "&[data-active]": {
@@ -251,6 +277,8 @@ const Classes = () => {
             })}
           />
         </div>
+      )}
+      </div>
       </div>
       <style>
         {`

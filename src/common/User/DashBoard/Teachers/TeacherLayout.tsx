@@ -131,7 +131,7 @@ const DasboardButton = ({
         console.log("testing");
         onClick();
       }}
-      className={`transition-all duration-500 px-2 py-2  rounded flex items-center justify-between gap-8 w-full my-8 ${
+      className={`transition-all duration-500 px-2 py-2  rounded flex items-center justify-between gap-8 w-full my-4 ${
         active
           ? "bg-[#8530c1] text-white"
           : "hover:bg-[#8530C1] hover:text-white"
@@ -181,7 +181,7 @@ const TeacherProfile = () => {
           loading="lazy"
           src={user?.user_image || UserIcon}
           alt="image"
-          className="rounded-full h-[130px] w-[130px] object-cover"
+          className="rounded-full h-[110px] w-[110px] object-cover"
         />
       </div>
       <div className="text-center">
@@ -189,6 +189,9 @@ const TeacherProfile = () => {
           {user?.firstname} {user?.lastname}
         </p>
         <p>{user?.email}</p>
+        <p className="font-semibold mt-2">
+          {user?.school?.class?.class_name}
+        </p>
       </div>
     </div>
   );
