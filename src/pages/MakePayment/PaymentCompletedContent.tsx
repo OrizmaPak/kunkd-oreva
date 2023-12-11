@@ -5,13 +5,15 @@ import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { useConnectStripe } from "@/api/queries";
 import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
+import { Loader } from "@mantine/core";
+
 
 
 const PaymentCompletedContent = () => {
   const navigate = useNavigate();
   const stripe= localStorage.getItem("stripeData")
   const stripeData = JSON.parse(stripe as string)
-  const {mutate} = useConnectStripe()
+  const {mutate, isLoading} = useConnectStripe()
   const handleContinue = ()=>{
     mutate({  subscription_plan_id:Number(localStorage.getItem("planId")),
     currency_iso3:"GBP",
@@ -60,7 +62,13 @@ const PaymentCompletedContent = () => {
                 onClick={handleContinue}
                 size="full"
               >
-                Continue
+              {isLoading ? (
+                <p className="flex justify-center items-center">
+                  <Loader color="white" size="sm" />
+                </p>
+              ) : (
+                <span>Continue</span>
+              )}
               </Button>
             </div>
           </div>
