@@ -3,8 +3,8 @@ import ParentSignupLayout from "@/common/ParentSignupLayout";
 import { useNavigate } from "react-router-dom";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { useConnectStripe } from "@/api/queries";
-import { notifications } from "@mantine/notifications";
-import { getApiErrorMessage } from "@/api/helper";
+// import { notifications } from "@mantine/notifications";
+// import { getApiErrorMessage } from "@/api/helper";
 import { Loader } from "@mantine/core";
 
 
