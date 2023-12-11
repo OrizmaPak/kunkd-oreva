@@ -35,6 +35,8 @@ import { TAudioBooks } from "@/api/types";
 import CardHome from "@/common/User/CardHome";
 import CardScreenHome from  "@/common/User/CardScreenHome"
 import { useNavigate } from "react-router-dom";
+import useTimeSpent from "@/hooks/useTimeSpent";
+
 
 // type TAudioBook = {
 //   name: string;
@@ -47,7 +49,10 @@ import { useNavigate } from "react-router-dom";
 const BookLayout = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate()
+  // const contentId = localStorage.getItem("contentId");
   const contentId = localStorage.getItem("contentId");
+  const profileId = localStorage.getItem("profileId");
+  useTimeSpent(Number(contentId),Number(profileId) )
   const {data:dataRecommended} = useRecommendedAudiobooks(contentId as string)
   const recommendedContents:TAudioBooks[]  =  dataRecommended?.data?.data?.recommended_contents
 

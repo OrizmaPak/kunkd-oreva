@@ -7,7 +7,7 @@ import { Stripe, loadStripe } from "@stripe/stripe-js";
 import { TStripe } from "./StripWrapper";
 
 
-const PayWitStripButton = ({setShowStripe, setPaymentType, planId, currencyIso3,
+const PayWitStripButton = ({setShowStripe, setPaymentType, planId,
     setStripeData, setStripePromise
 } : {
   setShowStripe: React.Dispatch<React.SetStateAction<boolean>>,

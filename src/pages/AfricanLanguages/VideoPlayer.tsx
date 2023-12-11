@@ -36,6 +36,8 @@ import { TStoryContent } from "../Stories/Stories1/Stories1";
 import {  Modal,  } from "@mantine/core";
 import { useDisclosure,  } from "@mantine/hooks";
 import TeacherNotificationModal from "@/components/TeacherWarningModal";
+import useTimeSpent from "@/hooks/useTimeSpent";
+
 
 
 type TRecommendedVideo = {
@@ -94,6 +96,8 @@ const VideoPlayer = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const contentId = localStorage.getItem("contentId");
+  // const contentId = localStorage.getItem("contentId");
+  // const profileId = localStorage.getItem("profileId");
   const videoRef = useRef<HTMLVideoElement>(null);
   const [user] = useStore(getUserState);
   const { data, isLoading } = useGetContentById(
@@ -113,6 +117,8 @@ const VideoPlayer = () => {
   const { mutate } = useContentTracking();
   const profileId = localStorage.getItem("profileId");
   const [delay, setDelay] = useState(0);
+  useTimeSpent(Number(contentId),Number(profileId) )
+
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;

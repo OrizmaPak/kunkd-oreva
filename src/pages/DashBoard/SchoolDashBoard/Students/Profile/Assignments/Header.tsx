@@ -1,5 +1,4 @@
-import NextIcon from "@/assets/nexticon.svg";
-import PrevIcon from "@/assets/previcon.svg";
+
 
 const Header = () => {
   return (

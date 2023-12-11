@@ -17,16 +17,13 @@ const PaymentCompletedContent = () => {
     currency_iso3:"GBP",
     reference:stripeData?.transaction_reference,
     customer_id:stripeData?.customerID},{
-      onSuccess(data) {
+      onSuccess() {
         if (localStorage.getItem("gotToHome") === "true") {
           navigate("/parent");
         } else {
           navigate("/childprofilesetup");
         }
-        notifications.show({
-          title: `Notification`,
-          message: `${data.data.message} "It is done mr korede"`,
-        });
+      //  console.log(data)
       },
 
       onError(err) {
