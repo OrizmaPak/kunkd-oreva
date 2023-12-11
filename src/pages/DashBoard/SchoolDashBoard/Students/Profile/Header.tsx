@@ -1,4 +1,3 @@
-import ArrowDown from "@/assets/arrowdown.svg";
 import LessThanIcon from "@/assets/lessthanIcon.svg";
 import StudentIcon from "@/assets/studentIcon.svg";
 import MyDateFilter from "@/components/DateFilter";

@@ -2,10 +2,41 @@ import Button from "@/components/Button";
 import ParentSignupLayout from "@/common/ParentSignupLayout";
 import { useNavigate } from "react-router-dom";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
+import { useConnectStripe } from "@/api/queries";
+import { notifications } from "@mantine/notifications";
+import { getApiErrorMessage } from "@/api/helper";
 
 
 const PaymentCompletedContent = () => {
   const navigate = useNavigate();
+  const stripe= localStorage.getItem("stripeData")
+  const stripeData = JSON.parse(stripe as string)
+  const {mutate} = useConnectStripe()
+  const handleContinue = ()=>{
+    mutate({  subscription_plan_id:Number(localStorage.getItem("planId")),
+    currency_iso3:"GBP",
+    reference:stripeData?.transaction_reference,
+    customer_id:stripeData?.customerID},{
+      onSuccess(data) {
+        if (localStorage.getItem("gotToHome") === "true") {
+          navigate("/parent");
+        } else {
+          navigate("/childprofilesetup");
+        }
+        notifications.show({
+          title: `Notification`,
+          message: `${data.data.message} "It is done mr korede"`,
+        });
+      },
+
+      onError(err) {
+        notifications.show({
+          title: `Notification`,
+          message: getApiErrorMessage(err),
+        });
+      },
+    })
+  }
   return (
     <div>
       <ParentSignupLayout active={3}>
@@ -29,13 +60,7 @@ const PaymentCompletedContent = () => {
               Payment receipt has been sent to your email address
               </p>
               <Button
-                onClick={() => {
-                  if (localStorage.getItem("gotToHome") === "true") {
-                    navigate("/parent");
-                  } else {
-                    navigate("/childprofilesetup");
-                  }
-                }}
+                onClick={handleContinue}
                 size="full"
               >
                 Continue

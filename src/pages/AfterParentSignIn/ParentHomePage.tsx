@@ -26,7 +26,7 @@ import "./parenthomepage.css";
 
 const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
 const [useri, setUser] = useStore(getUserState);
-  const {data, isLoading:adsIsLoading } = useGetUpdatedProfile()
+  const {data } = useGetUpdatedProfile()
   const currentUserProfile = data?.data?.data
   useEffect(() => {
     setUser({...useri, ...currentUserProfile})
@@ -58,8 +58,8 @@ const [useri, setUser] = useStore(getUserState);
   //   profile = profiles?.find((each) => each.id === currentId)!;
   // }
 
-  const user2 = localStorage.getItem("user")
-  const userObject = JSON.parse(user2 as string)
+  // const user2 = localStorage.getItem("user")
+  // const userObject = JSON.parse(user2 as string)
   const navigate = useNavigate();
   // const user = JSON.parse(userInLocalStr!);
   const [user ]= useStore(getUserState)

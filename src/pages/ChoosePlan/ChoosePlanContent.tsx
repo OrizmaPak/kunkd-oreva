@@ -49,7 +49,7 @@ const ChoosePlanContent = () => {
               isIcon={true}
               plan={planData && planData?.plans[2]}
               title="A day"
-              btn="Start Trial"
+              btn="Subscribe"
               price={
                 planData && planData?.countryCode === "NG"
                   ? planData?.plans[2]?.naira_value
@@ -91,7 +91,7 @@ const ChoosePlanContent = () => {
               isIcon={true}
               title="12 Months"
               noBorder={true}
-              btn="Start Trial"
+              btn="Subscribe"
               price={
                 planData && planData?.countryCode == "NG"
                   ? planData?.plans[1]?.naira_value

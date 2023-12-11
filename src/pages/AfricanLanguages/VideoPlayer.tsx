@@ -56,38 +56,38 @@ type TRecommendedVideo = {
   is_liked: boolean;
   short_link: string;
 };
-type TMediaContent ={
-  "id": number,
-  "category_id": number,
-  "category": string,
-  "sub_categories": [
-      {
-          "sub_category_id": number,
-          "sub_category_name": string
-      }
-  ],
-  "content_type_id": number,
-  "content_type": string,
-  "name": string,
-  "slug": string,
-  "synopsis": string,
-  "web_synopsis": string,
-  "theme": string,
-  "tags": string,
-  "has_quiz": false,
-  "media_type":string,
-  "media": [
-      {
-          "name": string,
-          "slug": string,
-          "order": number,
-          "file": string,
-          "thumbnail": string
-      }
-  ],
-  "is_liked": boolean,
-  "short_link": string
-}
+// type TMediaContent ={
+//   "id": number,
+//   "category_id": number,
+//   "category": string,
+//   "sub_categories": [
+//       {
+//           "sub_category_id": number,
+//           "sub_category_name": string
+//       }
+//   ],
+//   "content_type_id": number,
+//   "content_type": string,
+//   "name": string,
+//   "slug": string,
+//   "synopsis": string,
+//   "web_synopsis": string,
+//   "theme": string,
+//   "tags": string,
+//   "has_quiz": false,
+//   "media_type":string,
+//   "media": [
+//       {
+//           "name": string,
+//           "slug": string,
+//           "order": number,
+//           "file": string,
+//           "thumbnail": string
+//       }
+//   ],
+//   "is_liked": boolean,
+//   "short_link": string
+// }
 const VideoPlayer = () => {
   const [isfinish, setIsFinsh] = useState(false);
   const { lan_type } = useParams();

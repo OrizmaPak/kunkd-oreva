@@ -1,4 +1,3 @@
-import { string } from "zod";
 import axios from "./axios.config";
 import type {
   TAddTeacherData,
@@ -228,8 +227,12 @@ export const VerifyCompletePayStack = (payload: TPayStackInitData) => {
 };
 
 export const StripeInit = (payload: TPayStackInitData) => {
-  return axios.post("/subscribe/stripe/init/web", payload);
+  return axios.post("/subscribe/stripe/init", payload);
 };
+
+export const ConnectStripe  = (payload:object)=>{
+  return axios.post("/subscribe/stripe/set", payload)
+}
 
 export const ContentTracking = (payload: TContentTracking) => {
   const {signal, ...restPayload } = payload
@@ -247,7 +250,7 @@ export const ConnectStudentData = (payload: TAddTeacherData) => {
   return axios.post("/school/student/connect", payload);
 };
 
-export const GetClassList = (status:string, page:string) => {
+export const GetClassList = (status:string, page?:string) => {
   return axios.get("/school/class",{params : {status, page }});
 };
 

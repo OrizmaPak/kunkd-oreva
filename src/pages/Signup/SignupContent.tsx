@@ -162,7 +162,7 @@ const SignContent = () => {
             {/* // <OptionButton title="'I'm a Parent" body="I want to manage my child's access to this platform" image={UnChecked}/> */}
             <div className="mt-5">
               <Link to={to}>
-                <Link to={`/${to}`}>
+                <Link to={`/${to || "signup"}`}>
                   <Button onClick={handleClick} size="full">
                     Continue
                   </Button>

@@ -20,6 +20,7 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import "./stripStyle.css";
+// import { useConnectStripe } from "@/api/queries";
 
 export type TStripe = {
   clientSecret: string;
@@ -32,11 +33,14 @@ export type TStripe = {
 
 const CheckoutForm = ({
   setIsElementLoading,
+  // stripeData
 } : {
   setIsElementLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  stripeData:TStripe
 }) => {
   const stripe = useStripe();
   const elements = useElements();
+  // const {mutate} =  useConnectStripe()
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>("");
 
@@ -60,11 +64,11 @@ const CheckoutForm = ({
   
   
     try {
-      const { error } = await stripe.confirmPayment({
+      const { error } = await stripe.confirmSetup({
         elements,
         confirmParams: {
-          return_url: "https://dev-kundakids.vercel.app/congratulations",
-          // return_url: "http://localhost:5173/congratulations",
+          // return_url: "https://dev-kundakids.vercel.app/congratulations",
+          return_url: "http://localhost:5173/congratulations",
           // onSuccess:(){}s
         },
       });
@@ -76,6 +80,9 @@ const CheckoutForm = ({
           title: `Notification`,
           message: "Payment Successful",
         });
+
+    
+
       }
     } catch (error) {
       notifications.show({
@@ -135,7 +142,7 @@ const PaymentOutlet = ({  stripeData, stripePromise}: {
           }}
           >
           {stripeData ? (
-            <CheckoutForm   setIsElementLoading={setIsLoading} />
+            <CheckoutForm stripeData={stripeData}  setIsElementLoading={setIsLoading} />
             ) : null}
         </Elements>
       ) : null}

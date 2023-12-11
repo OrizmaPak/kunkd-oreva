@@ -31,7 +31,8 @@ const payInit : TPayStack = {
   };
 
 const MakePaymentContent = () => {
-  const planId = localStorage.getItem("planId");
+  const planId = localStorage.getItem("planId"); 
+  const currencyIso3 = localStorage.getItem("currency_iso3")
   const navigate = useNavigate();
 
   const { mutate: verifyMutate } = useVerifyCompletePayStack();
@@ -153,6 +154,7 @@ const MakePaymentContent = () => {
         { planId && patmentType && (
           <div className="flex gap-10 justify-center items-center mt-10">
             <PayWitStripButton 
+            currencyIso3={currencyIso3 as string}
             planId={planId}
             setStripeData={setStripeData}
             setStripePromise={setStripePromise}

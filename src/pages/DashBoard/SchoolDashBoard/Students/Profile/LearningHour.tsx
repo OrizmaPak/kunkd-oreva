@@ -56,6 +56,7 @@ export function BarChart() {
 }
 
 const LearningHour = ({schoolStudentStat}:{schoolStudentStat:TSchoolStudentStat}) => {
+  console.log(schoolStudentStat)
   return (
     <div className="bg-white rounded-3xl flex-grow py-2 px-4 mt-2">
       <div className="flex justify-between">

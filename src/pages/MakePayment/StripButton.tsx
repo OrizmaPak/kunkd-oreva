@@ -7,13 +7,14 @@ import { Stripe, loadStripe } from "@stripe/stripe-js";
 import { TStripe } from "./StripWrapper";
 
 
-const PayWitStripButton = ({setShowStripe, setPaymentType, planId, 
+const PayWitStripButton = ({setShowStripe, setPaymentType, planId, currencyIso3,
     setStripeData, setStripePromise
 } : {
   setShowStripe: React.Dispatch<React.SetStateAction<boolean>>,
   setPaymentType: React.Dispatch<React.SetStateAction<boolean>>,
     
     planId: string,
+    currencyIso3:string
     setStripeData: React.Dispatch<React.SetStateAction<TStripe | undefined>>,
     setStripePromise: React.Dispatch<React.SetStateAction<Promise<Stripe | null> | undefined>>,
 })=>{
@@ -29,6 +30,7 @@ const PayWitStripButton = ({setShowStripe, setPaymentType, planId,
         {
           onSuccess(data) {
             setStripeData({ ...data.data.data });
+            localStorage.setItem("stripeData",JSON.stringify(data.data.data))
             const publishableKey = data.data.data?.public_key;
             const stripe = loadStripe(publishableKey);
             setStripePromise(stripe);
@@ -65,7 +67,7 @@ const PayWitStripButton = ({setShowStripe, setPaymentType, planId,
 <span className="text-[16px] font-semibold"> pay with </span>
 <img src={StripeButton} alt="image" className="inline-block" />
 </>
-                    )} 
+ )} 
             </button>
   )
 }

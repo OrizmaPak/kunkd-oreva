@@ -75,7 +75,8 @@ import {
   GetSchoolStudentStat,
   LearningHour,
   RecommendedAudiobooks,
-  GetClassTotalTimeSpent
+  GetClassTotalTimeSpent,
+  ConnectStripe 
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -88,7 +89,6 @@ import { getProfileState } from "@/store/profileStore";
 import { notifications } from "@mantine/notifications";
 import { useNavigate } from "react-router-dom";
 import { ApiResponse } from "./types";
-import { string } from "zod";
 
 export const querykeys = {
   profiles: ["GetProfile"],
@@ -380,6 +380,12 @@ export const useStripeInit = () => {
   });
 };
 
+export const useConnectStripe=()=>{
+  return useMutation({
+    mutationFn:ConnectStripe 
+  })
+}
+
 export const useLikedContent = () => {
   return useMutation({
     mutationFn: LikedContent,
@@ -426,22 +432,22 @@ export const useConnectStudentData = () => {
     mutationFn: ConnectStudentData,
   });
 };
-export const useGetClassList = (status : string, page:string)=> {
-  return useQuery({ queryKey: ["GetClassList", status, page], queryFn: ()=>GetClassList(status as string, page) });
+export const useGetClassList = (status? : string, page?:string)=> {
+  return useQuery({ queryKey: ["GetClassList", status, page], queryFn: ()=>GetClassList(status as string, page as string) });
 };
 
 export const useGetSchool = () => {
   return useQuery({ queryKey: ["GetSchool"], queryFn: GetSchool });
 };
 
-export const useGetTeacherList = (status ?:string, page?:string) => {
+export const useGetTeacherList = (status?:string, page?:string) => {
   return useQuery({ queryKey: ["GetTeacherList", status, page], queryFn:()=> GetTeacherList(status as string , page as string) });
 };
 
-export const useGetAdmittedStudentsInSchool = ( status: string, page:string) => {
+export const useGetAdmittedStudentsInSchool = ( status: string, page?:string) => {
   return useQuery({
     queryKey: ["GetStudents", status, page],
-    queryFn: ()=>GetAdmittedStudentsInSchool(status as string , page),
+    queryFn: ()=>GetAdmittedStudentsInSchool(status as string , page as string),
   });
 };
 

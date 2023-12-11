@@ -46,15 +46,10 @@ const Main = () => {
   console.log("statLog", statLog)
   const { data: teacherData } = useGetTeacherList();
   const teacherList: TTeacherList[] = teacherData?.data.data.records;
-  const { data: studentData, isLoading } = useGetAdmittedStudentsInSchool("active");
+  const { data: studentData, isLoading } = useGetAdmittedStudentsInSchool("active", );
   const studentList = studentData?.data.data.records;
  
 
-
-
- 
-
-  
   return (
     <div className="h-[100%]  flex flex-col  overflow-y-scroll">
       <div className="flex justify-between                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ">

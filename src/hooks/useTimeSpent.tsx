@@ -1,7 +1,7 @@
 import { useState, useEffect} from 'react';
 import { useLearningHour } from '@/api/queries';
-import { notifications } from '@mantine/notifications';
-import { getApiErrorMessage } from '@/api/helper';
+// import { notifications } from '@mantine/notifications';
+// import { getApiErrorMessage } from '@/api/helper';
 import { useLocation,  } from 'react-router-dom';
 
 
@@ -13,7 +13,7 @@ const useTimeSpent = (contentId:number, profileId:number) => {
 
  
  
-
+console.log(timer)
   useEffect(() => { 
     let timerId:()=> void;
     let time = 0
@@ -48,15 +48,14 @@ const useTimeSpent = (contentId:number, profileId:number) => {
       console.log("Effect---------")
       
        mutateAsync({content_id:contentId, profile_id:profileId, timespent:time}).then((data)=>{
-        notifications.show({
-          title: `Notification`,
-          message: data.data.message,
-        });
+       
+        console.log(data)
        }).catch ((error)=>{
-        notifications.show({
-          title: `Notification`,
-          message: getApiErrorMessage(error),
-        });
+        // notifications.show({
+        //   title: `Notification`,
+        //   message: getApiErrorMessage(error),
+        // });
+        console.log(error)
        })
        
       
