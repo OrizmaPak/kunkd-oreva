@@ -11,6 +11,8 @@ import TeacherNotificationModal2 from "@/components/TeacherNotificationsModal";
 import { Modal, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+
 
 export type TRequestStudents = {
   parent: {
@@ -114,6 +116,7 @@ const Row = ({
   const { mutate: mutateReject, isLoading: rejectIsLoading } =
     useRejectStudentAdmission();
   const [opened, { open, close }] = useDisclosure(false);
+  const queryClient = useQueryClient();
 
 
   const handleAccept = (id: number) => {
@@ -122,6 +125,8 @@ const Row = ({
       {
         onSuccess(data) {
           refetch();
+          queryClient.invalidateQueries({ queryKey: ['GetAttemptStudentConnect']});
+          queryClient.invalidateQueries({ queryKey: ['GetAttemptAllStudentConnect']});
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -143,6 +148,8 @@ const Row = ({
       {
         onSuccess(data) {
           refetch();
+          queryClient.invalidateQueries({ queryKey: ['GetAttemptStudentConnect']});
+          queryClient.invalidateQueries({ queryKey: ['GetAttemptAllStudentConnect']});
           notifications.show({
             title: `Notification`,
             message: data.data.message,

@@ -15,6 +15,7 @@ import { useState } from "react";
 
 
 
+
 export type TRequestStudents = {
   parent: {
     firstname: string;
@@ -133,8 +134,8 @@ const Row = ({
       {
         onSuccess(data) {
           refetch();
-          queryClient.invalidateQueries({ queryKey: ['GetLicense']});
-
+          queryClient.invalidateQueries({ queryKey: ['GetAttemptStudentConnect']});
+          queryClient.invalidateQueries({ queryKey: ['GetAttemptAllStudentConnect']});
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -156,6 +157,8 @@ const Row = ({
       {
         onSuccess(data) {
           refetch();
+          queryClient.invalidateQueries({ queryKey: ['GetAttemptStudentConnect']});
+          queryClient.invalidateQueries({ queryKey: ['GetAttemptAllStudentConnect']});
           notifications.show({
             title: `Notification`,
             message: data.data.message,
