@@ -15,24 +15,25 @@ const PaymentCompletedContent = () => {
   const stripeData = JSON.parse(stripe as string)
   const {mutate, isLoading} = useConnectStripe()
   const handleContinue = ()=>{
+    if (localStorage.getItem("gotToHome") === "true") {
+      navigate("/parent");
+    } else {
+      navigate("/childprofilesetup");
+    }
     mutate({  subscription_plan_id:Number(localStorage.getItem("planId")),
     currency_iso3:"GBP",
     reference:stripeData?.transaction_reference,
     customer_id:stripeData?.customerID},{
       onSuccess() {
-        if (localStorage.getItem("gotToHome") === "true") {
-          navigate("/parent");
-        } else {
-          navigate("/childprofilesetup");
-        }
+       
       //  console.log(data)
       },
 
-      onError(err) {
-        notifications.show({
-          title: `Notification`,
-          message: getApiErrorMessage(err),
-        });
+      onError() {
+        // notifications.show({
+        //   title: `Notification`,
+        //   message: getApiErrorMessage(err),
+        // });
       },
     })
   }
