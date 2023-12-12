@@ -6,36 +6,30 @@ import { useConnectStripe } from "@/api/queries";
 // import { notifications } from "@mantine/notifications";
 // import { getApiErrorMessage } from "@/api/helper";
 import { Loader } from "@mantine/core";
+import { TStripe } from "./StripWrapper";
 
 
 
 const PaymentCompletedContent = () => {
   const navigate = useNavigate();
   const stripe= localStorage.getItem("stripeData")
-  const stripeData = JSON.parse(stripe as string)
+  const stripeData:TStripe = JSON.parse(stripe as string)
   const {mutate, isLoading} = useConnectStripe()
   const handleContinue = ()=>{
-    if (localStorage.getItem("gotToHome") === "true") {
-      navigate("/parent");
-    } else {
-      navigate("/childprofilesetup");
-    }
-    mutate({  subscription_plan_id:Number(localStorage.getItem("planId")),
+    mutate({ subscription_plan_id:Number(localStorage.getItem("planId")),
     currency_iso3:"GBP",
     reference:stripeData?.transaction_reference,
-    customer_id:stripeData?.customerID},{
-      onSuccess() {
-       
-      //  console.log(data)
-      },
-
-      onError() {
-        // notifications.show({
-        //   title: `Notification`,
-        //   message: getApiErrorMessage(err),
-        // });
-      },
+    customer_id: stripeData?.customerID},{
+      onSuccess(){
+        if (localStorage.getItem("gotToHome") === "true") {
+          navigate("/parent");
+        } else {
+          navigate("/childprofilesetup");
+        }
+      }
     })
+   
+   
   }
   return (
     <div>

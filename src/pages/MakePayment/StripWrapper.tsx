@@ -33,7 +33,7 @@ export type TStripe = {
 
 const CheckoutForm = ({
   setIsElementLoading,
-  // stripeData
+  stripeData
 } : {
   setIsElementLoading: React.Dispatch<React.SetStateAction<boolean>>,
   stripeData:TStripe
@@ -60,15 +60,15 @@ const CheckoutForm = ({
       setErrorMessage(submitError.message);
       return;
     }
-
-  
   
     try {
+      
+      // const { paymentIntent } = await stripe.retrievePaymentIntent(stripeData?.clientSecret);
       const { error } = await stripe.confirmSetup({
         elements,
         confirmParams: {
-          // return_url: "https://dev-kundakids.vercel.app/congratulations",
-          return_url: "http://localhost:5173/congratulations",
+          return_url: "https://dev-kundakids.vercel.app/congratulations",
+          // return_url: "http://localhost:5173/congratulations",
           // onSuccess:(){}s
         },
       });
@@ -84,12 +84,14 @@ const CheckoutForm = ({
     
 
       }
+      
     } catch (error) {
       notifications.show({
         title: `Notification`,
         message: getApiErrorMessage(error),
       });
     }
+    
     setIsLoading(false);
   };
 

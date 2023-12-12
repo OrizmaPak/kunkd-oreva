@@ -20,7 +20,7 @@ const PayWitStripButton = ({setShowStripe, setPaymentType, planId,
 })=>{
    const { mutate , isLoading} = useStripeInit();
  
-  
+
     const handleStripeInit = () => {
       mutate(
         {
