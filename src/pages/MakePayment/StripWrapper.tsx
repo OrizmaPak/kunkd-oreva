@@ -33,14 +33,15 @@ export type TStripe = {
 
 const CheckoutForm = ({
   setIsElementLoading,
-  stripeData
+  // stripeData
 } : {
   setIsElementLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  stripeData:TStripe
+  // stripeData:TStripe
 }) => {
   const stripe = useStripe();
   const elements = useElements();
   // const {mutate} =  useConnectStripe()
+  // console.log(stripeData)
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>("");
 
@@ -144,7 +145,7 @@ const PaymentOutlet = ({  stripeData, stripePromise}: {
           }}
           >
           {stripeData ? (
-            <CheckoutForm stripeData={stripeData}  setIsElementLoading={setIsLoading} />
+            <CheckoutForm   setIsElementLoading={setIsLoading} />
             ) : null}
         </Elements>
       ) : null}
