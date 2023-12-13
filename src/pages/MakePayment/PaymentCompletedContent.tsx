@@ -5,14 +5,14 @@ import { IoCheckmarkCircleOutline } from "react-icons/io5";
 // import { useConnectStripe } from "@/api/queries";
 // import { notifications } from "@mantine/notifications";
 // import { getApiErrorMessage } from "@/api/helper";
-import { Loader } from "@mantine/core";
+// import { Loader } from "@mantine/core";
 // import { TStripe } from "./StripWrapper";
 
 
 
 const PaymentCompletedContent = () => {
   const navigate = useNavigate();
-  const stripe= localStorage.getItem("stripeData")
+  // const stripe= localStorage.getItem("stripeData")
   // const stripeData:TStripe = JSON.parse(stripe as string)
   // const {mutate, isLoading} = useConnectStripe()
   const handleContinue = ()=>{
