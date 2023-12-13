@@ -65,7 +65,7 @@ const CheckoutForm = ({
     try {
       
       // const { paymentIntent } = await stripe.retrievePaymentIntent(stripeData?.clientSecret);
-      const { error } = await stripe.confirmSetup({
+      const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
           return_url: "https://dev-kundakids.vercel.app/congratulations",

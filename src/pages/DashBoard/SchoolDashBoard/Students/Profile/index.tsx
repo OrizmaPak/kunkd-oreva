@@ -22,7 +22,7 @@ export type TSchoolStudentStat = {
       "quiz": number,
       "stories": number
   },
-  "learning_hours": number[],
+  "learning_hours": {unknow: number},
   "name": string,
   "recently_completed_content": TStoryContent[],
   "teacher_email": string,

@@ -2,32 +2,34 @@ import Button from "@/components/Button";
 import ParentSignupLayout from "@/common/ParentSignupLayout";
 import { useNavigate } from "react-router-dom";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
-import { useConnectStripe } from "@/api/queries";
+// import { useConnectStripe } from "@/api/queries";
 // import { notifications } from "@mantine/notifications";
 // import { getApiErrorMessage } from "@/api/helper";
 import { Loader } from "@mantine/core";
-import { TStripe } from "./StripWrapper";
+// import { TStripe } from "./StripWrapper";
 
 
 
 const PaymentCompletedContent = () => {
   const navigate = useNavigate();
   const stripe= localStorage.getItem("stripeData")
-  const stripeData:TStripe = JSON.parse(stripe as string)
-  const {mutate, isLoading} = useConnectStripe()
+  // const stripeData:TStripe = JSON.parse(stripe as string)
+  // const {mutate, isLoading} = useConnectStripe()
   const handleContinue = ()=>{
-    mutate({ subscription_plan_id:Number(localStorage.getItem("planId")),
-    currency_iso3:"GBP",
-    reference:stripeData?.transaction_reference,
-    customer_id: stripeData?.customerID},{
-      onSuccess(){
-        if (localStorage.getItem("gotToHome") === "true") {
-          navigate("/parent");
-        } else {
-          navigate("/childprofilesetup");
-        }
-      }
-    })
+
+    if (localStorage.getItem("gotToHome") === "true") {
+      navigate("/parent");
+    } else {
+      navigate("/childprofilesetup");
+    }
+    // mutate({ subscription_plan_id:Number(localStorage.getItem("planId")),
+    // currency_iso3:"GBP",
+    // reference:stripeData?.transaction_reference,
+    // customer_id: stripeData?.customerID},{
+    //   onSuccess(){
+      
+    //   }
+    // })
    
    
   }
@@ -57,13 +59,7 @@ const PaymentCompletedContent = () => {
                 onClick={handleContinue}
                 size="full"
               >
-              {isLoading ? (
-                <p className="flex justify-center items-center">
-                  <Loader color="white" size="sm" />
-                </p>
-              ) : (
-                <span>Continue</span>
-              )}
+             Continue
               </Button>
             </div>
           </div>

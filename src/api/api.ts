@@ -227,7 +227,7 @@ export const VerifyCompletePayStack = (payload: TPayStackInitData) => {
 };
 
 export const StripeInit = (payload: TPayStackInitData) => {
-  return axios.post("/subscribe/stripe/init", payload);
+  return axios.post("/subscribe/stripe/init/web", payload);
 };
 
 export const ConnectStripe  = (payload:object)=>{

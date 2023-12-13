@@ -9,6 +9,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { TSchoolStudentStat } from ".";
+// import { number } from "zod";
 
 ChartJS.register(
   CategoryScale,
@@ -18,7 +19,7 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
+// eslint-disable-next-line
 export const options = {
   responsive: true,
   plugins: {
@@ -34,7 +35,7 @@ export const options = {
 };
 
 const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
+// eslint-disable-next-line
 export const data = {
   labels,
   datasets: [
@@ -51,18 +52,27 @@ export const data = {
   ],
 };
 
-export function BarChart() {
-  return <Bar options={options} data={data} />;
+export function BarChart({meta}:{meta:number[]}) {
+  console.log("Meta", data)
+  data.datasets[0].data = meta
+  if(meta.length < 1){
+    return "loading ..."
+  }
+
+  return <Bar options={options} data={data}/>
 }
 
 const LearningHour = ({schoolStudentStat}:{schoolStudentStat:TSchoolStudentStat}) => {
-  console.log(schoolStudentStat)
+  console.log('LEARNIG HOURS',schoolStudentStat?.learning_hours)
+  
+  const dataArray = Object.values(schoolStudentStat?.learning_hours ?? {}).map(value => value / 3600);
+  console.log("dataArray", dataArray)
   return (
     <div className="bg-white rounded-3xl flex-grow py-2 px-4 mt-2">
       <div className="flex justify-between">
         <h1 className="text-[20px] font-bold">Learning Hours</h1>
       </div>
-      <BarChart />
+      <BarChart meta= {dataArray} />
     </div>
   );
 };
