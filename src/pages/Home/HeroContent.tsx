@@ -49,12 +49,12 @@ const HeroContent = () => {
         <img
           src={Book}
           alt=""
-          className="absolute  bottom-[34%]  right-[34%] z-50 "
+          className="absolute  bottom-[34%]  right-[630px] z-50 "
         />
         <img
           src={Music}
           alt=""
-          className="absolute  bottom-[25%]  right-[9%] z-50 "
+          className="absolute  bottom-[25%]  right-[180px] z-50 "
         />
       </div>
     </div>

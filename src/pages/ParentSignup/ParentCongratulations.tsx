@@ -25,7 +25,7 @@ const ParentCongratulations = () => {
               <h1 className="font-bold header2 text-center mt-4 font-Recoleta">
                 Congratulations
               </h1>
-              <p className="text2 text-[#A7A7A7] text-center mt-4 mb-16 font-Hanken">
+              <p className="text2 text-[#A7A7A7] text-center mb-4 font-Hanken">
                 Your profile has been created
               </p>
               <Link to="/secureaccount">

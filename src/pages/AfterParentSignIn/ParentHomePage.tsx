@@ -58,8 +58,8 @@ const [useri, setUser] = useStore(getUserState);
   //   profile = profiles?.find((each) => each.id === currentId)!;
   // }
 
-  // const user2 = localStorage.getItem("user")
-  // const userObject = JSON.parse(user2 as string)
+  const user2 = localStorage.getItem("user")
+  const userObject = JSON.parse(user2 as string)
   const navigate = useNavigate();
   // const user = JSON.parse(userInLocalStr!);
   const [user ]= useStore(getUserState)
@@ -232,7 +232,7 @@ const [useri, setUser] = useStore(getUserState);
             />
           </div>
 
-       { <AdsButton />}
+       {userObject?.subscription.status === false && <AdsButton />}
           <div className="">
             <CardScreenHome
               data={recommendedStories}

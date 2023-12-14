@@ -203,7 +203,7 @@ const Row = ({
       <div className="flex  text-white gap-5 items-center justify-center ">
         <button
           onClick={() => {
-            handleReject(requestData.student.id);
+            handleReject(requestData?.id);
           }}
           className=" pad-x-40   text-[16px]   h-[38px] flex justify-center items-center rounded bg-[#E2B6FF] "
         >
@@ -217,7 +217,7 @@ const Row = ({
         </button>
         <button
           onClick={() => {
-            handleAccept(requestData.student.id);
+            handleAccept(requestData?.id);
           }}
           className="pad-x-40 text-[16px]  h-[38px]  flex justify-center items-center rounded bg-[#8530C1]"
         >

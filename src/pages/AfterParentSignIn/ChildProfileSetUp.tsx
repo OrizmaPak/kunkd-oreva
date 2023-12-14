@@ -160,14 +160,14 @@ export const ChildNameModal = ({
       transition={{ duration: 0.3 }}
       className="  rounded-3xl w-[100%] py-7 "
     >
-      <div className="flex px-10 justify-between items-center">
+      <div className="flex px-4 gap-4 justify-between items-center">
         <span></span>
         {showGoBackIcon && (
           <p onClick={goBack} className="">
             <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
           </p>
         )}
-        <h1 className="text-center font-bold text-[35px] font-Recoleta text30">
+        <h1 className="text-center font-bold text-[20px]  font-Recoleta text30">
           What is your child’s name?
         </h1>
         <span>
@@ -177,7 +177,7 @@ export const ChildNameModal = ({
         </span>
       </div>
 
-      <div className="px-28">
+      <div className="px-14">
         <div>
           <p className="text-center text2">Input your child’s full name</p>
         </div>
