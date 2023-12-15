@@ -549,8 +549,8 @@ export const useGetSchoolContentStat = (start:string, end:string)=>{
   return useQuery({queryKey:["GetSchoolContentStat", start, end], queryFn:()=>GetSchoolContentStat(start, end)})
 }
 
-export const useGetClassContentStat = (id:string, start:string, end:string)=>{
-  return useQuery({queryKey:["GetClassContentStat", id, start, end], queryFn:()=>GetClassContentStat(id, start,end)})
+export const useGetClassContentStat = (id:string, start:string, end:string, )=>{
+  return useQuery({queryKey:["GetClassContentStat", id, start, end], queryFn:()=>GetClassContentStat(id, start,end), enabled: !!Number(id)})
 }
 
 export const useActiveClass = ()=>{
@@ -598,6 +598,6 @@ export const useRecommendedAudiobooks = (id:string)=>{
 }
 
 export const useGetClassTotalTimeSpent = (id:string, start:string, end:string)=>{
-  return useQuery({queryKey:["GetClassTotalTimeSpent", id, start, end], queryFn:()=>GetClassTotalTimeSpent(id, start, end)})
+  return useQuery({queryKey:["GetClassTotalTimeSpent", id, start, end], queryFn:()=>GetClassTotalTimeSpent(id, start, end), enabled:!!Number(id)})
 }
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

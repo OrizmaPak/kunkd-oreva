@@ -63,10 +63,10 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
           setUser({ ...res });
           onSubmit();
         },
-        onError(err) {
+        onError() {
           notifications.show({
             title: `Notification`,
-            message: getApiErrorMessage(err),
+            message: getApiErrorMessage("You have  entered a wrong code"),
           });
         },
       }

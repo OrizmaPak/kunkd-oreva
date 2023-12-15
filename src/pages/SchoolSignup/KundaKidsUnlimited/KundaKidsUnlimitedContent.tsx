@@ -5,6 +5,15 @@ import "./kundakidsunlimitedcontent.css";
 
 const KundaKidsUnlimitedContent = () => {
   const navigate = useNavigate();
+
+
+  const handleContinue = ()=>{
+    if (localStorage.getItem("schoolDashboard") === 'true' ){
+      navigate("/schooldashboard")
+    }else{
+      navigate("/school")
+    }
+  }
   const customArray1 = [
     "Newsletter",
     "Booking",
@@ -69,7 +78,7 @@ const KundaKidsUnlimitedContent = () => {
       </Link> */}
       <div className=" footer-btn-container relative py-2 flex justify-end items-end  mx-auto">
         <button
-          onClick={() => navigate("/school")}
+          onClick={handleContinue}
           className="flex justify-center items-center gap-4"
         >
           <p className=" font-Hanken font-semibold">Continue free</p>

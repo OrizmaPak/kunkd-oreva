@@ -35,7 +35,7 @@ const ProgressReport = () => {
   const {data:allContentProgress} = useAllProgressContent(Number(profileId) || 0)
   const allContentProgressContents  =  allContentProgress?.data?.data;
  
-  const ongoingContents = allContentProgressContents?.records?.filter((conte:TStoryContent )=> conte?.status === "ongoing" && conte?.quiz_result?.status === false  )
+  const ongoingContents = allContentProgressContents?.records?.filter((conte:TStoryContent )=> conte?.status === "ongoing" || conte?.status === "complete" && conte?.quiz_result?.status === false  )
   const completedContents = allContentProgressContents?.records?.filter((conte:TStoryContent )=> conte?.status === "complete" && conte?.quiz_result?.status )
 
  

@@ -1,6 +1,7 @@
 import {
   useGetAdmittedStudentsInClass,
-  useGetClassTotalTimeSpent
+  useGetClassTotalTimeSpent,
+  useGetUpdatedProfile
 } from "@/api/queries";
 import StudentIcon from "@/assets/student3.svg";
 import MyDateFilter from "@/components/DateFilter";
@@ -13,13 +14,21 @@ import { useGetClassContentStat } from "@/api/queries";
 import useStore from "@/store";
 import { getUserState } from "@/store/authStore";
 import { TLogData } from "../../SchoolDashBoard/Main/Main";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 
 
 const Main = () => {
-  const [user, ] = useStore(getUserState)
+  const [user, setUser ] = useStore(getUserState)
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
+const {data:profile} = useGetUpdatedProfile()
+const profileData = profile?.data?.data
+useEffect(()=>{
+  console.log("Profile Data",  profileData)
+  setUser( {...user, ...profileData});
+// eslint-disable-next-line
+},[])
 
 
 

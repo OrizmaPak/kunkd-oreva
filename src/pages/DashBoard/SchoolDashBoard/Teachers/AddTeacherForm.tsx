@@ -51,7 +51,7 @@ const AddTeacherForm = ({
         .max(40, { message: "First name must not exceed 20 characters" }),
       lastname: z
         .string()
-        .min(4, { message: "Last name must be at least 4 characters long" })
+        .min(2, { message: "Last name must be at least 2 characters long" })
         .max(50, { message: "Last name must not exceed 40 characters" }),
       genderid: z
         .string()

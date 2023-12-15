@@ -118,7 +118,7 @@ mutate({class_id:currentClicked},  {
                 setCucrrentClicked(data.id)
               open()
             }} className="flex justify-center items-center gap-1 bg-[#8530C1] rounded p-1 px-2">
-             <span className="text-white">{status === "" ? "Disable": "Enable"}</span>
+             <span className="text-white">{status === "active" ? "Disable": "Enable"}</span>
             </button>
             <span></span>
           </div>

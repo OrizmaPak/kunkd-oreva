@@ -44,6 +44,7 @@ const SchoolHeader = ({
   const [user] = useStore(getUserState);
   const [profiles, setProfiles] = useStore(getProfileState);
   const handleDashboard = (e: React.MouseEvent<HTMLButtonElement>) => {
+    localStorage.setItem("schoolDashboard", "true")
     e.preventDefault();
     if (user?.role === "teacher") {
       navigate("../teacherdashboard");

@@ -353,14 +353,8 @@ const EditProfile = ({
       .string()
       .min(4, { message: "School name must be at least 4 characters long" })
       .max(40, { message: "School name must not exceed 20 characters" }),
-    genderid: z
-      .string()
-      .min(4, { message: "Invalid gender" })
-      .max(10, { message: "Invalid gender" }),
     dob: z
-      .string()
-      .min(4, { message: "Invalid DOB" })
-      .max(20, { message: "Invalid DOB" }),
+      .string().optional(),
     file: z.string().url().optional(),
   });
 
@@ -446,7 +440,7 @@ const EditProfile = ({
             </p>
 
             <p className="my-2 flex gap-4">
-              <p className=" flex-grow">
+              {/* <p className=" flex-grow">
                 <label htmlFor="name" className="text3 text-[#7E7E89]">
                   Gender
                 </label>
@@ -463,7 +457,7 @@ const EditProfile = ({
                 <span className="text-red-700">
                   {errors && errors?.genderid?.message}
                 </span>
-              </p>
+              </p> */}
 
               <p className=" flex-grow">
                 <label htmlFor="dob" className="text3 text-[#7E7E89]">
