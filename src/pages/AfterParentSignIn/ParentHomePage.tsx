@@ -141,7 +141,7 @@ const [useri, setUser] = useStore(getUserState);
                               goTo={() => {
                                 navigate(
                                   `../${
-                                    user.role === "parent" ? "parent" : "school"
+                                    user.role === "user" ? "parent" : "school"
                                   }/${data.category?.toLowerCase()}/sub/${data.slug
                                     ?.toLocaleLowerCase()
                                     .replace(/\s/g, "-")}`
@@ -157,8 +157,8 @@ const [useri, setUser] = useStore(getUserState);
                               {...data}
                               goTo={() => {
                                 navigate(
-                                  `../${
-                                    user.role === "parent" ? "parent" : "school"
+                                  `/${
+                                    user.role === "user" ? "parent" : "school"
                                   }/${data.category?.toLowerCase()}/${data.slug
                                     ?.toLocaleLowerCase()
                                     .replace(/\s/g, "-")}`

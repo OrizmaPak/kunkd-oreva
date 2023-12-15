@@ -5,6 +5,10 @@ import AfamBlur from "@/assets/afamblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { TStoryContent } from "../Stories/Stories1/Stories1";
+import { Navigate, useNavigate } from "react-router-dom";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
+
 
 import { DataType } from "../AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 import Button from "@/components/Button";
@@ -14,10 +18,43 @@ const ProgressCard = ({
 const pagesLength = data?.pages?.length as number;
 const pagesRead = data?.pages_read as number | undefined;
 const range = pagesLength > 0 ? Math.ceil((100 / pagesLength) * (pagesRead || 0)) : 0;
+const navigate = useNavigate()
+const [user, ] = useStore(getUserState);
+
+if(!user ){
+  return <Navigate to="/"  replace />
+}
 
   // const range = Math.ceil((100 / data?.pages?.length as number) * data?.pages_read);
   return (
-    <div className="flex progress-card-w h-[160px]  bg-[#fffbff]  border-[#FBECFF] border-2  rounded-xl">
+    <div onClick={()=>{
+
+
+      if(data.category === "Stories"){
+        navigate(
+          `../${
+            user.role === "user" ? "parent" : "school"
+          }/${data.category?.toLowerCase()}/sub/${data.slug
+            ?.toLocaleLowerCase()
+            .replace(/\s/g, "-")}`
+        );
+      }else if(data.category === "Audiobooks"){
+        navigate(
+          `/${
+            user.role === "user" ? "parent" : "school"
+          }/${data.category?.toLowerCase()}/${data.slug
+            ?.toLocaleLowerCase()
+            .replace(/\s/g, "-")}`
+        );
+      }else if(data.category === "Languages"){
+        navigate(
+          `../${
+            user.role === "user" ? "parent" : "school"
+          }/africanlanguages/${data.slug}/${data.name}`
+        )
+      }
+   
+    }} className="flex progress-card-w h-[160px]  bg-[#fffbff]  border-[#FBECFF] border-2  rounded-xl cursor-pointer">
       <div className=" basis-1/2">
         {/* <img
           src={data?.content?.image}
