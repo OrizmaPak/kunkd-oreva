@@ -42,7 +42,7 @@ const PowerWebApp = () => {
               students' reading abilities.
               <p className="mt-20">
                 <Button onClick={() => naivagte("/signup")} size="md">
-                  <small>Start FREE 7 Days Trial </small>
+                  <small>Get started </small>
                 </Button>
               </p>
             </p>

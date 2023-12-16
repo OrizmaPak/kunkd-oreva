@@ -62,7 +62,7 @@ const MyList = () => {
             }
           />
           <div className="pb-14">
-          {userObject.subscription.status === false &&  <AdsButton />}
+          {userObject.subscription.status === false && userObject.role === "user" &&  <AdsButton />}
           </div>
         </InnerWrapper>
       </Wrapper>

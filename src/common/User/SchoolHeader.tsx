@@ -163,9 +163,7 @@ const SchoolHeader = ({
               </div>
             </Menu.Target>
             <Menu.Dropdown>
-              <p className="text-center text-[18px] font-bold my-2">
-                Notification
-              </p>
+             
               <Menu.Item>
                   <SchNotification  data={user?.role ==="schoolAdmin" ? schoolConnectList : classConnectList} />
              </Menu.Item>
@@ -358,17 +356,28 @@ const SchNotification =({ data}: {data:TRequestStudents[]})=>{
 
 console.log("dataaaa--------",data)
 const [user] = useStore(getUserState);
+const navigate = useNavigate()
   return (
-    <div className="py-1 ">
+    <>
+    {data?.length  < 1 ||  !data && <p>No notifications</p>}
+   {data?.length > 0 && <div className="py-1 ">
      {data?.map((each, index)=>
       <div key={index}>
       <hr />
-      <p className="flex my-2 px-3 justify-center items-center gap-2">
+      <p onClick={()=>{
+        if(user?.role === "schoolAdmin"){
+        navigate(`/schooldashboard/request`) 
+        }else if (user?.role === "teacher"){
+        navigate(`/teacherdashboard/request`) 
+        }
+      }} className="flex my-2 px-3 justify-center items-center gap-2">
         <span className="text-[#8530C1] ml-4">{each?.firstname}{" "}{each.lastname} has made a request to your {user?.role === "schoolAdmin"? "School" : "class"}</span>
       </p>
       </div>
      ) }
-    </div>
+    </div>}
+    </>
+
   );
 
 };

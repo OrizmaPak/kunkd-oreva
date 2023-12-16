@@ -27,7 +27,7 @@ const Row = ({
 
   const {mutate, isLoading} = useDisableSchoolStudent()
   const handleDisableSchoolStudent = async ()=>{
-   mutate({student_id:data?.student?.id},  {
+   mutate({student_id:data?.id},  {
           onSuccess(data) {
              queryClient.invalidateQueries({ queryKey: ['GetStudents']});
              

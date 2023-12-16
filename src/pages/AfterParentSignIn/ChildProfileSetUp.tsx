@@ -1,5 +1,5 @@
 import { getApiErrorMessage } from "@/api/helper";
-import { useGetAvatars, useGetProfile, useProfle } from "@/api/queries";
+import { useGetAvatars, useGetProfile, useProfle, useGetUpdatedProfile } from "@/api/queries";
 import AddAvatarIcon from "@/assets/AddAvatarIcon.svg";
 import YaJump from "@/assets/Yaa jump 1.svg";
 import LessDOwnIcon from "@/assets/lessthanIcon.svg";
@@ -14,7 +14,9 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
-
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
+import { useEffect } from "react";
 // import useStore from "@/store/index";
 // import { getProfileState } from "@/store/profileStore";
 
@@ -483,6 +485,14 @@ export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
     setEnabled(true);
     // setChildProfile(profiles[0].id.toString());
   };
+
+  const [useri, setUser] = useStore(getUserState);
+  const {data:userData } = useGetUpdatedProfile()
+  const currentUserProfile = userData?.data?.data
+  useEffect(() => {
+    setUser({...useri, ...currentUserProfile})
+    //  eslint-disable-next-line react-hooks/exhaustive-deps
+  },[currentUserProfile])
   return (
     <motion.div
       initial={{ opacity: 0 }}
