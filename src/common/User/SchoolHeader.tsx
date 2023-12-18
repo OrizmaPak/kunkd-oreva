@@ -205,7 +205,7 @@ const SchoolHeader = ({
                     </Menu.Item>
                   ))}
 
-                  <Menu.Item>
+                  <Menu.Item  onClick={() => navigate("/account")}>
                     <button
                       onClick={() => navigate("/account")}
                       className="p-2 px-4 hover:cursor-pointer hover:text-[#8530C1] flex gap-2 items-center"
@@ -215,7 +215,7 @@ const SchoolHeader = ({
                     </button>
                   </Menu.Item>
                   <hr />
-                  <Menu.Item>
+                  <Menu.Item  onClick={handLogOut}>
                     <button
                       onClick={handLogOut}
                       className="p-2 px-4  hover:cursor-pointer  text-red-500"
@@ -257,7 +257,7 @@ const SchoolHeader = ({
                       Admin
                     </button>
                   </Menu.Item> */}
-                  <Menu.Item>
+                  <Menu.Item onClick={() => navigate("/account")}>
                     <button
                       onClick={() => navigate("/account")}
                       className="p-2 px-4  hover:cursor-pointer hover:text-[#8530C1]"
@@ -265,7 +265,7 @@ const SchoolHeader = ({
                       Account
                     </button>
                   </Menu.Item>
-                  <Menu.Item>
+                  <Menu.Item onClick={handLogOut}>
                     <button
                       onClick={handLogOut}
                       className="p-2 px-4  hover:cursor-pointer  text-red-500"
