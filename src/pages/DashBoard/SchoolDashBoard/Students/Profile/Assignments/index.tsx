@@ -7,7 +7,7 @@ const ContentInProgress = ({schoolStudentStat}:{schoolStudentStat:TSchoolStudent
   return (
     <div className=" bg-white rounded-3xl  flex-col px-6  w-[600px]">
       <Header />
-      {schoolStudentStat?.ongoing_contents?.length === 0? <p className="mt-4 font-bold ">Oops!!! No data available for content in progress😤 </p> : schoolStudentStat?.ongoing_contents?.slice(1,4)?.map((data, index) => {
+      {schoolStudentStat?.ongoing_contents?.length === 0? <p className="mt-4 font-bold ">Oops!!! No data available for content in progress😤 </p> : schoolStudentStat?.ongoing_contents?.slice(0,4)?.map((data, index) => {
         return <Row key={index}  data={data} />;
       })}
      

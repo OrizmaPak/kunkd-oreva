@@ -48,9 +48,12 @@ const StudentLeaderboard = ({
 export default StudentLeaderboard;
 
 const Row = ({ data }: { data: TRequestStudents }) => {
+  const navigate = useNavigate()
   return (
     <>
-      <div className="hover:cursor-pointer    border-b-[1px] border-[#eee]  py-4 font-medium   grid grid-cols-2 ">
+      <div onClick={()=>{
+        navigate(`student/profile/${data.id}`)
+      }} className="hover:cursor-pointer    border-b-[1px] border-[#eee]  py-4 font-medium   grid grid-cols-2 ">
         <span className="flex gap-2 items-center  ">
           <img
             loading="lazy"

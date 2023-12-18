@@ -9,6 +9,7 @@ const KundaKidsUnlimitedContent = () => {
 
   const handleContinue = ()=>{
     if (localStorage.getItem("schoolDashboard") === 'true' ){
+      localStorage.removeItem("schoolDashboard")
       navigate("/schooldashboard")
     }else{
       navigate("/school")

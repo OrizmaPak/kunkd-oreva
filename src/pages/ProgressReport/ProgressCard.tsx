@@ -28,7 +28,7 @@ if(!user ){
   // const range = Math.ceil((100 / data?.pages?.length as number) * data?.pages_read);
   return (
     <div onClick={()=>{
-
+      localStorage.setItem("contentId", data?.id?.toString() as string)
 
       if(data.category === "Stories"){
         navigate(
