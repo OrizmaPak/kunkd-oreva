@@ -5,7 +5,7 @@ import HeroContent from "./HeroContent";
 import KundaApp from "./KundaApp";
 import KundaParentContent from "./KundaParentContent";
 import ParentHero from "./ParentHero";
-import SayAboutUs from "./SayAbouyUs";
+// import SayAboutUs from "./SayAbouyUs";
 import ServiceContent from "./ServiceContent";
 
 const Parents = () => {

@@ -1,6 +1,6 @@
 import React from "react";
-import Wave1 from "@/assets/wave1.svg";
-import Six from "@/assets/six.svg";
+// import Wave1 from "@/assets/wave1.svg";
+// import Six from "@/assets/six.svg";
 // import Ellipse3 from "@/assets/Ellipse 49.svg";
 
 type Props = {

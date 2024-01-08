@@ -1,6 +1,6 @@
 import LadyBackground from "@/assets/lady2.svg";
 import Mac from "@/assets/halfmac.svg";
-import MacBg from "@/assets/macbackground.svg";
+// import MacBg from "@/assets/macbackground.svg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import LadyBlur from "@/assets/ladyleftblur.jpg";
