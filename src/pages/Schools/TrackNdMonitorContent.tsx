@@ -14,7 +14,7 @@ const TrackNdMonitorContent = () => {
         <p className=" font-Inter text-center mt-8 text-[36px]">
           Track and Monitor Student Progress
         </p>
-        <p className=" leading-[30px] text-center text1   text-[#7E7E89] font-medium mt-10 font-InterReg ">
+        <p className=" leading-[30px] text-center text1   text-[#7E7E89] font-medium mt-5 font-InterReg ">
           Designed with promoting the African culture in mind, our content{" "}
           celebrates diversity, promotes inclusivity, <br /> and encourages
           curiosity. Join thousands of young readers who are discovering <br />{" "}
