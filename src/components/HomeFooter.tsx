@@ -20,7 +20,7 @@ const HomeFooter = () => {
       <div className="flex items-center justify-between">
         <div className="max-w-[500px]">
           <img loading="lazy" src={Logo} alt="Logo" />
-          <p className=" text-justify my-5 text-[16px] text-[#667085] font-Inter">
+          <p className=" text-justify my-5 text-[16px] text-[#667085] font-InterReg">
             Kunda Kids is an award-winning children's publishing, ed-tech and
             media company. Our mission is to enliven early learning with fun
             stories that foster literacy, bolster self-esteem and celebrate

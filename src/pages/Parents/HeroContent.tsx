@@ -17,7 +17,7 @@ const HeroContentContent = () => {
           reading journey
         </h1>
         <div className="max-w-[500px] flex my-10 ">
-          <p className="font-Hanken leading-[30px] text-[#667085] text-[20px]">
+          <p className="font-InterReg  leading-[40px] text-[#667085] text-[20px]">
             Embark on a reading adventure with Kunda Kids and empower your
             child's literacy journey. Join us today and unlock the boundless
             possiblities of literacy

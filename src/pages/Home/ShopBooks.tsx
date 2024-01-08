@@ -21,6 +21,7 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 import "./ShopBooks.css";
 
 import ClientCard from "./ClientCard";
+import Button from "@/components/Button";
 
 const ShopBooks = () => {
   const settings2 = {
@@ -84,7 +85,7 @@ const ShopBooks = () => {
             <h1 className="text-black  font-bold text-center mb-4 leading-8 header-1 font-Inter ">
               Shop Our Books
             </h1>
-            <p className="text20 font-semibold text-[#7E7E89] my-10">
+            <p className="text20 text-[#7E7E89] my-10 font-InterReg ">
               From beautifully illustrated storybooks to interactive learning
               kits, we provide everything you need to create a nurturing
               environment that sparks a love for reading in your child.
@@ -106,20 +107,24 @@ const ShopBooks = () => {
                   />
                 </div>
                 <div className="basis-1/2 text-white">
-                  <p className="mb-5 ">New Books</p>
-                  <h1 className="font-bold text-[25px] text-white">
+                  <p className="mb-5 bg-white rounded-full inline text-[#8530C1] p-1 px-2">
+                    New Books
+                  </p>
+                  <h1 className=" text-[25px] text-white font-Inter">
                     Afam and the New Yam Festival <br /> [PRE-ORDER]
                   </h1>
-                  <p className="my-5 text1">
+                  <p className="my-5 text1 font-InterReg ">
                     Afam and the New Yam Festival is a heartwarming children’s
                     picture book, perfect for readers aged 3-8, that explores
                     the beauty of family, heritage, and unity.
                   </p>
-                  <p className="font-bold text-[30px] ">₦2,900.00 NGN</p>
+                  <p className=" text-[30px] font-Inter ">₦2,900.00 NGN</p>
                   <p className="mb-10">Tax incuded</p>
-                  <button className="bg-white text-[#8530C1] p-3  px-24 rounded">
-                    Add to cart
-                  </button>
+                  <Button size="md" className="bg-white  p-3  px-24 rounded">
+                    <span className="text-[#8530C1] font-Inter">
+                      Add to cart
+                    </span>
+                  </Button>
                 </div>
               </div>
             </div>

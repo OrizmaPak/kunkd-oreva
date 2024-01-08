@@ -31,18 +31,17 @@ const PowerWebApp = () => {
             />
           </div>
           <div className="basis-1/2  pad-x-40 flex flex-col justify-center  ">
-            <h1 className=" text-[#101828] font-Brico header-1 mb-4">
-              Unlock the Power of
-              <br /> the Web App
+            <h1 className=" text-[#101828] font-Inter  mb-4 text-[36px]">
+              Unlock the Power of the Web App
             </h1>
-            <p className="leading-[30px] text1 text-padding font-medium text-[#7E7E89]">
+            <p className="leading-[30px] text1 text-padding font-medium text-[#7E7E89] font-InterReg ">
               With a school license, our web app offers a comprehensive suite of
               enlightening stories, interactive quizzes, and immersive
               storytelling experiences, all tailored to support and strengthen
               students' reading abilities.
-              <p className="mt-20">
+              <p className="mt-10">
                 <Button onClick={() => naivagte("/signup")} size="md">
-                  <small>Start now </small>
+                  <span>Start now </span>
                 </Button>
               </p>
             </p>

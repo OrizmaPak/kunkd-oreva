@@ -30,7 +30,7 @@ const Vision = () => {
             <h1 className=" font-Inter header2 mb-4 text-[#101828] font-semibold">
               Our Vision
             </h1>
-            <p className="leading-[30px] text1  text-justify">
+            <p className="leading-[30px] text1  text-justify font-InterReg text-[#667085]">
               We envision a world where children of all backgrounds can see
               themselves represented in the stories they read. By infusing
               African culture into modern storylines with inspiring and

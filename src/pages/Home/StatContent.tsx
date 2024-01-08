@@ -1,6 +1,7 @@
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { FaUserAlt } from "react-icons/fa";
-import { BsJournalBookmark } from "react-icons/bs";
+// import { BsJournalBookmark } from "react-icons/bs";
+import StatBookIcon from "@/assets/bookstatIcon.svg";
 
 const StatContent = () => {
   return (
@@ -9,7 +10,7 @@ const StatContent = () => {
         <h1 className="text-center font-semibold font-Inter text-[36px] heading-[43px]">
           Unleash the full power of learning
         </h1>
-        <p className="text-[#667085] text20 text-center mb-16 font-medium">
+        <p className="text-[#667085] text20 text-center mb-16 font-InterReg ">
           Everything you need to convert, engage, and retain more users.
         </p>
       </div>
@@ -32,7 +33,8 @@ const StatContent = () => {
           <p className="h-[120px] border-[#C4CCD0] border-[1px]"></p>
           <div className="flex gap-8 justify-center items-center ">
             <p className="bg-white p-6 rounded-full shadow-md">
-              <BsJournalBookmark size={40} color={"#ED1C24"} />
+              {/* <BsJournalBookmark size={40} color={"#ED1C24"} /> */}
+              <img src={StatBookIcon} alt="img" className="w-[37px] h-[41px]" />
             </p>
             <p className="flex flex-col">
               <p className="header-1 font-bold font-Inter leading-0  border-0 text-center text-[#8530C1] ">

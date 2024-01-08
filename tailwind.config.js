@@ -7,6 +7,7 @@ export default {
       Hanken: ["Hanken-Grotest", "sans-serif"],
       Brico: ["Brico", "sans-serif"],
       Inter: ["Inter", "sans-serif"],
+      InterReg: ["InterReg", "san-serif"],
     },
     extend: {},
   },

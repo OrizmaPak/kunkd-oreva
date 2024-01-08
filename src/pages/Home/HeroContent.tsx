@@ -1,7 +1,7 @@
 import Music from "@/assets/Audio Icon.svg";
 import Book from "@/assets/Book Icon.svg";
 import group from "@/assets/Group 425.svg";
-import Arrow from "@/assets/arrow.svg";
+import Arrow from "@/assets/Iconarrow.svg";
 import GroupBlur from "@/assets/groupblur.jpg";
 import Button from "@/components/Button";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -18,16 +18,16 @@ const HeroContent = () => {
   return (
     <div className="  flex justify-between  ">
       <div className=" left-[80px] hero-text-container basis-1/2 pt-14 ">
-        <p className="font-bold text1 text-[#8530C1] mb-4  font-Inter header2  flex bg-[#F9F5FF]  gap-4 items-center w-[290px] rounded justify-center">
-          <span>Introducing Kunda Kids</span>
+        <p className="font-semibold  text-[#8530C1] mb-4  font-Inter header2  flex bg-[#F9F5FF]  gap-4 items-center w-[290px] rounded-full justify-center">
+          <span className="text-[18px]">Introducing Kunda Kids</span>
 
-          <img loading="lazy" src={Arrow} alt="" className="w-10 pt-2 mb-2" />
+          <img loading="lazy" src={Arrow} alt="" className="w-4 pt-2 mb-2" />
         </p>
-        <h1 className="text-[62px]  font-Brico  header1 ">
+        <h1 className="text-[68px]  font-Brico  font-bold tracking-[-1.5px] ">
           Empowering Africa's <br /> Reading Leaders
         </h1>
         <div className="max-w-[500px] flex mb-10 mt-10">
-          <p className="text-[20px] text-[#667085]  font-medium  leading-[31px] text1  text-justify">
+          <p className="text-[20px] text-[#667085]   font-InterReg  leading-[31px] text1  text-justify">
             Unlock the power of literacy with Kunda Kids, the revolutionary
             platform dedicated to raising reading leaders across Africa
           </p>
@@ -55,7 +55,7 @@ const HeroContent = () => {
           src={group}
           placeholderSrc={GroupBlur}
           effect="blur"
-          wrapperClassName="absolute bottom-0  top-[30px] z-50 hero-two-kids right-[210px] "
+          wrapperClassName="absolute bottom-0  top-[30px] z-50 hero-two-kids right-[160px] "
           width={290}
           height={400}
         />
@@ -67,7 +67,7 @@ const HeroContent = () => {
         <img
           src={VideoIcon}
           alt=""
-          className="absolute top-[-30px] right-[250px] z-50 "
+          className="absolute top-[-45px] right-[210px] z-50 "
         />
         <img
           src={Music}

@@ -7,7 +7,7 @@ const KundaAppContent = () => {
         <h1 className="text-center text-[40px] text-white mb-4 font-Secondary font-Inter header2">
           The Kunda Kids App
         </h1>
-        <p className="text-center font-primary text20">
+        <p className="text-center font-primary text20 font-InterReg ">
           Designed with promoting the African culture in mind, our content
           celebrates diversity, promotes inclusivity, and encourages curiosity.
           Join thousands of young readers who are discovering the joy of
@@ -17,8 +17,8 @@ const KundaAppContent = () => {
         </p>
       </div>
       <div className="flex items-center justify-center gap-8 mt-8">
-        <GooglePlay />
-        <AppleStore />
+        <GooglePlay sizes={true} />
+        <AppleStore sizes={true} />
       </div>
     </div>
   );

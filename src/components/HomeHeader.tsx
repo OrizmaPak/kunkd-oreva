@@ -101,11 +101,13 @@ const HomeHeader = () => {
           </NavLink> */}
         </div>
 
-        <div className="flex items-center justify-center pl-2 gap-8">
+        <div className="flex items-center justify-center pl-2 gap-3">
           <NavLink to="login">
-            <span className="text-[#8530C1] cursor-pointer">Login</span>
+            <span className="text-[#8530C1] cursor-pointer   border-2 py-[8px] px-[16px] border-[#D0D5DD] rounded-[8px]">
+              Login
+            </span>
           </NavLink>
-          <Button onClick={() => navigate("/signup")} size="md">
+          <Button onClick={() => navigate("/signup")} size="sm">
             Enroll
           </Button>
         </div>

@@ -1,8 +1,8 @@
 import React from "react";
 
 const sizes = {
-  md: "px-10 py-2",
-  sm: "px-4 py-1",
+  md: "px-[28px] py-[16px]",
+  sm: "px-[18px] py-[10px]",
   full: "w-full py-3 text-center",
 };
 const colors = {
@@ -48,7 +48,7 @@ const getClassName = (options: TClassName) => {
       : borderColors[borderColor || "default"];
   // varient  || backgroundColor - border -
 
-  return `rounded  text-[16px] ${sizes[size || "md"]} ${
+  return `rounded-[8px]  text-[16px] ${sizes[size || "md"]} ${
     colors[color || "default"]
   } ${btnVarientStyle}`;
 };

@@ -3,10 +3,10 @@ const HomeNewsLetter = () => {
   return (
     <div className="h-[422px] pt-16 bg-[#8530C1]">
       <form className="text-center leading-8">
-        <h1 className="text-white  text-[46px]  leading-[62.56px] font-Brico new-letterheader">
+        <h1 className="text-white  text-[36px]  leading-[50.56px] font-Inter ">
           Subscribe To Our NewsLetter To <br /> Get Latest Updates & News
         </h1>
-        <p className="my-4 text-white font-Inter text20">
+        <p className="my-4 text-white font-InterReg text20">
           Join over 4,000+ users already learning with Kunda Kids.
         </p>
         <h1 className="  w-[500px] h-14 mx-auto mt-10 relative ">

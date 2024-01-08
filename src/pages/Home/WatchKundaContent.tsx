@@ -82,7 +82,7 @@ const WatchKundaContent = () => {
           Animation
         </h1>
 
-        <p className="text20 font-semibold text-[#7E7E89]">
+        <p className="text20 text-[#7E7E89] font-InterReg ">
           Kunda & Friends is a vibrant, music-led 3D preschool and primary
           animation series for children, with a soundtrack inspired by Afrobeats
           and Amapiano. We aim to celebrate and share the richness of African

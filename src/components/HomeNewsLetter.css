@@ -1,4 +1,4 @@
 .new-letterheader {
-  font-size: clamp(1.1875rem, 0.833rem + 2.2689vw, 2.875rem) !important;
+  /* font-size: clamp(1.1875rem, 0.833rem + 2.2689vw, 2.875rem) !important; */
   line-height: clamp(1.75rem, 1.1985rem + 3.5294vw, 4.375rem) !important;
 }

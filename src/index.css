@@ -14,10 +14,15 @@
 
 @font-face {
   font-family: "Brico";
-  src: url("/public/fonts/BricolageGrotesque-Medium.ttf");
+  src: url("/public/fonts/BricolageGrotesque-SemiBold.ttf");
 }
 @font-face {
   font-family: "Inter";
+  src: url("/public/fonts/Inter-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: "InterReg";
   src: url("/public/fonts/Inter-Regular.ttf");
 }
 

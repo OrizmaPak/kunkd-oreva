@@ -30,7 +30,7 @@ const SayAboutUs = () => {
     <div>
       {" "}
       <div className=" mx-auto leading-8 text-center  / ">
-        <h1 className="pt-8 header-1 font-bold   font-Brico">
+        <h1 className="pt-8 header-1 font-bold   font-Inter text-[36px]">
           What our clients have to Say about us
         </h1>
         {/* <p>

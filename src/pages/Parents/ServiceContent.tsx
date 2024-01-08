@@ -61,7 +61,7 @@ const Serviceontent = () => {
       </div>
 
       <div className="max-w-[1000px] mx-auto text-center mt-28">
-        <h1 className="text-[46px] text-black font-Inter font-bold my-8 header2">
+        <h1 className="text-[36px] text-[#101828] font-Inter my-8 ">
           WE ARE AT YOUR SERVICE
         </h1>
       </div>
@@ -89,10 +89,10 @@ const Serviceontent = () => {
       </div>
       <div className="mt-[100px] mb-[50px] max-w-[1000px] mx-auto text-center">
         {/* <KundaApp /> */}
-        <h1 className="text-[36px] text-black font-Brico mb-6  header-1">
+        <h1 className=" text-black font-Inter mb-6 text-[36px]">
           Unlimited Books and Resources
         </h1>
-        <p className=" font-Hanken left-8 leading-[30px]  text1  font-mediumsss text-[#7E7E89]">
+        <p className=" left-8 leading-[30px]  text1  font-InterReg  text-[#7E7E89]">
           With Kunda Kid's informative non-fiction texts, our extensive
           collection covers a wide range of topics and genres that will
           captivate and inspire your child's love for reading.

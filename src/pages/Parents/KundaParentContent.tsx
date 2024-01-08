@@ -5,10 +5,10 @@ const KundaParentontent = () => {
   return (
     <div>
       <div className="max-w-[1280px] mx-auto text-center justify-center flex flex-col items-center text-white pt-14 ">
-        <h1 className="header2 font-bold font-Inter mb-5">
+        <h1 className="text-[36px] text-white font-Inter mb-5">
           Enhance Learning with our Web App
         </h1>
-        <p className="text-[18px] leading-[31px] text1 max-w-[900px]  mx-0 mb-10">
+        <p className="text-[18px] leading-[31px] text1 max-w-[900px]  mx-0 mb-10 font-InterReg ">
           Our web app takes learning to the next level, providing a seamless
           experience for your child to study, explore, and track their progress
           on their desktop through interactive quizzes, engaging activities, and

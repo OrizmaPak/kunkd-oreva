@@ -8,10 +8,10 @@ const Hero = () => {
   return (
     <div className="bg-white pt-14">
       <div className="max-w-[1200px] w-full mx-auto ">
-        <h1 className=" text-[#101828] font-Brico text-center mt-[100px] header1 mb-5 ">
+        <h1 className=" text-[#101828] font-Brico text-center mt-[100px] text-[68px] mb-5 ">
           We are Kunda Kids
         </h1>
-        <p className=" leading-[30px] text1 text-[#151515]  text-center mb-20">
+        <p className=" leading-[30px] text1  text-center mb-20 font-InterReg text-[#667085]">
           Kunda Kids is an award-winning children's publishing and media company
           based in London, UK.
           <br /> Founded in 2020 by Oladele and Louisa Olafuyi, Kunda Kids aims

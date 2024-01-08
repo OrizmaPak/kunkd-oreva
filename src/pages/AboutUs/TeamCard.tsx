@@ -49,16 +49,18 @@ const TeamCard = ({
         onMouseEnter={() => setShowMessage(true)}
         onMouseLeave={() => setShowMessage(false)}
       >
-        <h1 className=" font-bold text25 text-white">{name}</h1>
+        <h1 className=" font-bold text25 text-white font-Inter  leading-[23px]">
+          {name}
+        </h1>
         <div className="mt-1 h-0 group-hover:h-[120px] transition-all duration-300">
           {!showMessage ? (
-            <span className="group-hover:opacity-0 text-white font-bold text1">
+            <span className="group-hover:opacity-0 text-white font-InterReg text1">
               {title}
             </span>
           ) : (
             <p
               className={
-                "opacity-0 group-hover:opacity-100 text-white text-left text2"
+                "opacity-0 group-hover:opacity-100 text-white text-left  font-InterReg text2"
               }
             >
               {message}

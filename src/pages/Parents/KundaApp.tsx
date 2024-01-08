@@ -27,10 +27,10 @@ const KundaApp = () => {
 
       <div className="basis-[100%] ">
         <div>
-          <h1 className="font-semibold mt-4 mb-10 text-[36px] text-[#101828] font-Inter ">
+          <h1 className=" mt-4 mb-10 text-[36px] text-[#101828] font-Inter ">
             Access a World of Stories on the Go
           </h1>
-          <p className="text-[20px] text-[#667085] leading-[40px] font-semibold">
+          <p className="text-[20px] text-[#667085] leading-[40px] font-InterReg ">
             Designed with promoting the African culture in mind, our content
             celebrates diversity, promotes inclusivity, and encourages
             curiosity. Join thousands of young readers who are discovering the
@@ -39,9 +39,9 @@ const KundaApp = () => {
         </div>
         <div>
           <div className="flex gap-4 mt-8">
-            <AppleStore />
+            <AppleStore sizes={true} />
 
-            <GooglePlay />
+            <GooglePlay sizes={true} />
           </div>
         </div>
       </div>

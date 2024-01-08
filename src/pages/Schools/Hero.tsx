@@ -15,11 +15,11 @@ const Hero = () => {
   return (
     <div className="bg-white pt-14">
       <div className="max-w-[1000px] w-full mx-auto ">
-        <h1 className=" font-Brico text-center header1 mt-[100px] text-[#101828]">
+        <h1 className=" font-Brico text-center text-[68px] header1 mt-[100px] text-[#101828]">
           Empowering <br />
           literacy education
         </h1>
-        <p className=" leading-[30px] text1 text-[#667085] font-Inter   text-center mt-4">
+        <p className=" leading-[30px] text1 text-[#667085]    text-center mt-4 font-InterReg ">
           Embark on a reading adventure with Kunda Kids and empower your child's
           literacy journey.
           <br /> Join us today and unlock the boundless possibilities of
