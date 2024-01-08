@@ -4,7 +4,7 @@ const StatContent = () => {
   return (
     <div>
       <div className="max-w-[1000px] mx-auto">
-        <h1 className="text-center text-[60px] font-Secondary mb-20">
+        <h1 className="text-center text-[68px] font-Secondary mb-20">
           What is Kunda Kids for Parents
         </h1>
       </div>

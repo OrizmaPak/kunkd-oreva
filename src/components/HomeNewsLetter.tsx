@@ -15,7 +15,7 @@ const HomeNewsLetter = () => {
             placeholder="Enter email address"
             className="w-[100%] h-[100%] rounded p-3 pl-8 text-[13px]"
           />
-          <span className="absolute right-2 top-1 text-white ">
+          <span className="absolute right-2 top-[0.5px] text-white ">
             <button className="py-3 text-[18px] px-4 bg-[#8530C1] rounded-xl">
               Subscribe
             </button>
