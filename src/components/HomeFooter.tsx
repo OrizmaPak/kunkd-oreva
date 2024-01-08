@@ -14,50 +14,87 @@ const HomeFooter = () => {
       newWindow.opener = null; // Ensure no access to the current window
     }
   };
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
-    <div className="py-14 pad-x-40 home-footer-w mx-auto ">
+    <div className="py-14  max-w-[1440px] w-full px-8 mx-auto ">
       <div className="flex items-center justify-between">
-        <div>
+        <div className="max-w-[500px]">
           <img loading="lazy" src={Logo} alt="Logo" />
+          <p className=" text-justify my-5 text-[16px] text-[#667085] font-Inter">
+            Kunda Kids is an award-winning children's publishing, ed-tech and
+            media company. Our mission is to enliven early learning with fun
+            stories that foster literacy, bolster self-esteem and celebrate
+            Africa's rich history and diverse culture.
+          </p>
+          <div className="w-[540px] flex justify-between items-center text3  font-bold font-Inter text-[#667085] ">
+            <button
+              onClick={() => navigate("/aboutus")}
+              className="cursor-pointer"
+            >
+              About Us
+            </button>
+            <button
+              onClick={() => {
+                openInNewTab("https://kundakids.com/en-ng/blogs/news");
+              }}
+              className="cursor-pointer "
+            >
+              Blog
+            </button>
+            <button
+              onClick={() => {
+                openInNewTab(
+                  "https://kundakids.com/en-ng/policies/privacy-policy"
+                );
+              }}
+              className="cursor-pointer"
+            >
+              Private Policy
+            </button>
+            <button
+              onClick={() => {
+                openInNewTab(
+                  " https://kundakids.com/policies/terms-of-service"
+                );
+              }}
+              className="cursor-pointer"
+            >
+              Term of Use
+            </button>
+            <button
+              onClick={() => {
+                openInNewTab("");
+              }}
+              className="cursor-pointer"
+            >
+              Cookies Policy
+            </button>
+          </div>
         </div>
-        <div className="w-[540px] flex justify-between items-center text3  font-medium ">
-          <button onClick={()=>navigate('/aboutus')} className="cursor-pointer">About Us</button>
-          <button
-            onClick={() => {
-              openInNewTab("https://kundakids.com/en-ng/blogs/news");
-            }}
-            className="cursor-pointer font-medium"
-          >
-            Blog
-          </button>
-          <button
-            onClick={() => {
-              openInNewTab(
-                "https://kundakids.com/en-ng/policies/privacy-policy"
-              );
-            }}
-            className="cursor-pointer"
-          >
-            Private Policy
-          </button>
-          <button
-            onClick={() => {
-              openInNewTab(" https://kundakids.com/policies/terms-of-service");
-            }}
-            className="cursor-pointer"
-          >
-            Term of Use
-          </button>
-          <button
-            onClick={() => {
-              openInNewTab("");
-            }}
-            className="cursor-pointer"
-          >
-            Cookies Policy
-          </button>
+
+        <div>
+          <div className=" flex justify-between items-center  flex-col gap-4">
+            <span className=" text-[#8530C1] font-medium">Get the App</span>
+            <span className="ml-4 cursor-pointer ">
+              <GooglePlay />
+            </span>
+            <span className="ml-4 cursor-pointer">
+              <AppleStore />
+            </span>
+          </div>
         </div>
+      </div>
+
+      <hr className="my-10" />
+
+      <div className="flex justify-between items-center text3 font-semibold">
+        <div>
+          <p className="text-[#98A2B3]">
+            {" "}
+            &copy; Copyright 2023 Kunda Kids, All rights reserved.
+          </p>
+        </div>
+
         <div className="flex items-center justify-between w-[150px] cursor-pointer">
           <button
             onClick={() => {
@@ -90,23 +127,6 @@ const HomeFooter = () => {
               alt="twitterLogo cursor-pointer"
             />
           </button>
-        </div>
-      </div>
-
-      <hr className="my-10" />
-
-      <div className="flex justify-between items-center text3 font-semibold">
-        <div>
-          <p> &copy; Copyright 2023 Kunda Kids, All rights reserved.</p>
-        </div>
-        <div className=" flex justify-between items-center ">
-          <span className="ml-4 font-bold">Download Our App</span>
-          <span className="ml-4 cursor-pointer ">
-            <GooglePlay />
-          </span>
-          <span className="ml-4 cursor-pointer">
-            <AppleStore />
-          </span>
         </div>
       </div>
     </div>

@@ -21,14 +21,14 @@ const Parents = () => {
         {/* <StatContent /> */}
       </Stat>
       <KundaParent>
-        <div className="pb-96">
+        <div className="">
           <KundaParentContent />
         </div>
       </KundaParent>
       <Service>
         <ServiceContent />
       </Service>
-      <SayAboutUs />
+      {/* <SayAboutUs /> */}
     </div>
   );
 };

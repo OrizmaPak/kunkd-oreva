@@ -50,18 +50,18 @@ const Serviceontent = () => {
           alt=""
           className=" z-[50] mt-[-300px] mb-[100px]"
         /> */}
-        <LazyLoadImage
+        {/* <LazyLoadImage
           src={MacBok}
           placeholderSrc={MacBookBlur}
           effect="blur"
           wrapperClassName="z-[50] mt-[-300px] mb-[100px]"
           width={915}
           height={551}
-        />
+        /> */}
       </div>
 
-      <div className="max-w-[1000px] mx-auto text-center">
-        <h1 className="text-[46px] text-black font-Recoleta my-8 header2">
+      <div className="max-w-[1000px] mx-auto text-center mt-28">
+        <h1 className="text-[46px] text-black font-Inter font-bold my-8 header2">
           WE ARE AT YOUR SERVICE
         </h1>
       </div>
@@ -89,11 +89,11 @@ const Serviceontent = () => {
       </div>
       <div className="mt-[100px] mb-[50px] max-w-[1000px] mx-auto text-center">
         {/* <KundaApp /> */}
-        <h1 className="text-[46px] text-black font-Recoleta mb-6  header-1">
+        <h1 className="text-[36px] text-black font-Brico mb-6  header-1">
           Unlimited Books and Resources
         </h1>
         <p className=" font-Hanken left-8 leading-[30px]  text1  font-mediumsss text-[#7E7E89]">
-          With Kunda Kids’ informative non-fiction texts, our extensive
+          With Kunda Kid's informative non-fiction texts, our extensive
           collection covers a wide range of topics and genres that will
           captivate and inspire your child's love for reading.
         </p>

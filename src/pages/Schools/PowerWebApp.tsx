@@ -10,10 +10,10 @@ const PowerWebApp = () => {
   const naivagte = useNavigate();
 
   return (
-    <div className=" bg-[rgba(237,28,36,0.06);] pt-14  pb-60 ">
-      <div className="max-w-[1300px] w-full mx-auto  pad-x-40">
-        <div className="max-w-[1300px] mx-auto flex   justify-between">
-          <div className="basis-1/2  pad-x-40 flex justify-center items-center">
+    <div className=" bg-white pt-14  pb-6 ">
+      <div className="max-w-[1440px] w-full mx-auto  pad-x-40">
+        <div className="max-w-[1440px]  flex   justify-betwee">
+          <div className="basis-1/2  ">
             {/* <img
               loading="lazy"
               src={DadBoy}
@@ -31,7 +31,7 @@ const PowerWebApp = () => {
             />
           </div>
           <div className="basis-1/2  pad-x-40 flex flex-col justify-center  ">
-            <h1 className=" font-semibold font-Recoleta header-1 mb-4">
+            <h1 className=" text-[#101828] font-Brico header-1 mb-4">
               Unlock the Power of
               <br /> the Web App
             </h1>
@@ -42,7 +42,7 @@ const PowerWebApp = () => {
               students' reading abilities.
               <p className="mt-20">
                 <Button onClick={() => naivagte("/signup")} size="md">
-                  <small>Get started </small>
+                  <small>Start now </small>
                 </Button>
               </p>
             </p>

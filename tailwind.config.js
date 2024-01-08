@@ -5,6 +5,8 @@ export default {
     fontFamily: {
       Recoleta: ["Recoleta", "sans-serif"],
       Hanken: ["Hanken-Grotest", "sans-serif"],
+      Brico: ["Brico", "sans-serif"],
+      Inter: ["Inter", "sans-serif"],
     },
     extend: {},
   },

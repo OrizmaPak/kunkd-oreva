@@ -1,7 +1,6 @@
-import Wave2 from "@/assets/secondwave.svg";
-import Zigzag1 from "@/assets/zizag.svg";
-import OutLineZero from "@/assets/outlineZero.svg";
-import FilledZero from "@/assets/filledZero.svg";
+// import Zigzag1 from "@/assets/zizag.svg";
+// import OutLineZero from "@/assets/outlineZero.svg";
+// import FilledZero from "@/assets/filledZero.svg";
 import React from "react";
 
 type Props = {
@@ -10,15 +9,11 @@ type Props = {
 
 const KundaApp = ({ children }: Props) => {
   return (
-    <div className="bg-white shadow-md custom-shadow-bottom relative z-10  ">
-      <div
-        className="bg-cover bg-bottom  w-full h-[250px]   "
-        style={{ backgroundImage: `url(${Wave2})` }}
-      ></div>
+    <div className="bg-white shadow-md custom-shadow-bottom relative z-10 mt-[25px]">
       {/* <img loading="lazy" src={Wave2} alt="wave 2" /> */}
 
-      <div className="w-[100%] bg-[#8530C1]  px-[100px]   mt-[-10px]  z-[-1]  ">
-        <img
+      <div className="w-[100%] bg-[#8530C1]  px-[100px]   mt-[-10px]  z-[-1]  pt-[50px] ">
+        {/* <img
           loading="lazy"
           src={Zigzag1}
           alt=""
@@ -33,7 +28,7 @@ const KundaApp = ({ children }: Props) => {
           src={FilledZero}
           alt=""
           className=" left-[77%] top-[27%] absolute"
-        />
+        /> */}
 
         {children}
 

@@ -8,23 +8,23 @@ type Props = {
 };
 const WaveCard = ({ children }: Props) => {
   return (
-    <div className="mt-[-250px] relative z-[50] ">
-      <img
+    <div className="">
+      {/* <img
         src={Six}
         alt=""
         className="absolute    top-[22%] left-[7%] z-[100] "
-      />
+      /> */}
       {/* <img
         loading="lazy"
         src={Ellipse3}
         alt=""
         className="absolute left-[-200px] rotate-360 top-[-20%] -z-50"
       /> */}
-      <div
+      {/* <div
         className="bg-cover bg-center  w-full h-52   matt  "
         style={{ backgroundImage: `url(${Wave1})` }}
-      ></div>
-      <div className=" w-full bg-white">{children}</div>
+      ></div> */}
+      <div className="w-full bg-white">{children}</div>
     </div>
   );
 };

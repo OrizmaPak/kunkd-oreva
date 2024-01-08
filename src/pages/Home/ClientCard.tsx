@@ -8,10 +8,19 @@ export type CardTypes = {
   story?: string;
   title?: string;
   body?: string;
+  bg?: string;
 };
-const ClientCard = ({ image, name, location, story }: CardTypes) => {
+const ClientCard = ({
+  image,
+  name,
+  location,
+  story,
+  bg = "white",
+}: CardTypes) => {
   return (
-    <div className="w-[450px]  p-7 rounded-xl  bg-[#FFFFFF] shadow-md ml-[20px] mb-8 pb-4">
+    <div
+      className={`w-[450px]  p-7 rounded-xl  bg-[${bg}] shadow-md ml-[20px] mb-8 pb-4`}
+    >
       <div className="flex items-center mb-6">
         {/* <img
           loading="lazy"
@@ -29,12 +38,12 @@ const ClientCard = ({ image, name, location, story }: CardTypes) => {
           height={100}
         />
         <span className="ml-4 flex flex-col">
-          <span className="font-bold">{name}</span>
+          <span className="font-bold text-[24px]">{name}</span>
           <span>{location}</span>
         </span>
       </div>
       <div className="mt-8">
-        <p className="mb-10 ">{story}</p>
+        <p className="mb-10 text-[#667085] ">{story}</p>
       </div>
     </div>
   );

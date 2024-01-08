@@ -1,11 +1,14 @@
 .ellipse-w {
-  width: clamp(12.5rem, 3.2683rem + 42.2018vw, 41.25rem) !important;
-  right: clamp(3.125rem, 1.3188rem + 8.2569vw, 8.75rem) !important;
+  /* width: clamp(10.5rem, 3.2683rem + 42.2018vw, 1.25rem) !important; */
+  /* right: clamp(3.125rem, 1.3188rem + 8.2569vw, 8.75rem) !important; */
+  /* right: 100px; */
 }
 
 .ellipse11-w {
-  width: clamp(12.5rem, 6.8807rem + 25.6881vw, 30rem) !important;
-  right: clamp(5rem, 2.1904rem + 12.844vw, 13.75rem) !important;
+  /* width: clamp(10.5rem, 6.8807rem + 25.6881vw, 30rem) !important; */
+  /* right: clamp(5rem, 2.1904rem + 12.844vw, 13.75rem) !important; */
+  /* right: 100px; */
+  /* display: none; */
 }
 
 .home-hero-w {

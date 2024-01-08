@@ -12,6 +12,15 @@
   src: url("/public/fonts/HankenGrotesk-Medium.ttf");
 }
 
+@font-face {
+  font-family: "Brico";
+  src: url("/public/fonts/BricolageGrotesque-Medium.ttf");
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/public/fonts/Inter-Regular.ttf");
+}
+
 @layer utilities {
   @variants responsive {
     /* Hide scrollbar for Chrome, Safari and Opera */

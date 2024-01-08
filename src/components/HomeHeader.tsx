@@ -3,16 +3,15 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Button from "./Button";
 import "./homeheader.css";
 
-
 const HomeHeader = () => {
   const navigate = useNavigate();
-   const openInNewTab = (url: string) => {
+  const openInNewTab = (url: string) => {
     const newWindow: Window | null = window.open(url, "_blank");
     if (newWindow) {
       newWindow.opener = null; // Ensure no access to the current window
     }
   };
-// https://kundakids.com/en-ng
+  // https://kundakids.com/en-ng
   return (
     <div className=" w-[100%] bg-white px-8 fixed z-[100] flex justify-center items-center">
       <div className="flex home-header-w font-[500] py-2 text2  justify-between items-center bg-white   ">
@@ -57,8 +56,8 @@ const HomeHeader = () => {
             <span>Schools</span>
           </NavLink>
           <NavLink
-          to="#"
-           onClick={()=>openInNewTab("https://kundakids.com/en-ng")}
+            to="#"
+            onClick={() => openInNewTab("https://kundakids.com/en-ng")}
             className={({ isActive }) =>
               isActive ? " text-black" : "text-black"
             }
@@ -67,7 +66,7 @@ const HomeHeader = () => {
           </NavLink>
           <NavLink
             to="#"
-             onClick={()=>openInNewTab("https://kundakids.com/en-ng")}
+            onClick={() => openInNewTab("https://kundakids.com/en-ng")}
             className={({ isActive }) =>
               isActive ? " text-black" : "text-black"
             }
@@ -76,7 +75,7 @@ const HomeHeader = () => {
           </NavLink>
           <NavLink
             to="#"
-             onClick={()=>openInNewTab("https://kundakids.com/en-ng")}
+            onClick={() => openInNewTab("https://kundakids.com/en-ng")}
             className={({ isActive }) =>
               isActive ? " text-black" : "text-black"
             }
@@ -106,7 +105,7 @@ const HomeHeader = () => {
           <NavLink to="login">
             <span className="text-[#8530C1] cursor-pointer">Login</span>
           </NavLink>
-          <Button  onClick={() => navigate("/signup")} size="md">
+          <Button onClick={() => navigate("/signup")} size="md">
             Enroll
           </Button>
         </div>

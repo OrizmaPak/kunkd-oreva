@@ -9,14 +9,14 @@ const Empower = () => {
     <div>
       <div className="mt-[100px] mb-[50px] max-w-[1000px] mx-auto text-center">
         {/* <KundaApp /> */}
-        <h1 className="header2 text-black font-semibold font-Recoleta my-4">
+        <h1 className="header2 text-[#101828]  font-Brico my-4">
           Empower Educators with Valuable Resources
         </h1>
-        <p className=" font-Hanken left-8 text-[#7E7E89] text-[18px] leading-[30px]">
+        <p className=" font-Hanken left-8 text-[#7E7E89] text-[18px] leading-[30px] ">
           From curriculum-aligned lesson plans to teacher guides and printable
-          materials, our platform equips teachers with the tools they need to
-          engage students, foster critical thinking, and inspire a love for
-          reading.
+          materials, our platform <br />
+          equips teachers with the tools they need to engage students, foster
+          critical thinking, and inspire a love for reading.
         </p>
         <div className="mt-8">
           {/* <LazyLoadImage

@@ -6,9 +6,9 @@ import "./hero.css";
 
 const Hero = () => {
   return (
-    <div className="bg-[rgba(237,28,36,0.06);] pt-14">
+    <div className="bg-white pt-14">
       <div className="max-w-[1200px] w-full mx-auto ">
-        <h1 className=" font-semibold font-Recoleta text-center mt-[100px] header1 ">
+        <h1 className=" text-[#101828] font-Brico text-center mt-[100px] header1 mb-5 ">
           We are Kunda Kids
         </h1>
         <p className=" leading-[30px] text1 text-[#151515]  text-center mb-20">

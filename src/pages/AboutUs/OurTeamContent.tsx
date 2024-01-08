@@ -83,11 +83,6 @@ const OurTeamContent = () => {
       </p>
 
       <div>
-        <p className="mb-20">
-          <strong className="pr-6">Meet The Heads</strong> - - - - - - - - - - -
-          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-          - - - - - -- - - - - - - - - - - - - - - - - - - 
-        </p>
         <div className="grid grid-cols-3 gap-x-28  gap-y-10 my-8">
           {data &&
             data.map((data, index) => {

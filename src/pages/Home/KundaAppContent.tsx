@@ -4,7 +4,7 @@ const KundaAppContent = () => {
   return (
     <div>
       <div className=" max-w-[1000px] mx-auto text-white text-[18px] mb-14 leading-10  ">
-        <h1 className="text-center font-bold text-[40px] text-white mb-4 font-Secondary font-Recoleta header2">
+        <h1 className="text-center text-[40px] text-white mb-4 font-Secondary font-Inter header2">
           The Kunda Kids App
         </h1>
         <p className="text-center font-primary text20">
