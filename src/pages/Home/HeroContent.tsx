@@ -62,7 +62,7 @@ const HeroContent = () => {
         <img
           src={Book}
           alt=""
-          className="absolute  bottom-0  right-[520px] z-50 "
+          className="absolute  bottom-[30px]  right-[500px] z-50 "
         />
         <img
           src={VideoIcon}
@@ -72,7 +72,7 @@ const HeroContent = () => {
         <img
           src={Music}
           alt=""
-          className="absolute  bottom-[-120px] right-[50px] z-50 "
+          className="absolute  bottom-[-80px] right-[30px] z-50 "
         />
       </div>
     </div>
