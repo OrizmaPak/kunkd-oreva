@@ -71,7 +71,7 @@ const data = [
 const OurTeamContent = () => {
   return (
     <div className="max-w-[1000px] w-full mx-auto text-center">
-      <h1 className=" font-semibold font-Recoleta header2 text-black text-center mb-8">
+      <h1 className=" font-Inter header2  text-[#101828] font-semibold text-center mb-8">
         Our Amazing Team
       </h1>
       <p className=" text1 leading-[30px] mb-20">

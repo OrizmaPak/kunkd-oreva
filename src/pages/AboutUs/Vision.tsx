@@ -27,7 +27,7 @@ const Vision = () => {
             />
           </div>
           <div className="basis-1/2  mt-16">
-            <h1 className=" font-semibold font-Recoleta header2 mb-4">
+            <h1 className=" font-Inter header2 mb-4 text-[#101828] font-semibold">
               Our Vision
             </h1>
             <p className="leading-[30px] text1  text-justify">

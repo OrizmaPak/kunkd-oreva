@@ -10,7 +10,7 @@ const Mission = () => {
       <div className="max-w-[1440px]  mx-auto ">
         <div className=" mx-auto flex gap-4 ">
           <div className="basis-1/2 mt-16 px-10">
-            <h1 className="font-bold font-Recoleta header2 mb-4">
+            <h1 className="font-Inter header2 mb-4 text-[#101828] font-semibold">
               Our mission
             </h1>
             <p className="leading-[30px] text1  text-justify">
