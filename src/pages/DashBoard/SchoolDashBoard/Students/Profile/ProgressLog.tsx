@@ -4,18 +4,9 @@ import QuizBg from "@/assets/quizbg.svg";
 import VideoBg from "@/assets/videobg.svg";
 import { TLogData } from "../../Main/Main";
 
-
-
-
-const ProgressLog = ({
-  logData
-}: {
-  logData?:TLogData
-}) => {
-
- 
+const ProgressLog = ({ logData }: { logData?: TLogData }) => {
   return (
-    <div className="bg-white flex flex-col  flex-grow rounded-3xl px-6 py-2 pb-6 ">
+    <div className="bg-white flex flex-col  flex- rounded-3xl px-6 py-2 pb-6 ">
       <div>
         <div className="flex justify-between my-5 ">
           <h1 className="text-[20px] font-bold">Progress Log</h1>
@@ -24,7 +15,7 @@ const ProgressLog = ({
       <div className="grid grid-cols-2 gap-3 flex-grow py-4 ">
         <Card image={Bookbg} title="Stories" total={logData?.stories} />
         <Card image={MusicBg} title="Audiobooks" total={logData?.audio_books} />
-        <Card image={VideoBg} title="Videos" total={logData?.languages}  />
+        <Card image={VideoBg} title="Videos" total={logData?.languages} />
         <Card image={QuizBg} title="quiz" total={logData?.quiz} />
       </div>
     </div>
@@ -43,7 +34,7 @@ const Card = ({
   total?: number;
 }) => {
   return (
-    <div className=" rounded-3xl  p-6 border border-purple-300">
+    <div className=" rounded-3xl  p-6 border-[#FBECFF] border-[2px]">
       <div>
         <img loading="lazy" src={image} alt="image" className="w-[38px]" />
       </div>

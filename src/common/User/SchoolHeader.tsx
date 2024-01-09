@@ -14,10 +14,11 @@ import { useState } from "react";
 import { AiOutlineBell, AiOutlineSearch } from "react-icons/ai";
 import { selectAvatarType } from "@/pages/AfterParentSignIn/SelectProfile";
 import { useQueryClient } from "@tanstack/react-query";
-import { useGetAttemptAllStudentConnect, useGetAttemptStudentConnect } from "@/api/queries";
+import {
+  useGetAttemptAllStudentConnect,
+  useGetAttemptStudentConnect,
+} from "@/api/queries";
 import { TRequestStudents } from "@/pages/DashBoard/TeacherDashboard/Request/Request";
-
-
 
 type THints = {
   id: number;
@@ -43,8 +44,10 @@ const SchoolHeader = ({
   const navigate = useNavigate();
   const [user] = useStore(getUserState);
   const [profiles, setProfiles] = useStore(getProfileState);
+  const [dashboardActive, setDashboardActive] = useState(false);
   const handleDashboard = (e: React.MouseEvent<HTMLButtonElement>) => {
-    localStorage.setItem("schoolDashboard", "true")
+    localStorage.setItem("schoolDashboard", "true");
+    setDashboardActive(true);
     e.preventDefault();
     if (user?.role === "teacher") {
       navigate("../teacherdashboard");
@@ -70,21 +73,25 @@ const SchoolHeader = ({
     (profile: selectAvatarType) => profile.id === Number(currentId)
   );
 
-  console.log("user status",user?.status)
+  console.log("user status", user?.status);
 
-  
-  const {data} = useGetAttemptAllStudentConnect(user?.role === "schoolAdmin")
-  const {data:classConnect} = useGetAttemptStudentConnect(user?.role === "teacher")
-  const schoolConnectList = data?.data?.data?.records 
-  const classConnectList =classConnect?.data?.data?.records
-   
-
+  const { data } = useGetAttemptAllStudentConnect(user?.role === "schoolAdmin");
+  const { data: classConnect } = useGetAttemptStudentConnect(
+    user?.role === "teacher"
+  );
+  const schoolConnectList = data?.data?.data?.records;
+  const classConnectList = classConnect?.data?.data?.records;
 
   return (
     <div className="bg-white w-full fixed top-0 h-[8vh] z-50">
-      <div className="flex text-[#B5B5C3] text-[14px] text3  font-normal top-0 left-0 right-0  mx-auto  app-mai-nwidth-container  w-full   py-4   justify-between items-center bg-white  z-[1000] gap-4  h-[8vh] ">
+      <div className="flex text-[#B5B5C3] text-[14px] text3  font-medium top-0 left-0 right-0  mx-auto  app-mai-nwidth-container  w-full   py-4   justify-between items-center bg-white  z-[1000] gap-4  h-[8vh] ">
         <div className="flex items-center gap-10">
-          <Link to="/">
+          <Link
+            onClick={() => {
+              setDashboardActive(false);
+            }}
+            to="/"
+          >
             <div>
               <img
                 src={KundaLogo}
@@ -98,49 +105,68 @@ const SchoolHeader = ({
 
           <div className="flex gap-8 ">
             <NavLink
+              onClick={() => {
+                setDashboardActive(false);
+              }}
               to={user?.role === "user" ? "/parent" : "/school"}
               // to={"/school"}
               className={({ isActive }) =>
-                isActive ? " text-[#8530C1]" : "text-black"
+                isActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
               }
             >
-              <button>Home</button>
+              <button className="  font-medium">Home</button>
             </NavLink>
 
             <NavLink
+              onClick={() => {
+                setDashboardActive(false);
+              }}
               to="/mylist"
               className={({ isActive }) =>
-                isActive ? " text-[#8530C1]" : "text-black"
+                isActive
+                  ? " text-[#8530C1] font-medium"
+                  : "text-[#B5B5C3] font-medium"
               }
             >
-              <button>My List</button>
+              <button className="text-[16px]  font-medium">My List</button>
             </NavLink>
             <NavLink
+              onClick={() => {
+                setDashboardActive(false);
+              }}
               to="/progressreport"
               className={({ isActive }) =>
-                isActive ? " text-[#8530C1]" : "text-black"
+                isActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
               }
             >
-              <button>Progress Report</button>
+              <button className="text-[16px]  font-medium">
+                Progress Report
+              </button>
             </NavLink>
 
             <p className="w-40  flex justisfy-center item-center">
               {user?.role === "schoolAdmin" && (
                 <button
                   onClick={handleDashboard}
-                  className="text-black block  "
+                  className={` block text-[16px]  font-medium ${
+                    dashboardActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
+                  }`}
                 >
                   School Dashboard
                 </button>
               )}
-              {user?.role === "teacher"  && user?.status === "active"  ?(
+              {user?.role === "teacher" && user?.status === "active" ? (
                 <button
                   onClick={handleDashboard}
-                  className="text-black block  "
+                  className={` block text-[16px]  font-medium ${
+                    dashboardActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
+                  }`}
                 >
                   Teacher Dashboard
                 </button>
-              ):""}
+              ) : (
+                ""
+              )}
             </p>
           </div>
         </div>
@@ -152,22 +178,41 @@ const SchoolHeader = ({
             {" "}
             <Menu.Target>
               <div className="relative">
-              {  user?.role === "schoolAdmin" || user?.role === "teacher" ? <div>
-                  <AiOutlineBell
-                    size={20}
-                    className={" mx-auto"}
-                    color="black"
-                  />
-                  <p className={`absolute -top-4 text-white  right-[-14px] py-[1px] rounded-full px-[3px] ${schoolConnectList?.length > 0|| classConnectList?.length > 0 ? "bg-red-700": "bg-white"}  `} >{schoolConnectList?.length || classConnectList?.length || 0}</p>
-                </div> : ""}
+                {user?.role === "schoolAdmin" || user?.role === "teacher" ? (
+                  <div>
+                    <AiOutlineBell
+                      size={20}
+                      className={" mx-auto"}
+                      color="black"
+                    />
+                    <p
+                      className={`absolute -top-4 text-white  right-[-14px] py-[1px] rounded-full px-[3px] ${
+                        schoolConnectList?.length > 0 ||
+                        classConnectList?.length > 0
+                          ? "bg-red-700"
+                          : "bg-white"
+                      }  `}
+                    >
+                      {schoolConnectList?.length ||
+                        classConnectList?.length ||
+                        0}
+                    </p>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             </Menu.Target>
             <Menu.Dropdown>
-             
               <Menu.Item>
-                  <SchNotification  data={user?.role ==="schoolAdmin" ? schoolConnectList : classConnectList} />
-             </Menu.Item>
-            
+                <SchNotification
+                  data={
+                    user?.role === "schoolAdmin"
+                      ? schoolConnectList
+                      : classConnectList
+                  }
+                />
+              </Menu.Item>
             </Menu.Dropdown>
           </Menu>
 
@@ -205,7 +250,7 @@ const SchoolHeader = ({
                     </Menu.Item>
                   ))}
 
-                  <Menu.Item  onClick={() => navigate("/account")}>
+                  <Menu.Item onClick={() => navigate("/account")}>
                     <button
                       onClick={() => navigate("/account")}
                       className="p-2 px-4 hover:cursor-pointer hover:text-[#8530C1] flex gap-2 items-center"
@@ -215,7 +260,7 @@ const SchoolHeader = ({
                     </button>
                   </Menu.Item>
                   <hr />
-                  <Menu.Item  onClick={handLogOut}>
+                  <Menu.Item onClick={handLogOut}>
                     <button
                       onClick={handLogOut}
                       className="p-2 px-4  hover:cursor-pointer  text-red-500"
@@ -305,8 +350,7 @@ const SearchService = () => {
   //    }, {})
   //  );
 
- 
-  const removeDuplicatesByKey = (array: THints[], key:  keyof THints) => {
+  const removeDuplicatesByKey = (array: THints[], key: keyof THints) => {
     const seen = new Set();
     return array?.filter((item) => {
       const value = item[key];
@@ -352,34 +396,39 @@ const SearchService = () => {
 
 export default SchoolHeader;
 
-const SchNotification =({ data}: {data:TRequestStudents[]})=>{
-
-console.log("dataaaa--------",data)
-const [user] = useStore(getUserState);
-const navigate = useNavigate()
+const SchNotification = ({ data }: { data: TRequestStudents[] }) => {
+  console.log("dataaaa--------", data);
+  const [user] = useStore(getUserState);
+  const navigate = useNavigate();
   return (
     <>
-    {data?.length  < 1 ||  !data && <p>No notifications</p>}
-   {data?.length > 0 && <div className="py-1 ">
-     {data?.map((each, index)=>
-      <div key={index}>
-      <hr />
-      <p onClick={()=>{
-        if(user?.role === "schoolAdmin"){
-        navigate(`/schooldashboard/request`) 
-        }else if (user?.role === "teacher"){
-        navigate(`/teacherdashboard/request`) 
-        }
-      }} className="flex my-2 px-3 justify-center items-center gap-2">
-        <span className="text-[#8530C1] ml-4">{each?.firstname}{" "}{each.lastname} has made a request to your {user?.role === "schoolAdmin"? "School" : "class"}</span>
-      </p>
-      </div>
-     ) }
-    </div>}
+      {data?.length < 1 || (!data && <p>No notifications</p>)}
+      {data?.length > 0 && (
+        <div className="py-1 ">
+          {data?.map((each, index) => (
+            <div key={index}>
+              <hr />
+              <p
+                onClick={() => {
+                  if (user?.role === "schoolAdmin") {
+                    navigate(`/schooldashboard/request`);
+                  } else if (user?.role === "teacher") {
+                    navigate(`/teacherdashboard/request`);
+                  }
+                }}
+                className="flex my-2 px-3 justify-center items-center gap-2"
+              >
+                <span className="text-[#8530C1] ml-4">
+                  {each?.firstname} {each.lastname} has made a request to your{" "}
+                  {user?.role === "schoolAdmin" ? "School" : "class"}
+                </span>
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
     </>
-
   );
-
 };
 
 // const ParentNotification = ({ name }: { name: string }) => {

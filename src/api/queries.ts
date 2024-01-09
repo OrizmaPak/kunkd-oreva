@@ -76,7 +76,7 @@ import {
   LearningHour,
   RecommendedAudiobooks,
   GetClassTotalTimeSpent,
-  ConnectStripe 
+  ConnectStripe,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -131,7 +131,7 @@ export const useSetPassword = () => {
 // Set Teacher password
 export const useTeacherSetPassword = () => {
   return useMutation({
-    mutationFn: SetTeacherPassword ,
+    mutationFn: SetTeacherPassword,
   });
 };
 // Login
@@ -210,7 +210,11 @@ export const useContentForHome = () => {
   return useQuery({ queryKey: ["ContentForHome"], queryFn: ContentForHome });
 };
 
-export const useGetContentById = (contentId: string, userId: string, open?:()=>void) => {
+export const useGetContentById = (
+  contentId: string,
+  userId: string,
+  open?: () => void
+) => {
   const [user] = useStore(getUserState);
   const navigate = useNavigate();
   return useQuery({
@@ -219,9 +223,9 @@ export const useGetContentById = (contentId: string, userId: string, open?:()=>v
     onSuccess: (response: unknown) => {
       const res = response as ApiResponse<unknown>;
       const status = res.data.status;
-    
+
       if (
-        status === false ||
+        status === false &&
         res.data.message === "Number of allowed contents reached!"
       ) {
         if (user?.role === "user") {
@@ -230,15 +234,14 @@ export const useGetContentById = (contentId: string, userId: string, open?:()=>v
             title: `Notification`,
             message: res.data.message,
           });
-        } 
-        else if (user?.role === "schoolAdmin") {
+        } else if (user?.role === "schoolAdmin") {
           navigate("/kundakidsunlimited");
           notifications.show({
             title: `Notification`,
             message: res.data.message,
-          })
-        }else if (user?.role === "teacher" ){
-       open && open()
+          });
+        } else if (user?.role === "teacher") {
+          open && open();
         }
       }
     },
@@ -380,11 +383,11 @@ export const useStripeInit = () => {
   });
 };
 
-export const useConnectStripe=()=>{
+export const useConnectStripe = () => {
   return useMutation({
-    mutationFn:ConnectStripe 
-  })
-}
+    mutationFn: ConnectStripe,
+  });
+};
 
 export const useLikedContent = () => {
   return useMutation({
@@ -432,22 +435,32 @@ export const useConnectStudentData = () => {
     mutationFn: ConnectStudentData,
   });
 };
-export const useGetClassList = (status? : string, page?:string)=> {
-  return useQuery({ queryKey: ["GetClassList", status, page], queryFn: ()=>GetClassList(status as string, page as string) });
+export const useGetClassList = (status?: string, page?: string) => {
+  return useQuery({
+    queryKey: ["GetClassList", status, page],
+    queryFn: () => GetClassList(status as string, page as string),
+  });
 };
 
 export const useGetSchool = () => {
   return useQuery({ queryKey: ["GetSchool"], queryFn: GetSchool });
 };
 
-export const useGetTeacherList = (status?:string, page?:string) => {
-  return useQuery({ queryKey: ["GetTeacherList", status, page], queryFn:()=> GetTeacherList(status as string , page as string) });
+export const useGetTeacherList = (status?: string, page?: string) => {
+  return useQuery({
+    queryKey: ["GetTeacherList", status, page],
+    queryFn: () => GetTeacherList(status as string, page as string),
+  });
 };
 
-export const useGetAdmittedStudentsInSchool = ( status: string, page?:string) => {
+export const useGetAdmittedStudentsInSchool = (
+  status: string,
+  page?: string
+) => {
   return useQuery({
     queryKey: ["GetStudents", status, page],
-    queryFn: ()=>GetAdmittedStudentsInSchool(status as string , page as string),
+    queryFn: () =>
+      GetAdmittedStudentsInSchool(status as string, page as string),
   });
 };
 
@@ -458,20 +471,19 @@ export const useGetOngoingContents = (profileId: string) => {
   });
 };
 
-export const useGetAttemptStudentConnect = (check=true, page?:string) => {
+export const useGetAttemptStudentConnect = (check = true, page?: string) => {
   return useQuery({
     queryKey: ["GetAttemptStudentConnect", check, page],
-    queryFn:()=> GetAttemptStudentConnect(page as string),
-    enabled:check
+    queryFn: () => GetAttemptStudentConnect(page as string),
+    enabled: check,
   });
 };
 
-
-export const useGetAttemptAllStudentConnect = (check=true, page?:string) => {
+export const useGetAttemptAllStudentConnect = (check = true, page?: string) => {
   return useQuery({
     queryKey: ["GetAttemptAllStudentConnect", check, page],
-    queryFn: ()=>GetAttemptAllStudentConnect(page as string),
-    enabled: check 
+    queryFn: () => GetAttemptAllStudentConnect(page as string),
+    enabled: check,
   });
 };
 
@@ -507,10 +519,13 @@ export const useRejectStudentAdmission = () => {
   });
 };
 
-export const useGetAdmittedStudentsInClass = (status: string, page?:string) => {
+export const useGetAdmittedStudentsInClass = (
+  status: string,
+  page?: string
+) => {
   return useQuery({
     queryKey: ["GetAdmittedStudentsInClass", status, page],
-    queryFn: ()=>GetAdmittedStudentsInClass(status, page as string) ,
+    queryFn: () => GetAdmittedStudentsInClass(status, page as string),
   });
 };
 
@@ -531,73 +546,108 @@ export const useCancelSubscription = () => {
   return useMutation({
     mutationFn: CancelSubscription,
   });
-}
-
+};
 
 export const useGetSchoolProfileForStudent = (payload = "") => {
-  return useQuery({ 
-    queryKey : ["get-profile-for-parent", payload], 
-    queryFn: ()=>GetSchoolProfileForStudent(payload), 
-    enabled : !!(payload.length > 0)})
-}
+  return useQuery({
+    queryKey: ["get-profile-for-parent", payload],
+    queryFn: () => GetSchoolProfileForStudent(payload),
+    enabled: !!(payload.length > 0),
+  });
+};
 
 export const useGetUpdatedProfile = () => {
-  return useQuery({queryKey:["GetUpdatedProfile"], queryFn:GetUpdatedProfile})
-}
+  return useQuery({
+    queryKey: ["GetUpdatedProfile"],
+    queryFn: GetUpdatedProfile,
+  });
+};
 
-export const useGetSchoolContentStat = (start:string, end:string)=>{
-  return useQuery({queryKey:["GetSchoolContentStat", start, end], queryFn:()=>GetSchoolContentStat(start, end)})
-}
+export const useGetSchoolContentStat = (start: string, end: string) => {
+  return useQuery({
+    queryKey: ["GetSchoolContentStat", start, end],
+    queryFn: () => GetSchoolContentStat(start, end),
+  });
+};
 
-export const useGetClassContentStat = (id:string, start:string, end:string, )=>{
-  return useQuery({queryKey:["GetClassContentStat", id, start, end], queryFn:()=>GetClassContentStat(id, start,end), enabled: !!Number(id)})
-}
+export const useGetClassContentStat = (
+  id: string,
+  start: string,
+  end: string
+) => {
+  return useQuery({
+    queryKey: ["GetClassContentStat", id, start, end],
+    queryFn: () => GetClassContentStat(id, start, end),
+    enabled: !!Number(id),
+  });
+};
 
-export const useActiveClass = ()=>{
-  return useMutation({mutationFn:ActiveClass})
-}
+export const useActiveClass = () => {
+  return useMutation({ mutationFn: ActiveClass });
+};
 
-export const useDisableClass = ()=>{
-  return useMutation({mutationFn:DisableClass})
-}
+export const useDisableClass = () => {
+  return useMutation({ mutationFn: DisableClass });
+};
 
-export const useDisableSchoolStudent = ()=>{
-  return useMutation({mutationFn:DisableSchoolStudent})
-}
+export const useDisableSchoolStudent = () => {
+  return useMutation({ mutationFn: DisableSchoolStudent });
+};
 
-export const useDisableSchoolTeacher = ()=>{
-  return useMutation({mutationFn:DisableSchoolTeacher})
-}
+export const useDisableSchoolTeacher = () => {
+  return useMutation({ mutationFn: DisableSchoolTeacher });
+};
 
-export const useEnableSchoolTeacher = ()=>{
-  return useMutation({mutationFn:EnableSchoolTeacher})
-}
+export const useEnableSchoolTeacher = () => {
+  return useMutation({ mutationFn: EnableSchoolTeacher });
+};
 
-export const useEditClassName = ()=>{
-  return useMutation({mutationFn:EditClassName})
-}
+export const useEditClassName = () => {
+  return useMutation({ mutationFn: EditClassName });
+};
 
-export const useAllProgressContent = (id:number)=>{
-  return useQuery({queryKey:["AllProgressContent", id], queryFn:()=>AllProgressContent(id)})
-}
+export const useAllProgressContent = (id: number) => {
+  return useQuery({
+    queryKey: ["AllProgressContent", id],
+    queryFn: () => AllProgressContent(id),
+  });
+};
 
-export const useGetLicense = ()=>{
-return useQuery({queryKey:["GetLicense"], queryFn:GetLicense})
-}
+export const useGetLicense = () => {
+  return useQuery({ queryKey: ["GetLicense"], queryFn: GetLicense });
+};
 
-export const useGetSchoolStudentStat  = (id:string, start:string, end:string)=>{
-  return useQuery({queryKey:["GetSchoolStudentStat", id, start, end], queryFn:()=>GetSchoolStudentStat(id, start, end)})
-}
+export const useGetSchoolStudentStat = (
+  id: string,
+  start: string,
+  end: string
+) => {
+  return useQuery({
+    queryKey: ["GetSchoolStudentStat", id, start, end],
+    queryFn: () => GetSchoolStudentStat(id, start, end),
+  });
+};
 
-export const useLearningHour = ()=>{
-  return useMutation({mutationFn:LearningHour})
-}
+export const useLearningHour = () => {
+  return useMutation({ mutationFn: LearningHour });
+};
 
-export const useRecommendedAudiobooks = (id:string)=>{
-  return useQuery({queryKey:["RecommendedAudiobooks", id], queryFn:()=>RecommendedAudiobooks(id)})
-}
+export const useRecommendedAudiobooks = (id: string) => {
+  return useQuery({
+    queryKey: ["RecommendedAudiobooks", id],
+    queryFn: () => RecommendedAudiobooks(id),
+  });
+};
 
-export const useGetClassTotalTimeSpent = (id:string, start:string, end:string)=>{
-  return useQuery({queryKey:["GetClassTotalTimeSpent", id, start, end], queryFn:()=>GetClassTotalTimeSpent(id, start, end), enabled:!!Number(id)})
-}
+export const useGetClassTotalTimeSpent = (
+  id: string,
+  start: string,
+  end: string
+) => {
+  return useQuery({
+    queryKey: ["GetClassTotalTimeSpent", id, start, end],
+    queryFn: () => GetClassTotalTimeSpent(id, start, end),
+    enabled: !!Number(id),
+  });
+};
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

@@ -33,12 +33,10 @@ import {
 } from "react-share";
 import "video-react/dist/video-react.css";
 import { TStoryContent } from "../Stories/Stories1/Stories1";
-import {  Modal,  } from "@mantine/core";
-import { useDisclosure,  } from "@mantine/hooks";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import TeacherNotificationModal from "@/components/TeacherWarningModal";
 import useTimeSpent from "@/hooks/useTimeSpent";
-
-
 
 type TRecommendedVideo = {
   id: number;
@@ -105,7 +103,7 @@ const VideoPlayer = () => {
     user?.user_id?.toString() as string,
     open
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
-  const mediaContent = data?.data.data
+  const mediaContent = data?.data.data;
   const { data: recommendedData, isLoading: recommendedIsLoading } =
     useGetRecommendedVideo(contentId?.toString() as string);
   const recommendedVideos = recommendedData?.data?.data.recommended_contents;
@@ -117,8 +115,7 @@ const VideoPlayer = () => {
   const { mutate } = useContentTracking();
   const profileId = localStorage.getItem("profileId");
   const [delay, setDelay] = useState(0);
-  useTimeSpent(Number(contentId),Number(profileId) )
-
+  useTimeSpent(Number(contentId), Number(profileId));
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
@@ -131,40 +128,38 @@ const VideoPlayer = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [videoRef.current?.paused ]);
+  }, [videoRef.current?.paused]);
 
   useEffect(() => {
-
-
     const abortControllerRef = new AbortController();
-
     // console.log("useEffect is running " ,pageNumber, page, pageTotal, isReading, volume)
     const handleUpdateData = async () => {
       try {
-    mutate(
-      {
-        profile_id: Number(profileId),
-        content_id: Number(contentId),
-        status: "ongoing",
-        pages_read: Math.ceil(currentVideoTime),
-        timespent: Math.ceil(currentVideoTime),
-        signal:abortControllerRef.signal
-      },
-      {
-        onSuccess(data) {
-          console.log("success", data.data.message);
-        },
-        onError(err) {
-          notifications.show({
-            title: `Notification`,
-            message: getApiErrorMessage(err),
-          });
-        },
+        mutate(
+          {
+            profile_id: Number(profileId),
+            content_id: Number(contentId),
+            status: "ongoing",
+            pages_read: Math.ceil(currentVideoTime),
+            timespent: Math.ceil(currentVideoTime),
+            signal: abortControllerRef.signal,
+          },
+          {
+            onSuccess(data) {
+              console.log("success", data.data.message);
+            },
+            onError(err) {
+              notifications.show({
+                title: `Notification`,
+                message: getApiErrorMessage(err),
+              });
+            },
+          }
+        );
+      } catch (err) {
+        // Handle errors if needed
       }
-    )}
-    catch (err) {
-      // Handle errors if needed
-    }}
+    };
 
     handleUpdateData();
 
@@ -173,35 +168,38 @@ const VideoPlayer = () => {
       abortControllerRef.abort();
       // queryClient.cancelMutations();
     };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-
-
-
-    // mutate(
-    //   {
-    //     profile_id: Number(profileId),
-    //     content_id: Number(contentId),
-    //     status: "ongoing",
-    //     pages_read: Math.ceil(currentVideoTime),
-    //     timespent: Math.ceil(currentVideoTime),
-    //   },
-    //   {
-    //     onSuccess(data) {
-    //       console.log("success", data.data.message);
-    //     },
-    //     onError(err) {
-    //       notifications.show({
-    //         title: `Notification`,
-    //         message: getApiErrorMessage(err),
-    //       });
-    //     },
-    //   }
-    // );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [delay]);
 
-  const { data: likeData, refetch } = useGetLikedContent(profileId as string ) ;
+  const handleVideoComplete = async () => {
+    try {
+      mutate(
+        {
+          profile_id: Number(profileId),
+          content_id: Number(contentId),
+          status: "complete",
+          pages_read: Math.ceil(currentVideoTime),
+          timespent: Math.ceil(currentVideoTime),
+          // signal: abortControllerRef.signal,
+        },
+        {
+          onSuccess(data) {
+            console.log("success", data.data.message);
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    } catch (err) {
+      // Handle errors if needed
+    }
+  };
+
+  const { data: likeData, refetch } = useGetLikedContent(profileId as string);
   const likeContents: TStoryContent[] = likeData?.data.data.records;
   const { mutate: likeMutate } = useLikedContent();
   const { mutate: unFavoriteMutate } = useUnLikedContent();
@@ -259,11 +257,9 @@ const VideoPlayer = () => {
     }
   };
 
-
-
   return (
     <>
-    <Modal
+      <Modal
         radius={10}
         padding={30}
         size={"md"}
@@ -274,152 +270,157 @@ const VideoPlayer = () => {
           blur: 10,
         }}
         closeOnClickOutside={false}
-       
         withCloseButton={false}
         centered
       >
-        <TeacherNotificationModal onCancel={close}/>
+        <TeacherNotificationModal onCancel={close} />
       </Modal>
-    
-    <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col  bg-[#fff7fd]">
-      <div className="">
-        <Skeleton visible={isLoading} radius={"xl"}>
-          <AfricanLanguagesNav
-            category="Africanlanguages"
-            lanType={lan_type}
-            title={video && video.name}
-            subCategoryId={videoData?.sub_category_id.toString()}
-            subCategoryName={videoData?.sub_category_name}
-          />
-        </Skeleton>
-      </div>
-      {!isfinish ? (
-        <div className="  flex-grow mt-5  gap-10 rounded-3xl flex w-[100%]">
-          <Skeleton visible={isLoading}>
-            <div className="  basis-full  flex flex-col">
-              <div className="basis">
-                <div className="  rounded-t-3xl flex flex-col relative group">
-                  <button
-                    onClick={() => setIsFinsh(true)}
-                    className="py-3  text-[#8530C1]   z-50 px-8 flex gap-4 justify-center items-center rounded-3xl bg-white right-8  top-4 absolute"
-                  >
-                    Finish
-                  </button>
-                  {video?.file && (
-                    <ReactHlsPlayer
-                      className=" rounded-t-3xl flex-grow"
-                      // poster={video.thumbnail}
-                      src={video?.file}
-                      autoPlay
-                      controls={true}
-                      playerRef={videoRef}
-                      // hlsConfig={{
-                      //   startPosition: 10,
-                      // }}
-                      onTimeUpdate={(event) => {
-                        setCurrentVideotime(+event.currentTarget.currentTime);
-                      }}
-                      width="100%"
-                      height={"200px"}
-                    />
-                  )}
-                </div>
-                <div className=" bg-white py-8  rounded-b-3xl px-24 flex justify-between  items-center">
-                  <p className="text-[20px] font-bold ">{video?.name}</p>
-                  <p className="flex gap-5 text-[#8530C1]">
-                    <button
-                      onClick={handleLikedContent}
-                      className="py-3 px-7 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]"
-                    >
-                      <img
-                        loading="lazy"
-                        src={SaveIcon}
-                        alt="icon"
-                        className="w-[20px]"
-                      />
-                      <span>Save</span>
-                    </button>
-                    <Menu shadow="md" width={200}>
-                      <Menu.Target>
-                        <button className="py-3 px-7 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]">
-                          <img
-                            loading="lazy"
-                            src={ShareIcon}
-                            alt="icon"
-                            className="w-[20px]"
-                          />
 
-                          <span>Share</span>
-                        </button>
-                      </Menu.Target>
-
-                      <Menu.Dropdown>
-                        <div className="flex justify-center items-center">
-                          <Menu.Item>
-                            <TwitterShareButton url={video?.file as string}>
-                              <TwitterIcon size={30} />
-                            </TwitterShareButton>
-                          </Menu.Item>
-                          <Menu.Item>
-                            <FacebookShareButton url={video?.file as string}>
-                              <FacebookIcon size={30} />
-                            </FacebookShareButton>
-                          </Menu.Item>
-                          <Menu.Item>
-                            <WhatsappShareButton url={video?.file as string}>
-                              <WhatsappIcon size={30} />
-                            </WhatsappShareButton>
-                          </Menu.Item>
-                        </div>
-                      </Menu.Dropdown>
-                    </Menu>
-                  </p>
-                </div>
-
-                <div className="mt-4 bg-white left-10 p-10 rounded-3xl leading-10" >
-                  <p  dangerouslySetInnerHTML={{ __html: `${mediaContent?.web_synopsis}`}}> 
-                  </p>
-                </div>
-              </div>
-
-              <div></div>
-            </div>
+      <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col  bg-[#fff7fd]">
+        <div className="">
+          <Skeleton visible={isLoading} radius={"xl"}>
+            <AfricanLanguagesNav
+              category="Africanlanguages"
+              lanType={lan_type}
+              title={video && video.name}
+              subCategoryId={videoData?.sub_category_id.toString()}
+              subCategoryName={videoData?.sub_category_name}
+            />
           </Skeleton>
-          <div className="  basis-3/6 rounded-3xl bg-white px-10">
-            <h1 className="text-[24px]  font-semibold font-Recoleta my-3 ">
-              Recommended Videos
-            </h1>
-            <div>
-              {recommendedIsLoading
-                ? Array(6)
-                    .fill(1)
-                    .map((arr, index) => (
-                      <Skeleton
-                        key={index}
-                        height={100}
-                        className="mb-5"
-                        visible={recommendedIsLoading}
-                      >
-                        {arr}
-                      </Skeleton>
-                    ))
-                : recommendedData &&
-                  recommendedVideos
-                    ?.slice(1, 6)
-                    .map((data: TRecommendedVideo, index: number) => (
-                      <RecommendedVideoCard
-                        subCategory={videoData?.sub_category_name}
-                        key={index}
-                        {...data}
+        </div>
+        {!isfinish ? (
+          <div className="  flex-grow mt-5  gap-10 rounded-3xl flex w-[100%]">
+            <Skeleton visible={isLoading}>
+              <div className="  basis-full  flex flex-col">
+                <div className="basis">
+                  <div className="  rounded-t-3xl flex flex-col relative group">
+                    <button
+                      onClick={() => setIsFinsh(true)}
+                      className="py-3  text-[#8530C1]   z-50 px-8 flex gap-4 justify-center items-center rounded-3xl bg-white right-8  top-4 absolute"
+                    >
+                      Finish
+                    </button>
+                    {video?.file && (
+                      <ReactHlsPlayer
+                        className=" rounded-t-3xl flex-grow"
+                        // poster={video.thumbnail}
+                        src={video?.file}
+                        autoPlay
+                        controls={true}
+                        playerRef={videoRef}
+                        // hlsConfig={{
+                        //   startPosition: 10,
+                        // }}
+                        onEnded={() => {
+                          handleVideoComplete();
+                        }}
+                        onTimeUpdate={(event) => {
+                          setCurrentVideotime(+event.currentTarget.currentTime);
+                        }}
+                        width="100%"
+                        height={"200px"}
                       />
-                    ))}
+                    )}
+                  </div>
+                  <div className=" bg-white py-8  rounded-b-3xl px-24 flex justify-between  items-center">
+                    <p className="text-[20px] font-bold ">{video?.name}</p>
+                    <p className="flex gap-5 text-[#8530C1]">
+                      <button
+                        onClick={handleLikedContent}
+                        className="py-3 px-7 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]"
+                      >
+                        <img
+                          loading="lazy"
+                          src={SaveIcon}
+                          alt="icon"
+                          className="w-[20px]"
+                        />
+                        <span>Save</span>
+                      </button>
+                      <Menu shadow="md" width={200}>
+                        <Menu.Target>
+                          <button className="py-3 px-7 flex gap-4 justify-center items-center rounded-3xl bg-[#FBECFF]">
+                            <img
+                              loading="lazy"
+                              src={ShareIcon}
+                              alt="icon"
+                              className="w-[20px]"
+                            />
+
+                            <span>Share</span>
+                          </button>
+                        </Menu.Target>
+
+                        <Menu.Dropdown>
+                          <div className="flex justify-center items-center">
+                            <Menu.Item>
+                              <TwitterShareButton url={video?.file as string}>
+                                <TwitterIcon size={30} />
+                              </TwitterShareButton>
+                            </Menu.Item>
+                            <Menu.Item>
+                              <FacebookShareButton url={video?.file as string}>
+                                <FacebookIcon size={30} />
+                              </FacebookShareButton>
+                            </Menu.Item>
+                            <Menu.Item>
+                              <WhatsappShareButton url={video?.file as string}>
+                                <WhatsappIcon size={30} />
+                              </WhatsappShareButton>
+                            </Menu.Item>
+                          </div>
+                        </Menu.Dropdown>
+                      </Menu>
+                    </p>
+                  </div>
+
+                  <div className="mt-4 bg-white left-10 p-10 rounded-3xl leading-10">
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: `${mediaContent?.web_synopsis}`,
+                      }}
+                    ></p>
+                  </div>
+                </div>
+
+                <div></div>
+              </div>
+            </Skeleton>
+            <div className="  basis-3/6 rounded-3xl bg-white px-10">
+              <h1 className="text-[24px]  font-semibold font-Recoleta my-3 ">
+                Recommended Videos
+              </h1>
+              <div>
+                {recommendedIsLoading
+                  ? Array(6)
+                      .fill(1)
+                      .map((arr, index) => (
+                        <Skeleton
+                          key={index}
+                          height={100}
+                          className="mb-5"
+                          visible={recommendedIsLoading}
+                        >
+                          {arr}
+                        </Skeleton>
+                      ))
+                  : recommendedData &&
+                    recommendedVideos
+                      ?.slice(1, 6)
+                      .map((data: TRecommendedVideo, index: number) => (
+                        <RecommendedVideoCard
+                          subCategory={videoData?.sub_category_name}
+                          key={index}
+                          {...data}
+                        />
+                      ))}
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        <WelDone />
-      )}
-    </div>
+        ) : (
+          <WelDone />
+        )}
+      </div>
     </>
   );
 };

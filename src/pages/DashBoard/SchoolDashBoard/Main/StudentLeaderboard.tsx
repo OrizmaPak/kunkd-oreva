@@ -19,7 +19,7 @@ const StudentLeaderboard = ({
 
       <div className="grid grid-cols-2 mt-4 text-gray-400 text3">
         <span>Name</span>
-        <span className="flex justify-center">Class</span>
+        <span className="flex justify-end text-[14px] pr-4">Class</span>
       </div>
       <hr className="my-2" />
 
@@ -30,14 +30,14 @@ const StudentLeaderboard = ({
                 <h1 className="w-full">{array}</h1>
               </Skeleton>
             ))
-          : data?.slice(0, 9).map((data: TRequestStudents, index) => {
+          : data?.slice(0, 7).map((data: TRequestStudents, index) => {
               return <Row key={index} data={data} />;
             })}
       </div>
 
-      <div className="flex justify-end items-center gap-4 ">
+      <div className="flex justify-end items-center gap-4 mt-4 ">
         <button onClick={() => navigate("student")} className="flex gap-2">
-          <span className="text3 font-medium">See more</span>
+          <span className="text3 font-medium  font-Inter">See more</span>
           <BsChevronRight size={18} />
         </button>
       </div>
@@ -48,12 +48,15 @@ const StudentLeaderboard = ({
 export default StudentLeaderboard;
 
 const Row = ({ data }: { data: TRequestStudents }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <>
-      <div onClick={()=>{
-        navigate(`student/profile/${data.id}`)
-      }} className="hover:cursor-pointer    border-b-[1px] border-[#eee]  py-4 font-medium   grid grid-cols-2 ">
+      <div
+        onClick={() => {
+          navigate(`student/profile/${data.id}`);
+        }}
+        className="hover:cursor-pointer    border-b-[1px] border-[#eee]  py-4 font-medium   grid grid-cols-2  text-[#151515]"
+      >
         <span className="flex gap-2 items-center  ">
           <img
             loading="lazy"
@@ -65,7 +68,7 @@ const Row = ({ data }: { data: TRequestStudents }) => {
             {data?.firstname} {data?.lastname}
           </span>
         </span>
-        <span className="flex justify-center  items-center">
+        <span className="flex justify-end  items-center pr-4">
           {data?.class?.class_name}
         </span>
         <div className="flex justify-center"></div>

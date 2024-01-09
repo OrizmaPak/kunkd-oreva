@@ -2,21 +2,27 @@ import UserIcon from "@/assets/usericon.svg";
 
 import { TSchoolStudentStat } from ".";
 
-const MyTeacher = ({schoolStudentStat}:{schoolStudentStat:TSchoolStudentStat}) => {
+const MyTeacher = ({
+  schoolStudentStat,
+}: {
+  schoolStudentStat: TSchoolStudentStat;
+}) => {
   return (
-    <div className="py-2 bg-white px-3 rounded-3xl flex-grow pb-4">
-      <h1 className="font-bold text-[20px]">My Teacher</h1>
-      <div className="flex  justify-between items-center mt-8 ">
+    <div className="p-5 bg-white rounded-3xl flex-grow pb-4">
+      <h1 className="font-semibold text-[16px] leading-[30px]">My Teacher</h1>
+      <div className="flex gap-4 items-center mt-8 ">
         <img
           loading="lazy"
           src={schoolStudentStat?.teacher_picture || UserIcon}
           alt="fgrase"
-          className="w-[70px]  rounded-full"
+          className="w-[40px]  rounded-full"
         />
 
-        <p className="flex flex-col ">
-          <p className="font-bold ">{schoolStudentStat?.teacher_name}</p>
-          <p>{schoolStudentStat?.teacher_email}</p>
+        <p className="">
+          <p className="font-bold leading-[30px] ">
+            {schoolStudentStat?.teacher_name}
+          </p>
+          <p className="mt-0">{schoolStudentStat?.teacher_email}</p>
         </p>
       </div>
     </div>

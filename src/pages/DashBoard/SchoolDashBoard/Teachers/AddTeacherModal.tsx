@@ -11,11 +11,11 @@ import UploadPicture from "./UploadPicture";
 const AddTeacherModal = ({
   opened,
   toggle,
-  openSchNotifications
+  openSchNotifications,
 }: {
   opened: boolean;
   toggle: () => void;
-  openSchNotifications:()=>void
+  openSchNotifications: () => void;
 }) => {
   const [modalStep, setModalStep] = useState(STEP_1);
   const handleContinue = () => {
@@ -27,61 +27,66 @@ const AddTeacherModal = ({
   const { mutate, isLoading } = useAddTeacherData();
 
   const handleAddTeacherForm = (val: File) => {
-    if(val){
-       const reader = new FileReader();
+    if (val) {
+      const reader = new FileReader();
 
-    reader.onload = function (event) {
-      const result = event?.target?.result as string; // Extract base64 data
-      const base64String = result;
+      reader.onload = function (event) {
+        const result = event?.target?.result as string; // Extract base64 data
+        const base64String = result;
 
+        mutate(
+          {
+            firstname: teacherData?.firstname,
+            lastname: teacherData?.lastname,
+            email: teacherData?.email,
+            redirect_url: "http://localhost:5173/passwordsetup",
+            // redirect_url:"https://dev-kundakids.vercel.app/passwordsetup",
+
+            // password: teacherData?.password,
+            class_id: Number(teacherData?.classid),
+            gender_id: Number(teacherData?.genderid),
+            image: base64String,
+          },
+          {
+            onSuccess(data) {
+              queryClient.invalidateQueries(["GetTeacherList"]);
+              toggle();
+              notifications.show({
+                title: `Notification`,
+                message: data.data.message,
+              });
+            },
+
+            onError(err) {
+              toggle();
+              if (
+                getApiErrorMessage(err) ===
+                "Please upgrade your license to add more teachers"
+              ) {
+                openSchNotifications();
+              }
+              notifications.show({
+                title: `Notification`,
+                message: getApiErrorMessage(err),
+              });
+            },
+          }
+        );
+      };
+
+      reader.readAsDataURL(val);
+    } else {
       mutate(
         {
           firstname: teacherData?.firstname,
           lastname: teacherData?.lastname,
           email: teacherData?.email,
-          redirect_url:"http://localhost:5173/passwordsetup",
-          // redirect_url:"https://dev-kundakids.vercel.app/passwordsetup",
+          // redirect_url:"http://localhost:5173/passwordsetup",
+          redirect_url: "https://dev-kundakids.vercel.app/passwordsetup",
 
           // password: teacherData?.password,
           class_id: Number(teacherData?.classid),
           gender_id: Number(teacherData?.genderid),
-          image: base64String,
-        },
-        {
-          onSuccess(data) {
-            queryClient.invalidateQueries(["GetTeacherList"]);
-            toggle();
-            notifications.show({
-              title: `Notification`,
-              message: data.data.message,
-            });
-          },
-
-          onError(err) {
-            toggle();
-            openSchNotifications()
-            notifications.show({
-              title: `Notification`,
-              message: getApiErrorMessage(err),
-            });
-          },
-        }
-      );
-    };
-
-    reader.readAsDataURL(val);
-    }else{
-       mutate(
-        {
-          firstname: teacherData?.firstname,
-          lastname: teacherData?.lastname,
-          email: teacherData?.email,
-          // redirect_url:"http://localhost:5173/passwordsetup",
-          redirect_url:"https://dev-kundakids.vercel.app/passwordsetup",
-
-          // password: teacherData?.password,
-          class_id: Number(teacherData?.classid),
-          gender_id: Number(teacherData?.genderid)
         },
         {
           onSuccess(data) {
@@ -97,7 +102,13 @@ const AddTeacherModal = ({
 
           onError(err) {
             toggle();
-            openSchNotifications()
+            // console.log("what is the error", getApiErrorMessage(err));
+            if (
+              getApiErrorMessage(err) ===
+              "Please upgrade your license to add more teachers"
+            ) {
+              openSchNotifications();
+            }
             notifications.show({
               title: `Notification`,
               message: getApiErrorMessage(err),
@@ -106,8 +117,6 @@ const AddTeacherModal = ({
         }
       );
     }
-    
-   
   };
 
   return (

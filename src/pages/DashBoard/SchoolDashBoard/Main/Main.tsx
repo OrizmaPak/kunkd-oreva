@@ -2,11 +2,11 @@ import {
   useGetAdmittedStudentsInSchool,
   useGetSchoolContentStat,
   useGetTeacherList,
-  useGetLicense
+  useGetLicense,
 } from "@/api/queries";
 import StudentIcon from "@/assets/student3.svg";
 import TeacherIcon from "@/assets/teacher3.svg";
-import Classes from "@/assets/classD.svg"
+import Classes from "@/assets/classD.svg";
 import MyDateFilter from "@/components/DateFilter";
 import ProgressLog from "../Students/Profile/ProgressLog";
 import { TTeacherList } from "../Teachers/Teachers";
@@ -15,40 +15,38 @@ import ClassLeaderboard from "./ClassLeaderboard";
 import StudentLeaderboard from "./StudentLeaderboard";
 import { useState } from "react";
 
-
-export  type TLogData = {
+export type TLogData = {
   stories: number;
   audio_books: number;
   languages: number;
-  quiz:number
-
+  quiz: number;
 };
-type  TLicense = {
-  "added_class_count": number,
-  "added_student_count":  number,
-  "added_teacher_count": number,
-  "license_class_count":  number,
-  "license_student_count":  number,
-  "license_teacher_count":  number,
-  "status": boolean
-}
+type TLicense = {
+  added_class_count: number;
+  added_student_count: number;
+  added_teacher_count: number;
+  license_class_count: number;
+  license_student_count: number;
+  license_teacher_count: number;
+  status: boolean;
+};
 
 const Main = () => {
-  const {data:dataLicense} = useGetLicense()
-  const license:TLicense   = dataLicense?.data.data.school.licence
-  const [startDate, setStartDate] = useState("")
-  const [endDate, setEndDate] = useState("")
+  const { data: dataLicense } = useGetLicense();
+  const license: TLicense = dataLicense?.data.data.school.licence;
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
-  console.log("license",license)
-   const { data:logData } = useGetSchoolContentStat(startDate, endDate)
+  console.log("license", license);
+  const { data: logData } = useGetSchoolContentStat(startDate, endDate);
 
-  const statLog:TLogData = logData ?.data.data
-  console.log("statLog", statLog)
+  const statLog: TLogData = logData?.data.data;
+  console.log("statLog", statLog);
   const { data: teacherData } = useGetTeacherList();
   const teacherList: TTeacherList[] = teacherData?.data.data.records;
-  const { data: studentData, isLoading } = useGetAdmittedStudentsInSchool("active", );
+  const { data: studentData, isLoading } =
+    useGetAdmittedStudentsInSchool("active");
   const studentList = studentData?.data.data.records;
- 
 
   return (
     <div className="h-[100%]  flex flex-col  overflow-y-scroll">
@@ -58,27 +56,40 @@ const Main = () => {
         </div>
         <div className="flex justify-center  gap-2 items-center  ">
           <span className="text-[#8530C1]">Sort by Date:</span>
-       
+
           <div>
-            <MyDateFilter setStartDate={setStartDate} setEndDate={setEndDate}/>
+            <MyDateFilter setStartDate={setStartDate} setEndDate={setEndDate} />
           </div>
         </div>
       </div>
       <div className="flex flex-grow items-start  gap-4  ">
         <div className=" basis-full flex-grow  flex flex-col h-full ">
           <div className="flex  gap-4 items-center justify-center py-2">
-            <Card title="Teachers" image={TeacherIcon} amount={license?.added_teacher_count} max={ license?.license_teacher_count} />
-            <Card title="Students" image={StudentIcon} amount={license?.added_student_count} max={  license?.license_student_count} />
-            <Card title="Classes" image={Classes} amount={license?.added_class_count}  max={  license?.license_class_count}/>
+            <Card
+              title="Teachers"
+              image={TeacherIcon}
+              amount={license?.added_teacher_count}
+              max={license?.license_teacher_count}
+            />
+            <Card
+              title="Students"
+              image={StudentIcon}
+              amount={license?.added_student_count}
+              max={license?.license_student_count}
+            />
+            <Card
+              title="Classes"
+              image={Classes}
+              amount={license?.added_class_count}
+              max={license?.license_class_count}
+            />
           </div>
           <div className="flex-grow flex ">
             <StudentLeaderboard data={studentList} isLoading={isLoading} />
           </div>
         </div>
         <div className="basis- basis-3/5  flex flex-col  h-full ">
-          <ProgressLog
-            logData={statLog}
-          />
+          <ProgressLog logData={statLog} />
           <ClassLeaderboard data={teacherList} />
         </div>
       </div>

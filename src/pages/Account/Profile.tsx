@@ -9,7 +9,7 @@ import BigPencil from "@/assets/bigeditingpencil.svg";
 import CameraIcon from "@/assets/cameraIcon.svg";
 import CopyIcon from "@/assets/copyIcon.svg";
 import EditIcon from "@/assets/editPencil.svg";
-import Teacher01 from "@/assets/teacher01.svg";
+// import Teacher01 from "@/assets/teacher01.svg";
 import InputFormat from "@/common/InputFormat";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
@@ -17,6 +17,8 @@ import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import UploadPicture from "../DashBoard/SchoolDashBoard/Teachers/UploadPicture";
+import DragIcon from "@/assets/draganddropicon.svg";
+
 // import { getProfileState } from "@/store/profileStore";
 // import { UseFormRegisterReturn } from "react-hook-form";
 
@@ -134,7 +136,7 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
       {
         onSuccess(data) {
           console.log("success", data.data.message);
-          setUser({...user, user_image:data?.data?.data?.image})
+          setUser({ ...user, user_image: data?.data?.data?.image });
 
           notifications.show({
             title: `Notification`,
@@ -176,14 +178,14 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
           btnTitle="Done"
         />
       </Modal>
-      <div className="flex justify-between p-6 border border-[#8530C1]  rounded-3xl">
+      <div className="flex justify-between p-6 border-[2px] border-[#FBECFF]  rounded-3xl">
         <div className="flex justify-center items-center gap-14 relative ">
           <img
             onClick={() => open()}
             loading="lazy"
-            src={ user?.user_image ||Teacher01}
+            src={user?.user_image || DragIcon}
             alt="image"
-            className="w-[150px] h-[150px] rounded-full object-cover"
+            className="w-[164px] h-[164px] rounded-full object-cover"
           />
           <img
             onClick={() => open()}
@@ -221,7 +223,7 @@ const ParentPersonalInfomation = ({
   openEdit: () => void;
 }) => {
   return (
-    <div className="p-6 border border-[#8530C1]  rounded-3xl mt-8">
+    <div className="p-6 border-[2px] border-[#FBECFF]   rounded-3xl mt-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="font-bold text-[16px]">Personal Information</h1>
         <Button onClick={openEdit} size="sm" varient="outlined">
@@ -255,7 +257,7 @@ const SchoolPersonalInfomation = ({
 }) => {
   // const [user, ,] = useStore(getUserState);
   return (
-    <div className="p-6 border border-[#8530C1]  rounded-3xl mt-8">
+    <div className="p-6 border-[2px] border-[#FBECFF]  rounded-3xl mt-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="font-bold text-[16px]">Personal Information</h1>
         <Button onClick={openEdit} size="sm" varient="outlined">
@@ -287,7 +289,7 @@ const TeacherPersonalInfomation = ({
   openEdit: () => void;
 }) => {
   return (
-    <div className="p-6 border border-[#8530C1]  rounded-3xl mt-8">
+    <div className="p-6 border-[2px] border-[#FBECFF]   rounded-3xl mt-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="font-bold text-[16px]">Personal Information</h1>
         <Button onClick={openEdit} size="sm" varient="outlined">
@@ -358,10 +360,9 @@ const SchCard = ({ user }: { user: TUser }) => {
     );
   };
 
-  console.log("Card two");
   const [opened, { open, close }] = useDisclosure(false);
 
-  const [textToCopy, ] = useState(user?.school?.code as string);
+  const [textToCopy] = useState(user?.school?.code as string);
 
   const handleCopy = () => {
     // Create a new textarea element to hold the text
@@ -476,7 +477,7 @@ const SchCard = ({ user }: { user: TUser }) => {
             <SchNameAddress user={user} setEdit={setEdit} />
           ) : (
             <EditSchNameAddress
-              schoolName={user?.school?.contact_name as string} 
+              schoolName={user?.school?.contact_name as string}
               schoolAddress={user?.school?.address as string}
               setEdit={setEdit}
             />
@@ -489,7 +490,9 @@ const SchCard = ({ user }: { user: TUser }) => {
         <div className="pr-5 pt-2">
           <p className="flex gap-3 justify-center items-baseline">
             School code:
-            <p className="font-bold text-[23px] pt-1">{user?.school?.code as string}</p>
+            <p className="font-bold text-[23px] pt-1">
+              {user?.school?.code as string}
+            </p>
             <img
               loading="lazy"
               onClick={handleCopy}

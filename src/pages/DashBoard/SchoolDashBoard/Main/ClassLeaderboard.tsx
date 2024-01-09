@@ -3,7 +3,6 @@ import { BsChevronRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { TTeacherList } from "../Teachers/Teachers";
 
-
 const ClassLeaderboard = ({ data }: { data: TTeacherList[] }) => {
   const navigate = useNavigate();
   return (
@@ -25,7 +24,7 @@ const ClassLeaderboard = ({ data }: { data: TTeacherList[] }) => {
       <div className="flex  justify-end ">
         <span>
           <button onClick={() => navigate("classes")} className="flex gap-2">
-            <span className="text3 font-medium">See more</span>
+            <span className="text3 font-medium font-Inter">See more</span>
             <BsChevronRight size={18} />
           </button>
         </span>
