@@ -18,21 +18,20 @@ type TPayStack = {
   amount: number;
   email: string;
   public_key: string;
-  transaction_reference: string;  
+  transaction_reference: string;
 };
 
-
-const payInit : TPayStack = {
-    transaction_reference: "",
-    email: "",
-    amount: 0, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
-    public_key: "",
-    access_code: ""
-  };
+const payInit: TPayStack = {
+  transaction_reference: "",
+  email: "",
+  amount: 0, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+  public_key: "",
+  access_code: "",
+};
 
 const MakePaymentContent = () => {
-  const planId = localStorage.getItem("planId"); 
-  const currencyIso3 = localStorage.getItem("currency_iso3")
+  const planId = localStorage.getItem("planId");
+  const currencyIso3 = localStorage.getItem("currency_iso3");
   const navigate = useNavigate();
 
   const { mutate: verifyMutate } = useVerifyCompletePayStack();
@@ -40,10 +39,11 @@ const MakePaymentContent = () => {
   const [payStatckData, setPayStatckData] = useState<TPayStack>(payInit);
   // const [verifyResponse, setVerifyResponse] = useState("");
 
-   const [stripeData, setStripeData] = useState<TStripe>();
+  const [stripeData, setStripeData] = useState<TStripe>();
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null>>();
-
+  const [hasClickpayStack, setHasClickedPaystack] = useState(false);
   const handlePayStackInit = () => {
+    setHasClickedPaystack(true);
     mutate(
       {
         subscription_plan_id: Number(planId),
@@ -51,10 +51,10 @@ const MakePaymentContent = () => {
       {
         onSuccess(data) {
           setPayStatckData({ ...data.data.data });
-          notifications.show({
-            title: `Notification`,
-            message: data.data.message,
-          });
+          // notifications.show({
+          //   title: `Notification`,
+          //   message: data.data.message,
+          // });
         },
 
         onError(err) {
@@ -122,7 +122,6 @@ const MakePaymentContent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [payStatckData]);
 
-
   const [patmentType, setPaymentType] = useState(true);
   const [showStripe, setShowStripe] = useState(false);
   const [showPatStack, setShowPatStack] = useState(false);
@@ -151,14 +150,16 @@ const MakePaymentContent = () => {
           Kindly complete your payment using a valid credit card.
         </p>
 
-        { planId && patmentType && (
+        {planId && patmentType && (
           <div className="flex gap-10 justify-center items-center mt-10">
-            <PayWitStripButton 
-            currencyIso3={currencyIso3 as string}
-            planId={planId}
-            setStripeData={setStripeData}
-            setStripePromise={setStripePromise}
-            setShowStripe={setShowStripe} setPaymentType={setPaymentType} />
+            <PayWitStripButton
+              currencyIso3={currencyIso3 as string}
+              planId={planId}
+              setStripeData={setStripeData}
+              setStripePromise={setStripePromise}
+              setShowStripe={setShowStripe}
+              setPaymentType={setPaymentType}
+            />
             <button
               onClick={() => {
                 setShowPatStack(true);
@@ -173,7 +174,11 @@ const MakePaymentContent = () => {
         )}
         {showPatStack && (
           <p className="mt-10 px-40 flex justify-center items-center">
-            <Button onClick={handlePayStackInit} size="full">
+            <Button
+              disable={hasClickpayStack}
+              onClick={handlePayStackInit}
+              size="full"
+            >
               {isLoading || isPaymentLoading ? (
                 <p className="flex justify-center items-center">
                   <Loader color="white" size="sm" />
@@ -187,9 +192,9 @@ const MakePaymentContent = () => {
         {planId && showStripe && (
           // <Skeleton height={400} width={800} visible={isLoading}>
           <p className="mt-10 flex items-center justify-center">
-            <StripWrapper 
-            stripeData={stripeData}
-            stripePromise={stripePromise}
+            <StripWrapper
+              stripeData={stripeData}
+              stripePromise={stripePromise}
             />
           </p>
           // </Skeleton>
@@ -200,5 +205,3 @@ const MakePaymentContent = () => {
 };
 
 export default MakePaymentContent;
-
-

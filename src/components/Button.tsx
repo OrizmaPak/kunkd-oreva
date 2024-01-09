@@ -33,6 +33,7 @@ interface ButtonProps {
   type?: "button" | "submit" | "reset";
   onClick?: () => void;
   className?: string;
+  disable?: boolean;
 }
 
 type TClassName = Omit<
@@ -62,6 +63,7 @@ const Button = ({
   type = "button",
   onClick,
   borderColor = "default",
+  disable,
   className = "",
 }: ButtonProps) => {
   // const buttonClasses = `w-${width} text-${color}  bg-${backgroundColor} p-${padding} mt-4 rounded-3xl `;
@@ -73,6 +75,7 @@ const Button = ({
 
   return (
     <button
+      disabled={disable}
       type={type}
       onClick={handleClick}
       className={`${getClassName({

@@ -9,7 +9,7 @@ const AppleStore = ({ sizes }: { sizes?: boolean }) => {
     >
       <div>
         {/* <img loading="lazy" src={Apple} alt="" width="30px" /> */}
-        <FaApple size={`${sizes ? 45 : 20}`} />
+        <FaApple size={`${sizes ? 45 : 25}`} />
       </div>
       <div className="flex flex-col">
         <span className={`text-start ${sizes ? "text-[12px] " : "text-[8px]"}`}>
