@@ -4,7 +4,7 @@ import {
   useConnectStudentData,
   useGetSchool,
   useGetSchoolProfileForStudent,
-  useUpdateProfile
+  useUpdateProfile,
 } from "@/api/queries";
 import PencilIcon from "@/assets/blackPencilIcon.svg";
 import DotIcon from "@/assets/dotIcon.svg";
@@ -179,7 +179,6 @@ const KidCard = ({
   const date = new Date();
   const currentYear = date.getFullYear();
   const childaAge = currentYear - Number(year);
-  console.log("Student=----------",student);
   return (
     <>
       <Modal
@@ -195,7 +194,7 @@ const KidCard = ({
           refetch={refetch}
           id={id as number}
           image={image as string}
-          name={name as string }
+          name={name as string}
           dob={dob as string}
           closeModal={closeEditModal}
         />
@@ -208,7 +207,10 @@ const KidCard = ({
         withCloseButton={false}
         centered
       >
-        <ConnectTOSchool profileId={id as number} closeModal={closeConnectModal} />
+        <ConnectTOSchool
+          profileId={id as number}
+          closeModal={closeConnectModal}
+        />
       </Modal>
       <Modal
         radius={10}
@@ -219,7 +221,10 @@ const KidCard = ({
         withCloseButton={false}
         centered
       >
-        <SchoolProfile student={student as TStudent} closeSchModal={closeSchModal} />
+        <SchoolProfile
+          student={student as TStudent}
+          closeSchModal={closeSchModal}
+        />
       </Modal>
 
       <div className=" relative flex  border-[#FBECFF] border-[2px] px-6 py-6 rounded-3xl">
@@ -263,7 +268,8 @@ const KidCard = ({
                   <p className="h-2 w-2 rounded-full bg-[#F04438]"></p>
                   <p className="text2  text-[#B42318]">Request declined</p>
                 </button>
-              ) : student?.status === "pending" && student?.school_name?.length as number > 0 ? (
+              ) : student?.status === "pending" &&
+                (student?.school_name?.length as number) > 0 ? (
                 <button className="mt-1 flex justify-center items-center gap-2 bg-[#FFFAEB] px-2 py-1 rounded-2xl">
                   <span className="h-2 w-2 rounded-full bg-[#F79009]"></span>
                   <span className="text2  text-[#B54708]">Request Pending</span>
@@ -335,11 +341,11 @@ const EditProfile = ({
   const queryClient = useQueryClient();
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-  const files = event.target.files as FileList;
-  const file = files && files[0];
-  setSelectedFile(file);
-  console.log(file);
-  console.log("name", name, dob);
+    const files = event.target.files as FileList;
+    const file = files && files[0];
+    setSelectedFile(file);
+    console.log(file);
+    console.log("name", name, dob);
   };
 
   const handleButtonClick = () => {
@@ -353,8 +359,7 @@ const EditProfile = ({
       .string()
       .min(4, { message: "School name must be at least 4 characters long" })
       .max(40, { message: "School name must not exceed 20 characters" }),
-    dob: z
-      .string().optional(),
+    dob: z.string().optional(),
     file: z.string().url().optional(),
   });
 
@@ -409,7 +414,11 @@ const EditProfile = ({
           <p className="flex gap-2 justify-end items-center">
             <img
               loading="lazy"
-              src={!selectedFile ? image : URL.createObjectURL(selectedFile as Blob)}
+              src={
+                !selectedFile
+                  ? image
+                  : URL.createObjectURL(selectedFile as Blob)
+              }
               alt="Avatar"
               className="h-[100px] w-[100px]  object-cover"
             />
@@ -526,12 +535,12 @@ const ConnectTOSchool = ({
 }) => {
   const { mutate, isLoading } = useConnectStudentData();
   const { data: schoolData } = useGetSchool();
-   const [search, setSearch] = useState("");
+  const [search, setSearch] = useState("");
   const debounceValue = useDebounce(search, 500);
-  console.log("God Help me", search)
-  const {data:schoolCurData} = useGetSchoolProfileForStudent(debounceValue)
-  const  schData = schoolCurData?.data?.data
-  console.log("schoolCurData", schoolCurData?.data.data)
+  console.log("God Help me", search);
+  const { data: schoolCurData } = useGetSchoolProfileForStudent(debounceValue);
+  const schData = schoolCurData?.data?.data;
+  console.log("schoolCurData", schoolCurData?.data.data);
 
   // const profileId = localStorage.getItem("profileId");
   console.log("Profile", profileId);
@@ -539,17 +548,16 @@ const ConnectTOSchool = ({
   console.log(schoolList);
   const queryClient = useQueryClient();
 
-
   const schema: ZodType<FormData> = z.object({
     firstname: z
       .string()
-      .min(4, { message: "First name must be at least 4 characters long" })
+      .min(2, { message: "First name must be at least 2 characters long" })
       .max(40, { message: "First name must not exceed 20 characters" }),
     lastname: z
       .string()
-      .min(4, { message: "Last name must be at least 4 characters long" })
+      .min(2, { message: "Last name must be at least 2 characters long" })
       .max(40, { message: "Last name must not exceed 20 characters" }),
-   
+
     classid: z
       .string()
       .min(1, { message: "Select a class" })
@@ -626,7 +634,7 @@ const ConnectTOSchool = ({
             <InputFormat
               // reg={register("schoolCode")}
               // errorMsg={errors?.schoolCode?.message}
-              onChange={e => setSearch(e.target.value)}
+              onChange={(e) => setSearch(e.target.value)}
               value={search}
               type="text"
               placeholder="School Code"
@@ -650,7 +658,6 @@ const ConnectTOSchool = ({
           <p className="my-5">
             <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
               <select
-                
                 {...register("classid")}
                 name="classid"
                 id="classid"

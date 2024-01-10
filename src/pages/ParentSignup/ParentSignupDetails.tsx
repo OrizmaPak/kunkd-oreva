@@ -23,11 +23,11 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
   const schema: ZodType<FormData> = z.object({
     firstname: z
       .string()
-      .min(4, { message: "First must be at least 4 characters long" })
-      .max(20, { message: "First must not exceed 20 characters" }),
+      .min(2, { message: "First must be at least 2 characters long" })
+      .max(40, { message: "First must not exceed 20 characters" }),
     lastname: z
       .string()
-      .min(4, { message: "Last name must be at least 4 characters long" })
+      .min(2, { message: "Last name must be at least 2 characters long" })
       .max(40, { message: "Last name must not exceed 30 characters" }),
     email: z.string().email(),
   });
@@ -87,14 +87,14 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
                   type="text"
                   placeholder="First Name"
                   reg={register("firstname")}
-                  errorMsg={errors.name?.message}
+                  errorMsg={errors.firstname?.message}
                 />
 
                 <InputFormat
                   type="text"
                   placeholder="Last Name"
                   reg={register("lastname")}
-                  errorMsg={errors.address?.message}
+                  errorMsg={errors.lastname?.message}
                 />
               </p>
 
@@ -126,7 +126,8 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
 
             <p className="mt-2  text-center text2 text-gray-400 ">
               <span className="font-Hanken">Already hava an account? </span>
-              <button onClick={() => navigate("/login")}
+              <button
+                onClick={() => navigate("/login")}
                 className="mt-6 text-[#8530C1] font-bold
               "
               >
