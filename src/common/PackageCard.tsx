@@ -113,7 +113,9 @@ const PackageCard = ({
         <div className="flex justify-center items-center">
           <button
             onClick={() => handlePaln(plan?.id as number)}
-            className="mt-8 pad-x-40 bg-[#E7D4F4] text-[#8530C1] p-3 rounded-2xl"
+            className={`mt-8 pad-x-40  text-[#8530C1] p-3 rounded-2xl ${
+              recommended ? "bg-white" : "bg-[#E7D4F4]"
+            }`}
           >
             {btn}
           </button>
