@@ -1,5 +1,10 @@
 import { getApiErrorMessage } from "@/api/helper";
-import { useGetAvatars, useGetProfile, useProfle, useGetUpdatedProfile } from "@/api/queries";
+import {
+  useGetAvatars,
+  useGetProfile,
+  useProfle,
+  useGetUpdatedProfile,
+} from "@/api/queries";
 import AddAvatarIcon from "@/assets/AddAvatarIcon.svg";
 import YaJump from "@/assets/Yaa jump 1.svg";
 import LessDOwnIcon from "@/assets/lessthanIcon.svg";
@@ -138,7 +143,7 @@ export const ChildNameModal = ({
   const schema: ZodType<Pick<FormData, "name">> = z.object({
     name: z
       .string()
-      .min(4, { message: "Name must be at least 4 characters long" })
+      .min(2, { message: "Name must be at least 2 characters long" })
       .max(20, { message: "Name must not exceed 20 characters" }),
   });
 
@@ -234,7 +239,7 @@ export const ChildAgeModal = ({
 
   const submitData = async (data: FormData) => {
     onContinue();
-    setAge(data?.dob as string) ;
+    setAge(data?.dob as string);
   };
   // const [isKid, setIsKid] = useState(false)
   return (
@@ -448,8 +453,7 @@ const AvatarCard = ({
   setSelected: (val: string) => void;
 }) => {
   const handleClick = () => {
-    setSelected(name as string
-      );
+    setSelected(name as string);
   };
   return (
     <div>
@@ -475,10 +479,10 @@ const AvatarCard = ({
 export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
   const [enabled, setEnabled] = useState(false);
   // const [profiles] = useStore(getProfileState);
-  const {data} = useGetProfile(enabled, () => {
+  const { data } = useGetProfile(enabled, () => {
     onContinue();
   });
-    console.log(data)
+  console.log(data);
 
   const handleSubmit = () => {
     // console.log("toomuch----", profiles[0].id);
@@ -487,12 +491,12 @@ export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
   };
 
   const [useri, setUser] = useStore(getUserState);
-  const {data:userData } = useGetUpdatedProfile()
-  const currentUserProfile = userData?.data?.data
+  const { data: userData } = useGetUpdatedProfile();
+  const currentUserProfile = userData?.data?.data;
   useEffect(() => {
-    setUser({...useri, ...currentUserProfile})
+    setUser({ ...useri, ...currentUserProfile });
     //  eslint-disable-next-line react-hooks/exhaustive-deps
-  },[currentUserProfile])
+  }, [currentUserProfile]);
   return (
     <motion.div
       initial={{ opacity: 0 }}
