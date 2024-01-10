@@ -12,6 +12,7 @@ import { usePaystackPayment } from "react-paystack";
 import { useNavigate } from "react-router-dom";
 import PayWitStripButton from "./StripButton";
 import StripWrapper, { TStripe } from "./StripWrapper";
+import { ImCancelCircle } from "react-icons/im";
 
 type TPayStack = {
   access_code: string;
@@ -139,7 +140,7 @@ const MakePaymentContent = () => {
         }}
       >
         <span className="absolute right-[-150px] top-[40px]">
-          <img loading="lazy" src={Cancel} alt="cancel" />
+          <ImCancelCircle size={40} color={"#8530C1"} />
         </span>
       </button>
       <div className="w-[100%]  my-auto ">
