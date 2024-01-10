@@ -178,7 +178,7 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
           btnTitle="Done"
         />
       </Modal>
-      <div className="flex justify-between p-6 border-[2px] border-[#FBECFF]  rounded-3xl">
+      <div className="flex justify-between p-6 border-[3px] border-[#FBECFF]  rounded-3xl">
         <div className="flex justify-center items-center gap-14 relative ">
           <img
             onClick={() => open()}
@@ -195,10 +195,12 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
             className="absolute left-[65px]"
           />
           <p>
-            <p className="font-bold text25 text-[28px] font-Recoleta">
+            <p className="font-bold text25 text-[28px]  font-Hanken">
               {user?.firstname} {user?.lastname}
             </p>
-            <p className="text-[#B5B5C3] text-[16px] text3">{user?.email}</p>
+            <p className="text-[#B5B5C3] text-[16px] font-Hanken ">
+              {user?.email}
+            </p>
           </p>
         </div>
         <div className="flex justify-center items-center">
@@ -223,22 +225,29 @@ const ParentPersonalInfomation = ({
   openEdit: () => void;
 }) => {
   return (
-    <div className="p-6 border-[2px] border-[#FBECFF]   rounded-3xl mt-8">
+    <div className="p-6 border-[3px] border-[#FBECFF]   rounded-3xl mt-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="font-bold text-[16px]">Personal Information</h1>
+        <h1 className="font-bold font-Hanken text-[16px]">
+          Personal Information
+        </h1>
         <Button onClick={openEdit} size="sm" varient="outlined">
           <p className="gap-4 flex">
-            <img loading="lazy" src={EditPencil} alt="pencil" />{" "}
-            <span className="text-[#8530C1]">Edit</span>
+            <img
+              loading="lazy"
+              src={EditPencil}
+              alt="pencil"
+              className="w-[15px]"
+            />{" "}
+            <span className="text-[#8530C1] text-[14px] font-Hanken">Edit</span>
           </p>
         </Button>
       </div>
-      <div className="grid grid-cols-[1fr_1fr_1fr_1fr] my-1 text3 text-[#B5B5C3]">
+      <div className="grid grid-cols-[1fr_1fr_1fr_1fr] my-1 text3 text-[12px] font-Hanken text-[#B5B5C3]">
         <span>First Name</span>
         <span>Last Name</span>
         <span>Email</span>
       </div>
-      <div className="grid grid-cols-[1fr_1fr_1fr_1fr] text3 mb-4 text-[14px]">
+      <div className="grid grid-cols-[1fr_1fr_1fr_1fr] text3 mb-4 text-[14px] font-Hanken font-medium">
         <span>{user?.firstname}</span>
         <span>{user?.lastname}</span>
         <span>{user?.email}</span>
@@ -257,7 +266,7 @@ const SchoolPersonalInfomation = ({
 }) => {
   // const [user, ,] = useStore(getUserState);
   return (
-    <div className="p-6 border-[2px] border-[#FBECFF]  rounded-3xl mt-8">
+    <div className="p-6 border-[3px] border-[#FBECFF]  rounded-3xl mt-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="font-bold text-[16px]">Personal Information</h1>
         <Button onClick={openEdit} size="sm" varient="outlined">
@@ -289,7 +298,7 @@ const TeacherPersonalInfomation = ({
   openEdit: () => void;
 }) => {
   return (
-    <div className="p-6 border-[2px] border-[#FBECFF]   rounded-3xl mt-8">
+    <div className="p-6 border-[3px] border-[#FBECFF]   rounded-3xl mt-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="font-bold text-[16px]">Personal Information</h1>
         <Button onClick={openEdit} size="sm" varient="outlined">
