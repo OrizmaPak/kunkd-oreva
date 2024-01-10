@@ -65,6 +65,7 @@ const SchoolHeader = ({
 
   const handleChangeProfile = (id: number) => {
     setChildProfile(id.toString());
+    navigate("/parent");
     queryClient.invalidateQueries(["GetOngoingContents"]);
   };
 
@@ -114,7 +115,7 @@ const SchoolHeader = ({
                 isActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
               }
             >
-              <button className="  font-medium">Home</button>
+              <button className="text-[16px]  font-medium">Home</button>
             </NavLink>
 
             <NavLink
