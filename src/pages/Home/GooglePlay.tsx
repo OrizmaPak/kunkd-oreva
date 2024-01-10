@@ -1,9 +1,20 @@
 import Google from "@/assets/googleicon.svg";
 
 const GooglePlay = ({ sizes }: { sizes?: boolean }) => {
+  const openInNewTab = (url: string) => {
+    const newWindow: Window | null = window.open(url, "_blank");
+    if (newWindow) {
+      newWindow.opener = null; // Ensure no access to the current window
+    }
+  };
   return (
     <div>
       <button
+        onClick={() => {
+          openInNewTab(
+            "https://play.google.com/store/apps/details?id=com.lhamycodes.kundakids"
+          );
+        }}
         className={`bg-black text-white items-center justify-center flex rounded-md ${
           sizes ? "pad-x-14 py-2 gap-3 " : "pad-x-10 py-2 gap-2 "
         } pad-x-10 py-2 h-auto w-auto`}

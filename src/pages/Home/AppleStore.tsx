@@ -1,8 +1,17 @@
 import { FaApple } from "react-icons/fa";
 
 const AppleStore = ({ sizes }: { sizes?: boolean }) => {
+  const openInNewTab = (url: string) => {
+    const newWindow: Window | null = window.open(url, "_blank");
+    if (newWindow) {
+      newWindow.opener = null; // Ensure no access to the current window
+    }
+  };
   return (
     <button
+      onClick={() => {
+        openInNewTab("https://apps.apple.com/ng/app/kunda-kids/id1612794970");
+      }}
       className={`bg-black text-white items-center justify-center flex rounded-md ${
         sizes ? "pad-x-12 py-2 gap-3 " : "pad-x-10 py-2 gap-2 "
       } pad-x-10 py-2 h-auto w-auto`}
