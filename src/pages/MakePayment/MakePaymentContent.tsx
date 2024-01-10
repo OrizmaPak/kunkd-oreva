@@ -1,6 +1,5 @@
 import { getApiErrorMessage } from "@/api/helper";
 import { usePayStackInit, useVerifyCompletePayStack } from "@/api/queries";
-import Cancel from "@/assets/Cancel.svg";
 import PayStackButton from "@/assets/paymentPaystack.svg";
 // import StripeButton from "@/assets/paymentStripe.svg";
 import Button from "@/components/Button";
