@@ -14,7 +14,7 @@ const Card = ({
       </div>
       <div className="flex flex-col">
         <span className="text2 font-Hanken text-[#B5B5C3] ">{title}</span>
-        <span className="font-bold header1 ">{amount}</span>
+        <span className="font-semibold header1 ">{amount}</span>
       </div>
     </div>
   );

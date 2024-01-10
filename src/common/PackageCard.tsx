@@ -11,7 +11,7 @@ type Props = {
   noBorder?: boolean;
   isIcon?: boolean;
   plan?: TPlan;
-  countryCode?:string
+  countryCode?: string;
 };
 
 export type TPlan = {
@@ -31,11 +31,12 @@ const PackageCard = ({
   noBorder,
   isIcon,
   plan,
-  countryCode
+  countryCode,
 }: Props) => {
   const navigate = useNavigate();
   const handlePaln = (planId: number) => {
-    const currencyIso = countryCode === "NG" ? "NGN" : countryCode ==="UK" ? "GBP" : "USD" ;
+    const currencyIso =
+      countryCode === "NG" ? "NGN" : countryCode === "UK" ? "GBP" : "USD";
     if (!plan) {
       navigate("/childprofilesetup");
       if (localStorage.getItem("gotToHome") === "true") {
@@ -45,7 +46,7 @@ const PackageCard = ({
       }
     } else {
       localStorage.setItem("planId", planId?.toString());
-      localStorage.setItem("currency_iso3",currencyIso )
+      localStorage.setItem("currency_iso3", currencyIso);
       navigate("/makepayment");
     }
   };
@@ -64,7 +65,7 @@ const PackageCard = ({
         <div
           className={`${
             recommended ? "text-white" : ""
-          } text-lg font-Hanken font-bold text-center pt-2`}
+          } text-lg font-Hanken font-bold text-center pt-2 mt-5`}
         >
           {title}
         </div>

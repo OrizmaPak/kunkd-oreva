@@ -129,12 +129,13 @@ const MakePaymentContent = () => {
     <div className="w-[100%] max-w-[800px] mx-auto relative  h-full pt-[10%] ">
       <button
         onClick={() => {
-          if (localStorage.getItem("gotToHome") === "true") {
-            navigate("/parent");
-          } else {
-            navigate("/");
-            localStorage.clear();
-          }
+          navigate(-1);
+          // if (localStorage.getItem("gotToHome") === "true") {
+          //   navigate("/parent");
+          // } else {
+          //   navigate("/");
+          //   localStorage.clear();
+          // }
         }}
       >
         <span className="absolute right-[-150px] top-[40px]">

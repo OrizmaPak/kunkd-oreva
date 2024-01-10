@@ -15,7 +15,6 @@ const ChoosePlanContent = () => {
         <div className="mx-auto  flex items-center justify-center">
           <div className="flex mt-16 w-full  justify-center  items-center ">
             <PackageCard
-            
               title={<div className=" opacity-0">a</div>}
               price={<div className=" opacity-0">a</div>}
               noBorder={true}
@@ -28,8 +27,7 @@ const ChoosePlanContent = () => {
               ]}
             ></PackageCard>
             <PackageCard
-            countryCode={planData && planData.countryCode}
-
+              countryCode={planData && planData.countryCode}
               isIcon={true}
               title="Basic"
               btn="Choose "
@@ -43,9 +41,8 @@ const ChoosePlanContent = () => {
               ]}
             ></PackageCard>
 
-<PackageCard
-            countryCode={planData && planData.countryCode}
-
+            {/* <PackageCard
+              countryCode={planData && planData.countryCode}
               isIcon={true}
               plan={planData && planData?.plans[2]}
               title="A day"
@@ -62,15 +59,14 @@ const ChoosePlanContent = () => {
                 <BsCheckLg size={25} color="green" />,
                 <BsCheckLg size={25} color="green" />,
               ]}
-            ></PackageCard>
+            ></PackageCard> */}
 
             <PackageCard
-            countryCode={planData && planData.countryCode}
-
+              countryCode={planData && planData.countryCode}
               isIcon={true}
               plan={planData && planData?.plans[0]}
               title="1 Month"
-              btn="Start Trial"
+              btn="Subscribe"
               price={
                 planData && planData?.countryCode === "NG"
                   ? planData?.plans[0]?.naira_value
@@ -85,7 +81,7 @@ const ChoosePlanContent = () => {
               ]}
             ></PackageCard>
             <PackageCard
-            countryCode={planData && planData.countryCode}
+              countryCode={planData && planData.countryCode}
               recommended={true}
               plan={planData && planData?.plans[1]}
               isIcon={true}
