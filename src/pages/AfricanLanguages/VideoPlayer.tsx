@@ -9,6 +9,7 @@ import {
   useGetRecommendedVideo,
   useLikedContent,
   useUnLikedContent,
+  useLearningHour,
 } from "@/api/queries";
 import AfamBlur from "@/assets/afamblur.jpg";
 import Congrats from "@/assets/congrats.svg";
@@ -36,7 +37,7 @@ import { TStoryContent } from "../Stories/Stories1/Stories1";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import TeacherNotificationModal from "@/components/TeacherWarningModal";
-import useTimeSpent from "@/hooks/useTimeSpent";
+// import useTimeSpent from "@/hooks/useTimeSpent";
 
 type TRecommendedVideo = {
   id: number;
@@ -115,7 +116,16 @@ const VideoPlayer = () => {
   const { mutate } = useContentTracking();
   const profileId = localStorage.getItem("profileId");
   const [delay, setDelay] = useState(0);
-  useTimeSpent(Number(contentId), Number(profileId));
+  // useTimeSpent(Number(contentId), Number(profileId)); const {mutateAsync} = useLearningHour()
+  const { mutate: mutateLearning } = useLearningHour();
+
+  // useEffect(() => {
+  //   const continueReading = localStorage.getItem("continuePage");
+  //   console.log("Continue reading", continueReading);
+  //   if (continueReading && videoRef.current) {
+  //     videoRef.current.seekTo(continueReading, "seconds");
+  //   }
+  // }, []);
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
@@ -129,6 +139,7 @@ const VideoPlayer = () => {
       clearInterval(interval);
     };
   }, [videoRef.current?.paused]);
+  const [lastTime, setLastTime] = useState(0);
 
   useEffect(() => {
     const abortControllerRef = new AbortController();
@@ -147,6 +158,7 @@ const VideoPlayer = () => {
           {
             onSuccess(data) {
               console.log("success", data.data.message);
+              setLastTime(Math.ceil(currentVideoTime));
             },
             onError(err) {
               notifications.show({
@@ -156,6 +168,11 @@ const VideoPlayer = () => {
             },
           }
         );
+        mutateLearning({
+          content_id: Number(contentId),
+          profile_id: Number(profileId),
+          timespent: Math.ceil(currentVideoTime) - lastTime,
+        });
       } catch (err) {
         // Handle errors if needed
       }

@@ -21,6 +21,16 @@ ChartJS.register(
 );
 // eslint-disable-next-line
 export const options = {
+  scales: {
+    y: {
+      display: false, // Hide the vertical axis
+    },
+    x: {
+      grid: {
+        display: false, // Hide the grid lines
+      },
+    },
+  },
   responsive: true,
   plugins: {
     legend: {
@@ -28,13 +38,13 @@ export const options = {
     },
     title: {
       display: true,
-      text: "Learning Hours",
+      // text: "Learning Hours",
     },
   },
   barThickness: 10,
 };
 
-const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const labels = ["M", "T", "W", "T", "F", "S", "S"];
 // eslint-disable-next-line
 export const data = {
   labels,
@@ -42,7 +52,10 @@ export const data = {
     {
       label: "Hours",
       data: [6, 6, 3, 6, 4, 7, 9],
-      backgroundColor: "rgba(133, 48, 193, 1)",
+      backgroundColor: "#e0b3ef", // Set the bar color as a gradient
+      borderWidth: 0, // Remove the border
+      barPercentage: 0.2, // Reduce the bar width (adjust as needed)
+      borderRadius: 4, // Set the border radius (adjust as needed)
     },
     // {
     //   label: "Dataset 2",
@@ -52,27 +65,35 @@ export const data = {
   ],
 };
 
-export function BarChart({meta}:{meta:number[]}) {
-  console.log("Meta", data)
-  data.datasets[0].data = meta
-  if(meta.length < 1){
-    return "loading ..."
+export function BarChart({ meta }: { meta: number[] }) {
+  console.log("Meta", data);
+  data.datasets[0].data = meta;
+  if (meta.length < 1) {
+    return "loading ...";
   }
 
-  return <Bar options={options} data={data}/>
+  return <Bar options={options} data={data} />;
 }
 
-const LearningHour = ({schoolStudentStat}:{schoolStudentStat:TSchoolStudentStat}) => {
-  console.log('LEARNIG HOURS',schoolStudentStat?.learning_hours)
-  
-  const dataArray = Object.values(schoolStudentStat?.learning_hours ?? {}).map(value => value / 3600);
-  console.log("dataArray", dataArray)
+const LearningHour = ({
+  schoolStudentStat,
+}: {
+  schoolStudentStat: TSchoolStudentStat;
+}) => {
+  console.log("LEARNIG HOURS", schoolStudentStat?.learning_hours);
+
+  const dataArray = Object.values(schoolStudentStat?.learning_hours ?? {}).map(
+    (value) => value / 3600
+  );
+  console.log("dataArray", dataArray);
   return (
     <div className="bg-white rounded-3xl flex-grow py-2 px-4 mt-2">
       <div className="flex justify-between">
-        <h1 className="text-[20px] font-bold">Learning Hours</h1>
+        <h1 className="text-[16px] font-Hanken font-semibold ">
+          Learning Hours
+        </h1>
       </div>
-      <BarChart meta= {dataArray} />
+      <BarChart meta={dataArray} />
     </div>
   );
 };

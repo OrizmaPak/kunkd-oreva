@@ -62,8 +62,8 @@ const Main = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-grow items-start  gap-4  ">
-        <div className=" basis-full flex-grow  flex flex-col h-full ">
+      <div className="flex flex-grow items-start  gap-6 ">
+        <div className=" basis-full flex-grow  gap-3 flex flex-col h-full ">
           <div className="flex  gap-4 items-center justify-center py-2">
             <Card
               title="Teachers"
@@ -88,7 +88,7 @@ const Main = () => {
             <StudentLeaderboard data={studentList} isLoading={isLoading} />
           </div>
         </div>
-        <div className="basis- basis-3/5  flex flex-col  h-full ">
+        <div className="basis- basis-3/5  flex flex-col  h-full gap-3 ">
           <ProgressLog logData={statLog} />
           <ClassLeaderboard data={teacherList} />
         </div>

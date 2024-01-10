@@ -26,6 +26,7 @@ export type CardProps = {
   theme?: string;
   pages?: TStoryContent[];
   pages_read?: number;
+  timespent?: number;
   goTo?: () => void;
 };
 
@@ -37,14 +38,16 @@ const CardHome = ({
   pages_read,
   pages,
   hasRage,
+  timespent,
 }: TStoryContent & { goTo?: () => void; hasRage?: boolean }) => {
   // const totalPage = pages?.length;
   //  const totalPage = pages?.length ?? 0;
   // const range = pages_read &&  pages_read ? Math.ceil((100 / totalPage as number)  * pages_read as number)
   // : 0; // or some other default value
   const pagesLength = pages?.length as number;
-const pagesRead = pages_read as number | undefined;
-  const range = pagesLength > 0 ? Math.ceil((100 / pagesLength) * (pagesRead || 0)) : 0;
+  const pagesRead = pages_read as number | undefined;
+  const range =
+    pagesLength > 0 ? Math.ceil((100 / pagesLength) * (pagesRead || 0)) : 0;
 
   const handleClick = () => {
     if (goTo) goTo();
@@ -52,7 +55,11 @@ const pagesRead = pages_read as number | undefined;
     localStorage.setItem("contentId", id?.toString() as string);
     localStorage.setItem(
       "continuePage",
-      pages_read ? pages_read?.toString() : "1"
+      pages_read
+        ? pages_read?.toString()
+        : timespent
+        ? timespent?.toString()
+        : "1"
     );
   };
   const [visiblee, setVisiblee] = useState(false);
@@ -207,11 +214,17 @@ const pagesRead = pages_read as number | undefined;
               ) : (
                 ""
               )} */}
-                
-                <Progress
-    value={range || 60}
-    color={range && range < 20 ? "red" : range && range < 50 ? "yellow" : "green"}
-  />
+
+              <Progress
+                value={range || 60}
+                color={
+                  range && range < 20
+                    ? "red"
+                    : range && range < 50
+                    ? "yellow"
+                    : "green"
+                }
+              />
 
               {/* <Progress value={20} size="xs" colorScheme="pink" /> */}
             </p>

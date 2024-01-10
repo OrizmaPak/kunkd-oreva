@@ -9,7 +9,9 @@ const ProgressLog = ({ logData }: { logData?: TLogData }) => {
     <div className="bg-white flex flex-col  flex- rounded-3xl px-6 py-2 pb-6 ">
       <div>
         <div className="flex justify-between my-5 ">
-          <h1 className="text-[20px] font-bold">Progress Log</h1>
+          <h1 className="text-[16px]  font-Hanken font-semibold ">
+            Progress Log
+          </h1>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3 flex-grow py-4 ">
@@ -40,7 +42,7 @@ const Card = ({
       </div>
       <div className="flex flex-col">
         <span className="font-bold text25 ">{total ? total : 0}</span>
-        <span className="text3">{title}</span>
+        <span className="text3 text-[#B5B5C3] font-semibold">{title}</span>
       </div>
     </div>
   );

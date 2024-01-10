@@ -13,6 +13,7 @@ import {
   useLikedContent,
   useUnLikedContent,
   useRecommendedAudiobooks,
+  useLearningHour,
 } from "@/api/queries";
 import AfamBlur from "@/assets/afamblur.jpg";
 import { TMedia, TStoryContent } from "@/pages/Stories/Stories1/Stories1";
@@ -35,7 +36,7 @@ import { TAudioBooks } from "@/api/types";
 import CardHome from "@/common/User/CardHome";
 import CardScreenHome from "@/common/User/CardScreenHome";
 import { useNavigate } from "react-router-dom";
-import useTimeSpent from "@/hooks/useTimeSpent";
+// import useTimeSpent from "@/hooks/useTimeSpent";
 
 // type TAudioBook = {
 //   name: string;
@@ -48,10 +49,10 @@ import useTimeSpent from "@/hooks/useTimeSpent";
 const BookLayout = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
+
   // const contentId = localStorage.getItem("contentId");
   const contentId = localStorage.getItem("contentId");
-  const profileId = localStorage.getItem("profileId");
-  useTimeSpent(Number(contentId), Number(profileId));
+  // useTimeSpent(Number(contentId), Number(profileId));
   const { data: dataRecommended } = useRecommendedAudiobooks(
     contentId as string
   );
@@ -344,6 +345,14 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
   const [load, setLoad] = useState(false);
   const [delay, setDelay] = useState(0);
 
+  useEffect(() => {
+    const continueReading = localStorage.getItem("continuePage");
+    console.log("Continue reading", continueReading);
+    if (continueReading && audioRef.current) {
+      audioRef.current.currentTime = Number(continueReading);
+    }
+  }, []);
+
   const handlePlayControl = () => {
     const audioCon = audioRef.current;
     setIsPlaying(!isPlaying);
@@ -417,6 +426,8 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
   const { mutate } = useContentTracking();
   const profileId = localStorage.getItem("profileId");
   const contentId = localStorage.getItem("contentId");
+  const { mutate: mutateLearning } = useLearningHour();
+  const [lastTime, setLastTime] = useState(0);
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
@@ -450,6 +461,7 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
         {
           onSuccess(data) {
             console.log("success", data.data.message);
+            setLastTime(Math.ceil(currentTTime));
           },
           onError(err) {
             notifications.show({
@@ -459,6 +471,12 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
           },
         }
       );
+
+      mutateLearning({
+        content_id: Number(contentId),
+        profile_id: Number(profileId),
+        timespent: Math.ceil(currentTTime) - lastTime,
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [delay]);

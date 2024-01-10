@@ -8,7 +8,7 @@ const ContentInProgress = ({
   schoolStudentStat: TSchoolStudentStat;
 }) => {
   return (
-    <div className=" bg-white rounded-3xl  flex-col px-6  w-full">
+    <div className=" bg-white rounded-3xl  flex-col px-6  w-full overflow-y-scroll overflow-hidden  h-[300px]">
       <Header />
       {schoolStudentStat?.ongoing_contents?.length === 0 ? (
         <p className="mt-4 font-Inter">

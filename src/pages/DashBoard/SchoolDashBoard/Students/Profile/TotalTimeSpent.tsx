@@ -14,7 +14,7 @@ const TotalTimeSpent = ({
   return (
     <div className="p-5 bg-white rounded-3xl">
       <div className="flex justify-between">
-        <h1 className="text-[16px] font-semibold leading-[30px] mb-4 font-Inter">
+        <h1 className="text-[16px] font-semibold leading-[30px] mb-4 font-Hanken ">
           Total Time Spent
         </h1>
       </div>

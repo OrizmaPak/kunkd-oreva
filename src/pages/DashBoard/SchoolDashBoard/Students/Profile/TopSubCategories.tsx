@@ -8,7 +8,7 @@ const TopSubCategories = ({
   console.log("topinterest", schoolStudentStat?.top_interest_contents);
   return (
     <div className=" p-5 bg-white rounded-3xl flex-grow">
-      <h1 className="font-bold text-[16px] mb-2 leading-[30px] font-Inter">
+      <h1 className="font-bold text-[16px] mb-2 leading-[30px] font-Hanken font-semibold ">
         Top Interest
       </h1>
       <div className="flex  flex-col">

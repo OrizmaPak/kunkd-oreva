@@ -55,11 +55,11 @@ export type TMedia = {
   thumbnail: string;
 };
 
-type TQuizResult= {
-  "status": boolean,
-  "id": number,
-  "result": number
-}
+type TQuizResult = {
+  status: boolean;
+  id: number;
+  result: number;
+};
 export type TStoryContent = {
   sub_category_name?: unknown;
   category?: string;
@@ -81,9 +81,10 @@ export type TStoryContent = {
   tags?: string;
   theme?: string;
   thumbnail?: string;
-  status?:string;
-  web_synopsis?:string
-  quiz_result?:TQuizResult
+  status?: string;
+  web_synopsis?: string;
+  quiz_result?: TQuizResult;
+  timespent?: number;
 };
 
 const Stories1 = () => {
@@ -92,7 +93,7 @@ const Stories1 = () => {
   const [user] = useStore(getUserState);
   const contentId = localStorage.getItem("contentId");
   const profileId = localStorage.getItem("profileId");
-  useTimeSpent(Number(contentId),Number(profileId) )
+  useTimeSpent(Number(contentId), Number(profileId));
   const params = useParams();
   const { category } = params;
   const [opened, { open, close }] = useDisclosure(false);
@@ -100,7 +101,7 @@ const Stories1 = () => {
   const { data, isLoading: contentIsLoading } = useGetContentById(
     contentId?.toString() as string,
     // contentId!,
-    user?.user_id?.toString() || '',
+    user?.user_id?.toString() || "",
     open
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const content = data?.data.data;
@@ -122,86 +123,84 @@ const Stories1 = () => {
           blur: 10,
         }}
         closeOnClickOutside={false}
-       
         withCloseButton={false}
         centered
       >
-        <TeacherNotificationModal onCancel={close}/>
+        <TeacherNotificationModal onCancel={close} />
       </Modal>
-       <div className=" ">
-      <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] ">
-        <div className=" ">
-          {
-            <Skeleton visible={contentIsLoading}>
-              <StoriesNav
-                category={category && category}
-                genre={
-                  content && content?.sub_categories?.[0]?.sub_category_name
-                }
-                title={content && content.name}
-                subCategoryId={
-                  content && content?.sub_categories?.[0]?.sub_category_id
-                }
-                slug={
-                  content && content?.sub_categories?.[0]?.sub_category_name
-                }
-              />
-            </Skeleton>
-          }
-        </div>
-        <div className="flex-grow  h-full   ">
-          <div className="flex-grow mt-5 rounded-2xl ">
-            {!isFinish ? (
-              <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
-                {!startRead && (
-                  <Skeleton visible={contentIsLoading}>
-                    <AboutPage
-                      story={content as TStoryContent}
-                      setStartRead={() => setStartRead(true)}
-                    />
-                  </Skeleton>
-                )}
-
-                {content && startRead && (
-                  <ReadPage
-                    thumbnail={content.thumbnail as string}
-                    content={content.pages as TContentPage[]}
-                    setIsFinish={() => setIsFinish(true)}
-                    divRef={myRef}
-                  />
-                )}
-
-                <div className="w-full bg-white rounded-3xl mt-4">
-                  {
-                    <CardScreenHome
-                      data={recommendedStories}
-                      isLoading={isLoading}
-                      header="Recommended For You"
-                      isTitled={false}
-                      card={(props: TStoryContent) => (
-                        <CardHome
-                          {...props}
-                          goTo={() => {
-                            navigate(`../sub/${props.slug?.toLowerCase()}`);
-                            setStartRead(false);
-                          }}
-                        />
-                      )}
-                    />
+      <div className=" ">
+        <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] ">
+          <div className=" ">
+            {
+              <Skeleton visible={contentIsLoading}>
+                <StoriesNav
+                  category={category && category}
+                  genre={
+                    content && content?.sub_categories?.[0]?.sub_category_name
                   }
-                </div>
-              </div>
-            ) : (
-              <WelDone content={content as TStoryContent} />
-            )}
+                  title={content && content.name}
+                  subCategoryId={
+                    content && content?.sub_categories?.[0]?.sub_category_id
+                  }
+                  slug={
+                    content && content?.sub_categories?.[0]?.sub_category_name
+                  }
+                />
+              </Skeleton>
+            }
           </div>
-        </div>
+          <div className="flex-grow  h-full   ">
+            <div className="flex-grow mt-5 rounded-2xl ">
+              {!isFinish ? (
+                <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
+                  {!startRead && (
+                    <Skeleton visible={contentIsLoading}>
+                      <AboutPage
+                        story={content as TStoryContent}
+                        setStartRead={() => setStartRead(true)}
+                      />
+                    </Skeleton>
+                  )}
 
-        {/* </div> */}
+                  {content && startRead && (
+                    <ReadPage
+                      thumbnail={content.thumbnail as string}
+                      content={content.pages as TContentPage[]}
+                      setIsFinish={() => setIsFinish(true)}
+                      divRef={myRef}
+                    />
+                  )}
+
+                  <div className="w-full bg-white rounded-3xl mt-4">
+                    {
+                      <CardScreenHome
+                        data={recommendedStories}
+                        isLoading={isLoading}
+                        header="Recommended For You"
+                        isTitled={false}
+                        card={(props: TStoryContent) => (
+                          <CardHome
+                            {...props}
+                            goTo={() => {
+                              navigate(`../sub/${props.slug?.toLowerCase()}`);
+                              setStartRead(false);
+                            }}
+                          />
+                        )}
+                      />
+                    }
+                  </div>
+                </div>
+              ) : (
+                <WelDone content={content as TStoryContent} />
+              )}
+            </div>
+          </div>
+
+          {/* </div> */}
+        </div>
       </div>
-    </div>
     </>
-   
   );
 };
 
@@ -300,11 +299,10 @@ const AboutPage = ({
           <span className=" text-[#BD6AFA]  ">Dele and Louisa Olafuyi</span>
           <p className="grid grid-cols-2   gap-4 ">
             <button
-              onClick={(e)=>{
+              onClick={(e) => {
                 e.stopPropagation();
-                setStartRead()
-              }
-            }
+                setStartRead();
+              }}
               className=" py-3 inline self-end text-white border-white border-[2px] rounded-2xl"
             >
               Read
@@ -339,9 +337,7 @@ const AboutPage = ({
           <h1 className="text-white font-bold  font-Hanken text25 my-2">
             Overview
           </h1>
-          <p dangerouslySetInnerHTML={{ __html: `${story?.synopsis}`}}>
-           
-          </p>
+          <p dangerouslySetInnerHTML={{ __html: `${story?.synopsis}` }}></p>
         </div>
       </div>
     </div>
@@ -378,37 +374,37 @@ const ReadPage = ({
   const profileId = localStorage.getItem("profileId");
   const contentId = localStorage.getItem("contentId");
 
-  useEffect(() => 
-  {
-  const abortControllerRef = new AbortController();
+  useEffect(() => {
+    const abortControllerRef = new AbortController();
 
     // console.log("useEffect is running " ,pageNumber, page, pageTotal, isReading, volume)
     const handleUpdateData = async () => {
       try {
-    mutate(
-      {
-        profile_id: Number(profileId),
-        content_id: Number(contentId),
-        status: `${pageNumber === pageTotal ? "complete" : "ongoing"}`,
-        pages_read: Number(pageNumber + 1),
-        timespent: 23,
-        signal:abortControllerRef.signal
-      },
-      {
-        onSuccess(data) {
-          console.log("success", data.data.message);
-        },
-        onError(err) {
-          notifications.show({
-            title: `Notification`,
-            message: getApiErrorMessage(err),
-          });
-        },
+        mutate(
+          {
+            profile_id: Number(profileId),
+            content_id: Number(contentId),
+            status: `${pageNumber === pageTotal ? "complete" : "ongoing"}`,
+            pages_read: Number(pageNumber + 1),
+            timespent: 23,
+            signal: abortControllerRef.signal,
+          },
+          {
+            onSuccess(data) {
+              console.log("success", data.data.message);
+            },
+            onError(err) {
+              notifications.show({
+                title: `Notification`,
+                message: getApiErrorMessage(err),
+              });
+            },
+          }
+        );
+      } catch (err) {
+        // Handle errors if needed
       }
-    )}
-    catch (err) {
-      // Handle errors if needed
-    }}
+    };
 
     handleUpdateData();
 
@@ -418,21 +414,15 @@ const ReadPage = ({
       // queryClient.cancelMutations();
     };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[pageNumber]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageNumber]);
 
-
-
-
-
-
-  
   return (
     <div className="flex py-16 bg-white  rounded-3xl px-16">
       <div className=" basis-3/4 flex  items-center">
         <img
           loading="lazy"
-          src={ content[page]?.image || thumbnail}
+          src={content[page]?.image || thumbnail}
           alt="image"
           className="read-img rounded-xl"
         />
@@ -561,11 +551,11 @@ const BookPagination = ({
     continuePage ? Number(continuePage) : 1
   );
 
-  useEffect(()=>{
+  useEffect(() => {
     setPage(currentPage);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[currentPage])
-  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
+
   const pageItirate = (itirateControl: string) => {
     if (currentPage < pageTotal && itirateControl === "next") {
       setCurrentage((val) => (val += 1));

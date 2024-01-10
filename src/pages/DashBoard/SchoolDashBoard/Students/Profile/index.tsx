@@ -71,7 +71,7 @@ const StudentProfile = () => {
         <Header setStartDate={setStartDate} setEndDate={setEndDate} />
       </div>
 
-      <div className=" flex-grow gap-4 flex w-full ">
+      <div className=" flex-grow gap-6 flex w-full ">
         <div className=" flex w-full flex-col  fl gap-y-5  ">
           <div>
             <ProfileCard schoolStudentStat={schoolStudentStat} />

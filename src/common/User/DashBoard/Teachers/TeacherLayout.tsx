@@ -3,7 +3,6 @@ import DasboardIcon from "@/assets/adminIcon.svg";
 import StudentIcon from "@/assets/student.svg";
 import UserIcon from "@/assets/usericon.svg";
 
-
 import Arrow from "@/assets/greatericon.svg";
 import LogoutIcon from "@/assets/logout.svg";
 import LogoutModal from "@/pages/DashBoard/SchoolDashBoard/LogoutModal";
@@ -69,7 +68,7 @@ const TeacherLayout = () => {
       </Modal>
 
       <div className="w-full  bg-[#FFF7FD]  px-[100px] py-2 pb-4 mt-[8vh] h-[91vh]  ">
-        <div className="flex max-w-[1280px] w-full mx-auto  h-full gap-4  mt-[1vh]">
+        <div className="flex max-w-[1280px] w-full mx-auto  h-full gap-5  mt-[1vh]">
           <div className="basis-1/4 bg-white h-full rounded-[40px] px-4 flex  flex-col pb-4 ">
             <div className="flex-grow-1 flex-1">
               <Header
@@ -189,9 +188,7 @@ const TeacherProfile = () => {
           {user?.firstname} {user?.lastname}
         </p>
         <p>{user?.email}</p>
-        <p className="font-semibold mt-2">
-          {user?.school?.class?.class_name}
-        </p>
+        <p className="font-semibold mt-2">{user?.school?.class?.class_name}</p>
       </div>
     </div>
   );

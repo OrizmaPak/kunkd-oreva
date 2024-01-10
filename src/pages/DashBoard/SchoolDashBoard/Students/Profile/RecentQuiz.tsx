@@ -21,10 +21,10 @@ const RecentCompleted = ({
         />
       ) : (
         <div className="bg-white p-4 rounded-3xl  h-full">
-          <h1 className="font-semibold text-[16px] leading-[30px]  mb-2 font-Inter">
+          <h1 className="font-semibold text-[16px] leading-[30px]  mb-2 font-Hanken ">
             Recently Completed
           </h1>
-          <div className="flex gap-4">
+          <div className="flex gap-5">
             {schoolStudentStat?.recently_completed_content?.length === 0 && (
               <p className=" font-semibold ">Oops!!! No data😤 </p>
             )}
@@ -46,18 +46,19 @@ export default RecentCompleted;
 const CompletedCard = ({ data }: { data: TStoryContent }) => {
   return (
     <>
-      <div className="flex gap-4 ">
+      <div className="flex gap-3 ">
         <p>
           <img
             loading="lazy"
             src={data?.thumbnail}
             alt="image"
-            className="w-[70px]"
+            className="w-[65px] h-[65px] rounded"
           />
         </p>
         <p className="flex flex-col">
-          <span className="text-[12px] font-bold text-[#2BB457]">
-            {data?.name}
+          <span className="text-[20px] font-bold font-Hanken text-[#2BB457]">
+            {" "}
+            8.0
           </span>
           <span className="text-[15px] font-bold  text-gray-300">
             10hrs ago

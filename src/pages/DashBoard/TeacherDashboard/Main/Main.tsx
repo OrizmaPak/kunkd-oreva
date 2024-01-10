@@ -1,7 +1,7 @@
 import {
   useGetAdmittedStudentsInClass,
   useGetClassTotalTimeSpent,
-  useGetUpdatedProfile
+  useGetUpdatedProfile,
 } from "@/api/queries";
 import StudentIcon from "@/assets/student3.svg";
 import MyDateFilter from "@/components/DateFilter";
@@ -16,42 +16,44 @@ import { getUserState } from "@/store/authStore";
 import { TLogData } from "../../SchoolDashBoard/Main/Main";
 import { useState, useEffect } from "react";
 
-
-
 const Main = () => {
-  const [user, setUser ] = useStore(getUserState)
-  const [startDate, setStartDate] = useState("")
-  const [endDate, setEndDate] = useState("")
-const {data:profile} = useGetUpdatedProfile()
-const profileData = profile?.data?.data
-useEffect(()=>{
-  console.log("Profile Data",  profileData)
-  setUser( {...user, ...profileData});
-// eslint-disable-next-line
-},[])
+  const [user, setUser] = useStore(getUserState);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const { data: profile } = useGetUpdatedProfile();
+  const profileData = profile?.data?.data;
+  useEffect(() => {
+    console.log("Profile Data", profileData);
+    setUser({ ...user, ...profileData });
+    // eslint-disable-next-line
+  }, []);
 
-
-
-const {data:totalTimeSpentData} = useGetClassTotalTimeSpent(user?.school?.class?.class_id.toString() as string, startDate, endDate)
-  const totalTimeSpent = totalTimeSpentData?.data?.data
-  console.log("mytime-----",totalTimeSpent)
-  const {data:logData} = useGetClassContentStat(user?.school?.class?.class_id.toString() as string, startDate, endDate)
-  const statLog:TLogData = logData ?.data.data
+  const { data: totalTimeSpentData } = useGetClassTotalTimeSpent(
+    user?.school?.class?.class_id.toString() as string,
+    startDate,
+    endDate
+  );
+  const totalTimeSpent = totalTimeSpentData?.data?.data;
+  console.log("mytime-----", totalTimeSpent);
+  const { data: logData } = useGetClassContentStat(
+    user?.school?.class?.class_id.toString() as string,
+    startDate,
+    endDate
+  );
+  const statLog: TLogData = logData?.data.data;
 
   const { data, isLoading } = useGetAdmittedStudentsInClass("active");
   const studentList: TRequestStudents[] = data?.data.data.records;
 
- 
   return (
     <div className="h-full flex flex-col overflow-y-scroll">
       <div className="flex justify-between  gap-2">
         <h1 className="font-bold text-[30px] font-Recoleta">Overview</h1>
         <span className="flex gap-2 justify-center items-center">
           <span className="text-[#8530C1]">Sort by Date:</span>
-          <span> 
-          <MyDateFilter setStartDate={setStartDate} setEndDate={setEndDate}/>
-
-        </span>
+          <span>
+            <MyDateFilter setStartDate={setStartDate} setEndDate={setEndDate} />
+          </span>
         </span>
       </div>
       <div className=" flex gap-5 flex-grow">
@@ -59,17 +61,14 @@ const {data:totalTimeSpentData} = useGetClassTotalTimeSpent(user?.school?.class?
           <StudentLeaderboard data={studentList} isLoading={isLoading} />
         </div>
 
-        <div className=" basis-3/5 flex flex-col ">
+        <div className=" basis-3/5 flex flex-col gap-2 ">
           <Card
             image={StudentIcon}
             title="Students"
             amount={studentList ? studentList?.length : 0}
           />
 
-          <ProgressLog
-          logData={statLog}
-           
-          />
+          <ProgressLog logData={statLog} />
 
           <TotalTimeSpent totalTimeSpent={totalTimeSpent} />
         </div>

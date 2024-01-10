@@ -8,10 +8,10 @@ const ClassLeaderboard = ({ data }: { data: TTeacherList[] }) => {
   return (
     <div className="p-4 bg-white rounded-3xl flex flex-col flex-grow px-10 mt-2">
       <div className="flex justify-between">
-        <h1 className="text2 font-semibold">Class List</h1>
+        <h1 className="text2 font-semibold font-Hanken">Class List</h1>
       </div>
 
-      <div className="flex justify-between mt-4 text3 ">
+      <div className="flex justify-between mt-4 text3 font-semibold text-[#B5B5C3] ">
         <span>Classes</span>
         <span>Teacher</span>
       </div>
