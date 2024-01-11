@@ -1,9 +1,23 @@
 import Button from "@/components/Button";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+// import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
+import { getProfileState } from "@/store/profileStore";
 
 const LogoutModal = ({ onCloseModal }: { onCloseModal: () => void }) => {
   const navigate = useNavigate();
+  const [profiles, setProfiles] = useStore(getProfileState);
+  console.log(profiles);
+  // const navigate = useNavigate();
+  const handLogOut = () => {
+    localStorage.clear();
+    setProfiles([]);
+    onCloseModal();
+    navigate("/");
+  };
+  // const navigate = useNavigate();
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -24,7 +38,7 @@ const LogoutModal = ({ onCloseModal }: { onCloseModal: () => void }) => {
             Cancel
           </Button>
           <Button
-            onClick={() => navigate("/")}
+            onClick={handLogOut}
             className="p-4 px-10 bg-red-600 text-white rounded-full flex-grow"
           >
             Logout
