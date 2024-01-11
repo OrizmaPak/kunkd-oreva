@@ -5,7 +5,7 @@ import { Menu, Popover } from "@mantine/core";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useGetMainSearch } from "@/api/queries";
 import KundaLogo from "@/assets/schoolIcon.svg";
-import UserIcon2 from "@/assets/userIcon2.svg";
+// import UserIcon2 from "@/assets/userIcon2.svg";
 import useDebounce from "@/hooks/useDebounce";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
