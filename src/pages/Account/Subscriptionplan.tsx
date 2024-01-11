@@ -49,26 +49,34 @@ const Subscriptionplan = () => {
       transition={{ duration: 1 }}
     >
       <div className="px-4 ">
-        <h1 className="text25 font-bold my-8">Subscription Plan</h1>
+        <h1 className="text-[24px]  font-medium font-Hanken my-8">
+          Subscription Plan
+        </h1>
 
         {userObject?.subscription?.status === false ? (
           <div>
-            <div className="px-6 border-[2px] border-[#FBECFF]  py-10 rounded-3xl my-8 ">
+            <div className="px-6 border-[3px] border-[#FBECFF]  py-10 rounded-3xl my-8 ">
               <div className="grid grid-cols-[1fr_1fr_300px]">
                 <p className="flex flex-col">
-                  <span className="text-[#B5B5C3] text-[16px]">Plan</span>
-                  <span className="font-bold text25">Basic</span>
+                  <span className="text-[#B5B5C3] text-[16px] font-Hanken">
+                    Plan
+                  </span>
+                  <span className="font-bold text25 font-Hanken">Basic</span>
                 </p>
                 <p className="flex flex-col">
-                  <span className="text-[#B5B5C3] text-[16px]">Payment</span>
-                  <span className="font-bold text25">Free</span>
+                  <span className="text-[#B5B5C3] text-[16px] font-Hanken">
+                    Payment
+                  </span>
+                  <span className="font-bold text25 font-Hanken">Free</span>
                 </p>
 
-                <p className="flex justify-center items-center">
+                <p className="flex justify-center items-center py-2">
                   <Button onClick={() => navigate("/packages")} size="md">
-                    <p className="flex gap-3">
+                    <p className="flex gap-3 items-center">
                       <img loading="lazy" src={Starr} alt="starr" />
-                      <span className="text1">Upgrade</span>
+                      <span className="text-[14px] font-Hanken">
+                        Upgrade Plan
+                      </span>
                     </p>
                   </Button>
                 </p>
@@ -81,7 +89,7 @@ const Subscriptionplan = () => {
               <div className="flex items-center gap-4">
                 <span
                   onClick={() => setOpenPlan((el) => !el)}
-                  className="flex gap-2 cursor-pointer text3"
+                  className="flex gap-2 cursor-pointer text-[16px] font-Hanken"
                 >
                   See avalaible plan
                   <img

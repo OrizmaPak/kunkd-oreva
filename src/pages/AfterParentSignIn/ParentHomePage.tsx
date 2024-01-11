@@ -2,7 +2,7 @@ import {
   useContentForHome,
   // useGetContentsLog,
   useGetOngoingContents,
-  useGetUpdatedProfile
+  useGetUpdatedProfile,
 } from "@/api/queries";
 import BookIcon from "@/assets/bookicon.svg";
 import musicIcon from "@/assets/musicIcon.svg";
@@ -25,14 +25,14 @@ import Hero from "./Hero";
 import "./parenthomepage.css";
 
 const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
-const [useri, setUser] = useStore(getUserState);
-  const {data } = useGetUpdatedProfile()
-  const currentUserProfile = data?.data?.data
+  const [useri, setUser] = useStore(getUserState);
+  const { data } = useGetUpdatedProfile();
+  const currentUserProfile = data?.data?.data;
   useEffect(() => {
-    setUser({...useri, ...currentUserProfile})
+    setUser({ ...useri, ...currentUserProfile });
     //  eslint-disable-next-line react-hooks/exhaustive-deps
-  },[currentUserProfile])
-  console.log("Updataed user profile", data)
+  }, [currentUserProfile]);
+  console.log("Updataed user profile", data);
   const [profiles] = useStore(getProfileState);
   const profileId = localStorage.getItem("profileId") as string;
   const { data: ongoingData } = useGetOngoingContents(profileId);
@@ -58,11 +58,11 @@ const [useri, setUser] = useStore(getUserState);
   //   profile = profiles?.find((each) => each.id === currentId)!;
   // }
 
-  const user2 = localStorage.getItem("user")
-  const userObject = JSON.parse(user2 as string)
+  const user2 = localStorage.getItem("user");
+  const userObject = JSON.parse(user2 as string);
   const navigate = useNavigate();
   // const user = JSON.parse(userInLocalStr!);
-  const [user ]= useStore(getUserState)
+  const [user] = useStore(getUserState);
   const settings = {
     dots: false,
     centerMode: false,
@@ -74,9 +74,11 @@ const [useri, setUser] = useStore(getUserState);
   };
   const sliderReff = useRef<Slider>(null);
 
-  const profile = childProfile ? profiles?.find((each) => each.id === +childProfile) : profiles[0];
-  if(!user || !profile){
-    return <Navigate to="/"  replace />
+  const profile = childProfile
+    ? profiles?.find((each) => each.id === +childProfile)
+    : profiles[0];
+  if (!user || !profile) {
+    return <Navigate to="/" replace />;
   }
 
   return (
@@ -232,7 +234,7 @@ const [useri, setUser] = useStore(getUserState);
             />
           </div>
 
-       {userObject?.subscription.status === false && <AdsButton />}
+          {userObject?.subscription.status === false && <AdsButton />}
           <div className="">
             <CardScreenHome
               data={recommendedStories}

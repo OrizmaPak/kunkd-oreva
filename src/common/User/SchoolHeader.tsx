@@ -19,6 +19,8 @@ import {
   useGetAttemptStudentConnect,
 } from "@/api/queries";
 import { TRequestStudents } from "@/pages/DashBoard/TeacherDashboard/Request/Request";
+import { LuUser2 } from "react-icons/lu";
+import { logOut } from "@/auth/sdk";
 
 type THints = {
   id: number;
@@ -58,9 +60,10 @@ const SchoolHeader = ({
     }
   };
   const handLogOut = () => {
-    navigate("/");
+    logOut();
     localStorage.clear();
     setProfiles([]);
+    navigate("/");
   };
 
   const handleChangeProfile = (id: number) => {
@@ -256,8 +259,7 @@ const SchoolHeader = ({
                       onClick={() => navigate("/account")}
                       className="p-2 px-4 hover:cursor-pointer hover:text-[#8530C1] flex gap-2 items-center"
                     >
-                      <img loading="lazy" src={UserIcon2} alt="userIcon" />{" "}
-                      <span> Account</span>
+                      <LuUser2 size={25} color={"gray"} /> <span> Account</span>
                     </button>
                   </Menu.Item>
                   <hr />

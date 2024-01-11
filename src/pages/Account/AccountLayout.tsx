@@ -132,7 +132,7 @@ const SideMenuButton = ({
     <div className="my-8 w-[100%]">
       <button
         onClick={onClick}
-        className={`py-2 pad-x-40  text-[16px] rounded-full  font-medium font-Hanken ${
+        className={`py-3 px-4  text-[16px] rounded-full  font-medium font-Hanken w-[186px] text-left ${
           active ? "bg-[#FFF7FD] text-[#8530C1]" : "text-[#B5B5C3] "
         }  `}
       >

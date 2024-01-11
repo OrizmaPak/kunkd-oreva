@@ -22,7 +22,7 @@ import InputFormat from "../../common/InputFormat";
 const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
   const [, setUser] = useStore(getUserState);
-  const { mutate: socialMutate } = useSocialLogin();
+  const { mutate: socialMutate, isLoading: socialisLoading } = useSocialLogin();
   const handleGoogleLogin = async () => {
     try {
       const returnValue = await googleSignIn();
@@ -38,10 +38,10 @@ const LoginContent = () => {
         {
           onSuccess(data) {
             const res = data?.data?.data as TUser;
-            notifications.show({
-              title: `Notification`,
-              message: data.data.message,
-            });
+            // notifications.show({
+            //   title: `Notification`,
+            //   message: data.data.message,
+            // });
             setUser({ ...res });
             navigate("/selectprofile");
           },
@@ -77,10 +77,10 @@ const LoginContent = () => {
         {
           onSuccess(data) {
             const res = data?.data?.data as TUser;
-            notifications.show({
-              title: `Notification`,
-              message: data.data.message,
-            });
+            // notifications.show({
+            //   title: `Notification`,
+            //   message: data.data.message,
+            // });
             setUser({ ...res });
             navigate("/selectprofile");
           },
@@ -116,10 +116,7 @@ const LoginContent = () => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-
-
   const submitData = (data: FormData) => {
-
     mutate(
       {
         ...data,
@@ -133,11 +130,12 @@ const LoginContent = () => {
             message: data.data.message,
           });
 
-          if (res?.role === "schoolAdmin" || res?.role === "teacher" ) {
+          if (res?.role === "schoolAdmin" || res?.role === "teacher") {
             navigate("/school");
           } else if (res?.role === "parent" || res?.role === "user") {
             navigate("/selectprofile");
-        }},
+          }
+        },
         onError() {
           notifications.show({
             title: `Notification`,
@@ -171,8 +169,6 @@ const LoginContent = () => {
   return (
     <div className="flex justify-center items-center w-full h-full">
       <div className="inner-form-w relative  my-auto flex justify-end items-center ">
-       
-
         <Link to="/">
           <span className="absolute top-[-60px] ">
             <img loading="lazy" src={Cancel} alt="cancel" />
@@ -180,7 +176,7 @@ const LoginContent = () => {
         </Link>
         <div className="w-[100%]">
           <span></span>
-          <h1 className="font-bold fon header2 font-Recoleta text">
+          <h1 className="font-bold fon header2 font-Recoleta  leading-[30px] ">
             Welcome back
           </h1>
           <p className="text3 text-[#A7A7A7] font-Hanken">
@@ -240,7 +236,12 @@ const LoginContent = () => {
             <span>or continue with</span> <hr className="flex-1" />
           </p>
           <div className="flex gap-8">
-            <Button size="full" onClick={handleGoogleLogin} varient="outlined">
+            <Button
+              disable={socialisLoading}
+              size="full"
+              onClick={handleGoogleLogin}
+              varient="outlined"
+            >
               <FcGoogle size={20} className={" mx-auto"} />
             </Button>
             <Button size="full" varient="outlined">

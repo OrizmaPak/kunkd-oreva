@@ -108,7 +108,9 @@ const MyKids = () => {
 
         <div className="px-4 ">
           <div className="flex justify-between items-center">
-            <h1 className="text-[30px] font-bold my-8">My Kids</h1>
+            <h1 className="text-[24px]  my-8 font-medium font-Hanken">
+              My Kids
+            </h1>
             <Button
               onClick={() => {
                 open(), setCurrentStep(STEP_1);
@@ -227,8 +229,8 @@ const KidCard = ({
         />
       </Modal>
 
-      <div className=" relative flex  border-[#FBECFF] border-[2px] px-6 py-6 rounded-3xl">
-        <div>
+      <div className=" relative flex  border-[#FBECFF] border-[3px] px-6 py-6 rounded-3xl">
+        <div className=" flex justify-center items-center">
           {isLoading ? (
             <span>
               <Skeleton height={100} circle mb="xl" />
@@ -242,12 +244,12 @@ const KidCard = ({
             />
           )}
         </div>
-        <div className="ml-3 mt-8">
-          <h1 className="font-bold text-[16px] px-3 font-Recoleta">
+        <div className="ml-3">
+          <h1 className="font-bold text-[16px] px-3 font-Hanken">
             {name && name?.charAt(0)?.toUpperCase() + name?.slice(1)}
           </h1>
           <p className="text-gray-400 flex text2 mt-4 ">
-            <span className="border-l-gray-600 border-r-2 mr-4 px-3">
+            <span className="border-l-gray-600 border-r-2 mr-4 px-3 text-[14px] font-Hanken">
               Age - {childaAge}
             </span>
             <div>
@@ -258,7 +260,10 @@ const KidCard = ({
                   className="text2 flex gap-1 justify-center items-center mt-1"
                 >
                   <PiStudent size={25} color="#8530C1" />
-                  <p className="text2 text-[#8530C1]"> View School Info</p>
+                  <p className="text2 text-[#8530C1] text-[14px] font-Hanken">
+                    {" "}
+                    View School Info
+                  </p>
                 </button>
               ) : student?.status === "declined" ? (
                 <button
@@ -266,13 +271,17 @@ const KidCard = ({
                   className=" mt-1 flex justify-center items-center gap-2 bg-[#FEF3F2] px-2 py-1 rounded-2xl"
                 >
                   <p className="h-2 w-2 rounded-full bg-[#F04438]"></p>
-                  <p className="text2  text-[#B42318]">Request declined</p>
+                  <p className="text2  text-[#B42318] text-[14px] font-Hanken">
+                    Request declined
+                  </p>
                 </button>
               ) : student?.status === "pending" &&
                 (student?.school_name?.length as number) > 0 ? (
                 <button className="mt-1 flex justify-center items-center gap-2 bg-[#FFFAEB] px-2 py-1 rounded-2xl">
                   <span className="h-2 w-2 rounded-full bg-[#F79009]"></span>
-                  <span className="text2  text-[#B54708]">Request Pending</span>
+                  <span className="text2  text-[#B54708] text-[14px] font-Hanken">
+                    Request Pending
+                  </span>
                 </button>
               ) : (
                 <button

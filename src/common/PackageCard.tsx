@@ -38,7 +38,7 @@ const PackageCard = ({
     const currencyIso =
       countryCode === "NG" ? "NGN" : countryCode === "UK" ? "GBP" : "USD";
     if (!plan) {
-      navigate("/childprofilesetup");
+      // navigate("/childprofilesetup");
       if (localStorage.getItem("gotToHome") === "true") {
         navigate("/parent");
       } else {
@@ -80,7 +80,7 @@ const PackageCard = ({
         </div>
       )}
       {content && !isIcon && (
-        <div className=" flex flex-col ">
+        <div className=" flex flex-col pb-[74.5px] ">
           {content.map((item, index) => (
             <div className="mt-2 " key={index}>
               <p className="text-sm  py-[10.5px]  border-b-[0.5px] border-[#FBECFF]">

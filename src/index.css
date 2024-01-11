@@ -63,6 +63,7 @@ body {
 .header2 {
   /* font-size: clamp(1.125rem, 0.8887rem + 1.5126vw, 2.25rem) !important; */
   font-size: clamp(1rem, 0.7374rem + 1.6807vw, 2.25rem) !important;
+  line-height: 35px;
 }
 
 .header1 {

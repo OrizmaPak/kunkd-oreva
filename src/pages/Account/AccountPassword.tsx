@@ -68,12 +68,12 @@ const SettingPassword = () => {
       transition={{ duration: 1 }}
     >
       <div className="px-4">
-        <h1 className="text25 font-bold py-8">Password</h1>
+        <h1 className="text-[24px]  font-Hanken py-8 font-medium">Password</h1>
 
         <form onSubmit={handleSubmit(submitData)}>
           <div className="grid grid-cols-[150px_1fr_1fr] gap-8 my-6 items-center">
             <p className="flex flex-col">
-              <span className="text3">Old Password</span>
+              <span className="text-[16px] font-Hanken ">Old Password</span>
             </p>
 
             <span>
@@ -92,7 +92,7 @@ const SettingPassword = () => {
           </div>
           <div className="grid grid-cols-[150px_1fr_1fr] gap-8 my-6 items-center">
             <p className="flex flex-col">
-              <span className="text3">New Password</span>
+              <span className="text-[16px] font-Hanken ">New Password</span>
             </p>
             <span>
               <hr className="mr-16" />
@@ -112,7 +112,7 @@ const SettingPassword = () => {
             </span>
           </div>
 
-          <p className="flex justify-center items-center pt-14  px-48">
+          <p className="flex justify-center items-center pt-8  px-48">
             <Button type="submit">
               {isLoading ? (
                 <p className="flex justify-center items-center">

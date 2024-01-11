@@ -1,7 +1,7 @@
 import EditPencil from "@/assets/editPencil.svg";
 import Button from "@/components/Button";
 // import Starr from "@/assets/starr.svg";
-import SchoolLogo from "@/assets/schoolIcon.svg";
+// import SchoolLogo from "@/assets/schoolIcon.svg";
 import SchoolBg from "@/assets/schoolImage.svg";
 import { motion } from "framer-motion";
 // import { userContext } from "@/Context/StateProvider";
@@ -39,6 +39,7 @@ import { Loader, Menu } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useForm } from "react-hook-form";
 import { z, ZodType } from "zod";
+import { useQueryClient } from "@tanstack/react-query";
 // import { FileWithPath } from "@mantine/dropzone";
 import { TUser } from "@/api/types";
 
@@ -46,7 +47,9 @@ const Profile = () => {
   const [parentEditMode, setParentEditMode] = useState(false);
   const [teacherEditMode, setTeacherEditMode] = useState(false);
   const [schEditMode, setSchEditMode] = useState(false);
-  const [user, ,] = useStore(getUserState);
+  // const [user, ,] = useStore(getUserState);
+  const userStorage = localStorage.getItem("user");
+  const user = JSON.parse(userStorage as string);
   console.log("____RealUser______", user);
 
   return (
@@ -58,7 +61,7 @@ const Profile = () => {
         transition={{ duration: 1 }}
       >
         <div className="px-4 ">
-          <h1 className="text25 font-bold my-8 font-Hanken">Profile</h1>
+          <h1 className="text25 font-medium my-8 font-Hanken">Profile</h1>
 
           {user?.role === "teacher" && (
             <>
@@ -119,6 +122,8 @@ export default Profile;
 const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
   const { isLoading, mutate } = useUpdateParentImage();
   const [, setUser] = useStore(getUserState);
+  const queryClient = useQueryClient();
+
   // const [edit, setEdit] = useState(false);
 
   // const [uploadType, ,] = useState<"profileImage" | "backgroundImage" | null>(
@@ -137,7 +142,7 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
         onSuccess(data) {
           console.log("success", data.data.message);
           setUser({ ...user, user_image: data?.data?.data?.image });
-
+          queryClient.invalidateQueries(["GetUpdatedProfile"]);
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -225,12 +230,17 @@ const ParentPersonalInfomation = ({
   openEdit: () => void;
 }) => {
   return (
-    <div className="p-6 border-[3px] border-[#FBECFF]   rounded-3xl mt-8">
+    <div className=" relative p-6 px-[30px] border-[3px] border-[#FBECFF]   rounded-3xl mt-14">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="font-bold font-Hanken text-[16px]">
+        <h1 className="font-medium font-Hanken text-[16px]">
           Personal Information
         </h1>
-        <Button onClick={openEdit} size="sm" varient="outlined">
+        <Button
+          className="absolute top-[-20px] right-[40px] bg-white border-[2px]"
+          onClick={openEdit}
+          size="sm"
+          varient="outlined"
+        >
           <p className="gap-4 flex">
             <img
               loading="lazy"
@@ -238,7 +248,9 @@ const ParentPersonalInfomation = ({
               alt="pencil"
               className="w-[15px]"
             />{" "}
-            <span className="text-[#8530C1] text-[14px] font-Hanken">Edit</span>
+            <span className="text-[#8530C1] text-[14px] font-Hanken bg-white">
+              Edit profile
+            </span>
           </p>
         </Button>
       </div>
@@ -266,22 +278,29 @@ const SchoolPersonalInfomation = ({
 }) => {
   // const [user, ,] = useStore(getUserState);
   return (
-    <div className="p-6 border-[3px] border-[#FBECFF]  rounded-3xl mt-8">
+    <div className="relative px-[30px] p-6 border-[3px] border-[#FBECFF]  rounded-3xl mt-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="font-bold text-[16px]">Personal Information</h1>
-        <Button onClick={openEdit} size="sm" varient="outlined">
+        <h1 className="font-medium text-[16px] font-Hanken">
+          Personal Information
+        </h1>
+        <Button
+          onClick={openEdit}
+          size="sm"
+          varient="outlined"
+          className="absolute top-[-20px] right-[40px] bg-white border-[2px]"
+        >
           <p className="gap-4 flex">
             <img loading="lazy" src={EditPencil} alt="pencil" />{" "}
-            <span className="text-[#8530C1] text3">Edit</span>
+            <span className="text-[#8530C1] text3">Edit profile</span>
           </p>
         </Button>
       </div>
-      <div className="grid grid-cols-[1fr_1fr_1fr_1fr] my-1 text3 text-[#B5B5C3]">
+      <div className="grid grid-cols-[1fr_1fr_1fr_1fr] my-1 text-[12px]  font-Hanken text-[#B5B5C3]">
         <span>Contact Name</span>
         <span>Email</span>
         <span>Address</span>
       </div>
-      <div className="grid grid-cols-[1fr_1fr_1fr_1fr] text3 mb-4 text-[14px]">
+      <div className="grid grid-cols-[1fr_1fr_1fr_1fr]  font-Hanken mb-4 text-[14px]">
         <span>{user?.school?.contact_name}</span>
         <span>{user?.email}</span>
         <span>{user?.school?.address}</span>
@@ -298,22 +317,29 @@ const TeacherPersonalInfomation = ({
   openEdit: () => void;
 }) => {
   return (
-    <div className="p-6 border-[3px] border-[#FBECFF]   rounded-3xl mt-8">
+    <div className="relative p-6 px-[30px]  border-[3px] border-[#FBECFF]   rounded-3xl mt-16">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="font-bold text-[16px]">Personal Information</h1>
-        <Button onClick={openEdit} size="sm" varient="outlined">
+        <h1 className="font-medium text-[16px] font-Hanken ">
+          Personal Information
+        </h1>
+        <Button
+          onClick={openEdit}
+          size="sm"
+          varient="outlined"
+          className="absolute top-[-20px] right-[40px] bg-white border-[2px]"
+        >
           <p className="gap-4 flex">
             <img loading="lazy" src={EditPencil} alt="pencil" />{" "}
-            <span className="text-[#8530C1]">Edit</span>
+            <span className="text-[#8530C1]">Edit profile</span>
           </p>
         </Button>
       </div>
-      <div className="grid grid-cols-[1fr_1fr_1fr] my-1 text3 text-[#B5B5C3]">
+      <div className="grid grid-cols-[1fr_1fr_1fr] my-1 text-[12px] text-[#B5B5C3]  font-Hanken">
         <span>First Name</span>
         <span>Last Name</span>
         <span>Email</span>
       </div>
-      <div className="grid grid-cols-[1fr_1fr_1fr] text3 mb-4 text-[14px]">
+      <div className="grid grid-cols-[1fr_1fr_1fr] font-medium mb-4 text-[14px] font-Hanken">
         <span>{user?.firstname}</span>
         <span>{user?.lastname}</span>
         <span>{user?.email}</span>
@@ -329,6 +355,7 @@ const SchCard = ({ user }: { user: TUser }) => {
   const [uploadType, setUploadType] = useState<
     "profileImage" | "backgroundImage" | null
   >(null);
+  const queryClient = useQueryClient();
 
   const handleSubmit = (data: File) => {
     if (!uploadType) return;
@@ -340,6 +367,7 @@ const SchCard = ({ user }: { user: TUser }) => {
       {
         onSuccess(data) {
           console.log("success", data.data.message);
+          queryClient.invalidateQueries(["GetUpdatedProfile"]);
           setUser({
             ...user,
             school: {
@@ -412,7 +440,7 @@ const SchCard = ({ user }: { user: TUser }) => {
           btnTitle="Done"
         />
       </Modal>
-      <div className="relative">
+      <div className="relative  ">
         <img
           loading="lazy"
           src={
@@ -432,30 +460,36 @@ const SchCard = ({ user }: { user: TUser }) => {
           alt="camera"
           className="absolute top-8 right-10"
         />
-        <span
+        <div
           // onClick={open}
-          className="absolute p-4 bg-white rounded-full bottom-[-100px] left-12"
+          className="absolute p-4 bg-white rounded-full bottom-[-100px] left-8  h-[180px] w-[180px]"
         >
           <Menu>
             <Menu.Target>
-              <span className=" bg-[#b9b9b9] z-50 rounded-full flex justify-center items-center relative  ">
-                <img
-                  loading="lazy"
-                  src={
-                    user?.school?.profileImage
-                      ? user?.school?.profileImage
-                      : SchoolLogo
-                  }
-                  alt=""
-                  className="w-[180px] h-[180px] object-containe rounded-full "
-                />
-                <img
-                  loading="lazy"
-                  src={BigPencil}
-                  alt="pencil"
-                  className="absolute"
-                />
-              </span>
+              <div className="relative h-full w-full ">
+                {user?.school?.profileImage ? (
+                  <img
+                    loading="lazy"
+                    src={
+                      user?.school?.profileImage
+                        ? user?.school?.profileImage
+                        : ""
+                    }
+                    alt=""
+                    className="w-[180px] h-[180px] object-containe rounded-full "
+                  />
+                ) : (
+                  <span className=" bg-[#b9b9b9] z-50 rounded-full flex justify-center items-center   h-full w-full  "></span>
+                )}
+                <p className=" absolute top-0 left-0 z-[100] border-6 border-black w-full h-full flex justify-center items-center">
+                  <img
+                    loading="lazy"
+                    src={BigPencil}
+                    alt="pencil"
+                    className="absolute "
+                  />
+                </p>
+              </div>
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Item
@@ -478,15 +512,15 @@ const SchCard = ({ user }: { user: TUser }) => {
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>
-        </span>
+        </div>
       </div>
-      <div className="pl-[270px] flex justify-between mt-2  ">
+      <div className="pl-[215px] flex justify-between mt-3 mb-16">
         <div className="w-[300px]">
           {!edit ? (
             <SchNameAddress user={user} setEdit={setEdit} />
           ) : (
             <EditSchNameAddress
-              schoolName={user?.school?.contact_name as string}
+              schoolName={user?.school?.name as string}
               schoolAddress={user?.school?.address as string}
               setEdit={setEdit}
             />
@@ -496,10 +530,14 @@ const SchCard = ({ user }: { user: TUser }) => {
           </h1>
           <span className="text-[16px] text-[#B5B5C3]">{city}</span> */}
         </div>
-        <div className="pr-5 pt-2">
+        <div className="pr-5 ">
           <p className="flex gap-3 justify-center items-baseline">
-            School code:
-            <p className="font-bold text-[23px] pt-1">
+            <span className="text-[12px] text-[#B5B5C3] font-Hanken">
+              {" "}
+              License Code:
+            </span>
+
+            <p className="font-bold font-Hanken text-[20px] pt-1">
               {user?.school?.code as string}
             </p>
             <img
@@ -525,8 +563,11 @@ const SchNameAddress = ({
 }) => {
   return (
     <>
-      <h1 className="font-bold text-[28px] flex gap-4">
-        {user?.school?.name}
+      <div className=" flex  pr-4 gap-2">
+        <p className="font-bold text-[24px] leading-[25px] font-Hanken ">
+          {user?.school?.name}
+        </p>
+
         <img
           loading="lazy"
           onClick={() => setEdit(true)}
@@ -534,8 +575,8 @@ const SchNameAddress = ({
           alt="editIcon"
           className=" cursor-pointer"
         />
-      </h1>
-      <span className="text-[16px] text-[#B5B5C3]">
+      </div>
+      <span className="text-[16px] text-[#B5B5C3] font-Hanken ">
         {user?.school?.address}
       </span>
     </>
@@ -554,11 +595,11 @@ const EditSchNameAddress = ({
   const schema: ZodType<FormData> = z.object({
     school_name: z
       .string()
-      .min(4, { message: "School name must be at least 4 characters long" })
+      .min(2, { message: "School name must be at least 4 characters long" })
       .max(50, { message: "School name must not exceed 50 characters" }),
     address: z
       .string()
-      .min(11, { message: "Address  must be at least 4 characters long" })
+      .min(2, { message: "Address  must be at least 4 characters long" })
       .max(50, { message: "Address must not exceed 50 characters" }),
   });
 
@@ -572,6 +613,7 @@ const EditSchNameAddress = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   console.log("errors", errors);
+  const queryClient = useQueryClient();
 
   const submitData = async (data: FormData) => {
     // console.log("testing");
@@ -586,6 +628,7 @@ const EditSchNameAddress = ({
       {
         onSuccess(data) {
           console.log("success", data.data.data);
+          queryClient.invalidateQueries(["GetUpdatedProfile"]);
           setUser({
             ...user,
             school: {
@@ -665,7 +708,7 @@ const EditParentPersonalInfomation = ({
   onSave: () => void;
 }) => {
   const { mutate, isLoading } = useUpdateParentProfile();
-  const [user, setUser] = useStore(getUserState);
+  // const [user, setUser] = useStore(getUserState);
 
   const schema: ZodType<FormData> = z.object({
     firstname: z
@@ -685,6 +728,8 @@ const EditParentPersonalInfomation = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   console.log("errors", errors);
+  const queryClient = useQueryClient();
+  const [user, setUser] = useStore(getUserState);
 
   const submitData = async (data: FormData) => {
     console.log("testing");
@@ -698,6 +743,7 @@ const EditParentPersonalInfomation = ({
       {
         onSuccess(data) {
           console.log("success", data.data.data);
+          queryClient.invalidateQueries(["GetUpdatedProfile"]);
           setUser({
             ...user,
             firstname: data?.data?.data?.firstname,
@@ -828,6 +874,7 @@ const EditSchoolPersonalInfomation = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   console.log("errors", errors);
+  const queryClient = useQueryClient();
 
   const submitData = async (data: FormData) => {
     console.log("testing");
@@ -842,6 +889,7 @@ const EditSchoolPersonalInfomation = ({
       {
         onSuccess(data) {
           console.log("success", data.data.data);
+          queryClient.invalidateQueries(["GetUpdatedProfile"]);
           setUser({
             ...user,
             school: {
