@@ -12,8 +12,6 @@ import Profile from "./Profile";
 import Row from "./Row";
 import SchoolNotificationModal from "@/components/SchoolNotificationModal";
 
-
-
 export type DashBoardDataType = {
   noOfTeacher: number;
   noOfStudents: number;
@@ -27,15 +25,16 @@ export type DashBoardDataType = {
 };
 
 export type TTeacherList = {
-  user:{"class_id": number,
-  "class_name": string,
-  "email": string,
-  "firstname": string,
-  "gender": string,
-  "id":number,
-  "image": string,
-  "lastname": string}
-
+  user: {
+    class_id: number;
+    class_name: string;
+    email: string;
+    firstname: string;
+    gender: string;
+    id: number;
+    image: string;
+    lastname: string;
+  };
 };
 
 const Teachers = () => {
@@ -43,16 +42,19 @@ const Teachers = () => {
   const [status, setStatus] = useState("active");
   const [activePage, setPage] = useState(1);
 
-  const { data, isLoading, refetch } = useGetTeacherList(status, activePage?.toString());
+  const { data, isLoading, refetch } = useGetTeacherList(
+    status,
+    activePage?.toString()
+  );
   const teacherList: TTeacherList[] = data?.data.data.records;
   const totalPage = data?.data.data.number_pages;
 
   const [opened, { open, close }] = useDisclosure(false);
   const [modalStep, setModalStep] = useState(STEP_1);
-  const [openedSchNotifications, { open:openSchNotifications, close:closeSchNotifications }] = useDisclosure(false);
-
-
- 
+  const [
+    openedSchNotifications,
+    { open: openSchNotifications, close: closeSchNotifications },
+  ] = useDisclosure(false);
 
   const [currentClicked, setCucrrentClicked] = useState(0);
   const currentClickedProfile = teacherList?.find(
@@ -87,17 +89,16 @@ const Teachers = () => {
             asignClass={currentClickedProfile?.user?.class_name}
             image={currentClickedProfile?.user?.image}
             email={currentClickedProfile?.user?.email}
-            handleClick={()=>close()}
+            handleClick={() => close()}
             onEdit={() => setModalStep(STEP_3)}
           />
         )}
-    
 
-      {modalStep === STEP_3 && <EditAssignedClass onClose={close} currentClicked={currentClicked} />}
+        {modalStep === STEP_3 && (
+          <EditAssignedClass onClose={close} currentClicked={currentClicked} />
+        )}
       </Modal>
 
-
-      
       <Modal
         radius={10}
         size="md"
@@ -106,7 +107,10 @@ const Teachers = () => {
         closeButtonProps={{ size: "lg" }}
         centered
       >
-        <SchoolNotificationModal onCancel={closeSchNotifications}   label="teachers"/>
+        <SchoolNotificationModal
+          onCancel={closeSchNotifications}
+          label="teachers"
+        />
       </Modal>
       <div className="  flex-grow flex flex-col rounded-3xl p-4 bg-white">
         <div className="grid grid-cols-3 justify-center items-center w-full px-8 ">
@@ -116,36 +120,43 @@ const Teachers = () => {
             </h1>
           </div>
           <div className="flex gap-2 justify-center font-bold">
-             <Menu>
-            <Menu.Target>
-              <div className="flex gap-2">
-                 <button>Sort by</button>
+            <Menu>
+              <Menu.Target>
+                <div className="flex gap-2">
+                  <button>Sort by</button>
                   <img loading="lazy" src={ArrowDown} alt="Arrowdown" />
-              </div>
-            </Menu.Target>
-            <Menu.Dropdown>
-              <Menu.Item>
-               <button onClick={()=>{
-                 queryClient.invalidateQueries({ queryKey: ['GetTeacherList']});
-                setStatus('active')}}>
-                Active
-                </button> 
-              </Menu.Item>
-              <Menu.Item>
-                <button onClick={()=>{
-          queryClient.invalidateQueries({ queryKey: ['GetTeacherList']});
-                  
-                  setStatus("disable")}}>
-                  
-                Disabled
-                </button>
-                
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
+                </div>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item>
+                  <button
+                    onClick={() => {
+                      setStatus("active");
+                      queryClient.invalidateQueries({
+                        queryKey: ["GetTeacherList"],
+                      });
+                    }}
+                  >
+                    Active
+                  </button>
+                </Menu.Item>
+                <Menu.Item>
+                  <button
+                    onClick={() => {
+                      setStatus("disable");
+                      queryClient.invalidateQueries({
+                        queryKey: ["GetTeacherList"],
+                      });
+                    }}
+                  >
+                    Disabled
+                  </button>
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
           </div>
           <div className="flex gap-3 justify-end">
-            <NewTeacher  openSchNotifications={openSchNotifications}/>
+            <NewTeacher openSchNotifications={openSchNotifications} />
           </div>
         </div>
 
@@ -175,16 +186,14 @@ const Teachers = () => {
               ))
             : teacherList?.map((data: TTeacherList, index: number) => {
                 return (
-                  <Row 
-                  status={status}
-                  currentClicked={data?.user?.id}
+                  <Row
+                    status={status}
+                    currentClicked={data?.user?.id}
                     onClick={() => {
-                      console.log("userId--------",data?.user?.id)
+                      console.log("userId--------", data?.user?.id);
                       open();
                       setCucrrentClicked(data?.user?.id);
                       setModalStep(STEP_1);
-                     
-                      
                     }}
                     key={index}
                     data={data}
@@ -194,33 +203,33 @@ const Teachers = () => {
         </div>
       </div>
       <div>
-      <div className="flex  justify-end mt-2 px-4">
-        {/* <span>
+        <div className="flex  justify-end mt-2 px-4">
+          {/* <span>
           Showing <span className="text-[#8530C1]"> 1-9 </span> from
           <span className="text-[#8530C1]"> {totalPage * 5} </span> data
         </span> */}
-        {totalPage > 1 && (
-        <div className="px-10  mr-2 flex justify-end  pb-8">
-          <Pagination
-            total={totalPage}
-            value={activePage}
-            defaultChecked={true}
-            onChange={setPage}
-            onClick={() => {
-              console.log(activePage);
-              refetch();
-            }}
-            styles={() => ({
-              control: {
-                "&[data-active]": {
-                  backgroundColor: "#8530C1 !important",
-                },
-              },
-            })}
-          />
+          {totalPage > 1 && (
+            <div className="px-10  mr-2 flex justify-end  pb-8">
+              <Pagination
+                total={totalPage}
+                value={activePage}
+                defaultChecked={true}
+                onChange={setPage}
+                onClick={() => {
+                  console.log(activePage);
+                  refetch();
+                }}
+                styles={() => ({
+                  control: {
+                    "&[data-active]": {
+                      backgroundColor: "#8530C1 !important",
+                    },
+                  },
+                })}
+              />
+            </div>
+          )}
         </div>
-      )}
-      </div>
       </div>
       <style>
         {`

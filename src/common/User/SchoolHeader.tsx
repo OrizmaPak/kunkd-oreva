@@ -208,15 +208,15 @@ const SchoolHeader = ({
               </div>
             </Menu.Target>
             <Menu.Dropdown>
-              <Menu.Item>
-                <SchNotification
-                  data={
-                    user?.role === "schoolAdmin"
-                      ? schoolConnectList
-                      : classConnectList
-                  }
-                />
-              </Menu.Item>
+              {/* <Menu.Item> */}
+              <SchNotification
+                data={
+                  user?.role === "schoolAdmin"
+                    ? schoolConnectList
+                    : classConnectList
+                }
+              />
+              {/* </Menu.Item> */}
             </Menu.Dropdown>
           </Menu>
 
@@ -247,7 +247,7 @@ const SchoolHeader = ({
                       key={index}
                       onClick={() => handleChangeProfile(profile.id)}
                     >
-                      <button key={index}>
+                      <button className="py-1" key={index}>
                         {profile?.name.charAt(0).toUpperCase() +
                           profile?.name.slice(1)}
                       </button>
@@ -257,7 +257,7 @@ const SchoolHeader = ({
                   <Menu.Item onClick={() => navigate("/account")}>
                     <button
                       onClick={() => navigate("/account")}
-                      className="p-2 px-4 hover:cursor-pointer hover:text-[#8530C1] flex gap-2 items-center"
+                      className="hover:cursor-pointer hover:text-[#8530C1] flex gap-2 items-center "
                     >
                       <LuUser2 size={25} color={"gray"} /> <span> Account</span>
                     </button>
@@ -407,10 +407,11 @@ const SchNotification = ({ data }: { data: TRequestStudents[] }) => {
     <>
       {data?.length < 1 || (!data && <p>No notifications</p>)}
       {data?.length > 0 && (
-        <div className="py-1 ">
+        <div className="py-2 ">
+          {/* <hr /> */}
+
           {data?.map((each, index) => (
-            <div key={index}>
-              <hr />
+            <div className="cursor-pointer" key={index}>
               <p
                 onClick={() => {
                   if (user?.role === "schoolAdmin") {
@@ -426,6 +427,7 @@ const SchNotification = ({ data }: { data: TRequestStudents[] }) => {
                   {user?.role === "schoolAdmin" ? "School" : "class"}
                 </span>
               </p>
+              <hr />
             </div>
           ))}
         </div>

@@ -13,7 +13,6 @@ import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
-
 export type TRequestStudents = {
   parent: {
     firstname: string;
@@ -38,9 +37,11 @@ export type TRequestStudents = {
 const Request = () => {
   const [activePage, setPage] = useState(1);
 
-  const { data, refetch, isLoading } = useGetAttemptStudentConnect(true, activePage.toString());
+  const { data, refetch, isLoading } = useGetAttemptStudentConnect(
+    true,
+    activePage.toString()
+  );
   const totalPage = data?.data.data.number_pages;
-
 
   const attemptConnectStudents: TRequestStudents[] = data?.data.data.records;
 
@@ -49,7 +50,9 @@ const Request = () => {
       <div className=" flex-grow flex flex-col rounded-3xl p-4 bg-white">
         <div className="flex  justify-between items-center w-full px-8 ">
           <div>
-            <h1 className="text-[24px] font-semibold">Request ({attemptConnectStudents?.length || 0})</h1>
+            <h1 className="text-[24px] font-semibold">
+              Request ({attemptConnectStudents?.length || 0})
+            </h1>
           </div>
         </div>
         <div>
@@ -70,26 +73,26 @@ const Request = () => {
           <span className="text-[#8530C1]"> {totalPage * 5} </span> data
         </span> */}
         {totalPage > 1 && (
-        <div className="px-10  mr-2 flex justify-end  pb-8">
-          <Pagination
-            total={totalPage}
-            value={activePage}
-            defaultChecked={true}
-            onChange={setPage}
-            onClick={() => {
-              console.log(activePage);
-              refetch();
-            }}
-            styles={() => ({
-              control: {
-                "&[data-active]": {
-                  backgroundColor: "#8530C1 !important",
+          <div className="px-10  mr-2 flex justify-end  pb-8">
+            <Pagination
+              total={totalPage}
+              value={activePage}
+              defaultChecked={true}
+              onChange={setPage}
+              onClick={() => {
+                console.log(activePage);
+                refetch();
+              }}
+              styles={() => ({
+                control: {
+                  "&[data-active]": {
+                    backgroundColor: "#8530C1 !important",
+                  },
                 },
-              },
-            })}
-          />
-        </div>
-      )}
+              })}
+            />
+          </div>
+        )}
       </div>
       <style>
         {`
@@ -118,22 +121,25 @@ const Row = ({
   const [opened, { open, close }] = useDisclosure(false);
   const queryClient = useQueryClient();
 
-
   const handleAccept = (id: number) => {
     mutate(
       { student_id: id },
       {
         onSuccess(data) {
           refetch();
-          queryClient.invalidateQueries({ queryKey: ['GetAttemptStudentConnect']});
-          queryClient.invalidateQueries({ queryKey: ['GetAttemptAllStudentConnect']});
+          queryClient.invalidateQueries({
+            queryKey: ["GetAttemptStudentConnect"],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["GetAttemptAllStudentConnect"],
+          });
           notifications.show({
             title: `Notification`,
             message: data.data.message,
           });
         },
         onError(err) {
-          open()
+          open();
           notifications.show({
             title: `Notification`,
             message: getApiErrorMessage(err),
@@ -148,8 +154,12 @@ const Row = ({
       {
         onSuccess(data) {
           refetch();
-          queryClient.invalidateQueries({ queryKey: ['GetAttemptStudentConnect']});
-          queryClient.invalidateQueries({ queryKey: ['GetAttemptAllStudentConnect']});
+          queryClient.invalidateQueries({
+            queryKey: ["GetAttemptStudentConnect"],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["GetAttemptAllStudentConnect"],
+          });
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -167,8 +177,7 @@ const Row = ({
 
   return (
     <>
-    
-    <Modal
+      <Modal
         radius={10}
         size="md"
         opened={opened}
@@ -176,61 +185,60 @@ const Row = ({
         closeButtonProps={{ size: "lg" }}
         centered
       >
-        <TeacherNotificationModal2 onCancel={close}   label="Students"/>
+        <TeacherNotificationModal2 onCancel={close} label="Students" />
       </Modal>
       <div className="grid grid-cols-[1fr_300px] my-4 ">
-      <div className="flex item-center ">
-        <p className="mr-6 flex justify-center ">
-          <img
-            src={requestData?.image ? requestData?.image : Blxst}
-            alt="image"
-            className=" rounded-full w-[60px]"
-          />
-        </p>
-        <div className="flex justify-center items-center">
-          <p className="text-[#7E7E89] text2 font-medium  text-center inline  items-center">
-            <span className="text-[#8530C1] ">
-              {requestData?.firstname.charAt(0).toUpperCase() +
-                requestData?.firstname.slice(1)}{" "}
-              {requestData?.lastname}
-            </span>{" "}
-            is requesting to join your class
+        <div className="flex item-center ">
+          <p className="mr-6 flex justify-center ">
+            <img
+              src={requestData?.image ? requestData?.image : Blxst}
+              alt="image"
+              className=" rounded-full w-[60px]"
+            />
           </p>
-         
+          <div className="flex justify-center items-center">
+            <p className="text-[#7E7E89] text2 font-medium  text-center inline  items-center">
+              <span className="text-[#8530C1] ">
+                {requestData?.firstname.charAt(0).toUpperCase() +
+                  requestData?.firstname.slice(1)}{" "}
+                {requestData?.lastname}
+              </span>{" "}
+              is requesting to join your class
+            </p>
+          </div>
+        </div>
+
+        <div className="flex  text-white gap-5 items-center justify-center ">
+          <button
+            onClick={() => {
+              handleReject(requestData?.id);
+            }}
+            className=" pad-x-40   text-[16px]   h-[38px] flex justify-center items-center rounded bg-[#E2B6FF] "
+          >
+            {rejectIsLoading ? (
+              <p className="flex justify-center items-center">
+                <Loader color="white" size="sm" />
+              </p>
+            ) : (
+              <span>Decline</span>
+            )}
+          </button>
+          <button
+            onClick={() => {
+              handleAccept(requestData?.id);
+            }}
+            className="pad-x-40 text-[16px]  h-[38px]  flex justify-center items-center rounded bg-[#8530C1]"
+          >
+            {acceptIsLoading ? (
+              <p className="flex justify-center items-center">
+                <Loader color="white" size="sm" />
+              </p>
+            ) : (
+              <span>Accept</span>
+            )}
+          </button>
         </div>
       </div>
-
-      <div className="flex  text-white gap-5 items-center justify-center ">
-        <button
-          onClick={() => {
-            handleReject(requestData?.id);
-          }}
-          className=" pad-x-40   text-[16px]   h-[38px] flex justify-center items-center rounded bg-[#E2B6FF] "
-        >
-          {rejectIsLoading ? (
-            <p className="flex justify-center items-center">
-              <Loader color="white" size="sm" />
-            </p>
-          ) : (
-            <span>Decline</span>
-          )}
-        </button>
-        <button
-          onClick={() => {
-            handleAccept(requestData?.id);
-          }}
-          className="pad-x-40 text-[16px]  h-[38px]  flex justify-center items-center rounded bg-[#8530C1]"
-        >
-          {acceptIsLoading ? (
-            <p className="flex justify-center items-center">
-              <Loader color="white" size="sm" />
-            </p>
-          ) : (
-            <span>Accept</span>
-          )}
-        </button>
-      </div>
-    </div>
     </>
   );
 };

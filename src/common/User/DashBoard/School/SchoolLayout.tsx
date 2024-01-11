@@ -63,8 +63,8 @@ const SchoolLayout = () => {
   return (
     <>
       <Modal
-        radius={"xl"}
-        size="lg"
+        radius={6}
+        size="md"
         opened={opened}
         onClose={close}
         closeButtonProps={{ size: "lg" }}

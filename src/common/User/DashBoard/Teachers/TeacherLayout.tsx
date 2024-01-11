@@ -57,8 +57,8 @@ const TeacherLayout = () => {
   return (
     <>
       <Modal
-        radius={"xl"}
-        size="lg"
+        radius={4}
+        size="md"
         opened={opened}
         onClose={close}
         closeButtonProps={{ size: "lg" }}
