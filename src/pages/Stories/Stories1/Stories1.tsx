@@ -12,8 +12,8 @@ import Congrats from "@/assets/congrats.svg";
 import CardHome from "@/common/User/CardHome";
 import CardScreenHome from "@/common/User/CardScreenHome";
 import CustomTTSComponent from "@/components/TTS";
-import useStore from "@/store";
-import { getUserState } from "@/store/authStore";
+// import useStore from "@/store";
+// import { getUserState } from "@/store/authStore";
 import { Skeleton } from "@mantine/core";
 import { RefObject, useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -101,7 +101,7 @@ const Stories1 = () => {
   const { data, isLoading: contentIsLoading } = useGetContentById(
     contentId?.toString() as string,
     // contentId!,
-    profileId?.toString() || "0"a,
+    profileId?.toString() || "0",
     open
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const content = data?.data.data;
