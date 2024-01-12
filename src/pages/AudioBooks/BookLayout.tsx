@@ -17,8 +17,8 @@ import {
 } from "@/api/queries";
 import AfamBlur from "@/assets/afamblur.jpg";
 import { TMedia, TStoryContent } from "@/pages/Stories/Stories1/Stories1";
-import useStore from "@/store";
-import { getUserState } from "@/store/authStore";
+// import useStore from "@/store";
+// import { getUserState } from "@/store/authStore";
 import { MantineProvider, Skeleton, Slider } from "@mantine/core";
 import { useReducedMotion } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
@@ -58,12 +58,13 @@ const BookLayout = () => {
   );
   const recommendedContents: TAudioBooks[] =
     dataRecommended?.data?.data?.recommended_contents;
+  const profileId = localStorage.getItem("profileId");
 
   console.log("recommended", recommendedContents);
-  const [user] = useStore(getUserState);
+  // const [user] = useStore(getUserState);
   const { data, isLoading } = useGetContentById(
     contentId?.toString() as string,
-    user?.user_id?.toString() as string,
+    profileId?.toString() || ("0" as string),
     open
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const audioBookId = data?.data.data.id;

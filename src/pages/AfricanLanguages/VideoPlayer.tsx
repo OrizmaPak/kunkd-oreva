@@ -15,8 +15,8 @@ import AfamBlur from "@/assets/afamblur.jpg";
 import Congrats from "@/assets/congrats.svg";
 import SaveIcon from "@/assets/saveIcon.svg";
 import ShareIcon from "@/assets/shareIcon.svg";
-import useStore from "@/store";
-import { getUserState } from "@/store/authStore";
+// import useStore from "@/store";
+// import { getUserState } from "@/store/authStore";
 import { Menu, Skeleton } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { UseQueryResult } from "@tanstack/react-query";
@@ -93,15 +93,16 @@ const VideoPlayer = () => {
   const [isfinish, setIsFinsh] = useState(false);
   const { lan_type } = useParams();
   const [opened, { open, close }] = useDisclosure(false);
+  const profileId = localStorage.getItem("profileId");
 
   const contentId = localStorage.getItem("contentId");
   // const contentId = localStorage.getItem("contentId");
   // const profileId = localStorage.getItem("profileId");
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [user] = useStore(getUserState);
+  // const [user] = useStore(getUserState);
   const { data, isLoading } = useGetContentById(
     contentId?.toString() as string,
-    user?.user_id?.toString() as string,
+    profileId?.toString() || ("0" as string),
     open
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const mediaContent = data?.data.data;
@@ -114,7 +115,6 @@ const VideoPlayer = () => {
   const videoData = data?.data.data.sub_categories?.[0];
   const [currentVideoTime, setCurrentVideotime] = useState(0);
   const { mutate } = useContentTracking();
-  const profileId = localStorage.getItem("profileId");
   const [delay, setDelay] = useState(0);
   // useTimeSpent(Number(contentId), Number(profileId)); const {mutateAsync} = useLearningHour()
   const { mutate: mutateLearning } = useLearningHour();

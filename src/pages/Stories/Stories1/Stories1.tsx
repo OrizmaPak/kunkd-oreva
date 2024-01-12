@@ -90,7 +90,7 @@ export type TStoryContent = {
 const Stories1 = () => {
   const [isFinish, setIsFinish] = useState(false);
   const [startRead, setStartRead] = useState(false);
-  const [user] = useStore(getUserState);
+  // const [user] = useStore(getUserState);
   const contentId = localStorage.getItem("contentId");
   const profileId = localStorage.getItem("profileId");
   useTimeSpent(Number(contentId), Number(profileId));
@@ -101,7 +101,7 @@ const Stories1 = () => {
   const { data, isLoading: contentIsLoading } = useGetContentById(
     contentId?.toString() as string,
     // contentId!,
-    profileId?.toString() || "",
+    profileId?.toString() || "0"a,
     open
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const content = data?.data.data;
