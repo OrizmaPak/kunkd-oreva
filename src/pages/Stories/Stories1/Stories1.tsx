@@ -101,7 +101,7 @@ const Stories1 = () => {
   const { data, isLoading: contentIsLoading } = useGetContentById(
     contentId?.toString() as string,
     // contentId!,
-    user?.user_id?.toString() || "",
+    profileId?.toString() || "",
     open
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const content = data?.data.data;
