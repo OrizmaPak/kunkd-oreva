@@ -2,7 +2,7 @@ const Card = ({
   image,
   title,
   amount,
-  max
+  max,
 }: {
   image: string;
   title: string;
@@ -10,13 +10,15 @@ const Card = ({
   max: number;
 }) => {
   return (
-    <div className="flex p-4 gap-8 rounded bg-white  flex-grow ">
+    <div className="flex p-4 gap-4 rounded bg-white  flex-grow ">
       <div className="">
         <img loading="lazy" src={image} alt="image " className="w-[62px]" />
       </div>
       <div className="flex flex-col ">
         <span className=" text-gray-400 text3 ">{title}</span>
-        <span className="font-semibold text25 ">{amount ? amount : 0} / {max}</span>
+        <span className="font-semibold text25 ">
+          {amount ? amount : 0} / {max}
+        </span>
       </div>
     </div>
   );
