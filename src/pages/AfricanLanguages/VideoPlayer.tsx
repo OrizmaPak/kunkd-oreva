@@ -172,6 +172,8 @@ const VideoPlayer = () => {
           content_id: Number(contentId),
           profile_id: Number(profileId),
           timespent: Math.ceil(currentVideoTime) - lastTime,
+          sub_category_id:
+            data?.data?.data?.sub_categories?.[0]?.sub_category_id,
         });
       } catch (err) {
         // Handle errors if needed

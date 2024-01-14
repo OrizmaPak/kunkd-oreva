@@ -84,7 +84,9 @@ const SchoolHeader = ({
     user?.role === "teacher"
   );
   const schoolConnectList = data?.data?.data?.records;
+  const totalSchoolConnectList = data?.data?.data?.totalRecord;
   const classConnectList = classConnect?.data?.data?.records;
+  const totalConnectList = classConnect?.data?.data?.totalRecord;
 
   return (
     <div className="bg-white w-full fixed top-0 h-[8vh] z-50">
@@ -191,15 +193,12 @@ const SchoolHeader = ({
                     />
                     <p
                       className={`absolute -top-4 text-white  right-[-14px] py-[1px] rounded-full px-[3px] ${
-                        schoolConnectList?.length > 0 ||
-                        classConnectList?.length > 0
+                        totalSchoolConnectList > 0 || totalConnectList > 0
                           ? "bg-red-700"
                           : "bg-white"
                       }  `}
                     >
-                      {schoolConnectList?.length ||
-                        classConnectList?.length ||
-                        0}
+                      {totalSchoolConnectList || totalConnectList || 0}
                     </p>
                   </div>
                 ) : (

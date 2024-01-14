@@ -6,9 +6,11 @@ import { Skeleton } from "@mantine/core";
 const StudentLeaderboard = ({
   data,
   isLoading,
+  tableMax,
 }: {
   data: TRequestStudents[];
   isLoading: boolean;
+  tableMax?: number;
 }) => {
   const navigate = useNavigate();
   return (
@@ -30,7 +32,7 @@ const StudentLeaderboard = ({
                 <h1 className="w-full">{array}</h1>
               </Skeleton>
             ))
-          : data?.slice(0, 7).map((data: TRequestStudents, index) => {
+          : data?.slice(0, tableMax).map((data: TRequestStudents, index) => {
               return <Row key={index} data={data} />;
             })}
       </div>

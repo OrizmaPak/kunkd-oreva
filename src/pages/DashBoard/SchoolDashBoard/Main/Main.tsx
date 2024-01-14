@@ -85,7 +85,11 @@ const Main = () => {
             />
           </div>
           <div className="flex-grow flex ">
-            <StudentLeaderboard data={studentList} isLoading={isLoading} />
+            <StudentLeaderboard
+              data={studentList}
+              isLoading={isLoading}
+              tableMax={7}
+            />
           </div>
         </div>
         <div className="basis- basis-3/5  flex flex-col  h-full gap-3 ">

@@ -242,6 +242,7 @@ export const ChildAgeModal = ({
     setAge(data?.dob as string);
   };
   // const [isKid, setIsKid] = useState(false)
+  const today = new Date().toISOString().split("T")[0];
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -281,6 +282,7 @@ export const ChildAgeModal = ({
                 errorMsg={errors.dob?.message}
                 type="date"
                 placeholder="DOB"
+                dateMax={today}
               />
             </p>
             <p className="mb-8">

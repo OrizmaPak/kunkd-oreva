@@ -58,7 +58,11 @@ const Main = () => {
       </div>
       <div className=" flex gap-5 flex-grow">
         <div className=" basis-full flex-grow flex  ">
-          <StudentLeaderboard data={studentList} isLoading={isLoading} />
+          <StudentLeaderboard
+            data={studentList}
+            isLoading={isLoading}
+            tableMax={9}
+          />
         </div>
 
         <div className=" basis-3/5 flex flex-col gap-2 ">

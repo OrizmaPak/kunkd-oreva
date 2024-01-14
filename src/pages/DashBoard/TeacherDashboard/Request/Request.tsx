@@ -41,7 +41,9 @@ const Request = () => {
     true,
     activePage.toString()
   );
-  const totalPage = data?.data.data.number_pages;
+  const totalPage = Math.ceil(data?.data.data.totalRecord / 10);
+
+  console.log("Total records", data?.data.data.totalRecord);
 
   const attemptConnectStudents: TRequestStudents[] = data?.data.data.records;
 
@@ -55,45 +57,49 @@ const Request = () => {
             </h1>
           </div>
         </div>
-        <div>
-          {isLoading
-            ? new Array(8).fill(1).map((array) => (
-                <Skeleton height={60} my={10} visible={true}>
-                  <h1 className="w-full">{array}</h1>
-                </Skeleton>
-              ))
-            : attemptConnectStudents?.map((res: TRequestStudents, index) => (
-                <Row key={index} requestData={res} refetch={refetch} />
-              ))}
+        <div className="flex-grow">
+          <div>
+            {isLoading
+              ? new Array(8).fill(1).map((array) => (
+                  <Skeleton height={60} my={10} visible={true}>
+                    <h1 className="w-full">{array}</h1>
+                  </Skeleton>
+                ))
+              : attemptConnectStudents?.map((res: TRequestStudents, index) => (
+                  <Row key={index} requestData={res} refetch={refetch} />
+                ))}
+          </div>
         </div>
-      </div>
-      <div className="flex  justify-end mt-2 px-4">
-        {/* <span>
+
+        <div className="flex  justify-end mt-2 px-4">
+          {/* <span>
           Showing <span className="text-[#8530C1]"> 1-9 </span> from
           <span className="text-[#8530C1]"> {totalPage * 5} </span> data
         </span> */}
-        {totalPage > 1 && (
-          <div className="px-10  mr-2 flex justify-end  pb-8">
-            <Pagination
-              total={totalPage}
-              value={activePage}
-              defaultChecked={true}
-              onChange={setPage}
-              onClick={() => {
-                console.log(activePage);
-                refetch();
-              }}
-              styles={() => ({
-                control: {
-                  "&[data-active]": {
-                    backgroundColor: "#8530C1 !important",
+          {totalPage > 1 && (
+            <div className="  mr-2 flex justify-end  pb-4">
+              <Pagination
+                total={totalPage}
+                value={activePage}
+                defaultChecked={true}
+                onChange={setPage}
+                onClick={() => {
+                  console.log(activePage);
+                  refetch();
+                }}
+                styles={() => ({
+                  control: {
+                    "&[data-active]": {
+                      backgroundColor: "#8530C1 !important",
+                    },
                   },
-                },
-              })}
-            />
-          </div>
-        )}
+                })}
+              />
+            </div>
+          )}
+        </div>
       </div>
+
       <style>
         {`
        ::-webkit-scrollbar {

@@ -14,6 +14,7 @@ type Props = {
   smallPadding?: "true";
   readonly?: true | false;
   errorMsg?: string;
+  dateMax?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 const InputFormat = ({
@@ -26,6 +27,7 @@ const InputFormat = ({
   smallPadding,
   readonly,
   onChange,
+  dateMax,
   errorMsg,
 }: Props) => {
   const [ttype, setType] = useState(type);
@@ -55,6 +57,7 @@ const InputFormat = ({
           defaultValue={value}
           readOnly={readonly}
           onChange={onChange}
+          max={dateMax}
           className="w-full  h-full flex-1 text-black text-[14px]  focus:outline-none"
         />
         {rightIcon ? (

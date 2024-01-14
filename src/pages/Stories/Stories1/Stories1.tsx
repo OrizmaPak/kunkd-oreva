@@ -32,6 +32,7 @@ import { useRef } from "react";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import useTimeSpent from "@/hooks/useTimeSpent";
 import "./stories1.css";
+import { number } from "zod";
 // import { useQueryClient } from "@tanstack/react-query";
 type TContentPage = {
   audio: string;
@@ -93,7 +94,6 @@ const Stories1 = () => {
   // const [user] = useStore(getUserState);
   const contentId = localStorage.getItem("contentId");
   const profileId = localStorage.getItem("profileId");
-  useTimeSpent(Number(contentId), Number(profileId));
   const params = useParams();
   const { category } = params;
   const [opened, { open, close }] = useDisclosure(false);
@@ -105,6 +105,19 @@ const Stories1 = () => {
     open
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const content = data?.data.data;
+  const [arrayOfSubCatId, setArraySubCatId] = useState<number>(0);
+
+  useEffect(() => {
+    if (content) {
+      content.sub_categories?.map((data) => {
+        setArraySubCatId(data?.sub_category_id);
+      });
+    }
+    //eslint-disable-next-line
+  }, [content]);
+
+  useTimeSpent(Number(contentId), Number(profileId), arrayOfSubCatId);
+
   const { data: recommendedData, isLoading } = useContentForHome();
   const recommendedStories = recommendedData?.data.data.recommended_stories;
   const navigate = useNavigate();
@@ -483,7 +496,7 @@ const ReadPage = ({
 
               <p
                 className="content_cont leading-10 [&>img]:hidden"
-                dangerouslySetInnerHTML={{ __html: content[page].web_body }}
+                dangerouslySetInnerHTML={{ __html: content[page]?.web_body }}
               ></p>
             </p>
           )}
@@ -510,7 +523,7 @@ const ReadPage = ({
                 dangerouslySetInnerHTML={{ __html:  content[page].web_body }}
               ></p> */}
               <p className="content_cont leading-10 text20  [&>img]:hidden">
-                {ReactHtmlParser(content[pageNumber].web_body)}
+                {ReactHtmlParser(content[pageNumber]?.web_body)}
               </p>
 
               {/* <p>{content[pageNumber].web_body}</p> */}
@@ -548,7 +561,7 @@ const BookPagination = ({
   const profileId = localStorage.getItem("profileId");
   const contentId = localStorage.getItem("contentId");
   const [currentPage, setCurrentage] = useState(
-    continuePage ? Number(continuePage) : 1
+    continuePage && Number(continuePage) < pageTotal ? Number(continuePage) : 1
   );
 
   useEffect(() => {

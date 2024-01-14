@@ -417,7 +417,7 @@ const SchCard = ({ user }: { user: TUser }) => {
     document.body.removeChild(textarea);
     notifications.show({
       title: `Notification`,
-      message: "Coppied",
+      message: "Copied",
     });
   };
 
@@ -466,7 +466,7 @@ const SchCard = ({ user }: { user: TUser }) => {
         >
           <Menu>
             <Menu.Target>
-              <div className="relative h-full w-full ">
+              <div className="relative h-full w-full overflow-hidden rounded-full ">
                 {user?.school?.profileImage ? (
                   <img
                     loading="lazy"
@@ -476,7 +476,7 @@ const SchCard = ({ user }: { user: TUser }) => {
                         : ""
                     }
                     alt=""
-                    className="w-[180px] h-[180px] object-containe rounded-full "
+                    className="w-[180px] h-[180px] object-cover rounded-full "
                   />
                 ) : (
                   <span className=" bg-[#b9b9b9] z-50 rounded-full flex justify-center items-center   h-full w-full  "></span>
