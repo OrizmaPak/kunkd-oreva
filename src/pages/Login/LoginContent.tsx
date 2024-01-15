@@ -123,6 +123,7 @@ const LoginContent = () => {
       },
       {
         onSuccess(data) {
+          localStorage.clear();
           const res = data?.data?.data as TUser;
           setUser({ ...res });
           notifications.show({
@@ -176,7 +177,7 @@ const LoginContent = () => {
         </Link>
         <div className="w-[100%]">
           <span></span>
-          <h1 className="font-bold fon header2 font-Recoleta  leading-[30px] ">
+          <h1 className="font-bold fon header2 font-Recoleta   ">
             Welcome back
           </h1>
           <p className="text3 text-[#A7A7A7] font-Hanken">
