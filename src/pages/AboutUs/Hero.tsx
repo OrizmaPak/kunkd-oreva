@@ -1,4 +1,4 @@
-import Pupils2 from "@/assets/pupils2.svg";
+import Pupils2 from "@/assets/aboutbanner24.png";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import Pupils2Blur from "@/assets/pupilsblur.jpg";

@@ -1,5 +1,5 @@
 import VideoCard from "@/components/VideoCard";
-import Phones from "@/assets/newphone.svg";
+import Phones from "@/assets/iphone24.png";
 import Lines from "@/assets/lines.svg";
 // import Zigzag from "@/assets/zigzag2.svg";
 // import RoundP from "@/assets/roundpurpple.svg";

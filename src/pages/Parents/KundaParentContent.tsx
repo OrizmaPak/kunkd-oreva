@@ -1,4 +1,4 @@
-import MacBok from "@/assets/halfmac.svg";
+import MacBok from "@/assets/macdesktop24.png";
 import MacBookBlur from "@/assets/MacBook1blur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 const KundaParentontent = () => {

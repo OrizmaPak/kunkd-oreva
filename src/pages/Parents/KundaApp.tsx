@@ -1,4 +1,4 @@
-import Iphone from "@/assets/parentpagephone.svg";
+import Iphone from "@/assets/parentphone24.png";
 import GooglePlay from "../Home/GooglePlay";
 import AppleStore from "../Home/AppleStore";
 import { LazyLoadImage } from "react-lazy-load-image-component";

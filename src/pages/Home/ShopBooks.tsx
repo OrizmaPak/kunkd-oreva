@@ -1,13 +1,13 @@
 // import WaveThree from "@/assets/wavethree.svg";
-import client1 from "@/assets/client.svg";
-import client2 from "@/assets/boluimage.svg";
+import client1 from "@/assets/client124.png";
+import client2 from "@/assets/client224.png";
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useRef } from "react";
 import { BsChevronRight, BsChevronLeft } from "react-icons/bs";
-import BigCart from "@/assets/Afam-04 1.svg";
+import BigCart from "@/assets/afam24.png";
 import BigCartBlur from "@/assets/afamblur.jpg";
 import Lines from "@/assets/lines.svg";
 // import RoundG from "@/assets/Ellipse 56.svg";

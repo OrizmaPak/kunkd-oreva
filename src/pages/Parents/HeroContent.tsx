@@ -1,4 +1,4 @@
-import ManAndChild from "@/assets/parentbanner.svg";
+import ManAndChild from "@/assets/dadson24.png";
 // import Arrow from "@/assets/arrow.svg";
 import ManAndChildBlur from "@/assets/manandchildblur.jpg";
 import Button from "@/components/Button";

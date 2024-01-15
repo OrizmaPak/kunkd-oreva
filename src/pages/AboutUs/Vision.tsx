@@ -1,4 +1,4 @@
-import Grouphands from "@/assets/grouphands.svg";
+import Grouphands from "@/assets/visionimage24.png";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import DadSonBlur from "@/assets/dadsonblur.jpg";

@@ -1,4 +1,4 @@
-import DadBoy from "@/assets/dadboy.svg";
+import DadBoy from "@/assets/schdadson24.png";
 import Button from "@/components/Button";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";

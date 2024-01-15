@@ -1,11 +1,11 @@
 // import Pupils from "@/assets/pupils.svg";
 import ServiceCard from "./ServiceCard";
 import { CardTypes } from "../Home/ClientCard";
-import Service4 from "@/assets/service1.svg";
-import Service3 from "@/assets/service2.svg";
-import Service2 from "@/assets/service3.svg";
-import Service1 from "@/assets/smileIcon.svg";
-import LadyBg from "@/assets/ladyBg.svg";
+import Service4 from "@/assets/service424.png";
+import Service3 from "@/assets/service3.svg";
+import Service2 from "@/assets/service224.png";
+import Service1 from "@/assets/service124.png";
+import LadyBg from "@/assets/ladyservice24.png";
 // import MacBok from "@/assets/MacBook1.svg";
 // import MacBookBlur from "@/assets/MacBook1blur.jpg";
 import LadyBgBlur from "@/assets/ladybgBlur.jpg";

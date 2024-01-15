@@ -1,5 +1,5 @@
-import LadyBackground from "@/assets/lady2.svg";
-import Mac from "@/assets/halfmac.svg";
+import LadyBackground from "@/assets/ladysch24.png";
+import Mac from "@/assets/macside24.png";
 // import MacBg from "@/assets/macbackground.svg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
@@ -23,19 +23,19 @@ const TrackNdMonitorContent = () => {
         </p>
 
         <div className="relative overflow-hidden mt-20  pb-28">
-          <div className="  ml-28">
+          <div className="  ml-28 ">
             {/* <img loading="lazy" src={LadyBackground} alt="teacher" /> */}
             <LazyLoadImage
               src={LadyBackground}
               placeholderSrc={LadyBlur}
               effect="blur"
-              wrapperClassName="lady-kunds"
-              className="lady-kunds"
-              // width={517}
-              // height={632}
+              wrapperClassName=""
+              className=""
+              width={458}
+              height={600}
             />
           </div>
-          <div className="bg-red-600 px-20">
+          <div className=" px-20">
             {/* <img
               src={MacBg}
               alt="mac bg "
@@ -52,8 +52,9 @@ const TrackNdMonitorContent = () => {
               src={Mac}
               placeholderSrc={MacBlur}
               effect="blur"
-              wrapperClassName="absolute top-[-50px] right-[-150px] mac-w h-[600px]"
-              className="mac-w"
+              wrapperClassName="absolute top-[0px]   right-[0px] h-[1300px]"
+              className=""
+              // height={600}
             />
           </div>
         </div>
