@@ -57,7 +57,7 @@ const TeacherLayout = () => {
   return (
     <>
       <Modal
-        radius={4}
+        radius={6}
         size="md"
         opened={opened}
         onClose={close}

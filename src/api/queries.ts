@@ -225,7 +225,7 @@ export const useGetContentById = (
       const status = res.data.status;
 
       if (
-        status === false &&
+        status === false ||
         res.data.message === "Number of allowed contents reached!"
       ) {
         if (user?.role === "user") {
