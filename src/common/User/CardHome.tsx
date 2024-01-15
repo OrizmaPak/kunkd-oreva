@@ -130,7 +130,7 @@ const CardHome = ({
     setIsShaking(true);
     setTimeout(() => {
       setIsShaking(false);
-    }, 500); // Reset shaking after 0.5 seconds
+    }, 200); // Reset shaking after 0.5 seconds
   };
   return (
     <div className=" z-[1]  hover:scale-[102%] transition-all mx-2 py-4">
@@ -154,11 +154,15 @@ const CardHome = ({
             onClick={handleLikedContent}
             // className="px-4 py-2"
             className={`px-4 py-2 rounded-md transition-all   ${
-              isShaking ? "animate-shake" : ""
+              isShaking ? "scale-150" : ""
             }`}
           >
             {isLiked?.length > 0 ? (
-              <MdOutlineFavorite size="25" color="white" />
+              <MdOutlineFavorite
+                size="25"
+                color="white"
+                className=" scale-110"
+              />
             ) : (
               <MdFavoriteBorder size="25" color="white" />
             )}

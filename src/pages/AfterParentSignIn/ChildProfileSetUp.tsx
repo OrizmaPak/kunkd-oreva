@@ -6,9 +6,9 @@ import {
   useGetUpdatedProfile,
 } from "@/api/queries";
 import AddAvatarIcon from "@/assets/AddAvatarIcon.svg";
-import YaJump from "@/assets/Yaa jump 1.svg";
+import YaJump from "@/assets/yaa24.png";
 import LessDOwnIcon from "@/assets/lessthanIcon.svg";
-import YajSucces from "@/assets/yupsuccess.svg";
+import YajSucces from "@/assets/yaacongrat24.png";
 import InputFormat from "@/common/InputFormat";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import Button from "@/components/Button";

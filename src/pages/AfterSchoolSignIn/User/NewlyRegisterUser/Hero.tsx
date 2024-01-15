@@ -1,5 +1,5 @@
-import SchImage1 from "@/assets/SchHero.svg";
-import SchImage2 from "@/assets/Pimage2.svg";
+import SchImage1 from "@/assets/scaorosel124.png";
+import SchImage2 from "@/assets/scaorosel224.png";
 import Slider from "react-slick";
 // import { Skeleton } from "@mantine/core";
 // import { useState } from "reac

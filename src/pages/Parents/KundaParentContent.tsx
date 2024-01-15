@@ -4,8 +4,8 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 const KundaParentontent = () => {
   return (
     <div>
-      <div className="max-w-[1280px] mx-auto text-center justify-center flex flex-col items-center text-white pt-14 ">
-        <h1 className="text-[36px] text-white font-Inter mb-5">
+      <div className="max-w-[1280px] mx-auto text-center justify-center flex flex-col items-center text-white  ">
+        <h1 className="text-[36px] text-white font-Inter mb-5 leading-[30px] ">
           Enhance Learning with our Web App
         </h1>
         <p className="text-[18px] leading-[31px] text1 max-w-[900px]  mx-0 mb-10 font-InterReg ">

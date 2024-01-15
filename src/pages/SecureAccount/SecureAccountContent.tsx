@@ -12,6 +12,7 @@ import { notifications } from "@mantine/notifications";
 import { Loader } from "@mantine/core";
 import { getApiErrorMessage } from "@/api/helper";
 import { RiLockLine } from "react-icons/ri";
+import PasswordEye from "@/assets/passwordeye.svg";
 
 const SecureAccountContent = () => {
   const navigate = useNavigate();
@@ -85,6 +86,13 @@ const SecureAccountContent = () => {
                   placeholder="password"
                   leftIcon={<RiLockLine size={25} color="#c4ccd0" />}
                   reg={register("password")}
+                  rightIcon={
+                    <img
+                      loading="lazy"
+                      src={PasswordEye}
+                      alt="paswordeye icon"
+                    />
+                  }
                   errorMsg={errors.password?.message}
                 />
               </p>
@@ -94,6 +102,13 @@ const SecureAccountContent = () => {
                   type="password"
                   placeholder="Confirm password"
                   leftIcon={<RiLockLine size={25} color="#c4ccd0" />}
+                  rightIcon={
+                    <img
+                      loading="lazy"
+                      src={PasswordEye}
+                      alt="paswordeye icon"
+                    />
+                  }
                   reg={register("confirmPassword")}
                   errorMsg={errors.confirmPassword?.message}
                 />

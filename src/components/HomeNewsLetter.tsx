@@ -1,15 +1,18 @@
 import "./HomeNewsLetter.css";
 const HomeNewsLetter = () => {
   return (
-    <div className="h-[422px] pt-16 bg-[#8530C1]">
-      <form className="text-center leading-8">
-        <h1 className="text-white  text-[36px]  leading-[50.56px] font-Inter ">
-          Subscribe To Our NewsLetter To <br /> Get Latest Updates & News
+    <div className=" py-[96px] bg-[#8530C1]">
+      <form className="text-center">
+        <h1 className="text-white  text-[36px]  leading-[30px] font-Inter">
+          Subscribe To Our NewsLetter To
         </h1>
-        <p className="my-4 text-white font-InterReg text20">
+        <h1 className="text-white  text-[36px]  font-Inter">
+          Get Latest Updates & News
+        </h1>
+        <p className="my-4 mt-[20px] text-white font-InterReg text20">
           Join over 4,000+ users already learning with Kunda Kids.
         </p>
-        <h1 className="  w-[500px] h-14 mx-auto mt-10 relative ">
+        <h1 className="  w-[500px] h-14 mx-auto mt-5 relative mb-6">
           <input
             type="text"
             placeholder="Enter email address"

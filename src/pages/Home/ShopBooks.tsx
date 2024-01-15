@@ -73,15 +73,15 @@ const ShopBooks = () => {
         className="bg-cover bg-bottom  w-full  matt h-[250px] "
         style={{ backgroundImage: `url(${WaveThree})` }}
       ></div> */}
-      <div className="bg-white  w-[100%] pb-[40px] ">
-        <div className="bg-[#F9F5FF] pb-20 relative  ">
+      <div className="bg-white  w-[100%]  ">
+        <div className="bg-[#F9F5FF] py-[96px] relative  ">
           <img
             loading="lazy"
             src={Lines}
             alt="lines"
             className="absolute  right-0 top-[-300px]"
           />
-          <div className="max-w-[1000px] mx-auto  leading-8 text-center pt-16 ">
+          <div className="max-w-[1000px] mx-auto  leading-8 text-center   ">
             <h1 className="text-black  font-bold text-center mb-4 leading-8 header-1 font-Inter ">
               Shop Our Books
             </h1>

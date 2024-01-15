@@ -128,7 +128,7 @@ const SignContent = () => {
     <div className="flex justify-center items-center relative h-full">
       <div className="inner-form-w  mx-auto relative">
         <Link to="/">
-          <span className="absolute top-[-60px]">
+          <span className="absolute top-[-150px]">
             <img loading="lazy" src={Cancel} alt="cancel" />
           </span>
         </Link>

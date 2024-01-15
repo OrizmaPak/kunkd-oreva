@@ -5,7 +5,7 @@ import StatBookIcon from "@/assets/bookstatIcon.svg";
 
 const StatContent = () => {
   return (
-    <div className="pb-16 mb-16">
+    <div className="py-[94px]">
       <div className="mb-8">
         <h1 className="text-center font-semibold font-Inter text-[36px] heading-[43px]">
           Unleash the full power of learning

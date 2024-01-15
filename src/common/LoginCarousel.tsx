@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import ParentalCtrl from "@/assets/PARENTAL-CONTROL 1.svg";
-import LearnImage1 from "@/assets/learnimage1.svg";
+import LearnImage1 from "@/assets/logincarosel124.png";
 import LearnImage2 from "@/assets/learnimage2.svg";
 
 import CarouselCard from "./CarouselCard";

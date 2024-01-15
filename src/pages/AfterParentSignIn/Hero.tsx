@@ -1,6 +1,6 @@
 import Slider from "react-slick";
-import PImages1 from "@/assets/pimages.svg";
-import PImages2 from "@/assets/Pimage2.svg";
+import PImages1 from "@/assets/pcaorosel124.png";
+import PImages2 from "@/assets/pcaorosel224.png";
 import "./hero.css";
 
 type Props = {

@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 
 const Question = () => {
   return (
-    <div className="text-white bg-[#8530C1] p-16 text-center mt-40 mb-10  ">
+    <div className="text-white bg-[#8530C1] p-[96px] text-center mt-28 mb-10  ">
       <div>
         <h1 className="text-[36px] font-Inter header2   font-semibold mb-4">
           Have a question? <br /> Our team is happy to assist you.

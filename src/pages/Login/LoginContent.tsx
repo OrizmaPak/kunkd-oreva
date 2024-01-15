@@ -171,7 +171,7 @@ const LoginContent = () => {
     <div className="flex justify-center items-center w-full h-full">
       <div className="inner-form-w relative  my-auto flex justify-end items-center ">
         <Link to="/">
-          <span className="absolute top-[-60px] ">
+          <span className="absolute top-[-150px] ">
             <img loading="lazy" src={Cancel} alt="cancel" />
           </span>
         </Link>

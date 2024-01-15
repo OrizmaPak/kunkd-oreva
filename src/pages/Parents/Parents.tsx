@@ -20,11 +20,11 @@ const Parents = () => {
         </div>
         {/* <StatContent /> */}
       </Stat>
-      <KundaParent>
-        <div className="">
-          <KundaParentContent />
-        </div>
-      </KundaParent>
+      {/* <KundaParent> */}
+      <div className="bg-[#8530C1] pt-[96px]">
+        <KundaParentContent />
+      </div>
+      {/* </KundaParent> */}
       <Service>
         <ServiceContent />
       </Service>
