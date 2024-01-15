@@ -4,9 +4,9 @@ import CardHome from "@/common/User/CardHome";
 import InnerWrapper from "../../common/User/InnerWrapper";
 import { Route, Routes, useNavigate, Outlet } from "react-router-dom";
 import BookLayout from "./BookLayout";
-import AudioBanner from "@/assets/audiobanner.svg";
+import AudioBanner from "@/assets/audiobanner.png";
 import { Skeleton } from "@mantine/core";
-import { useGetAudioBoks, } from "@/api/queries";
+import { useGetAudioBoks } from "@/api/queries";
 export type StoriesType = {
   title?: string;
   image?: string;
@@ -20,7 +20,6 @@ export type StoriesType = {
   audioBook?: string;
 };
 
-
 const MainStoriesLayout = () => {
   return (
     <>
@@ -31,8 +30,6 @@ const MainStoriesLayout = () => {
 };
 
 const AudioBooks = () => {
-
-
   return (
     <div>
       <Wrapper bgColor="#fff7fd">

@@ -3,7 +3,7 @@ import {
   useGetContebtBySubCategories,
   useGetSubCategories,
 } from "@/api/queries";
-import Banner from "@/assets/banner5.svg";
+import Banner from "@/assets/storiesBanner.png";
 import GroupCard from "@/assets/groupcard.svg";
 import CardHome, { CardProps } from "@/common/User/CardHome";
 import CardScreenHome from "@/common/User/CardScreenHome";
@@ -23,7 +23,6 @@ import InnerWrapper from "../../common/User/InnerWrapper";
 import Quiz from "./Stories1/Quiz";
 import Stories1, { TStoryContent } from "./Stories1/Stories1";
 import "./stories.css";
-
 
 export type StoriesType = {
   title?: string;
@@ -77,15 +76,13 @@ const Story = () => {
   const subCategoryId = localStorage.getItem("subCategoryId");
   const { data, isLoading, refetch } = useGetContebtBySubCategories(
     subCategoryId as string,
-    activePage.toString(),
-    
+    activePage.toString()
   );
   const subCategoryContents = data?.data.data.records;
   const totalPage = Math.ceil(data?.data.data.totalRecord / 10);
 
   return (
     <>
-     
       <div>
         <hr className="my-20 mx-[200px]" />
         <h1 className="text-center font-bold text30 font-Recoleta mt-10 ">
@@ -113,23 +110,27 @@ const Story = () => {
                     </div>
                   </Skeleton>
                 ))
-            : subCategoryContents?.map((story: TStoryContent, index: number) => {
-                return (
-                  <>
-                    {
-                      <CardHome
-                        key={index}
-                        {...story}
-                        goTo={() => {
-                          navigate(
-                            `../sub/${story?.slug?.toLocaleLowerCase()?.replace(/\s/g, '')}`
-                          );
-                        }}
-                      />
-                    }
-                  </>
-                );
-              })}
+            : subCategoryContents?.map(
+                (story: TStoryContent, index: number) => {
+                  return (
+                    <>
+                      {
+                        <CardHome
+                          key={index}
+                          {...story}
+                          goTo={() => {
+                            navigate(
+                              `../sub/${story?.slug
+                                ?.toLocaleLowerCase()
+                                ?.replace(/\s/g, "")}`
+                            );
+                          }}
+                        />
+                      }
+                    </>
+                  );
+                }
+              )}
         </div>
       </div>
       {totalPage > 1 && (
@@ -220,7 +221,9 @@ const BrowseGenre = () => {
               {...props}
               goTo={() =>
                 navigate(
-                  `sub/${props?.slug?.replace(/\s/g, "_")?.toLowerCase() as string}`
+                  `sub/${
+                    props?.slug?.replace(/\s/g, "_")?.toLowerCase() as string
+                  }`
                 )
               }
             />

@@ -8,7 +8,7 @@ const Hero = ({ image }: { image: string }) => {
         <img
           src={image}
           alt="banner "
-          className=" h-[300px] rounded-t-[20px] w-full  object-cover"
+          className=" h-[350px] rounded-t-[20px] w-full  object-cover"
           onLoad={() => setIsLoading(false)}
         />
       </Skeleton>
