@@ -9,9 +9,9 @@ import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import React from "react";
 import { Outlet, useMatch, useNavigate } from "react-router-dom";
-import { getUserState } from "@/store/authStore";
-import useStore from "@/store/index";
-import { getProfileState } from "@/store/profileStore";
+// import { getUserState } from "@/store/authStore";
+// import useStore from "@/store/index";
+// import { getProfileState } from "@/store/profileStore";
 
 import SchoolIcon from "@/assets/schoolIcon.svg";
 
@@ -61,9 +61,9 @@ const links = [
 ];
 const SchoolLayout = () => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [profiles, setProfiles] = useStore(getProfileState);
+  // const [profiles, setProfiles] = useStore(getProfileState);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return (
     <>
