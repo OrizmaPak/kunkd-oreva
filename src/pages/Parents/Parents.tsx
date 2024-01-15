@@ -1,4 +1,4 @@
-import KundaParent from "../Home/KundaApp";
+// import KundaParent from "../Home/KundaApp";
 import Stat from "../Home/Stat";
 import Service from "../Home/WatchKunda";
 import HeroContent from "./HeroContent";
