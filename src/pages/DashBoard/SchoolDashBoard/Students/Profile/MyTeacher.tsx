@@ -22,7 +22,7 @@ const MyTeacher = ({
         />
       ) : (
         <div className="p-5 bg-white rounded-3xl flex-grow pb-4">
-          <h1 className="font-semibold text-[16px] leading-[30px] font-Hanken font-semibold ">
+          <h1 className=" text-[16px] leading-[30px] font-Hanken font-semibold ">
             My Teacher
           </h1>
           <div className="flex gap-4 items-center mt-8 ">

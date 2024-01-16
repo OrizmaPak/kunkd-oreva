@@ -14,7 +14,10 @@ const Students = () => {
   const [status, setStatus] = useState("active");
   const [activePage, setPage] = useState(1);
 
-  const { data, isLoading , refetch} = useGetAdmittedStudentsInClass(status, activePage.toString());
+  const { data, isLoading, refetch } = useGetAdmittedStudentsInClass(
+    status,
+    activePage.toString()
+  );
   const totalPage = data?.data.data.number_pages;
 
   const admittedStudents: TRequestStudents[] = data?.data.data.records;
@@ -38,38 +41,41 @@ const Students = () => {
       <div className=" flex-grow flex flex-col  rounded-3xl bg-white py-2  ">
         <div className="grid grid-cols-2 justify-center items-center w-full px-8 ">
           <div>
-            <h1 className="text-[25px] font-bold">Students ({admittedStudents?.length})</h1>
+            <h1 className="text-[25px] font-bold">
+              Students ({admittedStudents?.length})
+            </h1>
           </div>
           <div className="flex gap-2 justify-end ">
-             <Menu>
-            <Menu.Target>
-              <div className="flex gap-2">
-                 <button>Sort by</button>
+            <Menu>
+              <Menu.Target>
+                <div className="flex gap-2">
+                  <button>Sort by</button>
                   <img loading="lazy" src={ArrowDown} alt="Arrowdown" />
-              </div>
-            </Menu.Target>
-            <Menu.Dropdown>
-              <Menu.Item>
-               <button onClick={()=>{
-                setStatus('active')
-                //  queryClient.invalidateQueries({ queryKey: ['GetStudents']});
-                }}>
-                Active
-                </button> 
-              </Menu.Item>
-              <Menu.Item>
-                <button onClick={()=>{
-                  
-                  setStatus("disabled")
-          // queryClient.invalidateQueries({ queryKey: ['GetStudents']});
-                  }}>
-                  
-                Disabled
-                </button>
-                
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
+                </div>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item>
+                  <button
+                    onClick={() => {
+                      setStatus("active");
+                      //  queryClient.invalidateQueries({ queryKey: ['GetStudents']});
+                    }}
+                  >
+                    Active
+                  </button>
+                </Menu.Item>
+                <Menu.Item>
+                  <button
+                    onClick={() => {
+                      setStatus("disabled");
+                      // queryClient.invalidateQueries({ queryKey: ['GetStudents']});
+                    }}
+                  >
+                    Disabled
+                  </button>
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
           </div>
         </div>
 
@@ -113,26 +119,26 @@ const Students = () => {
           <span className="text-[#8530C1]"> {totalPage * 5} </span> data
         </span> */}
         {totalPage > 1 && (
-        <div className="px-10  mr-2 flex justify-end  pb-8">
-          <Pagination
-            total={totalPage}
-            value={activePage}
-            defaultChecked={true}
-            onChange={setPage}
-            onClick={() => {
-              console.log(activePage);
-              refetch();
-            }}
-            styles={() => ({
-              control: {
-                "&[data-active]": {
-                  backgroundColor: "#8530C1 !important",
+          <div className="px-10  mr-2 flex justify-end  pb-8">
+            <Pagination
+              total={totalPage}
+              value={activePage}
+              defaultChecked={true}
+              onChange={setPage}
+              onClick={() => {
+                console.log(activePage);
+                refetch();
+              }}
+              styles={() => ({
+                control: {
+                  "&[data-active]": {
+                    backgroundColor: "#8530C1 !important",
+                  },
                 },
-              },
-            })}
-          />
-        </div>
-      )}
+              })}
+            />
+          </div>
+        )}
       </div>
 
       <style>

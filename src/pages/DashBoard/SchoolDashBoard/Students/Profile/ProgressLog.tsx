@@ -10,7 +10,7 @@ const ProgressLog = ({
   isLoading,
 }: {
   logData?: TLogData;
-  isLoading: boolean;
+  isLoading?: boolean;
 }) => {
   return (
     <>

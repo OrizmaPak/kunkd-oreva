@@ -21,7 +21,7 @@ const TopSubCategories = ({
         />
       ) : (
         <div className=" p-5 bg-white rounded-3xl flex-grow">
-          <h1 className="font-bold text-[16px] mb-2 leading-[30px] font-Hanken font-semibold ">
+          <h1 className=" text-[16px] mb-2 leading-[30px] font-Hanken font-semibold ">
             Top Interest
           </h1>
           <div className="flex  flex-col">
