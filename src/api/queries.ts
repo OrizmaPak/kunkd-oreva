@@ -564,6 +564,8 @@ export const useGetUpdatedProfile = () => {
 };
 
 export const useGetSchoolContentStat = (start: string, end: string) => {
+  // const userObject = localStorage.getItem("user");
+  // const storedObject = JSON.parse(userObject as string);
   return useQuery({
     queryKey: ["GetSchoolContentStat", start, end],
     queryFn: () => GetSchoolContentStat(start, end),

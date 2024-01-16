@@ -2,7 +2,7 @@
 import ServiceCard from "./ServiceCard";
 import { CardTypes } from "../Home/ClientCard";
 import Service4 from "@/assets/service424.png";
-import Service3 from "@/assets/service3.svg";
+import Service3 from "@/assets/service324.png";
 import Service2 from "@/assets/service224.png";
 import Service1 from "@/assets/service124.png";
 import LadyBg from "@/assets/ladyservice24.png";
@@ -62,7 +62,7 @@ const Serviceontent = () => {
 
       <div className="max-w-[1000px] mx-auto text-center mt-28">
         <h1 className="text-[36px] text-[#101828] font-Inter my-8 ">
-          WE ARE AT YOUR SERVICE
+          We are at your service
         </h1>
       </div>
 
