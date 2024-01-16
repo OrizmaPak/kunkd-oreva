@@ -1,6 +1,6 @@
-import musicIcon from "@/assets/musicbg.svg";
-import videoIcon from "@/assets/videobg.svg";
-import BookIcon from "@/assets/bookbg.svg";
+import musicIcon from "@/assets/paudiobooksicon.png";
+import videoIcon from "@/assets/pvideoicon.png";
+import BookIcon from "@/assets/pstoriesicon.png";
 import PieChart from "./PieChart";
 import "./chart.css";
 
