@@ -31,56 +31,58 @@ const SelectProfile = ({
 }) => {
   const [profiles] = useStore(getProfileState);
 
-  const { data, isLoading} = useGetProfile();
+  const { data, isLoading } = useGetProfile();
   if (profiles) console.log(data, "profiles-----------", profiles);
-
- 
 
   return (
     <>
-     { !isLoading  && data?.data?.data?.length ===0 ? 
-     (<Navigate to="/childprofilesetup" replace /> ) : 
-     <div
-        style={{
-          backgroundImage: `url(${GroupIcon})`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "contain",
-          backgroundPosition: "center",
-        }}
-        className="relative h-screen w-full flex justify-center items-center  "
-      >
-        {
-          <div>
-            <div className="text-center  font-bold  mb-10 text-black">
-              <h1 className="text-[60px] font-Recoleta">Who's Learning?</h1>
-              <p className=" font-Hanken">Select which kid is learning now </p>
-            </div>
-            <div className="flex text-white text-center gap-10 justify-center items-center bg-transparent">
-              {isLoading
-                ? Array(3)
-                    .fill(1)
-                    .map((arr, index) => (
-                      <Skeleton
+      {!isLoading && data?.data?.data?.length === 0 ? (
+        <Navigate to="/childprofilesetup" replace />
+      ) : (
+        <div
+          style={{
+            backgroundImage: `url(${GroupIcon})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+          }}
+          className="relative h-screen w-full flex justify-center items-center  "
+        >
+          {
+            <div>
+              <div className="text-center  font-bold  mb-10 text-black">
+                <h1 className="text-[60px] font-Recoleta">Who's Learning?</h1>
+                <p className=" font-Hanken">
+                  Select which kid is learning now{" "}
+                </p>
+              </div>
+              <div className="flex text-white text-center gap-10 justify-center items-center bg-transparent">
+                {isLoading
+                  ? Array(3)
+                      .fill(1)
+                      .map((arr, index) => (
+                        <Skeleton
+                          key={index}
+                          height={100}
+                          circle
+                          visible={isLoading}
+                        >
+                          {arr}
+                        </Skeleton>
+                      ))
+                  : profiles?.map((avatar, index) => (
+                      <AvatarCard
                         key={index}
-                        height={100}
-                        circle
-                        visible={isLoading}
-                      >
-                        {arr}
-                      </Skeleton>
-                    ))
-                : profiles?.map((avatar, index) => (
-                    <AvatarCard
-                      key={index}
-                      {...avatar}
-                      isLoading={isLoading}
-                      setChildProfile={setChildProfile}
-                    />
-                  ))}
+                        {...avatar}
+                        isLoading={isLoading}
+                        setChildProfile={setChildProfile}
+                      />
+                    ))}
+              </div>
             </div>
-          </div>
-        }
-      </div>}
+          }
+        </div>
+      )}
     </>
   );
 };
@@ -105,6 +107,7 @@ const AvatarCard = ({
   const handleClick = () => {
     image = "";
     setChildProfile(id.toString());
+    localStorage.setItem("profileId", id.toString());
 
     navigate("/parent");
   };

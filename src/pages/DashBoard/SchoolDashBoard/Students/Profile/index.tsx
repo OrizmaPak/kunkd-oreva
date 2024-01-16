@@ -74,12 +74,18 @@ const StudentProfile = () => {
       <div className=" flex-grow gap-6 flex w-full ">
         <div className=" flex w-full flex-col  fl gap-y-5  ">
           <div>
-            <ProfileCard schoolStudentStat={schoolStudentStat} />
+            <ProfileCard
+              schoolStudentStat={schoolStudentStat}
+              isLoading={isLoading}
+            />
           </div>
 
           <div className="flex justify-center gap-5 flex-basis-[1/2]  ">
             <div className="flex-grow ">
-              <TotalTimeSpent schoolStudentStat={schoolStudentStat} />
+              <TotalTimeSpent
+                schoolStudentStat={schoolStudentStat}
+                isLoading={isLoading}
+              />
             </div>
             <div className=" flex-grow h-full ">
               <RecentCompleted
@@ -89,17 +95,32 @@ const StudentProfile = () => {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-5 ">
-            <MyTeacher schoolStudentStat={schoolStudentStat} />
-            <TopSubCategories schoolStudentStat={schoolStudentStat} />
+            <MyTeacher
+              schoolStudentStat={schoolStudentStat}
+              isLoading={isLoading}
+            />
+            <TopSubCategories
+              schoolStudentStat={schoolStudentStat}
+              isLoading={isLoading}
+            />
           </div>
           <div className="flex-grow flex ">
-            <ContentInProgress schoolStudentStat={schoolStudentStat} />
+            <ContentInProgress
+              schoolStudentStat={schoolStudentStat}
+              isLoading={isLoading}
+            />
           </div>
         </div>
 
         <div className="  flex basis-3/5   flex-col gap-3">
-          <ProgressLog logData={schoolStudentStat?.content_progress_log} />
-          <LearningHour schoolStudentStat={schoolStudentStat} />
+          <ProgressLog
+            logData={schoolStudentStat?.content_progress_log}
+            isLoading={isLoading}
+          />
+          <LearningHour
+            schoolStudentStat={schoolStudentStat}
+            isLoading={isLoading}
+          />
         </div>
       </div>
       <style>

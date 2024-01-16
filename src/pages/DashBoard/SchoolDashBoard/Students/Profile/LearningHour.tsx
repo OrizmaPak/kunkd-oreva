@@ -8,6 +8,8 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { Skeleton } from "@mantine/core";
+
 import { TSchoolStudentStat } from ".";
 // import { number } from "zod";
 
@@ -77,8 +79,10 @@ export function BarChart({ meta }: { meta: number[] }) {
 
 const LearningHour = ({
   schoolStudentStat,
+  isLoading,
 }: {
   schoolStudentStat: TSchoolStudentStat;
+  isLoading: boolean;
 }) => {
   console.log("LEARNIG HOURS", schoolStudentStat?.learning_hours);
 
@@ -87,14 +91,26 @@ const LearningHour = ({
   );
   console.log("dataArray", dataArray);
   return (
-    <div className="bg-white rounded-3xl flex-grow py-2 px-4 mt-2">
-      <div className="flex justify-between">
-        <h1 className="text-[16px] font-Hanken font-semibold ">
-          Learning Hours
-        </h1>
-      </div>
-      <BarChart meta={dataArray} />
-    </div>
+    <>
+      {isLoading ? (
+        <Skeleton
+          height={300}
+          width={350}
+          radius={20}
+          mb="xl"
+          visible={isLoading}
+        />
+      ) : (
+        <div className="bg-white rounded-3xl flex-grow py-2 px-4 mt-2">
+          <div className="flex justify-between">
+            <h1 className="text-[16px] font-Hanken font-semibold ">
+              Learning Hours
+            </h1>
+          </div>
+          <BarChart meta={dataArray} />
+        </div>
+      )}
+    </>
   );
 };
 

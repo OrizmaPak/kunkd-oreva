@@ -3,24 +3,47 @@ import MusicBg from "@/assets/daudiobookicon.png";
 import QuizBg from "@/assets/dquizicon.png";
 import VideoBg from "@/assets/dvideoicon.png";
 import { TLogData } from "../../Main/Main";
+import { Skeleton } from "@mantine/core";
 
-const ProgressLog = ({ logData }: { logData?: TLogData }) => {
+const ProgressLog = ({
+  logData,
+  isLoading,
+}: {
+  logData?: TLogData;
+  isLoading: boolean;
+}) => {
   return (
-    <div className="bg-white flex flex-col  flex- rounded-3xl px-6 py-2 pb-6 ">
-      <div>
-        <div className="flex justify-between my-5 ">
-          <h1 className="text-[16px]  font-Hanken font-semibold ">
-            Progress Log
-          </h1>
+    <>
+      {isLoading ? (
+        <Skeleton
+          height={550}
+          width={350}
+          radius={20}
+          mb="xl"
+          visible={isLoading}
+        />
+      ) : (
+        <div className="bg-white flex flex-col  flex- rounded-3xl px-6 py-2 pb-6 ">
+          <div>
+            <div className="flex justify-between my-5 ">
+              <h1 className="text-[16px]  font-Hanken font-semibold ">
+                Progress Log
+              </h1>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3 flex-grow py-4 ">
+            <Card image={Bookbg} title="Stories" total={logData?.stories} />
+            <Card
+              image={MusicBg}
+              title="Audiobooks"
+              total={logData?.audio_books}
+            />
+            <Card image={VideoBg} title="Videos" total={logData?.languages} />
+            <Card image={QuizBg} title="quiz" total={logData?.quiz} />
+          </div>
         </div>
-      </div>
-      <div className="grid grid-cols-2 gap-3 flex-grow py-4 ">
-        <Card image={Bookbg} title="Stories" total={logData?.stories} />
-        <Card image={MusicBg} title="Audiobooks" total={logData?.audio_books} />
-        <Card image={VideoBg} title="Videos" total={logData?.languages} />
-        <Card image={QuizBg} title="quiz" total={logData?.quiz} />
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
