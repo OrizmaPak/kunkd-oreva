@@ -4,9 +4,9 @@ import {
   useGetOngoingContents,
   useGetUpdatedProfile,
 } from "@/api/queries";
-import BookIcon from "@/assets/bookicon.svg";
-import musicIcon from "@/assets/musicIcon.svg";
-import videoIcon from "@/assets/videoicon.svg";
+import BookIcon from "@/assets/storiesicon24.png";
+import musicIcon from "@/assets/audiobookicon24.png";
+import videoIcon from "@/assets/videoicon.png";
 import AdsButton from "@/common/User/AdsButton";
 import CardHome from "@/common/User/CardHome";
 import CardScreenHome from "@/common/User/CardScreenHome";

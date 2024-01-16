@@ -1,7 +1,7 @@
-import Bookbg from "@/assets/bookbg.svg";
-import MusicBg from "@/assets/musicbg.svg";
-import QuizBg from "@/assets/quizbg.svg";
-import VideoBg from "@/assets/videobg.svg";
+import Bookbg from "@/assets/dbookicon.png";
+import MusicBg from "@/assets/daudiobookicon.png";
+import QuizBg from "@/assets/dquizicon.png";
+import VideoBg from "@/assets/dvideoicon.png";
 import { TLogData } from "../../Main/Main";
 
 const ProgressLog = ({ logData }: { logData?: TLogData }) => {

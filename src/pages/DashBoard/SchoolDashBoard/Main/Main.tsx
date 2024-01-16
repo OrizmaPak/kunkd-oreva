@@ -4,9 +4,9 @@ import {
   useGetTeacherList,
   useGetLicense,
 } from "@/api/queries";
-import StudentIcon from "@/assets/student3.svg";
-import TeacherIcon from "@/assets/teacher3.svg";
-import Classes from "@/assets/classD.svg";
+import StudentIcon from "@/assets/dstudenticon.png";
+import TeacherIcon from "@/assets/dteachericon.png";
+import Classes from "@/assets/dclassicon.png";
 import MyDateFilter from "@/components/DateFilter";
 import ProgressLog from "../Students/Profile/ProgressLog";
 import { TTeacherList } from "../Teachers/Teachers";
