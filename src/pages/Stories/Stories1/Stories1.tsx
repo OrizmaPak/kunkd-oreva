@@ -6,7 +6,7 @@ import {
   useLikedContent,
   useUnLikedContent,
 } from "@/api/queries";
-import Bookmark from "@/assets/Bookmark.svg";
+// import Bookmark from "@/assets/Bookmark.svg";
 import AfamBlur from "@/assets/afamblur.jpg";
 import Congrats from "@/assets/congrats.svg";
 import CardHome from "@/common/User/CardHome";
@@ -23,8 +23,8 @@ import StoriesNav from "./StoriesNav";
 
 import { getApiErrorMessage } from "@/api/helper";
 import TeacherNotificationModal from "@/components/TeacherWarningModal";
-import { MantineProvider, Modal, Slider } from "@mantine/core";
-import { useDisclosure, useReducedMotion } from "@mantine/hooks";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { UseQueryResult } from "@tanstack/react-query";
 import ReactHtmlParser from "html-react-parser";
@@ -417,17 +417,17 @@ const ReadPage = ({
   const [page, setPage] = useState(0);
   const pageTotal = content.length - 1;
   const [pageNumber, setPageNumber] = useState(0);
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const reducedMotion = useReducedMotion();
-  const [volume, setVolume] = useState(50);
-  const handleVolumeChange = (value: number) => {
-    setVolume(value);
-    const volume = Number(value) / max;
-    if (audioRef.current) {
-      audioRef.current.volume = volume;
-    }
-  };
-  const max = 20;
+  // const audioRef = useRef<HTMLAudioElement>(null);
+  // const reducedMotion = useReducedMotion();
+  // const [volume, setVolume] = useState(50);
+  // const handleVolumeChange = (value: number) => {
+  //   setVolume(value);
+  //   const volume = Number(value) / max;
+  //   if (audioRef.current) {
+  //     audioRef.current.volume = volume;
+  //   }
+  // };
+  // const max = 20;
   const { mutate } = useContentTracking();
   const profileId = localStorage.getItem("profileId");
   const contentId = localStorage.getItem("contentId");
@@ -501,7 +501,7 @@ const ReadPage = ({
               ></p>
               <p className="inline">Read to me</p>
             </button>
-            <p className="w-[100px]">
+            {/* <p className="w-[100px]">
               <MantineProvider
                 theme={{
                   colors: {
@@ -530,7 +530,7 @@ const ReadPage = ({
                   size={"sm"}
                 />
               </MantineProvider>
-            </p>
+            </p> */}
           </p>
           {!isReading && (
             <p
