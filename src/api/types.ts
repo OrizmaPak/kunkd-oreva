@@ -70,7 +70,7 @@ export type TUdateProfileData = {
   profile_id: string;
 };
 
-export type profile = {
+export type Tprofile = {
   id: number;
   name: string;
   age: 0;
