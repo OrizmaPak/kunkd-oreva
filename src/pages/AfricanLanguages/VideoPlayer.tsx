@@ -37,6 +37,7 @@ import { TStoryContent } from "../Stories/Stories1/Stories1";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import TeacherNotificationModal from "@/components/TeacherWarningModal";
+import ConnectedStudentModal from "@/components/ConnectedStudentModal";
 // import useTimeSpent from "@/hooks/useTimeSpent";
 
 type TRecommendedVideo = {
@@ -93,6 +94,10 @@ const VideoPlayer = () => {
   const [isfinish, setIsFinsh] = useState(false);
   const { lan_type } = useParams();
   const [opened, { open, close }] = useDisclosure(false);
+  const [
+    openedconnectedStudent,
+    { open: openConnectedStudent, close: closeConnectedStudent },
+  ] = useDisclosure(false);
   const profileId = localStorage.getItem("profileId");
 
   const contentId = localStorage.getItem("contentId");
@@ -103,7 +108,8 @@ const VideoPlayer = () => {
   const { data, isLoading } = useGetContentById(
     contentId?.toString() as string,
     profileId?.toString() || ("0" as string),
-    open
+    open,
+    openConnectedStudent
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const mediaContent = data?.data.data;
   const { data: recommendedData, isLoading: recommendedIsLoading } =
@@ -293,6 +299,23 @@ const VideoPlayer = () => {
         centered
       >
         <TeacherNotificationModal onCancel={close} />
+      </Modal>
+
+      <Modal
+        radius={10}
+        padding={30}
+        size={"md"}
+        opened={openedconnectedStudent}
+        onClose={closeConnectedStudent}
+        overlayProps={{
+          // style: { backgroundOpacity: 1 },
+          blur: 10,
+        }}
+        closeOnClickOutside={false}
+        withCloseButton={false}
+        centered
+      >
+        <ConnectedStudentModal onCancel={closeConnectedStudent} />
       </Modal>
 
       <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col  bg-[#fff7fd]">

@@ -33,6 +33,7 @@ import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import useTimeSpent from "@/hooks/useTimeSpent";
 import "./stories1.css";
 import { MdFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
+import ConnectedStudentModal from "@/components/ConnectedStudentModal";
 
 // import { number } from "zod";
 // import { useQueryClient } from "@tanstack/react-query";
@@ -100,11 +101,17 @@ const Stories1 = () => {
   const { category } = params;
   const [opened, { open, close }] = useDisclosure(false);
 
+  const [
+    openedconnectedStudent,
+    { open: openConnectedStudent, close: closeConnectedStudent },
+  ] = useDisclosure(false);
+
   const { data, isLoading: contentIsLoading } = useGetContentById(
     contentId?.toString() as string,
     // contentId!,
     profileId?.toString() || "0",
-    open
+    open,
+    openConnectedStudent
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const content = data?.data.data;
   const [arrayOfSubCatId, setArraySubCatId] = useState<number>(0);
@@ -143,8 +150,24 @@ const Stories1 = () => {
       >
         <TeacherNotificationModal onCancel={close} />
       </Modal>
+      <Modal
+        radius={10}
+        padding={30}
+        size={"md"}
+        opened={openedconnectedStudent}
+        onClose={closeConnectedStudent}
+        overlayProps={{
+          // style: { backgroundOpacity: 1 },
+          blur: 10,
+        }}
+        closeOnClickOutside={false}
+        withCloseButton={false}
+        centered
+      >
+        <ConnectedStudentModal onCancel={closeConnectedStudent} />
+      </Modal>
       <div className=" ">
-        <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] ">
+        <div className="min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] ">
           <div className=" ">
             {
               <Skeleton visible={contentIsLoading}>

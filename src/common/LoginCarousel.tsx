@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
-import ParentalCtrl from "@/assets/PARENTAL-CONTROL 1.svg";
+import ParentalCtrl from "@/assets/logincarousel224.png";
 import LearnImage1 from "@/assets/logincarosel124.png";
-import LearnImage2 from "@/assets/learnimage2.svg";
+import LearnImage2 from "@/assets/logincarousel324.png";
 
 import CarouselCard from "./CarouselCard";
 import Slider from "react-slick";
@@ -12,21 +12,21 @@ const LoginCarousel = () => {
   const images = [ParentalCtrl, LearnImage1, LearnImage2];
   const carouselData = [
     {
-      bgImage: ParentalCtrl,
+      bgImage: LearnImage1,
       title: "Read, Listen & Enjoy",
-      className: "bg-[rgba(40,67,135,0.5)] backdrop-blur-lg",
+      className: "bg-[rgba(230,230,230,0.3)]   border-white border-[1.5px]",
       body: "Get access to fun and inspiring stories & audiobooks that build on soft skills, values, reading and numeracy on a weekly basis.",
     },
     {
-      bgImage: LearnImage1,
-      title: "Learn African Languages",
-      className: "bg-[rgba(60,179,113,0.5)] backdrop-blur-lg",
+      bgImage: ParentalCtrl,
+      title: "Access World of Stories",
+      className: "bg-[rgba(230,230,230,0.3)]  border-white border-[1.5px]",
       body: "Get access to fun and inspiring stories & audiobooks that build on soft skills, values, reading and numeracy on a weekly basis.",
     },
     {
       bgImage: LearnImage2,
       title: "Learn African Languages",
-      className: "bg-[rgba(106,90,205,0.5)] backdrop-blur-lg",
+      className: "bg-[rgba(230,230,230,0.3)] border-white border-[1.5px] ",
       body: "Get access to fun and inspiring stories & audiobooks that build on soft skills, values, reading and numeracy on a weekly basis.",
     },
   ];
@@ -47,7 +47,7 @@ const LoginCarousel = () => {
   const [isLoading, setIsLoading] = useState(true);
   return (
     <Skeleton visible={isLoading}>
-      <div className="w-full  bg-red-600 h-full bg-center ">
+      <div className="w-full  h-full bg-center ">
         <img
           src={`${activeDot ? images[activeDot] : ParentalCtrl}`}
           alt=""

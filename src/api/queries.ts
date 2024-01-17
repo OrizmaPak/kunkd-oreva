@@ -213,7 +213,8 @@ export const useContentForHome = () => {
 export const useGetContentById = (
   contentId: string,
   userId: string,
-  open?: () => void
+  open?: () => void,
+  openConnnectedStudent?: () => void
 ) => {
   const [user] = useStore(getUserState);
   const navigate = useNavigate();
@@ -236,7 +237,7 @@ export const useGetContentById = (
             (data: Tprofile) => data.id === Number(currentProfile)
           );
           if (currentProfileObj.student.status === "approved") {
-            open && open();
+            openConnnectedStudent && openConnnectedStudent();
           } else {
             navigate("/packages");
             notifications.show({

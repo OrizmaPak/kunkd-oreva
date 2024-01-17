@@ -38,6 +38,7 @@ import { TAudioBooks } from "@/api/types";
 import CardHome from "@/common/User/CardHome";
 import CardScreenHome from "@/common/User/CardScreenHome";
 import { useNavigate } from "react-router-dom";
+import ConnectedStudentModal from "@/components/ConnectedStudentModal";
 // import useTimeSpent from "@/hooks/useTimeSpent";
 
 // type TAudioBook = {
@@ -50,6 +51,10 @@ import { useNavigate } from "react-router-dom";
 // };
 const BookLayout = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const [
+    openedconnectedStudent,
+    { open: openConnectedStudent, close: closeConnectedStudent },
+  ] = useDisclosure(false);
   const navigate = useNavigate();
 
   // const contentId = localStorage.getItem("contentId");
@@ -67,7 +72,8 @@ const BookLayout = () => {
   const { data, isLoading } = useGetContentById(
     contentId?.toString() as string,
     profileId?.toString() || ("0" as string),
-    open
+    open,
+    openConnectedStudent
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
   const audioBookId = data?.data.data.id;
   const audiobook = data?.data.data.media?.[0];
@@ -89,6 +95,23 @@ const BookLayout = () => {
         centered
       >
         <TeacherNotificationModal onCancel={close} />
+      </Modal>
+
+      <Modal
+        radius={10}
+        padding={30}
+        size={"md"}
+        opened={openedconnectedStudent}
+        onClose={closeConnectedStudent}
+        overlayProps={{
+          // style: { backgroundOpacity: 1 },
+          blur: 10,
+        }}
+        closeOnClickOutside={false}
+        withCloseButton={false}
+        centered
+      >
+        <ConnectedStudentModal onCancel={closeConnectedStudent} />
       </Modal>
 
       <div className=" ">

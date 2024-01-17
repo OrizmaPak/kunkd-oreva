@@ -34,7 +34,7 @@ const PayWitStripButton = ({
       {
         onSuccess(data) {
           setStripeData({ ...data.data.data });
-          localStorage.setItem("stripeData", JSON.stringify(data.data.data));
+          // localStorage.setItem("stripeData", JSON.stringify(data.data.data));
           const publishableKey = data.data.data?.public_key;
           const stripe = loadStripe(publishableKey);
           setStripePromise(stripe);
