@@ -16,7 +16,7 @@ const Chart = ({
   return (
     <div>
       <div className="flex justify-around  pad-x-40">
-        <div className=" chart-w ">
+        <div className=" chart-w  shadow-lg rounded-full p-2">
           <PieChart data={[stories, africanLanguages, audioBooks]} />
         </div>
         <div className=" flex  justify-between gap-4 items-center  ">

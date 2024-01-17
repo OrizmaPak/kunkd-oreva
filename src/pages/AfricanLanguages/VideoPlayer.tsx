@@ -314,7 +314,7 @@ const VideoPlayer = () => {
                 <div className="basis">
                   <div className="  rounded-t-3xl flex flex-col relative group">
                     <button
-                      onClick={() => setIsFinsh(true)}
+                      // onClick={() => setIsFinsh(true)}
                       className="py-3  text-[#8530C1]   z-50 px-8 flex gap-4 justify-center items-center rounded-3xl bg-white right-8  top-4 absolute"
                     >
                       Finish

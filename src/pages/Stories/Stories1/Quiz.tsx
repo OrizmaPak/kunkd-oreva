@@ -187,8 +187,10 @@ const Question = ({
 }) => {
   return (
     <div className=" flex justify-start mt-20 items-center flex-col gap-y-4 flex-grow ">
-      <h1 className="text-[24px] font-bold  text-center mb-8" dangerouslySetInnerHTML={{ __html: `${quesObject?.question}`}}>  
-      </h1>
+      <h1
+        className="text-[24px] font-bold  text-center mb-8"
+        dangerouslySetInnerHTML={{ __html: `${quesObject?.question}` }}
+      ></h1>
       <div className=" flex flex-col gap-6">
         <AnsButton
           selected_option={"a"}
@@ -274,11 +276,10 @@ const AnsButton = ({
           ? "bg-[#8530C1] text-white "
           : "text-[#8530C1]"
       } border border-[#8530C1] rounded-2xl texx`}
-      dangerouslySetInnerHTML={{ __html: title}}>
-      
-    </button>
+      dangerouslySetInnerHTML={{ __html: title }}
+    ></button>
   );
-}
+};
 
 type answerObj = {
   selected_option_value?: string;
@@ -323,7 +324,7 @@ const QuestionPagination = ({
       <div className="flex justify-between items-center">
         <button
           onClick={() => handlePagination("prev")}
-          className="py-3 px-16 bg-[#E2B6FF]   roundedss text-white"
+          className="py-3 px-16 bg-[#E2B6FF]   rounded text-white"
         >
           Prev
         </button>
@@ -406,18 +407,18 @@ const GoodRemarkMsg = ({
         <div className="flex justify-between items-center text-white">
           <Button
             onClick={refreshPage}
-            size="md"
+            size="sm"
             color="black"
             varient="outlined"
           >
-            <strong className="text-[#8530C1]">Retake Quiz</strong>
+            <strong className="text-[#8530C1] py-3">Retake Quiz</strong>
           </Button>
           <div className="flex gap-20">
             <button
               onClick={setShowYourResult}
               className="py-3 px-16 bg-[#8530C1] rounded"
             >
-              Done
+              Review quiz
             </button>
           </div>
         </div>
@@ -568,20 +569,22 @@ const ResultRow = ({
         <p className="text-[#8530C1]  rounded-full p-3 bg-white w-[30px] h-[30px] flex justify-center items-center">
           {index! + 1}
         </p>
-        <div   className={`text-[20px]  w-full flex  justify-between font-semibold `}>
-
-        <p
-         
-          dangerouslySetInnerHTML={{ __html: question}}>
-       
-         
-        </p>
-        <p > {!selected_option_value && <img src={DangerCircle} alt="image" />}</p>
+        <div
+          className={`text-[20px]  w-full flex  justify-between font-semibold `}
+        >
+          <p dangerouslySetInnerHTML={{ __html: question }}></p>
+          <p>
+            {" "}
+            {!selected_option_value && <img src={DangerCircle} alt="image" />}
+          </p>
         </div>
       </p>
-      <p className="pl-20 text-[20px] text-[#B5B5C3] py-2"  dangerouslySetInnerHTML={{ __html: `${selected_option_value ? selected_option_value:"-"}`}}>
-       
-      </p>
+      <p
+        className="pl-20 text-[20px] text-[#B5B5C3] py-2"
+        dangerouslySetInnerHTML={{
+          __html: `${selected_option_value ? selected_option_value : "-"}`,
+        }}
+      ></p>
     </div>
   );
 };
@@ -607,34 +610,48 @@ const ResultRow2 = ({
         <p className="text-[#8530C1]  rounded-full p-3 bg-white w-[30px] h-[30px] flex justify-center items-center">
           {index! + 1}
         </p>
-        <div  className={`text-[20px]  w-full flex  justify-between font-semibold `}>
-        <p dangerouslySetInnerHTML={{ __html: question}}></p>
-         {/* <p  dangerouslySetInnerHTML={{ __html: `${!selected_option_value || selected_option_value !== actual_answer ? (
+        <div
+          className={`text-[20px]  w-full flex  justify-between font-semibold `}
+        >
+          <p dangerouslySetInnerHTML={{ __html: question }}></p>
+          {/* <p  dangerouslySetInnerHTML={{ __html: `${!selected_option_value || selected_option_value !== actual_answer ? (
             <img src={DangerCircle} alt="image" />
           ) : (
             <img src={CheckCircle} alt="iamge" />
           )}`}}> </p> */}
         </div>
-         <p>
+        <p>
           {!selected_option_value || selected_option_value !== actual_answer ? (
             <img src={DangerCircle} alt="image" />
           ) : (
             <img src={CheckCircle} alt="iamge" />
           )}
-          </p>
         </p>
+      </p>
 
-       
-      
-      {selected_option_value === actual_answer && (<p className="pl-20 text-[20px] text-[#B5B5C3] py-2"  dangerouslySetInnerHTML={{ __html: `${selected_option_value}`}} >
-
-        </p>
+      {selected_option_value === actual_answer && (
+        <p
+          className="pl-20 text-[20px] text-[#B5B5C3] py-2"
+          dangerouslySetInnerHTML={{ __html: `${selected_option_value}` }}
+        ></p>
       )}
-      {selected_option_value !== actual_answer ? (<div>
-
-        <p className="pl-16 text-[20px] text-[#B5B5C3] py-2"  dangerouslySetInnerHTML={{ __html: `${selected_option_value !== actual_answer ? selected_option_value : ""}`}}></p>
-          <p className="text-red-500 font=semibold ml-16 flex gap-2 "  dangerouslySetInnerHTML={{ __html:` Answer:${actual_answer}` }}></p>
-      </div>
+      {selected_option_value !== actual_answer ? (
+        <div>
+          <p
+            className="pl-16 text-[20px] text-[#B5B5C3] py-2"
+            dangerouslySetInnerHTML={{
+              __html: `${
+                selected_option_value !== actual_answer
+                  ? selected_option_value
+                  : ""
+              }`,
+            }}
+          ></p>
+          <p
+            className="text-red-500 font=semibold ml-16 flex gap-2 "
+            dangerouslySetInnerHTML={{ __html: ` Answer:${actual_answer}` }}
+          ></p>
+        </div>
       ) : (
         ""
       )}

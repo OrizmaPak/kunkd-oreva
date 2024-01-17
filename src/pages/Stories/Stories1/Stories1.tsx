@@ -32,6 +32,8 @@ import { useRef } from "react";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import useTimeSpent from "@/hooks/useTimeSpent";
 import "./stories1.css";
+import { MdFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
+
 // import { number } from "zod";
 // import { useQueryClient } from "@tanstack/react-query";
 type TContentPage = {
@@ -234,7 +236,7 @@ const AboutPage = ({
   const isLiked = likeContents?.filter((content) => content.id === story?.id);
 
   const handleLikedContent = () => {
-    // handleShake();
+    handleShake();
     if (isLiked?.length === 0 || isLiked === undefined) {
       mutate(
         {
@@ -284,6 +286,15 @@ const AboutPage = ({
     }
   };
 
+  const [isShaking, setIsShaking] = useState(false);
+
+  const handleShake = () => {
+    setIsShaking(true);
+    setTimeout(() => {
+      setIsShaking(false);
+    }, 200); // Reset shaking after 0.5 seconds
+  };
+
   return (
     <div className="bg-[#5D0093]  w-[100%] flex rounded-3xl pad-x-40 about-card-px py-5">
       <div className="flex basis-full  border-r-2 justify-center items-center border-[#BD6AFA]  ">
@@ -310,17 +321,17 @@ const AboutPage = ({
             {story?.name}
           </span>
           <span className=" text-[#BD6AFA]  ">Dele and Louisa Olafuyi</span>
-          <p className="grid grid-cols-2   gap-4 ">
+          <p className="  flex gap-1 ">
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 setStartRead();
               }}
-              className=" py-3 inline self-end text-white border-white border-[2px] rounded-2xl"
+              className=" py-3 px-10 inline self-end text-white border-white border-[2px] rounded-2xl"
             >
               Read
             </button>
-            <button
+            {/* <button
               onClick={handleLikedContent}
               className="inline self-end text-start"
             >
@@ -330,6 +341,40 @@ const AboutPage = ({
                 alt="bookmark"
                 className=" inline "
               />
+            </button> */}
+
+            <button
+              onClick={handleLikedContent}
+              // className="px-4 py-2"
+              className={`px-4 py-2 rounded-md transition-all inline self-end items-center     ${
+                isShaking ? "scale-150" : ""
+              }`}
+            >
+              {isLiked?.length > 0 ? (
+                <MdOutlineFavorite
+                  size="35"
+                  color="white"
+                  className=" scale-110"
+                />
+              ) : (
+                <MdFavoriteBorder size="35" color="white" />
+              )}
+              <style>{`
+            @keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-10px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(10px);
+  }
+}
+
+.animate-shake {
+  animation: shake 0.3s infinite;
+}`}</style>
             </button>
           </p>
         </p>
@@ -406,11 +451,11 @@ const ReadPage = ({
             onSuccess(data) {
               console.log("success", data.data.message);
             },
-            onError(err) {
-              notifications.show({
-                title: `Notification`,
-                message: getApiErrorMessage(err),
-              });
+            onError() {
+              // notifications.show({
+              //   title: `Notification`,
+              //   message: getApiErrorMessage(err),
+              // });
             },
           }
         );

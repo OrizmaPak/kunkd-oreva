@@ -28,11 +28,9 @@ const ContentInProgress = ({
               Oops!!! No data available for content in progress😤{" "}
             </p>
           ) : (
-            schoolStudentStat?.ongoing_contents
-              ?.slice(0, 4)
-              ?.map((data, index) => {
-                return <Row key={index} data={data} />;
-              })
+            schoolStudentStat?.ongoing_contents?.map((data, index) => {
+              return <Row key={index} data={data} />;
+            })
           )}
         </div>
       )}

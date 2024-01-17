@@ -94,7 +94,7 @@ const Subscriptionplan = () => {
                   See avalaible plan
                   <img
                     loading="lazy"
-                    src={openPlan ? ArrowDown : ArrowUp}
+                    src={openPlan ? ArrowUp : ArrowDown}
                     alt="arrow"
                   />
                 </span>

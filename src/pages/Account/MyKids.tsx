@@ -9,7 +9,7 @@ import {
 import PencilIcon from "@/assets/blackPencilIcon.svg";
 import DotIcon from "@/assets/dotIcon.svg";
 import Kidmeme from "@/assets/kidmeme.svg";
-import LinkIcon from "@/assets/linkIcon.svg";
+import LinkIcon from "@/assets/connectIcon.png";
 import DeleteIcon from "@/assets/redDeleteIcon.svg";
 import InputFormat from "@/common/InputFormat";
 import { FormData } from "@/common/User/FormValidation/Schema";

@@ -80,7 +80,7 @@ const ProgressCard = ({
           wrapperClassName=" object-cover h-full rounded-xl  progress-card-img"
         />
       </div>
-      <div className="basis- basis-1/2 px-2 ">
+      <div className="basis- basis-1/2 px-3 ">
         <h1 className=" font-Hanken font-bold text3 leading-5 mt-4">
           {data?.name}
         </h1>
@@ -108,7 +108,7 @@ const ProgressCard = ({
               <p className="text3 mt-2  ">
                 Quiz score: {data?.quiz_result?.result}
               </p>
-              <Button size="md">
+              <Button size="sm">
                 <span className="text3">Completed</span>
               </Button>
             </div>
