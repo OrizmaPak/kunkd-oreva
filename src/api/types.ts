@@ -7,8 +7,8 @@ export type TSchool = {
   contact_name?: string;
   name?: string;
   profileImage?: string;
-  code?:string
-  class?:{class_id:number, class_name:string }
+  code?: string;
+  class?: { class_id: number; class_name: string };
 };
 export type returnUser = {
   dob: string;
@@ -28,7 +28,7 @@ export type returnUser = {
   // country_id: string;
   // state_id: string;
   address: string;
-  status:string;
+  status: string;
   school_name: string;
 };
 
@@ -45,12 +45,12 @@ export type TVerifyPinData = object;
 export type TPayStackInitData = object;
 export type TLikedContentData = object;
 export type TContentTracking = {
-  signal?:AbortSignal
-  profile_id: number,
-        content_id: number
-        status: string,
-        pages_read: number
-        timespent:number
+  signal?: AbortSignal;
+  profile_id: number;
+  content_id: number;
+  status: string;
+  pages_read: number;
+  timespent: number;
 };
 export type TAddTeacherData = object;
 export type TSaveQuiz = object;
@@ -68,6 +68,23 @@ export type TUdateProfileData = {
   age: string;
   image: string | Blob;
   profile_id: string;
+};
+
+export type profile = {
+  id: number;
+  name: string;
+  age: 0;
+  dob: string;
+  image: string;
+  student: {
+    assigned_teacher_id: number;
+    assigned_teacher_name: string;
+    class_id: number;
+    class_name: string;
+    school_id: number;
+    school_name: string;
+    status: string;
+  };
 };
 
 export type TUdateSchImageData = {
@@ -118,4 +135,3 @@ export type ApiResponse<T> = AxiosResponse<TResponse<T>>;
  * {
  * data, status, statusText, message, config, response, request}
  */
-

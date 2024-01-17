@@ -88,7 +88,7 @@ import useStore from "@/store/index";
 import { getProfileState } from "@/store/profileStore";
 import { notifications } from "@mantine/notifications";
 import { useNavigate } from "react-router-dom";
-import { ApiResponse } from "./types";
+import { ApiResponse, Tprofile } from "./types";
 
 export const querykeys = {
   profiles: ["GetProfile"],
@@ -229,11 +229,21 @@ export const useGetContentById = (
         res.data.message === "Number of allowed contents reached!"
       ) {
         if (user?.role === "user") {
-          navigate("/packages");
-          notifications.show({
-            title: `Notification`,
-            message: res.data.message,
-          });
+          const currentProfile = localStorage.getItem("profileId");
+          const profiles = localStorage.getItem("profiles");
+          const storedArrayObject = JSON.parse(profiles as string);
+          const currentProfileObj: Tprofile = storedArrayObject.find(
+            (data: Tprofile) => data.id === Number(currentProfile)
+          );
+          if (currentProfileObj.student.status === "approved") {
+            open && open();
+          } else {
+            navigate("/packages");
+            notifications.show({
+              title: `Notification`,
+              message: res.data.message,
+            });
+          }
         } else if (user?.role === "schoolAdmin") {
           navigate("/kundakidsunlimited");
           notifications.show({
