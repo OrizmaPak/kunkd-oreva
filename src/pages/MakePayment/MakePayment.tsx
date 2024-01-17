@@ -5,12 +5,17 @@ import ParentSignupLayout from "@/common/ParentSignupLayout";
 
 const MakePayment = () => {
   const [activeStep, ,] = useState(STEP_1);
+  const isHome = localStorage.getItem("gotToHome");
 
   return (
     <div>
-      <ParentSignupLayout active={3}>
-        {activeStep === STEP_1 ? <MakePaymentContent /> : null}
-      </ParentSignupLayout>
+      {isHome === "true" ? (
+        <MakePaymentContent />
+      ) : (
+        <ParentSignupLayout active={3}>
+          {activeStep === STEP_1 ? <MakePaymentContent /> : null}
+        </ParentSignupLayout>
+      )}
     </div>
   );
 };

@@ -44,7 +44,7 @@
   padding: 4px !important;
   border-radius: 5px !important;
 } */
-#button-text {
+/* #button-text {
   background-color: #8530c1 !important;
   width: 100% !important;
   display: block !important;
@@ -52,7 +52,7 @@
   border-radius: 6px !important;
   color: white !important;
   box-sizing: content-box;
-}
+} */
 
 #stripe-button:hover {
   filter: contrast(115%);
@@ -64,7 +64,7 @@
 }
 
 /* spinner/processing state, errors */
-.spinner,
+/* .spinner,
 .spinner:before,
 .spinner:after {
   border-radius: 50%;
@@ -125,7 +125,7 @@
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
-}
+} */
 
 @media only screen and (max-width: 600px) {
   form {

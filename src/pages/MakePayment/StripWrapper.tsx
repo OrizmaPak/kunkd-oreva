@@ -1,8 +1,9 @@
 import { Stripe } from "@stripe/stripe-js";
+import { Loader } from "@mantine/core";
 import {
   SyntheticEvent,
   //  useLayoutEffect,
-  useState
+  useState,
 } from "react";
 
 // import { getApiErrorMessage } from "@/api/helper";
@@ -33,9 +34,9 @@ export type TStripe = {
 
 const CheckoutForm = ({
   setIsElementLoading,
-  // stripeData
-} : {
-  setIsElementLoading: React.Dispatch<React.SetStateAction<boolean>>,
+}: // stripeData
+{
+  setIsElementLoading: React.Dispatch<React.SetStateAction<boolean>>;
   // stripeData:TStripe
 }) => {
   const stripe = useStripe();
@@ -61,9 +62,8 @@ const CheckoutForm = ({
       setErrorMessage(submitError.message);
       return;
     }
-  
+
     try {
-      
       // const { paymentIntent } = await stripe.retrievePaymentIntent(stripeData?.clientSecret);
       const { error } = await stripe.confirmPayment({
         elements,
@@ -73,7 +73,7 @@ const CheckoutForm = ({
           // onSuccess:(){}s
         },
       });
-      
+
       if (error) {
         setErrorMessage(error.message);
       } else {
@@ -81,33 +81,33 @@ const CheckoutForm = ({
           title: `Notification`,
           message: "Payment Successful",
         });
-
-    
-
       }
-      
     } catch (error) {
       notifications.show({
         title: `Notification`,
         message: getApiErrorMessage(error),
       });
     }
-    
+
     setIsLoading(false);
   };
 
   // const [email, setEmail] = useState("");sss
   const [isLoading, setIsLoading] = useState(false);
+  const [enableSubmit, setEnableSubmit] = useState(false);
 
   return (
     <form className="strip-form" onSubmit={handleSubmit}>
-      <LinkAuthenticationElement
-        id="link-authentication-element"
-       
-      />
+      <LinkAuthenticationElement id="link-authentication-element" />
       <PaymentElement
-       onReady={() => {
+        onChange={(event) => {
+          if (event.complete) {
+            setEnableSubmit(true);
+          }
+        }}
+        onReady={() => {
           setIsElementLoading(false);
+          // setIsLoading(true);
         }}
         id="payment-element"
         options={{
@@ -115,12 +115,16 @@ const CheckoutForm = ({
         }}
       />
       <button
-        className=""
-        disabled={isLoading || !stripe || !elements}
+        className="w-[120px] bg-[#8530C1] rounded flex justify-center items-center py-2"
+        disabled={isLoading || !stripe || !elements || !enableSubmit}
         id="submit"
       >
-        <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
+        <span id="button-text " className=" rounded  text-white">
+          {isLoading ? (
+            <Loader size={20} color="white" />
+          ) : (
+            <span className="text-center">Pay now</span>
+          )}
         </span>
       </button>
       {errorMessage && <div>{errorMessage}</div>}
@@ -128,27 +132,29 @@ const CheckoutForm = ({
   );
 };
 
-const PaymentOutlet = ({  stripeData, stripePromise}: { 
-  stripeData: TStripe | undefined,
-  stripePromise: Promise<Stripe | null> | undefined
+const PaymentOutlet = ({
+  stripeData,
+  stripePromise,
+}: {
+  stripeData: TStripe | undefined;
+  stripePromise: Promise<Stripe | null> | undefined;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   return (
     <Skeleton height={400} visible={isLoading}>
       <>
-      {stripePromise ? (
-        <Elements
-       
-        stripe={stripePromise}
-          options={{
-            clientSecret: stripeData?.clientSecret,
-          }}
+        {stripePromise ? (
+          <Elements
+            stripe={stripePromise}
+            options={{
+              clientSecret: stripeData?.clientSecret,
+            }}
           >
-          {stripeData ? (
-            <CheckoutForm   setIsElementLoading={setIsLoading} />
+            {stripeData ? (
+              <CheckoutForm setIsElementLoading={setIsLoading} />
             ) : null}
-        </Elements>
-      ) : null}
+          </Elements>
+        ) : null}
       </>
     </Skeleton>
   );

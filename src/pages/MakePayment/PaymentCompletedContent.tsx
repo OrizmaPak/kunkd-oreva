@@ -28,10 +28,12 @@ const PaymentCompletedContent = () => {
     //   }
     // })
   };
+  const isHome = localStorage.getItem("gotToHome");
+
   return (
     <div>
-      <ParentSignupLayout active={3}>
-        <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex item-center justify-center ">
+      {isHome === "true" ? (
+        <div className="w-[100%] max-w-[500px] mx-auto relative mt-48 h-full flex item-center justify-center ">
           <div className="inner-form-w2 mx-auto relative  flex item-center">
             <div className="w-[100%]  my-auto ">
               <span></span>
@@ -83,7 +85,62 @@ const PaymentCompletedContent = () => {
             </div>
           </div> */}
         </div>
-      </ParentSignupLayout>
+      ) : (
+        <ParentSignupLayout active={3}>
+          <div className="w-[100%] max-w-[500px] mx-auto relative  h-full flex item-center justify-center ">
+            <div className="inner-form-w2 mx-auto relative  flex item-center">
+              <div className="w-[100%]  my-auto ">
+                <span></span>
+                <div>
+                  <div className=" flex justify-center items-center">
+                    {/* <img loading="lazy" src={Congrats} alt="Congrats" /> */}
+                    <IoCheckmarkCircleOutline
+                      className="congrat-w"
+                      color="#8530C1"
+                    />
+                  </div>
+                  <h1 className="font-bold header2 text-center mt-4 font-Recoleta">
+                    Congratulations
+                  </h1>
+                  <p className="text2 text-[#A7A7A7] text-center mt-4 mb-10 font-Hanken">
+                    Payment receipt has been sent to your email address
+                  </p>
+                  <Button onClick={handleContinue} size="full">
+                    Continue
+                  </Button>
+                </div>
+              </div>
+            </div>
+            {/* <div className="w-[100%]  my-auto ">
+            <span></span>
+            <div>
+              <div className=" flex justify-center items-center">
+              <IoCheckmarkCircleOutline size={150} color="#8530C1" />
+              </div>
+              <h1 className="font-bold text-[40px] text-center mt-4 font-Recoleta">
+                Payment Completed
+              </h1>
+              <p className="text-[15px] text-[#A7A7A7] text-center mt-4 mb-16 font-Hanken">
+                Payment receipt has been sent to your email address
+              </p>
+
+              <Button
+                onClick={() => {
+                  if (localStorage.getItem("gotToHome") === "true") {
+                    navigate("/parent");
+                  } else {
+                    navigate("/childprofilesetup");
+                  }
+                }}
+                size="full"
+              >
+                Continue
+              </Button>
+            </div>
+          </div> */}
+          </div>
+        </ParentSignupLayout>
+      )}
     </div>
   );
 };
