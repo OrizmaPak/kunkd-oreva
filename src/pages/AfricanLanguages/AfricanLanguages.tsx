@@ -3,7 +3,7 @@ import Hero from "@/pages/Library/LibraryNotPaid/Hero";
 import InnerWrapper from "../../common/User/InnerWrapper";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
-import AfricanBanner from "@/assets/africanlanBanner.svg";
+import AfricanBanner from "@/assets/videobanner.png";
 import Videos from "./Videos";
 import VideoPlayer from "./VideoPlayer";
 // import Quiz from "./Quiz";

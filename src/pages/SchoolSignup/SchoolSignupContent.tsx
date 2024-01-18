@@ -1,8 +1,8 @@
 import Button from "@/components/Button";
 import InputFormat from "@/common/InputFormat";
 import PasswordIcon from "@/assets/passwordIcon.svg";
-import EmailLogo from "@/assets/emaillogo.svg";
 import PasswordEye from "@/assets/passwordeye.svg";
+import EmailLogo from "@/assets/emaillogo.svg";
 import Cancel from "@/assets/Cancel.svg";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";

@@ -108,7 +108,7 @@ const ProgressCard = ({
               <p className="text3 mt-2  ">
                 Quiz score: {data?.quiz_result?.result}
               </p>
-              <Button size="sm">
+              <Button size="sm" className="py-2">
                 <span className="text3">Completed</span>
               </Button>
             </div>
