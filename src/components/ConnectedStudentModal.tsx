@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const ConnectedStudentModal = ({ onCancel }: { onCancel: () => void }) => {
+  const navigate = useNavigate();
   const handleCancel = () => {
     onCancel();
+    navigate("/parent");
   };
   return (
     <motion.div
