@@ -78,6 +78,7 @@ const Classes = () => {
         radius={10}
         padding={"xl"}
         xOffset={500}
+        withCloseButton={false}
         title={
           <h1 className=" pl-8 text-[24px] font-semibold flex gap-2">
             <span>{currentClickedClassData?.name}</span>
@@ -94,7 +95,7 @@ const Classes = () => {
         size="md"
         opened={opened}
         onClose={close}
-        closeButtonProps={{ size: "lg" }}
+        // closeButtonProps={{ size: "lg" }}
         centered
       >
         {
@@ -135,8 +136,9 @@ const Classes = () => {
         size="md"
         opened={newClass}
         onClose={newClassClose}
-        closeButtonProps={{ size: "lg" }}
+        // closeButtonProps={{ size: "lg" }}
         centered
+        withCloseButton={false}
       >
         <AddNewClass
           newClassClose={newClassClose}

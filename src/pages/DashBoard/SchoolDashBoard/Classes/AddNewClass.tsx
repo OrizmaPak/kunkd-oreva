@@ -12,6 +12,7 @@ import { getApiErrorMessage } from "@/api/helper";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
+import Addicon from "@/assets/addicon24.png";
 
 const AddNewClass = ({
   newClassClose,
@@ -69,6 +70,13 @@ const AddNewClass = ({
 
   return (
     <div className="px-10">
+      <div className="flex justify-center items-center my-2">
+        <img
+          src={Addicon}
+          alt="image"
+          className="w-[60px] h-[60px] object-contain"
+        />
+      </div>
       <h1 className="text-center font-Recoleta text20 leading-[20px]">
         Add new class
       </h1>
@@ -99,7 +107,14 @@ const AddNewClass = ({
               </select>
             </p>
           </p> */}
-          <p className="my-5">
+          <p className="my-5 flex gap-2">
+            <Button
+              onClick={newClassClose}
+              varient="outlined"
+              className="text-black"
+            >
+              Cancel
+            </Button>
             <Button type="submit">
               {" "}
               {isLoading ? (
@@ -107,7 +122,7 @@ const AddNewClass = ({
                   <Loader color="white" size="sm" />
                 </p>
               ) : (
-                <span>Done</span>
+                <span>Save</span>
               )}
             </Button>
           </p>

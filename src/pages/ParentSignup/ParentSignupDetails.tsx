@@ -39,6 +39,8 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
+    localStorage.clear();
+
     setUser({ email: data.email });
 
     mutate(

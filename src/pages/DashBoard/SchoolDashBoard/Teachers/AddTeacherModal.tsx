@@ -126,9 +126,10 @@ const AddTeacherModal = ({
       opened={opened}
       onClose={toggle}
       withCloseButton={false}
-      closeButtonProps={{
-        size: "xl",
-      }}
+      // closeButtonProps={{
+      //   size: "xl",
+      // }}
+
       centered
     >
       {modalStep === STEP_1 && (

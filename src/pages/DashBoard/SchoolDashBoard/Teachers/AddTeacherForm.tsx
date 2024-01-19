@@ -6,10 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { AiOutlineMail } from "react-icons/ai";
-import { MdClose } from "react-icons/md";
+// import { MdClose } from "react-icons/md";
+import Addicon from "@/assets/addicon24.png";
 import { z, ZodType } from "zod";
-
-
 
 export type Tclass = {
   id: number;
@@ -43,26 +42,23 @@ const AddTeacherForm = ({
   const availableClassList = classList?.filter(
     (klass: Tclass) => klass?.teacher_count < 1
   );
-  const schema: ZodType<FormData> = z
-    .object({
-      firstname: z
-        .string()
-        .min(2, { message: "First name must be at least 2 characters long" })
-        .max(40, { message: "First name must not exceed 20 characters" }),
-      lastname: z
-        .string()
-        .min(2, { message: "Last name must be at least 2 characters long" })
-        .max(50, { message: "Last name must not exceed 40 characters" }),
-      genderid: z
-        .string()
-        .min(1, { message: "Select gender" })
-        .max(20, { message: "Gender must not exceed 20 characters" }),
-      classid: z
-        .string().optional(),
-      email: z.string().email(),
-    
-    })
-   
+  const schema: ZodType<FormData> = z.object({
+    firstname: z
+      .string()
+      .min(2, { message: "First name must be at least 2 characters long" })
+      .max(40, { message: "First name must not exceed 20 characters" }),
+    lastname: z
+      .string()
+      .min(2, { message: "Last name must be at least 2 characters long" })
+      .max(50, { message: "Last name must not exceed 40 characters" }),
+    genderid: z
+      .string()
+      .min(1, { message: "Select gender" })
+      .max(20, { message: "Gender must not exceed 20 characters" }),
+    classid: z.string().optional(),
+    email: z.string().email(),
+  });
+
   const {
     register,
     handleSubmit,
@@ -70,7 +66,7 @@ const AddTeacherForm = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    console.log(data)
+    console.log(data);
     setTeacherData(data as TTeacherData);
     handleContinue();
   };
@@ -84,11 +80,18 @@ const AddTeacherForm = ({
     >
       <div className="p-4 px-8">
         <div>
+          <div className="flex justify-center items-center">
+            <img
+              src={Addicon}
+              alt="image"
+              className="w-[80px] h-[60px] object-contain"
+            />
+          </div>
           <div className="flex justify-between items-center mb-8">
-            <p className="font-bold text30  font-Recoleta text-center flex-grow ">
+            <p className="font-Inter text20  text-center flex-grow ">
               Add New Teacher
             </p>
-            <MdClose size={35} onClick={toggle} className="cursor-pointer" />
+            {/* <MdClose size={35} onClick={toggle} className="cursor-pointer" /> */}
           </div>
         </div>
         <form onSubmit={handleSubmit(submitData)}>
@@ -204,7 +207,10 @@ const AddTeacherForm = ({
               <span className="text-red-600">{errors.genderid?.message}</span>
             </div>
           </div>
-          <div className=" mx-auto my-4">
+          <div className=" mx-auto my-4 flex gap-3 ">
+            <Button onClick={toggle} varient="outlined" className="text-black">
+              Cancel
+            </Button>
             <Button type="submit">Continue</Button>
           </div>
         </form>

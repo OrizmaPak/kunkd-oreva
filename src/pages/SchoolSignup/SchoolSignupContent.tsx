@@ -25,15 +25,15 @@ const SchoolSignupContent = () => {
   const schema: ZodType<FormData> = z.object({
     school_name: z
       .string()
-      .min(4, { message: "School name must be at least 4 characters long" })
+      .min(2, { message: "School name must be at least 4 characters long" })
       .max(40, { message: "School name must not exceed 20 characters" }),
     school_address: z
       .string()
-      .min(4, { message: "Address must be at least 4 characters long" })
+      .min(2, { message: "Address must be at least 4 characters long" })
       .max(50, { message: "Address must not exceed 40 characters" }),
     name: z
       .string()
-      .min(4, { message: "Contact name must be at least 4 characters long" })
+      .min(2, { message: "Contact name must be at least 4 characters long" })
       .max(20, { message: "Contact name must not exceed 20 characters" }),
     email: z.string().email(),
     password: z
@@ -49,6 +49,7 @@ const SchoolSignupContent = () => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
+    localStorage.clear();
     mutate(
       { ...data, fcm_token: pushToken },
       {
