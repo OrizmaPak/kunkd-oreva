@@ -64,9 +64,10 @@ const SchoolVerificationContent = () => {
           navigate("/schoolcongratulations");
         },
         onError(err) {
+          console.log("err", err);
           notifications.show({
             title: `Notification`,
-            message: getApiErrorMessage(err),
+            message: "You have entered a wrong verification code",
           });
         },
       }

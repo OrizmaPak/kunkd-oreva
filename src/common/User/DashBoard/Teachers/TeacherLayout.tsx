@@ -1,7 +1,7 @@
 import DasboardIcon from "@/assets/adminIcon.svg";
 
 import StudentIcon from "@/assets/student.svg";
-import UserIcon from "@/assets/usericon.svg";
+import UserIcon from "@/assets/profileavatar24.png";
 
 import Arrow from "@/assets/greatericon.svg";
 import LogoutIcon from "@/assets/logout.svg";

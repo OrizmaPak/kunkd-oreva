@@ -17,7 +17,7 @@ import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import UploadPicture from "../DashBoard/SchoolDashBoard/Teachers/UploadPicture";
-import DragIcon from "@/assets/draganddropicon.svg";
+import DragIcon from "@/assets/profileavatar24.png";
 
 // import { getProfileState } from "@/store/profileStore";
 // import { UseFormRegisterReturn } from "react-hook-form";

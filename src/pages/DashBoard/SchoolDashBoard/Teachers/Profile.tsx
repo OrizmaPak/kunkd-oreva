@@ -1,5 +1,5 @@
 import BlcakPencil from "@/assets/blackPencilIcon.svg";
-import UserIcon from "@/assets/usericon.svg";
+import UserIcon from "@/assets/profileavatar24.png";
 
 const Profile = ({
   name,
@@ -47,7 +47,7 @@ const Profile = ({
                   loading="lazy"
                   src={BlcakPencil}
                   alt="pencil"
-                  className=" cursor-pointer"
+                  className=" cursor-pointer w-5 h-5"
                 />
               </p>
             </p>

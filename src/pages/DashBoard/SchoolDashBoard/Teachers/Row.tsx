@@ -1,7 +1,7 @@
 // import ToggleIcon from "@/assets/toggl.svg";
 import { getApiErrorMessage } from "@/api/helper";
 import { useDisableSchoolTeacher, useEnableSchoolTeacher } from "@/api/queries";
-import UserIcon from "@/assets/usericon.svg";
+import UserIcon from "@/assets/profileavatar24.png";
 import ChangeProfileStatus from "@/pages/DashBoard/SchoolDashBoard/Teachers/ChangeProfileStatus";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -115,7 +115,7 @@ const Row = ({
                   loading="lazy"
                   src={data.user.image || UserIcon}
                   alt="image"
-                  className="w-[40px] h-[40px] object-cover rounded-xl "
+                  className="w-[45px] h-[45px] object-cover rounded-xl "
                 />
               </span>
               <span>
