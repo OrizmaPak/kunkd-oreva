@@ -3,13 +3,11 @@ import UserIcon from "@/assets/usericon.svg";
 import { motion } from "framer-motion";
 import { TTeacherList } from "../Teachers/Teachers";
 
-
 const Grade = ({
   data,
   handleClick,
   onEdit,
   student_count,
-  
 }: {
   name1?: string;
   data?: TTeacherList;
@@ -46,7 +44,7 @@ const Grade = ({
               {data?.user.firstname && (
                 <img
                   loading="lazy"
-                  src={data?.user.image || UserIcon }
+                  src={data?.user.image || UserIcon}
                   alt="image"
                   className="w-[60px] h-[60px] rounded-full"
                 />
@@ -61,7 +59,7 @@ const Grade = ({
             </div> */}
           </div>
           <div className=" flex gap-5">
-            <p>No of students in class </p>
+            <p>Number of students in class </p>
             <span className="font-bold">
               {student_count ? student_count : 0}
             </span>

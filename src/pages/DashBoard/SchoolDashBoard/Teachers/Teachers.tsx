@@ -45,6 +45,9 @@ const Teachers = () => {
     status,
     activePage?.toString()
   );
+
+  // const [status, setStatus] = useState("active");
+
   const teacherList: TTeacherList[] = data?.data.data.records;
   const totalPage = data?.data.data.number_pages;
 
@@ -68,13 +71,6 @@ const Teachers = () => {
         size={currentClickedProfile && modalStep === STEP_1 ? "700" : "md"}
         opened={opened}
         onClose={close}
-        title={
-          modalStep && modalStep === STEP_3 ? (
-            <h1 className="text-[22px] font-semibold text-center  ml-20 font-Recoleta">
-              Edit Assigned Class
-            </h1>
-          ) : null
-        }
         withCloseButton={false}
         centered
       >

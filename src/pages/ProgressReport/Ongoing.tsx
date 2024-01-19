@@ -5,7 +5,7 @@ import { TStoryContent } from "../Stories/Stories1/Stories1";
 const Ongoing = ({ data }: { data: TStoryContent[] }) => {
   return (
     <div>
-      <div className="py-8 grid grid-cols-3 gap-4 gap-x-14">
+      <div className="py-8 grid grid-cols-3 gap-y-10 gap-x-14">
         {data &&
           data.map((data: TStoryContent, index) => {
             return <ProgressCard key={index} data={data} />;

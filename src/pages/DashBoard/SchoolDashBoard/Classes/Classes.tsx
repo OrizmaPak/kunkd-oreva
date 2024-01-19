@@ -112,16 +112,11 @@ const Classes = () => {
         radius={10}
         padding={"xl"}
         xOffset={500}
-        title={
-          <h1 className=" pl-8 text-[24px] font-semibold flex gap-2">
-            Edit Class Name
-          </h1>
-        }
         size="md"
         opened={newClassNameOpened}
         onClose={newClassNameClose}
-        closeButtonProps={{ size: "lg" }}
         centered
+        withCloseButton={false}
       >
         {
           <EditClassName
@@ -151,12 +146,8 @@ const Classes = () => {
         size="md"
         opened={editOpened}
         onClose={editClose}
-        title={
-          <h1 className="text-[24px] font-semibold text-center w-full ml-16">
-            Edit Class Teachers
-          </h1>
-        }
-        closeButtonProps={{ size: "lg" }}
+        // closeButtonProps={{ size: "lg" }}
+        withCloseButton={false}
         centered
       >
         {

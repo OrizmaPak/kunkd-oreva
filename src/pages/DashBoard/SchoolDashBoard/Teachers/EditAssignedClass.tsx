@@ -9,26 +9,24 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { TClassList } from "../Classes/Classes";
+import EditIcon from "@/assets/editicon24.png";
 
-
-
-
-const EditAssignedClass = ({ onClose, currentClicked, }: { onClose: () => void , currentClicked:number}) => {
+const EditAssignedClass = ({
+  onClose,
+  currentClicked,
+}: {
+  onClose: () => void;
+  currentClicked: number;
+}) => {
   const queryClient = useQueryClient();
 
   const { data } = useGetClassList();
   const classList = data?.data.data.records;
-  const { mutate, isLoading } = useReAssignTeacher()
+  const { mutate, isLoading } = useReAssignTeacher();
 
-
-
-    const schema: ZodType<FormData> = z
-    .object({
-      classid: z
-        .string()
-        .min(1, { message: "Class Id is invalid" })
-        
-    });
+  const schema: ZodType<FormData> = z.object({
+    classid: z.string().min(1, { message: "Class Id is invalid" }),
+  });
 
   const {
     register,
@@ -37,50 +35,52 @@ const EditAssignedClass = ({ onClose, currentClicked, }: { onClose: () => void ,
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    console.log(data)
-    console.log("userId--------",currentClicked)
+    console.log(data);
+    console.log("userId--------", currentClicked);
 
-     mutate(
-        {
-         user_id: currentClicked,
-        class_id: Number(data?.classid)
-          
+    mutate(
+      {
+        user_id: currentClicked,
+        class_id: Number(data?.classid),
+      },
+      {
+        onSuccess(data) {
+          queryClient.invalidateQueries({ queryKey: ["GetClassList"] });
+          queryClient.invalidateQueries({ queryKey: ["GetTeacherList"] });
+
+          onClose();
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
         },
-        {
-          onSuccess(data) {
-             queryClient.invalidateQueries({ queryKey: ['GetClassList']});
-          queryClient.invalidateQueries({ queryKey: ['GetTeacherList']});
 
-          onClose()
-            notifications.show({
-              title: `Notification`,
-              message: data.data.message,
-            });
-          },
-
-          onError(err) {
-            notifications.show({
-              title: `Notification`,
-              message: getApiErrorMessage(err),
-            });
-          },
-        }
-      );
-    
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
   };
 
-
   return (
-    <div className="px-5 mt-12">
+    <div className="">
       <div>
+        <div className="flex justify-center items-center mb-3">
+          <img src={EditIcon} alt="image" className="w-[60px] h-[60px]" />
+        </div>
         <form onSubmit={handleSubmit(submitData)}>
+          <h1 className="text-[22px] font-semibold text-center  font-Hanken">
+            Edit Assigned Class
+          </h1>
           <div>
             <label htmlFor="assigntoclass">Assign to a class</label>
             <p className="border border-[#F3DAFF] py-3  px-8 rounded-full flex items-center gap-2 mt-2   ">
               <select
-               {...register("classid")}
+                {...register("classid")}
                 name="classid"
-                 
                 id="classid"
                 className="w-full  h-full flex-1  focus:outline-none"
               >
@@ -91,19 +91,25 @@ const EditAssignedClass = ({ onClose, currentClicked, }: { onClose: () => void ,
                     <option value={data.id}>{data.name}</option>
                   ))}
               </select>
-             
-
             </p>
-             <span className="text-red-600 mb-10">{errors.classid?.message}</span>
+            <span className="text-red-600 mb-10">
+              {errors.classid?.message}
+            </span>
           </div>
-          <p className="my-5">
-            <Button type="submit"> {isLoading ? (
+          <p className="my-5 mt-8 flex gap-3">
+            <Button onClick={onClose} varient="outlined" className="text-black">
+              Cancel
+            </Button>
+            <Button type="submit">
+              {" "}
+              {isLoading ? (
                 <p className="flex justify-center items-center">
                   <Loader color="white" size="sm" />
                 </p>
               ) : (
-                <span>Assign</span>
-              )}</Button>
+                <span>Save</span>
+              )}
+            </Button>
           </p>
         </form>
       </div>

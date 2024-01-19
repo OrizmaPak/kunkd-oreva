@@ -16,6 +16,7 @@ const Profile = ({
   asignClass: string;
   handleClick: () => void;
   onEdit: () => void;
+
   // totalStudent: number;
 }) => {
   return (
@@ -39,9 +40,9 @@ const Profile = ({
 
           <hr className="my-4 " />
           <div className="flex gap-4">
-            <p className="flex flex-col border-r-2  pr-2">
+            <p className="flex flex-col   pr-2">
               <span>Assigned class</span>
-              <p onClick={onEdit} className="flex gap-2">
+              <p onClick={onEdit} className="">
                 <span className="font-bold"> {asignClass}</span>
                 <img
                   loading="lazy"
@@ -51,10 +52,10 @@ const Profile = ({
                 />
               </p>
             </p>
-            <p className="flex flex-col">
-              <span>No of students in class</span>
+            {/* <p className="flex flex-col">
+              <span>Numberrrrrrrof students in class</span>
               <span className="font-bold">{0}</span>
-            </p>
+            </p> */}
           </div>
         </div>
       </div>
