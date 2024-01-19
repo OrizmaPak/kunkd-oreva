@@ -1,5 +1,4 @@
 import ArrowDown from "@/assets/arrowdown.svg";
-import Rectangle from "@/assets/boxIcon.svg";
 import { useNavigate } from "react-router-dom";
 import Row from "./Row";
 // import DeleteProfile from "../Teachers/DeleteProfile";

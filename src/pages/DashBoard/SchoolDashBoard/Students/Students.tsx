@@ -1,6 +1,5 @@
 import { useGetAdmittedStudentsInSchool } from "@/api/queries";
 import ArrowDown from "@/assets/arrowdown.svg";
-import Rectangle from "@/assets/boxIcon.svg";
 // import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
 import { TRequestStudents } from "../../TeacherDashboard/Request/Request";

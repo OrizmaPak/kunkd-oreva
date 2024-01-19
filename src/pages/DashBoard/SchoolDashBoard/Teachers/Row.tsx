@@ -1,7 +1,6 @@
 // import ToggleIcon from "@/assets/toggl.svg";
 import { getApiErrorMessage } from "@/api/helper";
 import { useDisableSchoolTeacher, useEnableSchoolTeacher } from "@/api/queries";
-import Rectangle from "@/assets/boxIcon.svg";
 import UserIcon from "@/assets/usericon.svg";
 import ChangeProfileStatus from "@/pages/DashBoard/SchoolDashBoard/Teachers/ChangeProfileStatus";
 import { Modal } from "@mantine/core";

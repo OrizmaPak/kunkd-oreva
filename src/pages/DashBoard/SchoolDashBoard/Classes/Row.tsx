@@ -1,7 +1,6 @@
 // import ToggleIcon from "@/assets/toggleicon.svg";
 import { getApiErrorMessage } from "@/api/helper";
 import { useActiveClass, useDisableClass } from "@/api/queries";
-import Rectangle from "@/assets/boxIcon.svg";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";

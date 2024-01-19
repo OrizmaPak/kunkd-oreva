@@ -1,6 +1,5 @@
 import { useGetTeacherList } from "@/api/queries";
 import ArrowDown from "@/assets/arrowdown.svg";
-import Rectangle from "@/assets/boxIcon.svg";
 import { STEP_1, STEP_3 } from "@/utils/constants";
 import { Menu, Modal, Pagination, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";

@@ -1,6 +1,5 @@
 import { useGetClassList, useGetTeacherList } from "@/api/queries";
 import ArrowDown from "@/assets/arrowdown.svg";
-import Box from "@/assets/box.svg";
 import ClassesIcon from "@/assets/classes.svg";
 import EditPencil from "@/assets/editPencil.svg";
 import Button from "@/components/Button";
