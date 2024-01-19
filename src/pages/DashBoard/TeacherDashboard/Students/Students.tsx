@@ -18,7 +18,7 @@ const Students = () => {
     status,
     activePage.toString()
   );
-  const totalPage = data?.data.data.number_pages;
+  const totalPage = Math.ceil(data?.data.data.totalRecord / 10);
 
   const admittedStudents: TRequestStudents[] = data?.data.data.records;
 
@@ -38,11 +38,14 @@ const Students = () => {
         <DeleteProfile onCancel={close} />
       </Modal> */}
 
-      <div className=" flex-grow flex flex-col  rounded-3xl bg-white py-2  ">
+      <div className=" flex-grow flex flex-col  rounded-3xl py-4 bg-white border-[2px] border-[#F2EAF1] ">
         <div className="grid grid-cols-2 justify-center items-center w-full px-8 ">
           <div>
-            <h1 className="text-[25px] font-bold">
-              Students ({admittedStudents?.length})
+            <h1 className="text-[25px] font-Inter">
+              Students{" "}
+              <span className="text-[#8530C1] bg-[#FFF7FD] rounded-3xl py-1 px-4">
+                {admittedStudents?.length || 0}
+              </span>
             </h1>
           </div>
           <div className="flex gap-2 justify-end ">
@@ -79,20 +82,14 @@ const Students = () => {
           </div>
         </div>
 
-        <div className="grid  grid-cols-[100px_400px_1fr_150px] mt-5 text-gray-400  px-8">
-          <div className="flex justify-start items-center ">
-            <span className=" ">
-              <img loading="lazy" src={Rectangle} alt="" />
-            </span>
-          </div>
+        <div className="grid  grid-cols-[450px_1fr_150px] mt-5 font-normal  px-8 text-[#7E7E89]  py-4 border-b-2 bg-[#FFF7FD] border-[#F3DAFF]">
           <div className=" ">Name</div>
           <div className="">Class</div>
           <div className="flex justify-end   items-center">
-            <span>Actions</span>{" "}
+            <span></span>
           </div>
         </div>
 
-        <hr className="my-2 mx-8" />
         <div className="flex flex-col flex-grow">
           {isLoading
             ? new Array(8).fill(1).map((array) => (
@@ -112,33 +109,33 @@ const Students = () => {
                 );
               })}
         </div>
-      </div>
-      <div className="flex  justify-end mt-2 px-4">
-        {/* <span>
+        <div className="flex  justify-end mt-4 px-4">
+          {/* <span>
           Showing <span className="text-[#8530C1]"> 1-9 </span> from
           <span className="text-[#8530C1]"> {totalPage * 5} </span> data
         </span> */}
-        {totalPage > 1 && (
-          <div className="px-10  mr-2 flex justify-end  pb-8">
-            <Pagination
-              total={totalPage}
-              value={activePage}
-              defaultChecked={true}
-              onChange={setPage}
-              onClick={() => {
-                console.log(activePage);
-                refetch();
-              }}
-              styles={() => ({
-                control: {
-                  "&[data-active]": {
-                    backgroundColor: "#8530C1 !important",
+          {totalPage > 1 && (
+            <div className="px-10  mr-2 flex justify-end  ">
+              <Pagination
+                total={totalPage}
+                value={activePage}
+                defaultChecked={true}
+                onChange={setPage}
+                onClick={() => {
+                  console.log(activePage);
+                  refetch();
+                }}
+                styles={() => ({
+                  control: {
+                    "&[data-active]": {
+                      backgroundColor: "#8530C1 !important",
+                    },
                   },
-                },
-              })}
-            />
-          </div>
-        )}
+                })}
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       <style>

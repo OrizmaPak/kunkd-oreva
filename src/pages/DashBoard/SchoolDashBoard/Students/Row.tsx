@@ -9,48 +9,48 @@ import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import { TRequestStudents } from "../../TeacherDashboard/Request/Request";
 
-
 const Row = ({
   status,
   data,
   onClick,
-  
 }: {
   data: TRequestStudents;
-  status:string,
+  status: string;
   classCode?: string;
   onClick?: () => void;
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const queryClient = useQueryClient();
 
+  const { mutate, isLoading } = useDisableSchoolStudent();
+  const handleDisableSchoolStudent = async () => {
+    mutate(
+      { student_id: data?.id },
+      {
+        onSuccess(data) {
+          queryClient.invalidateQueries({ queryKey: ["GetStudents"] });
 
-  const {mutate, isLoading} = useDisableSchoolStudent()
-  const handleDisableSchoolStudent = async ()=>{
-   mutate({student_id:data?.id},  {
-          onSuccess(data) {
-             queryClient.invalidateQueries({ queryKey: ['GetStudents']});
-             
-            notifications.show({
-              title: `Notification`,
-              message: data.data.message,
-            });
-            close()
-          },
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+          close();
+        },
 
-          onError(err) {
-            notifications.show({
-              title: `Notification`,
-              message: getApiErrorMessage(err),
-            });
-          },
-        })
-  }
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  };
 
   return (
     // <div className="  py-3  h-[72px] hover:cursor-pointer flex-grow font-medium">
     <>
-     <Modal
+      <Modal
         radius={10}
         padding={30}
         size={"md"}
@@ -59,48 +59,59 @@ const Row = ({
         withCloseButton={false}
         centered
       >
-        <ChangeProfileStatus onContinue={handleDisableSchoolStudent} isLoading={isLoading} onCancel={close} label="Student" />
+        <ChangeProfileStatus
+          onContinue={handleDisableSchoolStudent}
+          isLoading={isLoading}
+          onCancel={close}
+          label="Student"
+        />
       </Modal>
-     <div>
-      <div className="grid   grid-cols-[100px_400px_1fr_150px] mt-2  pr-4 pl-8 ">
-        <div className="flex justify-start items-center ">
-          <span className=" ">
-            <img loading="lazy" src={Rectangle} alt="" />
-          </span>
-        </div>
-        <div
-          onClick={onClick}
-          className="flex items-center justify-start gap-4 cursor-pointer "
-        >
-          <span>
-            <img
-              loading="lazy"
-              src={data.image}
-              alt="image"
-              className=" w-[46px]"
-            />
-          </span>
-          <span>
-            {data.firstname} {data.lastname}
-          </span>
-        </div>
-        <div className="flex justify-start items-center ">
-          {data.class.class_name}
-        </div>
+      <div>
+        <div className="grid   grid-cols-[450px_1fr_150px]  py-3  px-8 border-b-2 border-[#F2F4F7]">
+          <div
+            onClick={onClick}
+            className="flex items-center justify-start gap-4 cursor-pointer "
+          >
+            <span>
+              <img
+                loading="lazy"
+                src={data.image}
+                alt="image"
+                className=" w-[46px]"
+              />
+            </span>
+            <span>
+              {data.firstname} {data.lastname}
+            </span>
+          </div>
+          <div className="flex justify-start items-center ">
+            {data.class.class_name}
+          </div>
 
-        <div className="flex justify-end  gap-4  items-center">
-          <button disabled={status !== "active"}  onClick={()=>{
-          {status === "active" &&  open()}
-            }} className={`flex justify-center items-center gap-2 ${ status !== "active" ?"bg-gray-300" :"bg-[#8530C1]"}  rounded px-2 py-[4px] text-white `}>
-              <span>{status === "active"? "Disable" : "Disabled"}</span>
+          <div className="flex justify-end  gap-4  items-center">
+            <button
+              disabled={status !== "active"}
+              onClick={() => {
+                {
+                  status === "active" && open();
+                }
+              }}
+              className={` text-[#7E7E89] font-semibold font-Hanken  `}
+            >
+              <span>{status === "active" ? "Disable" : "Disabled"}</span>
             </button>
-          <span></span>
+            <button
+              disabled={status !== "active"}
+              onClick={onClick}
+              className=" text-[#8530C1] font-Inter"
+            >
+              Edit
+            </button>
+          </div>
         </div>
       </div>
-      <hr className="my-[10px] mx-8" />
-    </div>
     </>
-   
+
     // </div>
   );
 };

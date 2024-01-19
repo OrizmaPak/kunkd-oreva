@@ -34,7 +34,7 @@ const ProfileCard = ({
               <p>{schoolStudentStat?.parent_email}</p>
             </div>
           </div>
-          <p className="border-[2px] border-white h-[100px] py-4 " />
+          <p className="border-[1px] border-white h-[100px] py-4 " />
           <div className="flex justify-start  ">
             <div className="  flex-col gap-4 ml-4 flex item-center justify-center">
               {/* <p className="mt-4 mb-2">Gende: {gender}</p> */}

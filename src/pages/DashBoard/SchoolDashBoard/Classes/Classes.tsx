@@ -180,11 +180,14 @@ const Classes = () => {
         />
       </Modal>
 
-      <div className=" flex-grow flex flex-col rounded-3xl p-4 bg-white ">
+      <div className=" flex-grow flex flex-col rounded-3xl py-4 bg-white border-[2px] border-[#F2EAF1] ">
         <div className="grid grid-cols-3 justify-center items-center w-full px-8 ">
           <div>
-            <h1 className="text-[25px] font-bold">
-              Classes ({listOfClass?.length || 0})
+            <h1 className="text-[25px]  font-Inter">
+              Classes
+              <span className="text-[#8530C1] bg-[#FFF7FD] rounded-3xl py-1 px-4">
+                {listOfClass?.length || 0}
+              </span>{" "}
             </h1>
           </div>
           <div className="flex gap-2">
@@ -226,7 +229,7 @@ const Classes = () => {
           </div>
           <div className="flex justify-center">
             <Button onClick={() => newClassOpen()} size="sm">
-              <span className="flex  h-[32px] w-[] justify-center items-center gap-2">
+              <span className="flex  h-[25px] w-[] justify-center items-center gap-2">
                 <img loading="lazy" src={ClassesIcon} alt="" />
                 <span>Add new class</span>
               </span>
@@ -234,18 +237,13 @@ const Classes = () => {
           </div>
         </div>
 
-        <div className="border-b-[2px] py-5 border-[#eee] ">
-          <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px] mt-5  px-8 text-gray-400">
-            <div className="flex justify-start items-center ">
-              <span className=" ">
-                <img loading="lazy" src={Box} alt="box" />
-              </span>
-            </div>
+        <div className="   ">
+          <div className="grid  grid-cols-[300px_1fr_1fr_150px] mt-5 font-normal  px-8 text-[#7E7E89]  py-4 border-b-2 bg-[#FFF7FD] border-[#F3DAFF]">
             <div>Name</div>
             <div>No of Students</div>
             <div>No of Teachers</div>
             <div className="flex justify-end   items-center">
-              <span>Actions</span>
+              <span></span>
             </div>
           </div>
         </div>

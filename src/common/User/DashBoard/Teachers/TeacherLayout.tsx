@@ -15,6 +15,8 @@ import { Header } from "@/common/User/DashBoard/School/SchoolLayout";
 import useStore from "@/store";
 import { getUserState } from "@/store/authStore";
 import React from "react";
+import { useEffect } from "react";
+import { useGetUpdatedProfile } from "@/api/queries";
 
 const routeBaseUrl = "/teacherdashboard";
 const links = [
@@ -54,6 +56,13 @@ const links = [
 ];
 const TeacherLayout = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const [useri, setUser] = useStore(getUserState);
+  const { data: userData } = useGetUpdatedProfile();
+  const currentUserProfile = userData?.data?.data;
+  useEffect(() => {
+    setUser({ ...useri, ...currentUserProfile });
+    //  eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUserProfile]);
   return (
     <>
       <Modal

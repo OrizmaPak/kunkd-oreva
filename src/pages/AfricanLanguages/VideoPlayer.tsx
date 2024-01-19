@@ -132,57 +132,60 @@ const VideoPlayer = () => {
   //     videoRef.current.seekTo(continueReading, "seconds");
   //   }
   // }, []);
-
+  console.log("currentVideoTime", currentVideoTime);
+  console.log("I will win ", videoRef.current?.paused);
   useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
-    if (!videoRef.current?.paused) {
-      interval = setInterval(() => {
-        console.log("interval ran inside");
-        setDelay((prev) => prev + 1);
-      }, 5000);
-    }
-    return () => {
-      clearInterval(interval);
-    };
-  }, [videoRef.current?.paused]);
+    // let interval: ReturnType<typeof setInterval>;
+
+    setInterval(() => {
+      console.log("interval ran inside");
+      setDelay((prev) => prev + 1);
+    }, 5000);
+
+    // return () => {
+    //   clearInterval(interval);
+    // };
+  }, []);
   const [lastTime, setLastTime] = useState(0);
+  console.log("delay", delay);
 
   useEffect(() => {
     const abortControllerRef = new AbortController();
-    // console.log("useEffect is running " ,pageNumber, page, pageTotal, isReading, volume)
     const handleUpdateData = async () => {
-      try {
-        mutate(
-          {
-            profile_id: Number(profileId),
+      if (delay > 0 && currentVideoTime > 0 && !videoRef.current?.paused) {
+        try {
+          mutate(
+            {
+              profile_id: Number(profileId),
+              content_id: Number(contentId),
+              status: "ongoing",
+              pages_read: Math.ceil(currentVideoTime),
+              timespent: Math.ceil(currentVideoTime),
+              // signal: abortControllerRef.signal,
+            },
+            {
+              onSuccess(data) {
+                console.log("success", data.data.message);
+                setLastTime(Math.ceil(currentVideoTime));
+              },
+              onError(err) {
+                notifications.show({
+                  title: `Notification`,
+                  message: getApiErrorMessage(err),
+                });
+              },
+            }
+          );
+          mutateLearning({
             content_id: Number(contentId),
-            status: "ongoing",
-            pages_read: Math.ceil(currentVideoTime),
-            timespent: Math.ceil(currentVideoTime),
-            signal: abortControllerRef.signal,
-          },
-          {
-            onSuccess(data) {
-              console.log("success", data.data.message);
-              setLastTime(Math.ceil(currentVideoTime));
-            },
-            onError(err) {
-              notifications.show({
-                title: `Notification`,
-                message: getApiErrorMessage(err),
-              });
-            },
-          }
-        );
-        mutateLearning({
-          content_id: Number(contentId),
-          profile_id: Number(profileId),
-          timespent: Math.ceil(currentVideoTime) - lastTime,
-          sub_category_id:
-            data?.data?.data?.sub_categories?.[0]?.sub_category_id,
-        });
-      } catch (err) {
-        // Handle errors if needed
+            profile_id: Number(profileId),
+            timespent: Math.ceil(currentVideoTime) - lastTime,
+            sub_category_id:
+              data?.data?.data?.sub_categories?.[0]?.sub_category_id,
+          });
+        } catch (err) {
+          // Handle errors if needed
+        }
       }
     };
 
@@ -547,3 +550,52 @@ const WelDone = () => {
     </div>
   );
 };
+
+// useEffect(() => {
+//   const abortControllerRef = new AbortController();
+//   // console.log("useEffect is running " ,pageNumber, page, pageTotal, isReading, volume)
+//   const handleUpdateData = async () => {
+//     try {
+//       mutate(
+//         {
+//           profile_id: Number(profileId),
+//           content_id: Number(contentId),
+//           status: "ongoing",
+//           pages_read: Math.ceil(currentVideoTime),
+//           timespent: Math.ceil(currentVideoTime),
+//           signal: abortControllerRef.signal,
+//         },
+//         {
+//           onSuccess(data) {
+//             console.log("success", data.data.message);
+//             setLastTime(Math.ceil(currentVideoTime));
+//           },
+//           onError(err) {
+//             notifications.show({
+//               title: `Notification`,
+//               message: getApiErrorMessage(err),
+//             });
+//           },
+//         }
+//       );
+//       mutateLearning({
+//         content_id: Number(contentId),
+//         profile_id: Number(profileId),
+//         timespent: Math.ceil(currentVideoTime) - lastTime,
+//         sub_category_id:
+//           data?.data?.data?.sub_categories?.[0]?.sub_category_id,
+//       });
+//     } catch (err) {
+//       // Handle errors if needed
+//     }
+//   };
+
+//   handleUpdateData();
+
+//   // Cleanup function to cancel the request when the component unmounts
+//   return () => {
+//     abortControllerRef.abort();
+//     // queryClient.cancelMutations();
+//   };
+//   // eslint-disable-next-line react-hooks/exhaustive-deps
+// }, [delay]);

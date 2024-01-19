@@ -66,6 +66,12 @@ const Main = () => {
         <div className=" basis-full flex-grow  gap-3 flex flex-col h-full ">
           <div className="flex  gap-4 items-center justify-center py-2">
             <Card
+              title="Classes"
+              image={Classes}
+              amount={license?.added_class_count}
+              max={license?.license_class_count}
+            />
+            <Card
               title="Teachers"
               image={TeacherIcon}
               amount={license?.added_teacher_count}
@@ -76,12 +82,6 @@ const Main = () => {
               image={StudentIcon}
               amount={license?.added_student_count}
               max={license?.license_student_count}
-            />
-            <Card
-              title="Classes"
-              image={Classes}
-              amount={license?.added_class_count}
-              max={license?.license_class_count}
             />
           </div>
           <div className="flex-grow flex ">

@@ -15,10 +15,11 @@ const Card = ({
         <img loading="lazy" src={image} alt="image " className="w-[62px]" />
       </div>
       <div className="flex flex-col ">
-        <span className=" text-gray-400 text3 ">{title}</span>
         <span className="font-semibold text25 ">
-          {amount ? amount : 0} / {max}
+          {amount ? amount : 0}
+          <span className="text-[#B5B5C3]"> /{max}</span>
         </span>
+        <span className=" text-gray-400 text3 ">{title}</span>
       </div>
     </div>
   );

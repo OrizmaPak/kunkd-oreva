@@ -48,11 +48,14 @@ const Request = () => {
   return (
     <>
       <div className="h-full flex flex-col overflow-y-scroll">
-        <div className=" flex-grow flex flex-col rounded-3xl p-4 bg-white">
+        <div className=" flex-grow flex flex-col  p-4  rounded-3xl py-4 bg-white border-[2px] border-[#F2EAF1]  ">
           <div className="flex  justify-between items-center w-full px-8 ">
             <div>
-              <h1 className="text-[24px] font-semibold">
-                Request ({attemptConnectStudents?.length || 0})
+              <h1 className="text-[24px]  font-Inter">
+                Requests
+                <span className="text-[#8530C1] bg-[#FFF7FD] rounded-3xl py-1 px-4">
+                  {attemptConnectStudents?.length || 0}
+                </span>
               </h1>
             </div>
           </div>

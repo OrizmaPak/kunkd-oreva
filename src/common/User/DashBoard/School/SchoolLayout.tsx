@@ -146,12 +146,16 @@ const DasboardButton = ({
       className={` transition-all duration-700 px-2 py-2  rounded flex items-center justify-between gap-8 w-full my-8 text2 ${
         active
           ? "bg-[#8530c1] text-white"
-          : "hover:bg-[#8530C1] hover:text-white"
+          : "hover:bg-[#8530C1] hover:text-white text-[#B5B5C3]"
       }  my-4`}
     >
       <span className="flex gap-3 justify-center">
         <span className="ml-3">{icon}</span>
-        <span className={`${title === "Logout" && "text-red-600"}`}>
+        <span
+          className={` text-[16px] font-normal ${
+            title === "Logout" && "text-red-600"
+          }`}
+        >
           {title}
         </span>
       </span>

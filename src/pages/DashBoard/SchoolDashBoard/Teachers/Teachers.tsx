@@ -112,11 +112,14 @@ const Teachers = () => {
           label="teachers"
         />
       </Modal>
-      <div className="  flex-grow flex flex-col rounded-3xl p-4 bg-white">
+      <div className=" flex-grow flex flex-col rounded-3xl py-4 bg-white border-[2px] border-[#F2EAF1]">
         <div className="grid grid-cols-3 justify-center items-center w-full px-8 ">
           <div>
-            <h1 className="text-[25px] font-bold">
-              Teacher ({teacherList?.length})
+            <h1 className="text-[25px]  font-Inter">
+              Teachers
+              <span className="text-[#8530C1] bg-[#FFF7FD] rounded-3xl py-1 px-4">
+                {teacherList?.length || 0}
+              </span>
             </h1>
           </div>
           <div className="flex gap-2 justify-center font-bold">
@@ -161,20 +164,19 @@ const Teachers = () => {
         </div>
 
         <div>
-          <div className="grid  grid-cols-[100px_1fr_1fr_100px_100px] mt-5  text-gray-400 px-8">
-            <div className="flex justify-start items-center">
+          <div className="grid  grid-cols-[1fr_300px_150px_150px] mt-5 font-normal  px-8 text-[#7E7E89]  py-4 border-b-2 bg-[#FFF7FD] border-[#F3DAFF]">
+            {/* <div className="flex justify-start items-center">
               <span className=" ">
                 <img loading="lazy" src={Rectangle} alt="" />
               </span>
-            </div>
+            </div> */}
             <div>Name</div>
-            <div>Email</div>
+            <div className="">Email</div>
             <div>Gender</div>
             <div className="flex justify-end   items-center">
-              <span>Actions</span>{" "}
+              <span></span>{" "}
             </div>
           </div>
-          <hr className="my-2 mx-8" />
         </div>
 
         <div className="flex flex-col flex-grow">

@@ -101,14 +101,14 @@ const Row = ({
           label="Class"
         />
       </Modal>
-      <div className="   my-auto border-b-[2px] border-[#eee]  py-4 font-medium ">
+      <div className="   my-auto border-b-[2px] border-[#eee]   py-4 font-medium ">
         <div>
-          <div className="grid  grid-cols-[100px_300px_1fr_1fr_150px]    pr-4 pl-8">
-            <div className="flex justify-start items-center ">
+          <div className="grid  grid-cols-[300px_1fr_1fr_150px]    pr-4 pl-8">
+            {/* <div className="flex justify-start items-center ">
               <span className=" ">
                 <img loading="lazy" src={Rectangle} alt="" />
               </span>
-            </div>
+            </div> */}
             <div
               onClick={onClick}
               className="flex hover:cursor-pointer items-center justify-start gap-2 "
@@ -121,7 +121,7 @@ const Row = ({
             <div className="flex justify-start items-center ">
               {data.teacher_count}
             </div>
-            <div className="flex justify-end  gap-4  items-center">
+            <div className="flex justify-start  gap-4  items-center">
               <span>
                 {/* <img loading="lazy" src={ToggleIcon} alt="" /> */}
               </span>
@@ -130,13 +130,15 @@ const Row = ({
                   setCucrrentClicked(data.id);
                   open();
                 }}
-                className="flex justify-center items-center gap-1 bg-[#8530C1] rounded p-1 px-2"
+                className=" text-[#7E7E89] font-semibold font-Hanken "
               >
-                <span className="text-white">
+                <span className="">
                   {status === "active" ? "Disable" : "Enable"}
                 </span>
               </button>
-              <span></span>
+              <button onClick={onClick} className=" text-[#8530C1] font-Inter">
+                Edit
+              </button>
             </div>
           </div>
         </div>

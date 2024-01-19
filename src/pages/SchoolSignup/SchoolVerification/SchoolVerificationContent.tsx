@@ -82,7 +82,7 @@ const SchoolVerificationContent = () => {
     <div className="h-full w-full flex justify-center items-center">
       <div className="inner-form-w mx-auto relative">
         <Link to="/">
-          <span className="absolute top-[-60px]">
+          <span className="absolute top-[-200px]">
             <img loading="lazy" src={Cancel} alt="cancel" />
           </span>
         </Link>
