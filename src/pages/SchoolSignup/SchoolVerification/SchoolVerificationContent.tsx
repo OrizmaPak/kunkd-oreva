@@ -67,7 +67,9 @@ const SchoolVerificationContent = () => {
           console.log("err", err);
           notifications.show({
             title: `Notification`,
-            message: "You have entered a wrong verification code",
+            message: getApiErrorMessage(
+              "You have entered a wrong verification code"
+            ),
           });
         },
       }
