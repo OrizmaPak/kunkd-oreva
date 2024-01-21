@@ -23,7 +23,6 @@ const Main = () => {
   const { data: profile } = useGetUpdatedProfile();
   const profileData = profile?.data?.data;
   useEffect(() => {
-    console.log("Profile Data", profileData);
     setUser({ ...user, ...profileData });
     // eslint-disable-next-line
   }, []);
@@ -34,7 +33,6 @@ const Main = () => {
     endDate
   );
   const totalTimeSpent = totalTimeSpentData?.data?.data;
-  console.log("mytime-----", totalTimeSpent);
   const { data: logData } = useGetClassContentStat(
     user?.school?.class?.class_id.toString() as string,
     startDate,

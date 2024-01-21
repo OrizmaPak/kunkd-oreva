@@ -59,16 +59,10 @@ export const data = {
       barPercentage: 0.2, // Reduce the bar width (adjust as needed)
       borderRadius: 4, // Set the border radius (adjust as needed)
     },
-    // {
-    //   label: "Dataset 2",
-    //   data: [2, 3, 5, 6, 7, 8, 9],
-    //   backgroundColor: "rgba(53, 162, 235, 0.5)",
-    // },
   ],
 };
 
 export function BarChart({ meta }: { meta: number[] }) {
-  console.log("Meta", data);
   data.datasets[0].data = meta;
   if (meta.length < 1) {
     return "loading ...";
@@ -84,12 +78,9 @@ const LearningHour = ({
   schoolStudentStat: TSchoolStudentStat;
   isLoading: boolean;
 }) => {
-  console.log("LEARNIG HOURS", schoolStudentStat?.learning_hours);
-
   const dataArray = Object.values(schoolStudentStat?.learning_hours ?? {}).map(
     (value) => value / 3600
   );
-  console.log("dataArray", dataArray);
   return (
     <>
       {isLoading ? (

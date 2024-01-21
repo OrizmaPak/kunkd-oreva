@@ -43,8 +43,6 @@ const Request = () => {
   );
   const totalPage = Math.ceil(data?.data.data.totalRecord / 10);
 
-  console.log("Total records", data?.data.data.totalRecord);
-
   const attemptConnectStudents: TRequestStudents[] = data?.data.data.records;
 
   return (
@@ -87,7 +85,6 @@ const Request = () => {
                 defaultChecked={true}
                 onChange={setPage}
                 onClick={() => {
-                  console.log(activePage);
                   refetch();
                 }}
                 styles={() => ({

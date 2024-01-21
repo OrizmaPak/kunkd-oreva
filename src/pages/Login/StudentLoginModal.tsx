@@ -30,7 +30,7 @@ const StudentLoginModal = () => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = (data: FormData) => {
-    console.log("It is working", data);
+    return data;
   };
 
   return (

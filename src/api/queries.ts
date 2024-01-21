@@ -336,7 +336,8 @@ export const useGetQuiz = (contentId: string) => {
     queryKey: ["GetQuiz", contentId],
     queryFn: () => GetQuiz(contentId),
     onSuccess: (response) => {
-      console.log("quiz got called here", response);
+      // console.log("quiz got called here", response);
+      return response;
     },
   });
 };

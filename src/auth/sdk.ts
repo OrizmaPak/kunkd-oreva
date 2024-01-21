@@ -17,7 +17,6 @@ export const googleSignIn = async () => {
     login_hint: "user@example.com",
   });
   const result = await signInWithPopup(auth, provider);
-  console.log("then logged in result", result);
   return result;
 };
 
@@ -25,9 +24,8 @@ export const facebookSignIn = async () => {
   const provider = new FacebookAuthProvider();
   try {
     const result = await signInWithPopup(auth, provider);
-    console.log("Facebook result", result);
     return result;
   } catch (error) {
-    console.log("autheni error", error);
+    return error;
   }
 };

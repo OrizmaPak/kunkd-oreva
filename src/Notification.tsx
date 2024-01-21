@@ -38,7 +38,7 @@ function Notification() {
           );
         })
         .catch((err: Error) => {
-          console.log("Failed to set up notification listener: ", err);
+          return err;
         });
     };
 

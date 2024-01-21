@@ -32,7 +32,6 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
     setUser({ ...useri, ...currentUserProfile });
     //  eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUserProfile]);
-  console.log("Updataed user profile", data);
   const [profiles] = useStore(getProfileState);
   const profileId = localStorage.getItem("profileId") as string;
   const { data: ongoingData } = useGetOngoingContents(profileId);
@@ -41,27 +40,14 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
   const { isLoading, data: contentData } = useContentForHome();
   const recommendedStories = contentData?.data.data.recommended_stories;
   const newTrending = contentData?.data.data.trending_stories;
-  const currentId = childProfile;
 
   useEffect(() => {
     localStorage.setItem("gotToHome", "true");
   }, []);
 
-  console.log("test1- nad ----------", +currentId, +childProfile, profiles);
-
-  // if (childProfile) {
-  //   console.log("Profilessssss-------", profiles);
-  //   profile = profiles[0];
-  //   setChildProfile(profiles[0].id.toString());
-  //   // localStorage.setItem("profileId", profiles[0].id.toString());
-  // } else {
-  //   profile = profiles?.find((each) => each.id === currentId)!;
-  // }
-
   const user2 = localStorage.getItem("user");
   const userObject = JSON.parse(user2 as string);
   const navigate = useNavigate();
-  // const user = JSON.parse(userInLocalStr!);
   const [user] = useStore(getUserState);
   const settings = {
     dots: false,
@@ -189,26 +175,6 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
                   </div>
                 </div>
               </div>
-              // <CardScreenHome
-              //   data={ongoingContents!}
-              //   header="Continue learning"
-              //   actiontitle=""
-              //   isLoading={isLoading}
-              //   isTitled={false}
-              //   card={(props: TStoryContent) => (
-              //     <CardHome
-              //       {...props}
-              //       goTo={() => {
-              //         navigate(
-              //           `stories/sub/${props?.name
-              //             ?.toLocaleLowerCase()
-              //             .replace(/\s/g, "-")}`
-              //         );
-              //       }}
-
-              //     />
-              //   )}
-              // />
             )}
           </div>
 

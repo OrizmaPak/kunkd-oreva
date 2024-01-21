@@ -121,7 +121,6 @@ const Students = () => {
                 defaultChecked={true}
                 onChange={setPage}
                 onClick={() => {
-                  console.log(activePage);
                   refetch();
                 }}
                 styles={() => ({

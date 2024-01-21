@@ -8,7 +8,6 @@ const TopSubCategories = ({
   schoolStudentStat: TSchoolStudentStat;
   isLoading: boolean;
 }) => {
-  console.log("topinterest", schoolStudentStat?.top_interest_contents);
   return (
     <>
       {isLoading ? (

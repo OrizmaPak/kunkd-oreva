@@ -32,7 +32,6 @@ const SelectProfile = ({
   const [profiles] = useStore(getProfileState);
 
   const { data, isLoading } = useGetProfile();
-  if (profiles) console.log(data, "profiles-----------", profiles);
 
   return (
     <>

@@ -34,15 +34,11 @@ const SettingPassword = () => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = (data: FormData) => {
-    console.log("testing");
-    console.log("It is working", data);
     reset();
     mutate(
       { ...data },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
-
           notifications.show({
             title: `Notification`,
             message: data.data.message,

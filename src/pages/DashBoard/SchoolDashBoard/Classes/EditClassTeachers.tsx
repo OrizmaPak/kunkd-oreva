@@ -25,7 +25,6 @@ const EditClassTeachers = ({
 
   const { data } = useGetTeacherList();
   const teacherList = data?.data.data.records;
-  console.log("HI", teacherList);
   const { mutate, isLoading } = useReAssignTeacher();
 
   const schema: ZodType<FormData> = z.object({
@@ -39,8 +38,6 @@ const EditClassTeachers = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    console.log("Fine God ", data);
-
     mutate(
       {
         user_id: Number(data?.teacher_id),

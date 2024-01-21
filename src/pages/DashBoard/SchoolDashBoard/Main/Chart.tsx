@@ -12,7 +12,7 @@ const Chart = () => {
         <div>
           <DateRadio
             onChange={(value: string) => {
-              console.log(value);
+              return value;
             }}
           />
         </div>

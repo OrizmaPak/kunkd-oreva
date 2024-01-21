@@ -57,7 +57,6 @@ const BookLayout = () => {
   ] = useDisclosure(false);
   const navigate = useNavigate();
 
-  // const contentId = localStorage.getItem("contentId");
   const contentId = localStorage.getItem("contentId");
   // useTimeSpent(Number(contentId), Number(profileId));
   const { data: dataRecommended } = useRecommendedAudiobooks(
@@ -67,8 +66,6 @@ const BookLayout = () => {
     dataRecommended?.data?.data?.recommended_contents;
   const profileId = localStorage.getItem("profileId");
 
-  console.log("recommended", recommendedContents);
-  // const [user] = useStore(getUserState);
   const { data, isLoading } = useGetContentById(
     contentId?.toString() as string,
     profileId?.toString() || ("0" as string),
@@ -87,7 +84,6 @@ const BookLayout = () => {
         opened={opened}
         onClose={close}
         overlayProps={{
-          // style: { backgroundOpacity: 1 },
           blur: 10,
         }}
         closeOnClickOutside={false}
@@ -340,17 +336,6 @@ const AboutPage = ({
         </p>
       </div>
       <div className=" basis-3/4 text-[#008A3B] pad-x-40">
-        {/* <div>
-          <h1 className="text-white font-bold  font-Hanken text25 my-2">
-            About the author
-          </h1>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam
-            at ullam incidunt maiores ut officiis adipisci in quod accusamus
-            fugit. Quia illum, inventore id tempora recusandae ut consectetur
-            veniam reiciendis.
-          </p>
-        </div> */}
         <div>
           <h1 className="text-white font-bold  font-Hanken text25 my-2">
             Overview
@@ -384,31 +369,13 @@ const ReadPage = ({ audiobook }: { audiobook: TMedia }) => {
           />
         </div>
       </div>
-      {/* <div className=" basis-full flex flex-col bg-red-600 rounded-3xl p-10 ">
-        <div className="flex-grow">
-          <p className="mb-5 flex justify-between items-center">
-            <span className="text-[#B5B5C3] text-[18px]">Lyrics</span>
-            <span>
-              <img loading="lazy" src={ExportIcon} alt="" />
-            </span>
-          </p>
-          <p className=" leading-[60px] text-[22px]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos laborum
-            iste iure earum, nisi ipsa nulla numquam distinctio recusandae
-            aliquam culpa, tempora autem corporis dolorem unde consectetur
-            veniam quis doloremque!
-          </p>
-        </div>
-      </div> */}
     </div>
   );
 };
 
 const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
-  // console.log("file", audio);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  // const progressBar = useRef<HTMLInputElement>(null);
   const [currentTTime, setCurrentTTime] = useState(0);
   const [durationn, setDuration] = useState(0);
   const [load, setLoad] = useState(false);
@@ -416,7 +383,6 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
 
   useEffect(() => {
     const continueReading = localStorage.getItem("continuePage");
-    console.log("Continue reading", continueReading);
     if (continueReading && audioRef.current) {
       audioRef.current.currentTime = Number(continueReading);
     }
@@ -502,9 +468,7 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
     let interval: ReturnType<typeof setInterval>;
 
     if (isPlaying) {
-      console.log("interval ran outside");
       interval = setInterval(() => {
-        console.log("interval ran inside");
         setDelay((prev) => prev + 1);
       }, 5000);
     }
@@ -513,12 +477,8 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
     };
   }, [isPlaying]);
 
-  console.log("delay", delay);
-
   useEffect(() => {
     if (delay > 0) {
-      console.log("currentTTTTTT---", currentTTime);
-
       mutate(
         {
           profile_id: Number(profileId),
@@ -529,8 +489,8 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
         },
         {
           onSuccess(data) {
-            console.log("success", data.data.message);
             setLastTime(Math.ceil(currentTTime));
+            return data;
           },
           onError(err) {
             notifications.show({
@@ -561,7 +521,7 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
       },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
+          return data;
         },
         onError(err) {
           notifications.show({
@@ -598,20 +558,15 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
           >
             <Slider
               color="ocean-blue.0"
-              // backgroundColor=""
-
               value={currentTTime}
               onChange={(event) => {
                 handleSliderChange(event);
-                // handleSeek();
               }}
               min={0}
               max={durationn}
               step={0.1}
               label={`Duration: ${calculateTime(currentTTime)}`}
               disabled={reducedMotion}
-              // onLoadedMetadata={handleTimeUpdate}
-              // onTimeUpdate={handleUpdate}
             />
           </MantineProvider>
         </p>

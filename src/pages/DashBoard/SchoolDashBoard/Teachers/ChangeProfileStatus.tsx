@@ -8,6 +8,7 @@ const ChangeProfileStatus = ({
   onContinue,
   isLoading,
   activeIsLoading,
+
   label,
 }: {
   onCancel: () => void;

@@ -29,7 +29,6 @@ const ResetPasswordContent = ({}: { onSubmit?: () => void }) => {
   const submitData = (data: Pick<FormData, "otp">) => {
     setFprgotPasswordOtp(data?.otp);
 
-    console.log("otpppppp", forgotPasswordOtp);
     navigate("/newpassword");
   };
 

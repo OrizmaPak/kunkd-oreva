@@ -14,7 +14,7 @@ import CardScreenHome from "@/common/User/CardScreenHome";
 import CustomTTSComponent from "@/components/TTS";
 // import useStore from "@/store";
 // import { getUserState } from "@/store/authStore";
-import { Skeleton } from "@mantine/core";
+import { MantineProvider, Skeleton, Slider } from "@mantine/core";
 import { RefObject, useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
@@ -34,6 +34,10 @@ import useTimeSpent from "@/hooks/useTimeSpent";
 import "./stories1.css";
 import { MdFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
 import ConnectedStudentModal from "@/components/ConnectedStudentModal";
+import { RiFullscreenFill } from "react-icons/ri";
+import { AiOutlineFullscreenExit } from "react-icons/ai";
+// import { MantineProvider, Skeleton, Slider } from "@mantine/core";
+import { useReducedMotion } from "@mantine/hooks";
 
 // import { number } from "zod";
 // import { useQueryClient } from "@tanstack/react-query";
@@ -441,16 +445,12 @@ const ReadPage = ({
   const pageTotal = content.length - 1;
   const [pageNumber, setPageNumber] = useState(0);
   // const audioRef = useRef<HTMLAudioElement>(null);
-  // const reducedMotion = useReducedMotion();
-  // const [volume, setVolume] = useState(50);
-  // const handleVolumeChange = (value: number) => {
-  //   setVolume(value);
-  //   const volume = Number(value) / max;
-  //   if (audioRef.current) {
-  //     audioRef.current.volume = volume;
-  //   }
-  // };
-  // const max = 20;
+  const reducedMotion = useReducedMotion();
+  const [size, setSize] = useState(20);
+  const handleSizeChange = (value: number) => {
+    setSize(value);
+  };
+  const max = 35;
   const { mutate } = useContentTracking();
   const profileId = localStorage.getItem("profileId");
   const contentId = localStorage.getItem("contentId");
@@ -458,7 +458,6 @@ const ReadPage = ({
   useEffect(() => {
     const abortControllerRef = new AbortController();
 
-    // console.log("useEffect is running " ,pageNumber, page, pageTotal, isReading, volume)
     const handleUpdateData = async () => {
       try {
         mutate(
@@ -472,7 +471,7 @@ const ReadPage = ({
           },
           {
             onSuccess(data) {
-              console.log("success", data.data.message);
+              return data;
             },
             onError() {
               // notifications.show({
@@ -498,9 +497,25 @@ const ReadPage = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNumber]);
 
+  const [goFull, setGoFull] = useState(false);
+  useEffect(() => {
+    const e = document.getElementById("container");
+    if (goFull) {
+      e?.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  }, [goFull]);
+
   return (
-    <div className="flex py-16 bg-white  rounded-3xl px-16">
-      <div className=" basis-3/4 flex  items-center">
+    <div
+      id="container"
+      className={`flex py-16 bg-white  rounded-3xl px-16 justify-center items-center  ${
+        goFull ? "px-[200px]" : ""
+      }`}
+    >
+      {/* <button>change</button> */}
+      <div className={` basis-3/4 flex  items-center  max-h-[500px] `}>
         <img
           loading="lazy"
           src={content[page]?.image || thumbnail}
@@ -508,23 +523,23 @@ const ReadPage = ({
           className="read-img rounded-xl"
         />
       </div>
-      <div className=" basis-full flex flex-col ">
+      <div className=" basis-full flex flex-col  ">
         <div className="flex-grow">
           <p className="mb-5 flex justify-between items-center ">
             <button
               onClick={() => setIsReading(!isReading)}
-              className={`flex border py-2 ${
+              className={`flex border py-1 ${
                 isReading ? "bg-[#8530C1] text-white" : "text-[#8530C1]"
               } px-6 rounded-3xl border-[#8530C1] justify-center items-center`}
             >
               <p
-                className={`h-[3px] ${
+                className={`h-[10px] ${
                   isReading ? "bg-green-600" : "bg-yellow-600"
-                } rounded-full w-[3px] p-[5px] inline-block mr-2`}
+                } rounded-full w-[10px] p-[5px] inline-block mr-2`}
               ></p>
-              <p className="inline">Read to me</p>
+              <p className=" pb-2">Read to me</p>
             </button>
-            {/* <p className="w-[100px]">
+            <p className="w-[100px]">
               <MantineProvider
                 theme={{
                   colors: {
@@ -545,25 +560,47 @@ const ReadPage = ({
               >
                 <Slider
                   color="ocean-blue.0"
-                  value={volume}
-                  onChange={handleVolumeChange}
-                  min={0}
+                  value={size}
+                  onChange={handleSizeChange}
+                  min={20}
                   max={max}
                   disabled={reducedMotion}
                   size={"sm"}
                 />
               </MantineProvider>
-            </p> */}
+            </p>
+            <p className="cursor-pointer">
+              {goFull ? (
+                <AiOutlineFullscreenExit
+                  color="#8530C1"
+                  size={35}
+                  onClick={() => {
+                    setGoFull((prev) => !prev);
+                  }}
+                />
+              ) : (
+                <RiFullscreenFill
+                  color="#8530C1"
+                  size={35}
+                  onClick={() => {
+                    setGoFull((prev) => !prev);
+                  }}
+                />
+              )}
+            </p>
           </p>
           {!isReading && (
             <p
+              style={{ fontSize: `${size}px` }}
               ref={divRef}
-              className=" leading-10 flex h-[350px] overflow-y-auto  text20 font-medium font-Hanken pr-8 text-justify "
+              className={` leading-10 flex h-[350px]  overflow-y-auto  ${
+                size + "px"
+              } font-medium font-Hanken pr-8 text-justify `}
             >
               {/* {content[page].web_body} */}
 
               <p
-                className="content_cont leading-10 [&>img]:hidden"
+                className="content_cont leading-10 [&>img]:hidden text-center"
                 dangerouslySetInnerHTML={{ __html: content[page]?.web_body }}
               ></p>
             </p>
@@ -590,7 +627,10 @@ const ReadPage = ({
                 className="text20"
                 dangerouslySetInnerHTML={{ __html:  content[page].web_body }}
               ></p> */}
-              <p className="content_cont leading-10 text20  [&>img]:hidden">
+              <p
+                style={{ fontSize: `${size}px` }}
+                className="content_cont leading-10  [&>img]:hidden text-center"
+              >
                 {ReactHtmlParser(content[pageNumber]?.web_body)}
               </p>
 
@@ -658,8 +698,8 @@ const BookPagination = ({
       },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
           setIsFinish();
+          return data;
         },
         onError(err) {
           notifications.show({
@@ -701,7 +741,7 @@ const BookPagination = ({
           </p>
         </span>
         <div className="flex gap-4">
-          <p className="bg-[#8530C1] text-white p-3 rounded-3xl px-8 gap-8 flex justify-between  items-center">
+          <p className="bg-[#8530C1] text-white  py-3 rounded-3xl px-8 gap-8 flex justify-between  items-center">
             <button
               onClick={() => {
                 pageItirate("prev");
@@ -711,12 +751,12 @@ const BookPagination = ({
               }}
             >
               <GrFormPrevious
-                size={30}
+                size={40}
                 color="white"
                 className="u-react-icon"
               />
             </button>
-            <span className=" space-x-1">
+            <span className=" space-x-1 text-[20px] font-Hanken">
               {currentPage !== pageTotal && <span>{currentPage}</span>}
               {currentPage !== pageTotal && <span>/</span>}
               {currentPage !== pageTotal && <span>{pageTotal}</span>}
@@ -731,7 +771,7 @@ const BookPagination = ({
                 }}
               >
                 <GrFormNext
-                  size={30}
+                  size={40}
                   color="white"
                   className="u-react-icon"
                   style={{

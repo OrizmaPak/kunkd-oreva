@@ -4,7 +4,7 @@ import {
   useGetSubCategories,
 } from "@/api/queries";
 import Banner from "@/assets/storiesBanner.png";
-import GroupCard from "@/assets/groupcard.svg";
+import GroupCard from "@/assets/storiessub24.png";
 import CardHome, { CardProps } from "@/common/User/CardHome";
 import CardScreenHome from "@/common/User/CardScreenHome";
 import Wrapper from "@/common/User/Wrapper";
@@ -141,7 +141,6 @@ const Story = () => {
             defaultChecked={true}
             onChange={setPage}
             onClick={() => {
-              console.log(activePage);
               refetch();
             }}
             styles={() => ({

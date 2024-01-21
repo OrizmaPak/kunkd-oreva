@@ -12,15 +12,12 @@ const useTimeSpent = (
   const [visible, setVisible] = useState(true);
   const location = useLocation();
   const { mutateAsync } = useLearningHour();
-  const [timer, setTimer] = useState(0);
 
-  console.log(timer);
   useEffect(() => {
     let timerId: () => void;
     let time = 0;
     const startTimer = () => {
       const intervalId = setInterval(() => {
-        setTimer((prevTimer) => prevTimer + 1);
         time = time + 1;
       }, 1000); // Update the timer every 1000 milliseconds (1 second)
 
@@ -45,8 +42,6 @@ const useTimeSpent = (
 
     timerId = startTimer();
     return () => {
-      console.log("Effect---------");
-
       mutateAsync({
         content_id: contentId,
         profile_id: profileId,
@@ -54,17 +49,16 @@ const useTimeSpent = (
         sub_category_id: subCategoryId,
       })
         .then((data) => {
-          console.log(data);
+          return data;
         })
         .catch((error) => {
           // notifications.show({
           //   title: `Notification`,
           //   message: getApiErrorMessage(error),
           // });
-          console.log(error);
+          return error;
         });
 
-      console.log("2Effect---------2");
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       timerId();
     };

@@ -38,15 +38,10 @@ const AddNewClass = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    // setTeacherData(data as TTeacherData);
-    // handleContinue();
-    console.log("class", data);
-
     mutate(
       { name: data.name, teacher_id: Number(data.teacher_id) },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
           newClassClose();
           queryClient.invalidateQueries(["GetClassList"]);
           queryClient.invalidateQueries(["GetLicense"]);

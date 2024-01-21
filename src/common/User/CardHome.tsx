@@ -79,14 +79,15 @@ const CardHome = ({
         },
         {
           onSuccess(data) {
-            console.log("success", data.data.message);
+            // console.log("success", data.data.message);
             // const res = data?.data?.data as TUser;
             // setUser({ ...res });
             refetch();
             notifications.show({
               title: `Notification`,
-              message: name + " added to list",
+              message: name + " added to my list",
             });
+            return data;
           },
           onError(err) {
             notifications.show({
@@ -104,14 +105,13 @@ const CardHome = ({
         },
         {
           onSuccess(data) {
-            console.log("success", data.data.message);
-            // const res = data?.data?.data as TUser;
-            // setUser({ ...res });
             refetch();
             notifications.show({
               title: `Notification`,
-              message: name + " removed from the list",
+              message: name + " removed from your list",
             });
+
+            return data;
           },
           onError(err) {
             notifications.show({

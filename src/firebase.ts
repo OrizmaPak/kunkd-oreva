@@ -3,6 +3,9 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { notifications } from "@mantine/notifications";
+import { getApiErrorMessage } from "@/api/helper";
+
 // import { getPushTokenState } from "@/store/pushTokenStore";
 import useStore from "./store";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -28,30 +31,37 @@ export const auth = getAuth(app);
 const messaging = getMessaging(app);
 
 export const requestPermission = () => {
-  console.log("Requesting User Permission......");
-
   Notification.requestPermission().then((permission) => {
     if (permission === "granted") {
-      console.log("Notification User Permission Granted.");
       return getToken(messaging, {
         vapidKey: `BFMoGRmjR9nphcJ4TcrwnTI7C9pLTN1Doa07RovtB3mxo60JgVEZiRR3L4qM1knGcAiwAkdRGQriTU0x0mWwpBI`,
       })
         .then((currentToken) => {
           if (currentToken) {
-            console.log("Client Token: ", currentToken);
             useStore.getState().setToken(currentToken);
           } else {
-            console.log("Failed to generate the app registration token.");
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(
+                "Failed to generate the app registration token."
+              ),
+            });
           }
         })
         .catch((err) => {
-          console.log(
-            "An error occurred when requesting to receive the token.",
-            err
-          );
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(
+              "An error occurred when requesting to receive the token."
+            ),
+          });
+          return err;
         });
     } else {
-      console.log("User Permission Denied.");
+      notifications.show({
+        title: `Notification`,
+        message: getApiErrorMessage("User Permission Denied."),
+      });
     }
   });
 };

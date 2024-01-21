@@ -6,23 +6,22 @@ const OptionButton = ({
   clicked,
   id,
   setUserId,
-  userId
+  userId,
 }: {
   onClick: () => void;
   clicked: boolean;
   title: string;
   image: React.ReactNode;
   body: string;
-  id:number;
-  userId:number;
-  setUserId:(val:number)=> void
+  id: number;
+  userId: number;
+  setUserId: (val: number) => void;
 }) => {
-
-  const handlleContinue = ()=>{
-    onClick()
-    setUserId(id)
-    console.log("hello----",id,userId)
-  }
+  const handlleContinue = () => {
+    onClick();
+    setUserId(id);
+    console.log("hello----", id, userId);
+  };
   return (
     <div
       onClick={handlleContinue}
@@ -35,10 +34,7 @@ const OptionButton = ({
           <h1 className="font-Hanken font-bold text1">{title}</h1>
           <p className="font-Hanken text-[#A7A7A7] text3">{body}</p>
         </div>
-        <span className="flex items-end justify-center">
-          {/* <img loading="lazy" src={image} alt="checkIcon" /> */}
-          {image}
-        </span>
+        <span className="flex items-end justify-center">{image}</span>
       </p>
     </div>
   );

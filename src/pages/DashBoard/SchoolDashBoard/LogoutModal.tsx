@@ -9,14 +9,12 @@ const LogoutModal = ({ onCloseModal }: { onCloseModal: () => void }) => {
   const navigate = useNavigate();
   const [profiles, setProfiles] = useStore(getProfileState);
   console.log(profiles);
-  // const navigate = useNavigate();
   const handLogOut = () => {
     localStorage.clear();
     setProfiles([]);
     onCloseModal();
     navigate("/");
   };
-  // const navigate = useNavigate();
 
   return (
     <motion.div

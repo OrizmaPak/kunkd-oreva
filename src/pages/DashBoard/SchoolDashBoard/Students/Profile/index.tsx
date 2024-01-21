@@ -53,8 +53,6 @@ const StudentProfile = () => {
     endDate
   );
   const schoolStudentStat: TSchoolStudentStat = data?.data?.data;
-  console.log("dataaaaa", schoolStudentStat);
-  console.log("iddddd", id);
   if (!id) {
     return <Navigate to="../" replace />;
   }

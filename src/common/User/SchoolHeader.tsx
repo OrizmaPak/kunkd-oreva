@@ -77,8 +77,6 @@ const SchoolHeader = ({
     (profile: selectAvatarType) => profile.id === Number(currentId)
   );
 
-  console.log("user status", user?.status);
-
   const { data } = useGetAttemptAllStudentConnect(user?.role === "schoolAdmin");
   const { data: classConnect } = useGetAttemptStudentConnect(
     user?.role === "teacher"
@@ -399,7 +397,6 @@ const SearchService = () => {
 export default SchoolHeader;
 
 const SchNotification = ({ data }: { data: TRequestStudents[] }) => {
-  console.log("dataaaa--------", data);
   const [user] = useStore(getUserState);
   const navigate = useNavigate();
   return (

@@ -76,10 +76,6 @@ const Request = () => {
           </div>
 
           <div className="flex  justify-end mt-2 px-4">
-            {/* <span>
-          Showing <span className="text-[#8530C1]"> 1-9 </span> from
-          <span className="text-[#8530C1]"> {totalPage * 5} </span> data
-        </span> */}
             {totalPage > 1 && (
               <div className="  mr-2 flex justify-end  pb-4">
                 <Pagination
@@ -88,7 +84,6 @@ const Request = () => {
                   defaultChecked={true}
                   onChange={setPage}
                   onClick={() => {
-                    console.log(activePage);
                     refetch();
                   }}
                   styles={() => ({

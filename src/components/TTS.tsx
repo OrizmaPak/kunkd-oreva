@@ -48,10 +48,15 @@ const CustomTTSComponent = ({
     return () => {
       stop();
     };
+
+    // eslint-disable-next-line
   }, [location.pathname]);
 
+  useEffect(() => {
+    setShowPlay(false);
+  }, [pageNumber]);
+
   const handleVolumeChange = (value: number) => {
-    console.log(value);
     setPage(value);
   };
   return (
@@ -77,7 +82,6 @@ const CustomTTSComponent = ({
         {!showPlay && (
           <button
             className="py-1 px-8 rounded-3xl "
-            // disabled={!state.isPlaying}
             onClick={() => {
               setShowPlay(true);
               pause();
@@ -87,18 +91,6 @@ const CustomTTSComponent = ({
           </button>
         )}
 
-        {/* <button
-          onClick={() => {
-            state.isPlaying ? play() : pause();
-            console.log("play");
-          }}
-        >
-          {state.isPlaying ? (
-            <BsPauseCircleFill size={40} color="#8530C1" />
-          ) : (
-            <BsFillPlayCircleFill size={40} color="#8530C1" />
-          )}
-        </button> */}
         <div className="flex-grow pt-4 ">
           <MantineProvider
             theme={{

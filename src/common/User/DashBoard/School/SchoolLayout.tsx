@@ -190,7 +190,6 @@ const NavButton = (props: {
 }) => {
   const { icon, title, href, route } = props;
   const match = useMatch(route);
-  console.log(match);
   const navigate = useNavigate();
 
   const handleNavigate = () => {

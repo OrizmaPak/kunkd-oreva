@@ -8,7 +8,6 @@ import CameraIcon from "@/assets/cameralogo.svg";
 
 const UploadPicture = () => {
   const [files, setFiles] = useState<FileWithPath[]>([]);
-  console.log(files);
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
     return (

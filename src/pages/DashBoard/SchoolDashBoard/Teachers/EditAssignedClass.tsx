@@ -35,9 +35,6 @@ const EditAssignedClass = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    console.log(data);
-    console.log("userId--------", currentClicked);
-
     mutate(
       {
         user_id: currentClicked,

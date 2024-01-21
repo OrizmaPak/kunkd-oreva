@@ -37,11 +37,9 @@ const Main = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  console.log("license", license);
   const { data: logData } = useGetSchoolContentStat(startDate, endDate);
 
   const statLog: TLogData = logData?.data.data;
-  console.log("statLog", statLog);
   const { data: teacherData } = useGetTeacherList();
   const teacherList: TTeacherList[] = teacherData?.data.data.records;
   const { data: studentData, isLoading } =

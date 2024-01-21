@@ -40,17 +40,14 @@ import { notifications } from "@mantine/notifications";
 import { useForm } from "react-hook-form";
 import { z, ZodType } from "zod";
 import { useQueryClient } from "@tanstack/react-query";
-// import { FileWithPath } from "@mantine/dropzone";
 import { TUser } from "@/api/types";
 
 const Profile = () => {
   const [parentEditMode, setParentEditMode] = useState(false);
   const [teacherEditMode, setTeacherEditMode] = useState(false);
   const [schEditMode, setSchEditMode] = useState(false);
-  // const [user, ,] = useStore(getUserState);
   const userStorage = localStorage.getItem("user");
   const user = JSON.parse(userStorage as string);
-  console.log("____RealUser______", user);
 
   return (
     <>
@@ -132,7 +129,6 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
 
   const handleSubmit = (data: File) => {
     // if (!uploadType) return;
-    console.log("I'm getting it", data);
     mutate(
       {
         image: data as Blob | string,
@@ -140,7 +136,6 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
       },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
           setUser({ ...user, user_image: data?.data?.data?.image });
           queryClient.invalidateQueries(["GetUpdatedProfile"]);
           notifications.show({
@@ -208,14 +203,7 @@ const PTCard = ({ user }: { user: TUser; onclick?: () => void }) => {
             </p>
           </p>
         </div>
-        <div className="flex justify-center items-center">
-          {/* <Button size="md">
-          <p className="flex justify-center items-center gap-2">
-            <img loading="lazy" src={Starr} alt="starr" />
-            <span>Upgrade Plan</span>
-          </p>
-        </Button> */}
-        </div>
+        <div className="flex justify-center items-center"></div>
       </div>
     </>
   );
@@ -269,14 +257,12 @@ const ParentPersonalInfomation = ({
 };
 
 const SchoolPersonalInfomation = ({
-  // contactName,
   user,
   openEdit,
 }: {
   user: TUser;
   openEdit: () => void;
 }) => {
-  // const [user, ,] = useStore(getUserState);
   return (
     <div className="relative px-[30px] p-6 border-[3px] border-[#FBECFF]  rounded-3xl mt-8">
       <div className="flex justify-between items-center mb-8">
@@ -362,11 +348,9 @@ const SchCard = ({ user }: { user: TUser }) => {
     mutate(
       {
         [uploadType]: data as Blob | string,
-        // backgroundImage: "",
       },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
           queryClient.invalidateQueries(["GetUpdatedProfile"]);
           setUser({
             ...user,
@@ -381,9 +365,6 @@ const SchCard = ({ user }: { user: TUser }) => {
             title: `Notification`,
             message: data.data.message,
           });
-
-          // queryClient.invalidateQueries({ queryKey: querykeys.profiles });
-          // refetch();
           close();
         },
 
@@ -612,12 +593,9 @@ const EditSchNameAddress = ({
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  console.log("errors", errors);
   const queryClient = useQueryClient();
 
   const submitData = async (data: FormData) => {
-    // console.log("testing");
-    // console.log("It is working", data);
     mutate(
       {
         ...user?.school,
@@ -627,7 +605,6 @@ const EditSchNameAddress = ({
 
       {
         onSuccess(data) {
-          console.log("success", data.data.data);
           queryClient.invalidateQueries(["GetUpdatedProfile"]);
           setUser({
             ...user,
@@ -688,10 +665,6 @@ const EditSchNameAddress = ({
           </Button>
         </p>
       </form>
-      {/* <h1 className="font-bold text-[28px] flex gap-4">
-        {schoolName} <img loading="lazy" src={EditIcon} alt="editIcon" />
-      </h1>
-      <span className="text-[16px] text-[#B5B5C3]">{schoolAddress}</span> */}
     </>
   );
 };
@@ -727,13 +700,10 @@ const EditParentPersonalInfomation = ({
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  console.log("errors", errors);
   const queryClient = useQueryClient();
   const [user, setUser] = useStore(getUserState);
 
   const submitData = async (data: FormData) => {
-    console.log("testing");
-    console.log("It is working", data);
     mutate(
       {
         firstname: data.firstname as string,
@@ -742,7 +712,6 @@ const EditParentPersonalInfomation = ({
 
       {
         onSuccess(data) {
-          console.log("success", data.data.data);
           queryClient.invalidateQueries(["GetUpdatedProfile"]);
           setUser({
             ...user,
@@ -873,12 +842,9 @@ const EditSchoolPersonalInfomation = ({
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  console.log("errors", errors);
   const queryClient = useQueryClient();
 
   const submitData = async (data: FormData) => {
-    console.log("testing");
-    console.log("It is working", data);
     mutate(
       {
         contact_name: data.contact_name as string,
@@ -888,7 +854,6 @@ const EditSchoolPersonalInfomation = ({
 
       {
         onSuccess(data) {
-          console.log("success", data.data.data);
           queryClient.invalidateQueries(["GetUpdatedProfile"]);
           setUser({
             ...user,
@@ -963,29 +928,3 @@ const EditSchoolPersonalInfomation = ({
     </div>
   );
 };
-
-// type TCountry = {
-//   id: number;
-//   name: string;
-// };
-// const CustomSelectInput = ({
-//   data,
-//   reg,
-// }: {
-//   data: TCountry[];
-//   reg?: UseFormRegisterReturn;
-// }) => {
-//   // console.log(data);
-//   return (
-//     <div className="px-2 border-[#F3DAFF]  rounded-full  items-center gap-2 mt-1 flex justify-center sssss  border">
-//       <select {...reg} className="border-0 w-full">
-//         {data &&
-//           data.map((country, index) => (
-//             <option key={index} value={`${country.id}`}>
-//               {country.name}
-//             </option>
-//           ))}
-//       </select>
-//     </div>
-//   );
-// };

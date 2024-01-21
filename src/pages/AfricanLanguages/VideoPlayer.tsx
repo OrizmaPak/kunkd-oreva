@@ -117,37 +117,18 @@ const VideoPlayer = () => {
   const recommendedVideos = recommendedData?.data?.data.recommended_contents;
   const media = data?.data?.data?.media;
   const video = media?.[0];
-  // console.log("video", video);
   const videoData = data?.data.data.sub_categories?.[0];
   const [currentVideoTime, setCurrentVideotime] = useState(0);
   const { mutate } = useContentTracking();
   const [delay, setDelay] = useState(0);
-  // useTimeSpent(Number(contentId), Number(profileId)); const {mutateAsync} = useLearningHour()
   const { mutate: mutateLearning } = useLearningHour();
 
-  // useEffect(() => {
-  //   const continueReading = localStorage.getItem("continuePage");
-  //   console.log("Continue reading", continueReading);
-  //   if (continueReading && videoRef.current) {
-  //     videoRef.current.seekTo(continueReading, "seconds");
-  //   }
-  // }, []);
-  console.log("currentVideoTime", currentVideoTime);
-  console.log("I will win ", videoRef.current?.paused);
   useEffect(() => {
-    // let interval: ReturnType<typeof setInterval>;
-
     setInterval(() => {
-      console.log("interval ran inside");
       setDelay((prev) => prev + 1);
     }, 5000);
-
-    // return () => {
-    //   clearInterval(interval);
-    // };
   }, []);
   const [lastTime, setLastTime] = useState(0);
-  console.log("delay", delay);
 
   useEffect(() => {
     const abortControllerRef = new AbortController();
@@ -165,8 +146,8 @@ const VideoPlayer = () => {
             },
             {
               onSuccess(data) {
-                console.log("success", data.data.message);
                 setLastTime(Math.ceil(currentVideoTime));
+                return data;
               },
               onError(err) {
                 notifications.show({
@@ -212,7 +193,7 @@ const VideoPlayer = () => {
         },
         {
           onSuccess(data) {
-            console.log("success", data.data.message);
+            return data;
           },
           onError(err) {
             notifications.show({
@@ -495,13 +476,6 @@ const RecommendedVideoCard = ({
       onClick={handleGoTo}
       className="flex h-[100px] gap-4 bg-[#fffbff]  items-center my-8  rounded-2xl border-[2px] border-[#fbeff8] cursor-pointer"
     >
-      {/* <img
-        loading="lazy"
-        src={thumbnail}
-        alt="image"
-        className=" h-[100px] rounded-xl"
-      /> */}
-
       <LazyLoadImage
         src={thumbnail}
         placeholderSrc={AfamBlur}
@@ -550,52 +524,3 @@ const WelDone = () => {
     </div>
   );
 };
-
-// useEffect(() => {
-//   const abortControllerRef = new AbortController();
-//   // console.log("useEffect is running " ,pageNumber, page, pageTotal, isReading, volume)
-//   const handleUpdateData = async () => {
-//     try {
-//       mutate(
-//         {
-//           profile_id: Number(profileId),
-//           content_id: Number(contentId),
-//           status: "ongoing",
-//           pages_read: Math.ceil(currentVideoTime),
-//           timespent: Math.ceil(currentVideoTime),
-//           signal: abortControllerRef.signal,
-//         },
-//         {
-//           onSuccess(data) {
-//             console.log("success", data.data.message);
-//             setLastTime(Math.ceil(currentVideoTime));
-//           },
-//           onError(err) {
-//             notifications.show({
-//               title: `Notification`,
-//               message: getApiErrorMessage(err),
-//             });
-//           },
-//         }
-//       );
-//       mutateLearning({
-//         content_id: Number(contentId),
-//         profile_id: Number(profileId),
-//         timespent: Math.ceil(currentVideoTime) - lastTime,
-//         sub_category_id:
-//           data?.data?.data?.sub_categories?.[0]?.sub_category_id,
-//       });
-//     } catch (err) {
-//       // Handle errors if needed
-//     }
-//   };
-
-//   handleUpdateData();
-
-//   // Cleanup function to cancel the request when the component unmounts
-//   return () => {
-//     abortControllerRef.abort();
-//     // queryClient.cancelMutations();
-//   };
-//   // eslint-disable-next-line react-hooks/exhaustive-deps
-// }, [delay]);

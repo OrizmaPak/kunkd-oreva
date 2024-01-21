@@ -187,7 +187,6 @@ const Teachers = () => {
                     status={status}
                     currentClicked={data?.user?.id}
                     onClick={() => {
-                      console.log("userId--------", data?.user?.id);
                       open();
                       setCucrrentClicked(data?.user?.id);
                       setModalStep(STEP_1);
@@ -213,7 +212,6 @@ const Teachers = () => {
                 defaultChecked={true}
                 onChange={setPage}
                 onClick={() => {
-                  console.log(activePage);
                   refetch();
                 }}
                 styles={() => ({

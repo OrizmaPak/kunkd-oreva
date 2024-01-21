@@ -40,8 +40,6 @@ const TeacherLoginModal = ({ onContinue }: { onContinue: () => void }) => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = (data: FormData) => {
-    console.log("It is working", data);
-
     mutate(
       {
         current_password: localStorage.getItem("userPassword"),

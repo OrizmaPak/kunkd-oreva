@@ -64,13 +64,13 @@ const SchoolVerificationContent = () => {
           navigate("/schoolcongratulations");
         },
         onError(err) {
-          console.log("err", err);
           notifications.show({
             title: `Notification`,
             message: getApiErrorMessage(
               "You have entered a wrong verification code"
             ),
           });
+          return err;
         },
       }
     );

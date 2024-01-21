@@ -11,16 +11,15 @@ import { STEP_1, STEP_2 } from "@/utils/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import queryString from 'query-string';
+import queryString from "query-string";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { ZodType, z } from "zod";
 
-
-const TeacherLogin= () => {
-   const currentUrl = window.location.href;
-   const parsed = queryString.parseUrl(currentUrl);
+const TeacherLogin = () => {
+  const currentUrl = window.location.href;
+  const parsed = queryString.parseUrl(currentUrl);
   const [stage, setStage] = useState(STEP_1);
   const { isLoading, mutate } = useTeacherSetPassword();
   const schema: ZodType<FormData> = z
@@ -44,12 +43,10 @@ const TeacherLogin= () => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = (data: FormData) => {
-    console.log("It is working", data);
-
     mutate(
       {
         password: data?.password,
-        email:parsed?.query?.email as string
+        email: parsed?.query?.email as string,
       },
       {
         onSuccess(data) {
@@ -72,16 +69,16 @@ const TeacherLogin= () => {
 
   return (
     // <FormWrapper>
-        <div
-        style={{
-          backgroundImage: `url(${GroupIcon})`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "contain",
-          backgroundPosition: "center",
-        }}
-        className="relative h-screen w-full flex justify-center items-center  "
-      >
-         <div className="flex h-full  justify-center items-center ">
+    <div
+      style={{
+        backgroundImage: `url(${GroupIcon})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "contain",
+        backgroundPosition: "center",
+      }}
+      className="relative h-screen w-full flex justify-center items-center  "
+    >
+      <div className="flex h-full  justify-center items-center ">
         {stage === STEP_1 && (
           <div className=" bg-red-[600] ">
             <div className="mb-10">
@@ -161,9 +158,8 @@ const TeacherLogin= () => {
 
         {stage === STEP_2 && <CongratulationsModal />}
       </div>
-      </div>
+    </div>
 
-     
     // </FormWrapper>
   );
 };

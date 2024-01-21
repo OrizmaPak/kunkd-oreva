@@ -22,14 +22,10 @@ import { ZodType, z } from "zod";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
 import { useEffect } from "react";
-// import useStore from "@/store/index";
-// import { getProfileState } from "@/store/profileStore";
-
 import GroupIcon from "@/assets/groupIcons.svg";
 import { STEP_1, STEP_2, STEP_3, STEP_4, STEP_5 } from "@/utils/constants";
 import { useNavigate } from "react-router-dom";
-// import { getProfileState } from "@/store/profileStore";
-// import useStore from "@/store/index";
+
 import { MdClose } from "react-icons/md";
 import { selectAvatarType } from "./SelectProfile";
 export type avatarType = {
@@ -335,7 +331,6 @@ export const SelectAvatar = ({
 
       {
         onSuccess(data) {
-          console.log("morning", data);
           if (setChildProfile) setChildProfile(data?.data.data.profile_id);
           notifications.show({
             title: `Notification`,
@@ -406,7 +401,6 @@ export const SelectAvatar = ({
                     ))
                   : data?.data.data.avatars?.map(
                       (avatar: selectAvatarType, index: number) => {
-                        console.log("avatar", avatar);
                         return (
                           <AvatarCard
                             key={index}
@@ -480,16 +474,13 @@ const AvatarCard = ({
 
 export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
   const [enabled, setEnabled] = useState(false);
-  // const [profiles] = useStore(getProfileState);
   const { data } = useGetProfile(enabled, () => {
     onContinue();
+    return data;
   });
-  console.log(data);
 
   const handleSubmit = () => {
-    // console.log("toomuch----", profiles[0].id);
     setEnabled(true);
-    // setChildProfile(profiles[0].id.toString());
   };
 
   const [useri, setUser] = useStore(getUserState);

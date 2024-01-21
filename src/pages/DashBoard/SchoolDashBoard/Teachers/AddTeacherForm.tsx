@@ -66,7 +66,6 @@ const AddTeacherForm = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    console.log(data);
     setTeacherData(data as TTeacherData);
     handleContinue();
   };
@@ -91,7 +90,6 @@ const AddTeacherForm = ({
             <p className="font-Inter text20  text-center flex-grow ">
               Add New Teacher
             </p>
-            {/* <MdClose size={35} onClick={toggle} className="cursor-pointer" /> */}
           </div>
         </div>
         <form onSubmit={handleSubmit(submitData)}>
@@ -125,43 +123,6 @@ const AddTeacherForm = ({
               leftIcon={<AiOutlineMail size={25} color="#c4ccd0" />}
             />
           </div>
-          {/* <div className="flex gap-2 mb-2">
-            <div className=" flex-grow">
-              <label htmlFor="password">Enter Password</label>
-              <InputFormat
-                reg={register("password")}
-                errorMsg={errors.password?.message}
-                type="password"
-                placeholder="password"
-                leftIcon={
-                  // <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
-                  <RiLockLine size={25} color="#c4ccd0" />
-                }
-                rightIcon={
-                  // <img loading="lazy" src={PasswordEye} alt="paswordeye icon" />
-
-                  <AiOutlineEye size={25} color="#c4ccd0" />
-                }
-              />
-            </div>
-            <div className="flex-grow">
-              <label htmlFor="password">Confirm Password</label>
-              <InputFormat
-                reg={register("confirmPassword")}
-                errorMsg={errors.confirmPassword?.message}
-                type="password"
-                placeholder="confirm password"
-                leftIcon={
-                  // <img loading="lazy" src={PasswordIcon} alt="pasword icon" />
-                  <RiLockLine size={25} color="#c4ccd0" />
-                }
-                rightIcon={
-                  // <img loading="lazy" src={PasswordEye} alt="paswordeye icon" />
-                  <AiOutlineEye size={25} color="#c4ccd0" />
-                }
-              />
-            </div>
-          </div> */}
 
           <div className="flex gap-2 mb-8">
             <div className="flex-grow">

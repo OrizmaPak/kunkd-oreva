@@ -63,13 +63,9 @@ import { getUserState } from "./store/authStore";
 import SchoolRquest from "@/pages/DashBoard/SchoolDashBoard/Request/Request";
 import TeacherSignup from "@/pages/TeacherLogin/index";
 import Request from "./pages/DashBoard/TeacherDashboard/Request/Request";
-import { useResolvedPath } from "react-router-dom";
 
 function App() {
   const [, setUser] = useStore(getUserState);
-
-  const url = useResolvedPath("").pathname;
-  console.log("----URL------", url)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -83,187 +79,186 @@ function App() {
     };
   }, [setUser]);
   const [childProfile, setChildProfile] = useState<string>(
-    (localStorage.getItem("profileId") ? localStorage.getItem("profileId") : "") as string
+    (localStorage.getItem("profileId")
+      ? localStorage.getItem("profileId")
+      : "") as string
   );
   useEffect(() => {
-    localStorage.setItem("profileId", childProfile as string) ;
+    localStorage.setItem("profileId", childProfile as string);
   }, [childProfile]);
   return (
-   
-      <div className="App ">
-        <ScrollToTop />
-        {/* <Button onClick={log}></Button> */}
-        <Routes>
-          {/* Routes Before Login */}
-          <Route path="/">
-            <Route element={<WebLayout />}>
-              <Route index element={<Home />}></Route>
-              <Route path="parents" element={<Parents />}></Route>
-              <Route path="schools" element={<Schools />}></Route>
-            </Route>
-
-            <Route element={<WebLayoutNoNewsLetter />}>
-              <Route path="aboutus" element={<AboutUs />}></Route>
-              <Route path="shop" element={<Shop />}></Route>
-            </Route>
-
-            {/* Routes for School Teaher and Parent After  login */}
-            <Route
-              element={
-                <AppLayout
-                  childProfile={childProfile}
-                  setChildProfile={setChildProfile}
-                />
-              }
-            >
-              {/* <Route path="newlyregistereduser/*"> */}
-              <Route path="school/*">
-                <Route index element={<NewlyRegisteredUser />}></Route>
-                <Route path=":category/*" element={<Stories />}></Route>
-                <Route path="audiobooks/*" element={<AudioBooks />}></Route>
-                <Route
-                  path="africanlanguages/*"
-                  element={<AfricanLanguages />}
-                ></Route>
-              </Route>
-              <Route
-                path="existingusernotpaid"
-              ></Route>
-
-              <Route path="librarynotpaid/*">
-                <Route path=":category/*" element={<Stories />}></Route>
-                <Route path="audiobooks/*" element={<AudioBooks />}></Route>
-                <Route
-                  path="africanlanguages/*"
-                  element={<AfricanLanguages />}
-                ></Route>
-              </Route>
-              {/* <Route path="stories" element={<Stories />}></Route> */}
-              {/* <Route path="bedtimestories" element={<BedTimeStories />}></Route> */}
-              {/* <Route path="stories1/:id" element={<Stories1 />}></Route> */}
-              <Route path="mylist" element={<MyList />}></Route>
-              <Route path="progressreport" element={<ProgressReport />}></Route>
-
-              {/* ///////  <Route path="parenthomepage///////*"> */}
-              <Route path="parent/*">
-                <Route
-                  index
-                  element={
-                    <ParentHomePage
-                      childProfile={childProfile}
-                      // setChildProfile={setChildProfile}
-                    />
-                  }
-                ></Route>
-                <Route path=":category/*" element={<Stories />}></Route>
-                <Route path="audiobooks/*" element={<AudioBooks />}></Route>
-                <Route
-                  path="africanlanguages/*"
-                  element={<AfricanLanguages />}
-                ></Route>
-              </Route>
-
-              {/* ///////////////School Dashboard////////////// */}
-              <Route path="schooldashboard/*" element={<SchoolLayout />}>
-                <Route index element={<Main />}></Route>
-                <Route path="teacher" element={<Teachers />}></Route>
-                <Route path="student/*">
-                  <Route index element={<Students />} />
-                  <Route
-                    path="profile/:studentId"
-                    element={<StudentProfile />}
-                  ></Route>
-                </Route>
-                <Route path="classes" element={<Classes />}></Route>
-                <Route path="request" element={<SchoolRquest />}></Route>
-
-                {/* <Route path="setting" element={<Setting />}></Route> */}
-              </Route>
-              {/* Teacher Teacher Teacher Teacher DashBoard */}
-
-              <Route path="teacherdashboard/*" element={<TeacherLayout />}>
-                <Route index element={<TMain />}></Route>
-                <Route path="student/*">
-                  <Route index element={<TStudents />} />
-                  <Route
-                    path="profile/:studentId"
-                    element={<StudentProfile />}
-                  ></Route>
-                </Route>
-                <Route path="request" element={<Request />}></Route>
-              </Route>
-
-              {/* Account */}
-              <Route path="account/*" element={<AccountLayout />}>
-                <Route index element={<Profile />}></Route>
-                <Route path="mykids" element={<MyKids />}></Route>
-                <Route
-                  path="subscriptionplan"
-                  element={<SubscriptionPlan />}
-                ></Route>
-                <Route path="billing" element={<Billing />}></Route>
-                <Route
-                  path="accountpassword"
-                  element={<SettingPassword />}
-                ></Route>
-              </Route>
-            </Route>
-
-            {/* Login and Signup Routes And all Single  Route */}
-
-            {/* Login & Forgot password Routes */}
-            <Route path="login" element={<Login />}></Route>
-            <Route path="forgotpassword" element={<ForgotPassword />}></Route>
-            <Route path="resetpassword" element={<ResetPassword />}></Route>
-            <Route path="newpassword" element={<NewPassword />}></Route>
-            <Route
-              path="passwordcongratulations"
-              element={<PasswordCongratulations />}
-            ></Route>
-            <Route path="signup" element={<Signup />}></Route>
-
-            {/* School sign up Routes */}
-            <Route path="schoolsignup" element={<SchoolSignup />}></Route>
-            <Route
-              path="schoolverification"
-              element={<SchoolVerification />}
-            ></Route>
-            <Route
-              path="secureadminportal"
-              element={<SecureAdminPortal />}
-            ></Route>
-            <Route
-              path="kundakidsunlimited"
-              element={<KundaKidsUnlimited />}
-            ></Route>
-            <Route
-              path="schoolcongratulations"
-              element={<SchoolCongrtulations />}
-            ></Route>
-
-            {/* Parent sign up routes */}
-            <Route path="parentsignup" element={<ParentSignup />}></Route>
-            <Route path="secureaccount" element={<SecureAccount />}></Route>
-            <Route path="makepayment" element={<MakePayment />}></Route>
-            <Route
-              path="congratulations"
-              element={<PaymentCongratulations />}
-            ></Route>
-
-            <Route path="packages" element={<ChoosePlan />}></Route>
-            <Route
-              path="childprofilesetup"
-              element={<ChildProfileSetUp setChildProfile={setChildProfile} />}
-            ></Route>
-
-            <Route
-              path="selectprofile"
-              element={<SelectProfile setChildProfile={setChildProfile} />}
-            ></Route>
-            <Route path="passwordsetup" element={<TeacherSignup />}></Route>
+    <div className="App ">
+      <ScrollToTop />
+      {/* <Button onClick={log}></Button> */}
+      <Routes>
+        {/* Routes Before Login */}
+        <Route path="/">
+          <Route element={<WebLayout />}>
+            <Route index element={<Home />}></Route>
+            <Route path="parents" element={<Parents />}></Route>
+            <Route path="schools" element={<Schools />}></Route>
           </Route>
-        </Routes>
-      </div>
+
+          <Route element={<WebLayoutNoNewsLetter />}>
+            <Route path="aboutus" element={<AboutUs />}></Route>
+            <Route path="shop" element={<Shop />}></Route>
+          </Route>
+
+          {/* Routes for School Teaher and Parent After  login */}
+          <Route
+            element={
+              <AppLayout
+                childProfile={childProfile}
+                setChildProfile={setChildProfile}
+              />
+            }
+          >
+            {/* <Route path="newlyregistereduser/*"> */}
+            <Route path="school/*">
+              <Route index element={<NewlyRegisteredUser />}></Route>
+              <Route path=":category/*" element={<Stories />}></Route>
+              <Route path="audiobooks/*" element={<AudioBooks />}></Route>
+              <Route
+                path="africanlanguages/*"
+                element={<AfricanLanguages />}
+              ></Route>
+            </Route>
+            <Route path="existingusernotpaid"></Route>
+
+            <Route path="librarynotpaid/*">
+              <Route path=":category/*" element={<Stories />}></Route>
+              <Route path="audiobooks/*" element={<AudioBooks />}></Route>
+              <Route
+                path="africanlanguages/*"
+                element={<AfricanLanguages />}
+              ></Route>
+            </Route>
+            {/* <Route path="stories" element={<Stories />}></Route> */}
+            {/* <Route path="bedtimestories" element={<BedTimeStories />}></Route> */}
+            {/* <Route path="stories1/:id" element={<Stories1 />}></Route> */}
+            <Route path="mylist" element={<MyList />}></Route>
+            <Route path="progressreport" element={<ProgressReport />}></Route>
+
+            {/* ///////  <Route path="parenthomepage///////*"> */}
+            <Route path="parent/*">
+              <Route
+                index
+                element={
+                  <ParentHomePage
+                    childProfile={childProfile}
+                    // setChildProfile={setChildProfile}
+                  />
+                }
+              ></Route>
+              <Route path=":category/*" element={<Stories />}></Route>
+              <Route path="audiobooks/*" element={<AudioBooks />}></Route>
+              <Route
+                path="africanlanguages/*"
+                element={<AfricanLanguages />}
+              ></Route>
+            </Route>
+
+            {/* ///////////////School Dashboard////////////// */}
+            <Route path="schooldashboard/*" element={<SchoolLayout />}>
+              <Route index element={<Main />}></Route>
+              <Route path="teacher" element={<Teachers />}></Route>
+              <Route path="student/*">
+                <Route index element={<Students />} />
+                <Route
+                  path="profile/:studentId"
+                  element={<StudentProfile />}
+                ></Route>
+              </Route>
+              <Route path="classes" element={<Classes />}></Route>
+              <Route path="request" element={<SchoolRquest />}></Route>
+
+              {/* <Route path="setting" element={<Setting />}></Route> */}
+            </Route>
+            {/* Teacher Teacher Teacher Teacher DashBoard */}
+
+            <Route path="teacherdashboard/*" element={<TeacherLayout />}>
+              <Route index element={<TMain />}></Route>
+              <Route path="student/*">
+                <Route index element={<TStudents />} />
+                <Route
+                  path="profile/:studentId"
+                  element={<StudentProfile />}
+                ></Route>
+              </Route>
+              <Route path="request" element={<Request />}></Route>
+            </Route>
+
+            {/* Account */}
+            <Route path="account/*" element={<AccountLayout />}>
+              <Route index element={<Profile />}></Route>
+              <Route path="mykids" element={<MyKids />}></Route>
+              <Route
+                path="subscriptionplan"
+                element={<SubscriptionPlan />}
+              ></Route>
+              <Route path="billing" element={<Billing />}></Route>
+              <Route
+                path="accountpassword"
+                element={<SettingPassword />}
+              ></Route>
+            </Route>
+          </Route>
+
+          {/* Login and Signup Routes And all Single  Route */}
+
+          {/* Login & Forgot password Routes */}
+          <Route path="login" element={<Login />}></Route>
+          <Route path="forgotpassword" element={<ForgotPassword />}></Route>
+          <Route path="resetpassword" element={<ResetPassword />}></Route>
+          <Route path="newpassword" element={<NewPassword />}></Route>
+          <Route
+            path="passwordcongratulations"
+            element={<PasswordCongratulations />}
+          ></Route>
+          <Route path="signup" element={<Signup />}></Route>
+
+          {/* School sign up Routes */}
+          <Route path="schoolsignup" element={<SchoolSignup />}></Route>
+          <Route
+            path="schoolverification"
+            element={<SchoolVerification />}
+          ></Route>
+          <Route
+            path="secureadminportal"
+            element={<SecureAdminPortal />}
+          ></Route>
+          <Route
+            path="kundakidsunlimited"
+            element={<KundaKidsUnlimited />}
+          ></Route>
+          <Route
+            path="schoolcongratulations"
+            element={<SchoolCongrtulations />}
+          ></Route>
+
+          {/* Parent sign up routes */}
+          <Route path="parentsignup" element={<ParentSignup />}></Route>
+          <Route path="secureaccount" element={<SecureAccount />}></Route>
+          <Route path="makepayment" element={<MakePayment />}></Route>
+          <Route
+            path="congratulations"
+            element={<PaymentCongratulations />}
+          ></Route>
+
+          <Route path="packages" element={<ChoosePlan />}></Route>
+          <Route
+            path="childprofilesetup"
+            element={<ChildProfileSetUp setChildProfile={setChildProfile} />}
+          ></Route>
+
+          <Route
+            path="selectprofile"
+            element={<SelectProfile setChildProfile={setChildProfile} />}
+          ></Route>
+          <Route path="passwordsetup" element={<TeacherSignup />}></Route>
+        </Route>
+      </Routes>
+    </div>
     // </BrowserRouter>
   );
 }

@@ -17,13 +17,10 @@ const Subscriptionplan = () => {
   const navigate = useNavigate();
   const { data } = useGetPlans();
   const { mutate, isLoading } = useCancelSubscription();
-  console.log("plansdata---->", data?.data?.data);
   const planData = data?.data?.data;
   const [openPlan, setOpenPlan] = useState(false);
-  // const [user] = useStore(getUserState);
   const stringObject = localStorage.getItem("user");
   const userObject = JSON.parse(stringObject as string);
-  console.log("user----->", userObject);
   const handleCancelSubscription = () => {
     mutate("data", {
       onSuccess(data) {
@@ -81,9 +78,6 @@ const Subscriptionplan = () => {
                   </Button>
                 </p>
               </div>
-              {/* <div className="grid grid-cols-[1fr_1fr_300px]">
-            <span></span>
-          </div> */}
             </div>
             <div>
               <div className="flex items-center gap-4">

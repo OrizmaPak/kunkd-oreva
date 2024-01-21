@@ -9,8 +9,6 @@ const TotalTimeSpent = ({
 }: {
   totalTimeSpent: TTotalTimeSpent;
 }) => {
-  console.log(totalTimeSpent?.total_time_spent);
-
   const timespent = totalTimeSpent?.total_time_spent ?? 0;
   const min = Math.floor(timespent / 60);
   const sec = timespent % 60;

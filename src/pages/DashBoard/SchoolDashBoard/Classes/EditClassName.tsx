@@ -35,8 +35,6 @@ const EditClassName = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    console.log("Fine God ", data);
-
     mutate(
       {
         name: data?.name,

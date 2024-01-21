@@ -136,7 +136,6 @@ const DasboardButton = ({
   return (
     <button
       onClick={() => {
-        console.log("testing");
         onClick();
       }}
       className={`transition-all duration-500 px-2 py-2  rounded flex items-center justify-between gap-8 w-full my-4 ${
@@ -164,11 +163,9 @@ const NavButton = (props: {
 }) => {
   const { icon, title, href, route } = props;
   const match = useMatch(route);
-  console.log(match);
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    console.log("mat", href);
     navigate(href);
   };
   return (

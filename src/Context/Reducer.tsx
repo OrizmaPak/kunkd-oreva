@@ -6,7 +6,6 @@ export const userInitialState = { email: "", userType: "" };
 type Action = { type: "LOGIN"; payload: { email: string; userType: string } };
 export type Dispatch = (action: Action) => void;
 const reducer = (state: State, action: Action) => {
-  console.log("testng two", action.payload);
   if (action.type === "LOGIN") {
     return action.payload;
   }

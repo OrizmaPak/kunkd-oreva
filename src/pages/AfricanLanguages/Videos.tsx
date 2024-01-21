@@ -15,7 +15,7 @@ const Videos = () => {
 
   const subCategoryId = localStorage.getItem("subCategoryId");
   const { data, isLoading, refetch } = useGetContebtBySubCategories(
-    subCategoryId!,
+    subCategoryId as string,
     activePage.toString()
   );
   const subCategoryContents = data?.data.data.records as {
@@ -74,7 +74,6 @@ const Videos = () => {
                 defaultChecked={true}
                 onChange={setPage}
                 onClick={() => {
-                  console.log(activePage);
                   refetch();
                 }}
                 styles={() => ({

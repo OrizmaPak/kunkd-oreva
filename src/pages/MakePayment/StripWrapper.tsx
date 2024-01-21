@@ -42,7 +42,6 @@ const CheckoutForm = ({
   const stripe = useStripe();
   const elements = useElements();
   // const {mutate} =  useConnectStripe()
-  // console.log(stripeData)
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>("");
 

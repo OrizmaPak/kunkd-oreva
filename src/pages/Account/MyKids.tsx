@@ -2,7 +2,6 @@ import { getApiErrorMessage } from "@/api/helper";
 import {
   querykeys,
   useConnectStudentData,
-  useGetSchool,
   useGetSchoolProfileForStudent,
   useUpdateProfile,
 } from "@/api/queries";
@@ -353,8 +352,6 @@ const EditProfile = ({
     const files = event.target.files as FileList;
     const file = files && files[0];
     setSelectedFile(file);
-    console.log(file);
-    console.log("name", name, dob);
   };
 
   const handleButtonClick = () => {
@@ -388,8 +385,6 @@ const EditProfile = ({
       },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
-
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -543,18 +538,12 @@ const ConnectTOSchool = ({
   profileId: number;
 }) => {
   const { mutate, isLoading } = useConnectStudentData();
-  const { data: schoolData } = useGetSchool();
   const [search, setSearch] = useState("");
   const debounceValue = useDebounce(search, 500);
-  console.log("God Help me", search);
   const { data: schoolCurData } = useGetSchoolProfileForStudent(debounceValue);
   const schData = schoolCurData?.data?.data;
-  console.log("schoolCurData", schoolCurData?.data.data);
 
   // const profileId = localStorage.getItem("profileId");
-  console.log("Profile", profileId);
-  const schoolList = schoolData?.data.data.records;
-  console.log(schoolList);
   const queryClient = useQueryClient();
 
   const schema: ZodType<FormData> = z.object({
@@ -580,7 +569,6 @@ const ConnectTOSchool = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    console.log("TeacherDta", data);
     mutate(
       {
         profile_id: Number(profileId),
@@ -591,7 +579,6 @@ const ConnectTOSchool = ({
       },
       {
         onSuccess(data) {
-          console.log("success", data.data.message);
           closeModal();
           queryClient.invalidateQueries({ queryKey: querykeys.profiles });
           notifications.show({

@@ -30,8 +30,6 @@ const ParentSignupLayout = ({
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
-  console.log("---- active step", active);
-
   const toggle = () => {
     setIsOpen((prev) => !prev);
   };
@@ -92,8 +90,8 @@ const SigninDash = ({
     </div>
   );
 };
-const SigninDashIonsOnly = ({active}:{ active?: boolean }) => {
-  console.log(active)
+const SigninDashIonsOnly = ({ active }: { active?: boolean }) => {
+  console.log(active);
   return (
     <div className="mb-20">
       <img loading="lazy" src={Checked} alt="roundmark" />
