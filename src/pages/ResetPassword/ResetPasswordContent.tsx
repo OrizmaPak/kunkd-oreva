@@ -10,9 +10,10 @@ import { FormData } from "@/common/User/FormValidation/Schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 
-const ResetPasswordContent = ({}: { onSubmit?: () => void }) => {
+const ResetPasswordContent = () => {
   const [forgotPasswordOtp, setFprgotPasswordOtp] =
     useStore(getForgotPasswordOtp);
+  console.log(forgotPasswordOtp);
   const navigate = useNavigate();
   // const [pinValue, setPinValue] = useState("");
 
