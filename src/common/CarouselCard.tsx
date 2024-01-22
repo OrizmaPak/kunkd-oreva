@@ -7,12 +7,14 @@ type Props = {
 
 const CarouselCard = ({ className, title, body }: Props) => {
   return (
-    <div className={`${className} w-[600px] carousel-card rounded-3xl  `}>
-      <div className={` h-full w-full rounded-3xl p-10  `}>
-        <h1 className="font-bold text-[40px] mb-[40px] font-Hanken text-white">
+    <div
+      className={`${className}    carousel-card rounded-3xl px-[30px] py-[50px] `}
+    >
+      <div className={` `}>
+        <h1 className="font-bold text-[28px] mb-[20px] leading-[36px] font-Hanken text-white">
           {title}
         </h1>
-        <p className="text-white font-Hanken">{body}</p>
+        <p className="text-white font-Hanken text-[18px]">{body}</p>
       </div>
     </div>
   );

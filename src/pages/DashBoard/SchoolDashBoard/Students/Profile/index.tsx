@@ -79,7 +79,7 @@ const StudentProfile = () => {
           </div>
 
           <div className="flex justify-center gap-5 flex-basis-[1/2]  ">
-            <div className="flex-grow ">
+            <div className="w-[205px] ">
               <TotalTimeSpent
                 schoolStudentStat={schoolStudentStat}
                 isLoading={isLoading}

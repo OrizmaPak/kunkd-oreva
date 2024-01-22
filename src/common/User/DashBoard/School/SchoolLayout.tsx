@@ -143,7 +143,7 @@ const DasboardButton = ({
   return (
     <button
       onClick={onClick}
-      className={` transition-all duration-700 px-2 py-2  rounded flex items-center justify-between gap-8 w-full my-8 text2 ${
+      className={` transition-all duration-700 px-2 py-2   rounded-[8px] flex items-center justify-between gap-8 w-full my-8 text2 ${
         active
           ? "bg-[#8530c1] text-white"
           : "hover:bg-[#8530C1] hover:text-white text-[#B5B5C3]"

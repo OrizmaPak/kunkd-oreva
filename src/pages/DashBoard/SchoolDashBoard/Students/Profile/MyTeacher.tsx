@@ -1,4 +1,4 @@
-import UserIcon from "@/assets/usericon.svg";
+import UserIcon from "@/assets/profileavatar24.png";
 
 import { TSchoolStudentStat } from ".";
 import { Skeleton } from "@mantine/core";
@@ -30,14 +30,16 @@ const MyTeacher = ({
               loading="lazy"
               src={schoolStudentStat?.teacher_picture || UserIcon}
               alt="fgrase"
-              className="w-[40px]  rounded-full"
+              className="w-[50px]  rounded-full"
             />
 
             <p className="">
-              <p className="font-bold leading-[30px] ">
+              <p className="font-semibold leading-[30px] font-Hanken text-[14px]  ">
                 {schoolStudentStat?.teacher_name}
               </p>
-              <p className="mt-0">{schoolStudentStat?.teacher_email}</p>
+              <p className="mt-0 text-[12px] text-[#B5B5C3]">
+                {schoolStudentStat?.teacher_email}
+              </p>
             </p>
           </div>
         </div>

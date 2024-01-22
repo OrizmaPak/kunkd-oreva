@@ -21,7 +21,7 @@ const TopSubCategories = ({
       ) : (
         <div className=" p-5 bg-white rounded-3xl flex-grow">
           <h1 className=" text-[16px] mb-2 leading-[30px] font-Hanken font-semibold ">
-            Top Interest
+            Top Interest,
           </h1>
           <div className="flex  flex-col">
             {/* <p className="mt-4 font-bold ">Oops!!! No data😤 </p> */}
@@ -33,7 +33,9 @@ const TopSubCategories = ({
             {schoolStudentStat?.top_interest_contents
               ?.slice(0, 4)
               .map((data, index) => (
-                <p key={index}>{data?.name}</p>
+                <p className="text-[12px]" key={index}>
+                  {data?.name}
+                </p>
               ))}
           </div>
         </div>

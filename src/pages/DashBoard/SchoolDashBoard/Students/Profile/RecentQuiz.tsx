@@ -14,7 +14,7 @@ const RecentCompleted = ({
       {isLoading ? (
         <Skeleton
           height={150}
-          width={300}
+          width={350}
           radius={20}
           mb="xl"
           visible={isLoading}

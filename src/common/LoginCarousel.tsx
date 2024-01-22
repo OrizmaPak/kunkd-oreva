@@ -14,19 +14,22 @@ const LoginCarousel = () => {
     {
       bgImage: LearnImage1,
       title: "Read, Listen & Enjoy",
-      className: "bg-[rgba(230,230,230,0.3)]   border-white border-[1.5px]",
+      className:
+        "bg-[rgba(230,230,230,0.4)]  backdrop-blur  border-white border-[1.5px]",
       body: "Get access to fun and inspiring stories & audiobooks that build on soft skills, values, reading and numeracy on a weekly basis.",
     },
     {
       bgImage: ParentalCtrl,
       title: "Access World of Stories",
-      className: "bg-[rgba(230,230,230,0.3)]  border-white border-[1.5px]",
+      className:
+        "bg-[rgba(230,230,230,0.4)]  backdrop-blur  border-white border-[1.5px]",
       body: "Get access to fun and inspiring stories & audiobooks that build on soft skills, values, reading and numeracy on a weekly basis.",
     },
     {
       bgImage: LearnImage2,
       title: "Learn African Languages",
-      className: "bg-[rgba(230,230,230,0.3)] border-white border-[1.5px] ",
+      className:
+        "bg-[rgba(230,230,230,0.4)]  backdrop-blur border-white border-[1.5px] ",
       body: "Get access to fun and inspiring stories & audiobooks that build on soft skills, values, reading and numeracy on a weekly basis.",
     },
   ];
@@ -67,7 +70,7 @@ const LoginCarousel = () => {
             >
               <img loading="lazy" src={ArrowCaro} alt="arrow" />
             </button> */}
-              <div className="flex gap-2 bottom-6 left-[270px] absolute z-50">
+              <div className="flex gap-2  bottom-16 left-[270px] absolute z-50">
                 <CustomDot
                   handleSet={() => {
                     sliderRef?.current?.slickGoTo(0);
