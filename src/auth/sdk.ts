@@ -22,10 +22,17 @@ export const googleSignIn = async () => {
 
 export const facebookSignIn = async () => {
   const provider = new FacebookAuthProvider();
-  try {
-    const result = await signInWithPopup(auth, provider);
-    return result;
-  } catch (error) {
-    return error;
-  }
+
+  const result = await signInWithPopup(auth, provider);
+  return result;
 };
+
+// export const facebookSignIn = async () => {
+//   const provider = new FacebookAuthProvider();
+//   try {
+//     const result = await signInWithPopup(auth, provider);
+//     return result;
+//   } catch (error) {
+//     return error;
+//   }
+// };

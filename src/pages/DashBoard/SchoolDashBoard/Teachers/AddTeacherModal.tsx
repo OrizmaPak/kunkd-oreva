@@ -102,7 +102,6 @@ const AddTeacherModal = ({
 
           onError(err) {
             toggle();
-            // console.log("what is the error", getApiErrorMessage(err));
             if (
               getApiErrorMessage(err) ===
               "Please upgrade your license to add more teachers"
