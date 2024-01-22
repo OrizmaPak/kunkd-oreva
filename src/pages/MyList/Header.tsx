@@ -1,4 +1,4 @@
-import SearchIcon from "@/assets/searchicon.svg";
+// import SearchIcon from "@/assets/searchicon.svg";
 import { GoBook } from "react-icons/go";
 import { MdOutlineAudiotrack } from "react-icons/md";
 import { BsCameraVideo } from "react-icons/bs";
@@ -17,7 +17,7 @@ const Header = ({
       <div className="flex justify-between items-center py-10 px-24">
         <h1 className="font-bold font-Recoleta text30">My List</h1>
         <span>
-          <img loading="lazy" src={SearchIcon} alt="SearchIcon " className="" />
+          {/* <img loading="lazy" src={SearchIcon} alt="SearchIcon " className="" /> */}
         </span>
       </div>
 
@@ -83,11 +83,11 @@ const Header = ({
         </div>
 
         <div className="text3 flex mr-14  flex-col ">
-          <p className="text-end">Sort By :</p>
           <Menu shadow="md" width={150}>
             <Menu.Target>
-              <div className="flex gap-2">
-                <p>Recently Added</p>
+              <div className="flex gap-2 cursor-pointer ">
+                <p className="text-end">Sort By :</p>
+
                 <IoIosArrowDown size={25} color="#8530C1" />
               </div>
             </Menu.Target>

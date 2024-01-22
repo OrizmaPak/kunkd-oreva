@@ -310,12 +310,12 @@ export const SelectAvatar = ({
   close?: () => void;
   showCancelBtn?: boolean;
 }) => {
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState(0);
   const { isLoading: isLoadingAvatar, data, error } = useGetAvatars();
 
   // const arrayAvatar = data?.data.data.avatars;
-  const selectedAv = data?.data.data.avatars.filter(
-    (avatar: selectAvatarType) => avatar.name === selected
+  const selectedAv = data?.data?.data?.avatars.filter(
+    (avatar: selectAvatarType) => avatar?.id === selected
   )[0];
 
   const { isLoading, mutate } = useProfle();
@@ -387,7 +387,7 @@ export const SelectAvatar = ({
               </p>
             </div>
             <div className="flex justify-center items-center">
-              <div className="grid grid-cols-4 gap-x-4 gap-y-4">
+              <div className="grid grid-cols-4 gap-x-4 gap-y-4 overflow-scroll overflow-x-hidden h-[400px]">
                 {isLoadingAvatar
                   ? new Array(12).fill(1).map((el, index) => (
                       <Skeleton
@@ -413,7 +413,7 @@ export const SelectAvatar = ({
                     )}
               </div>
             </div>
-            <div className="px-14">
+            <div className="">
               <button
                 disabled={!selected}
                 onClick={onSubmit}
@@ -438,25 +438,27 @@ export const SelectAvatar = ({
 };
 
 const AvatarCard = ({
+  id,
   image,
-  name,
+
   selected,
   setSelected,
 }: {
   image?: string;
   name?: string;
-  selected: string;
-  setSelected: (val: string) => void;
+  selected: number;
+  id?: number;
+  setSelected: (val: number) => void;
 }) => {
   const handleClick = () => {
-    setSelected(name as string);
+    setSelected(id as number);
   };
   return (
     <div>
       <button
         onClick={handleClick}
         className={`${
-          selected === name
+          selected === id
             ? "border-[2px] border-[#8530C1]"
             : "border-[2px] border-white"
         }  rounded-xl p-2 transition-all duration-200`}

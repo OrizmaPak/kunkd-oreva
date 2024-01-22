@@ -507,6 +507,16 @@ const ReadPage = ({
     }
   }, [goFull]);
 
+  function removeTags(str: string) {
+    if (str === null || str === "") return false;
+    else str = str.toString();
+
+    // Regular expression to identify HTML tags in
+    // the input string. Replacing the identified
+    // HTML tag with a null string.
+    return str.replace(/(<([^>]+)>)/gi, "");
+  }
+
   return (
     <div
       id="container"
@@ -593,7 +603,9 @@ const ReadPage = ({
             <p
               style={{ fontSize: `${size}px` }}
               ref={divRef}
-              className={` leading-10 flex h-[350px]  overflow-y-auto  ${
+              className={` leading-10 flex  ${
+                goFull ? "h-[450px]" : "h-[350px]"
+              }   overflow-y-auto  ${
                 size + "px"
               } font-medium font-Hanken pr-8 text-justify `}
             >
@@ -631,7 +643,9 @@ const ReadPage = ({
                 style={{ fontSize: `${size}px` }}
                 className="content_cont leading-10  [&>img]:hidden text-center"
               >
-                {ReactHtmlParser(content[pageNumber]?.web_body)}
+                {ReactHtmlParser(
+                  removeTags(content[pageNumber]?.web_body) as string
+                )}
               </p>
 
               {/* <p>{content[pageNumber].web_body}</p> */}
