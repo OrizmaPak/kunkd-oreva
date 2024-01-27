@@ -1,10 +1,11 @@
 import React from "react";
 import { Skeleton } from "@mantine/core";
-import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+import { TStoryContent } from "@/api/types";
 import "./cardscreenhome.css";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import Slider from "react-slick";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 
 type Props = {
   data?: TStoryContent[];
@@ -14,6 +15,9 @@ type Props = {
   isTitled?: boolean;
   card?: (props: TStoryContent) => React.ReactNode;
   isLoading: boolean;
+  hasInfiniteScroll?: boolean;
+  hasNextPage?: boolean;
+  fetchNextPage?: () => void;
 };
 const CardScreen = ({
   data,
@@ -22,6 +26,9 @@ const CardScreen = ({
   actiontitle,
   card,
   isLoading,
+  hasInfiniteScroll = false,
+  fetchNextPage,
+  hasNextPage = false,
 }: Props) => {
   const settings = {
     dots: false,
@@ -31,11 +38,23 @@ const CardScreen = ({
     swipeToSlide: true,
     slidesToScroll: 5,
   };
+
+  const { ref, inView } = useInView({
+    /* Optional options */
+    // threshold: 1,
+  });
   const sliderReff = useRef<Slider>(null);
+
+  useEffect(() => {
+    console.log("inview------", { inView, fetchNextPage, hasNextPage });
+    if (inView && hasNextPage && fetchNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage]);
 
   return (
     <div className="   mx-20   pb-8">
-      <div className="flex justify-between mb-[50px] pt-8 ">
+      <div className="flex justify-between mb-[20px] pt-8 ">
         <span className=" text25 font-semibold font-Recoleta ">{header}</span>
         <button onClick={action} className=" text-[#8530C1] text2">
           {actiontitle}
@@ -71,8 +90,16 @@ const CardScreen = ({
                     </div>
                   </Skeleton>
                 ))
-            : data?.map((data: TStoryContent) => {
-                return card ? card(data) : null;
+            : data?.map((carddata: TStoryContent, index: number) => {
+                if (
+                  data.length === index + 1 &&
+                  hasInfiniteScroll &&
+                  hasNextPage
+                ) {
+                  return <div ref={ref}>Loading....</div>;
+                }
+                //  return <Todo key={todo.id} todo={todo} />;
+                return card ? card(carddata) : null;
               })}
         </Slider>
       </div>

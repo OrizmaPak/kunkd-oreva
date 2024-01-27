@@ -12,7 +12,9 @@ import {
 } from "@/api/queries";
 import { MdFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
 
-import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+// import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+
+import { TStoryContent } from "@/api/types";
 import { Progress } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import "./cardhome.css";
@@ -39,7 +41,13 @@ const CardHome = ({
   pages,
   hasRage,
   timespent,
-}: TStoryContent & { goTo?: () => void; hasRage?: boolean }) => {
+  ref,
+}: TStoryContent & {
+  goTo?: () => void;
+  hasRage?: boolean;
+
+  ref?: (node?: Element | null | undefined) => void;
+}) => {
   // const totalPage = pages?.length;
   //  const totalPage = pages?.length ?? 0;
   // const range = pages_read &&  pages_read ? Math.ceil((100 / totalPage as number)  * pages_read as number)
@@ -133,7 +141,10 @@ const CardHome = ({
     }, 200); // Reset shaking after 0.5 seconds
   };
   return (
-    <div className=" z-[1]  hover:scale-[102%] transition-all mx-2 py-4">
+    <div
+      ref={ref}
+      className=" z-[1]  hover:scale-[102%] transition-all mx-2 py-4"
+    >
       <span className="relative image-card ">
         <LazyLoadImage
           src={thumbnail}

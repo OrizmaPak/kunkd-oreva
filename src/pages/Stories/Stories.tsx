@@ -21,7 +21,9 @@ import {
 } from "react-router-dom";
 import InnerWrapper from "../../common/User/InnerWrapper";
 import Quiz from "./Stories1/Quiz";
-import Stories1, { TStoryContent } from "./Stories1/Stories1";
+import Stories1 from "./Stories1/Stories1";
+import { TStoryContent } from "@/api/types";
+
 import "./stories.css";
 
 export type StoriesType = {
@@ -57,7 +59,7 @@ const Stories = () => {
               <Route path=":subCategory" element={<Story />}></Route>
               {/* <Route path=":subCategory/:id" element={<Story />}></Route> */}
             </Route>
-            <Route path="sub/:title" element={<Stories1 />}></Route>
+            <Route path="stories/:sub/:title" element={<Stories1 />}></Route>
             {/* <Route path=":theme/:id/:title" element={<Stories1 />}></Route> */}
 
             <Route path="sub/:title/quiz" element={<Quiz />}></Route>
@@ -75,11 +77,11 @@ const Story = () => {
   const navigate = useNavigate();
   const subCategoryId = localStorage.getItem("subCategoryId");
   const { data, isLoading, refetch } = useGetContebtBySubCategories(
-    subCategoryId as string,
-    activePage.toString()
+    subCategoryId as string
+    // activePage.toString()
   );
-  const subCategoryContents = data?.data.data.records;
-  const totalPage = Math.ceil(data?.data.data.totalRecord / 10);
+  const subCategoryContents = data?.pages[0].data.data.records;
+  const totalPage = Math.ceil(data?.pages[0].data.data.totalRecord / 10);
 
   return (
     <>

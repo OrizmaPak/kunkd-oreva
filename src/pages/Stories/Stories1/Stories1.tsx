@@ -38,62 +38,12 @@ import { RiFullscreenFill } from "react-icons/ri";
 import { AiOutlineFullscreenExit } from "react-icons/ai";
 // import { MantineProvider, Skeleton, Slider } from "@mantine/core";
 import { useReducedMotion } from "@mantine/hooks";
+import { TContentPage, TStoryContent } from "@/api/types";
+import Wrapper from "@/common/User/Wrapper";
+import InnerWrapper from "@/common/User/InnerWrapper";
 
 // import { number } from "zod";
 // import { useQueryClient } from "@tanstack/react-query";
-type TContentPage = {
-  audio: string;
-  web_body: string;
-  content_media_id: number;
-  image: string;
-  name: string;
-  page_number: number;
-};
-
-type TSubCategory = {
-  sub_category_id: number;
-  sub_category_name: string;
-};
-
-export type TMedia = {
-  name: string;
-  slug: string;
-  order: number;
-  file: string;
-  thumbnail: string;
-};
-
-type TQuizResult = {
-  status: boolean;
-  id: number;
-  result: number;
-};
-export type TStoryContent = {
-  sub_category_name?: unknown;
-  category?: string;
-  sub_categories?: TSubCategory[];
-  category_id?: number;
-  content_type?: string;
-  content_type_id?: number;
-  has_quiz?: boolean;
-  id?: number;
-  is_liked?: boolean;
-  media?: TMedia[];
-  media_type?: string;
-  name?: string;
-  pages?: TContentPage[];
-  short_link?: string;
-  slug?: string;
-  pages_read?: number;
-  synopsis?: string;
-  tags?: string;
-  theme?: string;
-  thumbnail?: string;
-  status?: string;
-  web_synopsis?: string;
-  quiz_result?: TQuizResult;
-  timespent?: number;
-};
 
 const Stories1 = () => {
   const [isFinish, setIsFinish] = useState(false);
@@ -170,78 +120,86 @@ const Stories1 = () => {
       >
         <ConnectedStudentModal onCancel={closeConnectedStudent} />
       </Modal>
-      <div className=" ">
-        <div className="min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] ">
-          <div className=" ">
-            {
-              <Skeleton visible={contentIsLoading}>
-                <StoriesNav
-                  category={category && category}
-                  genre={
-                    content && content?.sub_categories?.[0]?.sub_category_name
-                  }
-                  title={content && content.name}
-                  subCategoryId={
-                    content && content?.sub_categories?.[0]?.sub_category_id
-                  }
-                  slug={
-                    content && content?.sub_categories?.[0]?.sub_category_name
-                  }
-                />
-              </Skeleton>
-            }
-          </div>
-          <div className="flex-grow  h-full   ">
-            <div className="flex-grow mt-5 rounded-2xl ">
-              {!isFinish ? (
-                <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
-                  {!startRead && (
-                    <Skeleton visible={contentIsLoading}>
-                      <AboutPage
-                        story={content as TStoryContent}
-                        setStartRead={() => setStartRead(true)}
-                      />
-                    </Skeleton>
-                  )}
-
-                  {content && startRead && (
-                    <ReadPage
-                      thumbnail={content.thumbnail as string}
-                      content={content.pages as TContentPage[]}
-                      setIsFinish={() => setIsFinish(true)}
-                      divRef={myRef}
+      <Wrapper bgColor="#fff7fd">
+        <InnerWrapper>
+          <div className=" bg-[#fff7fd]">
+            <div className="min-h-[calc(92vh-60px)] h-[100%] flex flex-col   ">
+              <div className=" ">
+                {
+                  <Skeleton visible={contentIsLoading}>
+                    <StoriesNav
+                      category={"Stories"}
+                      genre={
+                        content &&
+                        content?.sub_categories?.[0]?.sub_category_name
+                      }
+                      title={content && content.name}
+                      subCategoryId={
+                        content && content?.sub_categories?.[0]?.sub_category_id
+                      }
+                      slug={
+                        content &&
+                        content?.sub_categories?.[0]?.sub_category_name
+                      }
                     />
-                  )}
-
-                  <div className="w-full bg-white rounded-3xl mt-4">
-                    {
-                      <CardScreenHome
-                        data={recommendedStories}
-                        isLoading={isLoading}
-                        header="Recommended For You"
-                        isTitled={false}
-                        card={(props: TStoryContent) => (
-                          <CardHome
-                            {...props}
-                            goTo={() => {
-                              navigate(`../sub/${props.slug?.toLowerCase()}`);
-                              setStartRead(false);
-                            }}
+                  </Skeleton>
+                }
+              </div>
+              <div className="flex-grow  h-full   ">
+                <div className="flex-grow mt-5 rounded-2xl ">
+                  {!isFinish ? (
+                    <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
+                      {!startRead && (
+                        <Skeleton visible={contentIsLoading}>
+                          <AboutPage
+                            story={content as TStoryContent}
+                            setStartRead={() => setStartRead(true)}
                           />
-                        )}
-                      />
-                    }
-                  </div>
+                        </Skeleton>
+                      )}
+
+                      {content && startRead && (
+                        <ReadPage
+                          thumbnail={content.thumbnail as string}
+                          content={content.pages as TContentPage[]}
+                          setIsFinish={() => setIsFinish(true)}
+                          divRef={myRef}
+                        />
+                      )}
+
+                      <div className="w-full bg-white rounded-3xl mt-4">
+                        {
+                          <CardScreenHome
+                            data={recommendedStories}
+                            isLoading={isLoading}
+                            header="Recommended For You"
+                            isTitled={false}
+                            card={(props: TStoryContent) => (
+                              <CardHome
+                                {...props}
+                                goTo={() => {
+                                  navigate(
+                                    `../sub/${props.slug?.toLowerCase()}`
+                                  );
+                                  setStartRead(false);
+                                }}
+                              />
+                            )}
+                          />
+                        }
+                      </div>
+                    </div>
+                  ) : (
+                    <WelDone content={content as TStoryContent} />
+                  )}
                 </div>
-              ) : (
-                <WelDone content={content as TStoryContent} />
-              )}
+              </div>
+
+              {/* </div> */}
             </div>
           </div>
-
-          {/* </div> */}
-        </div>
-      </div>
+        </InnerWrapper>
+      </Wrapper>
     </>
   );
 };

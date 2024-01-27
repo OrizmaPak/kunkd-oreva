@@ -131,6 +131,14 @@ type TResponse<T> = {
 
 export type ApiResponse<T> = AxiosResponse<TResponse<T>>;
 
+export type TSubCategory = {
+  id: number;
+  image: string;
+  name: string;
+  short_link: string;
+  slug: string;
+};
+
 /**
  * {
  * data, status, statusText, message, config, response, request}

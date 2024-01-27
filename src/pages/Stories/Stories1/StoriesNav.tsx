@@ -33,10 +33,7 @@ const StoriesNav = ({
   };
   return (
     <div className="py-4 font-Recoleta pl-20 content-nav text25  font-semibold items-center rounded-full bg-white gap-8 flex pad-x-40">
-      <div
-        className="flex gap-2 cursor-pointer"
-        onClick={() => navigate(`../../stories`)}
-      >
+      <div className="flex gap-2 cursor-pointer" onClick={() => navigate(-1)}>
         <span>
           {category &&
             category?.charAt(0).toUpperCase() + category.substring(1)}
@@ -47,8 +44,7 @@ const StoriesNav = ({
       <div
         className="flex gap-2  cursor-pointer "
         onClick={() => {
-          navigate(`../${slug?.replace(/\s/g, "-").toLocaleLowerCase()}`);
-          localStorage.setItem("subCategoryId", subCategoryId?.toString()!);
+          navigate(-1);
         }}
       >
         <span>{genre}</span>

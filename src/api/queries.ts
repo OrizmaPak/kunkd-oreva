@@ -79,7 +79,7 @@ import {
   ConnectStripe,
 } from "./api";
 // import { TGetContentById } from "./types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useInfiniteQuery } from "@tanstack/react-query";
 // import { TProfileData } from "./types";
 // import { AxiosResponse } from "axios";
 import { selectAvatarType } from "@/pages/AfterParentSignIn/SelectProfile";
@@ -88,7 +88,8 @@ import useStore from "@/store/index";
 import { getProfileState } from "@/store/profileStore";
 import { notifications } from "@mantine/notifications";
 import { useNavigate } from "react-router-dom";
-import { ApiResponse, Tprofile } from "./types";
+import { ApiResponse, TStoryContent, Tprofile } from "./types";
+import { useState } from "react";
 
 export const querykeys = {
   profiles: ["GetProfile"],
@@ -266,10 +267,67 @@ export const useGetSubCategories = () => {
   });
 };
 
-export const useGetContebtBySubCategories = (subId: string, page: string) => {
-  return useQuery({
-    queryKey: ["getContentBySubId", subId, page],
-    queryFn: () => GetContebtBySubCategories(subId, page),
+// export const useGetContebtBySubCategories = (
+//   subId: string,
+//   setAllSubCategoryContents:(prev:TStoryContent)=>void
+// ) => {
+//   const [activePage, setPage] = useState(1);
+
+//   return useQuery({
+//     queryKey: ["getContentBySubId", subId, activePage],
+//     queryFn: () => GetContebtBySubCategories(subId, activePage.toString()),
+//     onSuccess(data) {
+//       console.log(data);
+//       if (activePage < Math.ceil(data?.data.data.totalRecord / 10)) {
+//         setAllSubCategoryContents((prev:TStoryContent[]) => {
+//           return[...prev, ...data?.data.data.records]});
+//         setPage((prev) => prev++);
+//       }else{
+//         setAllSubCategoryContents((prev: TStoryContent) => [
+//           ...prev,
+//           ata?.data.data.records,
+//         ]);
+
+//       }
+//     },
+//   });
+// };
+
+export const useGetContebtBySubCategories = (
+  subId: string
+  // setAllSubCategoryContents: (prev:TStoryContent) => void
+) => {
+  // const [activePage, setPage] = useState(1);
+
+  return useInfiniteQuery({
+    queryKey: ["getContentBySubId", subId],
+    queryFn: ({ pageParam = 1 }) => GetContebtBySubCategories(subId, pageParam),
+
+    getNextPageParam: (lastPage, allPages) => {
+      // console.log("all&last-----", { allPages, lastPage });
+      const allPagesArray = allPages?.reduce((prev, current) => {
+        return prev.concat(current?.data?.records);
+      }, []);
+      return allPagesArray?.length < lastPage?.data?.totalRecord;
+    },
+    // getPreviousPageParam: (firstPage, allPages) =>} firstPage.prevCursor,
+    // onSuccess: (data) => {
+    //   console.log(data);
+    //   if (data) {
+    //     if (activePage < Math.ceil(data?.data.data.totalRecord / 10)) {
+    //       setAllSubCategoryContents((prev: TStoryContent[]) => [
+    //         ...prev,
+    //         ...(data?.data.data.records || []),
+    //       ]);
+    //       setPage((prev) => prev + 1);
+    //     } else {
+    //       setAllSubCategoryContents((prev: TStoryContent[]) => [
+    //         ...prev,
+    //         ...(data?.data.data.records || []),
+    //       ]);
+    //     }
+    //   }
+    // },
   });
 };
 

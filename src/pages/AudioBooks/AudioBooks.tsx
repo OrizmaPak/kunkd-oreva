@@ -38,7 +38,7 @@ const AudioBooks = () => {
             <Route element={<MainStoriesLayout />}>
               <Route index element={<Books />}></Route>
             </Route>
-            <Route path=":id" element={<BookLayout />}></Route>
+            <Route path=":slug/:name" element={<BookLayout />}></Route>
           </Routes>
         </InnerWrapper>
       </Wrapper>

@@ -19,10 +19,7 @@ const AfricanLanguagesNav = ({
   const navigate = useNavigate();
   return (
     <div className="py-4 pl-20 font-Recoleta content-nav text-[24px]  font-semibold items-center rounded-full bg-white gap-8 flex px-8">
-      <div
-        className="flex gap-3 cursor-pointer  "
-        onClick={() => navigate(`../../africanlanguages`)}
-      >
+      <div className="flex gap-3 cursor-pointer  " onClick={() => navigate(-1)}>
         <span>African Languages</span>
         <img loading="lazy" src={NextIcon} alt="nextIcon" />
       </div>
@@ -33,8 +30,7 @@ const AfricanLanguagesNav = ({
         } `}
         onClick={() => {
           {
-            subCategoryName &&
-              navigate(`../../africanlanguages/${subCategoryName}`);
+            subCategoryName && navigate(-1);
           }
           {
             subCategoryId &&
@@ -42,8 +38,10 @@ const AfricanLanguagesNav = ({
           }
         }}
       >
-        <span>
-          {lanType && lanType?.charAt(0).toUpperCase() + lanType.slice(1)}
+        <span className="">
+          {lanType &&
+            lanType?.split("-")?.join(" ")?.charAt(0).toUpperCase() +
+              lanType.slice(1)}
         </span>
         {title && <img loading="lazy" src={NextIcon} alt="nextIcon" />}
       </div>

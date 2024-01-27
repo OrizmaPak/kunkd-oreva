@@ -18,6 +18,8 @@ import { Skeleton } from "@mantine/core";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
+import Wrapper from "@/common/User/Wrapper";
+import InnerWrapper from "@/common/User/InnerWrapper";
 
 const Quiz = () => {
   const contentId = localStorage.getItem("contentId");
@@ -74,91 +76,99 @@ const Quiz = () => {
   const [curentStep, setcurrentStep] = useState(STEP_1);
 
   return (
-    <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] w-[100%] ">
-      <Skeleton visible={isLoading}>
-        <StoriesNav
-          category={category && category}
-          genre={content && content.sub_categories[0].sub_category_name}
-          title={content && content.name}
-          subCategoryId={content && content.sub_categories[0].sub_category_id}
-          slug={content && content.sub_categories[0].sub_category_name}
-          quiz="Quiz"
-        />
-      </Skeleton>
+    <>
+      <Wrapper bgColor="#fff7fd">
+        <InnerWrapper>
+          <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] w-[100%] ">
+            <Skeleton visible={isLoading}>
+              <StoriesNav
+                category={category && category}
+                genre={content && content.sub_categories[0].sub_category_name}
+                title={content && content.name}
+                subCategoryId={
+                  content && content.sub_categories[0].sub_category_id
+                }
+                slug={content && content.sub_categories[0].sub_category_name}
+                quiz="Quiz"
+              />
+            </Skeleton>
 
-      {curentStep === STEP_1 && (
-        <>
-          <Skeleton visible={isLoading} height={600}>
-            <div className="flex-grow mt-5 pt-5 px-40 flex  h-[100%]  flex-col py-5 bg-white rounded-3xl ">
-              <MantineProvider
-                theme={{
-                  colors: {
-                    "ocean-blue": [
-                      "#8530C1",
-                      "#5FCCDB",
-                      "#44CADC",
-                      "#2AC9DE",
-                      "#1AC2D9",
-                      "#11B7CD",
-                      "#09ADC3",
-                      "#0E99AC",
-                      "#128797",
-                      "#147885",
-                    ],
-                  },
-                }}
-              >
-                <Progress
-                  value={progress * answers.length}
-                  size="xl"
-                  radius="xl"
-                  color="ocean-blue.0"
+            {curentStep === STEP_1 && (
+              <>
+                <Skeleton visible={isLoading} height={600}>
+                  <div className="flex-grow mt-5 pt-5 px-40 flex  h-[100%]  flex-col py-5 bg-white rounded-3xl ">
+                    <MantineProvider
+                      theme={{
+                        colors: {
+                          "ocean-blue": [
+                            "#8530C1",
+                            "#5FCCDB",
+                            "#44CADC",
+                            "#2AC9DE",
+                            "#1AC2D9",
+                            "#11B7CD",
+                            "#09ADC3",
+                            "#0E99AC",
+                            "#128797",
+                            "#147885",
+                          ],
+                        },
+                      }}
+                    >
+                      <Progress
+                        value={progress * answers.length}
+                        size="xl"
+                        radius="xl"
+                        color="ocean-blue.0"
+                      />
+                    </MantineProvider>
+                    <Question
+                      quesObject={questions && questions[currentQues]}
+                      selected={answers}
+                      setSelected={handleSelectAnswer}
+                      currentQuestion={currentQues}
+                    />
+
+                    <QuestionPagination
+                      handlePagination={handlePagination}
+                      totalQuestion={questions && questions?.length}
+                      currentQues={questions && currentQues}
+                      answers={answers && answers}
+                      questions={questions ?? []}
+                      handleSelectAnswer={handleSelectAnswer}
+                      setShowResult={() => setcurrentStep(STEP_2)}
+                    />
+                  </div>
+                </Skeleton>
+              </>
+            )}
+            {curentStep === STEP_2 && (
+              <div className="flex-grow mt-5 pt-10 flex  justify-center items-center  mx-auto w-[100%]  flex-col py-14 bg-white m rounded-3xl ">
+                <Result
+                  profileId={+profileId}
+                  quizId={+quizId as number}
+                  answers={answers}
+                  setShowRemark={() => setcurrentStep(STEP_3)}
                 />
-              </MantineProvider>
-              <Question
-                quesObject={questions && questions[currentQues]}
-                selected={answers}
-                setSelected={handleSelectAnswer}
-                currentQuestion={currentQues}
-              />
-
-              <QuestionPagination
-                handlePagination={handlePagination}
-                totalQuestion={questions && questions?.length}
-                currentQues={questions && currentQues}
-                answers={answers && answers}
-                questions={questions ?? []}
-                handleSelectAnswer={handleSelectAnswer}
-                setShowResult={() => setcurrentStep(STEP_2)}
-              />
-            </div>
-          </Skeleton>
-        </>
-      )}
-      {curentStep === STEP_2 && (
-        <div className="flex-grow mt-5 pt-10 flex  justify-center items-center  mx-auto w-[100%]  flex-col py-14 bg-white m rounded-3xl ">
-          <Result
-            profileId={+profileId}
-            quizId={+quizId as number}
-            answers={answers}
-            setShowRemark={() => setcurrentStep(STEP_3)}
-          />
-        </div>
-      )}
-      {curentStep === STEP_3 && (
-        <div className="flex-grow mt-5 pt-10 px-40 flex  flex-col py-14 bg-white rounded-3xl ">
-          <GoodRemarkMsg
-            answers={answers}
-            setShowYourResult={() => setcurrentStep(STEP_4)}
-          />
-        </div>
-      )}
-      {curentStep === STEP_4 && (
-        <div className="flex-grow mt-5 pt-10  mx-auto  flex justify-center items-center  flex-col py-14 bg-white   w-[100%] rounded-3xl ">
-          <YourResult answers={answers} />
-        </div>
-      )}
-    </div>
+              </div>
+            )}
+            {curentStep === STEP_3 && (
+              <div className="flex-grow mt-5 pt-10 px-40 flex  flex-col py-14 bg-white rounded-3xl ">
+                <GoodRemarkMsg
+                  answers={answers}
+                  setShowYourResult={() => setcurrentStep(STEP_4)}
+                />
+              </div>
+            )}
+            {curentStep === STEP_4 && (
+              <div className="flex-grow mt-5 pt-10  mx-auto  flex justify-center items-center  flex-col py-14 bg-white   w-[100%] rounded-3xl ">
+                <YourResult answers={answers} />
+              </div>
+            )}
+          </div>
+        </InnerWrapper>
+      </Wrapper>
+    </>
   );
 };
 

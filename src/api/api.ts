@@ -114,7 +114,9 @@ export const GetSubCategories = () => {
 };
 
 export const GetContebtBySubCategories = (subId: string, page: string) => {
-  return axios.get(`/content/subcategory/${subId} ?page=${page}`);
+  return axios
+    .get(`/content/subcategory/${subId}?page=${page}`)
+    .then((response) => response.data);
 };
 
 export const GetAudioBooks = () => {

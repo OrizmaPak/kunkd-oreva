@@ -15,10 +15,7 @@ const AudioBooksNav = ({
   // const { id } = useParams();
   return (
     <div className="py-4 pl-20 font-Recoleta content-nav text25  font-semibold items-center rounded-full bg-white gap-8 flex pad-x-40">
-      <div
-        className="flex gap-2 cursor-pointer "
-        onClick={() => navigate(`/librarynotpaid/audiobooks`)}
-      >
+      <div className="flex gap-2 cursor-pointer " onClick={() => navigate(-1)}>
         <span>{category}</span>
         <img loading="lazy" src={NextIcon} alt="nextIcon" />
       </div>

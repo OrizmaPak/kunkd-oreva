@@ -24,7 +24,7 @@ import SchoolVerification from "./pages/SchoolSignup/SchoolVerification/SchoolVe
 import Schools from "./pages/Schools/Schools";
 import SecureAccount from "./pages/SecureAccount/SecureAccount";
 import Signup from "./pages/Signup/Signup";
-import Stories from "./pages/Stories/Stories";
+// import Stories from "./pages/Stories/Stories";
 // import BedTimeStories from "./pages/Stories/BedTimeStories";
 // import Stories1 from "./pages/Stories/Stories1/Stories1";
 import TeacherLayout from "@/common/User/DashBoard/Teachers/TeacherLayout";
@@ -63,6 +63,15 @@ import { getUserState } from "./store/authStore";
 import SchoolRquest from "@/pages/DashBoard/SchoolDashBoard/Request/Request";
 import TeacherSignup from "@/pages/TeacherLogin/index";
 import Request from "./pages/DashBoard/TeacherDashboard/Request/Request";
+import AudiobooksV2 from "./pages/AudioBooks/AudiobooksV2/AudiobooksV2";
+import VideoV2 from "./pages/AfricanLanguages/VideosV2/VideoV2";
+import StoriesV2 from "./pages/Stories/StoriesV2/StoriesV2";
+import DefaultTab from "./pages/AfterParentSignIn/DefaultTab";
+import Stories1 from "./pages/Stories/Stories1/Stories1";
+import BookLayout from "./pages/AudioBooks/BookLayout";
+import VideoPlayer from "./pages/AfricanLanguages/VideoPlayer";
+import Quiz from "./pages/Stories/Stories1/Quiz";
+import DefaultSchoolTab from "./pages/AfterSchoolSignIn/User/NewlyRegisterUser/DefautSchoolTab";
 
 function App() {
   const [, setUser] = useStore(getUserState);
@@ -115,24 +124,53 @@ function App() {
           >
             {/* <Route path="newlyregistereduser/*"> */}
             <Route path="school/*">
-              <Route index element={<NewlyRegisteredUser />}></Route>
-              <Route path=":category/*" element={<Stories />}></Route>
-              <Route path="audiobooks/*" element={<AudioBooks />}></Route>
-              <Route
-                path="africanlanguages/*"
-                element={<AfricanLanguages />}
-              ></Route>
-            </Route>
-            <Route path="existingusernotpaid"></Route>
+              <Route element={<NewlyRegisteredUser />}>
+                <Route index element={<DefaultSchoolTab />}></Route>
+                <Route path="stories" element={<StoriesV2 />} />
+                <Route path="audiobooks" element={<AudiobooksV2 />}></Route>
+                <Route path="languages" element={<VideoV2 />}></Route>
+              </Route>
 
-            <Route path="librarynotpaid/*">
+              <Route path="stories/:sub/:title" element={<Stories1 />}></Route>
+              <Route path="stories/:sub/:title/quiz" element={<Quiz />}></Route>
+
+              <Route
+                path="audiobooks/:sub/:title"
+                element={<BookLayout />}
+              ></Route>
+              <Route
+                path="languages/:sub/:title"
+                element={<VideoPlayer />}
+              ></Route>
+              {/* <Route index element={<NewlyRegisteredUser />}></Route>
+              <Route path="stories/*" element={<StoriesV2 />}></Route>
+              <Route path="audiobooks/*" element={<AudioBooks />}></Route>
+              <Route
+                path="africanlanguages/*"
+                element={<AfricanLanguages />}
+              ></Route> */}
+            </Route>
+
+            {/* <Route path="school/*">
+              <Route index element={<NewlyRegisteredUser />}></Route>
+              <Route path="stories/*" element={<Stories />}></Route>
+              <Route path="audiobooks/*" element={<AudioBooks />}></Route>
+              <Route
+                path="africanlanguages/*"
+                element={<AfricanLanguages />}
+              ></Route>
+            </Route> */}
+
+            {/* <Route path="existingusernotpaid"></Route> */}
+
+            {/* <Route path="librarynotpaid/*">
               <Route path=":category/*" element={<Stories />}></Route>
               <Route path="audiobooks/*" element={<AudioBooks />}></Route>
               <Route
                 path="africanlanguages/*"
                 element={<AfricanLanguages />}
               ></Route>
-            </Route>
+            </Route> */}
             {/* <Route path="stories" element={<Stories />}></Route> */}
             {/* <Route path="bedtimestories" element={<BedTimeStories />}></Route> */}
             {/* <Route path="stories1/:id" element={<Stories1 />}></Route> */}
@@ -140,21 +178,53 @@ function App() {
             <Route path="progressreport" element={<ProgressReport />}></Route>
 
             {/* ///////  <Route path="parenthomepage///////*"> */}
+            {/* <Route
+              path="parent/*"
+              element={
+                <ParentHomePage
+                  childProfile={childProfile}
+                  // setChildProfile={setChildProfile}
+                />
+              }
+            >
+              <Route index element={<DefaultTab />}></Route>
+              <Route path="stories/*">
+                <Route index element={<StoriesV2 />}></Route>
+                <Route path=":sub/:title" element={<Stories1 />}></Route>
+              </Route>
+
+              <Route path="stories/*" element={<StoriesV2 />}>
+                <Route path="mat" element={<p>Hello mathew</p>}></Route>
+                <Route path=":sub/:title" element={<Stories1 />}></Route>
+              </Route>
+              <Route path="audiobooks/*" element={<AudiobooksV2 />}></Route>
+              <Route path="languages/*" element={<VideoV2 />}></Route>
+            </Route> */}
+
             <Route path="parent/*">
               <Route
-                index
                 element={
                   <ParentHomePage
                     childProfile={childProfile}
                     // setChildProfile={setChildProfile}
                   />
                 }
-              ></Route>
-              <Route path=":category/*" element={<Stories />}></Route>
-              <Route path="audiobooks/*" element={<AudioBooks />}></Route>
+              >
+                <Route index element={<DefaultTab />}></Route>
+                <Route path="stories" element={<StoriesV2 />} />
+                <Route path="audiobooks" element={<AudiobooksV2 />}></Route>
+                <Route path="languages" element={<VideoV2 />}></Route>
+              </Route>
+              <Route path="stories/:sub/:title" element={<Stories1 />}></Route>
+              <Route path="stories/:sub/:title/quiz" element={<Quiz />}></Route>
+
               <Route
-                path="africanlanguages/*"
-                element={<AfricanLanguages />}
+                path="audiobooks/:sub/:title"
+                element={<BookLayout />}
+              ></Route>
+              <Route
+                path="languages/:sub/:title"
+                element={<VideoPlayer />}
               ></Route>
             </Route>
 
