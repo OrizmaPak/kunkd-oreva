@@ -1,12 +1,4 @@
-import {
-  // useContentForHome,
-  // useGetContentsLog,
-  // useGetOngoingContents,
-  useGetUpdatedProfile,
-} from "@/api/queries";
-import BookIcon from "@/assets/storiesicon24.png";
-import musicIcon from "@/assets/audiobookicon24.png";
-import videoIcon from "@/assets/videoicon.png";
+import { useGetUpdatedProfile } from "@/api/queries";
 
 import InnerWrapper from "@/common/User/InnerWrapper";
 import Wrapper from "@/common/User/Wrapper";
@@ -14,10 +6,8 @@ import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
 import { getProfileState } from "@/store/profileStore";
 import { useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-// import Slider from "react-slick";
-import CategoriesCard from "../Library/LibraryNotPaid/CategoriesCard";
-// import { TStoryContent } from "../Stories/Stories1/Stories1";
+import { Navigate } from "react-router-dom";
+
 import Hero from "./Hero";
 import "./parenthomepage.css";
 import HomeTab from "./HomTab";
@@ -46,7 +36,6 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
 
   // const user2 = localStorage.getItem("user");
   // const userObject = JSON.parse(user2 as string);
-  const navigate = useNavigate();
   const [user] = useStore(getUserState);
   // const settings = {
   //   dots: false,
@@ -71,6 +60,9 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
       <Wrapper>
         <InnerWrapper>
           <Hero userimage={profile?.image} username={profile?.name} />
+          <h1 className="text-center font-bold text30  font-Recoleta   ">
+            Our Library
+          </h1>
 
           {/* <div className="flex justify-center items-center mt-8">
             <div className=" justify-center items-center category-gap  ">

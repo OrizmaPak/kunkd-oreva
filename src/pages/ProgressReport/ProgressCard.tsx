@@ -4,7 +4,7 @@ import "./progresscard.css";
 import AfamBlur from "@/assets/afamblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import { TStoryContent } from "../Stories/Stories1/Stories1";
+import { TStoryContent } from "@/api/types";
 import { Navigate, useNavigate } from "react-router-dom";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";

@@ -1,6 +1,6 @@
 // import { DataType } from "../AfterSchoolSignIn/User/NewlyRegisterUser/NewlyRegisteredUser";
 // import Card from "../../common/User/Card";
-import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+import { TStoryContent } from "@/api/types";
 import CardHome from "@/common/User/CardHome";
 import { useNavigate } from "react-router-dom";
 import EmptyList from "./EmptyList";
@@ -9,7 +9,7 @@ const DataList = ({ data }: { data: TStoryContent[] }) => {
   const navigate = useNavigate();
 
   const userInLocalStr = localStorage.getItem("user");
-  const user = JSON.parse(userInLocalStr!);
+  const user = JSON.parse(userInLocalStr as string);
   return (
     <div className="px-14 my-4 pb-10 ">
       {data && data.length < 1 && <EmptyList />}
@@ -58,7 +58,7 @@ const DataList = ({ data }: { data: TStoryContent[] }) => {
                       navigate(
                         `../${
                           user.role === "parent" ? "parent" : "school"
-                        }/africanlanguages/${data.slug}/${data.name}`
+                        }/languages/${data.slug}/${data.name}`
                       )
                     }
                   />

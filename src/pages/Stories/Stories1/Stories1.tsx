@@ -6,21 +6,17 @@ import {
   useLikedContent,
   useUnLikedContent,
 } from "@/api/queries";
-// import Bookmark from "@/assets/Bookmark.svg";
 import AfamBlur from "@/assets/afamblur.jpg";
 import Congrats from "@/assets/congrats.svg";
 import CardHome from "@/common/User/CardHome";
 import CardScreenHome from "@/common/User/CardScreenHome";
 import CustomTTSComponent from "@/components/TTS";
-// import useStore from "@/store";
-// import { getUserState } from "@/store/authStore";
 import { MantineProvider, Skeleton, Slider } from "@mantine/core";
 import { RefObject, useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import StoriesNav from "./StoriesNav";
-
 import { getApiErrorMessage } from "@/api/helper";
 import TeacherNotificationModal from "@/components/TeacherWarningModal";
 import { Modal } from "@mantine/core";
@@ -36,14 +32,13 @@ import { MdFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
 import ConnectedStudentModal from "@/components/ConnectedStudentModal";
 import { RiFullscreenFill } from "react-icons/ri";
 import { AiOutlineFullscreenExit } from "react-icons/ai";
-// import { MantineProvider, Skeleton, Slider } from "@mantine/core";
 import { useReducedMotion } from "@mantine/hooks";
 import { TContentPage, TStoryContent } from "@/api/types";
 import Wrapper from "@/common/User/Wrapper";
 import InnerWrapper from "@/common/User/InnerWrapper";
-
-// import { number } from "zod";
-// import { useQueryClient } from "@tanstack/react-query";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
+import TabInReadingPage from "@/pages/AfterParentSignIn/TabInReadingPage";
 
 const Stories1 = () => {
   const [isFinish, setIsFinish] = useState(false);
@@ -51,8 +46,6 @@ const Stories1 = () => {
   // const [user] = useStore(getUserState);
   const contentId = localStorage.getItem("contentId");
   const profileId = localStorage.getItem("profileId");
-  const params = useParams();
-  const { category } = params;
   const [opened, { open, close }] = useDisclosure(false);
 
   const [
@@ -166,8 +159,10 @@ const Stories1 = () => {
                           divRef={myRef}
                         />
                       )}
+                      <TabInReadingPage />
 
                       <div className="w-full bg-white rounded-3xl mt-4">
+                        <></>
                         {
                           <CardScreenHome
                             data={recommendedStories}
@@ -179,7 +174,9 @@ const Stories1 = () => {
                                 {...props}
                                 goTo={() => {
                                   navigate(
-                                    `../sub/${props.slug?.toLowerCase()}`
+                                    `../stories/${
+                                      props?.theme
+                                    }/${props.slug?.toLowerCase()}`
                                   );
                                   setStartRead(false);
                                 }}
@@ -478,7 +475,7 @@ const ReadPage = ({
   return (
     <div
       id="container"
-      className={`flex py-16 bg-white  rounded-3xl px-16 justify-center items-center  ${
+      className={`flex py-16 bg-white  rounded-3xl px-10 justify-center items-center  ${
         goFull ? "px-[200px]" : ""
       }`}
     >
@@ -771,6 +768,8 @@ const BookPagination = ({
 
 const WelDone = ({ content }: { content: TStoryContent }) => {
   const navigate = useNavigate();
+  const [user] = useStore(getUserState);
+
   const navigateQuiz = () => {
     localStorage.setItem("content", JSON.stringify(content));
     if (content.has_quiz === true) {
@@ -808,7 +807,14 @@ const WelDone = ({ content }: { content: TStoryContent }) => {
           >
             Take quiz
           </button>
-          <button onClick={() => navigate(-1)} className="text-[18px] mt-2">
+          <button
+            onClick={() => {
+              navigate(
+                `/${user?.role === "user" ? "parent" : "school"}/stories`
+              );
+            }}
+            className="text-[18px] mt-2"
+          >
             Later
           </button>
         </p>

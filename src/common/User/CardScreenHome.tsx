@@ -46,14 +46,13 @@ const CardScreen = ({
   const sliderReff = useRef<Slider>(null);
 
   useEffect(() => {
-    console.log("inview------", { inView, fetchNextPage, hasNextPage });
     if (inView && hasNextPage && fetchNextPage) {
       fetchNextPage();
     }
   }, [inView, fetchNextPage, hasNextPage]);
 
   return (
-    <div className="   mx-20   pb-8">
+    <div className="   mx-10 pb-4">
       <div className="flex justify-between mb-[20px] pt-8 ">
         <span className=" text25 font-semibold font-Recoleta ">{header}</span>
         <button onClick={action} className=" text-[#8530C1] text2">
@@ -63,13 +62,13 @@ const CardScreen = ({
       <div className="relative group  ">
         {/* <div className="absolute hidden group-hover:flex controls-container  w-full justify-between z-30  group"> */}
         <button
-          className="p-4 bg-[rgba(238,238,238,0.7)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-10 "
+          className="p-4 bg-[rgba(238,238,238)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-10 "
           onClick={() => sliderReff?.current?.slickPrev()}
         >
           <GrPrevious size={30} />
         </button>
         <button
-          className="p-4 bg-[rgba(238,238,238,0.7)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-[95.7%]"
+          className="p-4 bg-[rgba(238,238,238)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-[95.7%]"
           onClick={() => sliderReff?.current?.slickNext()}
         >
           <GrNext size={30} />

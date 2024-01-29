@@ -33,7 +33,7 @@ const ChoosePlan = () => {
               }
             }}
           >
-            <span className="absolute top-0 right-32">
+            <span className="absolute top-0  right-48">
               <img loading="lazy" src={Cancel} alt="cancel" />
             </span>
           </button>

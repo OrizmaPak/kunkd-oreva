@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
 import { useLocation } from "react-router-dom";
-const HomTab = () => {
+const TabInReadingPage = () => {
   const [user] = useStore(getUserState);
   const tabRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState<string>(
@@ -19,7 +19,7 @@ const HomTab = () => {
 
   const onChanged = (val: string) => {
     setActiveTab(val);
-    navigate(val, {
+    navigate(`${user?.role === "user" ? "/parent" : "/school"}/${val}`, {
       preventScrollReset: false,
     });
     console.log("scrollto", tabRef.current);
@@ -39,13 +39,13 @@ const HomTab = () => {
     <div
       ref={tabRef}
       id="tab-container"
-      className="  px-10 pt-10 sticky top-[70px] z-50 bg-white"
+      className="  px-10  my-5 bg-white pb-5 rounded-[20px]"
     >
       <Tabs value={activeTab} onTabChange={onChanged}>
         <div className="px-10 sticky    bg-white">
           <Tabs.List className="flex justify-between ">
             <Tabs.Tab
-              value={`${user?.role === "user" ? "/parent" : "/school"}`}
+              value={`${user?.role === "user" ? "../parent" : "../school"}`}
 
               //    leftSection={<IconPhoto style={iconStyle} />}
             >
@@ -132,4 +132,4 @@ const HomTab = () => {
   );
 };
 
-export default HomTab;
+export default TabInReadingPage;

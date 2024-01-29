@@ -42,6 +42,7 @@ import { useNavigate } from "react-router-dom";
 import ConnectedStudentModal from "@/components/ConnectedStudentModal";
 import Wrapper from "@/common/User/Wrapper";
 import InnerWrapper from "@/common/User/InnerWrapper";
+import TabInReadingPage from "../AfterParentSignIn/TabInReadingPage";
 // import useTimeSpent from "@/hooks/useTimeSpent";
 
 // type TAudioBook = {
@@ -144,6 +145,7 @@ const BookLayout = () => {
                       <ReadPage audiobook={audiobook} />
                     )}
 
+                    <TabInReadingPage />
                     <div className="w-full bg-white rounded-3xl mt-4">
                       {
                         <CardScreenHome
@@ -157,7 +159,7 @@ const BookLayout = () => {
                               {...props}
                               goTo={() =>
                                 navigate(
-                                  `../${props?.slug
+                                  `../audiobooks/${props?.theme}/${props?.slug
                                     ?.replace(/\s/g, "_")
                                     .toLowerCase()}`
                                 )

@@ -1,6 +1,5 @@
 import {
   useContentForHome,
-  // useGetContentsLog,
   useGetOngoingContents,
   useGetUpdatedProfile,
 } from "@/api/queries";
@@ -13,7 +12,6 @@ import { useEffect, useRef } from "react";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { Navigate, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
-// import { TStoryContent } from "../Stories/Stories1/Stories1";
 import { TStoryContent } from "@/api/types";
 
 import "./parenthomepage.css";
@@ -147,7 +145,7 @@ const DefaultTab = () => {
         )}
       </div>
 
-      <div className="my-[50px]">
+      <div className="mt-[30px]">
         <CardScreenHome
           data={newTrending}
           header="New & Trending"

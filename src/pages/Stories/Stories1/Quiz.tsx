@@ -20,6 +20,8 @@ import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
 import Wrapper from "@/common/User/Wrapper";
 import InnerWrapper from "@/common/User/InnerWrapper";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
 
 const Quiz = () => {
   const contentId = localStorage.getItem("contentId");
@@ -538,6 +540,8 @@ const Result = ({
 
 const YourResult = ({ answers }: { answers: answerObj[] }) => {
   const navigate = useNavigate();
+  const [user] = useStore(getUserState);
+
   return (
     <div className="relative flex-grow    w-[780px] rounded-3xl">
       <div className="my-10 text-center">
@@ -549,7 +553,11 @@ const YourResult = ({ answers }: { answers: answerObj[] }) => {
         ))}
         <p className="flex justify-center mt-14 items-center">
           <button
-            onClick={() => navigate(-2)}
+            onClick={() => {
+              navigate(
+                `/${user?.role === "user" ? "parent" : "school"}/stories`
+              );
+            }}
             className="p-3 px-20 text-white bg-[#8530C1] rounded"
           >
             Done
@@ -577,7 +585,7 @@ const ResultRow = ({
     >
       <p className={`flex gap-10 items-center `}>
         <p className="text-[#8530C1]  rounded-full p-3 bg-white w-[30px] h-[30px] flex justify-center items-center">
-          {index! + 1}
+          {(index as number) + 1}
         </p>
         <div
           className={`text-[20px]  w-full flex  justify-between font-semibold `}
@@ -618,7 +626,7 @@ const ResultRow2 = ({
     >
       <p className={`flex gap-10 items-center `}>
         <p className="text-[#8530C1]  rounded-full p-3 bg-white w-[30px] h-[30px] flex justify-center items-center">
-          {index! + 1}
+          {(index as number) + 1}
         </p>
         <div
           className={`text-[20px]  w-full flex  justify-between font-semibold `}

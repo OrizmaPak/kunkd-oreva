@@ -138,7 +138,7 @@ const MakePaymentContent = () => {
           // }
         }}
       >
-        <span className="absolute right-[-150px] top-[40px]">
+        <span className="absolute right-[-150px] top-[80px]">
           <ImCancelCircle size={40} color={"#8530C1"} />
         </span>
       </button>
