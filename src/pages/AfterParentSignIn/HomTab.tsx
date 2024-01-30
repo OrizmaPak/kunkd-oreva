@@ -39,7 +39,7 @@ const HomTab = () => {
     <div
       ref={tabRef}
       id="tab-container"
-      className="  px-10 pt-10 sticky top-[70px] z-50 bg-white"
+      className="  px-10 pt-10 sticky top-[40px] z-30 bg-white"
     >
       <Tabs value={activeTab} onTabChange={onChanged}>
         <div className="px-10 sticky    bg-white">
@@ -53,7 +53,7 @@ const HomTab = () => {
                 <span>
                   <FaThumbsUp color="#8530C1" size={40} />
                 </span>
-                <p className="font-semibold  font-Hanken text1">Recommended</p>
+                <p className="font-semibold  font-Hanken text1">For You</p>
               </div>
             </Tabs.Tab>
             <Tabs.Tab

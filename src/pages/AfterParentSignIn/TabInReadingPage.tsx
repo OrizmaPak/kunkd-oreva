@@ -53,7 +53,7 @@ const TabInReadingPage = () => {
                 <span>
                   <FaThumbsUp color="#8530C1" size={40} />
                 </span>
-                <p className="font-semibold  font-Hanken text1">Recommended</p>
+                <p className="font-semibold  font-Hanken text1">For You</p>
               </div>
             </Tabs.Tab>
             <Tabs.Tab

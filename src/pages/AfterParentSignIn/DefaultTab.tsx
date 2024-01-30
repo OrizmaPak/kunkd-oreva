@@ -59,7 +59,7 @@ const DefaultTab = () => {
     <div>
       <div className="mt-[98px]  ">
         {ongoingContents?.length > 0 && (
-          <div className=" mx-20 mt-4">
+          <div className=" mx-10 mt-4">
             <p className=" text25 font-semibold font-Recoleta  mb-[50px]">
               Continue Learning
             </p>

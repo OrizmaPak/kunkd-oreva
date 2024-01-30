@@ -143,9 +143,9 @@ const CardHome = ({
   return (
     <div
       ref={ref}
-      className=" z-[1]  hover:scale-[102%] transition-all mx-2 py-4"
+      className=" z-[1]   hover:scale-[105%] transition-all mx-2 py-4"
     >
-      <span className="relative image-card ">
+      <div className=" relative  image-card  ">
         <LazyLoadImage
           src={thumbnail}
           placeholderSrc={AfamBlur}
@@ -160,7 +160,7 @@ const CardHome = ({
           onMouseMoveCapture={() => setVisiblee(false)}
         />
 
-        <span className=" card-hover bg-[rgba(0,0,0,.5)] hidden  absolute left-0 top-[-184px] card transition-all duration-100   z-50  rounded-xl">
+        <span className=" card-hover bg-[rgba(0,0,0,.5)] hidden  absolute left-0 top-[0px] card transition-all duration-100   z-50  rounded-xl">
           <button
             onClick={handleLikedContent}
             // className="px-4 py-2"
@@ -205,7 +205,7 @@ const CardHome = ({
             </button>
           </p>
         </span>
-      </span>
+      </div>
 
       {!hasRage ? (
         <p className="mt-[2px]  text2 font-Hanken font-semibold  leading-2">
