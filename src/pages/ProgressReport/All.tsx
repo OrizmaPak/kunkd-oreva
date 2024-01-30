@@ -1,5 +1,5 @@
 import ProgressCard from "./ProgressCard";
-import { TStoryContent } from "../Stories/Stories1/Stories1";
+import { TStoryContent } from "@/api/types";
 
 const All = ({ data }: { data: TStoryContent[] }) => {
   return (

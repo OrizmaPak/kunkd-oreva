@@ -11,8 +11,7 @@ import { useGetSchoolStudentStat } from "@/api/queries";
 import RecentCompleted from "./RecentQuiz";
 import ContentInProgress from "./Assignments/";
 import { useState } from "react";
-import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
-
+import { TStoryContent } from "@/api/types";
 export type TSchoolStudentStat = {
   avatar: string;
   class: string;

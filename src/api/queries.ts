@@ -88,8 +88,7 @@ import useStore from "@/store/index";
 import { getProfileState } from "@/store/profileStore";
 import { notifications } from "@mantine/notifications";
 import { useNavigate } from "react-router-dom";
-import { ApiResponse, TStoryContent, Tprofile } from "./types";
-import { useState } from "react";
+import { ApiResponse, Tprofile } from "./types";
 
 export const querykeys = {
   profiles: ["GetProfile"],

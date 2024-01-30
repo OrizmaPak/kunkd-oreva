@@ -138,6 +138,59 @@ export type TSubCategory = {
   short_link: string;
   slug: string;
 };
+export type TContentPage = {
+  audio: string;
+  web_body: string;
+  content_media_id: number;
+  image: string;
+  name: string;
+  page_number: number;
+};
+
+export type TSubCategory2 = {
+  sub_category_id: number;
+  sub_category_name: string;
+};
+
+export type TMedia = {
+  name: string;
+  slug: string;
+  order: number;
+  file: string;
+  thumbnail: string;
+};
+
+type TQuizResult = {
+  status: boolean;
+  id: number;
+  result: number;
+};
+export type TStoryContent = {
+  sub_category_name?: unknown;
+  category?: string;
+  sub_categories?: TSubCategory2[];
+  category_id?: number;
+  content_type?: string;
+  content_type_id?: number;
+  has_quiz?: boolean;
+  id?: number;
+  is_liked?: boolean;
+  media?: TMedia[];
+  media_type?: string;
+  name?: string;
+  pages?: TContentPage[];
+  short_link?: string;
+  slug?: string;
+  pages_read?: number;
+  synopsis?: string;
+  tags?: string;
+  theme?: string;
+  thumbnail?: string;
+  status?: string;
+  web_synopsis?: string;
+  quiz_result?: TQuizResult;
+  timespent?: number;
+};
 
 /**
  * {

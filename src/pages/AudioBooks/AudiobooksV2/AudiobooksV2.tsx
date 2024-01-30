@@ -1,6 +1,5 @@
 // import SubButton from "../SubButton";
-import { TStoryContent, TSubCategory } from "@/api/types";
-import CategoryContents from "@/pages/Stories/StoriesV2/CategoryContents";
+import { TStoryContent } from "@/api/types";
 import { useGetAudioBoks } from "@/api/queries";
 import CardScreenHome from "@/common/User/CardScreenHome";
 import CardHome from "@/common/User/CardHome";

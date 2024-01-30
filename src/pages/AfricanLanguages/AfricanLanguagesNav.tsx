@@ -8,8 +8,6 @@ const AfricanLanguagesNav = ({
   lanType,
   title,
   quiz,
-  subCategoryId,
-  subCategoryName,
 }: {
   category?: string;
   lanType?: string;

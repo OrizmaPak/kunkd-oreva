@@ -15,17 +15,16 @@ const Videos = () => {
 
   const subCategoryId = localStorage.getItem("subCategoryId");
   const { data, isLoading, refetch } = useGetContebtBySubCategories(
-    subCategoryId as string,
-    activePage.toString()
+    subCategoryId as string
   );
-  const subCategoryContents = data?.data.data.records as {
+  const subCategoryContents = data?.pages?.[0].data.records as {
     thumbnail: string;
     id: number;
     name: string;
     sub_category_name: string;
     slug: string;
   }[];
-  const totalPage = Math.ceil(data?.data.data.totalRecord / 10);
+  const totalPage = Math.ceil(data?.pages?.[0].data.totalRecord / 10);
   return (
     <>
       <div className="bg-[#fff7fd] video-container ">

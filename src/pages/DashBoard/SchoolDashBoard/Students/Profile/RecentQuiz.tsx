@@ -1,5 +1,5 @@
 import { TSchoolStudentStat } from ".";
-import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+import { TStoryContent } from "@/api/types";
 import { Skeleton } from "@mantine/core";
 
 const RecentCompleted = ({
