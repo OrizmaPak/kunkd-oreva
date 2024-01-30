@@ -118,7 +118,7 @@ const SchoolHeader = ({
                 isActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
               }
             >
-              <button className="text-[16px]  font-medium">Home</button>
+              <button className="text-[16px]  font-bold">Home</button>
             </NavLink>
 
             <NavLink
@@ -132,7 +132,7 @@ const SchoolHeader = ({
                   : "text-[#B5B5C3] font-medium"
               }
             >
-              <button className="text-[16px]  font-medium">My List</button>
+              <button className="text-[16px]  font-bold">My List</button>
             </NavLink>
             <NavLink
               onClick={() => {
@@ -143,7 +143,7 @@ const SchoolHeader = ({
                 isActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
               }
             >
-              <button className="text-[16px]  font-medium">
+              <button className="text-[16px]  font-bold">
                 Progress Report
               </button>
             </NavLink>
@@ -152,7 +152,7 @@ const SchoolHeader = ({
               {user?.role === "schoolAdmin" && (
                 <button
                   onClick={handleDashboard}
-                  className={` block text-[16px]  font-medium ${
+                  className={` block text-[16px]  font-bold ${
                     dashboardActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
                   }`}
                 >
@@ -162,7 +162,7 @@ const SchoolHeader = ({
               {user?.role === "teacher" && user?.status === "active" ? (
                 <button
                   onClick={handleDashboard}
-                  className={` block text-[16px]  font-medium ${
+                  className={` block text-[16px]  font-bold ${
                     dashboardActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
                   }`}
                 >
