@@ -88,7 +88,7 @@ const SchoolHeader = ({
 
   return (
     <div className="bg-white w-full fixed top-0 h-[8vh] z-50">
-      <div className="flex text-[#B5B5C3] text-[14px] text3  font-medium top-0 left-0 right-0  mx-auto  app-mai-nwidth-container  w-full   py-4   justify-between items-center bg-white  z-[1000] gap-4  h-[8vh] ">
+      <div className="flex text-[#B5B5C3] text-[15px] text3  font-medium top-0 left-0 right-0  mx-auto  app-mai-nwidth-container  w-full   py-4   justify-between items-center bg-white  z-[1000] gap-4  h-[8vh] ">
         <div className="flex items-center gap-10">
           <Link
             onClick={() => {
