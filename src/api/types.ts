@@ -160,7 +160,7 @@ export type TMedia = {
   thumbnail: string;
 };
 
-type TQuizResult = {
+export type TQuizResult = {
   status: boolean;
   id: number;
   result: number;
