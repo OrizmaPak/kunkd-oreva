@@ -80,10 +80,10 @@ const CardScreen = ({
             ? Array(5)
                 .fill(1)
                 .map((arr, index) => (
-                  <Skeleton key={index} visible={isLoading}>
+                  <Skeleton key={index} visible={isLoading} className="mx-10">
                     <div
                       key={index}
-                      className="h-[200px] w-[400px] text-transparent"
+                      className="h-[200px] w-[400px] text-transparent mx-2"
                     >
                       {arr}
                     </div>

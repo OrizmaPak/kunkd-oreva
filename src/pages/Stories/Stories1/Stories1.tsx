@@ -809,9 +809,10 @@ const WelDone = ({ content }: { content: TStoryContent }) => {
           </button>
           <button
             onClick={() => {
-              navigate(
-                `/${user?.role === "user" ? "parent" : "school"}/stories`
-              );
+              // navigate(
+              //   `/${user?.role === "user" ? "parent" : "school"}/stories`
+              // );
+              navigate(-1);
             }}
             className="text-[18px] mt-2"
           >
