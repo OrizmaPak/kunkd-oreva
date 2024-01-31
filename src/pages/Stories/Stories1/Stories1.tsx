@@ -36,8 +36,8 @@ import { useReducedMotion } from "@mantine/hooks";
 import { TContentPage, TStoryContent } from "@/api/types";
 import Wrapper from "@/common/User/Wrapper";
 import InnerWrapper from "@/common/User/InnerWrapper";
-import { getUserState } from "@/store/authStore";
-import useStore from "@/store/index";
+// import { getUserState } from "@/store/authStore";
+// import useStore from "@/store/index";
 import TabInReadingPage from "@/pages/AfterParentSignIn/TabInReadingPage";
 
 const Stories1 = () => {
@@ -768,7 +768,7 @@ const BookPagination = ({
 
 const WelDone = ({ content }: { content: TStoryContent }) => {
   const navigate = useNavigate();
-  const [user] = useStore(getUserState);
+  // const [user] = useStore(getUserState);
 
   const navigateQuiz = () => {
     localStorage.setItem("content", JSON.stringify(content));
