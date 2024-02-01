@@ -399,8 +399,10 @@ export const SelectAvatar = ({
                         {el}
                       </Skeleton>
                     ))
-                  : data?.data.data.avatars?.map(
-                      (avatar: selectAvatarType, index: number) => {
+                  : data?.data?.data?.avatars
+                      ?.slice()
+                      .reverse()
+                      ?.map((avatar: selectAvatarType, index: number) => {
                         return (
                           <AvatarCard
                             key={index}
@@ -409,8 +411,7 @@ export const SelectAvatar = ({
                             {...avatar}
                           />
                         );
-                      }
-                    )}
+                      })}
               </div>
             </div>
             <div className="">

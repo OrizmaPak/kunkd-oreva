@@ -21,6 +21,7 @@ import {
 import { TRequestStudents } from "@/pages/DashBoard/TeacherDashboard/Request/Request";
 import { LuUser2 } from "react-icons/lu";
 import { logOut } from "@/auth/sdk";
+import "./SchoolHeader.css";
 
 type THints = {
   id: number;
@@ -107,18 +108,21 @@ const SchoolHeader = ({
             </div>
           </Link>
 
-          <div className="flex gap-8 ">
+          <div className="flex gap-5 ">
             <NavLink
+              style={{ textDecoration: "none" }}
               onClick={() => {
                 setDashboardActive(false);
               }}
               to={user?.role === "user" ? "/parent" : "/school"}
               // to={"/school"}
               className={({ isActive }) =>
-                isActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
+                isActive ? " text-[#8530C1] " : "text-[#B5B5C3]b "
               }
             >
-              <button className="text-[16px]  font-bold">Home</button>
+              <button className={`text-[16px]  font-bold nav-link  `}>
+                Home
+              </button>
             </NavLink>
 
             <NavLink
@@ -132,7 +136,9 @@ const SchoolHeader = ({
                   : "text-[#B5B5C3] font-medium"
               }
             >
-              <button className="text-[16px]  font-bold">My List</button>
+              <button className="text-[16px]  font-bold nav-link">
+                My List
+              </button>
             </NavLink>
             <NavLink
               onClick={() => {
@@ -143,7 +149,7 @@ const SchoolHeader = ({
                 isActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
               }
             >
-              <button className="text-[16px]  font-bold">
+              <button className="text-[16px]  font-bold nav-link">
                 Progress Report
               </button>
             </NavLink>
@@ -152,7 +158,7 @@ const SchoolHeader = ({
               {user?.role === "schoolAdmin" && (
                 <button
                   onClick={handleDashboard}
-                  className={` block text-[16px]  font-bold ${
+                  className={` block text-[16px]  font-bold nav-link ${
                     dashboardActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
                   }`}
                 >
@@ -162,7 +168,7 @@ const SchoolHeader = ({
               {user?.role === "teacher" && user?.status === "active" ? (
                 <button
                   onClick={handleDashboard}
-                  className={` block text-[16px]  font-bold ${
+                  className={` block text-[16px]  font-bold nav-link ${
                     dashboardActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
                   }`}
                 >
