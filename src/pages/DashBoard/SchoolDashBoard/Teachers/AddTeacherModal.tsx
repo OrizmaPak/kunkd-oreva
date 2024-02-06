@@ -41,7 +41,8 @@ const AddTeacherModal = ({
             email: teacherData?.email,
             // redirect_url: "http://localhost:5173/passwordsetup",
             // redirect_url:"https://dev-kundakids.vercel.app/passwordsetup",
-            redirect_url: "https://kundakids-singlepage.vercel.app/",
+            redirect_url:
+              "https://kundakids-singlepage.vercel.app/passwordsetup",
 
             // password: teacherData?.password,
             class_id: Number(teacherData?.classid),
@@ -84,7 +85,7 @@ const AddTeacherModal = ({
           email: teacherData?.email,
           // redirect_url:"http://localhost:5173/passwordsetup",
           // redirect_url: "https://dev-kundakids.vercel.app/passwordsetup",
-          redirect_url: "https://kundakids-singlepage.vercel.app/",
+          redirect_url: "https://kundakids-singlepage.vercel.app/passwordsetup",
 
           // password: teacherData?.password,
           class_id: Number(teacherData?.classid),
