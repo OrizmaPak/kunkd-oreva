@@ -395,3 +395,7 @@ export const GetClassTotalTimeSpent = (
 ) => {
   return axios.get(`/school/class/timespent/${id}`, { params: { start, end } });
 };
+// eslint-disable-next-line no-empty-pattern
+export const RemoveAccount = ({}) => {
+  return axios.delete(`/user/account`);
+};

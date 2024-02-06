@@ -12,7 +12,7 @@ const KundaApp = ({ children }: Props) => {
     <div className="bg-white shadow-md custom-shadow-bottom relative z-10 mt-[25px]">
       {/* <img loading="lazy" src={Wave2} alt="wave 2" /> */}
 
-      <div className="w-[100%] bg-[#8530C1]  px-[100px]   py-[94px] z-[-1]   ">
+      <div className="w-[100%] bg-[#8530C1]  px-[100px]   pt-[94px] z-[-1] h-[900px]  ">
         {/* <img
           loading="lazy"
           src={Zigzag1}

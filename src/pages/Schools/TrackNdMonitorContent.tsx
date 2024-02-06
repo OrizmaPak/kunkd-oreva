@@ -11,19 +11,21 @@ const TrackNdMonitorContent = () => {
   return (
     <div className="w-full flex justify-center items-center mt-28">
       <div className="container-w ">
-        <p className=" font-Inter text-center mt-8 text-[36px]">
-          Track and Monitor Student Progress
-        </p>
-        <p className=" leading-[30px] text-center text1   text-[#7E7E89] font-medium mt-5 font-InterReg ">
-          Designed with promoting the African culture in mind, our content{" "}
-          celebrates diversity, promotes inclusivity, <br /> and encourages
-          curiosity. Join thousands of young readers who are discovering <br />{" "}
-          the joy of storytelling and expanding their knowledge with every
-          swipe.
-        </p>
+        <div data-aos="fade-up" data-aos-once="true">
+          <p className=" font-Inter text-center mt-8 text-[36px]">
+            Track and Monitor Student Progress
+          </p>
+          <p className=" leading-[30px] text-center text1   text-[#7E7E89] font-medium mt-5 font-InterReg ">
+            Designed with promoting the African culture in mind, our content{" "}
+            celebrates diversity, promotes inclusivity, <br /> and encourages
+            curiosity. Join thousands of young readers who are discovering{" "}
+            <br /> the joy of storytelling and expanding their knowledge with
+            every swipe.
+          </p>
+        </div>
 
         <div className="relative overflow-hidden mt-20  pb-28">
-          <div className="  ml-28 ">
+          <div className="  ml-28  " data-aos="fade-right" data-aos-once="true">
             {/* <img loading="lazy" src={LadyBackground} alt="teacher" /> */}
             <LazyLoadImage
               src={LadyBackground}

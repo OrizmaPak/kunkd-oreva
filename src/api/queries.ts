@@ -77,6 +77,7 @@ import {
   RecommendedAudiobooks,
   GetClassTotalTimeSpent,
   ConnectStripe,
+  RemoveAccount,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery, useInfiniteQuery } from "@tanstack/react-query";
@@ -720,5 +721,9 @@ export const useGetClassTotalTimeSpent = (
     queryFn: () => GetClassTotalTimeSpent(id, start, end),
     enabled: !!Number(id),
   });
+};
+
+export const useRemoveAccount = () => {
+  return useMutation({ mutationFn: RemoveAccount });
 };
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

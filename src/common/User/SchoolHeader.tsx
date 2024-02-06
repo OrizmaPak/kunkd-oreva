@@ -63,7 +63,7 @@ const SchoolHeader = ({
   const handLogOut = () => {
     logOut();
     localStorage.clear();
-    setProfiles([]);
+    sessionStorage.clear();
     navigate("/");
   };
 

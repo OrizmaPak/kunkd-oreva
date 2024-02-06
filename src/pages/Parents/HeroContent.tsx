@@ -11,7 +11,11 @@ const HeroContentContent = () => {
   const navigate = useNavigate();
   return (
     <div className="flex justify-between ">
-      <div className=" hero-text-container pt-16 ">
+      <div
+        data-aos="fade-right"
+        data-aos-once="true"
+        className=" hero-text-container pt-16 "
+      >
         <h1 className="text-[62px] text-[#101828]  font-Brico  header1">
           Empowering <br /> your child's <br />
           reading journey
@@ -31,7 +35,11 @@ const HeroContentContent = () => {
           Get started
         </Button>
       </div>
-      <div className="amina-container  z-50">
+      <div
+        data-aos="fade-left"
+        data-aos-once="true"
+        className="amina-container  z-50"
+      >
         <LazyLoadImage
           effect="blur"
           src={ManAndChild}

@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { AiOutlineMail } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { ZodType, z } from "zod";
+
 // import { motion } from "framer-motion";
 
 const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
@@ -38,16 +39,17 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const submitData = async (data: FormData) => {
+  const submitData = async (datta: FormData) => {
     localStorage.clear();
 
-    setUser({ email: data.email });
+    setUser({ email: datta.email });
 
     mutate(
-      { ...data },
+      { ...datta },
 
       {
         onSuccess(data) {
+          localStorage.setItem("parentemail", datta.email as string);
           notifications.show({
             title: `Notification`,
             message: data.data.message,

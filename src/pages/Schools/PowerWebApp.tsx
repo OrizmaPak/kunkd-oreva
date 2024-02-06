@@ -10,10 +10,10 @@ const PowerWebApp = () => {
   const naivagte = useNavigate();
 
   return (
-    <div className=" bg-white pt-14  pb-6 ">
+    <div className=" bg-white pt-14  pb-6 mt-8 ">
       <div className="max-w-[1440px] w-full mx-auto  pad-x-40">
         <div className="max-w-[1440px]  flex   justify-betwee">
-          <div className="basis-1/2  ">
+          <div data-aos="fade-up" data-aos-once="true" className="basis-1/2  ">
             {/* <img
               loading="lazy"
               src={DadBoy}
@@ -30,7 +30,11 @@ const PowerWebApp = () => {
               // height={568.64}
             />
           </div>
-          <div className="basis-1/2  pad-x-40 flex flex-col justify-center  ">
+          <div
+            data-aos="fade-left"
+            data-aos-once="true"
+            className="basis-1/2  pad-x-40 flex flex-col justify-center  "
+          >
             <h1 className=" text-[#101828] font-Inter  mb-4 text-[36px]">
               Unlock the Power of the Web App
             </h1>

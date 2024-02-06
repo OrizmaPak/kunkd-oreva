@@ -29,7 +29,11 @@ const SayAboutUs = () => {
   return (
     <div>
       {" "}
-      <div className=" mx-auto leading-8 text-center  / ">
+      <div
+        data-aos="fade-down"
+        data-aos-once="true"
+        className=" mx-auto leading-8 text-center  / "
+      >
         <h1 className="pt-8 header-1 font-bold   font-Inter text-[36px]">
           What our clients have to Say about us
         </h1>

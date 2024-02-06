@@ -6,7 +6,12 @@ import StatBookIcon from "@/assets/bookstatIcon.svg";
 const StatContent = () => {
   return (
     <div className="py-[94px]">
-      <div className="mb-8">
+      <div
+        data-aos="fade-up"
+        data-aos-anchor-placement="center-bottom"
+        data-aos-once="true"
+        className="mb-8"
+      >
         <h1 className="text-center font-semibold font-Inter text-[36px] heading-[43px]">
           Unleash the full power of learning
         </h1>
@@ -16,7 +21,11 @@ const StatContent = () => {
       </div>
       <div className="flex items-center justify-center ">
         <div className="flex gap-28">
-          <div className="flex gap-8 justify-center items-center  ">
+          <div
+            data-aos="zoom-out-down"
+            data-aos-once="true"
+            className="flex gap-8 justify-center items-center  "
+          >
             <p className="bg-white p-6 rounded-full shadow-md">
               <FaUserAlt size={40} color={"#447ADC"} />
             </p>
@@ -30,8 +39,16 @@ const StatContent = () => {
               </p>
             </p>
           </div>
-          <p className="h-[120px] border-[#C4CCD0] border-[1px]"></p>
-          <div className="flex gap-8 justify-center items-center ">
+          <p
+            data-aos="zoom-out"
+            data-aos-once="true"
+            className="h-[120px] border-[#C4CCD0] border-[1px]"
+          ></p>
+          <div
+            data-aos="zoom-out-down"
+            data-aos-once="true"
+            className="flex gap-8 justify-center items-center "
+          >
             <p className="bg-white p-6 rounded-full shadow-md">
               {/* <BsJournalBookmark size={40} color={"#ED1C24"} /> */}
               <img src={StatBookIcon} alt="img" className="w-[37px] h-[41px]" />

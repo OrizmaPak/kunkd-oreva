@@ -81,7 +81,11 @@ const ShopBooks = () => {
             alt="lines"
             className="absolute  right-0 top-[-300px]"
           />
-          <div className="max-w-[1000px] mx-auto  leading-8 text-center   ">
+          <div
+            data-aos="fade-down"
+            data-aos-once="true"
+            className="max-w-[1000px] mx-auto  leading-8 text-center   "
+          >
             <h1 className="text-black  font-bold text-center mb-4 leading-8 header-1 font-Inter ">
               Shop Our Books
             </h1>
@@ -93,9 +97,17 @@ const ShopBooks = () => {
           </div>
 
           <div className="flex justify-center items-center ">
-            <div className=" p-14  bg-[#8530C1] rounded-[70px]   shopcard">
+            <div
+              data-aos="fade-left"
+              data-aos-once="true"
+              className=" p-14  bg-[#8530C1] rounded-[70px]   shopcard"
+            >
               <div className="flex gap-10 ">
-                <div className="basis-1/2">
+                <div
+                  data-aos="flip-up"
+                  data-aos-once="true"
+                  className="basis-1/2"
+                >
                   <LazyLoadImage
                     width={500}
                     height={500}
@@ -131,7 +143,11 @@ const ShopBooks = () => {
           </div>
         </div>
 
-        <div className=" mx-auto leading-8 text-center  my-20">
+        <div
+          data-aos="fade-down"
+          data-aos-once="true"
+          className=" mx-auto leading-8 text-center  my-20"
+        >
           <h1 className="pt-8 text-[36px] font-bold  font-Inter ">
             What our clients have to Say about us
           </h1>
@@ -142,7 +158,11 @@ const ShopBooks = () => {
           </p> */}
         </div>
 
-        <div className="max-w-[1000px] mx-auto gap-4 mb-20 mt-14  relative ">
+        <div
+          data-aos="fade-up"
+          data-aos-once="true"
+          className="max-w-[1000px] mx-auto gap-4 mb-20 mt-14  relative "
+        >
           <button
             onClick={() => sliderRef?.current?.slickPrev()}
             className="absolute z-10 -left-14 top-[45%] hover:text-white bg-[#ffff] hover:bg-[#8530C1] rounded-full p-2"

@@ -74,19 +74,22 @@ import Quiz from "./pages/Stories/Stories1/Quiz";
 import DefaultSchoolTab from "./pages/AfterSchoolSignIn/User/NewlyRegisterUser/DefautSchoolTab";
 
 function App() {
-  const [, setUser] = useStore(getUserState);
+  const [user, setUser] = useStore(getUserState);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       const res = currentUser as TUser;
+      console.log("userHere1----", user);
+      console.log("firebaseHere2----", res);
       if (currentUser) {
-        setUser(res);
+        // setUser({ ...res, ...user });
       }
     });
     return () => {
       unsubscribe();
     };
-  }, [setUser]);
+    // eslint-disable-next-line
+  }, []);
   const [childProfile, setChildProfile] = useState<string>(
     (localStorage.getItem("profileId")
       ? localStorage.getItem("profileId")

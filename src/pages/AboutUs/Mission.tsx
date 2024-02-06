@@ -3,13 +3,22 @@ import DadSonBlur from "@/assets/dadsonblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import "./mission.css";
+import AOS from "aos";
+import { useEffect } from "react";
 
 const Mission = () => {
+  useEffect(() => {
+    AOS.init({ duration: 600 });
+  }, []);
   return (
     <div className=" bg-white pb-20 pad-x-40 pt-40">
       <div className="max-w-[1440px]  mx-auto ">
         <div className=" mx-auto flex gap-4 ">
-          <div className="basis-1/2 mt-16 px-10">
+          <div
+            data-aos="fade-right"
+            // data-aos-once="true"
+            className="basis-1/2 mt-16 px-10"
+          >
             <h1 className="font-Inter header2 mb-4 text-[#101828]">
               Our mission
             </h1>
@@ -21,7 +30,11 @@ const Mission = () => {
               teamwork, and kindness.
             </p>
           </div>
-          <div className="basis-1/2 flex justify-center">
+          <div
+            data-aos="fade-left"
+            // data-aos-once="true"
+            className="basis-1/2 flex justify-center"
+          >
             <LazyLoadImage
               src={DadBoy}
               placeholderSrc={DadSonBlur}

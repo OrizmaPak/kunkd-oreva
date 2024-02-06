@@ -10,14 +10,24 @@ import { useNavigate } from "react-router-dom";
 import "./herocontent.css";
 import VideoIcon from "@/assets/newvideoIcon.svg";
 import Ellipse10 from "@/assets/Ellipse 51.svg";
+import MainHomeIcon from "@/assets/mainHomeIcons.png";
 
 import Ellipse11 from "@/assets/Rectangle 2304.svg";
+import AOS from "aos";
+
+import { useEffect } from "react";
 
 const HeroContent = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    AOS.init({ duration: 600 });
+  }, []);
   return (
     <div className="  flex justify-between  ">
-      <div className=" left-[80px] hero-text-container basis-1/2 pt-14 ">
+      <div
+        data-aos="fade-up"
+        className=" left-[80px] hero-text-container basis-1/2 pt-14 "
+      >
         <p className="font-semibold  text-[#8530C1] mb-4  font-Inter header2  flex bg-[#F9F5FF]  gap-4 items-center w-[290px] rounded-full justify-center">
           <span className="text-[18px]">Introducing Kunda Kids</span>
 
@@ -40,8 +50,12 @@ const HeroContent = () => {
           Create account
         </Button>
       </div>
-      <div className="  relative basis-1/2">
-        <img
+      <div
+        data-aos="zoom-in"
+        data-aos-once="true"
+        className="  relative basis-1/2 h-[700px] overflow-hidden"
+      >
+        {/* <img
           src={Ellipse10}
           alt="image"
           className=" absolute   left-14 top-[100px] "
@@ -50,16 +64,16 @@ const HeroContent = () => {
           src={Ellipse11}
           alt="image"
           className="  absolute  z-10  left-[150px] top-[175px]"
-        />
+        /> */}
         <LazyLoadImage
-          src={group}
+          src={MainHomeIcon}
           placeholderSrc={GroupBlur}
           effect="blur"
-          wrapperClassName="absolute bottom-0  top-[30px] z-50 hero-two-kids right-[160px] "
-          width={290}
+          wrapperClassName="absolute bottom-0  top-[30px] z-50  right-[0px] "
+          width={600}
           height={400}
         />
-        <img
+        {/* <img
           src={Book}
           alt=""
           className="absolute  bottom-[30px]  right-[500px] z-50 "
@@ -73,7 +87,7 @@ const HeroContent = () => {
           src={Music}
           alt=""
           className="absolute  bottom-[-80px] right-[30px] z-50 "
-        />
+        /> */}
       </div>
     </div>
   );

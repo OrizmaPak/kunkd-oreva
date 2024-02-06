@@ -60,8 +60,8 @@ const SettingsLayout = () => {
     <Wrapper bgColor="#FFF7FD">
       <InnerWrapper>
         <Modal
-          radius={"xl"}
-          size="lg"
+          radius={"sm"}
+          size="md"
           opened={opened}
           onClose={close}
           withCloseButton={false}

@@ -21,7 +21,7 @@ const Home = () => {
       </Stat>
 
       <KundaApp>
-        <div className="pb-[550px]">
+        <div>
           <KundaAppContent />
         </div>
       </KundaApp>

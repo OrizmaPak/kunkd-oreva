@@ -18,11 +18,21 @@ import { RiLockLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import { ZodType, z } from "zod";
 import InputFormat from "../../common/InputFormat";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebase";
+import { logOut } from "@/auth/sdk";
+import { useEffect } from "react";
 
 const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
-  const [, setUser] = useStore(getUserState);
+  const [user, setUser] = useStore(getUserState);
   const { mutate: socialMutate, isLoading: socialisLoading } = useSocialLogin();
+
+  useEffect(() => {
+    logOut();
+    localStorage.clear();
+    sessionStorage.clear();
+  }, []);
   const handleGoogleLogin = async () => {
     try {
       const returnValue = await googleSignIn();
@@ -116,16 +126,23 @@ const LoginContent = () => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const submitData = (data: FormData) => {
+  const submitData = async (datta: FormData) => {
     mutate(
       {
-        ...data,
+        ...datta,
       },
       {
-        onSuccess(data) {
+        async onSuccess(data) {
           localStorage.clear();
           const res = data?.data?.data as TUser;
+          // const userCredentils = await signInWithEmailAndPassword(
+          //   auth,
+          //   datta?.email as string,
+          //   datta.password as string
+          // );
+          // console.log("user", userCredentils);
           setUser({ ...res });
+
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -170,11 +187,17 @@ const LoginContent = () => {
   return (
     <div className="flex justify-center items-center w-full h-full">
       <div className="inner-form-w relative  my-auto flex justify-end items-center ">
-        <Link to="/">
-          <span className="absolute top-[-150px] ">
-            <img loading="lazy" src={Cancel} alt="cancel" />
-          </span>
-        </Link>
+        {/* <Link to="/"> */}
+        <span
+          onClick={() => {
+            logOut();
+            navigate("/");
+          }}
+          className="absolute top-[-150px] "
+        >
+          <img loading="lazy" src={Cancel} alt="cancel" />
+        </span>
+        {/* </Link> */}
         <div className="w-[100%]">
           <span></span>
           <h1 className="font-bold fon header2 font-Recoleta   ">

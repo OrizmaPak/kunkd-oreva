@@ -24,15 +24,22 @@ const WatchKundaContent = () => {
           className="z-[50] mt-[-500px] w-[70%]"
           onLoad={() => setPhonesImg(Phones)}
         /> */}
-        <LazyLoadImage
-          // width={1184}
-          // height={926}
-          effect="blur"
-          className="z-[50] mt-[-00px] phones "
-          wrapperClassName="z-[50] mt-[-500px] phones"
-          src={Phones}
-          placeholderSrc={Phonesblur}
-        />
+        <div
+          data-aos="fade-right"
+          data-aos-offset="300"
+          data-aos-easing="ease-in-sine"
+          className="z-50"
+        >
+          {/* <LazyLoadImage
+            // width={1184}
+            // height={926}
+            effect="blur"
+            className="z-[50] mt-[-00px] phones "
+            wrapperClassName="z-[50] mt-[-500px] phones"
+            src={Phones}
+            placeholderSrc={Phonesblur}
+          /> */}
+        </div>
 
         {/* <div> */}
         <img
@@ -77,7 +84,10 @@ const WatchKundaContent = () => {
         </div>
       </div> */}
 
-      <div className=" max-w-[1000px] mx-auto text-center text-black mt-28 text-[18px] mb-14  mleading-10">
+      <div
+        data-aos="fade-up"
+        className=" max-w-[1000px] mx-auto text-center text-black mt-28 text-[18px] mb-14  pt-[80px] mleading-10"
+      >
         <h1 className=" font-Inter font-bold mb-10 mt-60  font-Secondary header-1">
           Animation
         </h1>

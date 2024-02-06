@@ -7,8 +7,13 @@ import KundaParentContent from "./KundaParentContent";
 import ParentHero from "./ParentHero";
 // import SayAboutUs from "./SayAbouyUs";
 import ServiceContent from "./ServiceContent";
+import AOS from "aos";
+import { useEffect } from "react";
 
 const Parents = () => {
+  useEffect(() => {
+    AOS.init({ duration: 600 });
+  }, []);
   return (
     <div>
       <ParentHero>

@@ -10,6 +10,7 @@ import "./index.css";
 // import {useStore}
 import { BrowserRouter } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
+import "aos/dist/aos.css";
 import NotFound from "./pages/NotFoundPage/NotFound.tsx";
 
 const queryClient = new QueryClient();

@@ -120,14 +120,14 @@ const AddTeacherForm = ({
               errorMsg={errors.email?.message}
               type="email"
               placeholder="Email"
-              leftIcon={<AiOutlineMail size={25} color="#c4ccd0" />}
+              leftIcon={<AiOutlineMail size={20} color="#c4ccd0" />}
             />
           </div>
 
           <div className="flex gap-2 mb-8">
             <div className="flex-grow">
               <label htmlFor="class">Assign to a class</label>
-              <p className="border border-[#F3DAFF] py-4 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
+              <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
                 <select
                   {...register("classid")}
                   name="classid"
@@ -152,7 +152,7 @@ const AddTeacherForm = ({
             </div>
             <div className="flex-grow">
               <label htmlFor="class">Select gender</label>
-              <p className="border border-[#F3DAFF] py-4 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
+              <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
                 <select
                   {...register("genderid")}
                   name="genderid"
