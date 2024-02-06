@@ -41,11 +41,11 @@ import ProgressReport from "./pages/ProgressReport/ProgressReport";
 // import AfricanLanguages from "@/pages/AfricanLanguages/AfricanLanguages";
 // import AudioBooks from "@/pages/AudioBooks/AudioBooks";
 import TMain from "@/pages/DashBoard/TeacherDashboard/Main/Main";
-import { onAuthStateChanged } from "firebase/auth";
+// import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { TUser } from "./api/types";
+// import { TUser } from "./api/types";
 import ScrollToTop from "./components/ScrollToTop";
-import { auth } from "./firebase";
+// import { auth } from "./firebase";
 import AccountLayout from "./pages/Account/AccountLayout";
 import SettingPassword from "./pages/Account/AccountPassword";
 import Billing from "./pages/Account/Billing";
@@ -57,8 +57,8 @@ import ParentHomePage from "./pages/AfterParentSignIn/ParentHomePage";
 import SelectProfile from "./pages/AfterParentSignIn/SelectProfile";
 import PaymentCongratulations from "./pages/MakePayment/PaymentCompletedContent";
 import SecureAdminPortal from "./pages/SchoolSignup/SecureAdminPortal/SecureAdminPortal";
-import useStore from "./store";
-import { getUserState } from "./store/authStore";
+// import useStore from "./store";
+// import { getUserState } from "./store/authStore";
 // import { googleSignIn } from "./auth/sdk";
 import SchoolRquest from "@/pages/DashBoard/SchoolDashBoard/Request/Request";
 import TeacherSignup from "@/pages/TeacherLogin/index";
@@ -74,22 +74,21 @@ import Quiz from "./pages/Stories/Stories1/Quiz";
 import DefaultSchoolTab from "./pages/AfterSchoolSignIn/User/NewlyRegisterUser/DefautSchoolTab";
 
 function App() {
-  const [user, setUser] = useStore(getUserState);
+  // const [user] = useStore(getUserState);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      const res = currentUser as TUser;
-      console.log("userHere1----", user);
-      console.log("firebaseHere2----", res);
-      if (currentUser) {
-        // setUser({ ...res, ...user });
-      }
-    });
-    return () => {
-      unsubscribe();
-    };
-    // eslint-disable-next-line
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+  //     const res = currentUser as TUser;
+
+  //     if (currentUser) {
+  //       // setUser({ ...res, ...user });
+  //     }
+  //   });
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  //   // eslint-disable-next-line
+  // }, []);
   const [childProfile, setChildProfile] = useState<string>(
     (localStorage.getItem("profileId")
       ? localStorage.getItem("profileId")

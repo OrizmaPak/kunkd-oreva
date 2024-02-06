@@ -1,13 +1,13 @@
 import VideoCard from "@/components/VideoCard";
-import Phones from "@/assets/iphone24.png";
+// import Phones from "@/assets/iphone24.png";
 import Lines from "@/assets/lines.svg";
 // import Zigzag from "@/assets/zigzag2.svg";
 // import RoundP from "@/assets/roundpurpple.svg";
 // import RoundR from "@/assets/Ellipse 59.svg";
 // import RoundY from "@/assets/Ellipse 57.svg";
 // import ZagR from "@/assets/ZagR.svg";
-import Phonesblur from "@/assets/phonesblur.jpg";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+// import Phonesblur from "@/assets/phonesblur.jpg";
+// import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import "./WatchKundaContent.css";
 
@@ -86,6 +86,7 @@ const WatchKundaContent = () => {
 
       <div
         data-aos="fade-up"
+        data-aos-once="false"
         className=" max-w-[1000px] mx-auto text-center text-black mt-28 text-[18px] mb-14  pt-[80px] mleading-10"
       >
         <h1 className=" font-Inter font-bold mb-10 mt-60  font-Secondary header-1">

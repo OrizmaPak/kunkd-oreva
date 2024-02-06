@@ -15,7 +15,7 @@ import { RiLockLine } from "react-icons/ri";
 import PasswordEye from "@/assets/passwordeye.svg";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase";
-import { logOut } from "@/auth/sdk";
+// import { logOut } from "@/auth/sdk";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
 

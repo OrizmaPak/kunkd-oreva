@@ -18,14 +18,15 @@ import { RiLockLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import { ZodType, z } from "zod";
 import InputFormat from "../../common/InputFormat";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/firebase";
+// import { signInWithEmailAndPassword } from "firebase/auth";
+// import { auth } from "@/firebase";
 import { logOut } from "@/auth/sdk";
 import { useEffect } from "react";
 
 const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
   const [user, setUser] = useStore(getUserState);
+  console.log(user);
   const { mutate: socialMutate, isLoading: socialisLoading } = useSocialLogin();
 
   useEffect(() => {

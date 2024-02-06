@@ -7,7 +7,7 @@ import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
 
 // import { getPushTokenState } from "@/store/pushTokenStore";
-import { getUserState } from "@/store/authStore";
+// import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -32,7 +32,7 @@ export const auth = getAuth(app);
 const messaging = getMessaging(app);
 export const requestPermission = () => {
   Notification.requestPermission().then((permission) => {
-    const [user] = useStore(getUserState);
+    // const [user] = useStore(getUserState);
 
     if (permission === "granted") {
       return getToken(messaging, {

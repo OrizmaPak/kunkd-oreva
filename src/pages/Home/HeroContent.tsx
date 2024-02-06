@@ -1,6 +1,6 @@
-import Music from "@/assets/Audio Icon.svg";
-import Book from "@/assets/Book Icon.svg";
-import group from "@/assets/kids24.png";
+// import Music from "@/assets/Audio Icon.svg";
+// import Book from "@/assets/Book Icon.svg";
+// import group from "@/assets/kids24.png";
 import Arrow from "@/assets/Iconarrow.svg";
 import GroupBlur from "@/assets/groupblur.jpg";
 import Button from "@/components/Button";
@@ -8,11 +8,11 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { useNavigate } from "react-router-dom";
 import "./herocontent.css";
-import VideoIcon from "@/assets/newvideoIcon.svg";
-import Ellipse10 from "@/assets/Ellipse 51.svg";
+// import VideoIcon from "@/assets/newvideoIcon.svg";
+// import Ellipse10 from "@/assets/Ellipse 51.svg";
 import MainHomeIcon from "@/assets/mainHomeIcons.png";
 
-import Ellipse11 from "@/assets/Rectangle 2304.svg";
+// import Ellipse11 from "@/assets/Rectangle 2304.svg";
 import AOS from "aos";
 
 import { useEffect } from "react";

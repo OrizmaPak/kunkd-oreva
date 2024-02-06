@@ -46,7 +46,7 @@ const SchoolHeader = ({
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [user] = useStore(getUserState);
-  const [profiles, setProfiles] = useStore(getProfileState);
+  const [profiles] = useStore(getProfileState);
   const [dashboardActive, setDashboardActive] = useState(false);
   const handleDashboard = (e: React.MouseEvent<HTMLButtonElement>) => {
     localStorage.setItem("schoolDashboard", "true");
