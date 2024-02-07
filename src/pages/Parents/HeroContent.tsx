@@ -43,7 +43,7 @@ const HeroContentContent = () => {
         <LazyLoadImage
           effect="blur"
           src={ManAndChild}
-          placeholderSrc={ManAndChildBlur}
+          // placeholderSrc={ManAndChildBlur}
           className=" amina-w  "
         />
         {/* <img loading="lazy" src={Book} alt="" className='absolute  bottom-[34%]  right-[34%] z-50 ' /> */}

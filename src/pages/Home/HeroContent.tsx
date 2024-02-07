@@ -67,7 +67,7 @@ const HeroContent = () => {
         /> */}
         <LazyLoadImage
           src={MainHomeIcon}
-          placeholderSrc={GroupBlur}
+          // placeholderSrc={}
           effect="blur"
           wrapperClassName="absolute bottom-0  top-[30px] z-50  right-[0px] "
           width={600}
