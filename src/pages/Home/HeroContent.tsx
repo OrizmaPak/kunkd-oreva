@@ -2,7 +2,7 @@
 // import Book from "@/assets/Book Icon.svg";
 // import group from "@/assets/kids24.png";
 import Arrow from "@/assets/Iconarrow.svg";
-import GroupBlur from "@/assets/groupblur.jpg";
+// import GroupBlur from "@/assets/groupblur.jpg";
 import Button from "@/components/Button";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";

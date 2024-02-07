@@ -1,6 +1,6 @@
 import ManAndChild from "@/assets/dadson24.png";
 // import Arrow from "@/assets/arrow.svg";
-import ManAndChildBlur from "@/assets/manandchildblur.jpg";
+// import ManAndChildBlur from "@/assets/manandchildblur.jpg";
 import Button from "@/components/Button";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
