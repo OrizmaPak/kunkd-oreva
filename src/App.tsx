@@ -1,6 +1,6 @@
 import SchoolCongrtulations from "@/pages/SchoolSignup/SchoolCongratulations/SchoolCongratulations";
 import Shop from "@/pages/Shop/Shop";
-import { Outlet, Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import ShoolHeader from "./common/User/SchoolHeader";
 import HomeFooter from "./components/HomeFooter";
@@ -90,12 +90,12 @@ function App() {
   //   // eslint-disable-next-line
   // }, []);
   const [childProfile, setChildProfile] = useState<string>(
-    (localStorage.getItem("profileId")
-      ? localStorage.getItem("profileId")
+    (sessionStorage.getItem("profileId")
+      ? sessionStorage.getItem("profileId")
       : "") as string
   );
   useEffect(() => {
-    localStorage.setItem("profileId", childProfile as string);
+    sessionStorage.setItem("profileId", childProfile as string);
   }, [childProfile]);
   return (
     <div className="App ">
@@ -104,7 +104,11 @@ function App() {
       <Routes>
         {/* Routes Before Login */}
         <Route path="/">
+          {/* <Route index element={<Login />} ></Route> */}
+
           <Route element={<WebLayout />}>
+            <Route index element={<Login />}></Route>
+            {/* <Route index element={<Navigate to="login" replace />}></Route> */}
             <Route index element={<Home />}></Route>
             <Route path="parents" element={<Parents />}></Route>
             <Route path="schools" element={<Schools />}></Route>
@@ -338,7 +342,13 @@ function App() {
 export default App;
 
 const WebLayout = () => {
-  return (
+  const isLogin = useLocation().pathname === "/";
+
+  return isLogin ? (
+    <div>
+      <Outlet />
+    </div>
+  ) : (
     <>
       <HomeHeader />
       <Outlet />

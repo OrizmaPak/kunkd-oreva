@@ -24,7 +24,7 @@ const Hero = () => {
       <Slider {...settings}>
         <div className="bg-[#8530C1] h-[256px] rounded-bl-2xl rounded-tl-2xl rounded-tr-2xl">
           <h1 className="text-[32px] text-white font-semibold mx-10  my-10 leading-[35px]">
-            Beautifully illustrated storybooks
+            Beautifully illustrated stories
             <br /> for your child
           </h1>
           <img
@@ -36,7 +36,7 @@ const Hero = () => {
         </div>
         <div className="bg-[#2BB457] h-[256px] rounded-bl-2xl rounded-tl-2xl rounded-tr-2xl">
           <h1 className="text-[32px] text-white font-semibold mx-10  my-10 leading-[35px]">
-            Watch educational videos on <br /> the African Culture
+            Watch videos on African <br /> Languages and more
           </h1>
           <img
             loading="lazy"

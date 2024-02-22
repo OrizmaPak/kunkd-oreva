@@ -95,7 +95,7 @@ const SchoolVerificationContent = () => {
             Verify account
           </h1>
           <p className="text3 text-[#A7A7A7] font-Hanken">
-            A code has been sent to mail, enter to verify your account{" "}
+            A code has been sent to email, enter to verify your account{" "}
           </p>
           <form onSubmit={handleSubmit(submitData)}>
             <div className="mt-8 flex justify-center items-center flex-col">

@@ -8,7 +8,7 @@ import EmptyList from "./EmptyList";
 const DataList = ({ data }: { data: TStoryContent[] }) => {
   const navigate = useNavigate();
 
-  const userInLocalStr = localStorage.getItem("user");
+  const userInLocalStr = sessionStorage.getItem("user");
   const user = JSON.parse(userInLocalStr as string);
   return (
     <div className="px-14 my-4 pb-10 ">

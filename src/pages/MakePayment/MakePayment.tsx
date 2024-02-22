@@ -5,7 +5,7 @@ import ParentSignupLayout from "@/common/ParentSignupLayout";
 
 const MakePayment = () => {
   const [activeStep, ,] = useState(STEP_1);
-  const isHome = localStorage.getItem("gotToHome");
+  const isHome = sessionStorage.getItem("gotToHome");
 
   return (
     <div>

@@ -60,8 +60,8 @@ const CardHome = ({
   const handleClick = () => {
     if (goTo) goTo();
 
-    localStorage.setItem("contentId", id?.toString() as string);
-    localStorage.setItem(
+    sessionStorage.setItem("contentId", id?.toString() as string);
+    sessionStorage.setItem(
       "continuePage",
       pages_read
         ? pages_read?.toString()
@@ -71,7 +71,7 @@ const CardHome = ({
     );
   };
   const [visiblee, setVisiblee] = useState(false);
-  const profileId = localStorage.getItem("profileId");
+  const profileId = sessionStorage.getItem("profileId");
   const { data, refetch } = useGetLikedContent(profileId as string);
   const likeContents: TStoryContent[] = data?.data.data.records;
   const { mutate } = useLikedContent();

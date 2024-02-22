@@ -10,16 +10,16 @@ import { IoCheckmarkCircleOutline } from "react-icons/io5";
 
 const PaymentCompletedContent = () => {
   const navigate = useNavigate();
-  // const stripe= localStorage.getItem("stripeData")
+  // const stripe= sessionStorage.getItem("stripeData")
   // const stripeData:TStripe = JSON.parse(stripe as string)
   // const {mutate, isLoading} = useConnectStripe()
   const handleContinue = () => {
-    if (localStorage.getItem("gotToHome") === "true") {
+    if (sessionStorage.getItem("gotToHome") === "true") {
       navigate("/parent");
     } else {
       navigate("/childprofilesetup");
     }
-    // mutate({ subscription_plan_id:Number(localStorage.getItem("planId")),
+    // mutate({ subscription_plan_id:Number(sessionStorage.getItem("planId")),
     // currency_iso3:"GBP",
     // reference:stripeData?.transaction_reference,
     // customer_id: stripeData?.customerID},{
@@ -28,7 +28,7 @@ const PaymentCompletedContent = () => {
     //   }
     // })
   };
-  const isHome = localStorage.getItem("gotToHome");
+  const isHome = sessionStorage.getItem("gotToHome");
 
   return (
     <div>
@@ -72,7 +72,7 @@ const PaymentCompletedContent = () => {
 
               <Button
                 onClick={() => {
-                  if (localStorage.getItem("gotToHome") === "true") {
+                  if (sessionStorage.getItem("gotToHome") === "true") {
                     navigate("/parent");
                   } else {
                     navigate("/childprofilesetup");
@@ -126,7 +126,7 @@ const PaymentCompletedContent = () => {
 
               <Button
                 onClick={() => {
-                  if (localStorage.getItem("gotToHome") === "true") {
+                  if (sessionStorage.getItem("gotToHome") === "true") {
                     navigate("/parent");
                   } else {
                     navigate("/childprofilesetup");

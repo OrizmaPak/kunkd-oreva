@@ -32,7 +32,7 @@ const NewlyRegisteredUser = () => {
         <Hero />
         <hr className="mt-[16px] mx-16 " />
 
-        <h1 className="text-center font-bold text30  font-Recoleta my-10  ">
+        <h1 className="text-center font-bold text30  font-Hanken my-10  ">
           Our Library
         </h1>
         <HomTab />

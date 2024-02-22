@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const Hero = ({ image }: { image: string }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const storedUser = localStorage.getItem("user");
+  const storedUser = sessionStorage.getItem("user");
   const userObj = JSON.parse(storedUser as string);
 
   const navigate = useNavigate();

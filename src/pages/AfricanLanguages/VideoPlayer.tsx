@@ -102,11 +102,11 @@ const VideoPlayer = () => {
     openedconnectedStudent,
     { open: openConnectedStudent, close: closeConnectedStudent },
   ] = useDisclosure(false);
-  const profileId = localStorage.getItem("profileId");
+  const profileId = sessionStorage.getItem("profileId");
 
-  const contentId = localStorage.getItem("contentId");
-  // const contentId = localStorage.getItem("contentId");
-  // const profileId = localStorage.getItem("profileId");
+  const contentId = sessionStorage.getItem("contentId");
+  // const contentId =sessionStorage.getItem("contentId");
+  // const profileId =sessionStorage.getItem("profileId");
   const videoRef = useRef<HTMLVideoElement>(null);
   // const [user] = useStore(getUserState);
   const { data, isLoading } = useGetContentById(
@@ -489,7 +489,7 @@ const RecommendedVideoCard = ({
   const navigate = useNavigate();
   const handleGoTo = () => {
     navigate(`../languages/${subCategory}/${slug}`);
-    localStorage.setItem("contentId", id?.toString() as string);
+    sessionStorage.setItem("contentId", id?.toString() as string);
   };
   return (
     <div

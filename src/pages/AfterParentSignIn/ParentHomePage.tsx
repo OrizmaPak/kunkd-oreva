@@ -22,7 +22,7 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
     //  eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUserProfile]);
   const [profiles] = useStore(getProfileState);
-  // const profileId = localStorage.getItem("profileId") as string;
+  // const profileId = sessionStorage.getItem("profileId") as string;
   // const { data: ongoingData } = useGetOngoingContents(profileId);
   // const ongoingContents: TStoryContent[] =
   //   ongoingData?.data.data.ongoing_contents;
@@ -31,10 +31,10 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
   // const newTrending = contentData?.data.data.trending_stories;
 
   useEffect(() => {
-    localStorage.setItem("gotToHome", "true");
+    sessionStorage.setItem("gotToHome", "true");
   }, []);
 
-  // const user2 = localStorage.getItem("user");
+  // const user2 = sessionStorage.getItem("user");
   // const userObject = JSON.parse(user2 as string);
   const [user] = useStore(getUserState);
   // const settings = {
@@ -51,6 +51,7 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
   const profile = childProfile
     ? profiles?.find((each) => each.id === +childProfile)
     : profiles[0];
+  console.log("gotToHome", user, profile);
   if (!user || !profile) {
     return <Navigate to="/" replace />;
   }
@@ -60,7 +61,7 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
       <Wrapper>
         <InnerWrapper>
           <Hero userimage={profile?.image} username={profile?.name} />
-          <h1 className="text-center font-bold text30  font-Recoleta   ">
+          <h1 className="text-center font-bold text30   font-Hanken   ">
             Our Library
           </h1>
 

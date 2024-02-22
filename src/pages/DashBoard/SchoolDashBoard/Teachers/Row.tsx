@@ -100,7 +100,7 @@ const Row = ({
       </Modal>
       <div className=" hover:cursor-pointer  font-medium">
         <div>
-          <div className="grid  grid-cols-[1fr_300px_150px_150px]  py-3  px-8 border-b-2 border-[#F2F4F7]">
+          <div className="grid  grid-cols-[1fr_300px_150px]  py-3  px-8 border-b-2 border-[#F2F4F7]">
             {/* <div className="flex justify-start items-center ">
             <span className=" ">
               <img loading="lazy" src={Rectangle} alt="image" />
@@ -125,7 +125,7 @@ const Row = ({
             <div className="flex justify-start items-center  text-[#7E7E89]">
               {data.user.email}
             </div>
-            <div className="flex justify-start items-center ">
+            {/* <div className="flex justify-start items-center ">
               {data.user.gender === "Male" ? (
                 <span className="text-[#2BB457] bg-[#ECFDF3] rounded-3xl py-1 px-5">
                   Male
@@ -135,7 +135,7 @@ const Row = ({
                   Female
                 </span>
               )}
-            </div>
+            </div> */}
             <div className="flex justify-end  gap-4  items-center">
               <span>
                 {/* <img loading="lazy" src={ToggleIcon} alt="image" /> */}

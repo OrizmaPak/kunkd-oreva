@@ -11,11 +11,11 @@ type Action = {
 };
 
 const getLocalStorage = (key: string): State["profiles"] => {
-  const localData = localStorage.getItem(key);
+  const localData = sessionStorage.getItem(key);
   return localData ? JSON.parse(localData) : null;
 };
 const setLocalStorage = (key: string, value: State["profiles"]) =>
-  window.localStorage.setItem(key, JSON.stringify(value));
+  window.sessionStorage.setItem(key, JSON.stringify(value));
 
 export type ProfileSlice = State & Action;
 

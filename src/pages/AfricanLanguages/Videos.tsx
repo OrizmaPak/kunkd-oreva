@@ -13,7 +13,7 @@ const Videos = () => {
   const { lan_type } = useParams();
   const [activePage, setPage] = useState(1);
 
-  const subCategoryId = localStorage.getItem("subCategoryId");
+  const subCategoryId = sessionStorage.getItem("subCategoryId");
   const { data, isLoading, refetch } = useGetContebtBySubCategories(
     subCategoryId as string
   );

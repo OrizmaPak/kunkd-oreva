@@ -16,7 +16,7 @@ const ChoosePlan = () => {
   // };
   const [, setProfiles] = useStore(getProfileState);
   const navigate = useNavigate();
-  const isHome = localStorage.getItem("gotToHome");
+  const isHome = sessionStorage.getItem("gotToHome");
 
   return (
     <>
@@ -24,11 +24,11 @@ const ChoosePlan = () => {
         <div className="mt-20 relative">
           <button
             onClick={() => {
-              if (localStorage.getItem("gotToHome") === "true") {
+              if (sessionStorage.getItem("gotToHome") === "true") {
                 navigate("/parent");
               } else {
                 navigate("/");
-                localStorage.clear();
+                sessionStorage.clear();
                 setProfiles([]);
               }
             }}
@@ -70,11 +70,11 @@ const ChoosePlan = () => {
           <div className="mt-20 relative">
             <button
               onClick={() => {
-                if (localStorage.getItem("gotToHome") === "true") {
+                if (sessionStorage.getItem("gotToHome") === "true") {
                   navigate("/parent");
                 } else {
                   navigate("/");
-                  localStorage.clear();
+                  sessionStorage.clear();
                   setProfiles([]);
                 }
               }}

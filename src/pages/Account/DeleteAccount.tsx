@@ -12,7 +12,7 @@ const DeleteAccount = ({ onCancel }: { onCancel: () => void }) => {
       {},
       {
         async onSuccess(data) {
-          localStorage.clear();
+          sessionStorage.clear();
           onCancel();
           navigate("/");
 

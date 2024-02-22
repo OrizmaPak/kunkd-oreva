@@ -29,8 +29,8 @@ const ProgressCard = ({
   return (
     <div
       onClick={() => {
-        localStorage.setItem("contentId", data?.id?.toString() as string);
-        localStorage.setItem(
+        sessionStorage.setItem("contentId", data?.id?.toString() as string);
+        sessionStorage.setItem(
           "continuePage",
           data?.pages_read
             ? data?.pages_read?.toString()

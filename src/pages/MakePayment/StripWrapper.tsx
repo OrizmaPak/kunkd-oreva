@@ -67,7 +67,8 @@ const CheckoutForm = ({
       const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: "https://dev-kundakids.vercel.app/congratulations",
+          return_url: `${window.location.origin}/congratulations`,
+
           // return_url: "http://localhost:5173/congratulations",
           // onSuccess:(){}s
         },

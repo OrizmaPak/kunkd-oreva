@@ -54,7 +54,7 @@ const CardScreen = ({
   return (
     <div className="   mx-10 pb-4">
       <div className="flex justify-between mb-[20px] pt-8 ">
-        <span className=" text25 font-semibold font-Recoleta ">{header}</span>
+        <span className=" text25 font-semibold  font-Hanken ">{header}</span>
         <button onClick={action} className=" text-[#8530C1] text2">
           {actiontitle}
         </button>

@@ -39,14 +39,14 @@ const PackageCard = ({
       countryCode === "NG" ? "NGN" : countryCode === "UK" ? "GBP" : "USD";
     if (!plan) {
       // navigate("/childprofilesetup");
-      if (localStorage.getItem("gotToHome") === "true") {
+      if (sessionStorage.getItem("gotToHome") === "true") {
         navigate("/parent");
       } else {
         navigate("/childprofilesetup");
       }
     } else {
-      localStorage.setItem("planId", planId?.toString());
-      localStorage.setItem("currency_iso3", currencyIso);
+      sessionStorage.setItem("planId", planId?.toString());
+      sessionStorage.setItem("currency_iso3", currencyIso);
       navigate("/makepayment");
     }
   };

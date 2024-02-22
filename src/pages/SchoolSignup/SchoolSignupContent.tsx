@@ -49,7 +49,7 @@ const SchoolSignupContent = () => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    localStorage.clear();
+    sessionStorage.clear();
     mutate(
       { ...data, fcm_token: pushToken },
       {
@@ -142,7 +142,7 @@ const SchoolSignupContent = () => {
             </p>
             <p className="text-center text3 font-Hanken m-3 mt-2 text-gray-400">
               By continuing you agree to Kunda Kids
-              <strong className=" text-black">Terms of Service</strong>and
+              <strong className=" text-black"> Terms of Service </strong> and
               <strong className="text-black"> Privacy Policy </strong>
             </p>
 
@@ -152,7 +152,7 @@ const SchoolSignupContent = () => {
                   <Loader color="white" size="sm" />
                 </p>
               ) : (
-                <span className="text3">Create free account</span>
+                <span className="text3">Create account</span>
               )}
             </Button>
           </form>

@@ -75,7 +75,7 @@ const Story = () => {
   const [activePage, setPage] = useState(1);
   const { subCategory } = useParams();
   const navigate = useNavigate();
-  const subCategoryId = localStorage.getItem("subCategoryId");
+  const subCategoryId = sessionStorage.getItem("subCategoryId");
   const { data, isLoading, refetch } = useGetContebtBySubCategories(
     subCategoryId as string
     // activePage.toString()
@@ -298,7 +298,7 @@ const SubButton = ({
 }) => {
   const handleClick = () => {
     if (onClick) onClick();
-    localStorage.setItem("subCategoryId", subCategoryId);
+    sessionStorage.setItem("subCategoryId", subCategoryId);
   };
   return (
     <button

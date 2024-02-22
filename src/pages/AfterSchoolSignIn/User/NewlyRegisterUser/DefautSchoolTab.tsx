@@ -25,7 +25,7 @@ const DefaultSchoolTab = () => {
     setUser({ ...useri, ...currentUserProfile });
     //  eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUserProfile]);
-  const profileId = localStorage.getItem("profileId") as string;
+  const profileId = sessionStorage.getItem("profileId") as string;
   const { data: ongoingData } = useGetOngoingContents(profileId);
   const ongoingContents: TStoryContent[] =
     ongoingData?.data.data.ongoing_contents;
@@ -34,7 +34,7 @@ const DefaultSchoolTab = () => {
   const newTrending = contentData?.data.data.trending_stories;
 
   useEffect(() => {
-    localStorage.setItem("gotToHome", "true");
+    sessionStorage.setItem("gotToHome", "true");
   }, []);
 
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ const DefaultSchoolTab = () => {
       <div className="mt-[98px]  ">
         {ongoingContents?.length > 0 && (
           <div className=" mx-10 mt-4">
-            <p className=" text25 font-semibold font-Recoleta  mb-[50px]">
+            <p className=" text25 font-semibold font-Hanken  mb-[50px]">
               Continue Learning
             </p>
             <div className=" relative   ">

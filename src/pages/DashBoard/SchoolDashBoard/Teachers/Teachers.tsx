@@ -159,7 +159,7 @@ const Teachers = () => {
         </div>
 
         <div>
-          <div className="grid  grid-cols-[1fr_300px_150px_150px] mt-5 font-normal  px-8 text-[#7E7E89]  py-4 border-b-2 bg-[#FFF7FD] border-[#F3DAFF]">
+          <div className="grid  grid-cols-[1fr_300px_150px] mt-5 font-normal  px-8 text-[#7E7E89]  py-4 border-b-2 bg-[#FFF7FD] border-[#F3DAFF]">
             {/* <div className="flex justify-start items-center">
               <span className=" ">
                 <img loading="lazy" src={Rectangle} alt="" />
@@ -167,7 +167,7 @@ const Teachers = () => {
             </div> */}
             <div>Name</div>
             <div className="">Email</div>
-            <div>Gender</div>
+            {/* <div>Gender</div> */}
             <div className="flex justify-end   items-center">
               <span></span>{" "}
             </div>

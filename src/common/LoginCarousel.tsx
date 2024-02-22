@@ -20,7 +20,7 @@ const LoginCarousel = () => {
     },
     {
       bgImage: ParentalCtrl,
-      title: "Access World of Stories",
+      title: "Access a World of Stories",
       className:
         "bg-[rgba(230,230,230,0.4)]  backdrop-blur  border-white border-[1.5px]",
       body: "Get access to fun and inspiring stories & audiobooks that build on soft skills, values, reading and numeracy on a weekly basis.",

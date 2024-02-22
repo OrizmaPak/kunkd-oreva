@@ -231,8 +231,8 @@ export const useGetContentById = (
         res.data.message === "Number of allowed contents reached!"
       ) {
         if (user?.role === "user") {
-          const currentProfile = localStorage.getItem("profileId");
-          const profiles = localStorage.getItem("profiles");
+          const currentProfile = sessionStorage.getItem("profileId");
+          const profiles = sessionStorage.getItem("profiles");
           const storedArrayObject = JSON.parse(profiles as string);
           const currentProfileObj: Tprofile = storedArrayObject.find(
             (data: Tprofile) => data.id === Number(currentProfile)
@@ -634,7 +634,7 @@ export const useGetUpdatedProfile = () => {
 };
 
 export const useGetSchoolContentStat = (start: string, end: string) => {
-  // const userObject = localStorage.getItem("user");
+  // const userObject = sessionStorage.getItem("user");
   // const storedObject = JSON.parse(userObject as string);
   return useQuery({
     queryKey: ["GetSchoolContentStat", start, end],

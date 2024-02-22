@@ -40,7 +40,7 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (datta: FormData) => {
-    localStorage.clear();
+    sessionStorage.clear();
 
     setUser({ email: datta.email });
 
@@ -49,7 +49,7 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
 
       {
         onSuccess(data) {
-          localStorage.setItem("parentemail", datta.email as string);
+          sessionStorage.setItem("parentemail", datta.email as string);
           notifications.show({
             title: `Notification`,
             message: data.data.message,

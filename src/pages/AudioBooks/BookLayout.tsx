@@ -61,14 +61,14 @@ const BookLayout = () => {
   ] = useDisclosure(false);
   const navigate = useNavigate();
 
-  const contentId = localStorage.getItem("contentId");
+  const contentId = sessionStorage.getItem("contentId");
   // useTimeSpent(Number(contentId), Number(profileId));
   const { data: dataRecommended } = useRecommendedAudiobooks(
     contentId as string
   );
   const recommendedContents: TAudioBooks[] =
     dataRecommended?.data?.data?.recommended_contents;
-  const profileId = localStorage.getItem("profileId");
+  const profileId = sessionStorage.getItem("profileId");
 
   const { data, isLoading } = useGetContentById(
     contentId?.toString() as string,
@@ -199,7 +199,7 @@ const AboutPage = ({
   setStartRead: () => void;
   audioBookId: number;
 }) => {
-  const profileId = localStorage.getItem("profileId");
+  const profileId = sessionStorage.getItem("profileId");
   const { data, refetch } = useGetLikedContent(profileId as string);
   const likeContents: TStoryContent[] = data?.data.data.records;
   const { mutate } = useLikedContent();
@@ -393,7 +393,7 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
   const [delay, setDelay] = useState(0);
 
   useEffect(() => {
-    const continueReading = localStorage.getItem("continuePage");
+    const continueReading = sessionStorage.getItem("continuePage");
     if (continueReading && audioRef.current) {
       audioRef.current.currentTime = Number(continueReading);
     }
@@ -470,8 +470,8 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
     }
   };
   const { mutate } = useContentTracking();
-  const profileId = localStorage.getItem("profileId");
-  const contentId = localStorage.getItem("contentId");
+  const profileId = sessionStorage.getItem("profileId");
+  const contentId = sessionStorage.getItem("contentId");
   const { mutate: mutateLearning } = useLearningHour();
   const [lastTime, setLastTime] = useState(0);
 

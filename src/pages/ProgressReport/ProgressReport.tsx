@@ -27,7 +27,7 @@ export type TContentLog = {
 };
 
 const ProgressReport = () => {
-  const profileId = localStorage.getItem("profileId");
+  const profileId = sessionStorage.getItem("profileId");
   const { data: allContentProgress } = useAllProgressContent(
     Number(profileId) || 0
   );

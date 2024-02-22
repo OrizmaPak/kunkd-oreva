@@ -52,12 +52,12 @@ const SecureAccountContent = () => {
       { password: datta.password },
       {
         async onSuccess(data) {
-          const userCredentils = await createUserWithEmailAndPassword(
-            auth,
-            localStorage.getItem("parentemail") as string,
-            datta.password as string
-          );
-          console.log("user", userCredentils);
+          // const userCredentils = await createUserWithEmailAndPassword(
+          //   auth,
+          //   sessionStorage.getItem("parentemail") as string,
+          //   datta.password as string
+          // );
+          // console.log("user", userCredentils);
           notifications.show({
             title: `Notification`,
             message: data.data.message,

@@ -49,7 +49,7 @@ const SchoolHeader = ({
   const [profiles] = useStore(getProfileState);
   const [dashboardActive, setDashboardActive] = useState(false);
   const handleDashboard = (e: React.MouseEvent<HTMLButtonElement>) => {
-    localStorage.setItem("schoolDashboard", "true");
+    sessionStorage.setItem("schoolDashboard", "true");
     setDashboardActive(true);
     e.preventDefault();
     if (user?.role === "teacher") {
@@ -60,9 +60,10 @@ const SchoolHeader = ({
       navigate("../schooldashboard");
     }
   };
+
   const handLogOut = () => {
     logOut();
-    localStorage.clear();
+    sessionStorage.clear();
     sessionStorage.clear();
     navigate("/");
   };

@@ -24,12 +24,12 @@ import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
 
 const Quiz = () => {
-  const contentId = localStorage.getItem("contentId");
+  const contentId = sessionStorage.getItem("contentId");
   const { data: quiz, isLoading } = useGetQuiz(contentId?.toString() as string);
   const questions = quiz?.data?.data?.questions;
   const quizId = quiz?.data?.data?.quiz_id;
-  const profileId = localStorage.getItem("profileId") as string;
-  const contentString = localStorage.getItem("content");
+  const profileId = sessionStorage.getItem("profileId") as string;
+  const contentString = sessionStorage.getItem("content");
   const content = JSON.parse(contentString as string);
   const [currentQues, setCurrentQues] = useState<number>(0);
   const [answers, setAnswers] = useState<answerObj[]>([]);

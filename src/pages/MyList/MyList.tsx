@@ -9,9 +9,9 @@ import { useState } from "react";
 import { TStoryContent } from "@/api/types";
 
 const MyList = () => {
-  const user = localStorage.getItem("user");
+  const user = sessionStorage.getItem("user");
   const userObject = JSON.parse(user as string);
-  const profileId = localStorage.getItem("profileId");
+  const profileId = sessionStorage.getItem("profileId");
   const { data } = useGetLikedContent(profileId as string);
   const [myListType, setMyListType] = useState("stories");
   const likedContent: TStoryContent[] = data?.data.data.records;

@@ -44,8 +44,8 @@ const Stories1 = () => {
   const [isFinish, setIsFinish] = useState(false);
   const [startRead, setStartRead] = useState(false);
   // const [user] = useStore(getUserState);
-  const contentId = localStorage.getItem("contentId");
-  const profileId = localStorage.getItem("profileId");
+  const contentId = sessionStorage.getItem("contentId");
+  const profileId = sessionStorage.getItem("profileId");
   const [opened, { open, close }] = useDisclosure(false);
 
   const [
@@ -210,7 +210,7 @@ const AboutPage = ({
   story: TStoryContent;
   setStartRead: () => void;
 }) => {
-  const profileId = localStorage.getItem("profileId");
+  const profileId = sessionStorage.getItem("profileId");
   const { data, refetch } = useGetLikedContent(profileId as string);
   const likeContents: TStoryContent[] = data?.data.data.records;
   const { mutate } = useLikedContent();
@@ -407,8 +407,8 @@ const ReadPage = ({
   };
   const max = 35;
   const { mutate } = useContentTracking();
-  const profileId = localStorage.getItem("profileId");
-  const contentId = localStorage.getItem("contentId");
+  const profileId = sessionStorage.getItem("profileId");
+  const contentId = sessionStorage.getItem("contentId");
 
   useEffect(() => {
     const abortControllerRef = new AbortController();
@@ -634,9 +634,9 @@ const BookPagination = ({
   divRef: RefObject<HTMLDivElement>;
 }) => {
   const { mutate } = useContentTracking();
-  const continuePage = localStorage.getItem("continuePage");
-  const profileId = localStorage.getItem("profileId");
-  const contentId = localStorage.getItem("contentId");
+  const continuePage = sessionStorage.getItem("continuePage");
+  const profileId = sessionStorage.getItem("profileId");
+  const contentId = sessionStorage.getItem("contentId");
   const [currentPage, setCurrentage] = useState(
     continuePage && Number(continuePage) < pageTotal ? Number(continuePage) : 1
   );
@@ -771,7 +771,7 @@ const WelDone = ({ content }: { content: TStoryContent }) => {
   // const [user] = useStore(getUserState);
 
   const navigateQuiz = () => {
-    localStorage.setItem("content", JSON.stringify(content));
+    sessionStorage.setItem("content", JSON.stringify(content));
     if (content.has_quiz === true) {
       navigate("quiz");
     } else {

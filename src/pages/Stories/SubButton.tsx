@@ -9,7 +9,7 @@ const SubButton = ({
 }) => {
   const handleClick = () => {
     if (onClick) onClick();
-    localStorage.setItem("subCategoryId", subCategoryId);
+    sessionStorage.setItem("subCategoryId", subCategoryId);
   };
   return (
     <button

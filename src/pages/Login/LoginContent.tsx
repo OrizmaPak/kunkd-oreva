@@ -31,7 +31,7 @@ const LoginContent = () => {
 
   useEffect(() => {
     logOut();
-    localStorage.clear();
+    sessionStorage.clear();
     sessionStorage.clear();
   }, []);
   const handleGoogleLogin = async () => {
@@ -134,7 +134,7 @@ const LoginContent = () => {
       },
       {
         async onSuccess(data) {
-          localStorage.clear();
+          sessionStorage.clear();
           const res = data?.data?.data as TUser;
           // const userCredentils = await signInWithEmailAndPassword(
           //   auth,
@@ -189,7 +189,7 @@ const LoginContent = () => {
     <div className="flex justify-center items-center w-full h-full">
       <div className="inner-form-w relative  my-auto flex justify-end items-center ">
         {/* <Link to="/"> */}
-        <span
+        {/* <span
           onClick={() => {
             logOut();
             navigate("/");
@@ -197,7 +197,7 @@ const LoginContent = () => {
           className="absolute top-[-150px] "
         >
           <img loading="lazy" src={Cancel} alt="cancel" />
-        </span>
+        </span> */}
         {/* </Link> */}
         <div className="w-[100%]">
           <span></span>
