@@ -7,7 +7,6 @@ import {
   useUnLikedContent,
 } from "@/api/queries";
 import AfamBlur from "@/assets/afamblur.jpg";
-import Congrats from "@/assets/congrats.svg";
 import CardHome from "@/common/User/CardHome";
 import CardScreenHome from "@/common/User/CardScreenHome";
 import CustomTTSComponent from "@/components/TTS";
