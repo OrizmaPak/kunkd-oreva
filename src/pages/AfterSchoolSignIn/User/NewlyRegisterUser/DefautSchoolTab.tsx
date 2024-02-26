@@ -66,16 +66,16 @@ const DefaultSchoolTab = () => {
               <div className=" gap-5  relative group ">
                 {/* <div className="absolute hidden group-hover:block z-30 "> */}
                 <button
-                  className="p-4 bg-[rgba(238,238,238,0.7)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-10 "
+                  className="p-4 bg-[rgba(238,238,238)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-10 "
                   onClick={() => sliderReff?.current?.slickPrev()}
                 >
-                  <GrPrevious size={30} />
+                  <GrPrevious size={40} />
                 </button>
                 <button
-                  className="p-4 bg-[rgba(238,238,238,0.7)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-[95.7%]"
+                  className="p-4 bg-[rgba(238,238,238)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-[95.7%]"
                   onClick={() => sliderReff?.current?.slickNext()}
                 >
-                  <GrNext size={30} />
+                  <GrNext size={40} />
                 </button>
                 {/* </div> */}
                 <Slider ref={sliderReff} {...settings}>

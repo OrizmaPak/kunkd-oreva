@@ -52,7 +52,7 @@ const CardScreen = ({
   }, [inView, fetchNextPage, hasNextPage]);
 
   return (
-    <div className="   mx-10 pb-4">
+    <div className="   mx-10 pb-4 ">
       <div className="flex justify-between mb-[20px] pt-8 ">
         <span className=" text25 font-semibold  font-Hanken ">{header}</span>
         <button onClick={action} className=" text-[#8530C1] text2">
@@ -65,13 +65,14 @@ const CardScreen = ({
           className="p-4 bg-[rgba(238,238,238)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-10 "
           onClick={() => sliderReff?.current?.slickPrev()}
         >
-          <GrPrevious size={30} />
+          <GrPrevious size={40} />
         </button>
+
         <button
           className="p-4 bg-[rgba(238,238,238)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-[95.7%]"
           onClick={() => sliderReff?.current?.slickNext()}
         >
-          <GrNext size={30} />
+          <GrNext size={40} />
         </button>
         {/* </div> */}
 
