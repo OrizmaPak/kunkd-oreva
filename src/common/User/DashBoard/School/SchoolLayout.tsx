@@ -176,7 +176,7 @@ export const Header = ({
       <button className="px-4 mb-8 py-3   rounded-3xl flex items-center  gap-2 w-full   my-4">
         <span>{icon1}</span>
 
-        <span className="text-[14px] font-bold ml-4">School Logo</span>
+        <span className="text-[14px] font-bold ml-4"></span>
       </button>
     </div>
   );
