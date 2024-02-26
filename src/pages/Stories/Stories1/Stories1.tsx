@@ -39,6 +39,7 @@ import InnerWrapper from "@/common/User/InnerWrapper";
 // import { getUserState } from "@/store/authStore";
 // import useStore from "@/store/index";
 import TabInReadingPage from "@/pages/AfterParentSignIn/TabInReadingPage";
+import { IoCheckmarkCircleOutline } from "react-icons/io5";
 
 const Stories1 = () => {
   const [isFinish, setIsFinish] = useState(false);
@@ -785,12 +786,7 @@ const WelDone = ({ content }: { content: TStoryContent }) => {
     <div className=" min-h-[calc(92vh-72px-8vh-34px)] h-[100%] flex-grow mt-4 flex justify-center bg-white rounded-3xl items-center">
       <div>
         <p className="flex justify-center items-center">
-          <img
-            loading="lazy"
-            src={Congrats}
-            alt="congrats"
-            className="w-[176px] h-[176px]"
-          />
+          <IoCheckmarkCircleOutline className="congrat-w" color="#8530C1" />
         </p>
         <div className="text-center">
           <h1 className="text-[40px] font-Recoleta font-semibold">
