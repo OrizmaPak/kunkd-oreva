@@ -294,7 +294,8 @@ export const useGetSubCategories = () => {
 // };
 
 export const useGetContebtBySubCategories = (
-  subId: string
+  subId: string,
+  inView?: boolean
   // setAllSubCategoryContents: (prev:TStoryContent) => void
 ) => {
   // const [activePage, setPage] = useState(1);
@@ -302,7 +303,7 @@ export const useGetContebtBySubCategories = (
   return useInfiniteQuery({
     queryKey: ["getContentBySubId", subId],
     queryFn: ({ pageParam = 1 }) => GetContebtBySubCategories(subId, pageParam),
-
+    enabled: inView,
     getNextPageParam: (lastPage, allPages) => {
       // console.log("all&last-----", { allPages, lastPage });
       const allPagesArray = allPages?.reduce((prev, current) => {

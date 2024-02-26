@@ -3,17 +3,20 @@ import { useGetContebtBySubCategories } from "@/api/queries";
 import CardHome from "@/common/User/CardHome";
 import { useNavigate } from "react-router-dom";
 import { TStoryContent } from "@/api/types";
+import { useInView } from "react-intersection-observer";
+
 const CategoryContents = ({ id, title }: { id: string; title: string }) => {
+  const { ref, inView } = useInView({});
   const navigate = useNavigate();
   const { data, isLoading, hasNextPage, fetchNextPage } =
-    useGetContebtBySubCategories(id);
+    useGetContebtBySubCategories(id, inView);
   const allPagesArray = data?.pages?.reduce((prev, current) => {
     return prev.concat(current?.data?.records);
   }, []);
 
   return (
     <div>
-      <div className="">
+      <div ref={ref} className="">
         <CardScreenHome
           data={allPagesArray}
           header={title}
