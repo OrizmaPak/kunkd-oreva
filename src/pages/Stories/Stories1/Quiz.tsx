@@ -1,6 +1,6 @@
 import { Progress } from "@mantine/core";
 import StoriesNav from "./StoriesNav";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import RemarkBg from "@/assets/remarkbg.svg";
 import RemarkIcon from "@/assets/remarkIcon.svg";
@@ -72,8 +72,6 @@ const Quiz = () => {
       return newAnswer;
     });
   };
-  const params = useParams();
-  const { category } = params;
   const progress = 100 / questions?.length;
   const [curentStep, setcurrentStep] = useState(STEP_1);
 
@@ -84,7 +82,7 @@ const Quiz = () => {
           <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] w-[100%] ">
             <Skeleton visible={isLoading}>
               <StoriesNav
-                category={category && category}
+                category={content?.category}
                 genre={content && content.sub_categories[0].sub_category_name}
                 title={content && content.name}
                 subCategoryId={
