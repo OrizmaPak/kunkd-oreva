@@ -338,11 +338,22 @@ export const useSocialLogin = () => {
   });
 };
 
-export const useGetAudioBoks = () => {
-  return useQuery({
+export const useGetAudioBoks = (inView: boolean) => {
+  return useInfiniteQuery({
     queryKey: ["getAudioBooks"],
-    queryFn: () => GetAudioBooks(),
+    queryFn: ({ pageParam = 1 }) => GetAudioBooks(pageParam),
+    enabled: inView,
+    getNextPageParam: (lastPage, allPages) => {
+      const allPagesArray = allPages?.reduce((prev, current) => {
+        return prev.concat(current?.data?.records);
+      }, []);
+      return allPagesArray?.length < lastPage?.data?.totalRecord;
+    },
   });
+  // return useQuery({
+  //   queryKey: ["getAudioBooks", page],
+  //   queryFn: () => GetAudioBooks(page),
+  // });
 };
 
 export const useGetIntroVideo = () => {
