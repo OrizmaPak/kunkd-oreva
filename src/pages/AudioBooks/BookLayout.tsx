@@ -43,6 +43,7 @@ import ConnectedStudentModal from "@/components/ConnectedStudentModal";
 import Wrapper from "@/common/User/Wrapper";
 import InnerWrapper from "@/common/User/InnerWrapper";
 import TabInReadingPage from "../AfterParentSignIn/TabInReadingPage";
+import "./BookLayout.css";
 // import useTimeSpent from "@/hooks/useTimeSpent";
 
 // type TAudioBook = {

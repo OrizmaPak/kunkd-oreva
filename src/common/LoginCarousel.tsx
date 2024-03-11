@@ -50,7 +50,7 @@ const LoginCarousel = () => {
   const [isLoading, setIsLoading] = useState(true);
   return (
     <Skeleton visible={isLoading}>
-      <div className="w-full  h-full bg-center ">
+      <div className="w-full h-full bg-center ">
         <img
           src={`${activeDot ? images[activeDot] : ParentalCtrl}`}
           alt=""
@@ -70,7 +70,7 @@ const LoginCarousel = () => {
             >
               <img loading="lazy" src={ArrowCaro} alt="arrow" />
             </button> */}
-              <div className="flex gap-2  bottom-16 left-[270px] absolute z-50">
+              <div className="flex gap-2  bottom-16 left-[270px] absolute z-50 ">
                 <CustomDot
                   handleSet={() => {
                     sliderRef?.current?.slickGoTo(0);
@@ -93,7 +93,7 @@ const LoginCarousel = () => {
               <Slider ref={sliderRef} {...settings}>
                 {carouselData.map((el) => {
                   return (
-                    <div>
+                    <div className="">
                       <CarouselCard
                         className={el.className}
                         title={el.title}

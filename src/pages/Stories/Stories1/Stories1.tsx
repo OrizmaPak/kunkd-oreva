@@ -785,7 +785,7 @@ const WelDone = ({ content }: { content: TStoryContent }) => {
     <div className=" min-h-[calc(92vh-72px-8vh-34px)] h-[100%] flex-grow mt-4 flex justify-center bg-white rounded-3xl items-center">
       <div>
         <p className="flex justify-center items-center">
-          <IoCheckmarkCircleOutline className="congrat-w" color="#8530C1" />
+          <IoCheckmarkCircleOutline className="" size={150} color="#8530C1" />
         </p>
         <div className="text-center">
           <h1 className="text-[40px] font-Recoleta font-semibold">
