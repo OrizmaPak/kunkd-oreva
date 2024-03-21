@@ -199,7 +199,7 @@ function App() {
         closeOnClickOutside={false}
         withCloseButton={false}
       >
-        <LandScapeModal cancel={close} isLandScape={isLandScape as boolean} />
+        <LandScapeModal cancel={close} />
       </Modal>
       <div className="App ">
         <ScrollToTop />

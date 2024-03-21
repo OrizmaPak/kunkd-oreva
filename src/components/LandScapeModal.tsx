@@ -1,13 +1,7 @@
 import Button from "./Button";
 import { motion } from "framer-motion";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const LandScapeModal = ({
-  cancel,
-  isLandScape,
-}: {
-  cancel: () => void;
-  isLandScape: boolean;
-}) => {
+const LandScapeModal = ({ cancel }: { cancel: () => void }) => {
   const CancelModal = () => {
     if (window.innerWidth > window.innerHeight) {
       cancel();
