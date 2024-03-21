@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AfricanLanguagesNav from "./AfricanLanguagesNav";
 // import { africanLanguagesData } from "./AfricanLanguages";
 import { getApiErrorMessage } from "@/api/helper";
@@ -96,7 +96,6 @@ type TRecommendedVideo = {
 // }
 const VideoPlayer = () => {
   const [isfinish, setIsFinsh] = useState(false);
-  const { sub } = useParams();
   const [opened, { open, close }] = useDisclosure(false);
   const [
     openedconnectedStudent,
