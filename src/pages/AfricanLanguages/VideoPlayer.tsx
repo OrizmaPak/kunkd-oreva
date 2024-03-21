@@ -122,6 +122,8 @@ const VideoPlayer = () => {
   const media = data?.data?.data?.media;
   const video = media?.[0];
   const videoData = data?.data.data.sub_categories?.[0];
+  console.log("ddddd", videoData);
+
   const [currentVideoTime, setCurrentVideotime] = useState(0);
   const { mutate } = useContentTracking();
   const [delay, setDelay] = useState(0);
@@ -313,9 +315,9 @@ const VideoPlayer = () => {
               <Skeleton visible={isLoading} radius={"xl"}>
                 <AfricanLanguagesNav
                   category="Africanlanguages"
-                  lanType={sub}
+                  lanType={videoData?.sub_category_name}
                   title={video && video.name}
-                  subCategoryName={videoData?.sub_category_name}
+                  // subCategoryName={videoData?.sub_category_name}
                 />
               </Skeleton>
             </div>

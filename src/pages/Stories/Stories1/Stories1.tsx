@@ -475,8 +475,8 @@ const ReadPage = ({
   return (
     <div
       id="container"
-      className={`flex py-16 bg-white  rounded-3xl px-10 justify-center items-center  ${
-        goFull ? "px-[200px]" : ""
+      className={`flex py-16  rounded-3xl px-10 justify-center items-center bg-white  ${
+        goFull ? "md:px-[50px] lg:px-[100px] " : ""
       }`}
     >
       {/* <button>change</button> */}

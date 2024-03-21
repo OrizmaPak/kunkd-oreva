@@ -53,13 +53,15 @@ const ProgressCard = ({
               user.role === "user" ? "parent" : "school"
             }/${data.category?.toLowerCase()}/${data.slug
               ?.toLocaleLowerCase()
+              .replace(/\s/g, "-")}/${data.slug
+              ?.toLocaleLowerCase()
               .replace(/\s/g, "-")}`
           );
         } else if (data.category === "Languages") {
           navigate(
-            `../${
-              user.role === "user" ? "parent" : "school"
-            }/africanlanguages/${data.slug}/${data.name}`
+            `../${user.role === "user" ? "parent" : "school"}/languages/${
+              data.slug
+            }/${data.name}`
           );
         }
       }}
