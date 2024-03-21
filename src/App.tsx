@@ -168,17 +168,14 @@ function App() {
   function isPortrait() {
     return window.innerWidth < window.innerHeight;
   }
-  const [isLandScape, setIsLandScape] = useState<boolean>();
   const [opened, { open, close }] = useDisclosure(false);
 
   useEffect(() => {
     if (isLandscape()) {
       console.log("Device is in landscape mode");
-      setIsLandScape(true);
       close();
     } else if (isPortrait()) {
       console.log("Device is in portrait mode");
-      setIsLandScape(false);
       open();
     } else {
       console.log("Device orientation is square");
