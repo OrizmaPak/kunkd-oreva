@@ -9,6 +9,9 @@ import HomeHeader from "./components/HomeHeader";
 import Home from "./pages/Home/Home";
 
 import AudiobooksV2 from "./pages/AudioBooks/AudiobooksV2/AudiobooksV2";
+import LandScapeModal from "./components/LandScapeModal";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 
 const VideoV2 = lazy(() => import("./pages/AfricanLanguages/VideosV2/VideoV2"));
 const StoriesV2 = lazy(() => import("./pages/Stories/StoriesV2/StoriesV2"));
@@ -155,87 +158,129 @@ function App() {
   useEffect(() => {
     sessionStorage.setItem("profileId", childProfile as string);
   }, [childProfile]);
+
+  const location = useLocation();
+
+  function isLandscape() {
+    return window.innerWidth > window.innerHeight;
+  }
+
+  function isPortrait() {
+    return window.innerWidth < window.innerHeight;
+  }
+  const [isLandScape, setIsLandScape] = useState<boolean>();
+  const [opened, { open, close }] = useDisclosure(false);
+
+  useEffect(() => {
+    if (isLandscape()) {
+      console.log("Device is in landscape mode");
+      setIsLandScape(true);
+      close();
+    } else if (isPortrait()) {
+      console.log("Device is in portrait mode");
+      setIsLandScape(false);
+      open();
+    } else {
+      console.log("Device orientation is square");
+    }
+  }, [location.pathname, window.innerWidth, window.innerHeight]);
+
+  // Example usage
+
   return (
-    <div className="App ">
-      <ScrollToTop />
-      {/* <Button onClick={log}></Button> */}
-      <Suspense
-        fallback={
-          <Center h="100vh" maw={"100%"}>
-            <Loader color="#8530C1" size={100} />
-          </Center>
-        }
+    <>
+      <Modal
+        radius={6}
+        size="md"
+        opened={opened}
+        onClose={close}
+        closeButtonProps={{ size: "lg" }}
+        centered
+        closeOnClickOutside={false}
+        withCloseButton={false}
       >
-        <Routes>
-          {/* Routes Before Login */}
-          <Route path="/">
-            {/* <Route index element={<Login />} ></Route> */}
+        <LandScapeModal cancel={close} isLandScape={isLandScape as boolean} />
+      </Modal>
+      <div className="App ">
+        <ScrollToTop />
+        {/* <Button onClick={log}></Button> */}
+        <Suspense
+          fallback={
+            <Center h="100vh" maw={"100%"}>
+              <Loader color="#8530C1" size={100} />
+            </Center>
+          }
+        >
+          <Routes>
+            {/* Routes Before Login */}
+            <Route path="/">
+              {/* <Route index element={<Login />} ></Route> */}
 
-            <Route
-              index
-              element={
-                <>
-                  <Login />
-                </>
-              }
-            ></Route>
-            <Route element={<WebLayout />}>
-              {/* <Route index element={<Navigate to="login" replace />}></Route> */}
-              <Route index element={<Home />}></Route>
-              <Route path="parents" element={<Parents />}></Route>
-              <Route path="schools" element={<Schools />}></Route>
-            </Route>
+              <Route
+                index
+                element={
+                  <>
+                    <Login />
+                  </>
+                }
+              ></Route>
+              <Route element={<WebLayout />}>
+                {/* <Route index element={<Navigate to="login" replace />}></Route> */}
+                <Route index element={<Home />}></Route>
+                <Route path="parents" element={<Parents />}></Route>
+                <Route path="schools" element={<Schools />}></Route>
+              </Route>
 
-            <Route element={<WebLayoutNoNewsLetter />}>
-              <Route path="aboutus" element={<AboutUs />}></Route>
-              <Route path="shop" element={<Shop />}></Route>
-            </Route>
+              <Route element={<WebLayoutNoNewsLetter />}>
+                <Route path="aboutus" element={<AboutUs />}></Route>
+                <Route path="shop" element={<Shop />}></Route>
+              </Route>
 
-            {/* Routes for School Teaher and Parent After  login */}
-            <Route
-              element={
-                <AppLayout
-                  childProfile={childProfile}
-                  setChildProfile={setChildProfile}
-                />
-              }
-            >
-              {/* <Route path="newlyregistereduser/*"> */}
-              <Route path="school/*">
-                <Route element={<NewlyRegisteredUser />}>
-                  <Route index element={<DefaultSchoolTab />}></Route>
-                  <Route path="stories" element={<StoriesV2 />} />
-                  <Route path="audiobooks" element={<AudiobooksV2 />}></Route>
-                  <Route path="languages" element={<VideoV2 />}></Route>
-                </Route>
+              {/* Routes for School Teaher and Parent After  login */}
+              <Route
+                element={
+                  <AppLayout
+                    childProfile={childProfile}
+                    setChildProfile={setChildProfile}
+                  />
+                }
+              >
+                {/* <Route path="newlyregistereduser/*"> */}
+                <Route path="school/*">
+                  <Route element={<NewlyRegisteredUser />}>
+                    <Route index element={<DefaultSchoolTab />}></Route>
+                    <Route path="stories" element={<StoriesV2 />} />
+                    <Route path="audiobooks" element={<AudiobooksV2 />}></Route>
+                    <Route path="languages" element={<VideoV2 />}></Route>
+                  </Route>
 
-                <Route
-                  path="stories/:sub/:title"
-                  element={<Stories1 />}
-                ></Route>
-                <Route
-                  path="stories/:sub/:title/quiz"
-                  element={<Quiz />}
-                ></Route>
+                  <Route
+                    path="stories/:sub/:title"
+                    element={<Stories1 />}
+                  ></Route>
+                  <Route
+                    path="stories/:sub/:title/quiz"
+                    element={<Quiz />}
+                  ></Route>
 
-                <Route
-                  path="audiobooks/:sub/:title"
-                  element={<BookLayout />}
-                ></Route>
-                <Route
-                  path="languages/:sub/:title"
-                  element={<VideoPlayer />}
-                ></Route>
-                {/* <Route index element={<NewlyRegisteredUser />}></Route>
+                  <Route
+                    path="audiobooks/:sub/:title"
+                    element={<BookLayout />}
+                  ></Route>
+                  <Route
+                    path="languages/:sub/:title"
+                    element={<VideoPlayer />}
+                  ></Route>
+                  {/* <Route index element={<NewlyRegisteredUser />}></Route>
               <Route path="stories/*" element={<StoriesV2 />}></Route>
               <Route path="audiobooks/*" element={<AudioBooks />}></Route>
               <Route
                 path="africanlanguages/*"
                 element={<AfricanLanguages />}
               ></Route> */}
-              </Route>
+                </Route>
 
-              {/* <Route path="school/*">
+                {/* <Route path="school/*">
               <Route index element={<NewlyRegisteredUser />}></Route>
               <Route path="stories/*" element={<Stories />}></Route>
               <Route path="audiobooks/*" element={<AudioBooks />}></Route>
@@ -245,9 +290,9 @@ function App() {
               ></Route>
             </Route> */}
 
-              {/* <Route path="existingusernotpaid"></Route> */}
+                {/* <Route path="existingusernotpaid"></Route> */}
 
-              {/* <Route path="librarynotpaid/*">
+                {/* <Route path="librarynotpaid/*">
               <Route path=":category/*" element={<Stories />}></Route>
               <Route path="audiobooks/*" element={<AudioBooks />}></Route>
               <Route
@@ -255,14 +300,17 @@ function App() {
                 element={<AfricanLanguages />}
               ></Route>
             </Route> */}
-              {/* <Route path="stories" element={<Stories />}></Route> */}
-              {/* <Route path="bedtimestories" element={<BedTimeStories />}></Route> */}
-              {/* <Route path="stories1/:id" element={<Stories1 />}></Route> */}
-              <Route path="mylist" element={<MyList />}></Route>
-              <Route path="progressreport" element={<ProgressReport />}></Route>
+                {/* <Route path="stories" element={<Stories />}></Route> */}
+                {/* <Route path="bedtimestories" element={<BedTimeStories />}></Route> */}
+                {/* <Route path="stories1/:id" element={<Stories1 />}></Route> */}
+                <Route path="mylist" element={<MyList />}></Route>
+                <Route
+                  path="progressreport"
+                  element={<ProgressReport />}
+                ></Route>
 
-              {/* ///////  <Route path="parenthomepage///////*"> */}
-              {/* <Route
+                {/* ///////  <Route path="parenthomepage///////*"> */}
+                {/* <Route
               path="parent/*"
               element={
                 <ParentHomePage
@@ -285,141 +333,144 @@ function App() {
               <Route path="languages/*" element={<VideoV2 />}></Route>
             </Route> */}
 
-              <Route path="parent/*">
-                <Route
-                  element={
-                    <ParentHomePage
-                      childProfile={childProfile}
-                      // setChildProfile={setChildProfile}
-                    />
-                  }
-                >
-                  <Route index element={<DefaultTab />}></Route>
-                  <Route path="stories" element={<StoriesV2 />} />
-                  <Route path="audiobooks" element={<AudiobooksV2 />}></Route>
-                  <Route path="languages" element={<VideoV2 />}></Route>
-                </Route>
-                <Route
-                  path="stories/:sub/:title"
-                  element={<Stories1 />}
-                ></Route>
-                <Route
-                  path="stories/:sub/:title/quiz"
-                  element={<Quiz />}
-                ></Route>
-
-                <Route
-                  path="audiobooks/:sub/:title"
-                  element={<BookLayout />}
-                ></Route>
-                <Route
-                  path="languages/:sub/:title"
-                  element={<VideoPlayer />}
-                ></Route>
-              </Route>
-
-              {/* ///////////////School Dashboard////////////// */}
-              <Route path="schooldashboard/*" element={<SchoolLayout />}>
-                <Route index element={<Main />}></Route>
-                <Route path="teacher" element={<Teachers />}></Route>
-                <Route path="student/*">
-                  <Route index element={<Students />} />
+                <Route path="parent/*">
                   <Route
-                    path="profile/:studentId"
-                    element={<StudentProfile />}
+                    element={
+                      <ParentHomePage
+                        childProfile={childProfile}
+                        // setChildProfile={setChildProfile}
+                      />
+                    }
+                  >
+                    <Route index element={<DefaultTab />}></Route>
+                    <Route path="stories" element={<StoriesV2 />} />
+                    <Route path="audiobooks" element={<AudiobooksV2 />}></Route>
+                    <Route path="languages" element={<VideoV2 />}></Route>
+                  </Route>
+                  <Route
+                    path="stories/:sub/:title"
+                    element={<Stories1 />}
+                  ></Route>
+                  <Route
+                    path="stories/:sub/:title/quiz"
+                    element={<Quiz />}
+                  ></Route>
+
+                  <Route
+                    path="audiobooks/:sub/:title"
+                    element={<BookLayout />}
+                  ></Route>
+                  <Route
+                    path="languages/:sub/:title"
+                    element={<VideoPlayer />}
                   ></Route>
                 </Route>
-                <Route path="classes" element={<Classes />}></Route>
-                <Route path="request" element={<SchoolRquest />}></Route>
 
-                {/* <Route path="setting" element={<Setting />}></Route> */}
-              </Route>
-              {/* Teacher Teacher Teacher Teacher DashBoard */}
+                {/* ///////////////School Dashboard////////////// */}
+                <Route path="schooldashboard/*" element={<SchoolLayout />}>
+                  <Route index element={<Main />}></Route>
+                  <Route path="teacher" element={<Teachers />}></Route>
+                  <Route path="student/*">
+                    <Route index element={<Students />} />
+                    <Route
+                      path="profile/:studentId"
+                      element={<StudentProfile />}
+                    ></Route>
+                  </Route>
+                  <Route path="classes" element={<Classes />}></Route>
+                  <Route path="request" element={<SchoolRquest />}></Route>
 
-              <Route path="teacherdashboard/*" element={<TeacherLayout />}>
-                <Route index element={<TMain />}></Route>
-                <Route path="student/*">
-                  <Route index element={<TStudents />} />
+                  {/* <Route path="setting" element={<Setting />}></Route> */}
+                </Route>
+                {/* Teacher Teacher Teacher Teacher DashBoard */}
+
+                <Route path="teacherdashboard/*" element={<TeacherLayout />}>
+                  <Route index element={<TMain />}></Route>
+                  <Route path="student/*">
+                    <Route index element={<TStudents />} />
+                    <Route
+                      path="profile/:studentId"
+                      element={<StudentProfile />}
+                    ></Route>
+                  </Route>
+                  <Route path="request" element={<Request />}></Route>
+                </Route>
+
+                {/* Account */}
+                <Route path="account/*" element={<AccountLayout />}>
+                  <Route index element={<Profile />}></Route>
+                  <Route path="mykids" element={<MyKids />}></Route>
                   <Route
-                    path="profile/:studentId"
-                    element={<StudentProfile />}
+                    path="subscriptionplan"
+                    element={<SubscriptionPlan />}
+                  ></Route>
+                  <Route path="billing" element={<Billing />}></Route>
+                  <Route
+                    path="accountpassword"
+                    element={<SettingPassword />}
                   ></Route>
                 </Route>
-                <Route path="request" element={<Request />}></Route>
               </Route>
 
-              {/* Account */}
-              <Route path="account/*" element={<AccountLayout />}>
-                <Route index element={<Profile />}></Route>
-                <Route path="mykids" element={<MyKids />}></Route>
-                <Route
-                  path="subscriptionplan"
-                  element={<SubscriptionPlan />}
-                ></Route>
-                <Route path="billing" element={<Billing />}></Route>
-                <Route
-                  path="accountpassword"
-                  element={<SettingPassword />}
-                ></Route>
-              </Route>
+              {/* Login and Signup Routes And all Single  Route */}
+
+              {/* Login & Forgot password Routes */}
+              <Route path="login" element={<Login />}></Route>
+              <Route path="forgotpassword" element={<ForgotPassword />}></Route>
+              <Route path="resetpassword" element={<ResetPassword />}></Route>
+              <Route path="newpassword" element={<NewPassword />}></Route>
+              <Route
+                path="passwordcongratulations"
+                element={<PasswordCongratulations />}
+              ></Route>
+              <Route path="signup" element={<Signup />}></Route>
+
+              {/* School sign up Routes */}
+              <Route path="schoolsignup" element={<SchoolSignup />}></Route>
+              <Route
+                path="schoolverification"
+                element={<SchoolVerification />}
+              ></Route>
+              <Route
+                path="secureadminportal"
+                element={<SecureAdminPortal />}
+              ></Route>
+              <Route
+                path="kundakidsunlimited"
+                element={<KundaKidsUnlimited />}
+              ></Route>
+              <Route
+                path="schoolcongratulations"
+                element={<SchoolCongrtulations />}
+              ></Route>
+
+              {/* Parent sign up routes */}
+              <Route path="parentsignup" element={<ParentSignup />}></Route>
+              <Route path="secureaccount" element={<SecureAccount />}></Route>
+              <Route path="makepayment" element={<MakePayment />}></Route>
+              <Route
+                path="congratulations"
+                element={<PaymentCongratulations />}
+              ></Route>
+
+              <Route path="packages" element={<ChoosePlan />}></Route>
+              <Route
+                path="childprofilesetup"
+                element={
+                  <ChildProfileSetUp setChildProfile={setChildProfile} />
+                }
+              ></Route>
+
+              <Route
+                path="selectprofile"
+                element={<SelectProfile setChildProfile={setChildProfile} />}
+              ></Route>
+              <Route path="passwordsetup" element={<TeacherSignup />}></Route>
             </Route>
-
-            {/* Login and Signup Routes And all Single  Route */}
-
-            {/* Login & Forgot password Routes */}
-            <Route path="login" element={<Login />}></Route>
-            <Route path="forgotpassword" element={<ForgotPassword />}></Route>
-            <Route path="resetpassword" element={<ResetPassword />}></Route>
-            <Route path="newpassword" element={<NewPassword />}></Route>
-            <Route
-              path="passwordcongratulations"
-              element={<PasswordCongratulations />}
-            ></Route>
-            <Route path="signup" element={<Signup />}></Route>
-
-            {/* School sign up Routes */}
-            <Route path="schoolsignup" element={<SchoolSignup />}></Route>
-            <Route
-              path="schoolverification"
-              element={<SchoolVerification />}
-            ></Route>
-            <Route
-              path="secureadminportal"
-              element={<SecureAdminPortal />}
-            ></Route>
-            <Route
-              path="kundakidsunlimited"
-              element={<KundaKidsUnlimited />}
-            ></Route>
-            <Route
-              path="schoolcongratulations"
-              element={<SchoolCongrtulations />}
-            ></Route>
-
-            {/* Parent sign up routes */}
-            <Route path="parentsignup" element={<ParentSignup />}></Route>
-            <Route path="secureaccount" element={<SecureAccount />}></Route>
-            <Route path="makepayment" element={<MakePayment />}></Route>
-            <Route
-              path="congratulations"
-              element={<PaymentCongratulations />}
-            ></Route>
-
-            <Route path="packages" element={<ChoosePlan />}></Route>
-            <Route
-              path="childprofilesetup"
-              element={<ChildProfileSetUp setChildProfile={setChildProfile} />}
-            ></Route>
-
-            <Route
-              path="selectprofile"
-              element={<SelectProfile setChildProfile={setChildProfile} />}
-            ></Route>
-            <Route path="passwordsetup" element={<TeacherSignup />}></Route>
-          </Route>
-        </Routes>
-      </Suspense>
-    </div>
+          </Routes>
+        </Suspense>
+      </div>
+    </>
     // </BrowserRouter>
   );
 }
