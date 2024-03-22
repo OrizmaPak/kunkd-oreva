@@ -1,0 +1,4 @@
+w-avatar {
+  height: clamp(3.75rem, 3.2248rem + 3.3613vw, 6.25rem) !important;
+  width: clamp(3.75rem, 3.2248rem + 3.3613vw, 6.25rem) !important;
+}

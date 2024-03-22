@@ -28,6 +28,7 @@ import { Tclass } from "../DashBoard/SchoolDashBoard/Teachers/AddTeacherForm";
 
 import { useGetProfile } from "@/api/queries";
 import useDebounce from "@/hooks/useDebounce";
+import "./Mykids.css";
 import {
   ChildAgeModal,
   ChildNameModal,
@@ -239,7 +240,7 @@ const KidCard = ({
               loading="lazy"
               src={image}
               alt="avatar"
-              className="w-[100px] h-[100px] object-cover rounded-md"
+              className="w-avatar object-cover rounded-md"
             />
           )}
         </div>

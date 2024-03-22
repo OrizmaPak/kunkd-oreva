@@ -187,12 +187,16 @@ function App() {
         size="md"
         opened={opened}
         onClose={close}
+        overlayProps={{
+          opacity: 0.85,
+          blur: 3,
+        }}
         closeButtonProps={{ size: "lg" }}
         centered
         closeOnClickOutside={false}
         withCloseButton={false}
       >
-        <LandScapeModal cancel={close} />
+        <LandScapeModal />
       </Modal>
       <div className="App ">
         <ScrollToTop />
