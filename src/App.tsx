@@ -159,28 +159,33 @@ function App() {
     sessionStorage.setItem("profileId", childProfile as string);
   }, [childProfile]);
 
-  const location = useLocation();
-
-  function isLandscape() {
-    return window.innerWidth > window.innerHeight;
-  }
-
-  function isPortrait() {
-    return window.innerWidth < window.innerHeight;
-  }
   const [opened, { open, close }] = useDisclosure(false);
+  const [windowDimensions, setWindowDimensions] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
 
   useEffect(() => {
-    if (isLandscape()) {
-      console.log("Device is in landscape mode");
-      close();
-    } else if (isPortrait()) {
-      console.log("Device is in portrait mode");
-      open();
-    } else {
-      console.log("Device orientation is square");
-    }
-  }, [location.pathname, window.innerWidth, window.innerHeight]);
+    const handleResize = () => {
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+
+      if (window.innerWidth < window.innerHeight) {
+        open();
+      } else {
+        close();
+      }
+    };
+    window.addEventListener("load", handleResize);
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("load", handleResize);
+    };
+  }, []);
 
   // Example usage
 
