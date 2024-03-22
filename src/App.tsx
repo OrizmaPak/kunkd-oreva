@@ -160,18 +160,9 @@ function App() {
   }, [childProfile]);
 
   const [opened, { open, close }] = useDisclosure(false);
-  const [windowDimensions, setWindowDimensions] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
 
   useEffect(() => {
     const handleResize = () => {
-      setWindowDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-
       if (window.innerWidth < window.innerHeight) {
         open();
       } else {
