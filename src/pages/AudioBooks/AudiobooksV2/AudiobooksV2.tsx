@@ -29,6 +29,7 @@ const AudiobooksV2 = () => {
     <div>
       <div ref={ref} className="my-[50px]">
         <CardScreenHome
+          hasAll
           data={allPagesArray}
           header={"General"}
           isTitled={false}

@@ -292,6 +292,12 @@ export const useGetSubCategories = () => {
 //     },
 //   });
 // };
+export const useGetContebtBySubCategories2 = (id: string, page: string) => {
+  return useQuery({
+    queryKey: ["getContentBySubId2", id, page],
+    queryFn: () => GetContebtBySubCategories(id, page),
+  });
+};
 
 export const useGetContebtBySubCategories = (
   subId: string,
@@ -354,6 +360,13 @@ export const useGetAudioBoks = (inView: boolean) => {
   //   queryKey: ["getAudioBooks", page],
   //   queryFn: () => GetAudioBooks(page),
   // });
+};
+
+export const useGetAudioBoks2 = (page: string) => {
+  return useQuery({
+    queryKey: ["getAudioBooks", page],
+    queryFn: () => GetAudioBooks(page),
+  });
 };
 
 export const useGetIntroVideo = () => {

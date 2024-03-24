@@ -20,9 +20,11 @@ const CategoryContents = ({ id, title }: { id: string; title: string }) => {
     <div>
       <div ref={ref} className="">
         <CardScreenHome
+          hasAll
+          subId={id}
           data={allPagesArray}
           header={title}
-          isTitled={false}
+          isTitled={true}
           isLoading={isLoading}
           hasInfiniteScroll
           hasNextPage={hasNextPage}

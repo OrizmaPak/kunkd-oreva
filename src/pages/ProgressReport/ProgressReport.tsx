@@ -28,7 +28,7 @@ export type TContentLog = {
 
 const ProgressReport = () => {
   const profileId = sessionStorage.getItem("profileId");
-  const { data: allContentProgress } = useAllProgressContent(
+  const { data: allContentProgress, isLoading } = useAllProgressContent(
     Number(profileId) || 0
   );
   const allContentProgressContents = allContentProgress?.data?.data;
@@ -91,7 +91,10 @@ const ProgressReport = () => {
             </div>
             <div className="px-20">
               {currentStep === STEP_1 && (
-                <All data={allContentProgressContents?.records} />
+                <All
+                  data={allContentProgressContents?.records}
+                  isLoading={isLoading}
+                />
               )}
               {currentStep === STEP_2 && <Ongoing data={ongoingContents} />}
               {currentStep === STEP_3 && <Completed data={completedContents} />}

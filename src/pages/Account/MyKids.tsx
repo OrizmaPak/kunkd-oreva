@@ -229,7 +229,7 @@ const KidCard = ({
         />
       </Modal>
 
-      <div className=" relative flex  border-[#FBECFF] border-[3px] px-6 py-6 rounded-3xl">
+      <div className=" relative  lg:flex  border-[#FBECFF] border-[3px] px-6 py-6 rounded-3xl">
         <div className=" flex justify-center items-center">
           {isLoading ? (
             <span>

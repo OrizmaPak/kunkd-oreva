@@ -6,6 +6,7 @@ import { GrNext, GrPrevious } from "react-icons/gr";
 import Slider from "react-slick";
 import { useRef, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   data?: TStoryContent[];
@@ -17,6 +18,8 @@ type Props = {
   isLoading: boolean;
   hasInfiniteScroll?: boolean;
   hasNextPage?: boolean;
+  subId?: string;
+  hasAll?: boolean;
   fetchNextPage?: () => void;
 };
 const CardScreen = ({
@@ -25,6 +28,8 @@ const CardScreen = ({
   action,
   actiontitle,
   card,
+  subId,
+  hasAll,
   isLoading,
   hasInfiniteScroll = false,
   fetchNextPage,
@@ -44,6 +49,7 @@ const CardScreen = ({
     // threshold: 1,
   });
   const sliderReff = useRef<Slider>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (inView && hasNextPage && fetchNextPage) {
@@ -58,6 +64,17 @@ const CardScreen = ({
         <button onClick={action} className=" text-[#8530C1] text2">
           {actiontitle}
         </button>
+        {hasAll && (
+          <button
+            onClick={() => {
+              sessionStorage.setItem("subId", subId?.toString() as string);
+              navigate(`${subId?.toString()}`);
+            }}
+            className=" text-[#8530C1] text2"
+          >
+            View All
+          </button>
+        )}
       </div>
       <div className="relative group  ">
         {/* <div className="absolute hidden group-hover:flex controls-container  w-full justify-between z-30  group"> */}
@@ -81,7 +98,7 @@ const CardScreen = ({
             ? Array(5)
                 .fill(1)
                 .map((arr, index) => (
-                  <Skeleton key={index} visible={isLoading} className="mx-10">
+                  <Skeleton key={index} visible={isLoading} className="">
                     <div
                       key={index}
                       className="h-[200px] w-[400px] text-transparent mx-2"

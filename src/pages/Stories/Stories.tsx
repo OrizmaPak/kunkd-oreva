@@ -1,6 +1,6 @@
 import {
   useContentForHome,
-  useGetContebtBySubCategories,
+  useGetContebtBySubCategories2,
   useGetSubCategories,
 } from "@/api/queries";
 import Banner from "@/assets/storiesBanner.png";
@@ -12,17 +12,12 @@ import Button from "@/components/Button";
 import Hero from "@/pages/Library/LibraryNotPaid/Hero";
 import { Pagination, Skeleton } from "@mantine/core";
 import { useState } from "react";
-import {
-  Outlet,
-  Route,
-  Routes,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import InnerWrapper from "../../common/User/InnerWrapper";
 import Quiz from "./Stories1/Quiz";
 import Stories1 from "./Stories1/Stories1";
 import { TStoryContent } from "@/api/types";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 import "./stories.css";
 
@@ -71,90 +66,92 @@ const Stories = () => {
 };
 export default Stories;
 
-const Story = () => {
+export const Story = () => {
   const [activePage, setPage] = useState(1);
-  const { subCategory } = useParams();
   const navigate = useNavigate();
-  const subCategoryId = sessionStorage.getItem("subCategoryId");
-  const { data, isLoading, refetch } = useGetContebtBySubCategories(
-    subCategoryId as string
-    // activePage.toString()
+  const subCategoryId = sessionStorage.getItem("subId");
+  const { data, isLoading, refetch } = useGetContebtBySubCategories2(
+    subCategoryId as string,
+    activePage.toString()
   );
-  const subCategoryContents = data?.pages[0].data.data.records;
-  const totalPage = Math.ceil(data?.pages[0].data.data.totalRecord / 10);
+  console.log("dataaaaa", data?.data.records);
+  const subCategoryContents = data?.data.records;
+  const totalPage = Math.ceil(data?.data.totalRecord / 10);
 
   return (
     <>
-      <div>
-        <hr className="my-20 mx-[200px]" />
-        <h1 className="text-center font-bold text30 font-Recoleta mt-10 ">
-          {subCategory &&
-            subCategory?.charAt(0).toUpperCase() +
-              subCategory.substring(1).replace(/-/g, " ")}{" "}
-          Stories
-        </h1>
-        <p className="text-center text1 text-[#B5B5C3] my-8">
-          Whenever they request a new bedtime story
-        </p>
-      </div>
-      <div className="flex justify-center items-center">
-        <div className="grid grid-cols-5 gap-8 gap-y-12 pad-x-40 py-10">
-          {isLoading
-            ? Array(10)
-                .fill(5)
-                .map((arr, index) => (
-                  <Skeleton visible={true}>
-                    <div
-                      key={index}
-                      className="h-[200px] w-[200px] text-transparent"
-                    >
-                      {arr}
-                    </div>
-                  </Skeleton>
-                ))
-            : subCategoryContents?.map(
-                (story: TStoryContent, index: number) => {
-                  return (
-                    <>
-                      {
-                        <CardHome
+      <Wrapper bgColor="#fff7fd">
+        <InnerWrapper>
+          <div className="mt-5  p-5 pt-10 rounded-3xl flex flex-col bg-white  flex-grow">
+            <div className="px-10 cursor-pointer">
+              <IoMdArrowRoundBack size={35} onClick={() => navigate(-1)} />
+            </div>
+            <h1 className="text-center font-bold text30 font-Hanken   ">
+              {subCategoryContents && subCategoryContents[0]?.sub_category_name}
+            </h1>
+          </div>
+          <div className="flex justify-center items-center">
+            <div className="grid grid-cols-5 gap-8 gap-y-12 pad-x-40 py-10 ">
+              {isLoading
+                ? Array(10)
+                    .fill(5)
+                    .map((arr, index) => (
+                      <Skeleton visible={true}>
+                        <div
                           key={index}
-                          {...story}
-                          goTo={() => {
-                            navigate(
-                              `../sub/${story?.slug
-                                ?.toLocaleLowerCase()
-                                ?.replace(/\s/g, "")}`
-                            );
-                          }}
-                        />
-                      }
-                    </>
-                  );
-                }
-              )}
-        </div>
-      </div>
-      {totalPage > 1 && (
-        <div className="px-10  mr-2 flex justify-end  pb-8">
-          <Pagination
-            total={totalPage}
-            value={activePage}
-            defaultChecked={true}
-            onChange={setPage}
-            onClick={() => {
-              refetch();
-            }}
-            styles={() => ({
-              control: {
-                "&[data-active]": {
-                  backgroundColor: "#8530C1 !important",
-                },
-              },
-            })}
-          />
-        </div>
-      )}
+                          className="h-[200px] w-[200px] text-transparent"
+                        >
+                          {arr}
+                        </div>
+                      </Skeleton>
+                    ))
+                : subCategoryContents?.map(
+                    (story: TStoryContent, index: number) => {
+                      return (
+                        <>
+                          {
+                            <CardHome
+                              key={index}
+                              {...story}
+                              goTo={() => {
+                                navigate(
+                                  `../stories/${story?.slug
+                                    ?.toLocaleLowerCase()
+                                    ?.replace(/\s/g, "")}/${story?.name
+                                    ?.toLocaleLowerCase()
+                                    ?.replace(/\s/g, "")}`
+                                );
+                              }}
+                            />
+                          }
+                        </>
+                      );
+                    }
+                  )}
+            </div>
+          </div>
+          {totalPage > 1 && (
+            <div className="px-10  mr-2 flex justify-end  pb-8">
+              <Pagination
+                total={totalPage}
+                value={activePage}
+                defaultChecked={true}
+                onChange={setPage}
+                onClick={() => {
+                  refetch();
+                }}
+                styles={() => ({
+                  control: {
+                    "&[data-active]": {
+                      backgroundColor: "#8530C1 !important",
+                    },
+                  },
+                })}
+              />
+            </div>
+          )}
+        </InnerWrapper>
+      </Wrapper>
     </>
   );
 };

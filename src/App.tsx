@@ -12,6 +12,9 @@ import AudiobooksV2 from "./pages/AudioBooks/AudiobooksV2/AudiobooksV2";
 import LandScapeModal from "./components/LandScapeModal";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { Story } from "./pages/Stories/Stories";
+import Videos from "./pages/AfricanLanguages/Videos";
+import { Books } from "./pages/AudioBooks/AudioBooks";
 
 const VideoV2 = lazy(() => import("./pages/AfricanLanguages/VideosV2/VideoV2"));
 const StoriesV2 = lazy(() => import("./pages/Stories/StoriesV2/StoriesV2"));
@@ -255,6 +258,8 @@ function App() {
                     path="stories/:sub/:title"
                     element={<Stories1 />}
                   ></Route>
+
+                  <Route path="stories/:sub" element={<Story />}></Route>
                   <Route
                     path="stories/:sub/:title/quiz"
                     element={<Quiz />}
@@ -264,71 +269,20 @@ function App() {
                     path="audiobooks/:sub/:title"
                     element={<BookLayout />}
                   ></Route>
+                  <Route path="audiobooks/:sub" element={<Books />}></Route>
+
                   <Route
                     path="languages/:sub/:title"
                     element={<VideoPlayer />}
                   ></Route>
-                  {/* <Route index element={<NewlyRegisteredUser />}></Route>
-              <Route path="stories/*" element={<StoriesV2 />}></Route>
-              <Route path="audiobooks/*" element={<AudioBooks />}></Route>
-              <Route
-                path="africanlanguages/*"
-                element={<AfricanLanguages />}
-              ></Route> */}
+                  <Route path="languages/:sub" element={<Videos />}></Route>
                 </Route>
 
-                {/* <Route path="school/*">
-              <Route index element={<NewlyRegisteredUser />}></Route>
-              <Route path="stories/*" element={<Stories />}></Route>
-              <Route path="audiobooks/*" element={<AudioBooks />}></Route>
-              <Route
-                path="africanlanguages/*"
-                element={<AfricanLanguages />}
-              ></Route>
-            </Route> */}
-
-                {/* <Route path="existingusernotpaid"></Route> */}
-
-                {/* <Route path="librarynotpaid/*">
-              <Route path=":category/*" element={<Stories />}></Route>
-              <Route path="audiobooks/*" element={<AudioBooks />}></Route>
-              <Route
-                path="africanlanguages/*"
-                element={<AfricanLanguages />}
-              ></Route>
-            </Route> */}
-                {/* <Route path="stories" element={<Stories />}></Route> */}
-                {/* <Route path="bedtimestories" element={<BedTimeStories />}></Route> */}
-                {/* <Route path="stories1/:id" element={<Stories1 />}></Route> */}
                 <Route path="mylist" element={<MyList />}></Route>
                 <Route
                   path="progressreport"
                   element={<ProgressReport />}
                 ></Route>
-
-                {/* ///////  <Route path="parenthomepage///////*"> */}
-                {/* <Route
-              path="parent/*"
-              element={
-                <ParentHomePage
-                  childProfile={childProfile}
-                  // setChildProfile={setChildProfile}
-                />
-              }
-            >
-              <Route index element={<DefaultTab />}></Route>
-              <Route path="stories/*">
-                <Route index element={<StoriesV2 />}></Route>
-                <Route path=":sub/:title" element={<Stories1 />}></Route>
-              </Route>
-
-              <Route path="stories/*" element={<StoriesV2 />}>
-                <Route path="mat" element={<p>Hello mathew</p>}></Route>
-                <Route path=":sub/:title" element={<Stories1 />}></Route>
-              </Route>
-              <Route path="audiobooks/*" element={<AudiobooksV2 />}></Route>
-              <Route path="languages/*" element={<VideoV2 />}></Route>
-            </Route> */}
 
                 <Route path="parent/*">
                   <Route
@@ -348,6 +302,7 @@ function App() {
                     path="stories/:sub/:title"
                     element={<Stories1 />}
                   ></Route>
+                  <Route path="stories/:sub" element={<Story />}></Route>
                   <Route
                     path="stories/:sub/:title/quiz"
                     element={<Quiz />}
@@ -357,10 +312,12 @@ function App() {
                     path="audiobooks/:sub/:title"
                     element={<BookLayout />}
                   ></Route>
+                  <Route path="audiobooks/:sub" element={<Books />}></Route>
                   <Route
                     path="languages/:sub/:title"
                     element={<VideoPlayer />}
                   ></Route>
+                  <Route path="languages/:sub" element={<Videos />}></Route>
                 </Route>
 
                 {/* ///////////////School Dashboard////////////// */}
