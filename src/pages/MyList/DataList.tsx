@@ -42,7 +42,9 @@ const DataList = ({ data }: { data: TStoryContent[] }) => {
                       navigate(
                         `../${
                           user.role === "parent" ? "parent" : "school"
-                        }/${data.category?.toLowerCase()}/${data.slug
+                        }/${data.category?.toLowerCase()}/${data?.slug
+                          ?.toLocaleLowerCase()
+                          .replace(/\s/g, "-")}/${data?.name
                           ?.toLocaleLowerCase()
                           .replace(/\s/g, "-")}`
                       );
