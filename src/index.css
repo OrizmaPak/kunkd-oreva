@@ -41,7 +41,7 @@
   }
 }
 
-@layer components {
+@layer utilities {
   .text-a {
     @apply text-sm sm:text-lg md:text-2xl;
   }
