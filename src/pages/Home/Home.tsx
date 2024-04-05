@@ -11,7 +11,8 @@ import WatchKundaContent from "./WatchKundaContent";
 
 const Home = () => {
   return (
-    <div>
+    // <div className=" bg-pink-200">
+    <>
       <Hero>
         <HeroContent />
       </Hero>
@@ -20,7 +21,7 @@ const Home = () => {
       </Stat>
 
       <KundaApp>
-        <div className="pb-[600px]">
+        <div>
           <KundaAppContent />
         </div>
       </KundaApp>
@@ -28,7 +29,8 @@ const Home = () => {
         <WatchKundaContent />
       </WatchKunda>
       <ShopBooks />
-    </div>
+    </>
+    // </div>
   );
 };
 

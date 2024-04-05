@@ -1,18 +1,22 @@
 import DasboardIcon from "@/assets/adminIcon.svg";
 
 import StudentIcon from "@/assets/student.svg";
+import UserIcon from "@/assets/profileavatar24.png";
 
-import LogoutIcon from "@/assets/logout.svg";
 import Arrow from "@/assets/greatericon.svg";
-import { Outlet } from "react-router-dom";
-import { useMatch, useNavigate } from "react-router-dom";
-import { useDisclosure } from "@mantine/hooks";
-import { Modal } from "@mantine/core";
+import LogoutIcon from "@/assets/logout.svg";
 import LogoutModal from "@/pages/DashBoard/SchoolDashBoard/LogoutModal";
-import Teacher01 from "@/assets/teacher01.svg";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { Outlet, useMatch, useNavigate } from "react-router-dom";
+// import Teacher01 from "@/assets/teacher01.svg";
 import SchoolIcon from "@/assets/schoolIcon.svg";
 import { Header } from "@/common/User/DashBoard/School/SchoolLayout";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
 import React from "react";
+import { useEffect } from "react";
+import { useGetUpdatedProfile } from "@/api/queries";
 
 const routeBaseUrl = "/teacherdashboard";
 const links = [
@@ -27,6 +31,13 @@ const links = [
     label: "Student",
     href: "student",
     route: routeBaseUrl + "/student/*",
+    icon: StudentIcon,
+    hasSub: true,
+  },
+  {
+    label: "Request",
+    href: "request",
+    route: routeBaseUrl + "/request",
     icon: StudentIcon,
     hasSub: true,
   },
@@ -45,11 +56,18 @@ const links = [
 ];
 const TeacherLayout = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const [useri, setUser] = useStore(getUserState);
+  const { data: userData } = useGetUpdatedProfile();
+  const currentUserProfile = userData?.data?.data;
+  useEffect(() => {
+    setUser({ ...useri, ...currentUserProfile });
+    //  eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUserProfile]);
   return (
     <>
       <Modal
-        radius={"xl"}
-        size="lg"
+        radius={6}
+        size="md"
         opened={opened}
         onClose={close}
         closeButtonProps={{ size: "lg" }}
@@ -58,14 +76,21 @@ const TeacherLayout = () => {
         <LogoutModal onCloseModal={() => close()} />
       </Modal>
 
-      <div className="w-full  bg-[#FFF7FD]  px-[100px] py-[15px] mt-[8vh] h-[92vh]  ">
-        <div className="flex h-[calc(100vh-50px-8vh)]  gap-8">
-          <div className="basis-1/5 bg-white h-full rounded-[40px] px-7 flex  flex-col pb-4 ">
+      <div className="w-full  bg-[#FFF7FD]  px-[100px] py-2 pb-4 mt-[8vh] h-[91vh]  ">
+        <div className="flex max-w-[1280px] w-full mx-auto  h-full gap-5  mt-[1vh]">
+          <div className="basis-1/4 bg-white h-full rounded-[40px] px-4 flex  flex-col pb-4 ">
             <div className="flex-grow-1 flex-1">
               <Header
-                icon1={<img src={SchoolIcon} alt="icon" className="w-[40px]" />}
+                icon1={
+                  <img
+                    loading="lazy"
+                    src={SchoolIcon}
+                    alt="icon"
+                    className="w-[30px]"
+                  />
+                }
                 title="Pampers Schools"
-                icon2={<img src={Arrow} alt="icon" />}
+                icon2={<img loading="lazy" src={Arrow} alt="icon" />}
               />
               {links.slice(0, 4).map((link) => (
                 <NavButton
@@ -73,22 +98,18 @@ const TeacherLayout = () => {
                   title={link.label}
                   href={link.href}
                   route={link.route}
-                  icon={<img src={link.icon} alt="icon" />}
+                  icon={<img loading="lazy" src={link.icon} alt="icon" />}
                 />
               ))}
-              <hr className="my-10" />
+              <hr className="my-" />
 
-              <TeacherProfile
-                name="Mitchel Mccarty"
-                email="mitchelmccarty@mail.com"
-                image={Teacher01}
-              />
+              <TeacherProfile />
             </div>
             <div>
               <DasboardButton
                 onClick={() => open()}
                 title="Logout"
-                icon={<img src={LogoutIcon} alt="icon" />}
+                icon={<img loading="lazy" src={LogoutIcon} alt="icon" />}
               />
             </div>
           </div>
@@ -104,28 +125,32 @@ export default TeacherLayout;
 const DasboardButton = ({
   title,
   icon,
-  onClick = () => {},
+  onClick,
   active = false,
 }: {
   title: string;
   icon: React.ReactNode;
   active?: boolean;
-  onClick?: () => void;
+  onClick: () => void;
 }) => {
   return (
     <button
       onClick={() => {
-        console.log("testing");
         onClick();
       }}
-      className={`px-4 py-4  rounded-3xl flex items-center gap-8 w-full my-8 ${
+      className={`transition-all duration-500 px-2 py-2  rounded flex items-center justify-between gap-8 w-full my-4 ${
         active
           ? "bg-[#8530c1] text-white"
           : "hover:bg-[#8530C1] hover:text-white"
       }  my-4`}
     >
-      <span>{icon}</span>
-      <span className={`${title === "Logout" && "text-red-600"}`}>{title}</span>
+      <span className="flex gap-3 justify-center">
+        <span>{icon}</span>
+        <span className={`${title === "Logout" && "text-red-600"}`}>
+          {title}
+        </span>
+      </span>
+      <span className="h-8 w-2 bg-white rounded-2xl"></span>
     </button>
   );
 };
@@ -138,11 +163,9 @@ const NavButton = (props: {
 }) => {
   const { icon, title, href, route } = props;
   const match = useMatch(route);
-  console.log(match);
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    console.log("mat", href);
     navigate(href);
   };
   return (
@@ -154,23 +177,24 @@ const NavButton = (props: {
   );
 };
 
-const TeacherProfile = ({
-  image,
-  name,
-  email,
-}: {
-  image: string;
-  name: string;
-  email: string;
-}) => {
+const TeacherProfile = () => {
+  const [user, ,] = useStore(getUserState);
   return (
-    <div className="mt-28">
+    <div className="mt-10">
       <div className="flex justify-center items-center">
-        <img src={image} alt="image" />
+        <img
+          loading="lazy"
+          src={user?.user_image || UserIcon}
+          alt="image"
+          className="rounded-full h-[110px] w-[110px] object-cover"
+        />
       </div>
       <div className="text-center">
-        <p className="font-bold text-[20px]">{name}</p>
-        <p>{email}</p>
+        <p className="font-bold text-[20px]">
+          {user?.firstname} {user?.lastname}
+        </p>
+        <p>{user?.email}</p>
+        <p className="font-semibold mt-2">{user?.school?.class?.class_name}</p>
       </div>
     </div>
   );

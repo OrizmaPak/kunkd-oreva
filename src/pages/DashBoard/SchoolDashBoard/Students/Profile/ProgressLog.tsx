@@ -1,22 +1,49 @@
-import Bookbg from "@/assets/bookbg.svg";
-import MusicBg from "@/assets/musicbg.svg";
-import VideoBg from "@/assets/videobg.svg";
-import QuizBg from "@/assets/quizbg.svg";
-const ProgressLog = () => {
+import Bookbg from "@/assets/dbookicon.png";
+import MusicBg from "@/assets/daudiobookicon.png";
+import QuizBg from "@/assets/dquizicon.png";
+import VideoBg from "@/assets/dvideoicon.png";
+import { TLogData } from "../../Main/Main";
+import { Skeleton } from "@mantine/core";
+
+const ProgressLog = ({
+  logData,
+  isLoading,
+}: {
+  logData?: TLogData;
+  isLoading?: boolean;
+}) => {
   return (
-    <div className="bg-white flex flex-col  flex-grow rounded-3xl px-4 py-2 pb-6">
-      <div>
-        <div className="flex justify-between my-5 ">
-          <h1 className="text-[20px] font-bold">Progress Log</h1>
+    <>
+      {isLoading ? (
+        <Skeleton
+          height={550}
+          width={350}
+          radius={20}
+          mb="xl"
+          visible={isLoading}
+        />
+      ) : (
+        <div className="bg-white flex flex-col  flex- rounded-3xl px-6 py-2 pb-6 ">
+          <div>
+            <div className="flex justify-between my-5 ">
+              <h1 className="text-[16px]  font-Hanken font-semibold ">
+                Progress Log
+              </h1>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3 flex-grow py-4 ">
+            <Card image={Bookbg} title="Stories" total={logData?.stories} />
+            <Card
+              image={MusicBg}
+              title="Audiobooks"
+              total={logData?.audio_books}
+            />
+            <Card image={VideoBg} title="Videos" total={logData?.languages} />
+            <Card image={QuizBg} title="quiz" total={logData?.quiz} />
+          </div>
         </div>
-      </div>
-      <div className="grid grid-cols-2 gap-3 flex-grow py-4 ">
-        <Card image={Bookbg} title="Stories" total="38" />
-        <Card image={MusicBg} title="Audiobooks" total="42" />
-        <Card image={VideoBg} title="Videos" total="71" />
-        <Card image={QuizBg} title="quiz" total="20" />
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
@@ -29,16 +56,16 @@ const Card = ({
 }: {
   image: string;
   title: string;
-  total: string;
+  total?: number;
 }) => {
   return (
-    <div className=" rounded-3xl py-4 px-8 border border-purple-300">
+    <div className=" rounded-3xl  p-6 border-[#FBECFF] border-[2px]">
       <div>
-        <img src={image} alt="image" className="w-[60px]" />
+        <img loading="lazy" src={image} alt="image" className="w-[38px]" />
       </div>
       <div className="flex flex-col">
-        <span className="font-bold text-[30px]">{total}</span>
-        <span>{title}</span>
+        <span className="font-bold text25 ">{total ? total : 0}</span>
+        <span className="text3 text-[#B5B5C3] font-semibold">{title}</span>
       </div>
     </div>
   );

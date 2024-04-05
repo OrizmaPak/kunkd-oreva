@@ -1,306 +1,460 @@
 import { Link } from "react-router-dom";
-import BellIcon from "@/assets/bellicon.svg";
-import UserIcon from "@/assets/usericon.svg";
 import ArrowDown from "@/assets/arrowdown.svg";
-import SearchIcon from "@/assets/searchicon.svg";
-import { Menu } from "@mantine/core";
+import UserIcon from "@/assets/usericon.svg";
+import { Menu, Popover } from "@mantine/core";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useDisclosure } from "@mantine/hooks";
-import { Modal } from "@mantine/core";
-import EnterPassCode from "@/pages/DashBoard/SchoolDashBoard/Main/EnterPassCode";
-import { userContext } from "@/Context/StateProvider";
-import Avatar1 from "@/assets/Avatar1.svg";
-import Avatar2 from "@/assets/Avatar2.svg";
-import UserIcon2 from "@/assets/userIcon2.svg";
+import { useGetMainSearch } from "@/api/queries";
 import KundaLogo from "@/assets/schoolIcon.svg";
-import Blxst from "@/assets/Blxst.svg";
+// import UserIcon2 from "@/assets/userIcon2.svg";
+import useDebounce from "@/hooks/useDebounce";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
+import { getProfileState } from "@/store/profileStore";
+import { useState } from "react";
+import { AiOutlineBell, AiOutlineSearch } from "react-icons/ai";
+import { selectAvatarType } from "@/pages/AfterParentSignIn/SelectProfile";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  useGetAttemptAllStudentConnect,
+  useGetAttemptStudentConnect,
+} from "@/api/queries";
+import { TRequestStudents } from "@/pages/DashBoard/TeacherDashboard/Request/Request";
+import { LuUser2 } from "react-icons/lu";
+import { logOut } from "@/auth/sdk";
+import "./SchoolHeader.css";
 
-const notificationData = [
-  {
-    image: Blxst,
-    msg: "  is trying to add her child to your class",
-    name: "Ella Mia",
-  },
-  {
-    image: Blxst,
-    msg: "  is trying to add her child to your class",
-    name: "Ella Mia",
-  },
-];
+type THints = {
+  id: number;
+  file: string;
+  name: string;
+  content_category: string;
+  content_id: number;
+  order: number;
+  slug: string;
+  content_type: string;
+  media_type: string;
+  thumbnail: string;
+};
 
-const SchoolHeader = () => {
-  const [opened, { open, close }] = useDisclosure(false);
+const SchoolHeader = ({
+  childProfile,
+  setChildProfile,
+}: {
+  childProfile: string;
+  setChildProfile: (val: string) => void;
+}) => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
-
-  const [{ userType }] = userContext();
-  const handleDashboard = () => {
-    console.log("usertype", userType);
-    if (userType === "teacher") {
+  const [user] = useStore(getUserState);
+  const [profiles] = useStore(getProfileState);
+  const [dashboardActive, setDashboardActive] = useState(false);
+  const handleDashboard = (e: React.MouseEvent<HTMLButtonElement>) => {
+    sessionStorage.setItem("schoolDashboard", "true");
+    setDashboardActive(true);
+    e.preventDefault();
+    if (user?.role === "teacher") {
       navigate("../teacherdashboard");
     }
-    if (userType === "school") {
-      open();
+    if (user?.role === "schoolAdmin") {
+      // open();
+      navigate("../schooldashboard");
     }
   };
+
+  const handLogOut = () => {
+    logOut();
+    sessionStorage.clear();
+    sessionStorage.clear();
+    navigate("/");
+  };
+
+  const handleChangeProfile = (id: number) => {
+    setChildProfile(id.toString());
+    navigate("/parent");
+    queryClient.invalidateQueries(["GetOngoingContents"]);
+  };
+
+  const currentId = childProfile;
+  const currentProfile: selectAvatarType | undefined = profiles?.find(
+    (profile: selectAvatarType) => profile.id === Number(currentId)
+  );
+
+  const { data } = useGetAttemptAllStudentConnect(user?.role === "schoolAdmin");
+  const { data: classConnect } = useGetAttemptStudentConnect(
+    user?.role === "teacher"
+  );
+  const schoolConnectList = data?.data?.data?.records;
+  const totalSchoolConnectList = data?.data?.data?.totalRecord;
+  const classConnectList = classConnect?.data?.data?.records;
+  const totalConnectList = classConnect?.data?.data?.totalRecord;
+
   return (
-    <div className="flex   fixed top-0 max-w-[1440px] w-full font-[500] py-4 text-[16px] px-[20px] justify-between items-center bg-whit z-50 gap-4  h-[8vh] ">
-      <Modal
-        opened={opened}
-        onClose={close}
-        centered
-        size="lg"
-        radius={"xl"}
-        closeOnClickOutside={false}
-        withCloseButton={false}
-      >
-        <EnterPassCode onSubmit={close} />
-
-        <style>
-          {`
-         .mantine-kea9ny {
-            background-color: rgba(0, 0, 0, 0.9);
-          
-          }
-          
-                `}
-        </style>
-      </Modal>
-      <div className="flex items-center gap-20">
-        <Link to="/">
-          <div>
-            <img
-              src={KundaLogo}
-              alt="logo"
-              width="60.91px"
-              height="35pxs"
-              className="min-w-[60.91px]"
-            />
-          </div>
-        </Link>
-
-        <div className="flex gap-14">
-          <NavLink
-            to={
-              userType === "parent" ? "parenthomepage" : "/newlyregistereduser"
-            }
-            className={({ isActive }) =>
-              isActive ? " text-[#8530C1]" : "text-black"
-            }
+    <div className="bg-white w-full fixed top-0 h-[8vh] z-50">
+      <div className="flex text-[#B5B5C3] text-[15px] text3  font-medium top-0 left-0 right-0  mx-auto  app-mai-nwidth-container  w-full   py-4   justify-between items-center bg-white  z-[1000] gap-4  h-[8vh] ">
+        <div className="flex items-center gap-10">
+          <Link
+            onClick={() => {
+              setDashboardActive(false);
+            }}
+            to="/"
           >
-            <button>Home</button>
-          </NavLink>
-          <NavLink
-            to="/librarynotpaid"
-            className={({ isActive }) =>
-              isActive ? " text-[#8530C1]" : "text-black"
-            }
-          >
-            <button>Library</button>
-          </NavLink>
-          <NavLink
-            to="/mylist"
-            className={({ isActive }) =>
-              isActive ? " text-[#8530C1]" : "text-black"
-            }
-          >
-            <button>My List</button>
-          </NavLink>
-          <NavLink
-            to="/progressreport"
-            className={({ isActive }) =>
-              isActive ? " text-[#8530C1]" : "text-black"
-            }
-          >
-            <button>Progress Report</button>
-          </NavLink>
-        </div>
-      </div>
-
-      {/* <div className="max-w-[700px] w-full rounded-3xl  flex  px-4  bg-gray-100  ">
-        <img src={SearchIcon} alt="search icon" className="" />
-        <input
-          type="text"
-          className="w-full h-full py-4 rounded-3xl px-4 focus:outline-none  bg-inherit"
-        />
-      </div> */}
-
-      <div className="flex items-center justify-center pl-2 gap-20">
-        {/* <div className="flex gap-14">
-          <button>Home</button>
-          <button>Library</button>
-          <button>My List</button>
-          <button>Progress Report</button>
-
-          <span>
-            <img src={BadgeIcon} alt="badge icon" className="min-w-[17px]" />
-          </span>
-          <span>
-            <img
-              src={BatteryIcon}
-              alt="battery icon"
-              className="min-w-[17px]"
-            />
-          </span>
-          <span>
-            <img src={BellIcon} alt="bell icon" className="min-w-[17px]" />
-          </span>
-        </div> */}
-
-        <div className="max-w-[700px] w-full rounded-3xl  flex  px-4  bg-gray-100  ">
-          <img src={SearchIcon} alt="search icon" className="" />
-          <input
-            type="text"
-            className="w-full h-full py-4 rounded-3xl px-4 focus:outline-none  bg-inherit"
-          />
-        </div>
-
-        <Menu>
-          <Menu.Target>
             <div>
-              <span>
-                <img src={BellIcon} alt="bell icon" className="min-w-[17px]" />
-              </span>
+              <img
+                src={KundaLogo}
+                alt="logo"
+                width="45.91px"
+                height="35pxs"
+                className="min-w-[45.91px]"
+              />
             </div>
-          </Menu.Target>
-          <Menu.Dropdown>
-            <p className="text-center text-[18px] font-bold my-2">
-              Notification
+          </Link>
+
+          <div className="flex gap-5 ">
+            <NavLink
+              style={{ textDecoration: "none" }}
+              onClick={() => {
+                setDashboardActive(false);
+              }}
+              to={user?.role === "user" ? "/parent" : "/school"}
+              // to={"/school"}
+              className={({ isActive }) =>
+                isActive ? " text-[#8530C1] " : "text-[#B5B5C3]b "
+              }
+            >
+              <button className={`text-[16px]  font-bold nav-link  `}>
+                Home
+              </button>
+            </NavLink>
+
+            <NavLink
+              onClick={() => {
+                setDashboardActive(false);
+              }}
+              to="/mylist"
+              className={({ isActive }) =>
+                isActive
+                  ? " text-[#8530C1] font-medium"
+                  : "text-[#B5B5C3] font-medium"
+              }
+            >
+              <button className="text-[16px]  font-bold nav-link">
+                My List
+              </button>
+            </NavLink>
+            <NavLink
+              onClick={() => {
+                setDashboardActive(false);
+              }}
+              to="/progressreport"
+              className={({ isActive }) =>
+                isActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
+              }
+            >
+              <button className="text-[16px]  font-bold nav-link">
+                Progress Report
+              </button>
+            </NavLink>
+
+            <p className="w-40  flex justisfy-center item-center">
+              {user?.role === "schoolAdmin" && (
+                <button
+                  onClick={handleDashboard}
+                  className={` block text-[16px]  font-bold nav-link ${
+                    dashboardActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
+                  }`}
+                >
+                  School Dashboard
+                </button>
+              )}
+              {user?.role === "teacher" && user?.status === "active" ? (
+                <button
+                  onClick={handleDashboard}
+                  className={` block text-[16px]  font-bold nav-link ${
+                    dashboardActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
+                  }`}
+                >
+                  Teacher Dashboard
+                </button>
+              ) : (
+                ""
+              )}
             </p>
-            {notificationData.map((data, index) => (
-              // <Menu.Item>
-              <Notification key={index} {...data} />
-              // </Menu.Item>
-            ))}
-          </Menu.Dropdown>
-        </Menu>
+          </div>
+        </div>
 
-        {userType === "parent" ? (
+        <div className="flex items-center justify-center pl-2 gap-10 ">
+          <SearchService />
+
           <Menu>
+            {" "}
             <Menu.Target>
-              <div className="flex justify-center items-center gap-10  px-10 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
-                <img src={UserIcon} alt="user icon" className="w-[30px]" />
-
-                <span>
-                  <img
-                    src={ArrowDown}
-                    alt="arrow down icon"
-                    className="min-w-[17px]"
-                  />
-                </span>
+              <div className="relative">
+                {user?.role === "schoolAdmin" || user?.role === "teacher" ? (
+                  <div>
+                    <AiOutlineBell
+                      size={20}
+                      className={" mx-auto"}
+                      color="black"
+                    />
+                    <p
+                      className={`absolute -top-4 text-white  right-[-14px] py-[1px] rounded-full px-[3px] ${
+                        totalSchoolConnectList > 0 || totalConnectList > 0
+                          ? "bg-red-700"
+                          : "bg-white"
+                      }  `}
+                    >
+                      {totalSchoolConnectList || totalConnectList || 0}
+                    </p>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             </Menu.Target>
             <Menu.Dropdown>
-              <div className="flex flex-col py-2 px-1">
-                <Menu.Item>
-                  <button className="p-2 px-4 flex gap-2  items-center hover:cursor-pointer  hover:text-[#8530C1]">
-                    <img src={Avatar1} alt="avatar1" className="w-[25%]" />
-                    <span>Jake</span>
-                  </button>
-                </Menu.Item>
-                <Menu.Item>
-                  <button className="p-2 px-4 flex gap-2  items-center  hover:cursor-pointer  hover:text-[#8530C1]">
-                    <img src={Avatar2} alt="avatar1" className="w-[25%]" />
-                    <span>Mabel</span>
-                  </button>
-                </Menu.Item>
-                <Menu.Item>
-                  <button
-                    onClick={() => navigate("/account")}
-                    className="p-2 px-4 hover:cursor-pointer hover:text-[#8530C1] flex gap-2 items-center"
-                  >
-                    <img src={UserIcon2} alt="userIcon" /> <span> Account</span>
-                  </button>
-                </Menu.Item>
-                <hr />
-                <Menu.Item>
-                  <button
-                    onClick={() => navigate("/")}
-                    className="p-2 px-4  hover:cursor-pointer  text-red-500"
-                  >
-                    Sign out of Kunda kids
-                  </button>
-                </Menu.Item>
-              </div>
+              {/* <Menu.Item> */}
+              <SchNotification
+                data={
+                  user?.role === "schoolAdmin"
+                    ? schoolConnectList
+                    : classConnectList
+                }
+              />
+              {/* </Menu.Item> */}
             </Menu.Dropdown>
           </Menu>
-        ) : (
-          <Menu>
-            <Menu.Target>
-              <div className="flex justify-center items-center gap-10  px-10 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
-                <img src={UserIcon} alt="user icon" className="w-[30px]" />
 
-                <span>
+          {user?.role === "parent" || user?.role === "user" ? (
+            <Menu>
+              <Menu.Target>
+                <div className="flex justify-center items-center gap-5  px-6 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
                   <img
-                    src={ArrowDown}
-                    alt="arrow down icon"
-                    className="min-w-[17px]"
+                    loading="lazy"
+                    src={currentProfile ? currentProfile.image : UserIcon}
+                    alt="user icon"
+                    className="w-[24px] h-[24px] object-cover rounded-full"
                   />
-                </span>
-              </div>
-            </Menu.Target>
 
-            <Menu.Dropdown>
-              <div className="flex flex-col py-2 px-1">
-                <Menu.Item>
-                  <button
-                    onClick={handleDashboard}
-                    className="p-2 px-14  hover:cursor-pointer hover:text-[#8530C1]"
-                  >
-                    Admin
-                  </button>
-                </Menu.Item>
-                <Menu.Item>
-                  <button
-                    onClick={() => navigate("/account")}
-                    className="p-2 px-14  hover:cursor-pointer hover:text-[#8530C1]"
-                  >
-                    Account
-                  </button>
-                </Menu.Item>
-                <Menu.Item>
-                  <button
-                    onClick={() => navigate("/")}
-                    className="p-2 px-14  hover:cursor-pointer  text-red-500"
-                  >
-                    Sign out of Kunda kids
-                  </button>
-                </Menu.Item>
-              </div>
-            </Menu.Dropdown>
-          </Menu>
-        )}
+                  <span>
+                    <img
+                      src={ArrowDown}
+                      alt="arrow down icon"
+                      className="min-w-[17px]"
+                    />
+                  </span>
+                </div>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <div className="flex flex-col py-2 px-2 ">
+                  {profiles?.map((profile, index) => (
+                    <Menu.Item
+                      key={index}
+                      onClick={() => handleChangeProfile(profile.id)}
+                    >
+                      <button className="py-1" key={index}>
+                        {profile?.name.charAt(0).toUpperCase() +
+                          profile?.name.slice(1)}
+                      </button>
+                    </Menu.Item>
+                  ))}
+
+                  <Menu.Item onClick={() => navigate("/account")}>
+                    <button
+                      onClick={() => navigate("/account")}
+                      className="hover:cursor-pointer hover:text-[#8530C1] flex gap-2 items-center "
+                    >
+                      <LuUser2 size={25} color={"gray"} /> <span> Account</span>
+                    </button>
+                  </Menu.Item>
+                  <hr />
+                  <Menu.Item onClick={handLogOut}>
+                    <button
+                      onClick={handLogOut}
+                      className="p-2 px-4  hover:cursor-pointer  text-red-500"
+                    >
+                      Sign out of Kunda kids
+                    </button>
+                  </Menu.Item>
+                </div>
+              </Menu.Dropdown>
+            </Menu>
+          ) : (
+            <Menu>
+              <Menu.Target>
+                <div className="flex justify-center items-center gap-7  h-[42px] px-6 bg-gray-100 rounded-3xl p-2  hover:cursor-pointer">
+                  <img
+                    loading="lazy"
+                    src={user?.user_image ? user.user_image : UserIcon}
+                    alt="user icon"
+                    className="w-[24px] h-[24px] object-cover rounded-full"
+                  />
+
+                  <span>
+                    <img
+                      src={ArrowDown}
+                      alt="arrow down icon"
+                      className="min-w-[12px]"
+                    />
+                  </span>
+                </div>
+              </Menu.Target>
+
+              <Menu.Dropdown>
+                <div className="flex flex-col py-2 px-1">
+                  {/* <Menu.Item>
+                    <button
+                      onClick={handleDashboard}
+                      className="p-2 px-4  hover:cursor-pointer hover:text-[#8530C1]"
+                    >
+                      Admin
+                    </button>
+                  </Menu.Item> */}
+                  <Menu.Item onClick={() => navigate("/account")}>
+                    <button
+                      onClick={() => navigate("/account")}
+                      className="p-2 px-4  hover:cursor-pointer hover:text-[#8530C1]"
+                    >
+                      Account
+                    </button>
+                  </Menu.Item>
+                  <Menu.Item onClick={handLogOut}>
+                    <button
+                      onClick={handLogOut}
+                      className="p-2 px-4  hover:cursor-pointer  text-red-500"
+                    >
+                      Sign out of Kunda kids
+                    </button>
+                  </Menu.Item>
+                </div>
+              </Menu.Dropdown>
+            </Menu>
+          )}
+        </div>
       </div>
     </div>
+  );
+};
+
+const SearchService = () => {
+  const [search, setSearch] = useState("");
+  const debounceValue = useDebounce(search, 500);
+
+  const { data } = useGetMainSearch(debounceValue);
+
+  const arrayOfHint: THints[] = data?.data.data.hits;
+  const arrayOfHintId = arrayOfHint?.filter((data) => data?.content_id > 0);
+
+  // const uniqueObjects = Array.from(
+  //   new Set(arrayOfHintId.map(JSON.stringify))
+  // ).map(JSON.parse);
+
+  //  const uniqueObjects = Array.from(new Set(arrayOfHintId.map(JSON.stringify)))
+
+  //  const uniqueObjects = Object.values(
+  //    arrayOfHintId.reduce((unique:THints, obj) => {
+  //      unique[JSON.stringify(obj)]: = obj;
+  //      return unique;
+  //    }, {})
+  //  );
+
+  const removeDuplicatesByKey = (array: THints[], key: keyof THints) => {
+    const seen = new Set();
+    return array?.filter((item) => {
+      const value = item[key];
+      return seen.has(value) ? false : seen.add(value);
+    });
+  };
+
+  // Call the function to remove duplicates based on the 'id' key
+  const uniqueObjects = removeDuplicatesByKey(arrayOfHintId, "id");
+
+  return (
+    <Popover opened={!!search} width={350}>
+      <Popover.Target>
+        <div className="max-w-[300px] w-full rounded-3xl  flex  px-4  bg-gray-100  ">
+          {/* <img
+              loading="lazy"
+              src={SearchIcon}
+              alt="search icon"
+              className=""
+            /> */}
+          <AiOutlineSearch size={30} className={" mx-auto my-auto"} />
+
+          <input
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            type="text"
+            className="w-full h-[42px] text-black  py-4 rounded-3xl px-4 focus:outline-none  bg-inherit"
+          />
+        </div>
+      </Popover.Target>
+
+      <Popover.Dropdown>
+        {uniqueObjects?.map((data, index) => (
+          <p className="text-black" key={index}>
+            {data.name}
+          </p>
+        ))}
+      </Popover.Dropdown>
+    </Popover>
   );
 };
 
 export default SchoolHeader;
 
-const Notification = ({
-  image,
-  msg,
-  name,
-}: {
-  image: string;
-  msg: string;
-  name: string;
-}) => {
+const SchNotification = ({ data }: { data: TRequestStudents[] }) => {
+  const [user] = useStore(getUserState);
+  const navigate = useNavigate();
   return (
-    <div className="py-2 ">
-      <hr />
-      <p className="flex my-3 px-6 justify-center items-center gap-2">
-        <img
-          src={image}
-          alt="image"
-          className="w-[80px] h-[80px] rounded-full"
-        />
-        <span className="text-[#8530C1] ml-4">{name}</span>
-        <span>{msg}</span>
-      </p>
-      <p className="my-3  pl-32  flex gap-4 text-white">
-        <button className="p-2 px-8 bg-[#F3DAFF] rounded-3xl">Delete</button>
-        <button className="p-2 px-8 bg-[#8530C1] rounded-3xl">Accept</button>
-      </p>
-    </div>
+    <>
+      {data?.length < 1 || (!data && <p>No notifications</p>)}
+      {data?.length > 0 && (
+        <div className="py-2 ">
+          {/* <hr /> */}
+
+          {data?.map((each, index) => (
+            <div className="cursor-pointer" key={index}>
+              <p
+                onClick={() => {
+                  if (user?.role === "schoolAdmin") {
+                    navigate(`/schooldashboard/request`);
+                  } else if (user?.role === "teacher") {
+                    navigate(`/teacherdashboard/request`);
+                  }
+                }}
+                className="flex my-2 px-3 justify-center items-center gap-2"
+              >
+                <span className="text-[#8530C1] ml-4">
+                  {each?.firstname} {each.lastname} has made a request to your{" "}
+                  {user?.role === "schoolAdmin" ? "School" : "class"}
+                </span>
+              </p>
+              <hr />
+            </div>
+          ))}
+        </div>
+      )}
+    </>
   );
 };
+
+// const ParentNotification = ({ name }: { name: string }) => {
+//   return (
+//     <div className="py-2 w-[400px] ">
+//       <hr />
+//       <p className="flex my-2 px-6 justify-center items-center gap-2 ">
+//         <img
+//           src={Blxst}
+//           alt="image"
+//           className="w-[40px] h-[40px] rounded-full"
+//         />
+//         <span className=" text-[14px] font-medium ml-4">
+//           <span className="text-[#8530C1]">{name} </span>
+//           has accepted your request for your child join her class.
+//         </span>
+//         <span>Now</span>
+//       </p>
+//     </div>
+//   );
+// };

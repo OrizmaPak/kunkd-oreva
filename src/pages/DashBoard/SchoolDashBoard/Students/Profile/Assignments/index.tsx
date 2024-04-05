@@ -1,40 +1,41 @@
 import Header from "./Header";
-import Chisom from "@/assets/Chisom.svg";
 import Row from "./Row";
+import { TSchoolStudentStat } from "..";
+import { Skeleton } from "@mantine/core";
 
-const data = [
-  {
-    title: "Chisom's Book Quis",
-    image: Chisom,
-    duration: "30 mins",
-    range: 90,
-    date: "3rd June",
-  },
-  {
-    title: "Chisom's Book Quis",
-    image: Chisom,
-    duration: "30 mins",
-    range: 50,
-    date: "3rd June",
-  },
-  {
-    title: "Chisom's Book Quis",
-    image: Chisom,
-    duration: "30 mins",
-    range: 50,
-    date: "3rd June",
-  },
-];
-
-const index = () => {
+const ContentInProgress = ({
+  schoolStudentStat,
+  isLoading,
+}: {
+  schoolStudentStat: TSchoolStudentStat;
+  isLoading: boolean;
+}) => {
   return (
-    <div className=" bg-white rounded-3xl flex flex-col flex-grow ">
-      <Header />
-      {data.map((data, index) => {
-        return <Row key={index} {...data} />;
-      })}
-    </div>
+    <>
+      {isLoading ? (
+        <Skeleton
+          height={350}
+          width={600}
+          radius={20}
+          mb="xl"
+          visible={isLoading}
+        />
+      ) : (
+        <div className=" bg-white rounded-3xl  flex-col px-6  w-full overflow-y-scroll overflow-hidden  h-[300px]">
+          <Header />
+          {schoolStudentStat?.ongoing_contents?.length === 0 ? (
+            <p className="mt-4 font-Inter">
+              Oops!!! No data available for content in progress😤{" "}
+            </p>
+          ) : (
+            schoolStudentStat?.ongoing_contents?.map((data, index) => {
+              return <Row key={index} data={data} />;
+            })
+          )}
+        </div>
+      )}
+    </>
   );
 };
 
-export default index;
+export default ContentInProgress;

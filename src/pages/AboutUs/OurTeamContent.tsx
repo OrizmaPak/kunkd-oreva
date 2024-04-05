@@ -1,14 +1,22 @@
-import Dele from "@/assets/Dele1.svg";
-import Louisa from "@/assets/Louisa1.svg";
-import Chike from "@/assets/Chike1.svg";
-import Chidera from "@/assets/Chidera1.svg";
-import Toni from "@/assets/Toni1.svg";
-import Peter from "@/assets/Peter1.svg";
+import Chidera from "@/assets/Chidera.png";
+import ChideraBlur from "@/assets/Chiderablur.jpg";
+import Chike from "@/assets/Chike.png";
+import ChikeBlur from "@/assets/Chikeblur.jpg";
+import Dele from "@/assets/Dele.png";
+import DeleBlur from "@/assets/Deleblur.jpg";
+import Louisa from "@/assets/Louisa.png";
+import LouisaBlur from "@/assets/Louisablur.jpg";
+import Peter from "@/assets/Peter.png";
+import PeterBlur from "@/assets/Peterblur.jpg";
+import Toni from "@/assets/Toni.png";
+import ToniBlur from "@/assets/Toniblur.jpg";
 import TeamCard from "./TeamCard";
 
 const data = [
   {
     image: Dele,
+    imageBlur: DeleBlur,
+
     name: "Dele Olafuyi",
     title: "Co-founder, CEO",
     message:
@@ -16,6 +24,8 @@ const data = [
   },
   {
     image: Louisa,
+    imageBlur: LouisaBlur,
+
     name: "Louisa Olafuyi",
     title: "Co-founder, COO",
     message:
@@ -23,6 +33,8 @@ const data = [
   },
   {
     image: Toni,
+    imageBlur: ToniBlur,
+
     name: "Oluwatoni Ajewole",
     title: "Head of Product",
     message:
@@ -30,6 +42,8 @@ const data = [
   },
   {
     image: Chike,
+    imageBlur: ChikeBlur,
+
     name: "Chike Obasi",
     title: "Art Director",
     message:
@@ -37,6 +51,8 @@ const data = [
   },
   {
     image: Chidera,
+    imageBlur: ChideraBlur,
+
     name: "Chidera Monde",
     title: "Content & Strategy Director",
     message:
@@ -44,6 +60,7 @@ const data = [
   },
   {
     image: Peter,
+    imageBlur: PeterBlur,
     name: "Peter Ogedengbe",
     title: "Chief Technology Officer",
     message:
@@ -54,34 +71,30 @@ const data = [
 const OurTeamContent = () => {
   return (
     <div className="max-w-[1000px] w-full mx-auto text-center">
-      <h1 className="font-bold font-Recoleta text-[40px] text-black text-center mb-4">
-        Our Amazing Team
-      </h1>
-      <p className="mb-4">
-        Our team is made up of passionate team of artists, writers, producers,
-        and content and business leaders who share our vision for creating{" "}
-        <br />
-        diverse and inclusive children's literature. Together, we work to create
-        engaging and inspiring <br /> stories that celebrate African culture and
-        promote essential soft skills.
-      </p>
+      <div data-aos="fade-up" data-aos-once="true">
+        <h1 className=" font-Inter header2  text-[#101828] font-semibold text-center mb-8">
+          Our Amazing Team
+        </h1>
+        <p className=" text1 leading-[30px] mb-20 font-InterReg text-[#667085]">
+          Our team is made up of passionate team of artists, writers, producers,
+          and content and business leaders who share our vision for creating
+          diverse and inclusive children's literature. Together, we work to
+          create engaging and inspiring <br /> stories that celebrate African
+          culture and promote essential soft skills.
+        </p>
+      </div>
 
       <div>
-        <p>
-          <strong className="pr-6">Meet The Heads</strong> - - - - - - - - - - -
-          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-          - - - - - -- - - - - - - - - - - - - - - - - - - - - - - - - - -
-        </p>
-        <div className="grid grid-cols-3 gap-14 my-8">
+        <div className="grid grid-cols-3 gap-x-28  gap-y-10 my-8">
           {data &&
             data.map((data, index) => {
               return <TeamCard key={index} {...data} />;
             })}
         </div>
         {/* <div className="flex gap-6 mb-16">
-          <img src={Chike} alt="Chike" />
-          <img src={Chidera} alt="Chidera" />
-          <img src={Toni} alt="Toni" />
+          <img loading="lazy" src={Chike} alt="Chike" />
+          <img loading="lazy" src={Chidera} alt="Chidera" />
+          <img loading="lazy" src={Toni} alt="Toni" />
         </div> */}
       </div>
     </div>

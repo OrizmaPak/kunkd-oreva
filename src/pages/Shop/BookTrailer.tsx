@@ -10,7 +10,6 @@ import { useState } from "react";
 import YoutubeIcon from "@/assets/youtube.svg";
 
 const imageStyle = (active: number, index: number) => {
-  console.log(active === index, active, index);
   return {
     // width: "300px",
     paddingTop: "20px",
@@ -33,7 +32,6 @@ const BookTrailer = () => {
     slideToScroll: 1,
     speed: 500,
     beforeChange: (index: number) => {
-      console.log("--- index", index);
       setActive(index);
     },
     centerModeSettings: {
@@ -45,10 +43,10 @@ const BookTrailer = () => {
     <div className=" -z-0">
       <KundaApp>
         <div className="text-center text-white">
-          <h1 className=" font-Recoleta text-[50px] ">
+          <h1 className=" font-Recoleta text-[46px] font-semibold  ">
             Our awsome book trail!
           </h1>
-          <p>
+          <p className="text-[18px] leading-[30px]">
             Enjoy our animated book trailers below and subscribe to the Kunda
             Kids YouTube
             <br /> channel and enjoy more videos where our characters and
@@ -59,27 +57,57 @@ const BookTrailer = () => {
         <div>
           <button className="my-24  bg-white flex justify-between items-center font-bold  p-5 rounded-3xl px-16  gap-8 mx-auto">
             <span>Watch Kunda kids on</span>
-            <img src={YoutubeIcon} alt="Yuotube" />
+            <img loading="lazy" src={YoutubeIcon} alt="Yuotube" />
           </button>
           <div className="py-4 mt-10 h-[800px]  ">
             <Slider {...settings}>
               <div>
-                <img src={Pupils} style={imageStyle(active, 0)} alt="pupils" />
+                <img
+                  loading="lazy"
+                  src={Pupils}
+                  style={imageStyle(active, 0)}
+                  alt="pupils"
+                />
               </div>
               <div>
-                <img src={Pupils} style={imageStyle(active, 1)} alt="pupils" />
+                <img
+                  loading="lazy"
+                  src={Pupils}
+                  style={imageStyle(active, 1)}
+                  alt="pupils"
+                />
               </div>
               <div>
-                <img src={Pupils} style={imageStyle(active, 2)} alt="pupils" />
+                <img
+                  loading="lazy"
+                  src={Pupils}
+                  style={imageStyle(active, 2)}
+                  alt="pupils"
+                />
               </div>
               <div>
-                <img src={Pupils} style={imageStyle(active, 3)} alt="pupils" />
+                <img
+                  loading="lazy"
+                  src={Pupils}
+                  style={imageStyle(active, 3)}
+                  alt="pupils"
+                />
               </div>
               <div>
-                <img src={Pupils} style={imageStyle(active, 4)} alt="pupils" />
+                <img
+                  loading="lazy"
+                  src={Pupils}
+                  style={imageStyle(active, 4)}
+                  alt="pupils"
+                />
               </div>
               <div>
-                <img src={Pupils} style={imageStyle(active, 5)} alt="pupils" />
+                <img
+                  loading="lazy"
+                  src={Pupils}
+                  style={imageStyle(active, 5)}
+                  alt="pupils"
+                />
               </div>
             </Slider>
 

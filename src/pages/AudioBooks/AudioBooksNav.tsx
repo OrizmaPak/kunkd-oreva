@@ -1,8 +1,10 @@
 import NextIcon from "@/assets/nexticon.svg";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
 const AudioBooksNav = ({
   category,
-  genre,
+  // genre,
   title,
   quiz,
 }: {
@@ -12,31 +14,30 @@ const AudioBooksNav = ({
   quiz?: string;
 }) => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  // const { id } = useParams();
+  const [user] = useStore(getUserState);
+
   return (
-    <div className="py-4 rounded-full bg-white gap-8 flex px-8">
+    <div className="py-4 pl-20 font-Recoleta content-nav text25  font-semibold items-center rounded-full bg-white gap-8 flex pad-x-40">
       <div
-        className="flex gap-2 cursor-pointer  font-bold"
-        onClick={() => navigate(`/librarynotpaid/audiobooks`)}
+        className="flex gap-2 cursor-pointer "
+        onClick={() => {
+          navigate(
+            `/${user?.role === "user" ? "parent" : "school"}/audiobooks`
+          );
+        }}
       >
         <span>{category}</span>
-        <img src={NextIcon} alt="nextIcon" />
+        <img loading="lazy" src={NextIcon} alt="nextIcon" />
       </div>
 
       <div
-        className="flex gap-2  cursor-pointer  font-bold"
-        onClick={() => navigate(`/librarynotpaid/audiobooks/${genre}`)}
-      >
-        <span>{genre}</span>
-        <img src={NextIcon} alt="nextIcon" />
-      </div>
-
-      <div
-        onClick={() => navigate(`/librarynotpaid/audiobooks/${genre}/${id}`)}
-        className={`flex gap-2  cursor-pointer ${quiz && "font-bold"} `}
+        className={`flex gap-2  cursor-pointer text-[#B5B5C3] ${
+          quiz && "text-black"
+        } `}
       >
         <span>{title}</span>
-        {quiz && <img src={NextIcon} alt="nextIcon" />}
+        {quiz && <img loading="lazy" src={NextIcon} alt="nextIcon" />}
       </div>
 
       <div className=" cursor-pointer ">

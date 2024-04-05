@@ -1,15 +1,17 @@
 import DasboardIcon from "@/assets/adminIcon.svg";
-import TeacherIcon from "@/assets/teacher.svg";
-import StudentIcon from "@/assets/student.svg";
 import ClassesIcon from "@/assets/classes.svg";
-import LogoutIcon from "@/assets/logout.svg";
 import Arrow from "@/assets/greatericon.svg";
-import { Outlet } from "react-router-dom";
-import { useMatch, useNavigate } from "react-router-dom";
-import { useDisclosure } from "@mantine/hooks";
-import { Modal } from "@mantine/core";
+import LogoutIcon from "@/assets/logout.svg";
+import StudentIcon from "@/assets/student.svg";
+import TeacherIcon from "@/assets/teacher.svg";
 import LogoutModal from "@/pages/DashBoard/SchoolDashBoard/LogoutModal";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import React from "react";
+import { Outlet, useMatch, useNavigate } from "react-router-dom";
+// import { getUserState } from "@/store/authStore";
+// import useStore from "@/store/index";
+// import { getProfileState } from "@/store/profileStore";
 
 import SchoolIcon from "@/assets/schoolIcon.svg";
 
@@ -21,6 +23,12 @@ const links = [
     href: "",
     index: true,
     icon: DasboardIcon,
+  },
+  {
+    label: "Classes",
+    href: "classes",
+    route: routeBaseUrl + "/classes",
+    icon: ClassesIcon,
   },
   {
     label: "Teachers",
@@ -36,12 +44,14 @@ const links = [
     icon: StudentIcon,
     hasSub: true,
   },
+
   {
-    label: "Classes",
-    href: "classes",
-    route: routeBaseUrl + "/classes",
-    icon: ClassesIcon,
+    label: "Requests",
+    href: "request",
+    route: routeBaseUrl + "/request/",
+    icon: StudentIcon,
   },
+
   // {
   //   label: "Setting",
   //   href: "setting",
@@ -51,13 +61,15 @@ const links = [
 ];
 const SchoolLayout = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  // const [profiles, setProfiles] = useStore(getProfileState);
 
   // const navigate = useNavigate();
+
   return (
     <>
       <Modal
-        radius={"xl"}
-        size="lg"
+        radius={6}
+        size="md"
         opened={opened}
         onClose={close}
         closeButtonProps={{ size: "lg" }}
@@ -66,22 +78,29 @@ const SchoolLayout = () => {
         <LogoutModal onCloseModal={() => close()} />
       </Modal>
 
-      <div className="w-full   bg-[#FFF7FD]  px-[100px] py-[15px] mt-[8vh] h-[92vh]  ">
-        <div className="flex h-[calc(100vh-50px-8vh)] gap-8">
-          <div className="basis-1/5 bg-white  h-[calc(100vh-50px-8vh)] rounded-[40px] px-7 flex  flex-col pb-4 ">
+      <div className="w-full   bg-[#FFF7FD] px-[100px] mt-[8vh] py-2  pb-4 h-[91vh]  ">
+        <div className="flex max-w-[1280px] w-full mx-auto  h-full gap-6 mt-[1vh]">
+          <div className="basis-1/4 bg-white   h-full rounded-[40px] px- flex  flex-col pb-4 px-2">
             <div className="flex-grow-1 flex-1">
               <Header
-                icon1={<img src={SchoolIcon} alt="icon" className="w-[40px]" />}
+                icon1={
+                  <img
+                    loading="lazy"
+                    src={SchoolIcon}
+                    alt="icon"
+                    className="w-[40px]"
+                  />
+                }
                 title="Pampers Schools"
-                icon2={<img src={Arrow} alt="icon" />}
+                icon2={<img loading="lazy" src={Arrow} alt="icon" />}
               />
-              {links.slice(0, 4).map((link) => (
+              {links.map((link) => (
                 <NavButton
                   key={link.label}
                   title={link.label}
                   href={link.href}
                   route={link.route}
-                  icon={<img src={link.icon} alt="icon" />}
+                  icon={<img loading="lazy" src={link.icon} alt="icon" />}
                 />
               ))}
               {/* <hr className="my-10" />
@@ -89,21 +108,19 @@ const SchoolLayout = () => {
               title={links[links.length - 1].label}
               href={links[links.length - 1].href}
               route={links[links.length - 1].route}
-              icon={<img src={links[links.length - 1].icon} alt="icon" />}
+              icon={<img loading="lazy" src={links[links.length - 1].icon} alt="icon" />}
             /> */}
             </div>
             <div>
               <DasboardButton
                 onClick={() => open()}
                 title="Logout"
-                icon={<img src={LogoutIcon} alt="icon" />}
+                icon={<img loading="lazy" src={LogoutIcon} alt="icon" />}
               />
             </div>
           </div>
 
-          <div className="basis-full   h-[calc(100vh-50px-8vh)]">
-            {<Outlet />}
-          </div>
+          <div className="basis-full    h-full">{<Outlet />}</div>
         </div>
       </div>
     </>
@@ -115,7 +132,7 @@ export default SchoolLayout;
 const DasboardButton = ({
   title,
   icon,
-  onClick = () => {},
+  onClick,
   active = false,
 }: {
   title: string;
@@ -126,14 +143,23 @@ const DasboardButton = ({
   return (
     <button
       onClick={onClick}
-      className={`px-4 py-3  rounded-3xl flex items-center gap-8 w-full my-8 ${
+      className={` transition-all duration-700 px-2 py-2   rounded-[8px] flex items-center justify-between gap-8 w-full my-8 text2 ${
         active
           ? "bg-[#8530c1] text-white"
-          : "hover:bg-[#8530C1] hover:text-white"
+          : "hover:bg-[#8530C1] hover:text-white text-[#B5B5C3]"
       }  my-4`}
     >
-      <span>{icon}</span>
-      <span className={`${title === "Logout" && "text-red-600"}`}>{title}</span>
+      <span className="flex gap-3 justify-center">
+        <span className="ml-3">{icon}</span>
+        <span
+          className={` text-[16px] font-normal ${
+            title === "Logout" && "text-red-600"
+          }`}
+        >
+          {title}
+        </span>
+      </span>
+      <span className="h-8 w-2 bg-white rounded-2xl"></span>
     </button>
   );
 };
@@ -147,10 +173,10 @@ export const Header = ({
 }) => {
   return (
     <div>
-      <button className="px-4 mb-8 py-3  bg-[#EBEFF3]  rounded-3xl flex items-center justify-between gap-2 w-full   my-4">
+      <button className="px-4 mb-8 py-3   rounded-3xl flex items-center  gap-2 w-full   my-4">
         <span>{icon1}</span>
 
-        <span className="text-[20px] font-bold">School Logo</span>
+        <span className="text-[14px] font-bold ml-4"></span>
       </button>
     </div>
   );
@@ -164,7 +190,6 @@ const NavButton = (props: {
 }) => {
   const { icon, title, href, route } = props;
   const match = useMatch(route);
-  console.log(match);
   const navigate = useNavigate();
 
   const handleNavigate = () => {

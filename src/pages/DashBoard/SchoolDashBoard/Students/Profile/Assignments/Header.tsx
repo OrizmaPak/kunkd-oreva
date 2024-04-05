@@ -1,18 +1,15 @@
-import NextIcon from "@/assets/nexticon.svg";
-import PrevIcon from "@/assets/previcon.svg";
-
 const Header = () => {
   return (
-    <div className="flex justify-between px-10 py-4">
-      <p className="font-bold font-Hanken">Assignments</p>
-      <p className="gap-5 flex">
+    <div className="flex justify-between  py-6">
+      <p className=" font-Hanken font-semibold ">Content in progress</p>
+      {/* <p className="gap-5 flex">
         <button>
-          <img src={PrevIcon} alt="previous" />
+          <img loading="lazy" src={PrevIcon} alt="previous" />
         </button>
         <button>
-          <img src={NextIcon} alt="Nexticon" />
+          <img loading="lazy" src={NextIcon} alt="Nexticon" />
         </button>
-      </p>
+      </p> */}
     </div>
   );
 };

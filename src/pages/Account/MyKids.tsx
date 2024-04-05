@@ -1,57 +1,55 @@
-import Avatar1 from "@/assets/Avatar1.svg";
-import Avatar2 from "@/assets/Avatar2.svg";
-import Avatar3 from "@/assets/Avatar3.svg";
-import Avatar4 from "@/assets/Avatar4.svg";
-import DotIcon from "@/assets/dotIcon.svg";
-import { Menu } from "@mantine/core";
+import { getApiErrorMessage } from "@/api/helper";
+import {
+  querykeys,
+  useConnectStudentData,
+  useGetSchoolProfileForStudent,
+  useUpdateProfile,
+} from "@/api/queries";
 import PencilIcon from "@/assets/blackPencilIcon.svg";
-import LinkIcon from "@/assets/linkIcon.svg";
+import DotIcon from "@/assets/dotIcon.svg";
+import Kidmeme from "@/assets/kidmeme.svg";
+import LinkIcon from "@/assets/connectIcon.png";
 import DeleteIcon from "@/assets/redDeleteIcon.svg";
 import InputFormat from "@/common/InputFormat";
+import { FormData } from "@/common/User/FormValidation/Schema";
 import Button from "@/components/Button";
+import useStore from "@/store/index";
+import { getProfileState } from "@/store/profileStore";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader, Menu, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal } from "@mantine/core";
-import Kidmeme from "@/assets/kidmeme.svg";
+import { notifications } from "@mantine/notifications";
+import { useQueryClient } from "@tanstack/react-query";
+import { ChangeEvent, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { PiStudent } from "react-icons/pi";
+import { ZodType, z } from "zod";
+import { Tclass } from "../DashBoard/SchoolDashBoard/Teachers/AddTeacherForm";
+
+import { useGetProfile } from "@/api/queries";
+import useDebounce from "@/hooks/useDebounce";
+import "./Mykids.css";
 import {
-  ChildNameModal,
   ChildAgeModal,
+  ChildNameModal,
   SelectAvatar,
   WellDoneModal,
 } from "@/pages/AfterParentSignIn/ChildProfileSetUp";
 import { STEP_1, STEP_2, STEP_3, STEP_4 } from "@/utils/constants";
-import { useState } from "react";
+import { Skeleton } from "@mantine/core";
 import { motion } from "framer-motion";
-
-const kidsData = [
-  {
-    image: Avatar1,
-    name: "Emma",
-    age: 4,
-    gender: "Male",
-  },
-  {
-    image: Avatar2,
-    name: "Tola",
-    age: 6,
-    gender: "Female",
-  },
-  {
-    image: Avatar3,
-    name: "Eunice",
-    age: 8,
-    gender: "Female",
-  },
-  {
-    image: Avatar4,
-    name: "Fabiola",
-    age: 6,
-    gender: "Female",
-  },
-];
+import { AiOutlineClose } from "react-icons/ai";
+import { MdClose } from "react-icons/md";
 
 const MyKids = () => {
+  const [profile] = useStore(getProfileState);
   const [currentStep, setCurrentStep] = useState<number | null>(STEP_1);
   const [opened, { open, close }] = useDisclosure(false);
+  const [name, setName] = useState<string>("");
+  const [age, setAge] = useState<string>("");
+
+  const { isLoading, refetch } = useGetProfile();
+
   return (
     <>
       <motion.div
@@ -61,12 +59,13 @@ const MyKids = () => {
         transition={{ duration: 1 }}
       >
         <Modal
+          padding="xm"
           opened={opened}
           onClose={close}
           centered
           size="lg"
-          radius={"xl"}
-          closeOnClickOutside={false}
+          radius={10}
+          // closeOnClickOutside={false}
           withCloseButton={false}
         >
           {currentStep === STEP_1 && (
@@ -74,18 +73,28 @@ const MyKids = () => {
               onContinue={() => setCurrentStep(STEP_2)}
               goBack={() => currentStep - 1}
               showGoBackIcon={false}
+              setName={setName}
+              close={() => close()}
+              showCancelBtn={true}
             />
           )}
           {currentStep === STEP_2 && (
             <ChildAgeModal
               onContinue={() => setCurrentStep(STEP_3)}
               goBack={() => setCurrentStep(currentStep - 1)}
+              setAge={setAge}
+              close={() => close()}
+              showCancelBtn={true}
             />
           )}
           {currentStep === STEP_3 && (
             <SelectAvatar
               onContinue={() => setCurrentStep(STEP_4)}
               goBack={() => setCurrentStep(currentStep - 1)}
+              age={age}
+              name={name}
+              close={() => close()}
+              showCancelBtn={true}
             />
           )}
           {currentStep === STEP_4 && (
@@ -97,9 +106,11 @@ const MyKids = () => {
           )}
         </Modal>
 
-        <div className="px-20 ">
+        <div className="px-4 ">
           <div className="flex justify-between items-center">
-            <h1 className="text-[25px] font-bold my-8">My Kids</h1>
+            <h1 className="text-[24px]  my-8 font-medium font-Hanken">
+              My Kids
+            </h1>
             <Button
               onClick={() => {
                 open(), setCurrentStep(STEP_1);
@@ -107,14 +118,20 @@ const MyKids = () => {
               size="md"
             >
               <p className="flex gap-2 py-1">
-                <img src={Kidmeme} alt="meme" />
+                <img loading="lazy" src={Kidmeme} alt="meme" />
                 <span>Create new profile</span>
               </p>
             </Button>
           </div>
-          <div className="grid grid-cols-2 gap-y-10 gap-x-28">
-            {kidsData &&
-              kidsData.map((item, index) => <KidCard key={index} {...item} />)}
+          <div className="grid grid-cols-2 gap-y-10 gap-x-4">
+            {profile.map((item, index) => (
+              <KidCard
+                refetch={refetch}
+                key={index}
+                {...item}
+                isLoading={isLoading}
+              />
+            ))}
           </div>
         </div>
       </motion.div>
@@ -124,68 +141,165 @@ const MyKids = () => {
 
 export default MyKids;
 
+type TStudent = {
+  assigned_teacher_id?: number;
+  assigned_teacher_name?: string;
+  class_id?: number;
+  class_name?: string;
+  school_id?: number;
+  school_name?: string;
+  status?: string;
+};
+
 const KidCard = ({
   image,
   name,
-  age,
-  gender,
+  dob,
+  student,
+  id,
+  isLoading,
+  refetch,
 }: {
-  image: string;
-  name: string;
-  age: number;
-  gender: string;
+  image?: string;
+  name?: string;
+  dob?: string;
+  id?: number;
+  student?: TStudent;
+  isLoading?: boolean;
+  refetch: () => void;
 }) => {
   const [openedEditModal, { open: openEditModal, close: closeEditModal }] =
+    useDisclosure(false);
+  const [openedSchModal, { open: openSchModal, close: closeSchModal }] =
     useDisclosure(false);
   const [
     openedConnectModal,
     { open: openConnectModal, close: closeConnectModal },
   ] = useDisclosure(false);
+
+  const year = dob?.split("-")[0];
+  const date = new Date();
+  const currentYear = date.getFullYear();
+  const childaAge = currentYear - Number(year);
   return (
     <>
       <Modal
-        radius={"xl"}
-        size="xl"
+        radius={10}
+        size="lg"
+        px="md"
         opened={openedEditModal}
         onClose={closeEditModal}
-        closeButtonProps={{
-          size: "xl",
-        }}
+        withCloseButton={false}
         centered
       >
-        <EditProfile />
+        <EditProfile
+          refetch={refetch}
+          id={id as number}
+          image={image as string}
+          name={name as string}
+          dob={dob as string}
+          closeModal={closeEditModal}
+        />
       </Modal>
       <Modal
-        radius={"xl"}
-        size="xl"
+        radius={10}
+        size="lg"
         opened={openedConnectModal}
         onClose={closeConnectModal}
-        closeButtonProps={{
-          size: "xl",
-        }}
+        withCloseButton={false}
         centered
       >
-        <ConnectTOSchool />
+        <ConnectTOSchool
+          profileId={id as number}
+          closeModal={closeConnectModal}
+        />
+      </Modal>
+      <Modal
+        radius={10}
+        size="md"
+        px="md"
+        opened={openedSchModal}
+        onClose={closeSchModal}
+        withCloseButton={false}
+        centered
+      >
+        <SchoolProfile
+          student={student as TStudent}
+          closeSchModal={closeSchModal}
+        />
       </Modal>
 
-      <div className=" relative flex border border-gray-300 px-8 py-8 rounded-3xl">
-        <div>
-          <img src={image} alt="avatar" />
-        </div>
-        <div className="ml-4">
-          <h1 className="font-bold text-[25px] font-Recoleta">{name}</h1>
-          <p className="text-gray-400">
-            <span className="border-l-gray-600 border-r-2 mr-4 px-4">
-              Age - {age}
+      <div className=" relative  lg:flex  border-[#FBECFF] border-[3px] px-6 py-6 rounded-3xl">
+        <div className=" flex justify-center items-center">
+          {isLoading ? (
+            <span>
+              <Skeleton height={100} circle mb="xl" />
             </span>
-            <span>Gender - {gender}</span>
+          ) : (
+            <img
+              loading="lazy"
+              src={image}
+              alt="avatar"
+              className="w-avatar object-cover rounded-md"
+            />
+          )}
+        </div>
+        <div className="ml-3">
+          <h1 className="font-bold text-[16px] px-3 font-Hanken">
+            {name && name?.charAt(0)?.toUpperCase() + name?.slice(1)}
+          </h1>
+          <p className="text-gray-400 flex text2 mt-4 ">
+            <span className="border-l-gray-600 border-r-2 mr-4 px-3 text-[14px] font-Hanken">
+              Age - {childaAge}
+            </span>
+            <div>
+              {" "}
+              {student?.status === "approved" ? (
+                <button
+                  onClick={openSchModal}
+                  className="text2 flex gap-1 justify-center items-center mt-1"
+                >
+                  <PiStudent size={25} color="#8530C1" />
+                  <p className="text2 text-[#8530C1] text-[14px] font-Hanken">
+                    {" "}
+                    View School Info
+                  </p>
+                </button>
+              ) : student?.status === "declined" ? (
+                <button
+                  onClick={openConnectModal}
+                  className=" mt-1 flex justify-center items-center gap-2 bg-[#FEF3F2] px-2 py-1 rounded-2xl"
+                >
+                  <p className="h-2 w-2 rounded-full bg-[#F04438]"></p>
+                  <p className="text2  text-[#B42318] text-[14px] font-Hanken">
+                    Request declined
+                  </p>
+                </button>
+              ) : student?.status === "pending" &&
+                (student?.school_name?.length as number) > 0 ? (
+                <button className="mt-1 flex justify-center items-center gap-2 bg-[#FFFAEB] px-2 py-1 rounded-2xl">
+                  <span className="h-2 w-2 rounded-full bg-[#F79009]"></span>
+                  <span className="text2  text-[#B54708] text-[14px] font-Hanken">
+                    Request Pending
+                  </span>
+                </button>
+              ) : (
+                <button
+                  onClick={openConnectModal}
+                  className="text2 flex gap-1 justify-center items-center  mt-1"
+                >
+                  <img loading="lazy" src={LinkIcon} alt="link icon" />
+                  <p className="text2 text-[#8530C1]">Connect to School</p>
+                </button>
+              )}
+            </div>
           </p>
         </div>
         <div className="">
           <Menu>
             <Menu.Target>
-              <span className="absolute  right-10 p-2 cursor-pointer">
-                <img src={DotIcon} alt="doticon" />
+              <span className="absolute  right-5 p-2 cursor-pointer">
+                <img loading="lazy" src={DotIcon} alt="doticon" />
               </span>
             </Menu.Target>
             <Menu.Dropdown>
@@ -195,23 +309,15 @@ const KidCard = ({
                     onClick={openEditModal}
                     className="p-2 px-4   flex gap-2  justify-start items-center"
                   >
-                    <img src={PencilIcon} alt="pencil icon" />
-                    <span>Edit profile</span>
+                    <img loading="lazy" src={PencilIcon} alt="pencil icon" />
+                    <span className="text3">Edit profile</span>
                   </button>
                 </Menu.Item>
-                <Menu.Item>
-                  <button
-                    onClick={openConnectModal}
-                    className="p-2 px-4  flex gap-2  justify-start items-center"
-                  >
-                    <img src={LinkIcon} alt="link icon" />
-                    <span> Connect school</span>
-                  </button>
-                </Menu.Item>
+
                 <Menu.Item>
                   <button className="p-2 px-4  flex gap-2  justify-start items-center">
-                    <img src={DeleteIcon} alt="delete icon" />
-                    <span> Remove profile</span>
+                    <img loading="lazy" src={DeleteIcon} alt="delete icon" />
+                    <span className="text3"> Remove profile</span>
                   </button>
                 </Menu.Item>
               </div>
@@ -223,63 +329,358 @@ const KidCard = ({
   );
 };
 
-const EditProfile = () => {
-  return (
-    <div className="px-20">
-      <h1 className="text-center font-Recoleta font-bold text-[30px] ">
-        Edit Profile
-      </h1>
-      <div className="flex justify-between items-center">
-        <p className="flex gap-2 justify-end items-center">
-          <img src={Avatar1} alt="Avatar" />
-          <span>Profile Picture</span>
-        </p>
-        <p className="text-blue-400">Upload picture</p>
-      </div>
-      <div>
-        <form>
-          <p className="my-5">
-            <label htmlFor="name">Name</label>
-            <InputFormat type="text" />
-          </p>
+const EditProfile = ({
+  id,
+  image,
+  name,
+  dob,
+  refetch,
+  closeModal,
+}: {
+  id: number;
+  image: string;
+  name: string;
+  dob: string;
+  refetch: () => void;
+  closeModal: () => void;
+}) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFile, setSelectedFile] = useState<File | undefined>();
+  const { isLoading, mutate } = useUpdateProfile();
+  const queryClient = useQueryClient();
 
-          <p className="my-5 flex gap-4">
-            <p className=" flex-grow">
-              <label htmlFor="name">Gender</label>
-              <p className="border border-[#F3DAFF] py-4 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
-                <select
-                  name=""
-                  id=""
-                  className="w-full  h-full flex-1  focus:outline-none"
-                >
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </select>
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files as FileList;
+    const file = files && files[0];
+    setSelectedFile(file);
+  };
+
+  const handleButtonClick = () => {
+    if (fileInputRef?.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const schema: ZodType<FormData> = z.object({
+    name: z
+      .string()
+      .min(4, { message: "School name must be at least 4 characters long" })
+      .max(40, { message: "School name must not exceed 20 characters" }),
+    dob: z.string().optional(),
+    file: z.string().url().optional(),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const submitData = async (data: FormData) => {
+    mutate(
+      {
+        name: data.name as string,
+        age: data.dob as string,
+        image: selectedFile as File, // Changed the type here to `File`
+        profile_id: `${id}`,
+      },
+      {
+        onSuccess(data) {
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+
+          queryClient.invalidateQueries({ queryKey: querykeys.profiles });
+          refetch();
+          closeModal();
+        },
+
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  };
+
+  return (
+    <div className="px-5 py-4">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-center font-Recoleta font-bold text30  flex-grow">
+          Edit Profile
+        </h1>
+        <MdClose size={35} onClick={closeModal} className="cursor-pointer" />
+      </div>
+      <div className="px-10">
+        <div className="flex justify-between items-center ">
+          <p className="flex gap-2 justify-end items-center">
+            <img
+              loading="lazy"
+              src={
+                !selectedFile
+                  ? image
+                  : URL.createObjectURL(selectedFile as Blob)
+              }
+              alt="Avatar"
+              className="h-[100px] w-[100px]  object-cover"
+            />
+            <span className="text3">Profile Picture</span>
+          </p>
+          <button onClick={handleButtonClick} className="text-blue-400 text3">
+            Upload picture
+          </button>
+        </div>
+        <div>
+          <form onSubmit={handleSubmit(submitData)}>
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
+            <p className="my-2 mt-4">
+              <label htmlFor="name" className="text3 text-[#7E7E89]">
+                Name
+              </label>
+              <InputFormat
+                type="text"
+                reg={register("name")}
+                errorMsg={errors && errors?.name?.message}
+                value={name}
+              />
+            </p>
+
+            <p className="my-2 flex gap-4">
+              {/* <p className=" flex-grow">
+                <label htmlFor="name" className="text3 text-[#7E7E89]">
+                  Gender
+                </label>
+                <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-1  mb-2 ">
+                  <select
+                    id=""
+                    className="w-full  h-full flex-1  focus:outline-none text-[14px]"
+                    {...register("genderid")}
+                  >
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </p>
+                <span className="text-red-700">
+                  {errors && errors?.genderid?.message}
+                </span>
+              </p> */}
+
+              <p className=" flex-grow">
+                <label htmlFor="dob" className="text3 text-[#7E7E89]">
+                  DOB
+                </label>
+                <InputFormat
+                  type="date"
+                  reg={register("dob")}
+                  errorMsg={errors && errors?.dob?.message}
+                  value={dob as string}
+                />
               </p>
             </p>
-
-            <p className=" flex-grow">
-              <label htmlFor="dob">DOB</label>
-              <InputFormat type="date" />
-            </p>
-          </p>
-
-          <p className="my-5">
-            <label htmlFor="school">School</label>
+            {/* 
+          <p className="my-2">
+            <label htmlFor="school" className="text-[12px] text-[#7E7E89]">
+              School
+            </label>
             <InputFormat type="text" />
-          </p>
-          <p className="my-5 flex gap-4">
+          </p> */}
+            {/* <p className="my-2 flex gap-4">
             <p className="flex-grow">
-              <label htmlFor="class">Class</label>
+              <label htmlFor="class" className="text-[12px] text-[#7E7E89]">
+                Class
+              </label>
               <InputFormat type="text" />
             </p>
             <p className="flex-grow">
-              <label htmlFor="teacher">Teacher</label>
+              <label htmlFor="teacher" className="text-[12px] text-[#7E7E89]">
+                Teacher
+              </label>
               <InputFormat type="text" />
             </p>
+          </p> */}
+            <p className="my-5">
+              <Button type="submit">
+                {isLoading ? (
+                  <p className="flex justify-center items-center">
+                    <Loader color="white" size="sm" />
+                  </p>
+                ) : (
+                  <span className="text2">Save</span>
+                )}
+              </Button>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// type TSchools = {
+//   id: number;
+//   name: string;
+//   slug: string;
+//   classes: [];
+// };
+
+const ConnectTOSchool = ({
+  closeModal,
+  profileId,
+}: {
+  closeModal: () => void;
+  profileId: number;
+}) => {
+  const { mutate, isLoading } = useConnectStudentData();
+  const [search, setSearch] = useState("");
+  const debounceValue = useDebounce(search, 500);
+  const { data: schoolCurData } = useGetSchoolProfileForStudent(debounceValue);
+  const schData = schoolCurData?.data?.data;
+
+  // const profileId = localStorage.getItem("profileId");
+  const queryClient = useQueryClient();
+
+  const schema: ZodType<FormData> = z.object({
+    firstname: z
+      .string()
+      .min(2, { message: "First name must be at least 2 characters long" })
+      .max(40, { message: "First name must not exceed 20 characters" }),
+    lastname: z
+      .string()
+      .min(2, { message: "Last name must be at least 2 characters long" })
+      .max(40, { message: "Last name must not exceed 20 characters" }),
+
+    classid: z
+      .string()
+      .min(1, { message: "Select a class" })
+      .max(20, { message: "invalid class id" }),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const submitData = async (data: FormData) => {
+    mutate(
+      {
+        profile_id: Number(profileId),
+        firstname: data.firstname,
+        lastname: data.lastname,
+        school_id: schData?.id,
+        class_id: Number(data?.classid),
+      },
+      {
+        onSuccess(data) {
+          closeModal();
+          queryClient.invalidateQueries({ queryKey: querykeys.profiles });
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+        },
+
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  };
+
+  return (
+    <div className="px-4">
+      <div className="flex justify-between items-center  ">
+        <h1 className="text-center font-Recoleta font-bold text-[30px] flex-grow ">
+          Connect to school
+        </h1>
+        <MdClose size={35} onClick={closeModal} className="cursor-pointer" />
+      </div>
+      <p className="text-center my-5">
+        Connect your child to his/her school to enjoy...
+      </p>
+      <div className="px-10">
+        <form onSubmit={handleSubmit(submitData)}>
+          <p className="my-5">
+            <InputFormat
+              reg={register("firstname")}
+              errorMsg={errors?.firstname?.message}
+              type="text"
+              placeholder="First name"
+            />
           </p>
           <p className="my-5">
-            <Button>Save</Button>
+            <InputFormat
+              reg={register("lastname")}
+              errorMsg={errors?.lastname?.message}
+              type="text"
+              placeholder="Last name"
+            />
+          </p>
+          <p className="my-5">
+            <InputFormat
+              // reg={register("schoolCode")}
+              // errorMsg={errors?.schoolCode?.message}
+              onChange={(e) => setSearch(e.target.value)}
+              value={search}
+              type="text"
+              placeholder="School Code"
+            />
+          </p>
+
+          <p className="my-5">
+            <p className="border border-[#F3DAFF] py-2 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
+              {schData?.name ? schData?.name : "School Name"}
+              {/* <InputFormat
+              // disabled={true}
+              reg={register("school_name")}
+              errorMsg={errors?.school_name?.message}
+              value={schData?.name}
+              type="text"
+              placeholder="Last name"
+            /> */}
+            </p>
+          </p>
+
+          <p className="my-5">
+            <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
+              <select
+                {...register("classid")}
+                name="classid"
+                id="classid"
+                className="w-full  h-full flex-1  focus:outline-none text-[14px]"
+              >
+                <option value="">Select class</option>
+                {schData?.classes?.length > 0 &&
+                  schData?.classes?.map((classs: Tclass, index: number) => (
+                    <option key={index} value={classs.id}>
+                      {classs.name}
+                    </option>
+                  ))}
+              </select>
+            </p>
+          </p>
+
+          <p className="my-5">
+            <Button type="submit">
+              {isLoading ? (
+                <p className="flex justify-center items-center">
+                  <Loader color="white" size="sm" />
+                </p>
+              ) : (
+                <span>Continue</span>
+              )}
+            </Button>
           </p>
         </form>
       </div>
@@ -287,60 +688,51 @@ const EditProfile = () => {
   );
 };
 
-const ConnectTOSchool = () => {
+const SchoolProfile = ({
+  student,
+  closeSchModal,
+}: {
+  student: TStudent;
+  closeSchModal: () => void;
+}) => {
   return (
-    <div className="px-20">
-      <h1 className="text-center font-Recoleta font-bold text-[30px] ">
-        Connect to school
-      </h1>
-
-      <p className="text-center my-8">
-        Connect your child to his/her school to enjoy...
+    <div className="px-10">
+      <div className="flex  justify-between items-center">
+        <p className="text25 text-center font-semibold flex-grow ">
+          School information
+        </p>
+        <button onClick={closeSchModal}>
+          <AiOutlineClose size={25} />
+        </button>
+      </div>
+      <p className="my-5">
+        <label htmlFor="school">School</label>
+        <InputFormat
+          value={student?.school_name}
+          type="text"
+          readonly={true}
+          placeholder="First name"
+        />
       </p>
-
       <div>
-        <form>
-          <p className="my-5">
-            <InputFormat type="text" placeholder="Enter full name" />
-          </p>
-          <p className="my-5">
-            <InputFormat type="text" placeholder="Enter school code" />
-          </p>
-
-          <p className="my-5">
-            <p className="border border-[#F3DAFF] py-4 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
-              <select
-                name=""
-                id=""
-                className="w-full  h-full flex-1  focus:outline-none"
-              >
-                <option value="male">Select school</option>
-                <option value="SchoolA">School A</option>
-                <option value="SchoolB">School B</option>
-                <option value="SchoolC">School C</option>
-              </select>
-            </p>
-          </p>
-
-          <p className="my-5">
-            <p className="border border-[#F3DAFF] py-4 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
-              <select
-                name=""
-                id=""
-                className="w-full  h-full flex-1  focus:outline-none"
-              >
-                <option value="male">Select class</option>
-                <option value="ClassA">Class A</option>
-                <option value="ClassB">Class B</option>
-                <option value="ClassC">Class C</option>
-              </select>
-            </p>
-          </p>
-
-          <p className="my-5">
-            <Button>Continue</Button>
-          </p>
-        </form>
+        <p className="my-5">
+          <label htmlFor="school">Class</label>
+          <InputFormat
+            value={student?.class_name}
+            type="text"
+            readonly={true}
+            placeholder="First name"
+          />
+        </p>
+        <p className="my-5">
+          <label htmlFor="school">Teacher</label>
+          <InputFormat
+            value={student?.assigned_teacher_name}
+            type="text"
+            readonly={true}
+            placeholder="First name"
+          />
+        </p>
       </div>
     </div>
   );

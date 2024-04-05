@@ -28,10 +28,10 @@ const Billing = () => {
           <AddCard />
         </Modal>
 
-        <div className="px-20">
-          <h1 className="text-[25px] font-bold my-8">Billing</h1>
+        <div className="px-4">
+          <h1 className="text25 font-bold my-8">Billing</h1>
           <form>
-            <div className="grid grid-cols-[400px_1fr] mt-4">
+            <div className="grid grid-cols-[400px_1fr] mt-4 text3">
               <div>
                 <p>Card Details</p>
               </div>
@@ -40,10 +40,10 @@ const Billing = () => {
                 <div className="flex gap-8 border rounded-3xl p-4 border-[#8530C1] px-8">
                   <div>
                     <h1>
-                      <img src={VisaIcon} alt="visa" />
+                      <img loading="lazy" src={VisaIcon} alt="visa" />
                     </h1>
                   </div>
-                  <div className="text-[#8530C1]  flex-grow">
+                  <div className="text-[#8530C1]   flex-grow">
                     <p>Visa ending in 1992</p>
                     <p>Expiry 12/2028</p>
                     <p>
@@ -51,20 +51,26 @@ const Billing = () => {
                     </p>
                   </div>
                   <div className=" ">
-                    <img src={Marked} alt="marked" className="    " />
+                    <img
+                      loading="lazy"
+                      src={Marked}
+                      alt="marked"
+                      className="    "
+                    />
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 my-8">
+            <div className="flex items-center gap-4 my-8 text3">
               <span onClick={open} className="flex gap-2 cursor-pointer">
-                <img src={PlusIcon} alt="plusIcon" /> Add payment method
+                <img loading="lazy" src={PlusIcon} alt="plusIcon" /> Add payment
+                method
               </span>
               <hr className="flex-grow" />
             </div>
 
-            <div className="grid grid-cols-3 gap-4 my-8">
+            <div className="grid grid-cols-3 gap-4 my-8 text3">
               <p className="flex flex-col">
                 <span>Email Address</span>
                 <span className="text-[#B5B5C3]">
@@ -79,7 +85,7 @@ const Billing = () => {
 
             <hr className="my-4" />
 
-            <div className="grid grid-cols-[150px_1fr_1fr] gap-8 my-6 items-center">
+            <div className="grid grid-cols-[150px_1fr_1fr] gap-8 my-6 items-center text3">
               <p className="flex flex-col">
                 <span>Street Address</span>
               </p>
@@ -88,10 +94,10 @@ const Billing = () => {
                 <hr className="mr-16" />
               </span>
               <span>
-                <InputFormat type="text" placeholder="10 Kunda steet" />
+                <InputFormat type="text" placeholder="10 Kunda street" />
               </span>
             </div>
-            <div className="grid grid-cols-[150px_1fr_1fr] gap-8 my-6 items-center">
+            <div className="grid grid-cols-[150px_1fr_1fr] gap-8 my-6 items-center text3">
               <p className="flex flex-col">
                 <span>City/State</span>
               </p>
@@ -100,11 +106,11 @@ const Billing = () => {
                 <hr className="mr-16" />
               </span>
               <span>
-                <InputFormat type="text" placeholder="10 Kunda steet" />
+                <InputFormat type="text" placeholder="10 Kunda street" />
               </span>
             </div>
 
-            <div className="grid grid-cols-[150px_1fr_1fr] gap-8 my-6 items-center">
+            <div className="grid grid-cols-[150px_1fr_1fr] gap-8 my-6 items-center text3">
               <p className="flex flex-col">
                 <span>Country</span>
               </p>

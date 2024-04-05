@@ -1,14 +1,26 @@
-import { Link } from "react-router-dom";
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import "./packagecard.css";
 
 type Props = {
   recommended?: boolean;
   title?: React.ReactNode;
   price?: React.ReactNode;
   btn?: string;
-  content?: string[];
+  content?: React.ReactNode[];
   noBorder?: boolean;
   isIcon?: boolean;
+  plan?: TPlan;
+  countryCode?: string;
+};
+
+export type TPlan = {
+  dollar_value: string;
+  duration_days: number;
+  id: number;
+  naira_value: string;
+  name: string;
+  pounds_value: string;
 };
 const PackageCard = ({
   recommended,
@@ -18,25 +30,42 @@ const PackageCard = ({
   content,
   noBorder,
   isIcon,
+  plan,
+  countryCode,
 }: Props) => {
+  const navigate = useNavigate();
+  const handlePaln = (planId: number) => {
+    const currencyIso =
+      countryCode === "NG" ? "NGN" : countryCode === "UK" ? "GBP" : "USD";
+    if (!plan) {
+      // navigate("/childprofilesetup");
+      if (sessionStorage.getItem("gotToHome") === "true") {
+        navigate("/parent");
+      } else {
+        navigate("/childprofilesetup");
+      }
+    } else {
+      sessionStorage.setItem("planId", planId?.toString());
+      sessionStorage.setItem("currency_iso3", currencyIso);
+      navigate("/makepayment");
+    }
+  };
   return (
     <div
-      className={` min-w-[176px] ${
-        noBorder ? "" : "border border-[#E7D4F4]  "
-      } ${
+      className={`packageCard-w ${noBorder ? "" : " bg-[#fffbff]  "} ${
         recommended ? "bg-[#8530C1] " : ""
-      } px-4 rounded-3xl py-2 pt-8 relative`}
+      }  rounded-3xl py-2  relative`}
     >
       {recommended && (
         <div className=" absolute left-[0px] top-[-20px] bg-[#FBC70D] p-[7px] rounded-t-3xl w-full text-center">
-          <strong className="text-[13px] text-center"> RECOMMENDED</strong>
+          <strong className="text3 text-center"> RECOMMENDED</strong>
         </div>
       )}
       {title && (
         <div
           className={`${
             recommended ? "text-white" : ""
-          } text-lg font-Hanken font-bold text-center`}
+          } text-lg font-Hanken font-bold text-center pt-2 mt-5`}
         >
           {title}
         </div>
@@ -51,10 +80,12 @@ const PackageCard = ({
         </div>
       )}
       {content && !isIcon && (
-        <div className=" flex flex-col ">
+        <div className=" flex flex-col pb-[74.5px] ">
           {content.map((item, index) => (
-            <div className="mt-5 " key={index}>
-              <p className="text-sm my-5">{item}</p>
+            <div className="mt-2 " key={index}>
+              <p className="text-sm  py-[10.5px]  border-b-[0.5px] border-[#FBECFF]">
+                {item}
+              </p>
             </div>
           ))}
         </div>
@@ -63,9 +94,15 @@ const PackageCard = ({
       {content && isIcon && (
         <div className=" flex flex-col ">
           {content.map((item, index) => (
-            <div className="mt-7" key={index}>
-              <p className=" flex justify-center items-center">
-                <img src={item} alt="icon" className="w-[10px] my-5" />
+            <div className="mt-2" key={index}>
+              <p className=" flex py-2 justify-center items-center border-b-[0.5px] border-[#FBECFF]">
+                {/* <img
+                  loading="lazy"
+                  src={item}
+                  alt="icon"
+                  className="w-[10px] my-3 object-cover"
+                /> */}
+                {item}
               </p>
             </div>
           ))}
@@ -74,11 +111,14 @@ const PackageCard = ({
 
       {btn && (
         <div className="flex justify-center items-center">
-          <Link to="/makepayment">
-            <button className="mt-8 bg-[#E7D4F4] text-[#8530C1] p-3 rounded-2xl">
-              {btn}
-            </button>
-          </Link>
+          <button
+            onClick={() => handlePaln(plan?.id as number)}
+            className={`mt-8 pad-x-40  text-[#8530C1] p-3 rounded-2xl ${
+              recommended ? "bg-white" : "bg-[#E7D4F4]"
+            }`}
+          >
+            {btn}
+          </button>
         </div>
       )}
     </div>

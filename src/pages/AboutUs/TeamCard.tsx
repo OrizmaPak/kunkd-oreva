@@ -1,21 +1,45 @@
 import { useState } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import "./teamcard.css";
 
 const TeamCard = ({
   name,
   image,
   message,
   title,
+  imageBlur,
 }: {
   name: string;
   image: string;
   message: string;
   title: string;
+  imageBlur?: string;
 }) => {
   const [showMessage, setShowMessage] = useState(false);
 
   return (
-    <div className="w-[340px] h-[440px] relative transition-all duration-500 ease-in-out  ">
-      <img src={image} alt="image" className="w-[100%] h-[100%]" />
+    <div
+      data-aos="flip-left"
+      data-aos-easing="ease-out-cubic"
+      data-aos-duration="3000"
+      className="card-w relative transition-all duration-500 ease-in-out  "
+    >
+      {/* <img
+        loading="lazy"
+        src={image}
+        alt="image"
+        className="w-[100%] h-[100%]"
+      /> */}
+
+      <LazyLoadImage
+        src={image}
+        placeholderSrc={imageBlur}
+        effect="blur"
+        wrapperClassName=""
+        // width={408}
+        // height={408}
+      />
       {showMessage && (
         <div
           className={
@@ -30,16 +54,18 @@ const TeamCard = ({
         onMouseEnter={() => setShowMessage(true)}
         onMouseLeave={() => setShowMessage(false)}
       >
-        <h1 className=" font-bold text-[26px] text-white">{name}</h1>
+        <h1 className=" font-bold text25 text-white font-Inter  leading-[23px]">
+          {name}
+        </h1>
         <div className="mt-1 h-0 group-hover:h-[120px] transition-all duration-300">
           {!showMessage ? (
-            <span className="group-hover:opacity-0 text-white font-bold">
+            <span className="group-hover:opacity-0 text-white font-InterReg text1">
               {title}
             </span>
           ) : (
             <p
               className={
-                "opacity-0 group-hover:opacity-100 text-white text-left "
+                "opacity-0 group-hover:opacity-100 text-white text-left  font-InterReg text2"
               }
             >
               {message}

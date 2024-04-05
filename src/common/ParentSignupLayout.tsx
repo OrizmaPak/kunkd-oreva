@@ -20,10 +20,6 @@ const signinDashboardData = [
     title: "Make Payment",
     body: "Enter your payment details",
   },
-  {
-    title: "Add Child/Children",
-    body: "Add your children to manage their account",
-  },
 ];
 const ParentSignupLayout = ({
   children,
@@ -33,8 +29,6 @@ const ParentSignupLayout = ({
   active?: number;
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
-
-  console.log("---- active step", active);
 
   const toggle = () => {
     setIsOpen((prev) => !prev);
@@ -48,7 +42,7 @@ const ParentSignupLayout = ({
         } pt-8 px-8`}
       >
         <div onClick={toggle} className="mb-24">
-          <img src={isOpen ? Cancel2 : Hambuger} alt="cancel2" />
+          <img loading="lazy" src={isOpen ? Cancel2 : Hambuger} alt="cancel2" />
         </div>
         {signinDashboardData.map((data, index) =>
           isOpen ? (
@@ -78,29 +72,29 @@ const SigninDash = ({
   body: string;
   active?: boolean;
 }) => {
-  //   console.log("--- active", active);
   return (
-    <div className="flex  mt-16 gap-4">
+    <div className="flex  mt-10 gap-4">
       <div>
-        <img src={Checked} alt="roundmark" />
+        <img loading="lazy" src={Checked} alt="roundmark" />
       </div>
       <div>
         <h1
-          className={`text-[20] ${
+          className={`text1 ${
             active ? "opacity-100" : "opacity-50"
-          } font-bold text-[18px] `}
+          } font-bold  `}
         >
           {title}
         </h1>
-        <p>{body}</p>
+        <p className="text3">{body}</p>
       </div>
     </div>
   );
 };
-const SigninDashIonsOnly = ({}: { active?: boolean }) => {
+const SigninDashIonsOnly = ({ active }: { active?: boolean }) => {
+  console.log(active);
   return (
     <div className="mb-20">
-      <img src={Checked} alt="roundmark" />
+      <img loading="lazy" src={Checked} alt="roundmark" />
     </div>
   );
 };

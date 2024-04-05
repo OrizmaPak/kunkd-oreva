@@ -9,7 +9,7 @@ const CardNdRange = ({ range, image }: Props) => {
   return (
     <div className="w-[200px]">
       <span>
-        <img src={image} alt="image" className="" />
+        <img loading="lazy" src={image} alt="image" className="" />
       </span>
       <p className="mt-[10px] font-bold font-Hanken flex justify-between items-center gap-4 px-4 ">
         <span>{range}%</span>

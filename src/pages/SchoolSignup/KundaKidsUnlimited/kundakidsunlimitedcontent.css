@@ -1,0 +1,6 @@
+.unlimited-card {
+  width: clamp(25rem, 22.3911rem + 11.9266vw, 33.125rem) !important;
+}
+.footer-btn-container {
+  width: clamp(18.75rem, -0.9174rem + 89.9083vw, 80rem) !important;
+}

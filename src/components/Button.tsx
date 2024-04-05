@@ -1,8 +1,8 @@
 import React from "react";
 
 const sizes = {
-  md: "px-8 py-2",
-  sm: "px-4 py-1",
+  md: "px-[28px] py-[16px]",
+  sm: "px-[18px] py-[10px]",
   full: "w-full py-3 text-center",
 };
 const colors = {
@@ -33,6 +33,7 @@ interface ButtonProps {
   type?: "button" | "submit" | "reset";
   onClick?: () => void;
   className?: string;
+  disable?: boolean;
 }
 
 type TClassName = Omit<
@@ -48,7 +49,7 @@ const getClassName = (options: TClassName) => {
       : borderColors[borderColor || "default"];
   // varient  || backgroundColor - border -
 
-  return `rounded-[25px]  text-[16px] ${sizes[size || "md"]} ${
+  return `rounded-[8px]  text-[16px] ${sizes[size || "md"]} ${
     colors[color || "default"]
   } ${btnVarientStyle}`;
 };
@@ -62,6 +63,7 @@ const Button = ({
   type = "button",
   onClick,
   borderColor = "default",
+  disable,
   className = "",
 }: ButtonProps) => {
   // const buttonClasses = `w-${width} text-${color}  bg-${backgroundColor} p-${padding} mt-4 rounded-3xl `;
@@ -73,6 +75,7 @@ const Button = ({
 
   return (
     <button
+      disabled={disable}
       type={type}
       onClick={handleClick}
       className={`${getClassName({

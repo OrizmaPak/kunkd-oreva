@@ -11,7 +11,7 @@ const ParentSignup = () => {
     setActiveStep(step);
   };
   return (
-    <div>
+    <div className="bg-yellow-400">
       <ParentSignupLayout active={0}>
         {activeStep === STEP_1 ? (
           <ParentSignupDetails onSubmit={() => handleNext(STEP_2)} />
@@ -27,12 +27,12 @@ const ParentSignup = () => {
 
         {activeStep === STEP_3 ? (
           <ParentCongratulations
-            onSubmit={() => {
-              handleNext(STEP_3);
-            }}
+            // onSubmit={() => {
+            //   handleNext(STEP_3);
+            // }}
           />
         ) : null}
-        <div className="flex gap-2 justify-center absolute bottom-20 left-[1150px] ">
+        {/* <div className="flex gap-2 justify-center  bottom-20  items-center  bg-red-400 w-full ">
           <div
             className={`w-4 h-4 rounded-full ${
               activeStep === STEP_1
@@ -54,7 +54,7 @@ const ParentSignup = () => {
                 : "border-2 border-blue-[#8530C1]"
             }`}
           />
-        </div>
+        </div> */}
       </ParentSignupLayout>
     </div>
   );

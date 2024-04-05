@@ -1,18 +1,19 @@
-import Wrapper from "@/common/User/Wrapper";
 import InnerWrapper from "@/common/User/InnerWrapper";
-import Header from "./Header";
-import { useMatch, useNavigate } from "react-router-dom";
-import { Outlet } from "react-router-dom";
-import { useDisclosure } from "@mantine/hooks";
+import Wrapper from "@/common/User/Wrapper";
 import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { Outlet, useMatch, useNavigate } from "react-router-dom";
 import DeleteAccount from "./DeleteAccount";
-import { userContext } from "@/Context/StateProvider";
+import Header from "./Header";
+// import { userContext } from "@/Context/StateProvider";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
 
 const baseUrl = "/account";
 
 const links = [
   {
-    name: "profile",
+    name: "Profile",
     route: baseUrl,
     href: "",
     isSchool: true,
@@ -21,23 +22,26 @@ const links = [
   },
 
   {
-    name: "My kids",
+    name: "My Kids",
     route: baseUrl + "/mykids",
     href: "mykids",
     isParent: true,
   },
   {
-    name: "subscription plan",
+    name: "Subscription Plan",
     route: baseUrl + "/subscriptionplan",
     href: "subscriptionplan",
     isParent: true,
-    isSchool: true,
+    isSchool: false,
   },
-  {
-    name: "Billing",
-    route: baseUrl + "/billing",
-    href: "billing",
-  },
+  // {
+  //   name: "Billing",
+  //   route: baseUrl + "/billing",
+  //   href: "billing",
+  //   isTeacher: false,
+  //   isSchool: false,
+  //   isParent: true,
+  // },
   {
     name: "Password",
     route: baseUrl + "/accountpassword",
@@ -49,18 +53,18 @@ const links = [
 ];
 
 const SettingsLayout = () => {
-  const [{ userType }] = userContext();
   const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
+  const [user, ,] = useStore(getUserState);
   return (
     <Wrapper bgColor="#FFF7FD">
       <InnerWrapper>
         <Modal
-          radius={"xl"}
-          size="lg"
+          radius={"sm"}
+          size="md"
           opened={opened}
           onClose={close}
-          closeButtonProps={{ size: "lg" }}
+          withCloseButton={false}
           centered
         >
           <DeleteAccount onCancel={close} />
@@ -77,10 +81,10 @@ const SettingsLayout = () => {
               >
                 {links &&
                   links.map((link, index) => {
-                    if (userType === "teacher" && !link.isTeacher) {
+                    if (user?.role === "teacher" && !link.isTeacher) {
                       return null;
                     }
-                    if (userType === "school" && !link.isSchool) {
+                    if (user?.role === "schoolAdmin" && !link.isSchool) {
                       return null;
                     }
 
@@ -128,7 +132,7 @@ const SideMenuButton = ({
     <div className="my-8 w-[100%]">
       <button
         onClick={onClick}
-        className={`py-3 px-10 rounded-full ${
+        className={`py-3 px-4  text-[16px] rounded-full  font-medium font-Hanken w-[186px] text-left ${
           active ? "bg-[#FFF7FD] text-[#8530C1]" : "text-[#B5B5C3] "
         }  `}
       >

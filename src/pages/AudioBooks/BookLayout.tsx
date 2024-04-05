@@ -1,213 +1,407 @@
-import { useParams, useLocation } from "react-router-dom";
-import { audioBooksData, StoriesType } from "./AudioBooks";
-import CardScreen from "@/common/User/CardScreen";
-import Card from "@/common/User/Card";
-import Bookmark from "@/assets/Bookmark.svg";
+// import { useLocation } from "react-router-dom";
+// import Bookmark from "@/assets/Bookmark.svg";
+// import Card from "@/common/User/Card";
+// import CardScreen from "@/common/User/CardScreen";
+import React, { useEffect, useRef, useState } from "react";
+// import { StoriesType, audioBooksData } from "./AudioBooks";
+// import VolumeIcon from "@/assets/volumeIcon.svg";
+import { getApiErrorMessage } from "@/api/helper";
+import { MdFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
 
-import React, { useState, useRef, useEffect } from "react";
-import FastForward from "@/assets/fastforward.svg";
-import FastBackward from "@/assets/fastbackward.svg";
-import PauseIcon from "@/assets/pause.svg";
-import PlayIcon from "@/assets/play.svg";
-import VolumeIcon from "@/assets/volumeIcon.svg";
-
-import ExportIcon from "@/assets/exportIcon.svg";
+import {
+  useContentTracking,
+  useGetContentById,
+  useGetLikedContent,
+  useLikedContent,
+  useUnLikedContent,
+  useRecommendedAudiobooks,
+  useLearningHour,
+} from "@/api/queries";
+import AfamBlur from "@/assets/afamblur.jpg";
+// import { TMedia, TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+import { TStoryContent, TMedia } from "@/api/types";
+// import useStore from "@/store";
+// import { getUserState } from "@/store/authStore";
+import { MantineProvider, Skeleton, Slider } from "@mantine/core";
+import { useReducedMotion } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
+import { UseQueryResult } from "@tanstack/react-query";
+import { BsFillPlayCircleFill, BsPauseCircleFill } from "react-icons/bs";
+import { FiVolume1 } from "react-icons/fi";
+import { GrBackTen, GrForwardTen } from "react-icons/gr";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 import AudioBooksNav from "./AudioBooksNav";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import TeacherNotificationModal from "@/components/TeacherWarningModal";
+import { TAudioBooks } from "@/api/types";
+import CardHome from "@/common/User/CardHome";
+import CardScreenHome from "@/common/User/CardScreenHome";
+import { useNavigate } from "react-router-dom";
+import ConnectedStudentModal from "@/components/ConnectedStudentModal";
+import Wrapper from "@/common/User/Wrapper";
+import InnerWrapper from "@/common/User/InnerWrapper";
+import TabInReadingPage from "../AfterParentSignIn/TabInReadingPage";
+import "./BookLayout.css";
+// import useTimeSpent from "@/hooks/useTimeSpent";
 
-// const data = [
-//   {
-//     id: 1,
-//     image: Poster1,
-//     title: "Chisom's Eco-Friendly Visit",
-//     author: "Dele and Louisa Olatuyi",
-//     aboutAuthor:
-//       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nobis perspiciatis aliquam, atque excepturi nemo harum, nulla doloremque nisi distinctio provident impedit sint odit? Asperiores, quod excepturi vel aliquam, dignissimos doloribus at magnam ducimus doloremque voluptate possimus officia aperiam repellat blanditiis omnis alias qui provident, ut deleniti assumenda aliquid! Facere, reprehenderit. ",
-
-//     overview:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus voluptatem facere suscipit, quidem fuga quaerat illum temporibus ut, magni explicabo molestiae in ullam? Nam voluptatem excepturi minima sunt. Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-//     content:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-//   },
-//   {
-//     id: 2,
-//     image: Poster1,
-//     title: "Chisom's Eco-Friendly Visit",
-//     author: "Dele and Louisa Olatuyi",
-//     aboutAuthor:
-//       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nobis perspiciatis aliquam, atque excepturi nemo harum, nulla doloremque nisi distinctio provident impedit sint odit? Asperiores, quod excepturi vel aliquam, dignissimos doloribus at magnam ducimus doloremque voluptate possimus officia aperiam repellat blanditiis omnis alias qui provident, ut deleniti assumenda aliquid! Facere, reprehenderit. ",
-
-//     overview:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus voluptatem facere suscipit, quidem fuga quaerat illum temporibus ut, magni explicabo molestiae in ullam? Nam voluptatem excepturi minima sunt. Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-//     content:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-//   },
-//   {
-//     id: 3,
-//     image: Poster1,
-//     title: "Chisom's Eco-Friendly Visit",
-//     author: "Dele and Louisa Olatuyi",
-//     aboutAuthor:
-//       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nobis perspiciatis aliquam, atque excepturi nemo harum, nulla doloremque nisi distinctio provident impedit sint odit? Asperiores, quod excepturi vel aliquam, dignissimos doloribus at magnam ducimus doloremque voluptate possimus officia aperiam repellat blanditiis omnis alias qui provident, ut deleniti assumenda aliquid! Facere, reprehenderit. ",
-
-//     overview:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus voluptatem facere suscipit, quidem fuga quaerat illum temporibus ut, magni explicabo molestiae in ullam? Nam voluptatem excepturi minima sunt. Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-//     content:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-//   },
-//   {
-//     id: 4,
-//     image: Poster1,
-//     title: "Chisom's Eco-Friendly Visit",
-//     author: "Dele and Louisa Olatuyi",
-//     aboutAuthor:
-//       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nobis perspiciatis aliquam, atque excepturi nemo harum, nulla doloremque nisi distinctio provident impedit sint odit? Asperiores, quod excepturi vel aliquam, dignissimos doloribus at magnam ducimus doloremque voluptate possimus officia aperiam repellat blanditiis omnis alias qui provident, ut deleniti assumenda aliquid! Facere, reprehenderit. ",
-
-//     overview:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus voluptatem facere suscipit, quidem fuga quaerat illum temporibus ut, magni explicabo molestiae in ullam? Nam voluptatem excepturi minima sunt. Quae illum nam quam vero error est eum adipisci repellendus necessitatibus, omnis assumenda, aperiam quaerat non voluptas amet. Delectus, nostrum molestias! Cum? ",
-//     content:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nisi minima, beatae voluptatibus inventore amet vero, possimus sequi ex modi totam assumenda rerum et, placeat vitae obcaecati quae quisquam? Illo repellat deserunt eum, hic accusantium in, nesciunt perspiciatis fugit facere vel aspernatur nihil saepe laborum! Mollitia voluptates laborum officiis facilis explicabo maiores impedit. Dicta ut amet laboriosam cumque consequatur incidunt voluptas veritatis quibusdam. Repudiandae natus saepe totam porro, deleniti dicta?  ",
-//   },
-// ];
+// type TAudioBook = {
+//   name: string;
+//   slug: string;
+//   order: number;
+//   file: string;
+//   thumbnail: string;
+//   id: number;
+// };
 const BookLayout = () => {
+  const [opened, { open, close }] = useDisclosure(false);
+  const [
+    openedconnectedStudent,
+    { open: openConnectedStudent, close: closeConnectedStudent },
+  ] = useDisclosure(false);
+  const navigate = useNavigate();
+
+  const contentId = sessionStorage.getItem("contentId");
+  // useTimeSpent(Number(contentId), Number(profileId));
+  const { data: dataRecommended } = useRecommendedAudiobooks(
+    contentId as string
+  );
+  const recommendedContents: TAudioBooks[] =
+    dataRecommended?.data?.data?.recommended_contents;
+  const profileId = sessionStorage.getItem("profileId");
+
+  const { data, isLoading } = useGetContentById(
+    contentId?.toString() as string,
+    profileId?.toString() || ("0" as string),
+    open,
+    openConnectedStudent
+  ) as UseQueryResult<{ data: { data: TStoryContent } }>;
+  const audioBookId = data?.data.data.id;
+  const audiobook = data?.data.data.media?.[0];
   const [startRead, setStartRead] = useState(false);
-  const { id, story_type } = useParams();
-  const { state } = useLocation();
-  console.log(state);
-  const story = audioBooksData.find((data) => `${data.id}` === id);
   return (
-    <div className=" ">
-      <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd]  ">
-        {/* <div className="flex flex-col h-full"> */}
+    <>
+      <Modal
+        radius={10}
+        padding={30}
+        size={"md"}
+        opened={opened}
+        onClose={close}
+        overlayProps={{
+          blur: 10,
+        }}
+        closeOnClickOutside={false}
+        withCloseButton={false}
+        centered
+      >
+        <TeacherNotificationModal onCancel={close} />
+      </Modal>
 
-        <div className=" ">
-          {story && (
-            <AudioBooksNav
-              category="Audiobooks"
-              genre={story_type}
-              title={story?.title}
-            />
-          )}
-        </div>
-        <div className="flex-grow flex  h-full ">
-          <div className="flex-grow  mt-5 rounded-2xl">
-            <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
-              {story && !startRead && (
-                <AboutPage
-                  story={story}
-                  setStartRead={() => setStartRead(true)}
-                />
-              )}
+      <Modal
+        radius={10}
+        padding={30}
+        size={"md"}
+        opened={openedconnectedStudent}
+        onClose={closeConnectedStudent}
+        overlayProps={{
+          // style: { backgroundOpacity: 1 },
+          blur: 10,
+        }}
+        closeOnClickOutside={false}
+        withCloseButton={false}
+        centered
+      >
+        <ConnectedStudentModal onCancel={closeConnectedStudent} />
+      </Modal>
 
-              {story && startRead && <ReadPage story={story} />}
+      <Wrapper bgColor="#fff7fd">
+        <InnerWrapper>
+          <div className=" ">
+            <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd]  ">
+              <div className=" ">
+                <Skeleton visible={isLoading} radius={"xl"}>
+                  {
+                    <AudioBooksNav
+                      category="Audiobooks"
+                      title={audiobook && audiobook?.name}
+                    />
+                  }
+                </Skeleton>
+              </div>
+              <div className="flex-grow  h-full ">
+                <div className="flex-grow  mt-5 rounded-2xl">
+                  <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
+                    <Skeleton visible={isLoading}>
+                      {!startRead && (
+                        <AboutPage
+                          audiobook={audiobook as TMedia}
+                          setStartRead={() => setStartRead(true)}
+                          audioBookId={audioBookId as number}
+                        />
+                      )}
+                    </Skeleton>
 
-              <div className="w-full bg-white rounded-3xl mt-4">
-                {
-                  <CardScreen
-                    data={audioBooksData?.slice(1, 7).map((el) => ({ ...el }))}
-                    card={(props: StoriesType) => <Card {...props} />}
-                    header="Trending"
-                    actiontitle="View all"
-                    isTitled={true}
-                  />
-                }
+                    {audiobook && startRead && (
+                      <ReadPage audiobook={audiobook} />
+                    )}
+
+                    <TabInReadingPage />
+                    <div className="w-full bg-white rounded-3xl mt-4">
+                      {
+                        <CardScreenHome
+                          data={recommendedContents}
+                          header="New & Trending"
+                          actiontitle=""
+                          isTitled={false}
+                          isLoading={isLoading}
+                          card={(props: TStoryContent) => (
+                            <CardHome
+                              {...props}
+                              goTo={() =>
+                                navigate(
+                                  `../audiobooks/${props?.theme}/${props?.slug
+                                    ?.replace(/\s/g, "_")
+                                    .toLowerCase()}`
+                                )
+                              }
+                            />
+                          )}
+                        />
+
+                        // <CardScreen
+                        //   data={recommendedContents?.slice(1, 6).map((el) => ({ ...el }))}
+                        //   card={(props: StoriesType) => <Card {...props} />}
+                        //   header="Trending"
+                        //   actiontitle="View all"
+                        //   isTitled={true}
+                        // />
+                      }
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-
-        {/* </div> */}
-      </div>
-    </div>
+        </InnerWrapper>
+      </Wrapper>
+    </>
   );
 };
 
 export default BookLayout;
 
 const AboutPage = ({
-  story,
+  audiobook,
   setStartRead,
+  audioBookId,
 }: {
-  story: StoriesType;
+  audiobook: TMedia;
   setStartRead: () => void;
+  audioBookId: number;
 }) => {
+  const profileId = sessionStorage.getItem("profileId");
+  const { data, refetch } = useGetLikedContent(profileId as string);
+  const likeContents: TStoryContent[] = data?.data.data.records;
+  const { mutate } = useLikedContent();
+  const { mutate: unFavoriteMutate } = useUnLikedContent();
+  const isLiked = likeContents?.filter((content) => content.id === audioBookId);
+
+  const handleLikedContent = () => {
+    handleShake();
+    if (isLiked?.length === 0 || isLiked === undefined) {
+      mutate(
+        {
+          content_id: audioBookId,
+          profile_id: Number(profileId),
+        },
+        {
+          onSuccess() {
+            // const res = data?.data?.data as TUser;
+            // setUser({ ...res });
+            refetch();
+            notifications.show({
+              title: `Notification`,
+              message: audiobook?.name + " added to list",
+            });
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    } else {
+      unFavoriteMutate(
+        {
+          content_id: audioBookId,
+          profile_id: Number(profileId),
+        },
+        {
+          onSuccess() {
+            refetch();
+            notifications.show({
+              title: `Notification`,
+              message: audiobook?.name + " removed from the list",
+            });
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    }
+  };
+  const [isShaking, setIsShaking] = useState(false);
+
+  const handleShake = () => {
+    setIsShaking(true);
+    setTimeout(() => {
+      setIsShaking(false);
+    }, 200); // Reset shaking after 0.5 seconds
+  };
+
   return (
-    <div className="bg-[#003914]  w-[100%] flex rounded-3xl px-20 py-10">
-      <div className="flex basis-full  border-r-2 border-[#008A3B]  ">
+    <div className="bg-[#003914]   w-[100%] flex rounded-3xl pad-x-40 about-card-px py-5">
+      <div className="flex basis-full  border-r-2 justify-center items-center border-[#008A3B]  ">
         <p className="flex flex-col w-full">
-          <img src={story?.image} alt="image " className="w-[300px]" />
+          {audiobook ? (
+            <LazyLoadImage
+              src={audiobook?.thumbnail}
+              placeholderSrc={AfamBlur}
+              effect="blur"
+              className="rounded-2xl about-img "
+              wrapperClassName="about-img"
+            />
+          ) : (
+            <LazyLoadImage
+              placeholderSrc={AfamBlur}
+              effect="blur"
+              className="rounded-2xl about-img "
+              wrapperClassName="about-img"
+            />
+          )}
         </p>
-        <p className="flex flex-col w-full  ">
-          <span className="font-bold font-Recoleta text-white text-[30px]">
-            {story?.title}
+        <p className="grid flex-col w-full   h-full py-2 ">
+          <span className="font-bold font-Recoleta text-white text25 justify-self-start">
+            {audiobook?.name}
           </span>
-          <span className="mt-4 text-[#008A3B]  ">{story?.author}</span>
-          <p className="mt-40 flex gap-4">
+          <span className=" text-[#008A3B]">Dele and Louisa Olafuyi</span>
+          <p className="flex   gap-2 ">
             <button
               onClick={setStartRead}
-              className="px-16 py-3 border text-white border-white rounded-3xl"
+              className=" py-3 px-10 inline self-end text-white border-white border-[2px] rounded-2xl"
             >
-              Read
+              Play
             </button>
-            <img src={Bookmark} alt="bookmark" />
+            {/* <button
+              onClick={handleLikedContent}
+              className="inline self-end text-start"
+            >
+              <img
+                loading="lazy"
+                src={Bookmark}
+                alt="bookmark"
+                className=" inline "
+              />
+            </button> */}
+
+            <button
+              onClick={handleLikedContent}
+              // className="px-4 py-2"
+              className={`px-4 py-2 rounded-md transition-all inline self-end items-center     ${
+                isShaking ? "scale-150" : ""
+              }`}
+            >
+              {isLiked?.length > 0 ? (
+                <MdOutlineFavorite
+                  size="35"
+                  color="white"
+                  className=" scale-110"
+                />
+              ) : (
+                <MdFavoriteBorder size="35" color="white" />
+              )}
+              <style>{`
+            @keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-10px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(10px);
+  }
+}
+
+.animate-shake {
+  animation: shake 0.3s infinite;
+}`}</style>
+            </button>
           </p>
         </p>
       </div>
-      <div className=" basis-3/4 text-[#BD6AFA] px-10">
+      <div className=" basis-3/4 text-[#008A3B] pad-x-40">
         <div>
-          <h1 className="text-white font-bold  font-Hanken text-[25px] my-4">
-            About the author
-          </h1>
-          <p className="text-[#008A3B]">{story?.aboutAuthor}</p>
-        </div>
-        <div>
-          <h1 className="text-white font-bold  font-Hanken text-[25px] my-4">
+          <h1 className="text-white font-bold  font-Hanken text25 my-2">
             Overview
           </h1>
-          <p className="text-[#008A3B]">{story?.overView}</p>
+          <p dangerouslySetInnerHTML={{ __html: `${audiobook?.slug}` }}></p>
         </div>
       </div>
     </div>
   );
 };
 
-const ReadPage = ({ story }: { story: StoriesType }) => {
-  // const [isReading, setIsReading] = useState(false);
-
+const ReadPage = ({ audiobook }: { audiobook: TMedia }) => {
   return (
-    <div className="flex bg-[#fff7fd] py-5 gap-16 rounded-3xl ">
-      <div className=" basis-3/6 flex  items-center bg-[white] flex-col p-10 rounded-3xl">
-        <img src={story.image} alt="image" className="w-[300px]" />
-        <AudioControls audio={story.audioBook} />
-      </div>
-      <div className=" basis-full flex flex-col bg-white rounded-3xl p-10 ">
-        <div className="flex-grow">
-          <p className="mb-5 flex justify-between items-center">
-            <span className="text-[#B5B5C3] text-[18px]">Lyrics</span>
-            <span>
-              <img src={ExportIcon} alt="" />
-            </span>
-          </p>
-          <p className=" leading-10">{story.content}</p>
+    <div className="flex bg-[#fff7fd]  gap-16 rounded-3xl ">
+      <div className=" basis-full flex   bg-[white]  p-10 rounded-3xl gap-24 ">
+        <div>
+          <LazyLoadImage
+            src={audiobook.thumbnail}
+            placeholderSrc={AfamBlur}
+            effect="blur"
+            className=" rounded-xl"
+            wrapperClassName=""
+            width={229}
+            height={229}
+          />
+        </div>
+        <div className=" flex-grow">
+          <AudioControls
+            audio={audiobook && audiobook.file}
+            title={audiobook?.name}
+          />
         </div>
       </div>
     </div>
   );
 };
 
-const AudioControls = ({ audio }: { audio?: string }) => {
+const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  // const [ended, setEnded] = useState(false);
-  const progressBar = useRef<HTMLInputElement>(null);
   const [currentTTime, setCurrentTTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [durationn, setDuration] = useState(0);
+  const [load, setLoad] = useState(false);
+  const [delay, setDelay] = useState(0);
 
-  // const [audioDuration, setAudioDuration] = useState(audioRef.current);
+  useEffect(() => {
+    const continueReading = sessionStorage.getItem("continuePage");
+    if (continueReading && audioRef.current) {
+      audioRef.current.currentTime = Number(continueReading);
+    }
+  }, []);
 
   const handlePlayControl = () => {
     const audioCon = audioRef.current;
-    console.log("audio played", audioCon);
-    // setEnded(false);
     setIsPlaying(!isPlaying);
     if (audioCon && !audioCon.paused) {
       return audioCon.pause();
@@ -217,120 +411,259 @@ const AudioControls = ({ audio }: { audio?: string }) => {
 
   const handeSkip10 = (direction: "forward" | "backward") => () => {
     const audioCon = audioRef.current;
-    // setEnded(false);
     const duration = audioCon?.duration || 0;
     const currentTime = audioCon?.currentTime || 0;
-
-    console.log("duration", audioCon?.duration, audioCon?.currentTime);
-    if (audioCon && direction === "forward") {
-      audioCon.currentTime +=
-        currentTime + 10 > duration ? duration - currentTime : 10;
-      return;
-    } else if (audioCon && direction === "backward") {
+    if (!audioCon?.currentTime) return;
+    if (
+      audioCon?.currentTime &&
+      load &&
+      direction === "forward" &&
+      audioCon?.currentTime < duration
+    ) {
+      audioCon.currentTime += 10;
+    } else if (audioCon.currentTime && load && direction === "backward") {
       audioCon.currentTime -= currentTime - 10 < 0 ? currentTime : 10;
-      return;
     }
   };
 
   const max = 20;
-  const handleVolume = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { value } = e.target;
+
+  useEffect(() => {
+    let seconds;
+    if (audioRef.current) {
+      seconds = Math.floor(audioRef?.current.duration);
+      setDuration(+seconds);
+    }
+  }, [
+    audioRef?.current?.onloadedmetadata,
+    audioRef?.current?.readyState,
+    audioRef?.current?.onload,
+    audioRef?.current?.oncanplaythrough,
+  ]);
+
+  const calculateTime = (secs: number) => {
+    if (audioRef.current) {
+      const minutes = Math.floor(secs / 60);
+      const returnedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+      const seconds = Math.floor(secs % 60);
+      const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+      return `${returnedMinutes}: ${returnedSeconds}`;
+    }
+  };
+
+  const reducedMotion = useReducedMotion();
+
+  const handleSliderChange = (value: number) => {
+    setCurrentTTime(value);
+    if (load && audioRef.current) {
+      audioRef.current.currentTime = value;
+    }
+    return value;
+  };
+
+  const [volume, setVolume] = React.useState(50);
+
+  const handleVolumeChange = (value: number) => {
+    setVolume(value);
     const volume = Number(value) / max;
     if (audioRef.current) {
       audioRef.current.volume = volume;
     }
   };
+  const { mutate } = useContentTracking();
+  const profileId = sessionStorage.getItem("profileId");
+  const contentId = sessionStorage.getItem("contentId");
+  const { mutate: mutateLearning } = useLearningHour();
+  const [lastTime, setLastTime] = useState(0);
+
   useEffect(() => {
-    let seconds;
-    console.log("effect duration", audioRef.current?.duration);
-    if (audioRef.current) {
-      seconds = Math.floor(audioRef?.current.duration);
-      setDuration(+seconds);
-    }
-    if (progressBar?.current) {
-      progressBar.current.max = seconds?.toString() || "";
-    }
-  }, [audioRef?.current?.onloadedmetadata, audioRef?.current?.readyState]);
-  // const { story_type, id } = useParams();
+    let interval: ReturnType<typeof setInterval>;
 
-  const calculateTime = (secs: number) => {
-    const minutes = Math.floor(secs / 60);
-    // console.log("min", secs / 60);
-    const returnedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
-    const seconds = Math.floor(secs % 60);
-    const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
-    return `${returnedMinutes}: ${returnedSeconds}`;
-  };
-  const changeRage = () => {
-    if (audioRef?.current?.currentTime && progressBar.current) {
-      audioRef.current.currentTime = Number(progressBar.current.value);
+    if (isPlaying) {
+      interval = setInterval(() => {
+        setDelay((prev) => prev + 1);
+      }, 5000);
     }
-    if (progressBar.current) {
-      setCurrentTTime(+progressBar?.current?.value);
-      console.log(currentTTime);
-    }
-  };
-  //   const navigate = useNavigate();
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isPlaying]);
 
-  //   console.log("current time", calculateTime(currentTTime));
-  //   console.log("duration", duration);
-  console.log("actual duration", Math.floor((currentTTime * 100) / duration));
+  useEffect(() => {
+    if (delay > 0) {
+      mutate(
+        {
+          profile_id: Number(profileId),
+          content_id: Number(contentId),
+          status: currentTTime === durationn ? "complete" : "ongoing",
+          pages_read: Math.ceil(currentTTime),
+          timespent: Math.ceil(currentTTime),
+        },
+        {
+          onSuccess(data) {
+            setLastTime(Math.ceil(currentTTime));
+            return data;
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+
+      mutateLearning({
+        content_id: Number(contentId),
+        profile_id: Number(profileId),
+        timespent: Math.ceil(currentTTime) - lastTime,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [delay]);
+
+  const handleAudioComplete = async () => {
+    mutate(
+      {
+        profile_id: Number(profileId),
+        content_id: Number(contentId),
+        status: "complete",
+        pages_read: Math.ceil(currentTTime),
+        timespent: Math.ceil(currentTTime),
+      },
+      {
+        onSuccess(data) {
+          return data;
+        },
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  };
 
   return (
-    <div className="mt-10">
-      <div className="my-10 flex">
-        <p className=" flex-grow w-20">{calculateTime(currentTTime)}</p>
-        <input
-          type="range"
-          className="mr-2   text-[#8530C1] bg-[#8530C1]  flex-grow w-full"
-          ref={progressBar}
-          value={currentTTime}
-          onChange={changeRage}
-          defaultValue={0}
-        />
-        <p className="flex-grow w-20">
-          {duration ? calculateTime(duration) : `0:00`}
-        </p>
-        {/* <Progress value={(currentTTime * 100) / duration} /> */}
-      </div>
-      {/* <Progress value={(currentTTime * 100) / duration} /> */}
-      <div className="flex justify-center h-[72px] ">
-        <audio
-          onTimeUpdate={(event) => {
-            setCurrentTTime(+event.currentTarget.currentTime);
-          }}
-          onEnded={() => {
-            setIsPlaying(false);
-            // setEnded(true);
-          }}
-          ref={audioRef}
-          src={audio}
-        ></audio>
-        <div className="flex justify-end rounded-full gap-10 px-20 py-4 bg-[#FBECFF] items-center ">
-          <button onClick={handeSkip10("backward")}>
-            <img src={FastBackward} alt="backward" />
-          </button>
-          <button onClick={handlePlayControl}>
-            <img
-              src={isPlaying ? PauseIcon : PlayIcon}
-              alt=""
-              className="w-[40px]"
+    <div className="h-[229px]">
+      <h1 className="text-[22px] font-semibold text-[#151515]">{title}</h1>
+      <div className="my-3 flex justify-center items-center gap-2 mt-8">
+        <p className="w-full flex-grow">
+          <MantineProvider
+            theme={{
+              colors: {
+                "ocean-blue": [
+                  "#8530c1",
+                  "#5FCCDB",
+                  "#44CADC",
+                  "#2AC9DE",
+                  "#1AC2D9",
+                  "#11B7CD",
+                  "#09ADC3",
+                  "#0E99AC",
+                  "#128797",
+                  "#147885",
+                ],
+              },
+            }}
+          >
+            <Slider
+              color="ocean-blue.0"
+              value={currentTTime}
+              onChange={(event) => {
+                handleSliderChange(event);
+              }}
+              min={0}
+              max={durationn}
+              step={0.1}
+              label={`Duration: ${calculateTime(currentTTime)}`}
+              disabled={reducedMotion}
             />
-          </button>
-          <button onClick={handeSkip10("forward")}>
-            <img src={FastForward} alt="forward" />
-          </button>
-        </div>
+          </MantineProvider>
+        </p>
       </div>
-      <div className="mt-20 flex gap-5 pr-24">
-        <img src={VolumeIcon} alt="volume" className="w-[20px]" />
-        <input
-          type="range"
-          className="mr-2   text-[#8530C1] bg-[#8530C1] w-[100px]"
-          min={0}
-          max={max}
-          onChange={(e) => handleVolume(e)}
-        />
+
+      <div className="flex  justify-between ">
+        <p>{currentTTime && calculateTime(currentTTime)}</p>
+        <p>{durationn ? calculateTime(durationn) : `0:00`}</p>
+      </div>
+
+      <div className="flex justify-between mt-8">
+        <div className="flex justify-center h-[72px]">
+          <audio
+            id="audio-book"
+            onTimeUpdate={(event) => {
+              setCurrentTTime(+event.currentTarget.currentTime);
+            }}
+            onEnded={() => {
+              setIsPlaying(false);
+              handleAudioComplete();
+            }}
+            onCanPlayThrough={(event) => {
+              setCurrentTTime(+event.currentTarget.currentTime);
+            }}
+            ref={audioRef}
+            src={audio && audio}
+            onCanPlay={(event) => {
+              setCurrentTTime(+event.currentTarget.currentTime);
+              setLoad(true);
+            }}
+          ></audio>
+          <div className="flex h-[72px] justify-end rounded-full gap-10 px-10 py-4 bg-[#FBECFF] items-center ">
+            <button onClick={handeSkip10("backward")}>
+              <GrBackTen size={25} color="red" className="u-react-icon" />
+            </button>
+            <button onClick={handlePlayControl}>
+              {isPlaying ? (
+                <BsPauseCircleFill size={40} color="#8530C1" x />
+              ) : (
+                <BsFillPlayCircleFill size={40} color="#8530C1" />
+              )}
+            </button>
+            <button onClick={handeSkip10("forward")}>
+              <GrForwardTen
+                size={25}
+                color="red"
+                text="red"
+                className="u-react-icon"
+              />
+            </button>
+          </div>
+        </div>
+        <div className=" flex justify-center items-center gap-2">
+          <FiVolume1 size={25} />
+          <p className="w-[100px]">
+            <MantineProvider
+              theme={{
+                colors: {
+                  "ocean-blue": [
+                    "#8530c1",
+                    "#5FCCDB",
+                    "#44CADC",
+                    "#2AC9DE",
+                    "#1AC2D9",
+                    "#11B7CD",
+                    "#09ADC3",
+                    "#0E99AC",
+                    "#128797",
+                    "#147885",
+                  ],
+                },
+              }}
+            >
+              <Slider
+                color="ocean-blue.0"
+                value={volume}
+                onChange={handleVolumeChange}
+                min={0}
+                max={max}
+                disabled={reducedMotion}
+                size={"sm"}
+              />
+            </MantineProvider>
+          </p>
+        </div>
       </div>
     </div>
   );

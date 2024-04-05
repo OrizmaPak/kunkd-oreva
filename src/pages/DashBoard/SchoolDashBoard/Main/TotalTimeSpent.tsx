@@ -9,7 +9,7 @@ const TotalTimeSpent = () => {
         <div>
           <DateRadio
             onChange={(value: string) => {
-              console.log(value);
+              return value;
             }}
           />
         </div>
@@ -19,7 +19,7 @@ const TotalTimeSpent = () => {
         <p className="flex justify-between ">
           <span>Minutes</span>
           <span className="flex">
-            <img src={PositiveArrow} alt="Positive arrow" />
+            <img loading="lazy" src={PositiveArrow} alt="Positive arrow" />
             <span className="text-green-600">3.9%</span>
           </span>
         </p>

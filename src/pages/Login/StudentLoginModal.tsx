@@ -29,10 +29,8 @@ const StudentLoginModal = () => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  console.log("--- errors", errors);
   const submitData = (data: FormData) => {
-    console.log("testing");
-    console.log("It is working", data);
+    return data;
   };
 
   return (

@@ -1,25 +1,19 @@
 import EditPencil from "@/assets/editPencil.svg";
+import UserIcon from "@/assets/usericon.svg";
 import { motion } from "framer-motion";
+import { TTeacherList } from "../Teachers/Teachers";
 
 const Grade = ({
-  title,
-  name1,
-  name2,
-  image1,
-  image2,
-  noOfStudents,
+  data,
   handleClick,
   onEdit,
+  student_count,
 }: {
   name1?: string;
-  name2?: string;
-  title?: string;
-  image1?: string;
-  image2?: string;
-  noOfStudents?: number;
-  email?: string;
+  data?: TTeacherList;
   handleClick?: () => void;
-  onEdit?: (e: any) => void;
+  onEdit?: () => void;
+  student_count: number;
 }) => {
   return (
     <motion.div
@@ -28,38 +22,56 @@ const Grade = ({
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
     >
-      <div className="p-3 px-7">
-        <p className="font-bold font-Recoleta text-[25px] mb-5">{title}</p>
-
-        <hr className="my-3" />
+      <div className="pb-3 px-7">
+        <hr className="mb-8" />
 
         <div className="">
           <p className="flex my-4 gap-2  items-center" onClick={onEdit}>
-            <span> Assigned teachers</span>
-            <img src={EditPencil} alt="editpencil" />
+            {data?.user.firstname ? (
+              <span> Assigned teacher</span>
+            ) : (
+              <span>There is no teacher assigned to this class</span>
+            )}
+            <img
+              loading="lazy"
+              src={EditPencil}
+              alt="editpencil"
+              className=" cursor-pointer"
+            />
           </p>
           <div className=" flex justify-start gap-10 items-center my-5">
             <div className="flex justify-center  gap-2 items-center  border-r-gray-500 ">
-              <img src={image1} alt="" />
-              <span>{name1}</span>
+              {data?.user.firstname && (
+                <img
+                  loading="lazy"
+                  src={data?.user.image || UserIcon}
+                  alt="image"
+                  className="w-[60px] h-[60px] rounded-full"
+                />
+              )}
+              <span>
+                {data?.user.firstname} {data?.user.lastname}
+              </span>
             </div>
-            <div className="flex justify-center gap-2 items-center">
-              <img src={image2} alt="" />
+            {/* <div className="flex justify-center gap-2 items-center">
+              <img loading="lazy" src={image2} alt="" />
               <span>{name2}</span>
-            </div>
+            </div> */}
           </div>
-          <div>
-            <p>No of students in class </p>
-            <span className="font-bold">{noOfStudents}</span>
+          <div className=" flex gap-5">
+            <p>Number of students in class </p>
+            <span className="font-bold">
+              {student_count ? student_count : 0}
+            </span>
           </div>
         </div>
 
-        <div className="flex  gap-4  justify-center my-10 px-10">
+        <div className="flex  gap-4  justify-center mt-5 px-10">
           <button
             onClick={handleClick}
-            className="py-3 px-5 bg-red-600 text-white rounded-full flex-grow"
+            className="py-2 px-5 h-[42px] w-[260px] bg-[#8530C1] text-white rounded flex-grow"
           >
-            Delete class
+            Cancel
           </button>
         </div>
       </div>

@@ -8,7 +8,6 @@ import CameraIcon from "@/assets/cameralogo.svg";
 
 const UploadPicture = () => {
   const [files, setFiles] = useState<FileWithPath[]>([]);
-  console.log(files);
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
     return (
@@ -19,7 +18,12 @@ const UploadPicture = () => {
           className="rounded-full w-[200px] h-[200px]  object-cover"
         />
         <span className="absolute  bottom-5 right-0 bg-white rounded-full p-4">
-          <img src={CameraIcon} alt="camera" className="w-[30px]" />
+          <img
+            loading="lazy"
+            src={CameraIcon}
+            alt="camera"
+            className="w-[30px]"
+          />
         </span>
       </p>
     );
@@ -36,7 +40,9 @@ const UploadPicture = () => {
             <span className="flex-grow ">
               <p className="w-[250px]">
                 {files && previews}
-                {files.length < 1 && <img src={DragIcon} alt="drag and drop" />}
+                {files.length < 1 && (
+                  <img loading="lazy" src={DragIcon} alt="drag and drop" />
+                )}
               </p>
             </span>
             <span className="flex-grow flex flex-col justify-center items-center">

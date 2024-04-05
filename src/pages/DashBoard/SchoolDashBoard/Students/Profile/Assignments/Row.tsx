@@ -1,40 +1,43 @@
 import { Progress } from "@mantine/core";
-import DateIcon from "@/assets/dateIcon.svg";
-const Row = ({
-  image,
-  date,
-  duration,
-  range,
-  title,
-}: {
-  image?: string;
-  date?: string;
-  duration?: string;
-  range?: number;
-  title?: string;
-}) => {
+// import DateIcon from "@/assets/dateIcon.svg";
+import { TStoryContent } from "@/api/types";
+const Row = ({ data }: { data: TStoryContent }) => {
+  const totalPageCount = Number(data?.pages?.length) || 50; // Avoid division by zero
+  const progressPercentage =
+    Math.floor((Number(data?.pages_read) / totalPageCount) * 100) || 0;
   return (
-    <div className="grid grid-cols-[70px_200px_1fr_1fr_150px] flex-grow  mb-1 gap-5 px-8">
-      <p className="flex justify-center items-center">
-        <img src={image} alt="image" className="w-[70px]" />
+    <div className="grid grid-cols-[65px_1fr_200px] text-[10px] text-[#B5B5C3] flex-grow  mb-[30px]  ">
+      <p className="flex justify-start items-center">
+        <img
+          loading="lazy"
+          src={data?.thumbnail}
+          alt="image"
+          className="w-[55px] h-[55px]  rounded-[12px]"
+        />
       </p>
-      <p className="flex flex-col justify-center">
-        <span className="font-bold">{title}</span>
-        <span>{date}12:15 pm</span>
+      <p className="flex flex-col justify-center ">
+        <span className=" font-Hanken font-semibold text-[12px] text-black">
+          {data?.name}
+        </span>
       </p>
-      <p className="flex flex-col items-start justify-center">
+      {/* <p className="flex flex-col items-start justify-center">
         <span>Duration</span>
         <span className="font-bold">{duration}</span>
-      </p>
-      <p className="flex items-center justify-center gap-2 ">
-        {range}
+      </p> */}
+      <p className="flex items-center justify-center gap-2  text-[12px] ">
+        {data.category === "Languages" || data.category === "Audiobooks"
+          ? 64
+          : progressPercentage}
+        %
         <p className="flex-grow">
-          <Progress value={range} />
+          <Progress
+            value={
+              data.category === "Languages" || data.category === "Audiobooks"
+                ? 64
+                : progressPercentage
+            }
+          />
         </p>
-      </p>
-      <p className="flex justify-center gap-4 items-center">
-        <span>{date}</span>
-        <img src={DateIcon} alt="date" />
       </p>
     </div>
   );

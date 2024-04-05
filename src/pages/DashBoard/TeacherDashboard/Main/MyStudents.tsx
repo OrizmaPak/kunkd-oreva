@@ -56,7 +56,7 @@ const Row = ({
   return (
     <div className="flex justify-start gap-4 items-center my-2">
       <span className="flex gap-2 items-center justify-center">
-        <img src={image} alt="image" className="w-[50px]" />
+        <img loading="lazy" src={image} alt="image" className="w-[50px]" />
         <span>{grade}</span>
       </span>
       <span>{name}</span>

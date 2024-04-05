@@ -1,18 +1,19 @@
+import Button from "@/components/Button";
+
 const Question = () => {
   return (
-    <div className="text-white bg-[#8530C1] p-28 text-center my-40   ">
+    <div className="text-white bg-[#8530C1] p-[96px] text-center mt-28 mb-10  ">
       <div>
-        <h1 className="text-[40px] font-bold font-Recoleta mb-10">
+        <h1 className="text-[36px] font-Inter header2   font-semibold mb-4">
           Have a question? <br /> Our team is happy to assist you.
         </h1>
-        <p className="mb-10 text-[18px]">
+        <p className="mb-5 text1 font-InterReg">
           Ask about Kunda Kids products, pricing, implementation or anything
           else. Our highly <br /> trained reps are standing by. ready to help.
         </p>
-        <hr className="w-[400px] mx-auto my-5" />
-        <button className="mt-10 bg-white text-[#8530C1] p-5 rounded-3xl px-16">
-          Contact Us
-        </button>
+        <Button size="md" className="mt-5 bg-white p-5 rounded px-16">
+          <span className=" text-[#8530C1] font-Inter">Contact Us</span>
+        </Button>
       </div>
     </div>
   );

@@ -1,15 +1,27 @@
 import Button from "@/components/Button";
-import { useState } from "react";
 import { Text } from "@mantine/core";
 import { Dropzone, FileWithPath } from "@mantine/dropzone";
+import { useState } from "react";
 
-import DragIcon from "@/assets/draganddropicon.svg";
 import CameraIcon from "@/assets/cameralogo.svg";
+import DragIcon from "@/assets/draganddropicon.svg";
+import { Loader } from "@mantine/core";
 import { motion } from "framer-motion";
 
-const UploadPicture = ({ toggle }: { toggle?: () => void }) => {
+const UploadPicture = ({ 
+  isLoading,
+  btnTitle,
+  handleSubmit,
+}: {
+  btnTitle: string;
+  isLoading?: boolean;
+  handleSubmit?: (val: File) => void;
+}) => {
   const [files, setFiles] = useState<FileWithPath[]>([]);
-  console.log(files);
+
+  const handleClick = () => {
+    if (handleSubmit) handleSubmit(files[0] as File);
+  };
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
     return (
@@ -20,7 +32,12 @@ const UploadPicture = ({ toggle }: { toggle?: () => void }) => {
           className="rounded-full w-[200px] h-[200px]  object-cover"
         />
         <span className="absolute  bottom-5 right-0 bg-white rounded-full p-4">
-          <img src={CameraIcon} alt="camera" className="w-[30px]" />
+          <img
+            loading="lazy"
+            src={CameraIcon}
+            alt="camera"
+            className="w-[30px]"
+          />
         </span>
       </p>
     );
@@ -44,7 +61,7 @@ const UploadPicture = ({ toggle }: { toggle?: () => void }) => {
                 <p className="w-[250px]">
                   {files && previews}
                   {files.length < 1 && (
-                    <img src={DragIcon} alt="drag and drop" />
+                    <img loading="lazy" src={DragIcon} alt="drag and drop" />
                   )}
                 </p>
               </span>
@@ -58,8 +75,16 @@ const UploadPicture = ({ toggle }: { toggle?: () => void }) => {
             </div>
           </Text>
         </Dropzone>
-        <div className="max-w-[70%] mx-auto my-4">
-          <Button onClick={toggle}>Create Profile</Button>
+        <div className=" mx-auto my-4">
+          <Button onClick={handleClick}>
+            {isLoading ? (
+              <p className="flex justify-center items-center">
+                <Loader color="white" size="sm" />
+              </p>
+            ) : (
+              <span>{btnTitle}</span>
+            )}
+          </Button>
         </div>
       </div>
     </motion.div>

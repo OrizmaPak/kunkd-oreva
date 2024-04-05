@@ -3,11 +3,10 @@ import { Doughnut } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export const data = {
+export const options = (data: number[]) => ({
   datasets: [
     {
-      label: "# of Votes",
-      data: [42, 76, 38],
+      data: data[0]! > 1 || data[1]! > 1 || data[2]! > 1 ? data : [1, 1, 1],
       backgroundColor: [
         "rgba(43, 180, 87, 1)",
         "rgba(133, 48, 193, 1)",
@@ -17,18 +16,10 @@ export const data = {
       borderWidth: 1,
     },
   ],
-};
+});
 
-// const options = {
-//   responsive: true,
-//   maintainAspectRatio: false,
-//   // Adjust the size of the chart by modifying the following properties:
-//   width: 800,
-//   height: 800,
-// };
-
-function KundaChart() {
-  return <Doughnut data={data} />;
+function KundaChart({ data }: { data?: number[] }) {
+  return <Doughnut data={options(data!)} />;
 }
 
 export default KundaChart;

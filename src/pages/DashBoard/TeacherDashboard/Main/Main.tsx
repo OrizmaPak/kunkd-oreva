@@ -1,37 +1,88 @@
-import ArrowDown from "@/assets/arrowdown.svg";
+import {
+  useGetAdmittedStudentsInClass,
+  useGetClassTotalTimeSpent,
+  useGetUpdatedProfile,
+} from "@/api/queries";
 import StudentIcon from "@/assets/student3.svg";
+import MyDateFilter from "@/components/DateFilter";
+import StudentLeaderboard from "../../SchoolDashBoard/Main/StudentLeaderboard";
+import ProgressLog from "../../SchoolDashBoard/Students/Profile/ProgressLog";
+import { TRequestStudents } from "../Request/Request";
 import Card from "./Card";
 import TotalTimeSpent from "./TotalTimeSpent";
-import StudentLeaderboard from "../../SchoolDashBoard/Main/StudentLeaderboard";
-import { dashboardData } from "../../SchoolDashBoard/Teachers/Teachers";
-import ProgressLog from "../../SchoolDashBoard/Students/Profile/ProgressLog";
+import { useGetClassContentStat } from "@/api/queries";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
+import { TLogData } from "../../SchoolDashBoard/Main/Main";
+import { useState, useEffect } from "react";
 
 const Main = () => {
+  const [user, setUser] = useStore(getUserState);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const { data: profile } = useGetUpdatedProfile();
+  const profileData = profile?.data?.data;
+  useEffect(() => {
+    setUser({ ...user, ...profileData });
+    // eslint-disable-next-line
+  }, []);
+
+  const { data: totalTimeSpentData } = useGetClassTotalTimeSpent(
+    user?.school?.class?.class_id.toString() as string,
+    startDate,
+    endDate
+  );
+  const totalTimeSpent = totalTimeSpentData?.data?.data;
+  const { data: logData } = useGetClassContentStat(
+    user?.school?.class?.class_id.toString() as string,
+    startDate,
+    endDate
+  );
+  const statLog: TLogData = logData?.data.data;
+
+  const { data, isLoading } = useGetAdmittedStudentsInClass("active");
+  const studentList: TRequestStudents[] = data?.data.data.records;
+
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex justify-between px-8 gap-2">
+    <div className="h-full flex flex-col overflow-y-scroll">
+      <div className="flex justify-between  gap-2">
         <h1 className="font-bold text-[30px] font-Recoleta">Overview</h1>
         <span className="flex gap-2 justify-center items-center">
-          <span className="text-[#8530C1]">Last 7 days:</span>
-          <span> May 21 May 28 2023</span>
-          <img src={ArrowDown} alt="Arrowdown" className="w-4" />
+          <span className="text-[#8530C1]">Sort by Date:</span>
+          <span>
+            <MyDateFilter setStartDate={setStartDate} setEndDate={setEndDate} />
+          </span>
         </span>
       </div>
       <div className=" flex gap-5 flex-grow">
         <div className=" basis-full flex-grow flex  ">
           <StudentLeaderboard
-            data={dashboardData.slice(1, 9).map((el) => el)}
+            data={studentList}
+            isLoading={isLoading}
+            tableMax={9}
           />
         </div>
 
-        <div className=" basis-2/4 flex flex-col ">
-          <Card image={StudentIcon} title="Students" amount="37" />
+        <div className=" basis-3/5 flex flex-col gap-2 ">
+          <Card
+            image={StudentIcon}
+            title="Students"
+            amount={studentList ? studentList?.length : 0}
+          />
 
-          <ProgressLog />
+          <ProgressLog logData={statLog} />
 
-          <TotalTimeSpent />
+          <TotalTimeSpent totalTimeSpent={totalTimeSpent} />
         </div>
       </div>
+      <style>
+        {`
+       ::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+        `}
+      </style>
     </div>
   );
 };

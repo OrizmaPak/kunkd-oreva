@@ -1,45 +1,61 @@
 import BlcakPencil from "@/assets/blackPencilIcon.svg";
+import UserIcon from "@/assets/profileavatar24.png";
 
 const Profile = ({
   name,
   image,
   email,
+  asignClass,
   handleClick,
   onEdit,
-}: {
+}: // totalStudent,
+{
   name: string;
   image: string;
   email: string;
+  asignClass: string;
   handleClick: () => void;
   onEdit: () => void;
+
+  // totalStudent: number;
 }) => {
   return (
-    <div className="p-3">
+    <div className="p-3 py-1">
       <div className="flex gap-4">
         <div>
-          <img src={image} alt="image" className="w-[250px]" />
+          <img
+            loading="lazy"
+            src={image || UserIcon}
+            alt="image"
+            className="w-[176px] h-[176px] rounded-full "
+          />
         </div>
         <div className=" flex-1 px-8">
           <div className="flex flex-col  ">
-            <span className="text-[30px] font-bold font-Recoleta my-4">
+            <span className="text-[30px] font-bold font-Recoleta  ">
               {name}
             </span>
             <span>{email}</span>
           </div>
 
-          <hr className="my-4" />
+          <hr className="my-4 " />
           <div className="flex gap-4">
-            <p className="flex flex-col border-r-2  pr-4">
+            <p className="flex flex-col   pr-2">
               <span>Assigned class</span>
-              <p onClick={onEdit} className="flex gap-2">
-                <span className="font-bold">Purple</span>
-                <img src={BlcakPencil} alt="pencil" />
+              <p onClick={onEdit} className="">
+                <span className="font-bold"> {asignClass}</span>
+                <img
+                  loading="lazy"
+                  src={BlcakPencil}
+                  alt="pencil"
+                  className=" cursor-pointer w-5 h-5"
+                />
               </p>
             </p>
-            <p className="flex flex-col">
-              <span>No of students in class</span>
-              <span className="font-bold">23</span>
-            </p>
+            {/* <p className="flex flex-col">
+              <span>Numberrrrrrrof students in class</span>
+              <span className="font-bold">{0}</span>
+            </p> */}
           </div>
         </div>
       </div>
@@ -53,7 +69,7 @@ const Profile = ({
             <p className="flex justify-between ">
               <span>Minutes</span>
               <span className="flex">
-                <img src={PositiveArrow} alt="Positive arrow" />
+                <img loading="lazy" src={PositiveArrow} alt="Positive arrow" />
                 <span className="text-green-600">3.9%</span>
               </span>
             </p>
@@ -69,7 +85,7 @@ const Profile = ({
             <p className="flex justify-between ">
               <span>Minutes</span>
               <span className="flex">
-                <img src={PositiveArrow} alt="Positive arrow" />
+                <img loading="lazy" src={PositiveArrow} alt="Positive arrow" />
                 <span className="text-green-600">3.9%</span>
               </span>
             </p>
@@ -77,15 +93,15 @@ const Profile = ({
         </div>
       </div> */}
 
-      <div className="flex  gap-4  justify-center my-10 px-28">
+      <div className="flex  gap-4 mt-8 justify-center my-3 px-16">
         {/* <button className="p-4 px-10 bg-red-200 text-red-600 rounded-full flex-grow">
           Cancel
         </button> */}
         <button
           onClick={handleClick}
-          className="p-4 px-10 bg-red-600 text-white rounded-full flex-grow"
+          className="p-3 px-10 bg-[#8530C1] text-white rounded flex-grow"
         >
-          Remove
+          Cancel
         </button>
       </div>
     </div>

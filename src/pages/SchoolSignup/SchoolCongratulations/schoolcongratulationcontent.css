@@ -1,0 +1,4 @@
+.congrat-w {
+  width: clamp(5rem, 3.5952rem + 6.422vw, 9.375rem) !important;
+  height: clamp(5rem, 3.5952rem + 6.422vw, 9.375rem) !important;
+}

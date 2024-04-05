@@ -32,37 +32,87 @@ const PaymentType = () => {
             </div>
           </div>
 
-          <div className="  flex-grow grid grid-cols-5 gap-y-10 ">
+          <div className="  flex-grow grid grid-cols-5 gap-y-1 ">
             <span className="flex items-center justify-center">
-              <img src={GooglePay} alt="googlepay" className="w-[30%]" />
+              <img
+                loading="lazy"
+                src={GooglePay}
+                alt="googlepay"
+                className="w-[72px] h-[72px]"
+              />
             </span>
             <span className="flex items-center justify-center">
-              <img src={PayPal} alt="googlepay" className="w-[30%]" />
+              <img
+                loading="lazy"
+                src={PayPal}
+                alt="googlepay"
+                className="w-[72px] h-[72px]"
+              />
             </span>
             <span className="flex items-center justify-center">
-              <img src={ApplePay} alt="googlepay" className="w-[30%]" />
+              <img
+                loading="lazy"
+                src={ApplePay}
+                alt="googlepay"
+                className="w-[72px] h-[72px]"
+              />
             </span>
             <span className="flex items-center justify-center">
-              <img src={Visa} alt="googlepay" className="w-[30%]" />
+              <img
+                loading="lazy"
+                src={Visa}
+                alt="googlepay"
+                className="w-[72px] h-[72px]"
+              />
             </span>
             <span className="flex items-center justify-center">
-              <img src={Master} alt="googlepay" className="w-[30%]" />
+              <img
+                loading="lazy"
+                src={Master}
+                alt="googlepay"
+                className="w-[72px] h-[72px]"
+              />
             </span>
             <span className="flex items-center justify-center">
-              <img src={Stripe} alt="googlepay" className="w-[30%]" />
+              <img
+                loading="lazy"
+                src={Stripe}
+                alt="googlepay"
+                className="w-[72px] h-[72px]"
+              />
             </span>
             <span className="flex items-center justify-center">
-              <img src={Amex} alt="googlepay" className="w-[30%]" />
+              <img
+                loading="lazy"
+                src={Amex}
+                alt="googlepay"
+                className="w-[72px] h-[72px]"
+              />
             </span>
 
             <span className="flex items-center justify-center">
-              <img src={Payooner} alt="googlepay" className="w-[30%]" />
+              <img
+                loading="lazy"
+                src={Payooner}
+                alt="googlepay"
+                className="w-[72px] h-[72px]"
+              />
             </span>
             <span className="flex items-center justify-center">
-              <img src={UnionPay} alt="googlepay" className="w-[30%]" />
+              <img
+                loading="lazy"
+                src={UnionPay}
+                alt="googlepay"
+                className="w-[30%]"
+              />
             </span>
             <span className="flex items-center justify-center">
-              <img src={Discover} alt="googlepay" className="w-[30%]" />
+              <img
+                loading="lazy"
+                src={Discover}
+                alt="googlepay"
+                className="w-[72px] h-[72px]"
+              />
             </span>
           </div>
         </div>

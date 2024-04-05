@@ -1,44 +1,108 @@
-import TeacherIcon from "@/assets/teacher3.svg";
-import StudentIcon from "@/assets/student3.svg";
+import {
+  useGetAdmittedStudentsInSchool,
+  useGetSchoolContentStat,
+  useGetTeacherList,
+  useGetLicense,
+} from "@/api/queries";
+import StudentIcon from "@/assets/dstudenticon.png";
+import TeacherIcon from "@/assets/dteachericon.png";
+import Classes from "@/assets/dclassicon.png";
+import MyDateFilter from "@/components/DateFilter";
+import ProgressLog from "../Students/Profile/ProgressLog";
+import { TTeacherList } from "../Teachers/Teachers";
 import Card from "./Card";
 import ClassLeaderboard from "./ClassLeaderboard";
 import StudentLeaderboard from "./StudentLeaderboard";
-import ArrowDown from "@/assets/arrowdown.svg";
-import ProgressLog from "../Students/Profile/ProgressLog";
-import { dashboardData } from "../Teachers/Teachers";
+import { useState } from "react";
+
+export type TLogData = {
+  stories: number;
+  audio_books: number;
+  languages: number;
+  quiz: number;
+};
+type TLicense = {
+  added_class_count: number;
+  added_student_count: number;
+  added_teacher_count: number;
+  license_class_count: number;
+  license_student_count: number;
+  license_teacher_count: number;
+  status: boolean;
+};
 
 const Main = () => {
+  const { data: dataLicense } = useGetLicense();
+  const license: TLicense = dataLicense?.data.data.school.licence;
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  const { data: logData } = useGetSchoolContentStat(startDate, endDate);
+
+  const statLog: TLogData = logData?.data.data;
+  const { data: teacherData } = useGetTeacherList();
+  const teacherList: TTeacherList[] = teacherData?.data.data.records;
+  const { data: studentData, isLoading } =
+    useGetAdmittedStudentsInSchool("active");
+  const studentList = studentData?.data.data.records;
+
   return (
-    <div className="h-[100%] flex flex-col ">
-      <div className="flex justify-between                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ">
+    <div className="h-[100%]  flex flex-col  overflow-y-scroll">
+      <div className="flex justify-between                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ">
         <div>
           <h1 className="text-[25px] font-bold pl-4">Overview</h1>
         </div>
-        <div className="flex justify-end px-8 gap-2 items-center">
-          <span className="text-[#8530C1]">Last 7 days:</span>
-          <span className="flex gap-2 justify-center items-center">
-            <span> May 21 May 28 2023</span>
-            <img src={ArrowDown} alt="Arrowdown" className="w-4" />
-          </span>
+        <div className="flex justify-center  gap-2 items-center  ">
+          <span className="text-[#8530C1]">Sort by Date:</span>
+
+          <div>
+            <MyDateFilter setStartDate={setStartDate} setEndDate={setEndDate} />
+          </div>
         </div>
       </div>
-      <div className="flex flex-grow  gap-4 ">
-        <div className=" basis-full   flex flex-col">
-          <div className="flex gap-4 items-center justify-center py-2">
-            <Card title="Teachers" image={TeacherIcon} amount="450" />
-            <Card title="Students" image={StudentIcon} amount="241" />
+      <div className="flex flex-grow items-start  gap-6 ">
+        <div className=" basis-full flex-grow  gap-3 flex flex-col h-full ">
+          <div className="flex  gap-4 items-center justify-center py-2">
+            <Card
+              title="Classes"
+              image={Classes}
+              amount={license?.added_class_count}
+              max={license?.license_class_count}
+            />
+            <Card
+              title="Teachers"
+              image={TeacherIcon}
+              amount={license?.added_teacher_count}
+              max={license?.license_teacher_count}
+            />
+            <Card
+              title="Students"
+              image={StudentIcon}
+              amount={license?.added_student_count}
+              max={license?.license_student_count}
+            />
           </div>
-          <div className="flex-grow flex">
+          <div className="flex-grow flex ">
             <StudentLeaderboard
-              data={dashboardData.slice(1, 7).map((el) => el)}
+              data={studentList}
+              isLoading={isLoading}
+              tableMax={7}
             />
           </div>
         </div>
-        <div className="basis- basis-2/4  flex flex-col ">
-          <ProgressLog />
-          <ClassLeaderboard />
+        <div className="basis- basis-3/5  flex flex-col  h-full gap-3 ">
+          <ProgressLog logData={statLog} />
+          <ClassLeaderboard data={teacherList} />
         </div>
       </div>
+      <style>
+        {`
+       ::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+        `}
+      </style>
     </div>
   );
 };

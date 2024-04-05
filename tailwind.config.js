@@ -4,13 +4,10 @@ export default {
   theme: {
     fontFamily: {
       Recoleta: ["Recoleta", "sans-serif"],
-      Hanken: ["Hanken-Grotesk", "sans-serif"],
-    },
-    extend: {
-      fontSize: {
-        sm: ".2rem",
-        md: "2px",
-      },
+      Hanken: ["Hanken-Grotest", "sans-serif"],
+      Brico: ["Brico", "sans-serif"],
+      Inter: ["Inter", "sans-serif"],
+      InterReg: ["InterReg", "san-serif"],
     },
   },
   plugins: [],

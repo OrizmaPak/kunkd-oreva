@@ -1,34 +1,30 @@
-import WaveThree from "@/assets/wavethree.svg";
-import client1 from "@/assets/client.svg";
+// import WaveThree from "@/assets/wavethree.svg";
+import client1 from "@/assets/client124.png";
+import client2 from "@/assets/client224.png";
+
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useRef } from "react";
 import { BsChevronRight, BsChevronLeft } from "react-icons/bs";
-import BigCart from "@/assets/Afam-04 1.svg";
+import BigCart from "@/assets/afam24.png";
+import BigCartBlur from "@/assets/afamblur.jpg";
 import Lines from "@/assets/lines.svg";
-import RoundG from "@/assets/Ellipse 56.svg";
-import RoundR from "@/assets/Ellipse 59.svg";
-import ZagB from "@/assets/zag3.svg";
-import RoundY from "@/assets/Ellipse 57.svg";
+// import RoundG from "@/assets/Ellipse 56.svg";
+// import RoundR from "@/assets/Ellipse 59.svg";
+// import ZagB from "@/assets/zag3.svg";
+// import RoundY from "@/assets/Ellipse 57.svg";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
-import SixB from "@/assets/six.svg";
+// import SixB from "@/assets/six.svg";
+import "./ShopBooks.css";
 
 import ClientCard from "./ClientCard";
+import Button from "@/components/Button";
 
 const ShopBooks = () => {
-  // const settings = {
-  //   dots: true,
-  //   infinite: true,
-  //   speed: 500,
-  //   slidesToShow: 1,
-  //   arrows: false,
-  //   slidesToScroll: 1,
-  //   autoplay: true,
-  //   autoplaySpeed: 2000,
-  // };
-
-  var settings2 = {
+  const settings2 = {
     className: "center",
     arrows: false,
     dots: true,
@@ -46,9 +42,8 @@ const ShopBooks = () => {
 
   const sliderRef = useRef<Slider>(null);
   return (
-    <div className="relative">
-      <img src={Lines} alt="lines" className="absolute  right-0 top-[-300px]" />
-      <img
+    <div className="relative ">
+      {/* <img
         src={RoundG}
         alt="lines"
         className="absolute  right-[200px] top-[270px]"
@@ -72,84 +67,131 @@ const ShopBooks = () => {
         src={RoundY}
         alt="lines"
         className="absolute  right-[500px] bottom-[100px]"
-      />
+      /> */}
 
-      <div
+      {/* <div
         className="bg-cover bg-bottom  w-full  matt h-[250px] "
         style={{ backgroundImage: `url(${WaveThree})` }}
-      ></div>
-      <div className="bg-[#EBEFF3]  w-[100%] pb-[40px] ">
-        <div className="max-w-[800px] mx-auto mb-[70px] leading-8 text-center ">
-          <h1 className="text-black text-3xl font-bold text-center mb-4 leading-8 ">
-            Shop Our Books
-          </h1>
-          <p>
-            Discover a world of literary treasures at the Kunda Kids store,
-            where you can find carefully curated books, educational materials,
-            and engaging resources. From beautifully illustrated storybooks to
-            interactive learning kits, we provide everything you need to create
-            a nurturing environment that sparks a love for reading in your
-            child.
-          </p>
-        </div>
+      ></div> */}
+      <div className="bg-white  w-[100%]  ">
+        <div className="bg-[#F9F5FF] py-[96px] relative  ">
+          <img
+            loading="lazy"
+            src={Lines}
+            alt="lines"
+            className="absolute  right-0 top-[-300px]"
+          />
+          <div
+            data-aos="fade-down"
+            data-aos-once="true"
+            className="max-w-[1000px] mx-auto  leading-8 text-center   "
+          >
+            <h1 className="text-black  font-bold text-center mb-4 leading-8 header-1 font-Inter ">
+              Shop Our Books
+            </h1>
+            <p className="text20 text-[#7E7E89] my-10 font-InterReg ">
+              From beautifully illustrated storybooks to interactive learning
+              kits, we provide everything you need to create a nurturing
+              environment that sparks a love for reading in your child.
+            </p>
+          </div>
 
-        <div className="flex justify-center items-center ">
-          <div className="h-[605px] p-14 w-[1365px] bg-[#8530C1] rounded-[70px] mb-[200px] ">
-            <div className="flex gap-10 ">
-              <div className="basis-1/2">
-                <img src={BigCart} alt="b=cart card" className="w-[500px]" />
-              </div>
-              <div className="basis-1/2 text-white">
-                <p className="mb-5 mt-8">New Books</p>
-                <h1 className="font-bold text-[25px] text-white">
-                  Afam and the New Yam Festival <br /> [PRE-ORDER]
-                </h1>
-                <p className="my-5 leading-8">
-                  Afam and the New Yam Festival is a heartwarming children’s
-                  picture book, perfect for readers aged 3-8, that explores the
-                  beauty of family, heritage, and unity.
-                </p>
-                <p className="font-bold text-[30px] mt-8">₦2,900.00 NGN</p>
-                <p className="mb-10">Tax incuded</p>
-                <button className="bg-white text-[#8530C1] p-3  px-24 rounded-full">
-                  Add to cart
-                </button>
+          <div className="flex justify-center items-center ">
+            <div
+              data-aos="fade-left"
+              data-aos-once="true"
+              className=" p-14  bg-[#8530C1] rounded-[70px]   shopcard"
+            >
+              <div className="flex gap-10 ">
+                <div
+                  data-aos="flip-up"
+                  data-aos-once="true"
+                  className="basis-1/2"
+                >
+                  <LazyLoadImage
+                    width={500}
+                    height={500}
+                    effect="blur"
+                    className="rounded-2xl shopcard-pic"
+                    wrapperClassName="rounded-2xl  shopcard-pic"
+                    src={BigCart}
+                    placeholderSrc={BigCartBlur}
+                  />
+                </div>
+                <div className="basis-1/2 text-white">
+                  <p className="mb-5 bg-white rounded-full inline text-[#8530C1] p-1 px-2">
+                    New Books
+                  </p>
+                  <h1 className=" text-[25px] text-white font-Inter">
+                    Afam and the New Yam Festival <br /> [PRE-ORDER]
+                  </h1>
+                  <p className="my-5 text1 font-InterReg ">
+                    Afam and the New Yam Festival is a heartwarming children’s
+                    picture book, perfect for readers aged 3-8, that explores
+                    the beauty of family, heritage, and unity.
+                  </p>
+                  <p className=" text-[30px] font-Inter ">₦2,900.00 NGN</p>
+                  <p className="mb-10">Tax incuded</p>
+                  <Button size="md" className="bg-white  p-3  px-24 rounded">
+                    <span className="text-[#8530C1] font-Inter">
+                      Add to cart
+                    </span>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="max-w-[800px] mx-auto leading-8 text-center">
-          <h1 className="pt-8 text-3xl font-bold my-4 ">
-            What Our Client's Have To say
+        <div
+          data-aos="fade-down"
+          data-aos-once="true"
+          className=" mx-auto leading-8 text-center  my-20"
+        >
+          <h1 className="pt-8 text-[36px] font-bold  font-Inter ">
+            What our clients have to Say about us
           </h1>
-          <p>
+          {/* <p>
             Kunda & Friends is a beautiful new music-led 3D animation and for
             children that takes preschoolers on a fun and adventurous ride with
             Kunda and his friends
-          </p>
+          </p> */}
         </div>
 
-        <div className="max-w-[1000px] mx-auto gap-4 mb-20 mt-14  relative">
+        <div
+          data-aos="fade-up"
+          data-aos-once="true"
+          className="max-w-[1000px] mx-auto gap-4 mb-20 mt-14  relative "
+        >
           <button
             onClick={() => sliderRef?.current?.slickPrev()}
-            className="absolute z-10 -left-8 top-[45%] hover:text-white bg-[#ffff] hover:bg-[#8530C1] rounded-full p-1"
+            className="absolute z-10 -left-14 top-[45%] hover:text-white bg-[#ffff] hover:bg-[#8530C1] rounded-full p-2"
           >
-            <BsChevronLeft />
+            <BsChevronLeft size={30} />
           </button>
           <button
             onClick={() => sliderRef?.current?.slickNext()}
-            className="absolute z-10 -right-8 top-[45%] hover:text-white bg-[#ffff] hover:bg-[#8530C1] rounded-full p-1"
+            className="absolute z-10 -right-14 top-[45%] hover:text-white bg-[#ffff] hover:bg-[#8530C1] rounded-full p-2"
           >
-            <BsChevronRight />
+            <BsChevronRight size={30} />
           </button>
           <Slider ref={sliderRef} {...settings2}>
             <div className="mr-4">
               <ClientCard
                 name="Bolu Watife"
                 location="Lagos Nigeria"
+                image={client2}
+                bg="white"
+                story="It's good for my own children to maintain a connection to the African continent. They grew up in DRCongo but we're moving to Paraguay so I want those stories to be in their lives."
+              />
+            </div>
+            <div className="mr-4">
+              <ClientCard
+                name="Kizito Kolam"
+                location="Lagos Nigeria"
                 image={client1}
-                story=" Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis."
+                bg="#F9F5FF"
+                story="It's good for my own children to maintain a connection to the African continent. What you do is just so amazing and necessary. More African characters and experiences please!"
               />
             </div>
             <div className="mr-4">
@@ -157,7 +199,8 @@ const ShopBooks = () => {
                 name="Bolu Watife"
                 location="Lagos Nigeria"
                 image={client1}
-                story=" Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis."
+                bg="white"
+                story="It's good for my own children to maintain a connection to the African continent. They grew up in DRCongo but we're moving to Paraguay so I want those stories to be in their lives."
               />
             </div>
             <div className="mr-4">
@@ -165,7 +208,8 @@ const ShopBooks = () => {
                 name="Bolu Watife"
                 location="Lagos Nigeria"
                 image={client1}
-                story=" Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis."
+                bg="#F9F5FF"
+                story="It's good for my own children to maintain a connection to the African continent. What you do is just so amazing and necessary. More African characters and experiences please!"
               />
             </div>
             <div className="mr-4">
@@ -173,7 +217,8 @@ const ShopBooks = () => {
                 name="Bolu Watife"
                 location="Lagos Nigeria"
                 image={client1}
-                story=" Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis."
+                bg="white"
+                story="It's good for my own children to maintain a connection to the African continent. They grew up in DRCongo but we're moving to Paraguay so I want those stories to be in their lives."
               />
             </div>
             <div className="mr-4">
@@ -181,15 +226,8 @@ const ShopBooks = () => {
                 name="Bolu Watife"
                 location="Lagos Nigeria"
                 image={client1}
-                story=" Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis."
-              />
-            </div>
-            <div className="mr-4">
-              <ClientCard
-                name="Bolu Watife"
-                location="Lagos Nigeria"
-                image={client1}
-                story=" Vorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis."
+                bg="#F9F5FF"
+                story="It's good for my own children to maintain a connection to the African continent. What you do is just so amazing and necessary. More African characters and experiences please!"
               />
             </div>
           </Slider>
@@ -215,6 +253,7 @@ const ShopBooks = () => {
       line-height: 1; /* Adjust the line height of the dots */
       width: 16px; /* Increase the width of the dots */
       height: 16px; /* Increase the height of the dots */
+      top:28px
       
     }
     .slick-dots li button:before {

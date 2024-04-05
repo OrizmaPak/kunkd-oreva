@@ -1,19 +1,50 @@
-import Grease from "@/assets/grease.svg";
+import UserIcon from "@/assets/profileavatar24.png";
 
-const MyTeacher = () => {
+import { TSchoolStudentStat } from ".";
+import { Skeleton } from "@mantine/core";
+
+const MyTeacher = ({
+  schoolStudentStat,
+  isLoading,
+}: {
+  schoolStudentStat: TSchoolStudentStat;
+  isLoading: boolean;
+}) => {
   return (
-    <div className="py-2 bg-white px-12 rounded-3xl flex-grow">
-      <h1 className="font-bold text-[20px] mb-4">My Teacher</h1>
-      <div className="flex gap-4">
-        <p>
-          <img src={Grease} alt="fgrase" className=" w-[120px]" />
-        </p>
-        <p className="flex flex-col">
-          <p className="font-bold mb-3">Grease Kemma</p>
-          <p>grease@pampers.school</p>
-        </p>
-      </div>
-    </div>
+    <>
+      {isLoading ? (
+        <Skeleton
+          height={150}
+          width={280}
+          radius={20}
+          mb="xl"
+          visible={isLoading}
+        />
+      ) : (
+        <div className="p-5 bg-white rounded-3xl flex-grow pb-4">
+          <h1 className=" text-[16px] leading-[30px] font-Hanken font-semibold ">
+            My Teacher
+          </h1>
+          <div className="flex gap-4 items-center mt-8 ">
+            <img
+              loading="lazy"
+              src={schoolStudentStat?.teacher_picture || UserIcon}
+              alt="fgrase"
+              className="w-[50px]  rounded-full"
+            />
+
+            <p className="">
+              <p className="font-semibold leading-[30px] font-Hanken text-[14px]  ">
+                {schoolStudentStat?.teacher_name}
+              </p>
+              <p className="mt-0 text-[12px] text-[#B5B5C3]">
+                {schoolStudentStat?.teacher_email}
+              </p>
+            </p>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
