@@ -6,21 +6,16 @@ import {
   useLikedContent,
   useUnLikedContent,
 } from "@/api/queries";
-// import Bookmark from "@/assets/Bookmark.svg";
 import AfamBlur from "@/assets/afamblur.jpg";
-import Congrats from "@/assets/congrats.svg";
 import CardHome from "@/common/User/CardHome";
 import CardScreenHome from "@/common/User/CardScreenHome";
 import CustomTTSComponent from "@/components/TTS";
-// import useStore from "@/store";
-// import { getUserState } from "@/store/authStore";
 import { MantineProvider, Skeleton, Slider } from "@mantine/core";
 import { RefObject, useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import StoriesNav from "./StoriesNav";
-
 import { getApiErrorMessage } from "@/api/helper";
 import TeacherNotificationModal from "@/components/TeacherWarningModal";
 import { Modal } from "@mantine/core";
@@ -36,73 +31,21 @@ import { MdFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
 import ConnectedStudentModal from "@/components/ConnectedStudentModal";
 import { RiFullscreenFill } from "react-icons/ri";
 import { AiOutlineFullscreenExit } from "react-icons/ai";
-// import { MantineProvider, Skeleton, Slider } from "@mantine/core";
 import { useReducedMotion } from "@mantine/hooks";
-
-// import { number } from "zod";
-// import { useQueryClient } from "@tanstack/react-query";
-type TContentPage = {
-  audio: string;
-  web_body: string;
-  content_media_id: number;
-  image: string;
-  name: string;
-  page_number: number;
-};
-
-type TSubCategory = {
-  sub_category_id: number;
-  sub_category_name: string;
-};
-
-export type TMedia = {
-  name: string;
-  slug: string;
-  order: number;
-  file: string;
-  thumbnail: string;
-};
-
-type TQuizResult = {
-  status: boolean;
-  id: number;
-  result: number;
-};
-export type TStoryContent = {
-  sub_category_name?: unknown;
-  category?: string;
-  sub_categories?: TSubCategory[];
-  category_id?: number;
-  content_type?: string;
-  content_type_id?: number;
-  has_quiz?: boolean;
-  id?: number;
-  is_liked?: boolean;
-  media?: TMedia[];
-  media_type?: string;
-  name?: string;
-  pages?: TContentPage[];
-  short_link?: string;
-  slug?: string;
-  pages_read?: number;
-  synopsis?: string;
-  tags?: string;
-  theme?: string;
-  thumbnail?: string;
-  status?: string;
-  web_synopsis?: string;
-  quiz_result?: TQuizResult;
-  timespent?: number;
-};
+import { TContentPage, TStoryContent } from "@/api/types";
+import Wrapper from "@/common/User/Wrapper";
+import InnerWrapper from "@/common/User/InnerWrapper";
+// import { getUserState } from "@/store/authStore";
+// import useStore from "@/store/index";
+import TabInReadingPage from "@/pages/AfterParentSignIn/TabInReadingPage";
+import { IoCheckmarkCircleOutline } from "react-icons/io5";
 
 const Stories1 = () => {
   const [isFinish, setIsFinish] = useState(false);
   const [startRead, setStartRead] = useState(false);
   // const [user] = useStore(getUserState);
-  const contentId = localStorage.getItem("contentId");
-  const profileId = localStorage.getItem("profileId");
-  const params = useParams();
-  const { category } = params;
+  const contentId = sessionStorage.getItem("contentId");
+  const profileId = sessionStorage.getItem("profileId");
   const [opened, { open, close }] = useDisclosure(false);
 
   const [
@@ -170,78 +113,90 @@ const Stories1 = () => {
       >
         <ConnectedStudentModal onCancel={closeConnectedStudent} />
       </Modal>
-      <div className=" ">
-        <div className="min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] ">
-          <div className=" ">
-            {
-              <Skeleton visible={contentIsLoading}>
-                <StoriesNav
-                  category={category && category}
-                  genre={
-                    content && content?.sub_categories?.[0]?.sub_category_name
-                  }
-                  title={content && content.name}
-                  subCategoryId={
-                    content && content?.sub_categories?.[0]?.sub_category_id
-                  }
-                  slug={
-                    content && content?.sub_categories?.[0]?.sub_category_name
-                  }
-                />
-              </Skeleton>
-            }
-          </div>
-          <div className="flex-grow  h-full   ">
-            <div className="flex-grow mt-5 rounded-2xl ">
-              {!isFinish ? (
-                <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
-                  {!startRead && (
-                    <Skeleton visible={contentIsLoading}>
-                      <AboutPage
-                        story={content as TStoryContent}
-                        setStartRead={() => setStartRead(true)}
-                      />
-                    </Skeleton>
-                  )}
-
-                  {content && startRead && (
-                    <ReadPage
-                      thumbnail={content.thumbnail as string}
-                      content={content.pages as TContentPage[]}
-                      setIsFinish={() => setIsFinish(true)}
-                      divRef={myRef}
+      <Wrapper bgColor="#fff7fd">
+        <InnerWrapper>
+          <div className=" bg-[#fff7fd]">
+            <div className="min-h-[calc(92vh-60px)] h-[100%] flex flex-col   ">
+              <div className=" ">
+                {
+                  <Skeleton visible={contentIsLoading}>
+                    <StoriesNav
+                      category={"Stories"}
+                      genre={
+                        content &&
+                        content?.sub_categories?.[0]?.sub_category_name
+                      }
+                      title={content && content.name}
+                      subCategoryId={
+                        content && content?.sub_categories?.[0]?.sub_category_id
+                      }
+                      slug={
+                        content &&
+                        content?.sub_categories?.[0]?.sub_category_name
+                      }
                     />
-                  )}
-
-                  <div className="w-full bg-white rounded-3xl mt-4">
-                    {
-                      <CardScreenHome
-                        data={recommendedStories}
-                        isLoading={isLoading}
-                        header="Recommended For You"
-                        isTitled={false}
-                        card={(props: TStoryContent) => (
-                          <CardHome
-                            {...props}
-                            goTo={() => {
-                              navigate(`../sub/${props.slug?.toLowerCase()}`);
-                              setStartRead(false);
-                            }}
+                  </Skeleton>
+                }
+              </div>
+              <div className="flex-grow  h-full   ">
+                <div className="flex-grow mt-5 rounded-2xl ">
+                  {!isFinish ? (
+                    <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
+                      {!startRead && (
+                        <Skeleton visible={contentIsLoading}>
+                          <AboutPage
+                            story={content as TStoryContent}
+                            setStartRead={() => setStartRead(true)}
                           />
-                        )}
-                      />
-                    }
-                  </div>
+                        </Skeleton>
+                      )}
+
+                      {content && startRead && (
+                        <ReadPage
+                          thumbnail={content.thumbnail as string}
+                          content={content.pages as TContentPage[]}
+                          setIsFinish={() => setIsFinish(true)}
+                          divRef={myRef}
+                        />
+                      )}
+                      <TabInReadingPage />
+
+                      <div className="w-full bg-white rounded-3xl mt-4">
+                        <></>
+                        {
+                          <CardScreenHome
+                            data={recommendedStories}
+                            isLoading={isLoading}
+                            header="Recommended For You"
+                            isTitled={false}
+                            card={(props: TStoryContent) => (
+                              <CardHome
+                                {...props}
+                                goTo={() => {
+                                  navigate(
+                                    `../stories/${
+                                      props?.theme
+                                    }/${props.slug?.toLowerCase()}`
+                                  );
+                                  setStartRead(false);
+                                }}
+                              />
+                            )}
+                          />
+                        }
+                      </div>
+                    </div>
+                  ) : (
+                    <WelDone content={content as TStoryContent} />
+                  )}
                 </div>
-              ) : (
-                <WelDone content={content as TStoryContent} />
-              )}
+              </div>
+
+              {/* </div> */}
             </div>
           </div>
-
-          {/* </div> */}
-        </div>
-      </div>
+        </InnerWrapper>
+      </Wrapper>
     </>
   );
 };
@@ -255,7 +210,7 @@ const AboutPage = ({
   story: TStoryContent;
   setStartRead: () => void;
 }) => {
-  const profileId = localStorage.getItem("profileId");
+  const profileId = sessionStorage.getItem("profileId");
   const { data, refetch } = useGetLikedContent(profileId as string);
   const likeContents: TStoryContent[] = data?.data.data.records;
   const { mutate } = useLikedContent();
@@ -452,8 +407,8 @@ const ReadPage = ({
   };
   const max = 35;
   const { mutate } = useContentTracking();
-  const profileId = localStorage.getItem("profileId");
-  const contentId = localStorage.getItem("contentId");
+  const profileId = sessionStorage.getItem("profileId");
+  const contentId = sessionStorage.getItem("contentId");
 
   useEffect(() => {
     const abortControllerRef = new AbortController();
@@ -520,8 +475,8 @@ const ReadPage = ({
   return (
     <div
       id="container"
-      className={`flex py-16 bg-white  rounded-3xl px-16 justify-center items-center  ${
-        goFull ? "px-[200px]" : ""
+      className={`flex py-16  rounded-3xl px-10 justify-center items-center bg-white  ${
+        goFull ? "md:px-[50px] lg:px-[100px] " : ""
       }`}
     >
       {/* <button>change</button> */}
@@ -679,9 +634,9 @@ const BookPagination = ({
   divRef: RefObject<HTMLDivElement>;
 }) => {
   const { mutate } = useContentTracking();
-  const continuePage = localStorage.getItem("continuePage");
-  const profileId = localStorage.getItem("profileId");
-  const contentId = localStorage.getItem("contentId");
+  const continuePage = sessionStorage.getItem("continuePage");
+  const profileId = sessionStorage.getItem("profileId");
+  const contentId = sessionStorage.getItem("contentId");
   const [currentPage, setCurrentage] = useState(
     continuePage && Number(continuePage) < pageTotal ? Number(continuePage) : 1
   );
@@ -813,8 +768,10 @@ const BookPagination = ({
 
 const WelDone = ({ content }: { content: TStoryContent }) => {
   const navigate = useNavigate();
+  // const [user] = useStore(getUserState);
+
   const navigateQuiz = () => {
-    localStorage.setItem("content", JSON.stringify(content));
+    sessionStorage.setItem("content", JSON.stringify(content));
     if (content.has_quiz === true) {
       navigate("quiz");
     } else {
@@ -828,12 +785,7 @@ const WelDone = ({ content }: { content: TStoryContent }) => {
     <div className=" min-h-[calc(92vh-72px-8vh-34px)] h-[100%] flex-grow mt-4 flex justify-center bg-white rounded-3xl items-center">
       <div>
         <p className="flex justify-center items-center">
-          <img
-            loading="lazy"
-            src={Congrats}
-            alt="congrats"
-            className="w-[176px] h-[176px]"
-          />
+          <IoCheckmarkCircleOutline className="" size={150} color="#8530C1" />
         </p>
         <div className="text-center">
           <h1 className="text-[40px] font-Recoleta font-semibold">
@@ -850,7 +802,15 @@ const WelDone = ({ content }: { content: TStoryContent }) => {
           >
             Take quiz
           </button>
-          <button onClick={() => navigate(-1)} className="text-[18px] mt-2">
+          <button
+            onClick={() => {
+              // navigate(
+              //   `/${user?.role === "user" ? "parent" : "school"}/stories`
+              // );
+              navigate(-1);
+            }}
+            className="text-[18px] mt-2"
+          >
             Later
           </button>
         </p>

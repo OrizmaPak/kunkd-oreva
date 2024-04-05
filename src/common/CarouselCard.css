@@ -1,4 +1,5 @@
 .carousel-card {
-  width: clamp(9.375rem, 3.4664rem + 37.8151vw, 37.5rem) !important;
+  /* width: clamp(9.375rem, 3.4664rem + 37.8151vw, 37.5rem) !important; */
+  padding-block: clamp(0.625rem, 0.0998rem + 3.3613vw, 3.125rem) !important;
   height: clamp(1.875rem, -1.2237rem + 19.8319vw, 16.625rem) !important;
 }

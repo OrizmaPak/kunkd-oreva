@@ -49,10 +49,10 @@ const TeacherLogin = () => {
         email: parsed?.query?.email as string,
       },
       {
-        onSuccess(data) {
+        onSuccess() {
           notifications.show({
             title: `Notification`,
-            message: data.data.message,
+            message: "Your profile has been created",
           });
 
           setStage(STEP_2);
@@ -88,9 +88,7 @@ const TeacherLogin = () => {
 
             <div className="px-10">
               <h1 className="font-bold text1">Create password</h1>
-              <p className="mb-10 text2">
-                Create a password that you dont't use for other websites
-              </p>
+              <p className="mb-10 text2">Create a unique password</p>
               <form onSubmit={handleSubmit(submitData)}>
                 <div className="mb-4">
                   <label htmlFor="password text3">Enter New Password</label>

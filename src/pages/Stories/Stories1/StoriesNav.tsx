@@ -1,12 +1,13 @@
 import NextIcon from "@/assets/nexticon.svg";
 import { useNavigate, useLocation } from "react-router-dom";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
+
 const StoriesNav = ({
   category,
   genre,
   title,
   quiz,
-  subCategoryId,
-  slug,
 }: {
   category?: string;
   genre?: string;
@@ -15,6 +16,8 @@ const StoriesNav = ({
   subCategoryId?: number;
   slug?: string;
 }) => {
+  const [user] = useStore(getUserState);
+
   const navigate = useNavigate();
   const location = useLocation();
   const contentNavigate = () => {
@@ -35,7 +38,9 @@ const StoriesNav = ({
     <div className="py-4 font-Recoleta pl-20 content-nav text25  font-semibold items-center rounded-full bg-white gap-8 flex pad-x-40">
       <div
         className="flex gap-2 cursor-pointer"
-        onClick={() => navigate(`../../stories`)}
+        onClick={() => {
+          navigate(`/${user?.role === "user" ? "parent" : "school"}/stories`);
+        }}
       >
         <span>
           {category &&
@@ -47,8 +52,7 @@ const StoriesNav = ({
       <div
         className="flex gap-2  cursor-pointer "
         onClick={() => {
-          navigate(`../${slug?.replace(/\s/g, "-").toLocaleLowerCase()}`);
-          localStorage.setItem("subCategoryId", subCategoryId?.toString()!);
+          navigate(`/${user?.role === "user" ? "parent" : "school"}/stories`);
         }}
       >
         <span>{genre}</span>

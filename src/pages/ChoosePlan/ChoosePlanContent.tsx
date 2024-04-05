@@ -19,11 +19,11 @@ const ChoosePlanContent = () => {
               price={<div className=" opacity-0">a</div>}
               noBorder={true}
               content={[
-                "Learning Content ",
-                "50K books & videos",
-                "Unlimited daily reading",
-                "Up to 4 child profiles",
-                "Offline reading ",
+                "Safe, ad-free content",
+                "Access unlimited quality content",
+                "New content every week",
+                "Multiple children's profiles",
+                "Monitor child's progress",
               ]}
             ></PackageCard>
             <PackageCard

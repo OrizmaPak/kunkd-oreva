@@ -9,7 +9,7 @@ import "./kundaapp.css";
 const KundaApp = () => {
   return (
     <div className="flex justify-between gap-30 pb-14 max-w-[1440px] mx-auto pad-x-40 ">
-      <div className="basis-[100%] ">
+      <div data-aos="zoom-out" data-aos-once="true" className="basis-[100%] ">
         {/* <img loading="lazy" src={Iphone} alt="phone" className="  " /> */}
 
         <LazyLoadImage
@@ -25,7 +25,7 @@ const KundaApp = () => {
         />
       </div>
 
-      <div className="basis-[100%] ">
+      <div data-aos="fade-left" data-aos-once="true" className="basis-[100%] ">
         <div>
           <h1 className=" mt-4 mb-10 text-[36px] text-[#101828] font-Inter ">
             Access a World of Stories on the Go

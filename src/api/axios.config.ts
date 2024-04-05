@@ -27,11 +27,11 @@ axiosIntance.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error?.response?.status === 401) {
-      //   window.location = "/login?reason=session_expired";
-      //   localStorage.removeItem("access_token");
-      //   localStorage.removeItem("business_domain");
-      //   localStorage.removeItem("user");
+    console.log("err status", error.response?.data);
+    if (error.response?.data?.message === "Missing or malformed JWT") {
+      sessionStorage.clear();
+      sessionStorage.clear();
+      window.location.replace(`${window.location.origin}/login`);
     }
     return Promise.reject(error);
   }

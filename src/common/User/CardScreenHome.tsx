@@ -1,10 +1,12 @@
 import React from "react";
 import { Skeleton } from "@mantine/core";
-import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+import { TStoryContent } from "@/api/types";
 import "./cardscreenhome.css";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import Slider from "react-slick";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
+import { useInView } from "react-intersection-observer";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   data?: TStoryContent[];
@@ -14,6 +16,11 @@ type Props = {
   isTitled?: boolean;
   card?: (props: TStoryContent) => React.ReactNode;
   isLoading: boolean;
+  hasInfiniteScroll?: boolean;
+  hasNextPage?: boolean;
+  subId?: string;
+  hasAll?: boolean;
+  fetchNextPage?: () => void;
 };
 const CardScreen = ({
   data,
@@ -21,7 +28,12 @@ const CardScreen = ({
   action,
   actiontitle,
   card,
+  subId,
+  hasAll,
   isLoading,
+  hasInfiniteScroll = false,
+  fetchNextPage,
+  hasNextPage = false,
 }: Props) => {
   const settings = {
     dots: false,
@@ -31,29 +43,53 @@ const CardScreen = ({
     swipeToSlide: true,
     slidesToScroll: 5,
   };
+
+  const { ref, inView } = useInView({
+    /* Optional options */
+    // threshold: 1,
+  });
   const sliderReff = useRef<Slider>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (inView && hasNextPage && fetchNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage]);
 
   return (
-    <div className="   mx-20   pb-8">
-      <div className="flex justify-between mb-[50px] pt-8 ">
-        <span className=" text25 font-semibold font-Recoleta ">{header}</span>
+    <div className="   mx-10 pb-4 ">
+      <div className="flex justify-between mb-[20px] pt-8 ">
+        <span className=" text25 font-semibold  font-Hanken ">{header}</span>
         <button onClick={action} className=" text-[#8530C1] text2">
           {actiontitle}
         </button>
+        {hasAll && (
+          <button
+            onClick={() => {
+              sessionStorage.setItem("subId", subId?.toString() as string);
+              navigate(`${subId?.toString()}`);
+            }}
+            className=" text-[#8530C1] text2"
+          >
+            View All
+          </button>
+        )}
       </div>
       <div className="relative group  ">
         {/* <div className="absolute hidden group-hover:flex controls-container  w-full justify-between z-30  group"> */}
         <button
-          className="p-4 bg-[rgba(238,238,238,0.7)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-10 "
+          className="p-4 bg-[rgba(238,238,238)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-10 "
           onClick={() => sliderReff?.current?.slickPrev()}
         >
-          <GrPrevious size={30} />
+          <GrPrevious size={40} />
         </button>
+
         <button
-          className="p-4 bg-[rgba(238,238,238,0.7)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-[95.7%]"
+          className="p-4 bg-[rgba(238,238,238)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-[95.7%]"
           onClick={() => sliderReff?.current?.slickNext()}
         >
-          <GrNext size={30} />
+          <GrNext size={40} />
         </button>
         {/* </div> */}
 
@@ -62,17 +98,25 @@ const CardScreen = ({
             ? Array(5)
                 .fill(1)
                 .map((arr, index) => (
-                  <Skeleton key={index} visible={isLoading}>
+                  <Skeleton key={index} visible={isLoading} className="">
                     <div
                       key={index}
-                      className="h-[200px] w-[400px] text-transparent"
+                      className="h-[200px] w-[400px] text-transparent mx-2"
                     >
                       {arr}
                     </div>
                   </Skeleton>
                 ))
-            : data?.map((data: TStoryContent) => {
-                return card ? card(data) : null;
+            : data?.map((carddata: TStoryContent, index: number) => {
+                if (
+                  data.length === index + 1 &&
+                  hasInfiniteScroll &&
+                  hasNextPage
+                ) {
+                  return <div ref={ref}>Loading....</div>;
+                }
+                //  return <Todo key={todo.id} todo={todo} />;
+                return card ? card(carddata) : null;
               })}
         </Slider>
       </div>

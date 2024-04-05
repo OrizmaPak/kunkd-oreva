@@ -42,7 +42,7 @@ const TeacherLoginModal = ({ onContinue }: { onContinue: () => void }) => {
   const submitData = (data: FormData) => {
     mutate(
       {
-        current_password: localStorage.getItem("userPassword"),
+        current_password: sessionStorage.getItem("userPassword"),
         new_password: data?.password,
       },
       {

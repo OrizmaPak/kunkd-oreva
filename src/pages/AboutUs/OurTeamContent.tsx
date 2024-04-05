@@ -71,16 +71,18 @@ const data = [
 const OurTeamContent = () => {
   return (
     <div className="max-w-[1000px] w-full mx-auto text-center">
-      <h1 className=" font-Inter header2  text-[#101828] font-semibold text-center mb-8">
-        Our Amazing Team
-      </h1>
-      <p className=" text1 leading-[30px] mb-20 font-InterReg text-[#667085]">
-        Our team is made up of passionate team of artists, writers, producers,
-        and content and business leaders who share our vision for creating
-        diverse and inclusive children's literature. Together, we work to create
-        engaging and inspiring <br /> stories that celebrate African culture and
-        promote essential soft skills.
-      </p>
+      <div data-aos="fade-up" data-aos-once="true">
+        <h1 className=" font-Inter header2  text-[#101828] font-semibold text-center mb-8">
+          Our Amazing Team
+        </h1>
+        <p className=" text1 leading-[30px] mb-20 font-InterReg text-[#667085]">
+          Our team is made up of passionate team of artists, writers, producers,
+          and content and business leaders who share our vision for creating
+          diverse and inclusive children's literature. Together, we work to
+          create engaging and inspiring <br /> stories that celebrate African
+          culture and promote essential soft skills.
+        </p>
+      </div>
 
       <div>
         <div className="grid grid-cols-3 gap-x-28  gap-y-10 my-8">

@@ -5,6 +5,13 @@ import Button from "@/components/Button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
+import { useAddTeacherData } from "@/api/queries";
+import { getApiErrorMessage } from "@/api/helper";
+import { notifications } from "@mantine/notifications";
+import { Loader } from "@mantine/core";
+
+import { useQueryClient } from "@tanstack/react-query";
+
 import { AiOutlineMail } from "react-icons/ai";
 // import { MdClose } from "react-icons/md";
 import Addicon from "@/assets/addicon24.png";
@@ -29,14 +36,15 @@ export type TTeacherData = {
 };
 
 const AddTeacherForm = ({
-  handleContinue,
-  setTeacherData,
-  toggle,
+  close,
+  openSchNotifications,
 }: {
-  handleContinue: () => void;
-  setTeacherData: (val: TTeacherData) => void;
-  toggle: () => void;
+  close: () => void;
+  openSchNotifications: () => void;
 }) => {
+  const { mutate, isLoading } = useAddTeacherData();
+  const queryClient = useQueryClient();
+
   const { data } = useGetClassList();
   const classList: Tclass[] = data?.data?.data.records;
   const availableClassList = classList?.filter(
@@ -51,10 +59,6 @@ const AddTeacherForm = ({
       .string()
       .min(2, { message: "Last name must be at least 2 characters long" })
       .max(50, { message: "Last name must not exceed 40 characters" }),
-    genderid: z
-      .string()
-      .min(1, { message: "Select gender" })
-      .max(20, { message: "Gender must not exceed 20 characters" }),
     classid: z.string().optional(),
     email: z.string().email(),
   });
@@ -66,8 +70,45 @@ const AddTeacherForm = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    setTeacherData(data as TTeacherData);
-    handleContinue();
+    console.log("Hello", data);
+    mutate(
+      {
+        firstname: data?.firstname,
+        lastname: data?.lastname,
+        email: data?.email,
+
+        redirect_url: `${window.location.origin}/passwordsetup`,
+        gender_id: 1,
+        // password: data?.password,
+        class_id: Number(data?.classid),
+      },
+      {
+        onSuccess(data) {
+          queryClient.invalidateQueries(["GetTeacherList"]);
+          queryClient.invalidateQueries(["GetLicense"]);
+
+          close();
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+        },
+
+        onError(err) {
+          close();
+          if (
+            getApiErrorMessage(err) ===
+            "Please upgrade your license to add more teachers"
+          ) {
+            openSchNotifications();
+          }
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
   };
 
   return (
@@ -120,14 +161,14 @@ const AddTeacherForm = ({
               errorMsg={errors.email?.message}
               type="email"
               placeholder="Email"
-              leftIcon={<AiOutlineMail size={25} color="#c4ccd0" />}
+              leftIcon={<AiOutlineMail size={20} color="#c4ccd0" />}
             />
           </div>
 
           <div className="flex gap-2 mb-8">
             <div className="flex-grow">
               <label htmlFor="class">Assign to a class</label>
-              <p className="border border-[#F3DAFF] py-4 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
+              <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
                 <select
                   {...register("classid")}
                   name="classid"
@@ -150,9 +191,9 @@ const AddTeacherForm = ({
               </p>
               <span className="text-red-600">{errors.classid?.message}</span>
             </div>
-            <div className="flex-grow">
+            {/* <div className="flex-grow">
               <label htmlFor="class">Select gender</label>
-              <p className="border border-[#F3DAFF] py-4 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
+              <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
                 <select
                   {...register("genderid")}
                   name="genderid"
@@ -166,13 +207,21 @@ const AddTeacherForm = ({
                 </select>
               </p>
               <span className="text-red-600">{errors.genderid?.message}</span>
-            </div>
+            </div> */}
           </div>
           <div className=" mx-auto my-4 flex gap-3 ">
-            <Button onClick={toggle} varient="outlined" className="text-black">
+            <Button onClick={close} varient="outlined" className="text-black">
               Cancel
             </Button>
-            <Button type="submit">Continue</Button>
+            <Button type="submit">
+              {isLoading ? (
+                <p className="flex justify-center items-center">
+                  <Loader color="white" size="sm" />
+                </p>
+              ) : (
+                <span>Save</span>
+              )}
+            </Button>
           </div>
         </form>
       </div>

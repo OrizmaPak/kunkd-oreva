@@ -1,6 +1,6 @@
 import { Progress } from "@mantine/core";
 // import DateIcon from "@/assets/dateIcon.svg";
-import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+import { TStoryContent } from "@/api/types";
 const Row = ({ data }: { data: TStoryContent }) => {
   const totalPageCount = Number(data?.pages?.length) || 50; // Avoid division by zero
   const progressPercentage =

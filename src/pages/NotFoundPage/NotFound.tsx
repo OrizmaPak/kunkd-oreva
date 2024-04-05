@@ -34,7 +34,7 @@ const NotFound = () => {
             </div>
             <Button
               onClick={() => {
-                localStorage.clear();
+                sessionStorage.clear();
                 navigate("/login");
                 location.reload();
               }}

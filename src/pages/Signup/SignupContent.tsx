@@ -24,7 +24,7 @@ const options = [
     id: 1,
   },
   {
-    title: "'I'm a Parent",
+    title: "I'm a Parent",
     desc: "I want to manage my child's access to this platform",
     to: "parentsignup",
     id: 2,

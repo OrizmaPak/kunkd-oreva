@@ -16,7 +16,7 @@ const StudentLeaderboard = ({
   return (
     <div className="py-4 bg-white rounded-3xl mt-1  flex flex-col flex-grow  pad-x-40">
       <div className="flex justify-between">
-        <h1 className="text1 font-bold font-Recoleta">Student List</h1>
+        <h1 className="text1 font-bold font-Recoleta">Students List</h1>
       </div>
 
       <div className="grid grid-cols-2 mt-4 text-gray-400 text3">

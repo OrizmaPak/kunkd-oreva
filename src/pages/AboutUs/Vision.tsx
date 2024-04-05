@@ -3,13 +3,22 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import DadSonBlur from "@/assets/dadsonblur.jpg";
 import "./mission.css";
+import AOS from "aos";
+import { useEffect } from "react";
 
 const Vision = () => {
+  useEffect(() => {
+    AOS.init({ duration: 600 });
+  }, []);
   return (
     <div className=" bg-white pt-14 pb-28  pad-x-40">
       <div className="max-w-[1440px]  mx-auto  ">
         <div className=" mx-auto flex  gap-5">
-          <div className="basis-1/2 flex ">
+          <div
+            data-aos="fade-right"
+            // data-aos-once="true"
+            className="basis-1/2 flex "
+          >
             {/* <img
               loading="lazy"
               src={DadBoy}
@@ -26,7 +35,11 @@ const Vision = () => {
               // height={408}
             />
           </div>
-          <div className="basis-1/2  mt-16">
+          <div
+            data-aos="fade-left"
+            // data-aos-once="true"
+            className="basis-1/2  mt-16"
+          >
             <h1 className=" font-Inter header2 mb-4 text-[#101828] font-semibold">
               Our Vision
             </h1>

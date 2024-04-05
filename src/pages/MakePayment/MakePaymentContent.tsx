@@ -30,8 +30,8 @@ const payInit: TPayStack = {
 };
 
 const MakePaymentContent = () => {
-  const planId = localStorage.getItem("planId");
-  const currencyIso3 = localStorage.getItem("currency_iso3");
+  const planId = sessionStorage.getItem("planId");
+  const currencyIso3 = sessionStorage.getItem("currency_iso3");
   const navigate = useNavigate();
 
   const { mutate: verifyMutate } = useVerifyCompletePayStack();
@@ -130,15 +130,15 @@ const MakePaymentContent = () => {
       <button
         onClick={() => {
           navigate(-1);
-          // if (localStorage.getItem("gotToHome") === "true") {
+          // if (sessionStorage.getItem("gotToHome") === "true") {
           //   navigate("/parent");
           // } else {
           //   navigate("/");
-          //   localStorage.clear();
+          //   sessionStorage.clear();
           // }
         }}
       >
-        <span className="absolute right-[-150px] top-[40px]">
+        <span className="absolute right-[-150px] top-[80px]">
           <ImCancelCircle size={40} color={"#8530C1"} />
         </span>
       </button>

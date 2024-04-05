@@ -114,11 +114,15 @@ export const GetSubCategories = () => {
 };
 
 export const GetContebtBySubCategories = (subId: string, page: string) => {
-  return axios.get(`/content/subcategory/${subId} ?page=${page}`);
+  return axios
+    .get(`/content/subcategory/${subId}?page=${page}`)
+    .then((response) => response.data);
 };
 
-export const GetAudioBooks = () => {
-  return axios.get("/audiobook/page");
+export const GetAudioBooks = (page: string) => {
+  return axios
+    .get("/content/category/2", { params: { page } })
+    .then((response) => response.data);
 };
 
 export const GetTrendingAudioBooks = () => {
@@ -392,4 +396,8 @@ export const GetClassTotalTimeSpent = (
   end: string
 ) => {
   return axios.get(`/school/class/timespent/${id}`, { params: { start, end } });
+};
+// eslint-disable-next-line no-empty-pattern
+export const RemoveAccount = ({}) => {
+  return axios.delete(`/user/account`);
 };

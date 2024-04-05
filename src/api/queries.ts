@@ -77,9 +77,10 @@ import {
   RecommendedAudiobooks,
   GetClassTotalTimeSpent,
   ConnectStripe,
+  RemoveAccount,
 } from "./api";
 // import { TGetContentById } from "./types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useInfiniteQuery } from "@tanstack/react-query";
 // import { TProfileData } from "./types";
 // import { AxiosResponse } from "axios";
 import { selectAvatarType } from "@/pages/AfterParentSignIn/SelectProfile";
@@ -230,8 +231,8 @@ export const useGetContentById = (
         res.data.message === "Number of allowed contents reached!"
       ) {
         if (user?.role === "user") {
-          const currentProfile = localStorage.getItem("profileId");
-          const profiles = localStorage.getItem("profiles");
+          const currentProfile = sessionStorage.getItem("profileId");
+          const profiles = sessionStorage.getItem("profiles");
           const storedArrayObject = JSON.parse(profiles as string);
           const currentProfileObj: Tprofile = storedArrayObject.find(
             (data: Tprofile) => data.id === Number(currentProfile)
@@ -266,10 +267,74 @@ export const useGetSubCategories = () => {
   });
 };
 
-export const useGetContebtBySubCategories = (subId: string, page: string) => {
+// export const useGetContebtBySubCategories = (
+//   subId: string,
+//   setAllSubCategoryContents:(prev:TStoryContent)=>void
+// ) => {
+//   const [activePage, setPage] = useState(1);
+
+//   return useQuery({
+//     queryKey: ["getContentBySubId", subId, activePage],
+//     queryFn: () => GetContebtBySubCategories(subId, activePage.toString()),
+//     onSuccess(data) {
+//       console.log(data);
+//       if (activePage < Math.ceil(data?.data.data.totalRecord / 10)) {
+//         setAllSubCategoryContents((prev:TStoryContent[]) => {
+//           return[...prev, ...data?.data.data.records]});
+//         setPage((prev) => prev++);
+//       }else{
+//         setAllSubCategoryContents((prev: TStoryContent) => [
+//           ...prev,
+//           ata?.data.data.records,
+//         ]);
+
+//       }
+//     },
+//   });
+// };
+export const useGetContebtBySubCategories2 = (id: string, page: string) => {
   return useQuery({
-    queryKey: ["getContentBySubId", subId, page],
-    queryFn: () => GetContebtBySubCategories(subId, page),
+    queryKey: ["getContentBySubId2", id, page],
+    queryFn: () => GetContebtBySubCategories(id, page),
+  });
+};
+
+export const useGetContebtBySubCategories = (
+  subId: string,
+  inView?: boolean
+  // setAllSubCategoryContents: (prev:TStoryContent) => void
+) => {
+  // const [activePage, setPage] = useState(1);
+
+  return useInfiniteQuery({
+    queryKey: ["getContentBySubId", subId],
+    queryFn: ({ pageParam = 1 }) => GetContebtBySubCategories(subId, pageParam),
+    enabled: inView,
+    getNextPageParam: (lastPage, allPages) => {
+      // console.log("all&last-----", { allPages, lastPage });
+      const allPagesArray = allPages?.reduce((prev, current) => {
+        return prev.concat(current?.data?.records);
+      }, []);
+      return allPagesArray?.length < lastPage?.data?.totalRecord;
+    },
+    // getPreviousPageParam: (firstPage, allPages) =>} firstPage.prevCursor,
+    // onSuccess: (data) => {
+    //   console.log(data);
+    //   if (data) {
+    //     if (activePage < Math.ceil(data?.data.data.totalRecord / 10)) {
+    //       setAllSubCategoryContents((prev: TStoryContent[]) => [
+    //         ...prev,
+    //         ...(data?.data.data.records || []),
+    //       ]);
+    //       setPage((prev) => prev + 1);
+    //     } else {
+    //       setAllSubCategoryContents((prev: TStoryContent[]) => [
+    //         ...prev,
+    //         ...(data?.data.data.records || []),
+    //       ]);
+    //     }
+    //   }
+    // },
   });
 };
 
@@ -279,10 +344,28 @@ export const useSocialLogin = () => {
   });
 };
 
-export const useGetAudioBoks = () => {
-  return useQuery({
+export const useGetAudioBoks = (inView: boolean) => {
+  return useInfiniteQuery({
     queryKey: ["getAudioBooks"],
-    queryFn: () => GetAudioBooks(),
+    queryFn: ({ pageParam = 1 }) => GetAudioBooks(pageParam),
+    enabled: inView,
+    getNextPageParam: (lastPage, allPages) => {
+      const allPagesArray = allPages?.reduce((prev, current) => {
+        return prev.concat(current?.data?.records);
+      }, []);
+      return allPagesArray?.length < lastPage?.data?.totalRecord;
+    },
+  });
+  // return useQuery({
+  //   queryKey: ["getAudioBooks", page],
+  //   queryFn: () => GetAudioBooks(page),
+  // });
+};
+
+export const useGetAudioBoks2 = (page: string) => {
+  return useQuery({
+    queryKey: ["getAudioBooks", page],
+    queryFn: () => GetAudioBooks(page),
   });
 };
 
@@ -576,7 +659,7 @@ export const useGetUpdatedProfile = () => {
 };
 
 export const useGetSchoolContentStat = (start: string, end: string) => {
-  // const userObject = localStorage.getItem("user");
+  // const userObject = sessionStorage.getItem("user");
   // const storedObject = JSON.parse(userObject as string);
   return useQuery({
     queryKey: ["GetSchoolContentStat", start, end],
@@ -663,5 +746,9 @@ export const useGetClassTotalTimeSpent = (
     queryFn: () => GetClassTotalTimeSpent(id, start, end),
     enabled: !!Number(id),
   });
+};
+
+export const useRemoveAccount = () => {
+  return useMutation({ mutationFn: RemoveAccount });
 };
 // const {mutate, isLoading, isError} = useCreateSchoolUser();

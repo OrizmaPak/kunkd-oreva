@@ -6,15 +6,14 @@ import "./kundakidsunlimitedcontent.css";
 const KundaKidsUnlimitedContent = () => {
   const navigate = useNavigate();
 
-
-  const handleContinue = ()=>{
-    if (localStorage.getItem("schoolDashboard") === 'true' ){
-      localStorage.removeItem("schoolDashboard")
-      navigate("/schooldashboard")
-    }else{
-      navigate("/school")
+  const handleContinue = () => {
+    if (sessionStorage.getItem("schoolDashboard") === "true") {
+      sessionStorage.removeItem("schoolDashboard");
+      navigate("/schooldashboard");
+    } else {
+      navigate("/school");
     }
-  }
+  };
   const customArray1 = [
     "Newsletter",
     "Booking",
@@ -62,7 +61,9 @@ const KundaKidsUnlimitedContent = () => {
           <p className="flex justify-center">
             <button className="text-[20px] my-8 py-3 px-14 font-bold rounded bg-slate-50 text-[#8530C1]">
               {/* <span className="text-[20px]">Contact us</span> */}
-              <a href="mailto:someone@yoursite.com?subject=Mail from Our Site">Contact us</a>  
+              <a href="mailto:someone@yoursite.com?subject=Mail from Our Site">
+                Contact us
+              </a>
             </button>
           </p>
         </div>
@@ -82,7 +83,7 @@ const KundaKidsUnlimitedContent = () => {
           onClick={handleContinue}
           className="flex justify-center items-center gap-4"
         >
-          <p className=" font-Hanken font-semibold">Continue free</p>
+          <p className=" font-Hanken font-semibold">Continue for free</p>
           <img loading="lazy" src={GreaterIcon} alt="greater icon" />
         </button>
       </div>

@@ -12,7 +12,9 @@ import {
 } from "@/api/queries";
 import { MdFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
 
-import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+// import { TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+
+import { TStoryContent } from "@/api/types";
 import { Progress } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import "./cardhome.css";
@@ -39,7 +41,13 @@ const CardHome = ({
   pages,
   hasRage,
   timespent,
-}: TStoryContent & { goTo?: () => void; hasRage?: boolean }) => {
+  ref,
+}: TStoryContent & {
+  goTo?: () => void;
+  hasRage?: boolean;
+
+  ref?: (node?: Element | null | undefined) => void;
+}) => {
   // const totalPage = pages?.length;
   //  const totalPage = pages?.length ?? 0;
   // const range = pages_read &&  pages_read ? Math.ceil((100 / totalPage as number)  * pages_read as number)
@@ -52,8 +60,8 @@ const CardHome = ({
   const handleClick = () => {
     if (goTo) goTo();
 
-    localStorage.setItem("contentId", id?.toString() as string);
-    localStorage.setItem(
+    sessionStorage.setItem("contentId", id?.toString() as string);
+    sessionStorage.setItem(
       "continuePage",
       pages_read
         ? pages_read?.toString()
@@ -63,7 +71,7 @@ const CardHome = ({
     );
   };
   const [visiblee, setVisiblee] = useState(false);
-  const profileId = localStorage.getItem("profileId");
+  const profileId = sessionStorage.getItem("profileId");
   const { data, refetch } = useGetLikedContent(profileId as string);
   const likeContents: TStoryContent[] = data?.data.data.records;
   const { mutate } = useLikedContent();
@@ -133,8 +141,11 @@ const CardHome = ({
     }, 200); // Reset shaking after 0.5 seconds
   };
   return (
-    <div className=" z-[1]  hover:scale-[102%] transition-all mx-2 py-4">
-      <span className="relative image-card ">
+    <div
+      ref={ref}
+      className=" z-[1]   hover:scale-[105%] transition-all mx-2 py-4"
+    >
+      <div className=" relative  image-card  ">
         <LazyLoadImage
           src={thumbnail}
           placeholderSrc={AfamBlur}
@@ -149,7 +160,7 @@ const CardHome = ({
           onMouseMoveCapture={() => setVisiblee(false)}
         />
 
-        <span className=" card-hover bg-[rgba(0,0,0,.5)] hidden  absolute left-0 top-[-184px] card transition-all duration-100   z-50  rounded-xl">
+        <span className=" card-hover bg-[rgba(0,0,0,.5)] hidden  absolute left-0 top-[0px] card transition-all duration-100   z-50  rounded-xl">
           <button
             onClick={handleLikedContent}
             // className="px-4 py-2"
@@ -194,7 +205,7 @@ const CardHome = ({
             </button>
           </p>
         </span>
-      </span>
+      </div>
 
       {!hasRage ? (
         <p className="mt-[2px]  text2 font-Hanken font-semibold  leading-2">

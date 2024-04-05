@@ -28,6 +28,7 @@ import { Tclass } from "../DashBoard/SchoolDashBoard/Teachers/AddTeacherForm";
 
 import { useGetProfile } from "@/api/queries";
 import useDebounce from "@/hooks/useDebounce";
+import "./Mykids.css";
 import {
   ChildAgeModal,
   ChildNameModal,
@@ -228,7 +229,7 @@ const KidCard = ({
         />
       </Modal>
 
-      <div className=" relative flex  border-[#FBECFF] border-[3px] px-6 py-6 rounded-3xl">
+      <div className=" relative  lg:flex  border-[#FBECFF] border-[3px] px-6 py-6 rounded-3xl">
         <div className=" flex justify-center items-center">
           {isLoading ? (
             <span>
@@ -239,7 +240,7 @@ const KidCard = ({
               loading="lazy"
               src={image}
               alt="avatar"
-              className="w-[100px] h-[100px] object-cover rounded-md"
+              className="w-avatar object-cover rounded-md"
             />
           )}
         </div>

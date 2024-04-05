@@ -13,10 +13,17 @@ import { Loader } from "@mantine/core";
 import { getApiErrorMessage } from "@/api/helper";
 import { RiLockLine } from "react-icons/ri";
 import PasswordEye from "@/assets/passwordeye.svg";
+// import { createUserWithEmailAndPassword } from "firebase/auth";
+// import { auth } from "@/firebase";
+// import { logOut } from "@/auth/sdk";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
 
 const SecureAccountContent = () => {
   const navigate = useNavigate();
   const { isLoading, mutate } = useSetPassword();
+  const [user] = useStore(getUserState);
+  console.log("user----------", user);
 
   const schema: ZodType<FormData> = z
     .object({
@@ -40,11 +47,17 @@ const SecureAccountContent = () => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const submitData = (data: FormData) => {
+  const submitData = (datta: FormData) => {
     mutate(
-      { password: data.password },
+      { password: datta.password },
       {
-        onSuccess(data) {
+        async onSuccess(data) {
+          // const userCredentils = await createUserWithEmailAndPassword(
+          //   auth,
+          //   sessionStorage.getItem("parentemail") as string,
+          //   datta.password as string
+          // );
+          // console.log("user", userCredentils);
           notifications.show({
             title: `Notification`,
             message: data.data.message,

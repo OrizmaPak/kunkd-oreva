@@ -106,7 +106,7 @@ const AvatarCard = ({
   const handleClick = () => {
     image = "";
     setChildProfile(id.toString());
-    localStorage.setItem("profileId", id.toString());
+    sessionStorage.setItem("profileId", id.toString());
 
     navigate("/parent");
   };

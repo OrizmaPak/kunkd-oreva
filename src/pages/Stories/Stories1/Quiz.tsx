@@ -1,6 +1,6 @@
 import { Progress } from "@mantine/core";
 import StoriesNav from "./StoriesNav";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import RemarkBg from "@/assets/remarkbg.svg";
 import RemarkIcon from "@/assets/remarkIcon.svg";
@@ -18,14 +18,18 @@ import { Skeleton } from "@mantine/core";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
+import Wrapper from "@/common/User/Wrapper";
+import InnerWrapper from "@/common/User/InnerWrapper";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
 
 const Quiz = () => {
-  const contentId = localStorage.getItem("contentId");
+  const contentId = sessionStorage.getItem("contentId");
   const { data: quiz, isLoading } = useGetQuiz(contentId?.toString() as string);
   const questions = quiz?.data?.data?.questions;
   const quizId = quiz?.data?.data?.quiz_id;
-  const profileId = localStorage.getItem("profileId") as string;
-  const contentString = localStorage.getItem("content");
+  const profileId = sessionStorage.getItem("profileId") as string;
+  const contentString = sessionStorage.getItem("content");
   const content = JSON.parse(contentString as string);
   const [currentQues, setCurrentQues] = useState<number>(0);
   const [answers, setAnswers] = useState<answerObj[]>([]);
@@ -68,97 +72,103 @@ const Quiz = () => {
       return newAnswer;
     });
   };
-  const params = useParams();
-  const { category } = params;
   const progress = 100 / questions?.length;
   const [curentStep, setcurrentStep] = useState(STEP_1);
 
   return (
-    <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] w-[100%] ">
-      <Skeleton visible={isLoading}>
-        <StoriesNav
-          category={category && category}
-          genre={content && content.sub_categories[0].sub_category_name}
-          title={content && content.name}
-          subCategoryId={content && content.sub_categories[0].sub_category_id}
-          slug={content && content.sub_categories[0].sub_category_name}
-          quiz="Quiz"
-        />
-      </Skeleton>
+    <>
+      <Wrapper bgColor="#fff7fd">
+        <InnerWrapper>
+          <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] w-[100%] ">
+            <Skeleton visible={isLoading}>
+              <StoriesNav
+                category={content?.category}
+                genre={content && content.sub_categories[0].sub_category_name}
+                title={content && content.name}
+                subCategoryId={
+                  content && content.sub_categories[0].sub_category_id
+                }
+                slug={content && content.sub_categories[0].sub_category_name}
+                quiz="Quiz"
+              />
+            </Skeleton>
 
-      {curentStep === STEP_1 && (
-        <>
-          <Skeleton visible={isLoading} height={600}>
-            <div className="flex-grow mt-5 pt-5 px-40 flex  h-[100%]  flex-col py-5 bg-white rounded-3xl ">
-              <MantineProvider
-                theme={{
-                  colors: {
-                    "ocean-blue": [
-                      "#8530C1",
-                      "#5FCCDB",
-                      "#44CADC",
-                      "#2AC9DE",
-                      "#1AC2D9",
-                      "#11B7CD",
-                      "#09ADC3",
-                      "#0E99AC",
-                      "#128797",
-                      "#147885",
-                    ],
-                  },
-                }}
-              >
-                <Progress
-                  value={progress * answers.length}
-                  size="xl"
-                  radius="xl"
-                  color="ocean-blue.0"
+            {curentStep === STEP_1 && (
+              <>
+                <Skeleton visible={isLoading} height={600}>
+                  <div className="flex-grow mt-5 pt-5 px-40 flex  h-[100%]  flex-col py-5 bg-white rounded-3xl ">
+                    <MantineProvider
+                      theme={{
+                        colors: {
+                          "ocean-blue": [
+                            "#8530C1",
+                            "#5FCCDB",
+                            "#44CADC",
+                            "#2AC9DE",
+                            "#1AC2D9",
+                            "#11B7CD",
+                            "#09ADC3",
+                            "#0E99AC",
+                            "#128797",
+                            "#147885",
+                          ],
+                        },
+                      }}
+                    >
+                      <Progress
+                        value={progress * answers.length}
+                        size="xl"
+                        radius="xl"
+                        color="ocean-blue.0"
+                      />
+                    </MantineProvider>
+                    <Question
+                      quesObject={questions && questions[currentQues]}
+                      selected={answers}
+                      setSelected={handleSelectAnswer}
+                      currentQuestion={currentQues}
+                    />
+
+                    <QuestionPagination
+                      handlePagination={handlePagination}
+                      totalQuestion={questions && questions?.length}
+                      currentQues={questions && currentQues}
+                      answers={answers && answers}
+                      questions={questions ?? []}
+                      handleSelectAnswer={handleSelectAnswer}
+                      setShowResult={() => setcurrentStep(STEP_2)}
+                    />
+                  </div>
+                </Skeleton>
+              </>
+            )}
+            {curentStep === STEP_2 && (
+              <div className="flex-grow mt-5 pt-10 flex  justify-center items-center  mx-auto w-[100%]  flex-col py-14 bg-white m rounded-3xl ">
+                <Result
+                  profileId={+profileId}
+                  quizId={+quizId as number}
+                  answers={answers}
+                  setShowRemark={() => setcurrentStep(STEP_3)}
                 />
-              </MantineProvider>
-              <Question
-                quesObject={questions && questions[currentQues]}
-                selected={answers}
-                setSelected={handleSelectAnswer}
-                currentQuestion={currentQues}
-              />
-
-              <QuestionPagination
-                handlePagination={handlePagination}
-                totalQuestion={questions && questions?.length}
-                currentQues={questions && currentQues}
-                answers={answers && answers}
-                questions={questions ?? []}
-                handleSelectAnswer={handleSelectAnswer}
-                setShowResult={() => setcurrentStep(STEP_2)}
-              />
-            </div>
-          </Skeleton>
-        </>
-      )}
-      {curentStep === STEP_2 && (
-        <div className="flex-grow mt-5 pt-10 flex  justify-center items-center  mx-auto w-[100%]  flex-col py-14 bg-white m rounded-3xl ">
-          <Result
-            profileId={+profileId}
-            quizId={+quizId as number}
-            answers={answers}
-            setShowRemark={() => setcurrentStep(STEP_3)}
-          />
-        </div>
-      )}
-      {curentStep === STEP_3 && (
-        <div className="flex-grow mt-5 pt-10 px-40 flex  flex-col py-14 bg-white rounded-3xl ">
-          <GoodRemarkMsg
-            answers={answers}
-            setShowYourResult={() => setcurrentStep(STEP_4)}
-          />
-        </div>
-      )}
-      {curentStep === STEP_4 && (
-        <div className="flex-grow mt-5 pt-10  mx-auto  flex justify-center items-center  flex-col py-14 bg-white   w-[100%] rounded-3xl ">
-          <YourResult answers={answers} />
-        </div>
-      )}
-    </div>
+              </div>
+            )}
+            {curentStep === STEP_3 && (
+              <div className="flex-grow mt-5 pt-10 px-40 flex  flex-col py-14 bg-white rounded-3xl ">
+                <GoodRemarkMsg
+                  answers={answers}
+                  setShowYourResult={() => setcurrentStep(STEP_4)}
+                />
+              </div>
+            )}
+            {curentStep === STEP_4 && (
+              <div className="flex-grow mt-5 pt-10  mx-auto  flex justify-center items-center  flex-col py-14 bg-white   w-[100%] rounded-3xl ">
+                <YourResult answers={answers} />
+              </div>
+            )}
+          </div>
+        </InnerWrapper>
+      </Wrapper>
+    </>
   );
 };
 
@@ -528,6 +538,8 @@ const Result = ({
 
 const YourResult = ({ answers }: { answers: answerObj[] }) => {
   const navigate = useNavigate();
+  const [user] = useStore(getUserState);
+
   return (
     <div className="relative flex-grow    w-[780px] rounded-3xl">
       <div className="my-10 text-center">
@@ -539,7 +551,11 @@ const YourResult = ({ answers }: { answers: answerObj[] }) => {
         ))}
         <p className="flex justify-center mt-14 items-center">
           <button
-            onClick={() => navigate(-2)}
+            onClick={() => {
+              navigate(
+                `/${user?.role === "user" ? "parent" : "school"}/stories`
+              );
+            }}
             className="p-3 px-20 text-white bg-[#8530C1] rounded"
           >
             Done
@@ -567,7 +583,7 @@ const ResultRow = ({
     >
       <p className={`flex gap-10 items-center `}>
         <p className="text-[#8530C1]  rounded-full p-3 bg-white w-[30px] h-[30px] flex justify-center items-center">
-          {index! + 1}
+          {(index as number) + 1}
         </p>
         <div
           className={`text-[20px]  w-full flex  justify-between font-semibold `}
@@ -608,7 +624,7 @@ const ResultRow2 = ({
     >
       <p className={`flex gap-10 items-center `}>
         <p className="text-[#8530C1]  rounded-full p-3 bg-white w-[30px] h-[30px] flex justify-center items-center">
-          {index! + 1}
+          {(index as number) + 1}
         </p>
         <div
           className={`text-[20px]  w-full flex  justify-between font-semibold `}

@@ -21,6 +21,7 @@ import {
 import { TRequestStudents } from "@/pages/DashBoard/TeacherDashboard/Request/Request";
 import { LuUser2 } from "react-icons/lu";
 import { logOut } from "@/auth/sdk";
+import "./SchoolHeader.css";
 
 type THints = {
   id: number;
@@ -45,10 +46,10 @@ const SchoolHeader = ({
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [user] = useStore(getUserState);
-  const [profiles, setProfiles] = useStore(getProfileState);
+  const [profiles] = useStore(getProfileState);
   const [dashboardActive, setDashboardActive] = useState(false);
   const handleDashboard = (e: React.MouseEvent<HTMLButtonElement>) => {
-    localStorage.setItem("schoolDashboard", "true");
+    sessionStorage.setItem("schoolDashboard", "true");
     setDashboardActive(true);
     e.preventDefault();
     if (user?.role === "teacher") {
@@ -59,10 +60,11 @@ const SchoolHeader = ({
       navigate("../schooldashboard");
     }
   };
+
   const handLogOut = () => {
     logOut();
-    localStorage.clear();
-    setProfiles([]);
+    sessionStorage.clear();
+    sessionStorage.clear();
     navigate("/");
   };
 
@@ -88,7 +90,7 @@ const SchoolHeader = ({
 
   return (
     <div className="bg-white w-full fixed top-0 h-[8vh] z-50">
-      <div className="flex text-[#B5B5C3] text-[14px] text3  font-medium top-0 left-0 right-0  mx-auto  app-mai-nwidth-container  w-full   py-4   justify-between items-center bg-white  z-[1000] gap-4  h-[8vh] ">
+      <div className="flex text-[#B5B5C3] text-[15px] text3  font-medium top-0 left-0 right-0  mx-auto  app-mai-nwidth-container  w-full   py-4   justify-between items-center bg-white  z-[1000] gap-4  h-[8vh] ">
         <div className="flex items-center gap-10">
           <Link
             onClick={() => {
@@ -107,18 +109,21 @@ const SchoolHeader = ({
             </div>
           </Link>
 
-          <div className="flex gap-8 ">
+          <div className="flex gap-5 ">
             <NavLink
+              style={{ textDecoration: "none" }}
               onClick={() => {
                 setDashboardActive(false);
               }}
               to={user?.role === "user" ? "/parent" : "/school"}
               // to={"/school"}
               className={({ isActive }) =>
-                isActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
+                isActive ? " text-[#8530C1] " : "text-[#B5B5C3]b "
               }
             >
-              <button className="text-[16px]  font-medium">Home</button>
+              <button className={`text-[16px]  font-bold nav-link  `}>
+                Home
+              </button>
             </NavLink>
 
             <NavLink
@@ -132,7 +137,9 @@ const SchoolHeader = ({
                   : "text-[#B5B5C3] font-medium"
               }
             >
-              <button className="text-[16px]  font-medium">My List</button>
+              <button className="text-[16px]  font-bold nav-link">
+                My List
+              </button>
             </NavLink>
             <NavLink
               onClick={() => {
@@ -143,7 +150,7 @@ const SchoolHeader = ({
                 isActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
               }
             >
-              <button className="text-[16px]  font-medium">
+              <button className="text-[16px]  font-bold nav-link">
                 Progress Report
               </button>
             </NavLink>
@@ -152,7 +159,7 @@ const SchoolHeader = ({
               {user?.role === "schoolAdmin" && (
                 <button
                   onClick={handleDashboard}
-                  className={` block text-[16px]  font-medium ${
+                  className={` block text-[16px]  font-bold nav-link ${
                     dashboardActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
                   }`}
                 >
@@ -162,7 +169,7 @@ const SchoolHeader = ({
               {user?.role === "teacher" && user?.status === "active" ? (
                 <button
                   onClick={handleDashboard}
-                  className={` block text-[16px]  font-medium ${
+                  className={` block text-[16px]  font-bold nav-link ${
                     dashboardActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
                   }`}
                 >

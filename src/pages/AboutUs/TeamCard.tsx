@@ -19,7 +19,12 @@ const TeamCard = ({
   const [showMessage, setShowMessage] = useState(false);
 
   return (
-    <div className="card-w relative transition-all duration-500 ease-in-out  ">
+    <div
+      data-aos="flip-left"
+      data-aos-easing="ease-out-cubic"
+      data-aos-duration="3000"
+      className="card-w relative transition-all duration-500 ease-in-out  "
+    >
       {/* <img
         loading="lazy"
         src={image}

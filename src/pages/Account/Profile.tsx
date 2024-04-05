@@ -46,7 +46,7 @@ const Profile = () => {
   const [parentEditMode, setParentEditMode] = useState(false);
   const [teacherEditMode, setTeacherEditMode] = useState(false);
   const [schEditMode, setSchEditMode] = useState(false);
-  const userStorage = localStorage.getItem("user");
+  const userStorage = sessionStorage.getItem("user");
   const user = JSON.parse(userStorage as string);
 
   return (

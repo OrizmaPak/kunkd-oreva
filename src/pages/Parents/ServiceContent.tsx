@@ -60,19 +60,29 @@ const Serviceontent = () => {
         /> */}
       </div>
 
-      <div className="max-w-[1000px] mx-auto text-center mt-28">
+      <div
+        data-aos="fade-up"
+        data-aos-once="true"
+        data-aos-duration="2000"
+        className="max-w-[1000px] mx-auto text-center mt-28"
+      >
         <h1 className="text-[36px] text-[#101828] font-Inter my-8 ">
           We are at your service
         </h1>
       </div>
 
-      <div className="flex mt-14 mb-10 max-w-[1300px] gap-20 mx-auto  justify-center items-center ">
+      <div
+        data-aos="fade-right"
+        data-aos-once="true"
+        data-aos-duration="2000"
+        className="flex mt-14 mb-10 max-w-[1300px] gap-20 mx-auto  justify-center items-center "
+      >
         <div className="h-[632px]  flex  flex-col justify-between service-content-W">
           {servicesData.map((el) => {
             return <ServiceCard {...el} />;
           })}
         </div>
-        <div>
+        <div data-aos="fade-left" data-aos-once="true">
           <LazyLoadImage
             src={LadyBg}
             placeholderSrc={LadyBgBlur}
@@ -87,7 +97,12 @@ const Serviceontent = () => {
           />
         </div>
       </div>
-      <div className="mt-[100px] mb-[50px] max-w-[1000px] mx-auto text-center">
+      <div
+        data-aos="fade-up"
+        data-aos-once="true"
+        data-aos-duration="2000"
+        className="mt-[100px] mb-[50px] max-w-[1000px] mx-auto text-center"
+      >
         {/* <KundaApp /> */}
         <h1 className=" text-black font-Inter mb-6 text-[36px]">
           Unlimited Books and Resources

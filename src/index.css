@@ -41,6 +41,11 @@
   }
 }
 
+@layer components {
+  .text-a {
+    @apply text-sm sm:text-lg md:text-2xl;
+  }
+}
 .no-focus-border:focus {
   outline: none;
   border-color: transparent;

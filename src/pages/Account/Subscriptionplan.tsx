@@ -19,7 +19,7 @@ const Subscriptionplan = () => {
   const { mutate, isLoading } = useCancelSubscription();
   const planData = data?.data?.data;
   const [openPlan, setOpenPlan] = useState(false);
-  const stringObject = localStorage.getItem("user");
+  const stringObject = sessionStorage.getItem("user");
   const userObject = JSON.parse(stringObject as string);
   const handleCancelSubscription = () => {
     mutate("data", {

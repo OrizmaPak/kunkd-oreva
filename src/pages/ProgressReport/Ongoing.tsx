@@ -1,7 +1,6 @@
 import ProgressCard from "./ProgressCard";
 // import { TContentLog } from "./ProgressReport";
-import { TStoryContent } from "../Stories/Stories1/Stories1";
-
+import { TStoryContent } from "@/api/types";
 const Ongoing = ({ data }: { data: TStoryContent[] }) => {
   return (
     <div>

@@ -4,7 +4,7 @@ import "./progresscard.css";
 import AfamBlur from "@/assets/afamblur.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import { TStoryContent } from "../Stories/Stories1/Stories1";
+import { TStoryContent } from "@/api/types";
 import { Navigate, useNavigate } from "react-router-dom";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
@@ -29,8 +29,8 @@ const ProgressCard = ({
   return (
     <div
       onClick={() => {
-        localStorage.setItem("contentId", data?.id?.toString() as string);
-        localStorage.setItem(
+        sessionStorage.setItem("contentId", data?.id?.toString() as string);
+        sessionStorage.setItem(
           "continuePage",
           data?.pages_read
             ? data?.pages_read?.toString()
@@ -53,13 +53,15 @@ const ProgressCard = ({
               user.role === "user" ? "parent" : "school"
             }/${data.category?.toLowerCase()}/${data.slug
               ?.toLocaleLowerCase()
+              .replace(/\s/g, "-")}/${data.slug
+              ?.toLocaleLowerCase()
               .replace(/\s/g, "-")}`
           );
         } else if (data.category === "Languages") {
           navigate(
-            `../${
-              user.role === "user" ? "parent" : "school"
-            }/africanlanguages/${data.slug}/${data.name}`
+            `../${user.role === "user" ? "parent" : "school"}/languages/${
+              data.slug
+            }/${data.name}`
           );
         }
       }}

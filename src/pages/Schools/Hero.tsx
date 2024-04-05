@@ -8,31 +8,38 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { useNavigate } from "react-router-dom";
 import "./hero.css";
+import AOS from "aos";
+import { useEffect } from "react";
 
 import Button from "@/components/Button";
 const Hero = () => {
   const naivagte = useNavigate();
+  useEffect(() => {
+    AOS.init({ duration: 600 });
+  }, []);
   return (
     <div className="bg-white pt-14">
       <div className="max-w-[1000px] w-full mx-auto ">
-        <h1 className=" font-Brico text-center text-[68px] header1 mt-[100px] text-[#101828]">
-          Empowering <br />
-          literacy education
-        </h1>
-        <p className=" leading-[30px] text1 text-[#667085]    text-center mt-4 font-InterReg ">
-          Embark on a reading adventure with Kunda Kids and empower your child's
-          literacy journey.
-          <br /> Join us today and unlock the boundless possibilities of
-          literacy.
-        </p>
-        <p className="flex justify-center items-center mt-4 ">
-          <Button onClick={() => naivagte("/signup")} size="md">
-            Get Started
-          </Button>
-        </p>
+        <div data-aos="fade-down" data-aos-once="true">
+          <h1 className=" font-Brico text-center text-[68px] header1 mt-[100px] text-[#101828]">
+            Empowering <br />
+            literacy education
+          </h1>
+          <p className=" leading-[30px] text1 text-[#667085]    text-center mt-4 font-InterReg ">
+            Embark on a reading adventure with Kunda Kids and empower your
+            child's literacy journey.
+            <br /> Join us today and unlock the boundless possibilities of
+            literacy.
+          </p>
+          <p className="flex justify-center items-center mt-4 ">
+            <Button onClick={() => naivagte("/signup")} size="md">
+              Get Started
+            </Button>
+          </p>
+        </div>
 
         <div className="flex gap-10 justify-center items-center">
-          <div>
+          <div data-aos="flip-up" data-aos-once="true">
             {/* <img loading="lazy" src={SchHero1} alt="girl" /> */}
             <LazyLoadImage
               src={SchHero1}
@@ -43,7 +50,7 @@ const Hero = () => {
               className="kid-card-picture"
             />
           </div>
-          <div className="mt-[100px]">
+          <div data-aos="flip-down" data-aos-once="true" className="mt-[100px]">
             {/* <img loading="lazy" src={SchHero2} alt="girl" />
              */}
             <LazyLoadImage
@@ -57,7 +64,7 @@ const Hero = () => {
               // height={428.5}
             />
           </div>
-          <div>
+          <div data-aos="flip-up" data-aos-once="true">
             {/* <img loading="lazy" src={SchHero3} alt="girl" /> */}
             <LazyLoadImage
               src={SchHero3}

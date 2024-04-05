@@ -10,7 +10,7 @@ const LogoutModal = ({ onCloseModal }: { onCloseModal: () => void }) => {
   const [profiles, setProfiles] = useStore(getProfileState);
   console.log(profiles);
   const handLogOut = () => {
-    localStorage.clear();
+    sessionStorage.clear();
     setProfiles([]);
     onCloseModal();
     navigate("/");

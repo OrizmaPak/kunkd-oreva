@@ -66,7 +66,7 @@ const Row = ({
         />
       </Modal>
       <div>
-        <div className="grid   grid-cols-[450px_1fr_150px]  py-3  px-8 border-b-2 border-[#F2F4F7]">
+        <div className="grid   grid-cols-[450px_1fr_150px_1fr_1fr]  py-3  px-8 border-b-2 border-[#F2F4F7]">
           <div
             onClick={onClick}
             className="flex items-center justify-start gap-4 cursor-pointer "

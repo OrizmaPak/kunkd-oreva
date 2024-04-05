@@ -18,7 +18,8 @@ import {
   useLearningHour,
 } from "@/api/queries";
 import AfamBlur from "@/assets/afamblur.jpg";
-import { TMedia, TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+// import { TMedia, TStoryContent } from "@/pages/Stories/Stories1/Stories1";
+import { TStoryContent, TMedia } from "@/api/types";
 // import useStore from "@/store";
 // import { getUserState } from "@/store/authStore";
 import { MantineProvider, Skeleton, Slider } from "@mantine/core";
@@ -39,6 +40,10 @@ import CardHome from "@/common/User/CardHome";
 import CardScreenHome from "@/common/User/CardScreenHome";
 import { useNavigate } from "react-router-dom";
 import ConnectedStudentModal from "@/components/ConnectedStudentModal";
+import Wrapper from "@/common/User/Wrapper";
+import InnerWrapper from "@/common/User/InnerWrapper";
+import TabInReadingPage from "../AfterParentSignIn/TabInReadingPage";
+import "./BookLayout.css";
 // import useTimeSpent from "@/hooks/useTimeSpent";
 
 // type TAudioBook = {
@@ -57,14 +62,14 @@ const BookLayout = () => {
   ] = useDisclosure(false);
   const navigate = useNavigate();
 
-  const contentId = localStorage.getItem("contentId");
+  const contentId = sessionStorage.getItem("contentId");
   // useTimeSpent(Number(contentId), Number(profileId));
   const { data: dataRecommended } = useRecommendedAudiobooks(
     contentId as string
   );
   const recommendedContents: TAudioBooks[] =
     dataRecommended?.data?.data?.recommended_contents;
-  const profileId = localStorage.getItem("profileId");
+  const profileId = sessionStorage.getItem("profileId");
 
   const { data, isLoading } = useGetContentById(
     contentId?.toString() as string,
@@ -110,69 +115,76 @@ const BookLayout = () => {
         <ConnectedStudentModal onCancel={closeConnectedStudent} />
       </Modal>
 
-      <div className=" ">
-        <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd]  ">
+      <Wrapper bgColor="#fff7fd">
+        <InnerWrapper>
           <div className=" ">
-            <Skeleton visible={isLoading} radius={"xl"}>
-              {
-                <AudioBooksNav
-                  category="Audiobooks"
-                  title={audiobook && audiobook?.name}
-                />
-              }
-            </Skeleton>
-          </div>
-          <div className="flex-grow  h-full ">
-            <div className="flex-grow  mt-5 rounded-2xl">
-              <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
-                <Skeleton visible={isLoading}>
-                  {!startRead && (
-                    <AboutPage
-                      audiobook={audiobook as TMedia}
-                      setStartRead={() => setStartRead(true)}
-                      audioBookId={audioBookId as number}
-                    />
-                  )}
-                </Skeleton>
-
-                {audiobook && startRead && <ReadPage audiobook={audiobook} />}
-
-                <div className="w-full bg-white rounded-3xl mt-4">
+            <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd]  ">
+              <div className=" ">
+                <Skeleton visible={isLoading} radius={"xl"}>
                   {
-                    <CardScreenHome
-                      data={recommendedContents}
-                      header="New & Trending"
-                      actiontitle=""
-                      isTitled={false}
-                      isLoading={isLoading}
-                      card={(props: TStoryContent) => (
-                        <CardHome
-                          {...props}
-                          goTo={() =>
-                            navigate(
-                              `../${props?.slug
-                                ?.replace(/\s/g, "_")
-                                .toLowerCase()}`
-                            )
-                          }
+                    <AudioBooksNav
+                      category="Audiobooks"
+                      title={audiobook && audiobook?.name}
+                    />
+                  }
+                </Skeleton>
+              </div>
+              <div className="flex-grow  h-full ">
+                <div className="flex-grow  mt-5 rounded-2xl">
+                  <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
+                    <Skeleton visible={isLoading}>
+                      {!startRead && (
+                        <AboutPage
+                          audiobook={audiobook as TMedia}
+                          setStartRead={() => setStartRead(true)}
+                          audioBookId={audioBookId as number}
                         />
                       )}
-                    />
+                    </Skeleton>
 
-                    // <CardScreen
-                    //   data={recommendedContents?.slice(1, 6).map((el) => ({ ...el }))}
-                    //   card={(props: StoriesType) => <Card {...props} />}
-                    //   header="Trending"
-                    //   actiontitle="View all"
-                    //   isTitled={true}
-                    // />
-                  }
+                    {audiobook && startRead && (
+                      <ReadPage audiobook={audiobook} />
+                    )}
+
+                    <TabInReadingPage />
+                    <div className="w-full bg-white rounded-3xl mt-4">
+                      {
+                        <CardScreenHome
+                          data={recommendedContents}
+                          header="New & Trending"
+                          actiontitle=""
+                          isTitled={false}
+                          isLoading={isLoading}
+                          card={(props: TStoryContent) => (
+                            <CardHome
+                              {...props}
+                              goTo={() =>
+                                navigate(
+                                  `../audiobooks/${props?.theme}/${props?.slug
+                                    ?.replace(/\s/g, "_")
+                                    .toLowerCase()}`
+                                )
+                              }
+                            />
+                          )}
+                        />
+
+                        // <CardScreen
+                        //   data={recommendedContents?.slice(1, 6).map((el) => ({ ...el }))}
+                        //   card={(props: StoriesType) => <Card {...props} />}
+                        //   header="Trending"
+                        //   actiontitle="View all"
+                        //   isTitled={true}
+                        // />
+                      }
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </InnerWrapper>
+      </Wrapper>
     </>
   );
 };
@@ -188,7 +200,7 @@ const AboutPage = ({
   setStartRead: () => void;
   audioBookId: number;
 }) => {
-  const profileId = localStorage.getItem("profileId");
+  const profileId = sessionStorage.getItem("profileId");
   const { data, refetch } = useGetLikedContent(profileId as string);
   const likeContents: TStoryContent[] = data?.data.data.records;
   const { mutate } = useLikedContent();
@@ -382,7 +394,7 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
   const [delay, setDelay] = useState(0);
 
   useEffect(() => {
-    const continueReading = localStorage.getItem("continuePage");
+    const continueReading = sessionStorage.getItem("continuePage");
     if (continueReading && audioRef.current) {
       audioRef.current.currentTime = Number(continueReading);
     }
@@ -459,8 +471,8 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
     }
   };
   const { mutate } = useContentTracking();
-  const profileId = localStorage.getItem("profileId");
-  const contentId = localStorage.getItem("contentId");
+  const profileId = sessionStorage.getItem("profileId");
+  const contentId = sessionStorage.getItem("contentId");
   const { mutate: mutateLearning } = useLearningHour();
   const [lastTime, setLastTime] = useState(0);
 

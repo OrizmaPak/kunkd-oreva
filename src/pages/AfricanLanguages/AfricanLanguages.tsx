@@ -106,7 +106,7 @@ export const VideoCard = ({ name, image, id }: TSubVideo) => {
     if (name) {
       navigate(`${name?.trim().toLocaleLowerCase()}`);
     }
-    localStorage.setItem("subCategoryId", id.toString());
+    sessionStorage.setItem("subCategoryId", id.toString());
   };
   return (
     <div

@@ -26,11 +26,11 @@ type Action = {
 };
 
 const getLocalStorage = (key: string): State["user"] => {
-  const localData = localStorage.getItem(key);
+  const localData = sessionStorage.getItem(key);
   return localData ? JSON.parse(localData) : null;
 };
 const setLocalStorage = (key: string, value: State["user"]) =>
-  window.localStorage.setItem(key, JSON.stringify(value));
+  sessionStorage.setItem(key, JSON.stringify(value));
 
 export type AuthSlice = State & Action;
 

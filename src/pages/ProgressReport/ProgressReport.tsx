@@ -8,12 +8,8 @@ import { useState } from "react";
 import { STEP_1, STEP_2, STEP_3 } from "@/utils/constants";
 import Ongoing from "./Ongoing";
 import Completed from "./Completed";
-import {
- 
-  useAllProgressContent
-} from "@/api/queries";
-import { TStoryContent } from "../Stories/Stories1/Stories1";
-
+import { useAllProgressContent } from "@/api/queries";
+import { TStoryContent } from "@/api/types";
 export type TContentLog = {
   content: {
     id: number;
@@ -31,14 +27,21 @@ export type TContentLog = {
 };
 
 const ProgressReport = () => {
-  const profileId = localStorage.getItem("profileId");
-  const {data:allContentProgress} = useAllProgressContent(Number(profileId) || 0)
-  const allContentProgressContents  =  allContentProgress?.data?.data;
- 
-  const ongoingContents = allContentProgressContents?.records?.filter((conte:TStoryContent )=> conte?.status === "ongoing" || conte?.status === "complete" && conte?.quiz_result?.status === false  )
-  const completedContents = allContentProgressContents?.records?.filter((conte:TStoryContent )=> conte?.status === "complete" && conte?.quiz_result?.status )
+  const profileId = sessionStorage.getItem("profileId");
+  const { data: allContentProgress, isLoading } = useAllProgressContent(
+    Number(profileId) || 0
+  );
+  const allContentProgressContents = allContentProgress?.data?.data;
 
- 
+  const ongoingContents = allContentProgressContents?.records?.filter(
+    (conte: TStoryContent) =>
+      conte?.status === "ongoing" ||
+      (conte?.status === "complete" && conte?.quiz_result?.status === false)
+  );
+  const completedContents = allContentProgressContents?.records?.filter(
+    (conte: TStoryContent) =>
+      conte?.status === "complete" && conte?.quiz_result?.status
+  );
 
   const [currentStep, setCurrentStep] = useState(STEP_1);
   return (
@@ -71,11 +74,15 @@ const ProgressReport = () => {
             <hr className="mx-20  mb-5" />
             <div className="pt-5 pb-1 pad-x-40 ">
               <Chart
-                stories={allContentProgressContents?.category_count?.story_count}
+                stories={
+                  allContentProgressContents?.category_count?.story_count
+                }
                 africanLanguages={
                   allContentProgressContents?.category_count?.language_count
                 }
-                audioBooks={allContentProgressContents?.category_count?.audiobook_count}
+                audioBooks={
+                  allContentProgressContents?.category_count?.audiobook_count
+                }
               />
             </div>
 
@@ -86,12 +93,11 @@ const ProgressReport = () => {
               {currentStep === STEP_1 && (
                 <All
                   data={allContentProgressContents?.records}
+                  isLoading={isLoading}
                 />
               )}
               {currentStep === STEP_2 && <Ongoing data={ongoingContents} />}
-              {currentStep === STEP_3 && (
-                <Completed data={completedContents} />
-              )}
+              {currentStep === STEP_3 && <Completed data={completedContents} />}
             </div>
             {/* <div className="px-28 flex justify-end pt-14 pb-8">
               <Pagination
