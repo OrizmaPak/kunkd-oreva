@@ -19,10 +19,10 @@ jobs:
         with:
           node-version: 18.x
 
-      - name: Install Packages and Build Application
+      - name: Install dependencies with Yarn
         run: |
-          npm install
-          npm run build
+          yarn install
+          yarn build
 
       - name: Commit built assets
         run: |
