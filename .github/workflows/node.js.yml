@@ -1,28 +1,62 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Node.js CI
+name: Deploy
 
 on:
   push:
     branches: ["prod"]
+  workflow_dispatch:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Create Node Environment
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: "npm"
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test
+          node-version: 16.x
+
+      - name: Install Packages and Build Application
+        run: |
+          npm install
+          npm run build
+
+      - name: Commit built assets
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git checkout -B deploy
+          git rm -r .github
+          git rm -r .idea
+          git rm -r email
+          git rm -r public
+          git rm -r src
+          git rm .DS_Store
+          git rm .browserslistrc
+          git rm .eslintrc.js
+          git rm .gitignore
+          git rm README.md
+          git rm babel.config.js
+          git rm netlify.toml
+          git rm package-lock.json
+          git rm package.json
+          git rm postcss.config.js
+          git rm tailwind.config.js
+          git rm vue.config.js
+          git rm yarn.lock
+          git add .
+          git commit -m "Build V3"
+          git push -f origin deploy
+
+      - name: Deploy via scp
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          KEY: ${{ secrets.SSHKEY }}
+          source: "dist/*"
+          target: /var/www/v3ui
