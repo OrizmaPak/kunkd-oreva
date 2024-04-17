@@ -133,7 +133,7 @@ export default AddNewClass;
   <select
     name=""
     id=""
-    placeholder="Select gender"
+    // placeholder="Select gender"
     className="w-full  h-full flex-1  focus:outline-none"
   ></select>
 </p>;

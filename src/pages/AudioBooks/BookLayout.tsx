@@ -616,18 +616,13 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
             </button>
             <button onClick={handlePlayControl}>
               {isPlaying ? (
-                <BsPauseCircleFill size={40} color="#8530C1" x />
+                <BsPauseCircleFill size={40} color="#8530C1" />
               ) : (
                 <BsFillPlayCircleFill size={40} color="#8530C1" />
               )}
             </button>
             <button onClick={handeSkip10("forward")}>
-              <GrForwardTen
-                size={25}
-                color="red"
-                text="red"
-                className="u-react-icon"
-              />
+              <GrForwardTen size={25} color="red" className="u-react-icon" />
             </button>
           </div>
         </div>

@@ -173,7 +173,7 @@ const AddTeacherForm = ({
                   {...register("classid")}
                   name="classid"
                   id="classid"
-                  placeholder="Select class"
+                  // placeholder="Select class"
                   className="w-full  h-full flex-1  focus:outline-none"
                 >
                   <option value="">Select Class</option>

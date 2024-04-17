@@ -743,11 +743,11 @@ const BookPagination = ({
                   size={40}
                   color="white"
                   className="u-react-icon"
-                  style={{
-                    polyline: {
-                      stroke: "white",
-                    },
-                  }}
+                  // style={{
+                  //   polyline: {
+                  //     stroke: "white",
+                  //   },
+                  // }}
                 />
               </button>
             )}
