@@ -32,7 +32,6 @@ jobs:
           git rm -r .github
           git rm -r public
           git rm -r src
-          git rm .eslintrc.js
           git rm .gitignore
           git rm README.md
           git rm package-lock.json
