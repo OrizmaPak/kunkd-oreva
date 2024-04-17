@@ -30,7 +30,6 @@ jobs:
           git config --local user.name "GitHub Action"
           git checkout -B deploy
           git rm -r .github
-          git rm -r email
           git rm -r public
           git rm -r src
           git rm .DS_Store
