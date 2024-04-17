@@ -33,7 +33,6 @@ jobs:
           git rm -r public
           git rm -r src
           git rm .gitignore
-          git rm package-lock.json
           git rm package.json
           git rm postcss.config.js
           git rm tailwind.config.js
