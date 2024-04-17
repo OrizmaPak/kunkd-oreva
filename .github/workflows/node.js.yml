@@ -32,17 +32,13 @@ jobs:
           git rm -r .github
           git rm -r public
           git rm -r src
-          git rm .browserslistrc
           git rm .eslintrc.js
           git rm .gitignore
           git rm README.md
-          git rm babel.config.js
-          git rm netlify.toml
           git rm package-lock.json
           git rm package.json
           git rm postcss.config.js
           git rm tailwind.config.js
-          git rm vue.config.js
           git rm yarn.lock
           git add .
           git commit -m "Build V3"
