@@ -98,7 +98,7 @@ export const UpdateProfile = (payload: TUdateProfileData) => {
 };
 
 export const SocialSignUp = (payload: TGoogleSignUpData) => {
-  return axios.post("/social/auth/web", payload);
+  return axios.post("/social/auth", payload);
 };
 
 export const ContentForHome = (payload: TContentForHome) => {

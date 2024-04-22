@@ -46,15 +46,30 @@ const SignContent = () => {
     try {
       const returnValue = await googleSignIn();
 
+      console.log("googleData", returnValue);
+      const nameArray = returnValue?.user?.displayName?.split(" ") ?? "";
+
       mutate(
+        // {
+        //   providerId: returnValue.providerId,
+        //   displayName: returnValue.user.displayName,
+        //   uid: returnValue.user.uid,
+        //   email: returnValue.user.email,
+        //   phoneNumber: returnValue.user.phoneNumber,
+        //   photoURL: returnValue.user.photoURL,
+        //   fcmToken: pushToken,
+        // },
         {
-          providerId: returnValue.providerId,
-          displayName: returnValue.user.displayName,
-          uid: returnValue.user.uid,
+          provider: returnValue.providerId,
+          // displayName: returnValue.user.displayName,
+          id: returnValue.user?.providerData?.[0]?.uid,
+          name: returnValue.user.displayName,
           email: returnValue.user.email,
           phoneNumber: returnValue.user.phoneNumber,
           photoURL: returnValue.user.photoURL,
           fcmToken: pushToken,
+          first_name: nameArray[0],
+          last_name: nameArray[1],
         },
         {
           onSuccess(data) {
@@ -86,16 +101,30 @@ const SignContent = () => {
   const handleFacebookSignUp = async () => {
     try {
       const returnValue = await facebookSignIn();
+      console.log("googleData", returnValue);
+      const nameArray = returnValue?.user?.displayName?.split(" ") ?? "";
 
       mutate(
+        // {
+        //   providerId: returnValue?.providerId,
+        //   displayName: returnValue?.user.displayName,
+        //   uid: returnValue?.user.uid,
+        //   email: returnValue?.user.email,
+        //   phoneNumber: returnValue?.user.phoneNumber,
+        //   photoURL: returnValue?.user.photoURL,
+        //   fcmToken: pushToken,
+        // },
         {
-          providerId: returnValue?.providerId,
-          displayName: returnValue?.user.displayName,
-          uid: returnValue?.user.uid,
-          email: returnValue?.user.email,
-          phoneNumber: returnValue?.user.phoneNumber,
-          photoURL: returnValue?.user.photoURL,
+          provider: returnValue.providerId,
+          // displayName: returnValue.user.displayName,
+          id: returnValue.user?.providerData?.[0]?.uid,
+          name: returnValue.user.displayName,
+          email: returnValue.user.email,
+          phoneNumber: returnValue.user.phoneNumber,
+          photoURL: returnValue.user.photoURL,
           fcmToken: pushToken,
+          first_name: nameArray[0],
+          last_name: nameArray[1],
         },
         {
           onSuccess(data) {

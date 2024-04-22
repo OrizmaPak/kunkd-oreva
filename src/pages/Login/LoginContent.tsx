@@ -16,6 +16,8 @@ import { FcGoogle } from "react-icons/fc";
 import { RiLockLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import { ZodType, z } from "zod";
+import { getPushTokenState } from "@/store/pushTokenStore";
+
 import InputFormat from "../../common/InputFormat";
 // import { signInWithEmailAndPassword } from "firebase/auth";
 // import { auth } from "@/firebase";
@@ -24,6 +26,8 @@ import { useEffect } from "react";
 
 const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
+  const [pushToken, ,] = useStore(getPushTokenState);
+
   const [user, setUser] = useStore(getUserState);
   console.log(user);
   const { mutate: socialMutate, isLoading: socialisLoading } = useSocialLogin();
@@ -36,14 +40,30 @@ const LoginContent = () => {
   const handleGoogleLogin = async () => {
     try {
       const returnValue = await googleSignIn();
+
+      const nameArray = returnValue?.user?.displayName?.split(" ") ?? "";
+
       socialMutate(
+        // {
+        //   providerId: returnValue?.providerId,
+        //   displayName: returnValue?.user.displayName,
+        //   uid: returnValue?.user.uid,
+        //   email: returnValue?.user.email,
+        //   phoneNumber: returnValue?.user.phoneNumber,
+        //   photoURL: returnValue?.user.photoURL,
+        // },
+
         {
-          providerId: returnValue?.providerId,
-          displayName: returnValue?.user.displayName,
-          uid: returnValue?.user.uid,
-          email: returnValue?.user.email,
-          phoneNumber: returnValue?.user.phoneNumber,
-          photoURL: returnValue?.user.photoURL,
+          providerId: returnValue.providerId,
+          // displayName: returnValue.user.displayName,
+          id: returnValue.user?.providerData?.[0]?.uid,
+          name: returnValue.user.displayName,
+          email: returnValue.user.email,
+          phoneNumber: returnValue.user.phoneNumber,
+          photoURL: returnValue.user.photoURL,
+          fcmToken: pushToken,
+          first_name: nameArray[0],
+          last_name: nameArray[1],
         },
         {
           onSuccess(data) {
@@ -75,14 +95,28 @@ const LoginContent = () => {
   const handleFacebookLogin = async () => {
     try {
       const returnValue = await facebookSignIn();
+      const nameArray = returnValue?.user?.displayName?.split(" ") ?? "";
+
       socialMutate(
+        // {
+        //   providerId: returnValue?.providerId,
+        //   displayName: returnValue?.user.displayName,
+        //   uid: returnValue?.user.uid,
+        //   email: returnValue?.user.email,
+        //   phoneNumber: returnValue?.user.phoneNumber,
+        //   photoURL: returnValue?.user.photoURL,
+        // },
         {
-          providerId: returnValue?.providerId,
-          displayName: returnValue?.user.displayName,
-          uid: returnValue?.user.uid,
-          email: returnValue?.user.email,
-          phoneNumber: returnValue?.user.phoneNumber,
-          photoURL: returnValue?.user.photoURL,
+          providerId: returnValue.providerId,
+          // displayName: returnValue.user.displayName,
+          id: returnValue.user?.providerData?.[0]?.uid,
+          name: returnValue.user.displayName,
+          email: returnValue.user.email,
+          phoneNumber: returnValue.user.phoneNumber,
+          photoURL: returnValue.user.photoURL,
+          fcmToken: pushToken,
+          first_name: nameArray[0],
+          last_name: nameArray[1],
         },
         {
           onSuccess(data) {
