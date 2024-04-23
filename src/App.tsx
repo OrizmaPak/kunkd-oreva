@@ -96,7 +96,7 @@ const SchoolCongrtulations = lazy(
   () =>
     import("@/pages/SchoolSignup/SchoolCongratulations/SchoolCongratulations")
 );
-const ScrollToTop = lazy(() => import("./components/ScrollToTop"));
+const ScrollToTop = lazy(() => import("@/components/ScrollToTop"));
 const AccountLayout = lazy(() => import("./pages/Account/AccountLayout"));
 const SettingPassword = lazy(() => import("./pages/Account/AccountPassword"));
 const Billing = lazy(() => import("./pages/Account/Billing"));

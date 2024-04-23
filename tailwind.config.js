@@ -9,7 +9,6 @@ export default {
       Inter: ["Inter", "sans-serif"],
       InterReg: ["InterReg", "san-serif"],
     },
-    extend: {},
   },
   plugins: [],
 };

@@ -1,6 +1,6 @@
 import { Progress } from "@mantine/core";
 import StoriesNav from "./StoriesNav";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import RemarkBg from "@/assets/remarkbg.svg";
 import RemarkIcon from "@/assets/remarkIcon.svg";
@@ -8,7 +8,11 @@ import Button from "@/components/Button";
 import { RingProgress, MantineProvider } from "@mantine/core";
 // import { Slider, MantineProvider } from "@mantine/core";
 
-import { useGetQuiz, useSaveQuiz } from "@/api/queries";
+import {
+  useGetQuiz,
+  useSaveQuiz,
+  // useSaveQuiz
+} from "@/api/queries";
 import { STEP_1, STEP_2, STEP_3, STEP_4 } from "@/utils/constants";
 import Contour from "@/assets/contour.svg";
 import DangerCircle from "@/assets/Danger Circle.svg";
@@ -22,6 +26,7 @@ import Wrapper from "@/common/User/Wrapper";
 import InnerWrapper from "@/common/User/InnerWrapper";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
+import { useNavigate } from "react-router-dom";
 
 const Quiz = () => {
   const contentId = sessionStorage.getItem("contentId");

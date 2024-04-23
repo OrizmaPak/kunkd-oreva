@@ -40,6 +40,7 @@ export const requestPermission = () => {
       })
         .then((currentToken) => {
           if (currentToken) {
+            console.log("tokennnn", currentToken);
             useStore.getState().setToken(currentToken);
           } else {
             notifications.show({

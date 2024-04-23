@@ -21,7 +21,6 @@ const InputFormat = ({
   type,
   placeholder,
   rightIcon,
-  leftIcon,
   reg,
   value,
   smallPadding,
@@ -49,7 +48,6 @@ const InputFormat = ({
           smallPadding ? "px-2" : "px-8"
         }  rounded-full flex items-center gap-2 mt-1   `}
       >
-        {leftIcon ? <span>{leftIcon}</span> : null}
         <input
           {...reg}
           placeholder={placeholder}
