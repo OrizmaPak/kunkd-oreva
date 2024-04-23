@@ -1,0 +1,403 @@
+import axios from "./axios.config";
+import type {
+  TAddTeacherData,
+  TContentForHome,
+  TContentTracking,
+  TForgotPasswordData,
+  TGetProfileData,
+  TGoogleSignUpData,
+  TLikedContentData,
+  TLoginData,
+  TParentSignupData,
+  TPayStackInitData,
+  TProfileData,
+  TResetPasswordData,
+  TSaveQuiz,
+  TSchoolSignupData,
+  TSecurePortalData,
+  TSetPasswordData,
+  TUdateParentImageData,
+  TUdateParentProfileData,
+  TUdateProfileData,
+  TUdateSchImageData,
+  TUdateSchProfileData,
+  TUpdatePassword,
+  TVerifyOtpData,
+  TVerifyPinData,
+} from "./types";
+
+// School
+export const SchoolSignUp = (payload: TSchoolSignupData) => {
+  return axios.post("/signup/school", payload);
+};
+
+export const VerifyOtp = (payload: TVerifyOtpData) => {
+  return axios.post("/otp/verify", payload);
+};
+
+export const SecurePortal = (payload: TSecurePortalData) => {
+  return axios.post("/user/pin", payload);
+};
+
+// Parent
+export const ParentSignUp = (payload: TParentSignupData) => {
+  return axios.post("/signup/parent", payload);
+};
+export const SetPassword = (payload: TSetPasswordData) => {
+  return axios.post("/password/set", payload);
+};
+
+export const SetTeacherPassword = (payload: TSetPasswordData) => {
+  return axios.post("/teacher/password/set", payload);
+};
+
+// Login
+export const Login = (payload: TLoginData) => {
+  return axios.post("/login", payload);
+};
+
+// Forgot Password
+export const ForgotPassword = (payload: TForgotPasswordData) => {
+  return axios.post("/password/forgot", payload);
+};
+
+export const ResetPassword = (payload: TResetPasswordData) => {
+  return axios.post("/password/reset", payload);
+};
+
+// Get Avatar
+export const GetAvatars = () => {
+  return axios.get("/avatars");
+};
+
+// Profile
+export const Profile = (payload: TProfileData) => {
+  const formData = new FormData();
+  formData.append("name", payload?.name);
+  formData.append("dob", payload?.dob);
+  formData.append("is_avatar", payload?.is_avatar);
+  formData.append("image", payload?.image);
+  return axios.post("/profile", formData);
+};
+
+export const GetProfile = (payload: TGetProfileData) => {
+  return axios.get("/profile", payload);
+};
+
+export const UpdatePassword = (payload: TUpdatePassword) => {
+  return axios.patch("/password/update", payload);
+};
+
+export const UpdateProfile = (payload: TUdateProfileData) => {
+  const formData = new FormData();
+  formData.append("name", payload?.name);
+  formData.append("dob", payload?.age);
+  formData.append("image", payload?.image);
+  formData.append("profile_id", payload?.profile_id);
+  return axios.patch("/profile", formData);
+};
+
+export const SocialSignUp = (payload: TGoogleSignUpData) => {
+  return axios.post("/social/auth", payload);
+};
+
+export const ContentForHome = (payload: TContentForHome) => {
+  return axios.get("/content/screen/web", payload);
+};
+
+export const GetContentById = (contentId: string, userId: string) => {
+  return axios.get(`/content/${contentId}/${userId}`);
+};
+
+export const GetSubCategories = () => {
+  return axios.get("/content/categories");
+};
+
+export const GetContebtBySubCategories = (subId: string, page: string) => {
+  return axios
+    .get(`/content/subcategory/${subId}?page=${page}`)
+    .then((response) => response.data);
+};
+
+export const GetAudioBooks = (page: string) => {
+  return axios
+    .get("/content/category/2", { params: { page } })
+    .then((response) => response.data);
+};
+
+export const GetTrendingAudioBooks = () => {
+  return axios.get("/audiobook/content/trending");
+};
+
+export const GetIntroVideo = () => {
+  return axios.get("intro/video");
+};
+
+export const GetPlans = () => {
+  return axios.get("/subscription/plans");
+};
+
+export const ResendOTP = (payload: TLoginData) => {
+  return axios.post("/otp/resend", payload);
+};
+export const LikedContent = (payload: TLikedContentData) => {
+  return axios.post("/user/content/favourite", payload);
+};
+
+export const UnLikedContent = (payload: TLikedContentData) => {
+  return axios.post("/user/content/unfavourite", payload);
+};
+
+// export const GetLikedContent = (payload: TLikedContentData) => {
+//   return axios.get("/user/content/favourites/:id", payload);
+// };
+export const GetLikedContent = (profileId: string) => {
+  return axios.get(`/user/content/favourites?id= ${profileId}`);
+};
+
+// export const GetLikedContent = (profileId: string) => {
+//   return axios.get(`/user/content/favourites?id=`, {
+//     params: { id: profileId },
+//   });
+// };
+
+// Socila Login
+export const SocialLogin = (payload: TLoginData) => {
+  return axios.post("/social/auth/web", payload);
+};
+
+export const UpdateSchProfile = (payload: TUdateSchProfileData) => {
+  return axios.patch("/profile/school", payload);
+};
+
+export const UpdateParentProfile = (payload: TUdateParentProfileData) => {
+  return axios.patch("/profile/parent", payload);
+};
+
+// GEt all countries
+export const GetCountries = () => {
+  return axios.get("/countries");
+};
+
+// GEt all States
+
+export const GetStates = () => {
+  return axios.get("/states/161");
+};
+
+export const VerifyPin = (payload: TVerifyPinData) => {
+  return axios.post("/user/pin/verify", payload);
+};
+
+export const UpdateSchoolNameAddress = (payload: TVerifyPinData) => {
+  return axios.patch("/profile/school/name", payload);
+};
+
+// QIUZ
+export const GetQuiz = (contentId: string) => {
+  return axios.get(`/quiz/${contentId}`);
+};
+
+export const GetRecommendedVideo = (contentId: string) => {
+  return axios.get(`/recommended/content/${contentId}`);
+};
+
+export const UpdateSchImage = (payload: TUdateSchImageData) => {
+  const formData = new FormData();
+  if (payload.backgroundImage) {
+    formData.append(
+      "background_image",
+      payload?.backgroundImage as string | Blob
+    );
+  } else {
+    formData.append("profile_image", payload?.profileImage as string | Blob);
+  }
+
+  return axios.patch("/profile/school/image", formData);
+};
+
+export const UpdateParentImage = (payload: TUdateParentImageData) => {
+  const formData = new FormData();
+  formData.append("image", payload?.image as string | Blob);
+  return axios.patch("/profile/image", formData);
+};
+
+export const PayStackInit = (payload: TPayStackInitData) => {
+  return axios.post("/subscribe/paystack/init", payload);
+};
+
+export const VerifyCompletePayStack = (payload: TPayStackInitData) => {
+  return axios.post("/subscribe/paystack/verify", payload);
+};
+
+export const StripeInit = (payload: TPayStackInitData) => {
+  return axios.post("/subscribe/stripe/init/web", payload);
+};
+
+export const ConnectStripe = (payload: object) => {
+  return axios.post("/subscribe/stripe/set", payload);
+};
+
+export const ContentTracking = (payload: TContentTracking) => {
+  const { signal, ...restPayload } = payload;
+  return axios.post("/content/track", restPayload, { signal });
+};
+
+export const AddTeacherData = (payload: TAddTeacherData) => {
+  return axios.post("/school/teacher", payload);
+};
+
+export const AddClassData = (payload: TAddTeacherData) => {
+  return axios.post("/school/class", payload);
+};
+export const ConnectStudentData = (payload: TAddTeacherData) => {
+  return axios.post("/school/student/connect", payload);
+};
+
+export const GetClassList = (status: string, page?: string) => {
+  return axios.get("/school/class", { params: { status, page } });
+};
+
+export const GetSchool = () => {
+  return axios.get("/school");
+};
+
+export const GetTeacherList = (status: string, page?: string) => {
+  return axios.get("/school/teacher", { params: { status, page } });
+};
+
+export const GetAdmittedStudentsInSchool = (status: string, page: string) => {
+  return axios.get("/school/student", { params: { status, page } });
+};
+
+export const GetAdmittedStudentsInClass = (status: string, page: string) => {
+  return axios.get("/school/class/student", { params: { status, page } });
+};
+
+export const GetAttemptStudentConnect = (page: string) => {
+  return axios.get("/school/student/connect/list", { params: { page } });
+};
+
+export const GetAttemptAllStudentConnect = (page: string) => {
+  return axios.get("/school/student/all/connect/list", { params: { page } });
+};
+
+export const ReAssignTeacher = (payload: TAddTeacherData) => {
+  return axios.post("/school/teacher/reassign", payload);
+};
+
+export const GetOngoingContents = (profileId: string) => {
+  return axios.get(
+    `/content/tracking/ongoing${profileId ? `?id=${profileId}` : ""}`
+  );
+};
+
+export const GetCompletedContents = (profileId: string) => {
+  return axios.get(
+    `/content/tracking/completed${profileId ? `?id=${profileId}` : ""}`
+  );
+};
+
+export const GetContentsLog = (profileId: string) => {
+  return axios.get(
+    `/content/profile/status${profileId ? `?id=${profileId}` : ""}`
+  );
+};
+
+export const AcceptStudentAdmission = (payload: TAddTeacherData) => {
+  return axios.post(`/school/student/admit`, payload);
+};
+
+export const RejectStudentAdmission = (payload: TAddTeacherData) => {
+  return axios.post(`/school/student/decline`, payload);
+};
+
+export const SaveQuiz = (payload: TSaveQuiz) => {
+  return axios.post(`/quiz/question/save`, payload);
+};
+
+export const GetMainSearch = (payload: string) => {
+  return axios.get(`/search?s=${payload}`);
+};
+
+export const CancelSubscription = (payload: string) => {
+  return axios.post(`/subscribe/cancel`, payload);
+};
+
+export const GetSchoolProfileForStudent = (payload: string) => {
+  return axios.get(`/school/profile/${payload}`);
+};
+
+export const GetUpdatedProfile = () => {
+  return axios.get(`/auth/profile`);
+};
+
+export const GetSchoolContentStat = (start: string, end: string) => {
+  return axios.get(`/school/content/log`, { params: { start, end } });
+};
+
+export const GetClassContentStat = (id: string, start: string, end: string) => {
+  return axios.get(`/school/content/class/log/${id}`, {
+    params: { start, end },
+  });
+};
+
+export const ActiveClass = (payload: object) => {
+  return axios.patch(`/school/class/activate`, payload);
+};
+
+export const DisableClass = (payload: object) => {
+  return axios.patch(`/school/class/disable`, payload);
+};
+
+export const DisableSchoolStudent = (payload: object) => {
+  return axios.patch(`/school/student/disable`, payload);
+};
+
+export const DisableSchoolTeacher = (payload: object) => {
+  return axios.patch(`/school/teacher/disable`, payload);
+};
+
+export const EnableSchoolTeacher = (payload: object) => {
+  return axios.patch(`/school/teacher/enable`, payload);
+};
+
+export const EditClassName = (payload: object) => {
+  return axios.patch(`/school/class/edit`, payload);
+};
+
+export const AllProgressContent = (id: number) => {
+  return axios.get(`/content/tracking/all`, { params: { id } });
+};
+
+export const GetLicense = () => {
+  return axios.get(`license`);
+};
+
+export const GetSchoolStudentStat = (
+  id: string,
+  start: string,
+  end: string
+) => {
+  return axios.get(`/school/student/stat/${id}`, { params: { start, end } });
+};
+
+export const LearningHour = (payload: object) => {
+  return axios.post(`/content/learn`, payload);
+};
+
+export const RecommendedAudiobooks = (id: string) => {
+  return axios.get(`/recommended/content/${id}`);
+};
+
+export const GetClassTotalTimeSpent = (
+  id: string,
+  start: string,
+  end: string
+) => {
+  return axios.get(`/school/class/timespent/${id}`, { params: { start, end } });
+};
+// eslint-disable-next-line no-empty-pattern
+export const RemoveAccount = ({}) => {
+  return axios.delete(`/user/account`);
+};

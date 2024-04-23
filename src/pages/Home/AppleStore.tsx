@@ -1,18 +1,39 @@
-import Apple from '@/assets/appleicon.svg'
+import { FaApple } from "react-icons/fa";
 
-const AppleStore = () => {
+const AppleStore = ({ sizes }: { sizes?: boolean }) => {
+  const openInNewTab = (url: string) => {
+    const newWindow: Window | null = window.open(url, "_blank");
+    if (newWindow) {
+      newWindow.opener = null; // Ensure no access to the current window
+    }
+  };
   return (
-    <div className='bg-black text-white items-center justify-center flex gap-2 rounded-md px-4 py-1 '>
-    <div>
-        <img src={Apple} alt="" width='30px' />
-    </div>
-    <div>
-        <p className='text-[9px]'>Download on the</p>
-        <h1 className='font-bold'>Apple Store</h1>
-    </div>
-  
-</div>
-  )
-}
+    <button
+      onClick={() => {
+        openInNewTab("https://apps.apple.com/ng/app/kunda-kids/id1612794970");
+      }}
+      className={`bg-black text-white items-center justify-center flex rounded-md ${
+        sizes ? "pad-x-12 py-2 gap-3 " : "pad-x-10 py-2 gap-2 "
+      } pad-x-10 py-2 h-auto w-auto`}
+    >
+      <div>
+        {/* <img loading="lazy" src={Apple} alt="" width="30px" /> */}
+        <FaApple size={`${sizes ? 45 : 25}`} />
+      </div>
+      <div className="flex flex-col">
+        <span className={`text-start ${sizes ? "text-[12px] " : "text-[8px]"}`}>
+          Download on the
+        </span>
+        <span
+          className={`font-simebold font-InterReg  ${
+            sizes ? "text-[20px]" : "text3"
+          }`}
+        >
+          Apple Store
+        </span>
+      </div>
+    </button>
+  );
+};
 
-export default AppleStore
+export default AppleStore;

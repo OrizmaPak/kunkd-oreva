@@ -1,17 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    fontFamily:{
-        Recoleta: ["Recoleta", "sans-serif"],
-        Hanken: ["Hanken-Grotesk", "sans-serif"],
-
-
+    fontFamily: {
+      Recoleta: ["Recoleta", "sans-serif"],
+      Hanken: ["Hanken-Grotest", "sans-serif"],
+      Brico: ["Brico", "sans-serif"],
+      Inter: ["Inter", "sans-serif"],
+      InterReg: ["InterReg", "san-serif"],
     },
-    extend: {},
   },
   plugins: [],
-}
+};

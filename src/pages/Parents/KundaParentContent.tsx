@@ -1,13 +1,33 @@
-
+import MacBok from "@/assets/macdesktop24.png";
+import MacBookBlur from "@/assets/MacBook1blur.jpg";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 const KundaParentontent = () => {
   return (
-    <div>
-      <div className='max-w-[800px] mx-auto text-center text-white pt-14 '>
-        <h1 className='text-[40px] font-Secondary font-bold'>Kunda Kids For Parent In 1 Minute</h1>
-        <p>Kunda & Friends is a beautiful new music-led 3D animation for that takes preschools on a fun and adventurous ride with and his friends</p>
+    <div className="p-[0px]">
+      <div className="max-w-[1280px] mx-auto text-center justify-center flex flex-col items-center text-white my-   ">
+        <div data-aos="fade-up" data-aos-once="true">
+          <h1 className="text-[36px] text-white font-Inter mb-5 leading-[30px] ">
+            Enhance Learning with our Web App
+          </h1>
+          <p className="text-[18px] leading-[31px] text1 max-w-[900px]  mx-0 mb-10 font-InterReg ">
+            Our web app takes learning to the next level, providing a seamless
+            experience for your child to study, explore, and track their
+            progress on their desktop through interactive quizzes, engaging
+            activities, and personalized recommendations.
+          </p>
+        </div>
+
+        <LazyLoadImage
+          src={MacBok}
+          placeholderSrc={MacBookBlur}
+          effect="blur"
+          wrapperClassName="z-[50] "
+          // width={915}
+          // height={551}
+        />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default KundaParentontent
+export default KundaParentontent;

@@ -1,3 +1,14 @@
-body{
-    font-family: 'Hanken'
+:root {
+  --font-size: 16px;
+}
+
+:root {
+  --font-size: 30px;
+}
+
+body {
+  /* max-width: 1440px; */
+  background-color: red;
+  /* border: 10px solid yellow; */
+  margin-inline: 0 auto !important;
 }

@@ -1,0 +1,13 @@
+.chart-w {
+  width: clamp(9.375rem, -0.7939rem + 23.2432vw, 20.125rem) !important;
+  height: clamp(9.375rem, -0.7939rem + 23.2432vw, 20.125rem) !important;
+}
+
+.chart-icon {
+  width: clamp(0.25rem, -3.0608rem + 7.5676vw, 3.75rem) !important;
+  height: clamp(0.25rem, -3.0608rem + 7.5676vw, 3.75rem) !important;
+}
+
+.chart-icon-container {
+  width: clamp(5rem, -0.9122rem + 13.5135vw, 11.25rem) !important;
+}

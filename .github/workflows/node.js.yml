@@ -1,0 +1,52 @@
+name: Deploy
+
+on:
+  push:
+    branches: ["deploy"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Create Node Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies with Yarn
+        run: |
+          yarn install
+          yarn build
+
+      - name: Commit built assets
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git checkout -B deploy
+          git rm -r .github
+          git rm -r public
+          git rm -r src
+          git rm .gitignore
+          git rm package.json
+          git rm postcss.config.js
+          git rm tailwind.config.js
+          git rm yarn.lock
+          git add .
+          git commit -m "Build V3"
+          git push -f origin deploy
+
+      - name: Deploy via scp
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          KEY: ${{ secrets.SSHKEY }}
+          source: "dist/*"
+          target: /var/www/v3ui

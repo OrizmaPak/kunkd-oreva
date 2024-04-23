@@ -1,28 +1,37 @@
-
-import Hero from './Hero'
-import HeroContent from './HeroContent'
-import Stat from './Stat'
-import StatContent from './StatContent'
-import KundaApp from './KundaApp'
-import ShopBooks from './ShopBooks'
-import WatchKunda from './WatchKunda'
+import Hero from "./Hero";
+import HeroContent from "./HeroContent";
+import Stat from "./Stat";
+import StatContent from "./StatContent";
+import KundaApp from "./KundaApp";
+import ShopBooks from "./ShopBooks";
+import WatchKunda from "./WatchKunda";
 // import Section2Props from './WatchKundaContent'
-import KundaAppContent from './KundaAppContent'
-import WatchKundaContent from './WatchKundaContent'
+import KundaAppContent from "./KundaAppContent";
+import WatchKundaContent from "./WatchKundaContent";
 
 const Home = () => {
   return (
-    <div>
+    // <div className=" bg-pink-200">
+    <>
       <Hero>
-        <HeroContent/>
+        <HeroContent />
       </Hero>
-      <Stat><StatContent/></Stat>
-      <KundaApp><KundaAppContent/></KundaApp>
-      <WatchKunda><WatchKundaContent/></WatchKunda>
-      <ShopBooks/>
+      <Stat>
+        <StatContent />
+      </Stat>
 
-    </div>
-  )
-}
+      <KundaApp>
+        <div>
+          <KundaAppContent />
+        </div>
+      </KundaApp>
+      <WatchKunda>
+        <WatchKundaContent />
+      </WatchKunda>
+      <ShopBooks />
+    </>
+    // </div>
+  );
+};
 
-export default Home
+export default Home;
