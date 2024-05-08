@@ -8,7 +8,7 @@ import AudioBanner from "@/assets/audiobanner.png";
 import { Pagination } from "@mantine/core";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { Skeleton } from "@mantine/core";
-import { useGetAudioBoks2, useGetContebtBySubCategories2 } from "@/api/queries";
+import { useGetContebtBySubCategories2 } from "@/api/queries";
 import { useState } from "react";
 export type StoriesType = {
   title?: string;
