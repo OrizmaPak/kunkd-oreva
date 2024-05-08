@@ -8,7 +8,7 @@ import AudioBanner from "@/assets/audiobanner.png";
 import { Pagination } from "@mantine/core";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { Skeleton } from "@mantine/core";
-import { useGetAudioBoks2 } from "@/api/queries";
+import { useGetContebtBySubCategories2 } from "@/api/queries";
 import { useState } from "react";
 export type StoriesType = {
   title?: string;
@@ -61,7 +61,20 @@ type TAudioBooks = {
 export const Books = () => {
   const navigate = useNavigate();
   const [activePage, setPage] = useState(1);
-  const { isLoading, data, refetch } = useGetAudioBoks2(activePage.toString());
+
+  const subCategoryId = sessionStorage.getItem("subId");
+  const { data, isLoading, refetch } = useGetContebtBySubCategories2(
+    subCategoryId as string,
+    activePage.toString() as string
+  );
+
+  const subCategoryContents = data?.data.records as {
+    thumbnail: string;
+    id: number;
+    name: string;
+    sub_category_name: string;
+    slug: string;
+  }[];
   const audioBooks = data?.data?.records;
   const totalPage = Math.ceil(data?.data.totalRecord / 10);
   return (
@@ -74,7 +87,8 @@ export const Books = () => {
                 <IoMdArrowRoundBack size={35} onClick={() => navigate(-1)} />
               </div>
               <h1 className="text-center font-bold text-[30px] font-Hanken ">
-                Audiobooks
+                {subCategoryContents &&
+                  subCategoryContents[0]?.sub_category_name}
               </h1>
             </div>
             <div className="flex justify-center items-center ">
