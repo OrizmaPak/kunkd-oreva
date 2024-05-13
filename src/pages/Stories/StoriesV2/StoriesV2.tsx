@@ -7,7 +7,7 @@ const StoriesV2 = () => {
   const subCategory = data?.data.data[0].sub_categories;
   return (
     <div>
-      <div>
+      <div className=" mt-14">
         {subCategory?.map((sub: TSubCategory) => {
           return (
             <CategoryContents
