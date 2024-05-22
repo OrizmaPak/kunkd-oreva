@@ -61,18 +61,18 @@ const SignContent = () => {
     phoneNumber: string;
     photoURL: string;
   };
-  function getUserWithGoogleProvider(users: TproviderData[]) {
-    // Check if the array contains only one user
-    if (users.length === 1) {
-      return users[0];
-    } else {
-      // If there are multiple users, find the user with providerId === "apple.com"
-      const appleUser = users.find(
-        (user: TproviderData) => user.providerId === "google.com"
-      );
-      return appleUser;
-    }
-  }
+  // function getUserWithGoogleProvider(users: TproviderData[]) {
+  //   // Check if the array contains only one user
+  //   if (users.length === 1) {
+  //     return users[0];
+  //   } else {
+  //     // If there are multiple users, find the user with providerId === "apple.com"
+  //     const appleUser = users.find(
+  //       (user: TproviderData) => user.providerId === "google.com"
+  //     );
+  //     return appleUser;
+  //   }
+  // }
   const handleGoogleSignUp = async () => {
     try {
       console.log("start running");
