@@ -43,6 +43,9 @@ import Wrapper from "@/common/User/Wrapper";
 import InnerWrapper from "@/common/User/InnerWrapper";
 import TabInReadingPage from "../AfterParentSignIn/TabInReadingPage";
 // import useTimeSpent from "@/hooks/useTimeSpent";
+import moengage from "@moengage/web-sdk";
+import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
 
 type TRecommendedVideo = {
   id: number;
@@ -102,6 +105,7 @@ const VideoPlayer = () => {
     { open: openConnectedStudent, close: closeConnectedStudent },
   ] = useDisclosure(false);
   const profileId = sessionStorage.getItem("profileId");
+  const [user] = useStore(getUserState);
 
   const contentId = sessionStorage.getItem("contentId");
   // const contentId =sessionStorage.getItem("contentId");
@@ -184,8 +188,31 @@ const VideoPlayer = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [delay]);
+  function formatTimeComponent(component: number) {
+    return component < 10 ? "0" + component : component;
+  }
+  const currentTime = new Date();
+  // Extract hours, minutes, and seconds
+  const hours = currentTime.getHours();
+  const minutes = currentTime.getMinutes();
+  const seconds = currentTime.getSeconds();
+  // Formatting the time components
+  const timeString =
+    formatTimeComponent(hours) +
+    ":" +
+    formatTimeComponent(minutes) +
+    ":" +
+    formatTimeComponent(seconds);
 
   const handleVideoComplete = async () => {
+    moengage.track_event("web_lesson_completed", {
+      user_id: user?.user_id,
+      profile_id: sessionStorage.getItem("profileId") || 0,
+      lession_id: sessionStorage.getItem("coontentId"),
+      lession_category: "African Languages",
+      media_type: "vidoe",
+      end_time: timeString,
+    });
     try {
       mutate(
         {

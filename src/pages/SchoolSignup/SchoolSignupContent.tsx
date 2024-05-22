@@ -35,6 +35,10 @@ const SchoolSignupContent = () => {
       .string()
       .min(2, { message: "Contact name must be at least 4 characters long" })
       .max(20, { message: "Contact name must not exceed 20 characters" }),
+    phone: z
+      .string()
+      .min(11, { message: "Phone number must not less than 11 characters" })
+      .max(14, { message: "Phone number must not more than 14 characters" }),
     email: z.string().email(),
     password: z
       .string()
@@ -112,6 +116,15 @@ const SchoolSignupContent = () => {
                 type="text"
                 placeholder="Contact Name"
                 reg={register("name")}
+                errorMsg={errors.name?.message}
+              />
+            </p>
+
+            <p className="my-3">
+              <InputFormat
+                type="number"
+                placeholder="Phone number"
+                reg={register("phone")}
                 errorMsg={errors.name?.message}
               />
             </p>

@@ -1,6 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./packagecard.css";
+import moengage from "@moengage/web-sdk";
+import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
 
 type Props = {
   recommended?: boolean;
@@ -34,6 +37,23 @@ const PackageCard = ({
   countryCode,
 }: Props) => {
   const navigate = useNavigate();
+  const [user] = useStore(getUserState);
+  function formatTimeComponent(component: number) {
+    return component < 10 ? "0" + component : component;
+  }
+  const currentTime = new Date();
+  // Extract hours, minutes, and seconds
+  const hours = currentTime.getHours();
+  const minutes = currentTime.getMinutes();
+  const seconds = currentTime.getSeconds();
+  // Formatting the time components
+  const timeString =
+    formatTimeComponent(hours) +
+    ":" +
+    formatTimeComponent(minutes) +
+    ":" +
+    formatTimeComponent(seconds);
+
   const handlePaln = (planId: number) => {
     const currencyIso =
       countryCode === "NG" ? "NGN" : countryCode === "UK" ? "GBP" : "USD";
@@ -45,6 +65,14 @@ const PackageCard = ({
         navigate("/childprofilesetup");
       }
     } else {
+      moengage.track_event("web_add_to_cart", {
+        user_id: user?.user_id,
+        subsription_plan: plan,
+        date: timeString,
+        amount: price,
+        currency:
+          countryCode === "NG" ? "NGN" : countryCode === "UK" ? "GBP" : "USD",
+      });
       sessionStorage.setItem("planId", planId?.toString());
       sessionStorage.setItem("currency_iso3", currencyIso);
       navigate("/makepayment");

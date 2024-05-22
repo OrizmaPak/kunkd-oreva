@@ -18,6 +18,9 @@ import { TStoryContent } from "@/api/types";
 import { Progress } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import "./cardhome.css";
+import moengage from "@moengage/web-sdk";
+import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
 
 export type CardProps = {
   id?: number;
@@ -29,6 +32,7 @@ export type CardProps = {
   pages?: TStoryContent[];
   pages_read?: number;
   timespent?: number;
+  media_type?: string;
   goTo?: () => void;
 };
 
@@ -40,6 +44,8 @@ const CardHome = ({
   pages_read,
   pages,
   hasRage,
+  category,
+  media_type,
   timespent,
   ref,
 }: TStoryContent & {
@@ -57,7 +63,34 @@ const CardHome = ({
   const range =
     pagesLength > 0 ? Math.ceil((100 / pagesLength) * (pagesRead || 0)) : 0;
 
+  const [user] = useStore(getUserState);
+
+  function formatTimeComponent(component: number) {
+    return component < 10 ? "0" + component : component;
+  }
+  const currentTime = new Date();
+  // Extract hours, minutes, and seconds
+  const hours = currentTime.getHours();
+  const minutes = currentTime.getMinutes();
+  const seconds = currentTime.getSeconds();
+  // Formatting the time components
+  const timeString =
+    formatTimeComponent(hours) +
+    ":" +
+    formatTimeComponent(minutes) +
+    ":" +
+    formatTimeComponent(seconds);
+
   const handleClick = () => {
+    console.log("Categorie", category);
+    moengage.track_event("web_lesson_started", {
+      user_id: user?.user_id,
+      profile_id: sessionStorage.getItem("profileId") || 0,
+      lession_id: id,
+      lession_category: category,
+      media_type: media_type,
+      start_time: timeString,
+    });
     if (goTo) goTo();
 
     sessionStorage.setItem("contentId", id?.toString() as string);

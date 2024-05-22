@@ -39,6 +39,9 @@ import InnerWrapper from "@/common/User/InnerWrapper";
 // import useStore from "@/store/index";
 import TabInReadingPage from "@/pages/AfterParentSignIn/TabInReadingPage";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
+import moengage from "@moengage/web-sdk";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
 
 const Stories1 = () => {
   const [isFinish, setIsFinish] = useState(false);
@@ -640,6 +643,7 @@ const BookPagination = ({
   const [currentPage, setCurrentage] = useState(
     continuePage && Number(continuePage) < pageTotal ? Number(continuePage) : 1
   );
+  const [user] = useStore(getUserState);
 
   useEffect(() => {
     setPage(currentPage);
@@ -655,8 +659,31 @@ const BookPagination = ({
     }
     setPageNumber(currentPage);
   };
+  function formatTimeComponent(component: number) {
+    return component < 10 ? "0" + component : component;
+  }
+  const currentTime = new Date();
+  // Extract hours, minutes, and seconds
+  const hours = currentTime.getHours();
+  const minutes = currentTime.getMinutes();
+  const seconds = currentTime.getSeconds();
+  // Formatting the time components
+  const timeString =
+    formatTimeComponent(hours) +
+    ":" +
+    formatTimeComponent(minutes) +
+    ":" +
+    formatTimeComponent(seconds);
 
   const handleBookCompletedProgress = () => {
+    moengage.track_event("web_lesson_completed", {
+      user_id: user?.user_id,
+      profile_id: sessionStorage.getItem("profileId") || 0,
+      lession_id: sessionStorage.getItem("coontentId"),
+      lession_category: "stories",
+      media_type: "text",
+      end_time: timeString,
+    });
     mutate(
       {
         profile_id: Number(profileId),
@@ -768,9 +795,31 @@ const BookPagination = ({
 
 const WelDone = ({ content }: { content: TStoryContent }) => {
   const navigate = useNavigate();
-  // const [user] = useStore(getUserState);
-
+  const [user] = useStore(getUserState);
+  function formatTimeComponent(component: number) {
+    return component < 10 ? "0" + component : component;
+  }
+  const currentTime = new Date();
+  // Extract hours, minutes, and seconds
+  const hours = currentTime.getHours();
+  const minutes = currentTime.getMinutes();
+  const seconds = currentTime.getSeconds();
+  // Formatting the time components
+  const timeString =
+    formatTimeComponent(hours) +
+    ":" +
+    formatTimeComponent(minutes) +
+    ":" +
+    formatTimeComponent(seconds);
   const navigateQuiz = () => {
+    moengage.track_event("web_quiz_started", {
+      user_id: user?.user_id,
+      profile_d: sessionStorage.getItem("profileId"),
+      lesson_id: sessionStorage.getItem("contentId"),
+      lesson_category: content?.category,
+      media_type: content?.media_type,
+      start_time: timeString,
+    });
     sessionStorage.setItem("content", JSON.stringify(content));
     if (content.has_quiz === true) {
       navigate("quiz");

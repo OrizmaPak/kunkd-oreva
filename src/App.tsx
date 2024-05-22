@@ -7,6 +7,9 @@ import ShoolHeader from "./common/User/SchoolHeader";
 import HomeFooter from "./components/HomeFooter";
 import HomeHeader from "./components/HomeHeader";
 import Home from "./pages/Home/Home";
+// import "@type/moengage/web-sdk";
+
+import moengage from "@moengage/web-sdk";
 
 import AudiobooksV2 from "./pages/AudioBooks/AudiobooksV2/AudiobooksV2";
 import LandScapeModal from "./components/LandScapeModal";
@@ -15,7 +18,6 @@ import { useDisclosure } from "@mantine/hooks";
 import { Story } from "./pages/Stories/Stories";
 import Videos from "./pages/AfricanLanguages/Videos";
 import { Books } from "./pages/AudioBooks/AudioBooks";
-
 const VideoV2 = lazy(() => import("./pages/AfricanLanguages/VideosV2/VideoV2"));
 const StoriesV2 = lazy(() => import("./pages/Stories/StoriesV2/StoriesV2"));
 const DefaultTab = lazy(() => import("./pages/AfterParentSignIn/DefaultTab"));
@@ -136,9 +138,11 @@ const DefaultSchoolTab = lazy(
 
 const Login = lazy(() => import("./pages/Login/Login"));
 const HomeNewsLetter = lazy(() => import("./components/HomeNewsLetter"));
+// import moengage from "@moengage/web-sdk
 
 function App() {
   // const [user] = useStore(getUserState);
+  moengage.initialize({ app_id: "O8E62027IMB0O72W0PJ0MG5Y", cluster: "DC_2" });
 
   // useEffect(() => {
   //   const unsubscribe = onAuthStateChanged(auth, (currentUser) => {

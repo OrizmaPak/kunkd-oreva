@@ -17,6 +17,7 @@ import useStore from "@/store/index";
 export const firebaseConfig = {
   apiKey: "AIzaSyASg9uWg2-ewPDnCGPGYUUErNvTjt8s89Q",
   authDomain: "new-kunda-kids.firebaseapp.com",
+  // authDomain: "web.kundakidsapi.com",
   projectId: "new-kunda-kids",
   storageBucket: "new-kunda-kids.appspot.com",
   messagingSenderId: "917890819560",

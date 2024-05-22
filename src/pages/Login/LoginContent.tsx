@@ -17,6 +17,7 @@ import { RiLockLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import { ZodType, z } from "zod";
 import { getPushTokenState } from "@/store/pushTokenStore";
+import moengage from "@moengage/web-sdk";
 
 import InputFormat from "../../common/InputFormat";
 // import { signInWithEmailAndPassword } from "firebase/auth";
@@ -27,6 +28,16 @@ import { useEffect } from "react";
 const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
   const [pushToken, ,] = useStore(getPushTokenState);
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1; // Adding 1 because getMonth() returns zero-based index
+  const day = currentDate.getDate();
+  const formattedDate =
+    year +
+    "-" +
+    (month < 10 ? "0" + month : month) +
+    "-" +
+    (day < 10 ? "0" + day : day);
 
   const [user, setUser] = useStore(getUserState);
   console.log(user);
@@ -54,7 +65,8 @@ const LoginContent = () => {
         // },
 
         {
-          providerId: returnValue.providerId,
+          // provider: returnValue.providerId,
+          provider: "google",
           // displayName: returnValue.user.displayName,
           id: returnValue.user?.providerData?.[0]?.uid,
           name: returnValue.user.displayName,
@@ -68,10 +80,22 @@ const LoginContent = () => {
         {
           onSuccess(data) {
             const res = data?.data?.data as TUser;
-            // notifications.show({
-            //   title: `Notification`,
-            //   message: data.data.message,
-            // });
+            notifications.show({
+              title: `Notification`,
+              message: data.data.message,
+            });
+            moengage.add_unique_user_id(res?.user_id);
+            moengage.add_first_name(res?.firstname);
+            moengage.add_last_name(res?.lastname);
+            moengage.add_email(res?.email);
+            moengage.add_mobile(res?.phoneNumber);
+            moengage.track_event("web_login", {
+              user_id: res?.user_id,
+              login_platform: "web",
+              subscription_status: res?.status,
+              login_date: formattedDate,
+              login_method: "Google",
+            });
             setUser({ ...res });
             navigate("/selectprofile");
           },
@@ -107,7 +131,7 @@ const LoginContent = () => {
         //   photoURL: returnValue?.user.photoURL,
         // },
         {
-          providerId: returnValue.providerId,
+          provider: "facebook",
           // displayName: returnValue.user.displayName,
           id: returnValue.user?.providerData?.[0]?.uid,
           name: returnValue.user.displayName,
@@ -125,6 +149,18 @@ const LoginContent = () => {
             //   title: `Notification`,
             //   message: data.data.message,
             // });
+            moengage.add_unique_user_id(res?.user_id);
+            moengage.add_first_name(res?.firstname);
+            moengage.add_last_name(res?.lastname);
+            moengage.add_email(res?.email);
+            moengage.add_mobile(res?.phoneNumber);
+            moengage.track_event("web_login", {
+              user_id: res?.user_id,
+              login_platform: "web",
+              subscription_status: res?.status,
+              login_date: formattedDate,
+              login_method: "FB",
+            });
             setUser({ ...res });
             navigate("/selectprofile");
           },
@@ -169,12 +205,21 @@ const LoginContent = () => {
         async onSuccess(data) {
           sessionStorage.clear();
           const res = data?.data?.data as TUser;
-          // const userCredentils = await signInWithEmailAndPassword(
-          //   auth,
-          //   datta?.email as string,
-          //   datta.password as string
-          // );
-          // console.log("user", userCredentils);
+          console.log("web_moengage before");
+          moengage.add_unique_user_id(res?.user_id);
+          moengage.add_first_name(res?.firstname);
+          moengage.add_last_name(res?.lastname);
+          moengage.add_email(res?.email);
+          moengage.add_mobile(res?.phoneNumber);
+          moengage.track_event("web_login", {
+            user_id: res?.user_id,
+            login_platform: "web",
+            subscription_status: res?.status,
+            login_date: formattedDate,
+            login_method: "manual",
+          });
+          console.log("web_moengage after");
+
           setUser({ ...res });
 
           notifications.show({
