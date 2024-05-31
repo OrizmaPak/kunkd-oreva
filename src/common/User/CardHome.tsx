@@ -112,7 +112,6 @@ const CardHome = ({
         : "1"
     );
   };
-  const [visiblee, setVisiblee] = useState(false);
   const profileId = sessionStorage.getItem("profileId");
   const { data, refetch } = useGetLikedContent(profileId as string);
   const likeContents: TStoryContent[] = data?.data.data.records;
@@ -209,10 +208,6 @@ const CardHome = ({
           className=" rounded-xl card"
           wrapperClassName="card 
           "
-          onMouseMove={() => {
-            setVisiblee(true);
-          }}
-          onMouseMoveCapture={() => setVisiblee(false)}
         />
 
         <span className=" card-hover bg-[rgba(0,0,0,.5)] hidden  absolute left-0 top-[0px] card transition-all duration-100   z-50  rounded-xl">

@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./packagecard.css";
-import moengage from "@moengage/web-sdk";
 import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
 import { handleEventTracking } from "@/api/moengage";

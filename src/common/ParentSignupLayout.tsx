@@ -52,7 +52,7 @@ const ParentSignupLayout = ({
               body={data.body}
             />
           ) : (
-            <SigninDashIonsOnly active={active === index} />
+            <SigninDashIonsOnly />
           )
         )}
       </div>
@@ -90,7 +90,7 @@ const SigninDash = ({
     </div>
   );
 };
-const SigninDashIonsOnly = ({ active }: { active?: boolean }) => {
+const SigninDashIonsOnly = () => {
   return (
     <div className="mb-20">
       <img loading="lazy" src={Checked} alt="roundmark" />

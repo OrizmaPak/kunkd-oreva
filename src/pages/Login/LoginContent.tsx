@@ -31,7 +31,7 @@ const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
   const [pushToken, ,] = useStore(getPushTokenState);
 
-  const [user, setUser] = useStore(getUserState);
+  const [, setUser] = useStore(getUserState);
   const { mutate: socialMutate, isLoading: socialisLoading } = useSocialLogin();
 
   useEffect(() => {

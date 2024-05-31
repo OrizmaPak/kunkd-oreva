@@ -21,6 +21,7 @@ const OptionButton = ({
     onClick();
     setUserId(id);
   };
+  console.log(userId);
   return (
     <div
       onClick={handlleContinue}

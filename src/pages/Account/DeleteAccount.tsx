@@ -4,7 +4,6 @@ import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useNavigate } from "react-router-dom";
 import Button from "@/components/Button";
-import moengage from "@moengage/web-sdk";
 import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
 import { handleEventTracking } from "@/api/moengage";

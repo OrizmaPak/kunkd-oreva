@@ -22,7 +22,6 @@ import { TRequestStudents } from "@/pages/DashBoard/TeacherDashboard/Request/Req
 import { LuUser2 } from "react-icons/lu";
 import { logOut } from "@/auth/sdk";
 import "./SchoolHeader.css";
-import moengage from "@moengage/web-sdk";
 import { handleEventTracking } from "@/api/moengage";
 
 type THints = {
