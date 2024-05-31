@@ -74,7 +74,6 @@ export const Story = () => {
     subCategoryId as string,
     activePage.toString()
   );
-  console.log("dataaaaa", data?.data.records);
   const subCategoryContents = data?.data.records;
   const totalPage = Math.ceil(data?.data.totalRecord / 10);
 

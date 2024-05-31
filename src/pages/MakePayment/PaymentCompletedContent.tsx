@@ -2,6 +2,10 @@ import Button from "@/components/Button";
 import ParentSignupLayout from "@/common/ParentSignupLayout";
 import { useNavigate } from "react-router-dom";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
+import { useEffect } from "react";
+import { handleEventTracking, timeString } from "@/api/moengage";
+import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
 // import { useConnectStripe } from "@/api/queries";
 // import { notifications } from "@mantine/notifications";
 // import { getApiErrorMessage } from "@/api/helper";
@@ -29,6 +33,22 @@ const PaymentCompletedContent = () => {
     // })
   };
   const isHome = sessionStorage.getItem("gotToHome");
+  const [user] = useStore(getUserState);
+
+  useEffect(() => {
+    handleEventTracking("web_subscribed", {
+      user_id: user?.user_id,
+      subsription_plan: "annual",
+      date: timeString,
+      amount: sessionStorage.getItem("price"),
+      currency:
+        sessionStorage.getItem("currency_iso3") === "NG"
+          ? "NGN"
+          : sessionStorage.getItem("currency_iso3") === "UK"
+          ? "GBP"
+          : "USD",
+    });
+  }, []);
 
   return (
     <div>
@@ -41,8 +61,9 @@ const PaymentCompletedContent = () => {
                 <div className=" flex justify-center items-center">
                   {/* <img loading="lazy" src={Congrats} alt="Congrats" /> */}
                   <IoCheckmarkCircleOutline
-                    className="congrat-w"
+                    // className="congrat-w"
                     color="#8530C1"
+                    size={100}
                   />
                 </div>
                 <h1 className="font-bold header2 text-center mt-4 font-Recoleta">

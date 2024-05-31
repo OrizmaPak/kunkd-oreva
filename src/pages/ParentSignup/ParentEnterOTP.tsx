@@ -15,12 +15,25 @@ import { FormData } from "@/common/User/FormValidation/Schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TUser } from "@/api/types";
 import { useState, useEffect } from "react";
+import { handleEventTracking } from "@/api/moengage";
+import moengage from "@moengage/web-sdk";
+
 // import { motion } from "framer-motion";
 
 const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
   const { isLoading, mutate } = useVerifyOtp();
   const { mutate: resendOTPMutate } = useResendOTP();
   const [user, setUser] = useStore(getUserState);
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1; // Adding 1 because getMonth() returns zero-based index
+  const day = currentDate.getDate();
+  const formattedDate =
+    year +
+    "-" +
+    (month < 10 ? "0" + month : month) +
+    "-" +
+    (day < 10 ? "0" + day : day);
 
   const schema: ZodType<Pick<FormData, "otp">> = z.object({
     otp: z
@@ -60,6 +73,19 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
             title: `Notification`,
             message: data.data.message,
           });
+          moengage.add_unique_user_id(res?.user_id);
+          moengage.add_first_name(res?.firstname);
+          moengage.add_last_name(res?.lastname);
+          moengage.add_email(res?.email);
+          moengage.add_mobile(res?.phoneNumber);
+          handleEventTracking("web_parent_registered", {
+            email_address: res?.email,
+            user_id: res?.user_id,
+            registration_date: formattedDate,
+            registration_method: "manual",
+            registration_platform: "webapp",
+          });
+
           setUser({ ...res });
           onSubmit();
         },

@@ -14,8 +14,6 @@ const CategoryContents = ({ id, title }: { id: string; title: string }) => {
     return prev.concat(current?.data?.records);
   }, []);
 
-  console.log("story,", data);
-
   return (
     <div>
       <div ref={ref} className="">

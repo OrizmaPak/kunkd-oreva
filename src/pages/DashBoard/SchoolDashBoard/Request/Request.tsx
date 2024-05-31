@@ -12,6 +12,9 @@ import SchoolNotificationModal from "@/components/SchoolNotificationModal";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
+import { handleEventTracking } from "@/api/moengage";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
 
 export type TRequestStudents = {
   parent: {
@@ -121,18 +124,24 @@ const Row = ({
   requestData: TRequestStudents;
   refetch: () => void;
 }) => {
+  const [user] = useStore(getUserState);
   const queryClient = useQueryClient();
   const [opened, { open, close }] = useDisclosure(false);
-
   const { mutate, isLoading: acceptIsLoading } = useAcceptStudentAdmission();
   const { mutate: mutateReject, isLoading: rejectIsLoading } =
     useRejectStudentAdmission();
 
-  const handleAccept = (id: number) => {
+  const handleAccept = (objData: TRequestStudents) => {
     mutate(
-      { student_id: id },
+      { student_id: objData?.id },
       {
         onSuccess(data) {
+          handleEventTracking("handle_student_request", {
+            school_id: user?.user_id,
+            class_name: objData?.class?.class_name,
+            student_name: objData?.firstname + " " + objData?.lastname,
+            request_status: "accepted",
+          });
           refetch();
           queryClient.invalidateQueries({
             queryKey: ["GetAttemptStudentConnect"],
@@ -155,11 +164,17 @@ const Row = ({
       }
     );
   };
-  const handleReject = (id: number) => {
+  const handleReject = (objData: TRequestStudents) => {
     mutateReject(
-      { student_id: id },
+      { student_id: objData?.id },
       {
         onSuccess(data) {
+          handleEventTracking("handle_student_request", {
+            school_id: user?.user_id,
+            class_name: objData?.class?.class_name,
+            student_name: objData?.firstname + " " + objData?.lastname,
+            request_status: "declined",
+          });
           refetch();
           queryClient.invalidateQueries({
             queryKey: ["GetAttemptStudentConnect"],
@@ -219,7 +234,7 @@ const Row = ({
         <div className="flex  text-white gap-5 items-center justify-center ">
           <button
             onClick={() => {
-              handleReject(requestData.student.id);
+              handleReject(requestData);
             }}
             className=" pad-x-40   text-[16px]   h-[38px] flex justify-center items-center rounded bg-[#E2B6FF] "
           >
@@ -233,7 +248,7 @@ const Row = ({
           </button>
           <button
             onClick={() => {
-              handleAccept(requestData?.id);
+              handleAccept(requestData);
             }}
             className="pad-x-40 text-[16px]  h-[38px]  flex justify-center items-center rounded bg-[#8530C1]"
           >

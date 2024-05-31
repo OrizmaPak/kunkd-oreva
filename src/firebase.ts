@@ -17,6 +17,7 @@ import useStore from "@/store/index";
 export const firebaseConfig = {
   apiKey: "AIzaSyASg9uWg2-ewPDnCGPGYUUErNvTjt8s89Q",
   authDomain: "new-kunda-kids.firebaseapp.com",
+  // authDomain: "web.kundakidsapi.com",
   projectId: "new-kunda-kids",
   storageBucket: "new-kunda-kids.appspot.com",
   messagingSenderId: "917890819560",
@@ -27,7 +28,8 @@ export const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-getAnalytics(app);
+
+export const analyticss = getAnalytics(app);
 export const auth = getAuth(app);
 const messaging = getMessaging(app);
 export const requestPermission = () => {
@@ -40,7 +42,6 @@ export const requestPermission = () => {
       })
         .then((currentToken) => {
           if (currentToken) {
-            console.log("tokennnn", currentToken);
             useStore.getState().setToken(currentToken);
           } else {
             notifications.show({

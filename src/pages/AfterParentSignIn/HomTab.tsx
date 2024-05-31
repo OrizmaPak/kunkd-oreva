@@ -22,7 +22,6 @@ const HomTab = () => {
     navigate(val, {
       preventScrollReset: false,
     });
-    console.log("scrollto", tabRef.current);
     // if (tabRef.current) {
     //   tabRef.current.scrollTo(0, 0);
     // }

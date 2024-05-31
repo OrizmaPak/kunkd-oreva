@@ -2,7 +2,7 @@ import { getApiErrorMessage } from "@/api/helper";
 import { useSocialSignUp } from "@/api/queries";
 import { TUser } from "@/api/types";
 import Cancel from "@/assets/Cancel.svg";
-import { facebookSignIn, googleSignIn } from "@/auth/sdk";
+import { facebookSignIn, googleSignIn, appleSignIn } from "@/auth/sdk";
 import Button from "@/components/Button";
 import useStore from "@/store";
 import { getUserState } from "@/store/authStore";
@@ -15,7 +15,16 @@ import { FcGoogle } from "react-icons/fc";
 import { IoCheckmarkCircleOutline, IoEllipseOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import OptionButton from "./OptionButton";
-
+import moengage from "@moengage/web-sdk";
+import { handleEventTracking } from "@/api/moengage";
+export type TproviderData = {
+  providerId: string;
+  uid: string;
+  displayName: string;
+  email: string;
+  phoneNumber: string;
+  photoURL: string;
+};
 const options = [
   {
     title: "I'm a school",
@@ -41,28 +50,42 @@ const SignContent = () => {
   const handleClick = () => {
     // todo
   };
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1; // Adding 1 because getMonth() returns zero-based index
+  const day = currentDate.getDate();
+  const formattedDate =
+    year +
+    "-" +
+    (month < 10 ? "0" + month : month) +
+    "-" +
+    (day < 10 ? "0" + day : day);
 
+  function getUserWithGoogleProvider(users: TproviderData[]) {
+    // Check if the array contains only one user
+    if (users.length === 1) {
+      return users[0];
+    } else {
+      // If there are multiple users, find the user with providerId === "apple.com"
+      const appleUser = users.find(
+        (user: TproviderData) => user.providerId === "google.com"
+      );
+      return appleUser;
+    }
+  }
   const handleGoogleSignUp = async () => {
     try {
       const returnValue = await googleSignIn();
-
-      console.log("googleData", returnValue);
+      const googleUserData = getUserWithGoogleProvider(
+        returnValue.user?.providerData as TproviderData[]
+      );
       const nameArray = returnValue?.user?.displayName?.split(" ") ?? "";
 
       mutate(
-        // {
-        //   providerId: returnValue.providerId,
-        //   displayName: returnValue.user.displayName,
-        //   uid: returnValue.user.uid,
-        //   email: returnValue.user.email,
-        //   phoneNumber: returnValue.user.phoneNumber,
-        //   photoURL: returnValue.user.photoURL,
-        //   fcmToken: pushToken,
-        // },
         {
-          provider: returnValue.providerId,
+          provider: "google",
           // displayName: returnValue.user.displayName,
-          id: returnValue.user?.providerData?.[0]?.uid,
+          id: googleUserData?.uid,
           name: returnValue.user.displayName,
           email: returnValue.user.email,
           phoneNumber: returnValue.user.phoneNumber,
@@ -75,6 +98,93 @@ const SignContent = () => {
           onSuccess(data) {
             const res = data?.data?.data as TUser;
 
+            moengage.add_unique_user_id(res?.user_id);
+            moengage.add_first_name(res?.firstname);
+            moengage.add_last_name(res?.lastname);
+            moengage.add_email(res?.email);
+            moengage.add_mobile(res?.phoneNumber);
+            handleEventTracking("web_parent_login", {
+              user_id: res?.user_id,
+              login_platform: "web",
+              subscription_status: res?.status,
+              login_date: formattedDate,
+              login_method: "google",
+            });
+
+            // notifications.show({
+            //   title: `Notification`,
+            //   message: data.data.message,
+            // });
+            setUser({ ...res });
+            navigate("/packages");
+          },
+
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    } catch (error) {
+      notifications.show({
+        title: `Notification`,
+        message: getApiErrorMessage(error),
+      });
+    }
+  };
+
+  function getUserWithAppleProvider(users: TproviderData[]) {
+    // Check if the array contains only one user
+    if (users.length === 1) {
+      return users[0];
+    } else {
+      // If there are multiple users, find the user with providerId === "apple.com"
+      const appleUser = users.find(
+        (user: TproviderData) => user.providerId === "apple.com"
+      );
+      return appleUser;
+    }
+  }
+
+  const handleAppleSignIn = async () => {
+    try {
+      const returnValue = await appleSignIn();
+
+      const appleUserData = getUserWithAppleProvider(
+        returnValue.user?.providerData as TproviderData[]
+      );
+      const nameArray = appleUserData?.displayName?.split(" ") ?? "";
+
+      mutate(
+        {
+          provider: "apple",
+          // displayName: returnValue.user.displayName,
+          id: appleUserData?.uid,
+          name: returnValue.user.displayName,
+          email: returnValue.user.email,
+          phoneNumber: returnValue.user.phoneNumber,
+          photoURL: returnValue.user.photoURL,
+          fcmToken: pushToken,
+          first_name: nameArray[0],
+          last_name: nameArray[1],
+        },
+        {
+          onSuccess(data) {
+            const res = data?.data?.data as TUser;
+            moengage.add_unique_user_id(res?.user_id);
+            moengage.add_first_name(res?.firstname);
+            moengage.add_last_name(res?.lastname);
+            moengage.add_email(res?.email);
+            moengage.add_mobile(res?.phoneNumber);
+            handleEventTracking("web_parent_login", {
+              user_id: res?.user_id,
+              login_platform: "web",
+              subscription_status: res?.status,
+              login_date: formattedDate,
+              login_method: "apple",
+            });
             // notifications.show({
             //   title: `Notification`,
             //   message: data.data.message,
@@ -101,7 +211,6 @@ const SignContent = () => {
   const handleFacebookSignUp = async () => {
     try {
       const returnValue = await facebookSignIn();
-      console.log("googleData", returnValue);
       const nameArray = returnValue?.user?.displayName?.split(" ") ?? "";
 
       mutate(
@@ -115,7 +224,7 @@ const SignContent = () => {
         //   fcmToken: pushToken,
         // },
         {
-          provider: returnValue.providerId,
+          provider: "facebook",
           // displayName: returnValue.user.displayName,
           id: returnValue.user?.providerData?.[0]?.uid,
           name: returnValue.user.displayName,
@@ -129,7 +238,18 @@ const SignContent = () => {
         {
           onSuccess(data) {
             const res = data?.data?.data as TUser;
-
+            moengage.add_unique_user_id(res?.user_id);
+            moengage.add_first_name(res?.firstname);
+            moengage.add_last_name(res?.lastname);
+            moengage.add_email(res?.email);
+            moengage.add_mobile(res?.phoneNumber);
+            handleEventTracking("web_parent_login", {
+              user_id: res?.user_id,
+              login_platform: "web",
+              subscription_status: res?.status,
+              login_date: formattedDate,
+              login_method: "FB",
+            });
             // notifications.show({
             //   title: `Notification`,
             //   message: data.data.message,
@@ -208,7 +328,11 @@ const SignContent = () => {
               >
                 <FcGoogle size={20} className={" mx-auto"} />
               </Button>
-              <Button size="full" varient="outlined">
+              <Button
+                onClick={handleAppleSignIn}
+                size="full"
+                varient="outlined"
+              >
                 <BsApple size={20} className={" mx-auto"} color={"black"} />
               </Button>
               <Button

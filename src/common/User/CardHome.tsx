@@ -18,6 +18,10 @@ import { TStoryContent } from "@/api/types";
 import { Progress } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import "./cardhome.css";
+import moengage from "@moengage/web-sdk";
+import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
+import { formattedDate, handleEventTracking } from "@/api/moengage";
 
 export type CardProps = {
   id?: number;
@@ -29,6 +33,7 @@ export type CardProps = {
   pages?: TStoryContent[];
   pages_read?: number;
   timespent?: number;
+  media_type?: string;
   goTo?: () => void;
 };
 
@@ -40,6 +45,8 @@ const CardHome = ({
   pages_read,
   pages,
   hasRage,
+  category,
+  media_type,
   timespent,
   ref,
 }: TStoryContent & {
@@ -57,7 +64,42 @@ const CardHome = ({
   const range =
     pagesLength > 0 ? Math.ceil((100 / pagesLength) * (pagesRead || 0)) : 0;
 
+  const [user] = useStore(getUserState);
+
+  function formatTimeComponent(component: number) {
+    return component < 10 ? "0" + component : component;
+  }
+  const currentTime = new Date();
+  // Extract hours, minutes, and seconds
+  const hours = currentTime.getHours();
+  const minutes = currentTime.getMinutes();
+  const seconds = currentTime.getSeconds();
+  // Formatting the time components
+  const timeString =
+    formatTimeComponent(hours) +
+    ":" +
+    formatTimeComponent(minutes) +
+    ":" +
+    formatTimeComponent(seconds);
+
   const handleClick = () => {
+    moengage.track_event(
+      `${
+        user?.role == "teacher"
+          ? "teacher"
+          : user?.role == "user"
+          ? "parent"
+          : "school"
+      }_lesson_started`,
+      {
+        user_id: user?.user_id,
+        profile_id: sessionStorage.getItem("profileId") || 0,
+        lession_id: id,
+        lession_category: category,
+        media_type: media_type,
+        start_time: timeString,
+      }
+    );
     if (goTo) goTo();
 
     sessionStorage.setItem("contentId", id?.toString() as string);
@@ -70,7 +112,6 @@ const CardHome = ({
         : "1"
     );
   };
-  const [visiblee, setVisiblee] = useState(false);
   const profileId = sessionStorage.getItem("profileId");
   const { data, refetch } = useGetLikedContent(profileId as string);
   const likeContents: TStoryContent[] = data?.data.data.records;
@@ -87,7 +128,21 @@ const CardHome = ({
         },
         {
           onSuccess(data) {
-            // console.log("success", data.data.message);
+            handleEventTracking(
+              `${
+                user?.role == "teacher"
+                  ? "teacher"
+                  : user?.role == "user"
+                  ? "parent"
+                  : "school"
+              }_favorited`,
+              {
+                user_id: user?.user_id,
+                profile_id: sessionStorage.getItem("profileId"),
+                date_favorited: formattedDate,
+                lesson_name: name,
+              }
+            );
             // const res = data?.data?.data as TUser;
             // setUser({ ...res });
             refetch();
@@ -153,11 +208,6 @@ const CardHome = ({
           className=" rounded-xl card"
           wrapperClassName="card 
           "
-          onMouseMove={() => {
-            setVisiblee(true);
-            console.log(visiblee);
-          }}
-          onMouseMoveCapture={() => setVisiblee(false)}
         />
 
         <span className=" card-hover bg-[rgba(0,0,0,.5)] hidden  absolute left-0 top-[0px] card transition-all duration-100   z-50  rounded-xl">

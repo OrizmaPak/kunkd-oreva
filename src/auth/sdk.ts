@@ -2,6 +2,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   FacebookAuthProvider,
+  OAuthProvider,
   signOut,
 } from "firebase/auth";
 import { auth } from "../firebase";
@@ -23,6 +24,12 @@ export const googleSignIn = async () => {
 export const facebookSignIn = async () => {
   const provider = new FacebookAuthProvider();
 
+  const result = await signInWithPopup(auth, provider);
+  return result;
+};
+
+export const appleSignIn = async () => {
+  const provider = new OAuthProvider("apple.com");
   const result = await signInWithPopup(auth, provider);
   return result;
 };

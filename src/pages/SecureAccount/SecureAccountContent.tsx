@@ -16,14 +16,13 @@ import PasswordEye from "@/assets/passwordeye.svg";
 // import { createUserWithEmailAndPassword } from "firebase/auth";
 // import { auth } from "@/firebase";
 // import { logOut } from "@/auth/sdk";
-import { getUserState } from "@/store/authStore";
-import useStore from "@/store/index";
+// import { getUserState } from "@/store/authStore";
+// import useStore from "@/store/index";
 
 const SecureAccountContent = () => {
   const navigate = useNavigate();
   const { isLoading, mutate } = useSetPassword();
-  const [user] = useStore(getUserState);
-  console.log("user----------", user);
+  // const [user] = useStore(getUserState);
 
   const schema: ZodType<FormData> = z
     .object({
@@ -57,7 +56,6 @@ const SecureAccountContent = () => {
           //   sessionStorage.getItem("parentemail") as string,
           //   datta.password as string
           // );
-          // console.log("user", userCredentils);
           notifications.show({
             title: `Notification`,
             message: data.data.message,

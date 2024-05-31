@@ -22,7 +22,6 @@ const TabInReadingPage = () => {
     navigate(`${user?.role === "user" ? "/parent" : "/school"}/${val}`, {
       preventScrollReset: false,
     });
-    console.log("scrollto", tabRef.current);
     // if (tabRef.current) {
     //   tabRef.current.scrollTo(0, 0);
     // }

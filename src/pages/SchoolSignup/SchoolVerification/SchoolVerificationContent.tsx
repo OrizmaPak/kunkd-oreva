@@ -16,12 +16,25 @@ import { getUserState } from "@/store/authStore";
 import useStore from "@/store";
 import { TUser } from "@/api/types";
 import { useState, useEffect } from "react";
+import { handleEventTracking } from "@/api/moengage";
+import moengage from "@moengage/web-sdk";
 
 const SchoolVerificationContent = () => {
   const navigate = useNavigate();
   const { isLoading, mutate } = useVerifyOtp();
   const [, setUser] = useStore(getUserState);
   // const [isActive, setIsActive] = useState(false);
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1; // Adding 1 because getMonth() returns zero-based index
+  const day = currentDate.getDate();
+  const formattedDate =
+    year +
+    "-" +
+    (month < 10 ? "0" + month : month) +
+    "-" +
+    (day < 10 ? "0" + day : day);
+
   const [secondsLeft, setSecondsLeft] = useState(60);
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -59,6 +72,23 @@ const SchoolVerificationContent = () => {
           notifications.show({
             title: `Notification`,
             message: data.data.message,
+          });
+          moengage.add_unique_user_id(res?.user_id);
+          moengage.add_first_name(res?.firstname);
+          moengage.add_last_name(res?.lastname);
+          moengage.add_email(res?.email);
+          moengage.add_mobile(res?.phoneNumber);
+          handleEventTracking("web_school_registered", {
+            email_address: res?.email,
+            user_id: res?.user_id,
+            registration_date: formattedDate,
+            schoolname: res?.school?.name,
+            registration_method: "manual",
+            registration_platform: "webapp",
+          });
+          handleEventTracking("school_otp_verification_status", {
+            school_id: res?.user_id,
+            verification_status: "true",
           });
           setUser({ ...res });
           navigate("/schoolcongratulations");
