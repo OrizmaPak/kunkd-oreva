@@ -31,6 +31,10 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
       .min(2, { message: "Last name must be at least 2 characters long" })
       .max(40, { message: "Last name must not exceed 30 characters" }),
     email: z.string().email(),
+    phone: z
+      .string()
+      .min(11, { message: "Phone number must not less than 11 characters" })
+      .max(14, { message: "Phone number must not more than 14 characters" }),
   });
 
   const {
@@ -98,6 +102,14 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
                   type="text"
                   placeholder="Last Name"
                   reg={register("lastname")}
+                  errorMsg={errors.lastname?.message}
+                />
+              </p>
+              <p className="my-8">
+                <InputFormat
+                  type="number"
+                  placeholder="Phone number"
+                  reg={register("phone")}
                   errorMsg={errors.lastname?.message}
                 />
               </p>

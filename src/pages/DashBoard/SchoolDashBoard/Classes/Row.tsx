@@ -8,6 +8,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import ChangeProfileStatus from "../Teachers/ChangeProfileStatus";
 import { TClassList } from "./Classes";
+import { formattedDate, handleEventTracking } from "@/api/moengage";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
 
 const Row = ({
   data,
@@ -21,6 +24,7 @@ const Row = ({
   const [currentClicked, setCucrrentClicked] = useState(0);
 
   const queryClient = useQueryClient();
+  const [user] = useStore(getUserState);
 
   const { mutate, isLoading } = useDisableClass();
   const { mutate: mutateActiveClass, isLoading: activeLoading } =
@@ -32,6 +36,10 @@ const Row = ({
         { class_id: currentClicked },
         {
           onSuccess(data) {
+            handleEventTracking("disable_class", {
+              school_id: user?.user_id,
+              disable_date: formattedDate,
+            });
             queryClient.invalidateQueries({ queryKey: ["GetClassList"] });
             notifications.show({
               title: `Notification`,

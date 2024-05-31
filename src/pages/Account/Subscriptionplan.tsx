@@ -12,8 +12,13 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { BiSolidEdit } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import moengage from "@moengage/web-sdk";
+import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
 
 const Subscriptionplan = () => {
+  const [user] = useStore(getUserState);
+
   const navigate = useNavigate();
   const { data } = useGetPlans();
   const { mutate, isLoading } = useCancelSubscription();
@@ -21,9 +26,41 @@ const Subscriptionplan = () => {
   const [openPlan, setOpenPlan] = useState(false);
   const stringObject = sessionStorage.getItem("user");
   const userObject = JSON.parse(stringObject as string);
+  function formatTimeComponent(component: number) {
+    return component < 10 ? "0" + component : component;
+  }
+  const currentTime = new Date();
+  // Extract hours, minutes, and seconds
+  const hours = currentTime.getHours();
+  const minutes = currentTime.getMinutes();
+  const seconds = currentTime.getSeconds();
+  // Formatting the time components
+  const timeString =
+    formatTimeComponent(hours) +
+    ":" +
+    formatTimeComponent(minutes) +
+    ":" +
+    formatTimeComponent(seconds);
+
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1; // Adding 1 because getMonth() returns zero-based index
+  const day = currentDate.getDate();
+  const formattedDate =
+    year +
+    "-" +
+    (month < 10 ? "0" + month : month) +
+    "-" +
+    (day < 10 ? "0" + day : day);
+
   const handleCancelSubscription = () => {
     mutate("data", {
       onSuccess(data) {
+        moengage.track_event("web_subscription_cancelled", {
+          user_id: user?.user_id,
+          date: formattedDate,
+          time: timeString,
+        });
         notifications.show({
           title: `Notification`,
           message: data.data.message,

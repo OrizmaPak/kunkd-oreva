@@ -27,6 +27,7 @@ import InnerWrapper from "@/common/User/InnerWrapper";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
 import { useNavigate } from "react-router-dom";
+import { handleEventTracking } from "@/api/moengage";
 
 const Quiz = () => {
   const contentId = sessionStorage.getItem("contentId");
@@ -454,6 +455,22 @@ const Result = ({
   setShowRemark: () => void;
 }) => {
   const { mutate, isLoading } = useSaveQuiz();
+  const [user] = useStore(getUserState);
+  function formatTimeComponent(component: number) {
+    return component < 10 ? "0" + component : component;
+  }
+  const currentTime = new Date();
+  // Extract hours, minutes, and seconds
+  const hours = currentTime.getHours();
+  const minutes = currentTime.getMinutes();
+  const seconds = currentTime.getSeconds();
+  // Formatting the time components
+  const timeString =
+    formatTimeComponent(hours) +
+    ":" +
+    formatTimeComponent(minutes) +
+    ":" +
+    formatTimeComponent(seconds);
 
   const handleSaveQuiz = () => {
     mutate(
@@ -464,6 +481,24 @@ const Result = ({
       },
       {
         onSuccess(data) {
+          handleEventTracking(
+            `${
+              user?.role == "teacher"
+                ? "teacher"
+                : user?.role == "user"
+                ? "parent"
+                : "school"
+            }_quiz_completed`,
+            {
+              user_id: user?.user_id,
+              profile_d: sessionStorage.getItem("profileId"),
+              lesson_id: sessionStorage.getItem("contentId"),
+              lesson_category: "stories",
+              media_type: "text",
+              start_time: timeString,
+              quiz_score: (100 / answers.length) * attempted.length,
+            }
+          );
           setShowRemark();
           notifications.show({
             title: `Notification`,

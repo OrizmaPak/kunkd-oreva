@@ -22,6 +22,7 @@ import { TRequestStudents } from "@/pages/DashBoard/TeacherDashboard/Request/Req
 import { LuUser2 } from "react-icons/lu";
 import { logOut } from "@/auth/sdk";
 import "./SchoolHeader.css";
+import { handleEventTracking } from "@/api/moengage";
 
 type THints = {
   id: number;
@@ -61,7 +62,32 @@ const SchoolHeader = ({
     }
   };
 
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1;
+  const day = currentDate.getDate();
+  const formattedDate =
+    year +
+    "-" +
+    (month < 10 ? "0" + month : month) +
+    "-" +
+    (day < 10 ? "0" + day : day);
+
   const handLogOut = () => {
+    handleEventTracking(
+      `web_${
+        user?.role == "teacher"
+          ? "teacher"
+          : user?.role == "user"
+          ? "parent"
+          : "school"
+      }
+_logout`,
+      {
+        user_id: user?.user_id,
+        login_date: formattedDate,
+      }
+    );
     logOut();
     sessionStorage.clear();
     sessionStorage.clear();

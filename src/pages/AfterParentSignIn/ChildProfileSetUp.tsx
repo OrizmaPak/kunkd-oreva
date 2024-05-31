@@ -28,6 +28,8 @@ import { useNavigate } from "react-router-dom";
 
 import { MdClose } from "react-icons/md";
 import { selectAvatarType } from "./SelectProfile";
+import moengage from "@moengage/web-sdk";
+
 export type avatarType = {
   name: string;
   image: string;
@@ -312,6 +314,7 @@ export const SelectAvatar = ({
 }) => {
   const [selected, setSelected] = useState(0);
   const { isLoading: isLoadingAvatar, data, error } = useGetAvatars();
+  const [user] = useStore(getUserState);
 
   // const arrayAvatar = data?.data.data.avatars;
   const selectedAv = data?.data?.data?.avatars.filter(
@@ -319,6 +322,21 @@ export const SelectAvatar = ({
   )[0];
 
   const { isLoading, mutate } = useProfle();
+  function formatTimeComponent(component: number) {
+    return component < 10 ? "0" + component : component;
+  }
+  const currentTime = new Date();
+  // Extract hours, minutes, and seconds
+  const hours = currentTime.getHours();
+  const minutes = currentTime.getMinutes();
+  const seconds = currentTime.getSeconds();
+  // Formatting the time components
+  const timeString =
+    formatTimeComponent(hours) +
+    ":" +
+    formatTimeComponent(minutes) +
+    ":" +
+    formatTimeComponent(seconds);
 
   const onSubmit = () => {
     mutate(
@@ -335,6 +353,13 @@ export const SelectAvatar = ({
           notifications.show({
             title: `Notification`,
             message: data.data.message,
+          });
+
+          moengage.track_event("web_add_child", {
+            user_id: user?.user_id,
+            child_name: name,
+            child_age: age,
+            date_added: timeString,
           });
 
           onContinue();

@@ -44,6 +44,10 @@ import Wrapper from "@/common/User/Wrapper";
 import InnerWrapper from "@/common/User/InnerWrapper";
 import TabInReadingPage from "../AfterParentSignIn/TabInReadingPage";
 import "./BookLayout.css";
+import moengage from "@moengage/web-sdk";
+import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
+
 // import useTimeSpent from "@/hooks/useTimeSpent";
 
 // type TAudioBook = {
@@ -475,7 +479,22 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
   const contentId = sessionStorage.getItem("contentId");
   const { mutate: mutateLearning } = useLearningHour();
   const [lastTime, setLastTime] = useState(0);
-
+  const [user] = useStore(getUserState);
+  function formatTimeComponent(component: number) {
+    return component < 10 ? "0" + component : component;
+  }
+  const currentTime = new Date();
+  // Extract hours, minutes, and seconds
+  const hours = currentTime.getHours();
+  const minutes = currentTime.getMinutes();
+  const seconds = currentTime.getSeconds();
+  // Formatting the time components
+  const timeString =
+    formatTimeComponent(hours) +
+    ":" +
+    formatTimeComponent(minutes) +
+    ":" +
+    formatTimeComponent(seconds);
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
 
@@ -523,6 +542,14 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
   }, [delay]);
 
   const handleAudioComplete = async () => {
+    moengage.track_event("web_lesson_completed", {
+      user_id: user?.user_id,
+      profile_id: sessionStorage.getItem("profileId") || 0,
+      lession_id: sessionStorage.getItem("coontentId"),
+      lession_category: "Audiobooks",
+      media_type: "audio",
+      end_time: timeString,
+    });
     mutate(
       {
         profile_id: Number(profileId),

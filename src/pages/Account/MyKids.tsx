@@ -25,6 +25,7 @@ import { useForm } from "react-hook-form";
 import { PiStudent } from "react-icons/pi";
 import { ZodType, z } from "zod";
 import { Tclass } from "../DashBoard/SchoolDashBoard/Teachers/AddTeacherForm";
+import { getUserState } from "@/store/authStore";
 
 import { useGetProfile } from "@/api/queries";
 import useDebounce from "@/hooks/useDebounce";
@@ -40,6 +41,7 @@ import { Skeleton } from "@mantine/core";
 import { motion } from "framer-motion";
 import { AiOutlineClose } from "react-icons/ai";
 import { MdClose } from "react-icons/md";
+import { handleEventTracking } from "@/api/moengage";
 
 const MyKids = () => {
   const [profile] = useStore(getProfileState);
@@ -543,6 +545,7 @@ const ConnectTOSchool = ({
   const debounceValue = useDebounce(search, 500);
   const { data: schoolCurData } = useGetSchoolProfileForStudent(debounceValue);
   const schData = schoolCurData?.data?.data;
+  const [user] = useStore(getUserState);
 
   // const profileId = localStorage.getItem("profileId");
   const queryClient = useQueryClient();
@@ -569,17 +572,22 @@ const ConnectTOSchool = ({
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const submitData = async (data: FormData) => {
+  const submitData = async (datta: FormData) => {
     mutate(
       {
         profile_id: Number(profileId),
-        firstname: data.firstname,
-        lastname: data.lastname,
+        firstname: datta.firstname,
+        lastname: datta.lastname,
         school_id: schData?.id,
-        class_id: Number(data?.classid),
+        class_id: Number(datta?.classid),
       },
       {
         onSuccess(data) {
+          handleEventTracking("connect_to_school", {
+            user_id: user?.user_id,
+            profile_id: sessionStorage.getItem("profileId"),
+            student_name: datta?.firstname + " " + datta?.lastname,
+          });
           closeModal();
           queryClient.invalidateQueries({ queryKey: querykeys.profiles });
           notifications.show({

@@ -18,11 +18,6 @@
 //     return prev.concat(current?.data?.records);
 //   }, []);
 
-//   console.log(
-//     "audibooks,",
-//     data?.pages.map((el) => el?.data?.records)
-//   );
-
 //   const navigate = useNavigate();
 
 //   return (

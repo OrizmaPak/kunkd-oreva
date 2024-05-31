@@ -10,6 +10,9 @@ import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { TClassList } from "../Classes/Classes";
 import EditIcon from "@/assets/editicon24.png";
+import { formattedDate, handleEventTracking } from "@/api/moengage";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
 
 const EditAssignedClass = ({
   onClose,
@@ -23,6 +26,7 @@ const EditAssignedClass = ({
   const { data } = useGetClassList();
   const classList = data?.data.data.records;
   const { mutate, isLoading } = useReAssignTeacher();
+  const [user] = useStore(getUserState);
 
   const schema: ZodType<FormData> = z.object({
     classid: z.string().min(1, { message: "Class Id is invalid" }),
@@ -34,14 +38,19 @@ const EditAssignedClass = ({
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const submitData = async (data: FormData) => {
+  const submitData = async (datta: FormData) => {
     mutate(
       {
         user_id: currentClicked,
-        class_id: Number(data?.classid),
+        class_id: Number(datta?.classid),
       },
       {
         onSuccess(data) {
+          handleEventTracking("edit_teacher", {
+            school_id: user?.user_id,
+            class_id: datta?.classid,
+            date_updated: formattedDate,
+          });
           queryClient.invalidateQueries({ queryKey: ["GetClassList"] });
           queryClient.invalidateQueries({ queryKey: ["GetTeacherList"] });
 

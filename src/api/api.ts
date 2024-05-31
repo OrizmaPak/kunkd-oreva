@@ -163,7 +163,7 @@ export const GetLikedContent = (profileId: string) => {
 
 // Socila Login
 export const SocialLogin = (payload: TLoginData) => {
-  return axios.post("/social/auth/web", payload);
+  return axios.post("/social/auth", payload);
 };
 
 export const UpdateSchProfile = (payload: TUdateSchProfileData) => {

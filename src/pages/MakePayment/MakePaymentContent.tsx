@@ -12,6 +12,9 @@ import { useNavigate } from "react-router-dom";
 import PayWitStripButton from "./StripButton";
 import StripWrapper, { TStripe } from "./StripWrapper";
 import { ImCancelCircle } from "react-icons/im";
+import moengage from "@moengage/web-sdk";
+import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
 
 type TPayStack = {
   access_code: string;
@@ -30,6 +33,7 @@ const payInit: TPayStack = {
 };
 
 const MakePaymentContent = () => {
+  const [user] = useStore(getUserState);
   const planId = sessionStorage.getItem("planId");
   const currencyIso3 = sessionStorage.getItem("currency_iso3");
   const navigate = useNavigate();
@@ -76,6 +80,21 @@ const MakePaymentContent = () => {
   };
 
   const initializePayment = usePaystackPayment(options);
+  function formatTimeComponent(component: number) {
+    return component < 10 ? "0" + component : component;
+  }
+  const currentTime = new Date();
+  // Extract hours, minutes, and seconds
+  const hours = currentTime.getHours();
+  const minutes = currentTime.getMinutes();
+  const seconds = currentTime.getSeconds();
+  // Formatting the time components
+  const timeString =
+    formatTimeComponent(hours) +
+    ":" +
+    formatTimeComponent(minutes) +
+    ":" +
+    formatTimeComponent(seconds);
 
   useEffect(() => {
     const res = payStatckData;
@@ -89,6 +108,18 @@ const MakePaymentContent = () => {
 
             {
               onSuccess(data) {
+                moengage.track_event("web_subscribed", {
+                  user_id: user?.user_id,
+                  subsription_plan: "annual",
+                  date: timeString,
+                  amount: payStatckData?.amount,
+                  currency:
+                    currencyIso3 === "NG"
+                      ? "NGN"
+                      : currencyIso3 === "UK"
+                      ? "GBP"
+                      : "USD",
+                });
                 // window.location.href =
                 // "https://dev-kundakids.vercel.app/congratulations";
                 // window.location.href =

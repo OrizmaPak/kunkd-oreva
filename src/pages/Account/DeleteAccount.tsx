@@ -4,14 +4,60 @@ import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useNavigate } from "react-router-dom";
 import Button from "@/components/Button";
+import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
+import { handleEventTracking } from "@/api/moengage";
+
 const DeleteAccount = ({ onCancel }: { onCancel: () => void }) => {
+  const [user] = useStore(getUserState);
+
   const navigate = useNavigate();
   const { mutate, isLoading } = useRemoveAccount();
+  function formatTimeComponent(component: number) {
+    return component < 10 ? "0" + component : component;
+  }
+  const currentTime = new Date();
+  // Extract hours, minutes, and seconds
+  const hours = currentTime.getHours();
+  const minutes = currentTime.getMinutes();
+  const seconds = currentTime.getSeconds();
+  // Formatting the time components
+  const timeString =
+    formatTimeComponent(hours) +
+    ":" +
+    formatTimeComponent(minutes) +
+    ":" +
+    formatTimeComponent(seconds);
+
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1; // Adding 1 because getMonth() returns zero-based index
+  const day = currentDate.getDate();
+  const formattedDate =
+    year +
+    "-" +
+    (month < 10 ? "0" + month : month) +
+    "-" +
+    (day < 10 ? "0" + day : day);
   const handleRemoveAccount = () => {
     mutate(
       {},
       {
         async onSuccess(data) {
+          handleEventTracking(
+            `${
+              user?.role == "teacher"
+                ? "teacher"
+                : user?.role == "user"
+                ? "parent"
+                : "school"
+            }_delete_account`,
+            {
+              user_id: user?.user_id,
+              date_deleted: formattedDate,
+              time_deleted: timeString,
+            }
+          );
           sessionStorage.clear();
           onCancel();
           navigate("/");
