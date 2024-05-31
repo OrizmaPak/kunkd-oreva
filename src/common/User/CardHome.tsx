@@ -21,6 +21,7 @@ import "./cardhome.css";
 import moengage from "@moengage/web-sdk";
 import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
+import { formattedDate, handleEventTracking } from "@/api/moengage";
 
 export type CardProps = {
   id?: number;
@@ -82,15 +83,23 @@ const CardHome = ({
     formatTimeComponent(seconds);
 
   const handleClick = () => {
-    console.log("Categorie", category);
-    moengage.track_event("web_lesson_started", {
-      user_id: user?.user_id,
-      profile_id: sessionStorage.getItem("profileId") || 0,
-      lession_id: id,
-      lession_category: category,
-      media_type: media_type,
-      start_time: timeString,
-    });
+    moengage.track_event(
+      `${
+        user?.role == "teacher"
+          ? "teacher"
+          : user?.role == "user"
+          ? "parent"
+          : "school"
+      }_lesson_started`,
+      {
+        user_id: user?.user_id,
+        profile_id: sessionStorage.getItem("profileId") || 0,
+        lession_id: id,
+        lession_category: category,
+        media_type: media_type,
+        start_time: timeString,
+      }
+    );
     if (goTo) goTo();
 
     sessionStorage.setItem("contentId", id?.toString() as string);
@@ -120,7 +129,21 @@ const CardHome = ({
         },
         {
           onSuccess(data) {
-            // console.log("success", data.data.message);
+            handleEventTracking(
+              `${
+                user?.role == "teacher"
+                  ? "teacher"
+                  : user?.role == "user"
+                  ? "parent"
+                  : "school"
+              }_favorited`,
+              {
+                user_id: user?.user_id,
+                profile_id: sessionStorage.getItem("profileId"),
+                date_favorited: formattedDate,
+                lesson_name: name,
+              }
+            );
             // const res = data?.data?.data as TUser;
             // setUser({ ...res });
             refetch();
@@ -188,7 +211,6 @@ const CardHome = ({
           "
           onMouseMove={() => {
             setVisiblee(true);
-            console.log(visiblee);
           }}
           onMouseMoveCapture={() => setVisiblee(false)}
         />

@@ -7,6 +7,9 @@ import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import { TRequestStudents } from "../../TeacherDashboard/Request/Request";
+import { handleEventTracking } from "@/api/moengage";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
 
 const Row = ({
   status,
@@ -20,15 +23,20 @@ const Row = ({
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const queryClient = useQueryClient();
-
+  const [user] = useStore(getUserState);
   const { mutate, isLoading } = useDisableSchoolStudent();
+  const datta = data;
   const handleDisableSchoolStudent = async () => {
     mutate(
-      { student_id: data?.id },
+      { student_id: datta?.id },
       {
         onSuccess(data) {
           queryClient.invalidateQueries({ queryKey: ["GetStudents"] });
-
+          handleEventTracking("disable_student", {
+            school_id: user?.user_id,
+            profile_id: datta?.id,
+            student_name: datta?.firstname,
+          });
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -66,7 +74,7 @@ const Row = ({
         />
       </Modal>
       <div>
-        <div className="grid   grid-cols-[450px_1fr_150px_1fr_1fr]  py-3  px-8 border-b-2 border-[#F2F4F7]">
+        <div className="grid   grid-cols-[450px_1fr_150px]  py-3  px-8 border-b-2 border-[#F2F4F7] ">
           <div
             onClick={onClick}
             className="flex items-center justify-start gap-4 cursor-pointer "
@@ -87,7 +95,7 @@ const Row = ({
             {data.class.class_name}
           </div>
 
-          <div className="flex justify-end  gap-4  items-center">
+          <div className="flex justify-end  gap-8  items-end ">
             <button
               disabled={status !== "active"}
               onClick={() => {
@@ -104,7 +112,7 @@ const Row = ({
               onClick={onClick}
               className=" text-[#8530C1] font-Inter"
             >
-              Edit
+              View
             </button>
           </div>
         </div>

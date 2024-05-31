@@ -41,6 +41,7 @@ import { useForm } from "react-hook-form";
 import { z, ZodType } from "zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { TUser } from "@/api/types";
+import { formattedDate, handleEventTracking } from "@/api/moengage";
 
 const Profile = () => {
   const [parentEditMode, setParentEditMode] = useState(false);
@@ -845,6 +846,7 @@ const EditSchoolPersonalInfomation = ({
   const queryClient = useQueryClient();
 
   const submitData = async (data: FormData) => {
+    const datta = data;
     mutate(
       {
         contact_name: data.contact_name as string,
@@ -854,6 +856,12 @@ const EditSchoolPersonalInfomation = ({
 
       {
         onSuccess(data) {
+          handleEventTracking("edit_school_profile", {
+            school_id: user?.user_id,
+            change_contact_name: datta?.contact_name,
+            date_edited: formattedDate,
+            change_address: datta?.address,
+          });
           queryClient.invalidateQueries(["GetUpdatedProfile"]);
           setUser({
             ...user,

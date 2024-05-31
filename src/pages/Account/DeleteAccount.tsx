@@ -7,6 +7,7 @@ import Button from "@/components/Button";
 import moengage from "@moengage/web-sdk";
 import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
+import { handleEventTracking } from "@/api/moengage";
 
 const DeleteAccount = ({ onCancel }: { onCancel: () => void }) => {
   const [user] = useStore(getUserState);
@@ -44,11 +45,20 @@ const DeleteAccount = ({ onCancel }: { onCancel: () => void }) => {
       {},
       {
         async onSuccess(data) {
-          moengage.track_event("web_delete_account", {
-            user_id: user?.user_id,
-            date_deleted: formattedDate,
-            time_deleted: timeString,
-          });
+          handleEventTracking(
+            `${
+              user?.role == "teacher"
+                ? "teacher"
+                : user?.role == "user"
+                ? "parent"
+                : "school"
+            }_delete_account`,
+            {
+              user_id: user?.user_id,
+              date_deleted: formattedDate,
+              time_deleted: timeString,
+            }
+          );
           sessionStorage.clear();
           onCancel();
           navigate("/");

@@ -91,7 +91,6 @@ const SigninDash = ({
   );
 };
 const SigninDashIonsOnly = ({ active }: { active?: boolean }) => {
-  console.log(active);
   return (
     <div className="mb-20">
       <img loading="lazy" src={Checked} alt="roundmark" />

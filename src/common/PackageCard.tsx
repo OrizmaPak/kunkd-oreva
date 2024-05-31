@@ -4,6 +4,7 @@ import "./packagecard.css";
 import moengage from "@moengage/web-sdk";
 import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
+import { handleEventTracking } from "@/api/moengage";
 
 type Props = {
   recommended?: boolean;
@@ -65,7 +66,7 @@ const PackageCard = ({
         navigate("/childprofilesetup");
       }
     } else {
-      moengage.track_event("web_add_to_cart", {
+      handleEventTracking("web_add_to_cart", {
         user_id: user?.user_id,
         subsription_plan: plan,
         date: timeString,
@@ -74,6 +75,7 @@ const PackageCard = ({
           countryCode === "NG" ? "NGN" : countryCode === "UK" ? "GBP" : "USD",
       });
       sessionStorage.setItem("planId", planId?.toString());
+      sessionStorage.setItem("price", price as string);
       sessionStorage.setItem("currency_iso3", currencyIso);
       navigate("/makepayment");
     }

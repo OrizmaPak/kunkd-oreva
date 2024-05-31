@@ -12,6 +12,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import EditIcon from "@/assets/editicon24.png";
+import { formattedDate, handleEventTracking } from "@/api/moengage";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
 
 const EditClassName = ({
   editClose,
@@ -21,6 +24,7 @@ const EditClassName = ({
   currentClicked: number;
 }) => {
   const queryClient = useQueryClient();
+  const [user] = useStore(getUserState);
 
   const { mutate, isLoading } = useEditClassName();
 
@@ -34,16 +38,20 @@ const EditClassName = ({
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const submitData = async (data: FormData) => {
+  const submitData = async (datta: FormData) => {
     mutate(
       {
-        name: data?.name,
+        name: datta?.name,
         class_id: currentClicked,
       },
       {
         onSuccess(data) {
           queryClient.invalidateQueries({ queryKey: ["GetClassList"] });
-
+          handleEventTracking("edit_class", {
+            school_id: user?.user_id,
+            class_name: datta?.name,
+            date_updated: formattedDate,
+          });
           editClose();
           notifications.show({
             title: `Notification`,

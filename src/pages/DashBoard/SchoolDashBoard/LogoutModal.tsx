@@ -8,7 +8,6 @@ import DeleteIcon from "@/assets/deleteicon24.png";
 const LogoutModal = ({ onCloseModal }: { onCloseModal: () => void }) => {
   const navigate = useNavigate();
   const [profiles, setProfiles] = useStore(getProfileState);
-  console.log(profiles);
   const handLogOut = () => {
     sessionStorage.clear();
     setProfiles([]);

@@ -27,7 +27,6 @@ axiosIntance.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log("err status", error.response?.data);
     if (error.response?.data?.message === "Missing or malformed JWT") {
       sessionStorage.clear();
       sessionStorage.clear();

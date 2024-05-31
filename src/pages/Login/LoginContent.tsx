@@ -1,7 +1,7 @@
 import { getApiErrorMessage } from "@/api/helper";
 import { useLogin, useSocialLogin } from "@/api/queries";
 import { TUser } from "@/api/types";
-import { facebookSignIn, googleSignIn } from "@/auth/sdk";
+import { appleSignIn, facebookSignIn, googleSignIn } from "@/auth/sdk";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import Button from "@/components/Button";
 import { getUserState } from "@/store/authStore";
@@ -24,23 +24,14 @@ import InputFormat from "../../common/InputFormat";
 // import { auth } from "@/firebase";
 import { logOut } from "@/auth/sdk";
 import { useEffect } from "react";
+import { TproviderData } from "../Signup/SignupContent";
+import { formattedDate, handleEventTracking } from "@/api/moengage";
 
 const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
   const [pushToken, ,] = useStore(getPushTokenState);
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth() + 1; // Adding 1 because getMonth() returns zero-based index
-  const day = currentDate.getDate();
-  const formattedDate =
-    year +
-    "-" +
-    (month < 10 ? "0" + month : month) +
-    "-" +
-    (day < 10 ? "0" + day : day);
 
   const [user, setUser] = useStore(getUserState);
-  console.log(user);
   const { mutate: socialMutate, isLoading: socialisLoading } = useSocialLogin();
 
   useEffect(() => {
@@ -48,22 +39,29 @@ const LoginContent = () => {
     sessionStorage.clear();
     sessionStorage.clear();
   }, []);
+
+  function getUserWithGoogleProvider(users: TproviderData[]) {
+    // Check if the array contains only one user
+    if (users.length === 1) {
+      return users[0];
+    } else {
+      // If there are multiple users, find the user with providerId === "apple.com"
+      const appleUser = users.find(
+        (user: TproviderData) => user.providerId === "google.com"
+      );
+      return appleUser;
+    }
+  }
   const handleGoogleLogin = async () => {
     try {
       const returnValue = await googleSignIn();
 
-      const nameArray = returnValue?.user?.displayName?.split(" ") ?? "";
+      const googleUserData = getUserWithGoogleProvider(
+        returnValue.user?.providerData as TproviderData[]
+      );
+      const nameArray = googleUserData?.displayName?.split(" ") ?? "";
 
       socialMutate(
-        // {
-        //   providerId: returnValue?.providerId,
-        //   displayName: returnValue?.user.displayName,
-        //   uid: returnValue?.user.uid,
-        //   email: returnValue?.user.email,
-        //   phoneNumber: returnValue?.user.phoneNumber,
-        //   photoURL: returnValue?.user.photoURL,
-        // },
-
         {
           // provider: returnValue.providerId,
           provider: "google",
@@ -89,15 +87,103 @@ const LoginContent = () => {
             moengage.add_last_name(res?.lastname);
             moengage.add_email(res?.email);
             moengage.add_mobile(res?.phoneNumber);
-            moengage.track_event("web_login", {
+            handleEventTracking("web_parent_login", {
               user_id: res?.user_id,
               login_platform: "web",
               subscription_status: res?.status,
               login_date: formattedDate,
               login_method: "Google",
             });
+            // moengage.track_event("web_login", {
+            //   user_id: res?.user_id,
+            //   login_platform: "web",
+            //   subscription_status: res?.status,
+            //   login_date: formattedDate,
+            //   login_method: "Google",
+            // });
             setUser({ ...res });
             navigate("/selectprofile");
+          },
+
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    } catch (error) {
+      notifications.show({
+        title: `Notification`,
+        message: getApiErrorMessage(error),
+      });
+    }
+  };
+
+  function getUserWithAppleProvider(users: TproviderData[]) {
+    // Check if the array contains only one user
+    if (users.length === 1) {
+      return users[0];
+    } else {
+      // If there are multiple users, find the user with providerId === "apple.com"
+      const appleUser = users.find(
+        (user: TproviderData) => user.providerId === "apple.com"
+      );
+      return appleUser;
+    }
+  }
+
+  const handleAppleSignIn = async () => {
+    try {
+      const returnValue = await appleSignIn();
+
+      const appleUserData = getUserWithAppleProvider(
+        returnValue.user?.providerData as TproviderData[]
+      );
+      const nameArray = appleUserData?.displayName?.split(" ") ?? "";
+
+      mutate(
+        {
+          provider: "apple",
+          // displayName: returnValue.user.displayName,
+          id: appleUserData?.uid,
+          name: returnValue.user.displayName,
+          email: returnValue.user.email,
+          phoneNumber: returnValue.user.phoneNumber,
+          photoURL: returnValue.user.photoURL,
+          fcmToken: pushToken,
+          first_name: nameArray[0],
+          last_name: nameArray[1],
+        },
+        {
+          onSuccess(data) {
+            const res = data?.data?.data as TUser;
+            moengage.add_unique_user_id(res?.user_id);
+            moengage.add_first_name(res?.firstname);
+            moengage.add_last_name(res?.lastname);
+            moengage.add_email(res?.email);
+            moengage.add_mobile(res?.phoneNumber);
+            handleEventTracking("web_parent_login", {
+              user_id: res?.user_id,
+              login_platform: "web",
+              subscription_status: res?.status,
+              login_date: formattedDate,
+              login_method: "apple",
+            });
+            // moengage.track_event("web_login", {
+            //   user_id: res?.user_id,
+            //   login_platform: "web",
+            //   subscription_status: res?.status,
+            //   login_date: formattedDate,
+            //   login_method: "apple",
+            // });
+            // notifications.show({
+            //   title: `Notification`,
+            //   message: data.data.message,
+            // });
+            setUser({ ...res });
+            navigate("/packages");
           },
 
           onError(err) {
@@ -154,13 +240,14 @@ const LoginContent = () => {
             moengage.add_last_name(res?.lastname);
             moengage.add_email(res?.email);
             moengage.add_mobile(res?.phoneNumber);
-            moengage.track_event("web_login", {
+            handleEventTracking("web_parent_login", {
               user_id: res?.user_id,
               login_platform: "web",
               subscription_status: res?.status,
               login_date: formattedDate,
               login_method: "FB",
             });
+
             setUser({ ...res });
             navigate("/selectprofile");
           },
@@ -205,20 +292,28 @@ const LoginContent = () => {
         async onSuccess(data) {
           sessionStorage.clear();
           const res = data?.data?.data as TUser;
-          console.log("web_moengage before");
           moengage.add_unique_user_id(res?.user_id);
           moengage.add_first_name(res?.firstname);
           moengage.add_last_name(res?.lastname);
           moengage.add_email(res?.email);
           moengage.add_mobile(res?.phoneNumber);
-          moengage.track_event("web_login", {
-            user_id: res?.user_id,
-            login_platform: "web",
-            subscription_status: res?.status,
-            login_date: formattedDate,
-            login_method: "manual",
-          });
-          console.log("web_moengage after");
+          handleEventTracking(
+            `web_${
+              res?.role == "teacher"
+                ? "teacher"
+                : res?.role == "user"
+                ? "parent"
+                : "school"
+            }
+_login`,
+            {
+              user_id: res?.user_id,
+              login_platform: "web",
+              subscription_status: res?.status,
+              login_date: formattedDate,
+              login_method: "manual",
+            }
+          );
 
           setUser({ ...res });
 
@@ -347,7 +442,7 @@ const LoginContent = () => {
             >
               <FcGoogle size={20} className={" mx-auto"} />
             </Button>
-            <Button size="full" varient="outlined">
+            <Button onClick={handleAppleSignIn} size="full" varient="outlined">
               <BsApple size={20} className={" mx-auto"} color={"black"} />
             </Button>
             <Button

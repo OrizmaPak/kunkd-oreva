@@ -28,7 +28,8 @@ export const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-getAnalytics(app);
+
+export const analyticss = getAnalytics(app);
 export const auth = getAuth(app);
 const messaging = getMessaging(app);
 export const requestPermission = () => {
@@ -41,7 +42,6 @@ export const requestPermission = () => {
       })
         .then((currentToken) => {
           if (currentToken) {
-            console.log("tokennnn", currentToken);
             useStore.getState().setToken(currentToken);
           } else {
             notifications.show({

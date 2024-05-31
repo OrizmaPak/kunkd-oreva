@@ -23,6 +23,7 @@ import { LuUser2 } from "react-icons/lu";
 import { logOut } from "@/auth/sdk";
 import "./SchoolHeader.css";
 import moengage from "@moengage/web-sdk";
+import { handleEventTracking } from "@/api/moengage";
 
 type THints = {
   id: number;
@@ -64,7 +65,7 @@ const SchoolHeader = ({
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
-  const month = currentDate.getMonth() + 1; // Adding 1 because getMonth() returns zero-based index
+  const month = currentDate.getMonth() + 1;
   const day = currentDate.getDate();
   const formattedDate =
     year +
@@ -74,10 +75,20 @@ const SchoolHeader = ({
     (day < 10 ? "0" + day : day);
 
   const handLogOut = () => {
-    moengage.track_event("web_logout", {
-      user_id: user?.user_id,
-      login_date: formattedDate,
-    });
+    handleEventTracking(
+      `web_${
+        user?.role == "teacher"
+          ? "teacher"
+          : user?.role == "user"
+          ? "parent"
+          : "school"
+      }
+_logout`,
+      {
+        user_id: user?.user_id,
+        login_date: formattedDate,
+      }
+    );
     logOut();
     sessionStorage.clear();
     sessionStorage.clear();

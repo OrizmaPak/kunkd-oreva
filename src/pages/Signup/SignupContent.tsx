@@ -16,7 +16,15 @@ import { IoCheckmarkCircleOutline, IoEllipseOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import OptionButton from "./OptionButton";
 import moengage from "@moengage/web-sdk";
-
+import { handleEventTracking } from "@/api/moengage";
+export type TproviderData = {
+  providerId: string;
+  uid: string;
+  displayName: string;
+  email: string;
+  phoneNumber: string;
+  photoURL: string;
+};
 const options = [
   {
     title: "I'm a school",
@@ -53,41 +61,31 @@ const SignContent = () => {
     "-" +
     (day < 10 ? "0" + day : day);
 
-  type TproviderData = {
-    providerId: string;
-    uid: string;
-    displayName: string;
-    email: string;
-    phoneNumber: string;
-    photoURL: string;
-  };
-  // function getUserWithGoogleProvider(users: TproviderData[]) {
-  //   // Check if the array contains only one user
-  //   if (users.length === 1) {
-  //     return users[0];
-  //   } else {
-  //     // If there are multiple users, find the user with providerId === "apple.com"
-  //     const appleUser = users.find(
-  //       (user: TproviderData) => user.providerId === "google.com"
-  //     );
-  //     return appleUser;
-  //   }
-  // }
+  function getUserWithGoogleProvider(users: TproviderData[]) {
+    // Check if the array contains only one user
+    if (users.length === 1) {
+      return users[0];
+    } else {
+      // If there are multiple users, find the user with providerId === "apple.com"
+      const appleUser = users.find(
+        (user: TproviderData) => user.providerId === "google.com"
+      );
+      return appleUser;
+    }
+  }
   const handleGoogleSignUp = async () => {
     try {
-      console.log("start running");
       const returnValue = await googleSignIn();
-      console.log("googleData", returnValue);
-      // const googleUserData = getUserWithGoogleProvider(
-      //   returnValue.user?.providerData as TproviderData[]
-      // );
+      const googleUserData = getUserWithGoogleProvider(
+        returnValue.user?.providerData as TproviderData[]
+      );
       const nameArray = returnValue?.user?.displayName?.split(" ") ?? "";
 
       mutate(
         {
           provider: "google",
           // displayName: returnValue.user.displayName,
-          id: returnValue?.user?.uid,
+          id: googleUserData?.uid,
           name: returnValue.user.displayName,
           email: returnValue.user.email,
           phoneNumber: returnValue.user.phoneNumber,
@@ -105,7 +103,7 @@ const SignContent = () => {
             moengage.add_last_name(res?.lastname);
             moengage.add_email(res?.email);
             moengage.add_mobile(res?.phoneNumber);
-            moengage.track_event("web_login", {
+            handleEventTracking("web_parent_login", {
               user_id: res?.user_id,
               login_platform: "web",
               subscription_status: res?.status,
@@ -124,7 +122,7 @@ const SignContent = () => {
           onError(err) {
             notifications.show({
               title: `Notification`,
-              message: getApiErrorMessage("errror.com"),
+              message: getApiErrorMessage(err),
             });
           },
         }
@@ -153,13 +151,11 @@ const SignContent = () => {
   const handleAppleSignIn = async () => {
     try {
       const returnValue = await appleSignIn();
-      console.log("apple", returnValue);
 
       const appleUserData = getUserWithAppleProvider(
         returnValue.user?.providerData as TproviderData[]
       );
-      const nameArray = returnValue.user.displayName?.split(" ") ?? "";
-      console.log("nameArray", nameArray);
+      const nameArray = appleUserData?.displayName?.split(" ") ?? "";
 
       mutate(
         {
@@ -182,7 +178,7 @@ const SignContent = () => {
             moengage.add_last_name(res?.lastname);
             moengage.add_email(res?.email);
             moengage.add_mobile(res?.phoneNumber);
-            moengage.track_event("web_login", {
+            handleEventTracking("web_parent_login", {
               user_id: res?.user_id,
               login_platform: "web",
               subscription_status: res?.status,
@@ -215,7 +211,6 @@ const SignContent = () => {
   const handleFacebookSignUp = async () => {
     try {
       const returnValue = await facebookSignIn();
-      console.log("googleData", returnValue);
       const nameArray = returnValue?.user?.displayName?.split(" ") ?? "";
 
       mutate(
@@ -248,7 +243,7 @@ const SignContent = () => {
             moengage.add_last_name(res?.lastname);
             moengage.add_email(res?.email);
             moengage.add_mobile(res?.phoneNumber);
-            moengage.track_event("web_login", {
+            handleEventTracking("web_parent_login", {
               user_id: res?.user_id,
               login_platform: "web",
               subscription_status: res?.status,

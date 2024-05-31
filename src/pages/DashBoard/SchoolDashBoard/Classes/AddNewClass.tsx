@@ -13,6 +13,9 @@ import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import Addicon from "@/assets/addicon24.png";
+import { formattedDate, handleEventTracking } from "@/api/moengage";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
 
 const AddNewClass = ({
   newClassClose,
@@ -21,6 +24,7 @@ const AddNewClass = ({
   newClassClose: () => void;
   openSchNotifications: () => void;
 }) => {
+  const [user] = useStore(getUserState);
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useAddClassData();
   const schema: ZodType<FormData> = z.object({
@@ -37,11 +41,16 @@ const AddNewClass = ({
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const submitData = async (data: FormData) => {
+  const submitData = async (datta: FormData) => {
     mutate(
-      { name: data.name, teacher_id: Number(data.teacher_id) },
+      { name: datta.name, teacher_id: Number(datta.teacher_id) },
       {
         onSuccess(data) {
+          handleEventTracking("add_class", {
+            class_name: datta.name,
+            school_id: user?.user_id,
+            date_created: formattedDate,
+          });
           newClassClose();
           queryClient.invalidateQueries(["GetClassList"]);
           queryClient.invalidateQueries(["GetLicense"]);

@@ -10,8 +10,11 @@ import TotalTimeSpent from "./TotalTimeSpent";
 import { useGetSchoolStudentStat } from "@/api/queries";
 import RecentCompleted from "./RecentQuiz";
 import ContentInProgress from "./Assignments/";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TStoryContent } from "@/api/types";
+import { formattedDate, handleEventTracking } from "@/api/moengage";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
 export type TSchoolStudentStat = {
   avatar: string;
   class: string;
@@ -45,6 +48,7 @@ const StudentProfile = () => {
   const id = params.studentId;
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [user] = useStore(getUserState);
 
   const { data, isLoading } = useGetSchoolStudentStat(
     id as string,
@@ -52,6 +56,27 @@ const StudentProfile = () => {
     endDate
   );
   const schoolStudentStat: TSchoolStudentStat = data?.data?.data;
+  useEffect(() => {
+    handleEventTracking(
+      `${
+        user?.role == "teacher"
+          ? "teacher"
+          : user?.role == "user"
+          ? "parent"
+          : "school"
+      }`,
+      {
+        user_id: user?.user_id,
+        student_name: schoolStudentStat?.name,
+        date_viewed: formattedDate,
+        total_time_spent: schoolStudentStat?.total_time_spent,
+        teacher_name: schoolStudentStat?.teacher_name,
+        top_interest: schoolStudentStat?.top_interest_contents,
+        recently_completed: schoolStudentStat?.parent_email,
+        learning_hours: schoolStudentStat?.learning_hours,
+      }
+    );
+  }, []);
   if (!id) {
     return <Navigate to="../" replace />;
   }

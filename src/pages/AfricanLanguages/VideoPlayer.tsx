@@ -43,9 +43,9 @@ import Wrapper from "@/common/User/Wrapper";
 import InnerWrapper from "@/common/User/InnerWrapper";
 import TabInReadingPage from "../AfterParentSignIn/TabInReadingPage";
 // import useTimeSpent from "@/hooks/useTimeSpent";
-import moengage from "@moengage/web-sdk";
 import useStore from "@/store/index";
 import { getUserState } from "@/store/authStore";
+import { handleEventTracking } from "@/api/moengage";
 
 type TRecommendedVideo = {
   id: number;
@@ -125,7 +125,6 @@ const VideoPlayer = () => {
   const media = data?.data?.data?.media;
   const video = media?.[0];
   const videoData = data?.data.data.sub_categories?.[0];
-  console.log("ddddd", videoData);
 
   const [currentVideoTime, setCurrentVideotime] = useState(0);
   const { mutate } = useContentTracking();
@@ -205,14 +204,23 @@ const VideoPlayer = () => {
     formatTimeComponent(seconds);
 
   const handleVideoComplete = async () => {
-    moengage.track_event("web_lesson_completed", {
-      user_id: user?.user_id,
-      profile_id: sessionStorage.getItem("profileId") || 0,
-      lession_id: sessionStorage.getItem("coontentId"),
-      lession_category: "African Languages",
-      media_type: "vidoe",
-      end_time: timeString,
-    });
+    handleEventTracking(
+      `${
+        user?.role == "teacher"
+          ? "teacher"
+          : user?.role == "user"
+          ? "parent"
+          : "school"
+      }_lesson_completed`,
+      {
+        user_id: user?.user_id,
+        profile_id: sessionStorage.getItem("profileId") || 0,
+        lession_id: sessionStorage.getItem("coontentId"),
+        lession_category: "African Languages",
+        media_type: "vidoe",
+        end_time: timeString,
+      }
+    );
     try {
       mutate(
         {

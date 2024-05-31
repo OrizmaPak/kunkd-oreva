@@ -39,9 +39,9 @@ import InnerWrapper from "@/common/User/InnerWrapper";
 // import useStore from "@/store/index";
 import TabInReadingPage from "@/pages/AfterParentSignIn/TabInReadingPage";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
-import moengage from "@moengage/web-sdk";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
+import { handleEventTracking } from "@/api/moengage";
 
 const Stories1 = () => {
   const [isFinish, setIsFinish] = useState(false);
@@ -676,14 +676,23 @@ const BookPagination = ({
     formatTimeComponent(seconds);
 
   const handleBookCompletedProgress = () => {
-    moengage.track_event("web_lesson_completed", {
-      user_id: user?.user_id,
-      profile_id: sessionStorage.getItem("profileId") || 0,
-      lession_id: sessionStorage.getItem("coontentId"),
-      lession_category: "stories",
-      media_type: "text",
-      end_time: timeString,
-    });
+    handleEventTracking(
+      `${
+        user?.role == "teacher"
+          ? "teacher"
+          : user?.role == "user"
+          ? "parent"
+          : "school"
+      }_lesson_completed`,
+      {
+        user_id: user?.user_id,
+        profile_id: sessionStorage.getItem("profileId") || 0,
+        lession_id: sessionStorage.getItem("coontentId"),
+        lession_category: "stories",
+        media_type: "text",
+        end_time: timeString,
+      }
+    );
     mutate(
       {
         profile_id: Number(profileId),
@@ -812,14 +821,23 @@ const WelDone = ({ content }: { content: TStoryContent }) => {
     ":" +
     formatTimeComponent(seconds);
   const navigateQuiz = () => {
-    moengage.track_event("web_quiz_started", {
-      user_id: user?.user_id,
-      profile_d: sessionStorage.getItem("profileId"),
-      lesson_id: sessionStorage.getItem("contentId"),
-      lesson_category: content?.category,
-      media_type: content?.media_type,
-      start_time: timeString,
-    });
+    handleEventTracking(
+      `${
+        user?.role == "teacher"
+          ? "teacher"
+          : user?.role == "user"
+          ? "parent"
+          : "school"
+      }_quiz_started`,
+      {
+        user_id: user?.user_id,
+        profile_d: sessionStorage.getItem("profileId"),
+        lesson_id: sessionStorage.getItem("contentId"),
+        lesson_category: content?.category,
+        media_type: content?.media_type,
+        start_time: timeString,
+      }
+    );
     sessionStorage.setItem("content", JSON.stringify(content));
     if (content.has_quiz === true) {
       navigate("quiz");

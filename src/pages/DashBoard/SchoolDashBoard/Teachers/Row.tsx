@@ -8,6 +8,9 @@ import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import { TTeacherList } from "./Teachers";
+import { formattedDate, handleEventTracking } from "@/api/moengage";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
 
 const Row = ({
   data,
@@ -24,6 +27,7 @@ const Row = ({
   const { mutate, isLoading } = useDisableSchoolTeacher();
   const { mutate: enableMutate, isLoading: enableLoading } =
     useEnableSchoolTeacher();
+  const [user] = useStore(getUserState);
 
   const handleDisableTeacher = async () => {
     if (status === "active") {
@@ -31,6 +35,10 @@ const Row = ({
         { user_id: currentClicked },
         {
           onSuccess(data) {
+            handleEventTracking("disable_teacher", {
+              school_id: user?.user_id,
+              disable_date: formattedDate,
+            });
             queryClient.invalidateQueries({ queryKey: ["GetTeacherList"] });
             notifications.show({
               title: `Notification`,

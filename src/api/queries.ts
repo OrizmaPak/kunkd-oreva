@@ -277,7 +277,6 @@ export const useGetSubCategories = () => {
 //     queryKey: ["getContentBySubId", subId, activePage],
 //     queryFn: () => GetContebtBySubCategories(subId, activePage.toString()),
 //     onSuccess(data) {
-//       console.log(data);
 //       if (activePage < Math.ceil(data?.data.data.totalRecord / 10)) {
 //         setAllSubCategoryContents((prev:TStoryContent[]) => {
 //           return[...prev, ...data?.data.data.records]});
@@ -311,7 +310,6 @@ export const useGetContebtBySubCategories = (
     queryFn: ({ pageParam = 1 }) => GetContebtBySubCategories(subId, pageParam),
     enabled: inView,
     getNextPageParam: (lastPage, allPages) => {
-      // console.log("all&last-----", { allPages, lastPage });
       const allPagesArray = allPages?.reduce((prev, current) => {
         return prev.concat(current?.data?.records);
       }, []);
@@ -319,7 +317,6 @@ export const useGetContebtBySubCategories = (
     },
     // getPreviousPageParam: (firstPage, allPages) =>} firstPage.prevCursor,
     // onSuccess: (data) => {
-    //   console.log(data);
     //   if (data) {
     //     if (activePage < Math.ceil(data?.data.data.totalRecord / 10)) {
     //       setAllSubCategoryContents((prev: TStoryContent[]) => [
@@ -419,7 +416,6 @@ export const useGetQuiz = (contentId: string) => {
     queryKey: ["GetQuiz", contentId],
     queryFn: () => GetQuiz(contentId),
     onSuccess: (response) => {
-      // console.log("quiz got called here", response);
       return response;
     },
   });

@@ -51,7 +51,6 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
   const profile = childProfile
     ? profiles?.find((each) => each.id === +childProfile)
     : profiles[0];
-  console.log("gotToHome", user, profile);
   if (!user || !profile) {
     return <Navigate to="/" replace />;
   }

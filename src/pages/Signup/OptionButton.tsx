@@ -20,7 +20,6 @@ const OptionButton = ({
   const handlleContinue = () => {
     onClick();
     setUserId(id);
-    console.log("hello----", id, userId);
   };
   return (
     <div

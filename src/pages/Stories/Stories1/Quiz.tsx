@@ -27,7 +27,7 @@ import InnerWrapper from "@/common/User/InnerWrapper";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
 import { useNavigate } from "react-router-dom";
-import moengage from "@moengage/web-sdk";
+import { handleEventTracking } from "@/api/moengage";
 
 const Quiz = () => {
   const contentId = sessionStorage.getItem("contentId");
@@ -481,15 +481,24 @@ const Result = ({
       },
       {
         onSuccess(data) {
-          moengage.track_event("web_quiz_completed", {
-            user_id: user?.user_id,
-            profile_d: sessionStorage.getItem("profileId"),
-            lesson_id: sessionStorage.getItem("contentId"),
-            lesson_category: "stories",
-            media_type: "text",
-            start_time: timeString,
-            quiz_score: (100 / answers.length) * attempted.length,
-          });
+          handleEventTracking(
+            `${
+              user?.role == "teacher"
+                ? "teacher"
+                : user?.role == "user"
+                ? "parent"
+                : "school"
+            }_quiz_completed`,
+            {
+              user_id: user?.user_id,
+              profile_d: sessionStorage.getItem("profileId"),
+              lesson_id: sessionStorage.getItem("contentId"),
+              lesson_category: "stories",
+              media_type: "text",
+              start_time: timeString,
+              quiz_score: (100 / answers.length) * attempted.length,
+            }
+          );
           setShowRemark();
           notifications.show({
             title: `Notification`,

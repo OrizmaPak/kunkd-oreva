@@ -9,6 +9,8 @@ import { useAddTeacherData } from "@/api/queries";
 import { getApiErrorMessage } from "@/api/helper";
 import { notifications } from "@mantine/notifications";
 import { Loader } from "@mantine/core";
+import { getUserState } from "@/store/authStore";
+import useStore from "@/store/index";
 
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -16,6 +18,7 @@ import { AiOutlineMail } from "react-icons/ai";
 // import { MdClose } from "react-icons/md";
 import Addicon from "@/assets/addicon24.png";
 import { z, ZodType } from "zod";
+import { formattedDate, handleEventTracking } from "@/api/moengage";
 
 export type Tclass = {
   id: number;
@@ -44,7 +47,7 @@ const AddTeacherForm = ({
 }) => {
   const { mutate, isLoading } = useAddTeacherData();
   const queryClient = useQueryClient();
-
+  const [user] = useStore(getUserState);
   const { data } = useGetClassList();
   const classList: Tclass[] = data?.data?.data.records;
   const availableClassList = classList?.filter(
@@ -69,23 +72,31 @@ const AddTeacherForm = ({
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const submitData = async (data: FormData) => {
-    console.log("Hello", data);
+  const submitData = async (datta: FormData) => {
     mutate(
       {
-        firstname: data?.firstname,
-        lastname: data?.lastname,
-        email: data?.email,
+        firstname: datta?.firstname,
+        lastname: datta?.lastname,
+        email: datta?.email,
 
         redirect_url: `${window.location.origin}/passwordsetup`,
         gender_id: 1,
         // password: data?.password,
-        class_id: Number(data?.classid),
+        class_id: Number(datta?.classid),
       },
       {
         onSuccess(data) {
+          handleEventTracking("teacher_otp_verification_status", {
+            teacher_name: datta.firstname + " " + datta.lastname,
+            verification_status: "true",
+          });
           queryClient.invalidateQueries(["GetTeacherList"]);
           queryClient.invalidateQueries(["GetLicense"]);
+          handleEventTracking("add_teacher", {
+            school_id: user?.user_id,
+            teacher_name: datta.firstname + " " + datta.lastname,
+            date_added: formattedDate,
+          });
 
           close();
           notifications.show({
