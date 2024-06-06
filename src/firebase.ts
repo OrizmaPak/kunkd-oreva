@@ -48,14 +48,14 @@ let messaging: Messaging | null;
 })();
 
 export const requestPermission = () => {
-  Notification.requestPermission().then((permission) => {
+  Notification.requestPermission().then(async (permission) => {
     // const [user] = useStore(getUserState);
 
-    if (permission === "granted") {
+    if (permission === "granted" && messaging) {
       return getToken(messaging, {
         vapidKey: `BFMoGRmjR9nphcJ4TcrwnTI7C9pLTN1Doa07RovtB3mxo60JgVEZiRR3L4qM1knGcAiwAkdRGQriTU0x0mWwpBI`,
       })
-        .then((currentToken: unknown) => {
+        .then((currentToken) => {
           if (currentToken) {
             useStore.getState().setToken(currentToken);
           } else {
@@ -89,7 +89,9 @@ requestPermission();
 
 export const onMessageListener = () =>
   new Promise((resolve) => {
-    onMessage(messaging, (payload) => {
-      resolve(payload);
-    });
+    if (messaging) {
+      onMessage(messaging, (payload) => {
+        resolve(payload);
+      });
+    }
   });

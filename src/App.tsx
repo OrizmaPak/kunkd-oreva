@@ -189,6 +189,7 @@ function App() {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("load", handleResize);
     };
+    // eslint-disable-next-line
   }, []);
 
   // Example usage
