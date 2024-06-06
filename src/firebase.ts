@@ -2,7 +2,13 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import {
+  getMessaging,
+  getToken,
+  Messaging,
+  onMessage,
+  isSupported,
+} from "firebase/messaging";
 import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
 
@@ -31,7 +37,16 @@ const app = initializeApp(firebaseConfig);
 
 export const analyticss = getAnalytics(app);
 export const auth = getAuth(app);
-const messaging = getMessaging(app);
+let messaging: Messaging | null;
+(async () => {
+  const supported = await isSupported();
+  if (supported) {
+    messaging = getMessaging(app);
+  } else {
+    console.log("Firebase Messaging is not supported in this browser.");
+  }
+})();
+
 export const requestPermission = () => {
   Notification.requestPermission().then((permission) => {
     // const [user] = useStore(getUserState);
@@ -40,7 +55,7 @@ export const requestPermission = () => {
       return getToken(messaging, {
         vapidKey: `BFMoGRmjR9nphcJ4TcrwnTI7C9pLTN1Doa07RovtB3mxo60JgVEZiRR3L4qM1knGcAiwAkdRGQriTU0x0mWwpBI`,
       })
-        .then((currentToken) => {
+        .then((currentToken: unknown) => {
           if (currentToken) {
             useStore.getState().setToken(currentToken);
           } else {
@@ -52,7 +67,7 @@ export const requestPermission = () => {
             });
           }
         })
-        .catch((err) => {
+        .catch((err: unknown) => {
           notifications.show({
             title: `Notification`,
             message: getApiErrorMessage(
