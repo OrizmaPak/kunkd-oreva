@@ -38,53 +38,66 @@ const app = initializeApp(firebaseConfig);
 export const analyticss = getAnalytics(app);
 export const auth = getAuth(app);
 export let messaging: Messaging | null;
-(async () => {
-  const supported = await isSupported();
-  if (supported) {
+
+const initializeMessaging = async () => {
+  if ((await isSupported()) && "Notification" in window) {
     messaging = getMessaging(app);
   } else {
-    console.log("Firebase Messaging is not supported in this browser.");
+    console.warn(
+      "Firebase Messaging or Notifications are not supported in this browser."
+    );
   }
-})();
+};
 
-export const requestPermission = () => {
-  Notification.requestPermission().then(async (permission) => {
-    // const [user] = useStore(getUserState);
+initializeMessaging();
 
-    if (permission === "granted" && messaging) {
-      return getToken(messaging, {
-        vapidKey: `BFMoGRmjR9nphcJ4TcrwnTI7C9pLTN1Doa07RovtB3mxo60JgVEZiRR3L4qM1knGcAiwAkdRGQriTU0x0mWwpBI`,
-      })
-        .then((currentToken) => {
-          if (currentToken) {
-            useStore.getState().setToken(currentToken);
-          } else {
+export const requestPermission = async () => {
+  if (!messaging) {
+    console.warn(
+      "Firebase Messaging or Notifications are not supported in this browser."
+    );
+    return;
+  }
+
+  if ("Notification" in window) {
+    Notification.requestPermission().then(async (permission) => {
+      // const [user] = useStore(getUserState);
+
+      if (permission === "granted" && messaging) {
+        return getToken(messaging, {
+          vapidKey: `BFMoGRmjR9nphcJ4TcrwnTI7C9pLTN1Doa07RovtB3mxo60JgVEZiRR3L4qM1knGcAiwAkdRGQriTU0x0mWwpBI`,
+        })
+          .then((currentToken) => {
+            if (currentToken) {
+              useStore.getState().setToken(currentToken);
+            } else {
+              notifications.show({
+                title: `Notification`,
+                message: getApiErrorMessage(
+                  "Failed to generate the app registration token."
+                ),
+              });
+            }
+          })
+          .catch((err: unknown) => {
             notifications.show({
               title: `Notification`,
               message: getApiErrorMessage(
-                "Failed to generate the app registration token."
+                "An error occurred when requesting to receive the token."
               ),
             });
-          }
-        })
-        .catch((err: unknown) => {
+            return err;
+          });
+      } else {
+        if (messaging) {
           notifications.show({
             title: `Notification`,
-            message: getApiErrorMessage(
-              "An error occurred when requesting to receive the token."
-            ),
+            message: getApiErrorMessage("User Permission Denied."),
           });
-          return err;
-        });
-    } else {
-      if (messaging) {
-        notifications.show({
-          title: `Notification`,
-          message: getApiErrorMessage("User Permission Denied."),
-        });
+        }
       }
-    }
-  });
+    });
+  }
 };
 
 requestPermission();
