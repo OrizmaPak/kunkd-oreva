@@ -49,4 +49,4 @@ jobs:
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
           source: "dist/*"
-          target: /var/www/v3ui
+          target: /var/www/web
