@@ -8,6 +8,7 @@ export default {
       Brico: ["Brico", "sans-serif"],
       Inter: ["Inter", "sans-serif"],
       InterReg: ["InterReg", "san-serif"],
+      DMSans: ["DMSans", "san-serif"],
     },
   },
   plugins: [],

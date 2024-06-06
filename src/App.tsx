@@ -128,6 +128,9 @@ const Request = lazy(
   () => import("./pages/DashBoard/TeacherDashboard/Request/Request")
 );
 const Stories1 = lazy(() => import("./pages/Stories/Stories1/Stories1"));
+
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy/PrivacyPolicy"));
+
 const BookLayout = lazy(() => import("./pages/AudioBooks/BookLayout"));
 const VideoPlayer = lazy(() => import("./pages/AfricanLanguages/VideoPlayer"));
 const Quiz = lazy(() => import("./pages/Stories/Stories1/Quiz"));
@@ -170,7 +173,10 @@ function App() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < window.innerHeight) {
+      const path = location.pathname;
+
+      const isPolicyPath = path.includes("privacy-policy");
+      if (window.innerWidth < window.innerHeight && !isPolicyPath) {
         open();
       } else {
         close();
@@ -228,6 +234,7 @@ function App() {
                   </>
                 }
               ></Route>
+              <Route path="privacy-policy" element={<PrivacyPolicy />}></Route>
               <Route element={<WebLayout />}>
                 {/* <Route index element={<Navigate to="login" replace />}></Route> */}
                 <Route index element={<Home />}></Route>
