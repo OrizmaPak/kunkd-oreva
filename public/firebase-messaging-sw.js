@@ -10,7 +10,7 @@ importScripts(
   "https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js"
 );
 
-//the Firebase config object
+// Firebase config object
 const firebaseConfig = {
   apiKey: "AIzaSyASg9uWg2-ewPDnCGPGYUUErNvTjt8s89Q",
   authDomain: "new-kunda-kids.firebaseapp.com",
@@ -23,13 +23,29 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(function (payload) {
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-  };
+// Check if Firebase Messaging is supported
+firebase.messaging
+  .isSupported()
+  .then((supported) => {
+    if (supported) {
+      const messaging = firebase.messaging();
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
-});
+      messaging.onBackgroundMessage((payload) => {
+        const notificationTitle = payload.notification.title;
+        const notificationOptions = {
+          body: payload.notification.body,
+        };
+
+        self.registration.showNotification(
+          notificationTitle,
+          notificationOptions
+        );
+      });
+    } else {
+      console.warn("Firebase Messaging is not supported on this browser.");
+    }
+  })
+  .catch((error) => {
+    console.error("Error checking Firebase Messaging support:", error);
+  });

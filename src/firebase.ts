@@ -37,7 +37,7 @@ const app = initializeApp(firebaseConfig);
 
 export const analyticss = getAnalytics(app);
 export const auth = getAuth(app);
-let messaging: Messaging | null;
+export let messaging: Messaging | null;
 (async () => {
   const supported = await isSupported();
   if (supported) {
@@ -77,21 +77,26 @@ export const requestPermission = () => {
           return err;
         });
     } else {
-      notifications.show({
-        title: `Notification`,
-        message: getApiErrorMessage("User Permission Denied."),
-      });
+      if (messaging) {
+        notifications.show({
+          title: `Notification`,
+          message: getApiErrorMessage("User Permission Denied."),
+        });
+      }
     }
   });
 };
 
 requestPermission();
 
-export const onMessageListener = () =>
-  new Promise((resolve) => {
+export const onMessageListener = () => {
+  return new Promise((resolve, reject) => {
     if (messaging) {
       onMessage(messaging, (payload) => {
         resolve(payload);
       });
+    } else {
+      reject("messaging not supported");
     }
   });
+};
