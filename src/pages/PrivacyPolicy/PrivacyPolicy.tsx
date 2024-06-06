@@ -9,12 +9,12 @@ const PrivacyPolicy = () => {
       </div>
       <hr />
       <div>
-        <p className=" font-DMSans header text-center font-light  tracking-wider mt-[130px]">
+        <p className=" font-DMSans header text-center font-light  tracking-wider mt-[100px] md:mt-[140px]">
           Privacy policy
         </p>
       </div>
 
-      <div className=" max-w-[560px] mx-auto text-[18px] font-DMSans font-light mt-6 tracking-wide px-6 md:px-0">
+      <div className=" max-w-[560px] mx-auto text-[14px] md:text-[18px] font-DMSans font-light mt-3 tracking-wide px-6 md:px-0">
         <div>
           <p className=" font-bold">Kunda Kids Legal and Moral Matters</p>
 
