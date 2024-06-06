@@ -1,0 +1,7 @@
+.kkLog {
+  width: clamp(6.25rem, 0.2404rem + 38.4615vw, 21.875rem);
+}
+
+.header {
+  font-size: clamp(1.875rem, 1.3942rem + 3.0769vw, 3.125rem) !important;
+}
