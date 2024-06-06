@@ -4,7 +4,7 @@ import "./PrivacyPolicy.css";
 const PrivacyPolicy = () => {
   return (
     <div className="">
-      <div className=" flex  justify-center mb-8 fixed bg-white w-full pt-4 pb-7 border border-b-[1px]">
+      <div className=" flex  justify-center mb-8 fixed bg-white w-full pt-5 pb-7 border border-b-[1px]">
         <img src={KKLogo} alt="image" className="kkLog" />
       </div>
       <hr />
