@@ -2,7 +2,13 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import {
+  getMessaging,
+  getToken,
+  Messaging,
+  onMessage,
+  isSupported,
+} from "firebase/messaging";
 import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
 
@@ -31,50 +37,79 @@ const app = initializeApp(firebaseConfig);
 
 export const analyticss = getAnalytics(app);
 export const auth = getAuth(app);
-const messaging = getMessaging(app);
-export const requestPermission = () => {
-  Notification.requestPermission().then((permission) => {
-    // const [user] = useStore(getUserState);
+export let messaging: Messaging | null;
 
-    if (permission === "granted") {
-      return getToken(messaging, {
-        vapidKey: `BFMoGRmjR9nphcJ4TcrwnTI7C9pLTN1Doa07RovtB3mxo60JgVEZiRR3L4qM1knGcAiwAkdRGQriTU0x0mWwpBI`,
-      })
-        .then((currentToken) => {
-          if (currentToken) {
-            useStore.getState().setToken(currentToken);
-          } else {
+const initializeMessaging = async () => {
+  if ((await isSupported()) && "Notification" in window) {
+    messaging = getMessaging(app);
+  } else {
+    console.warn(
+      "Firebase Messaging or Notifications are not supported in this browser."
+    );
+  }
+};
+
+initializeMessaging();
+
+export const requestPermission = async () => {
+  if (!messaging) {
+    console.warn(
+      "Firebase Messaging or Notifications are not supported in this browser."
+    );
+    return;
+  }
+
+  if ("Notification" in window) {
+    Notification.requestPermission().then(async (permission) => {
+      // const [user] = useStore(getUserState);
+
+      if (permission === "granted" && messaging) {
+        return getToken(messaging, {
+          vapidKey: `BFMoGRmjR9nphcJ4TcrwnTI7C9pLTN1Doa07RovtB3mxo60JgVEZiRR3L4qM1knGcAiwAkdRGQriTU0x0mWwpBI`,
+        })
+          .then((currentToken) => {
+            if (currentToken) {
+              useStore.getState().setToken(currentToken);
+            } else {
+              notifications.show({
+                title: `Notification`,
+                message: getApiErrorMessage(
+                  "Failed to generate the app registration token."
+                ),
+              });
+            }
+          })
+          .catch((err: unknown) => {
             notifications.show({
               title: `Notification`,
               message: getApiErrorMessage(
-                "Failed to generate the app registration token."
+                "An error occurred when requesting to receive the token."
               ),
             });
-          }
-        })
-        .catch((err) => {
+            return err;
+          });
+      } else {
+        if (messaging) {
           notifications.show({
             title: `Notification`,
-            message: getApiErrorMessage(
-              "An error occurred when requesting to receive the token."
-            ),
+            message: getApiErrorMessage("User Permission Denied."),
           });
-          return err;
-        });
-    } else {
-      notifications.show({
-        title: `Notification`,
-        message: getApiErrorMessage("User Permission Denied."),
-      });
-    }
-  });
+        }
+      }
+    });
+  }
 };
 
 requestPermission();
 
-export const onMessageListener = () =>
-  new Promise((resolve) => {
-    onMessage(messaging, (payload) => {
-      resolve(payload);
-    });
+export const onMessageListener = () => {
+  return new Promise((resolve, reject) => {
+    if (messaging) {
+      onMessage(messaging, (payload) => {
+        resolve(payload);
+      });
+    } else {
+      reject("messaging not supported");
+    }
   });
+};
