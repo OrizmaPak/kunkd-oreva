@@ -1,4 +1,4 @@
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, useState, lazy, Suspense, useLayoutEffect } from "react";
 import { Center, Loader } from "@mantine/core";
 import { Outlet, Route, Routes, useLocation } from "react-router-dom";
 import Shop from "@/pages/Shop/Shop";
@@ -18,6 +18,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { Story } from "./pages/Stories/Stories";
 import Videos from "./pages/AfricanLanguages/Videos";
 import { Books } from "./pages/AudioBooks/AudioBooks";
+import RefundPolicy from "./pages/RefundPolicy/RefundPolicy";
 const VideoV2 = lazy(() => import("./pages/AfricanLanguages/VideosV2/VideoV2"));
 const StoriesV2 = lazy(() => import("./pages/Stories/StoriesV2/StoriesV2"));
 const DefaultTab = lazy(() => import("./pages/AfterParentSignIn/DefaultTab"));
@@ -171,23 +172,26 @@ function App() {
 
   const [opened, { open, close }] = useDisclosure(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const handleResize = () => {
       const path = location.pathname;
 
       const isPolicyPath = path.includes("privacy-policy");
-      if (window.innerWidth < window.innerHeight && !isPolicyPath) {
+      const isRefundPolicyPath = path.includes("refund-policy");
+      if (isPolicyPath || isRefundPolicyPath) return;
+      if (window.innerWidth < window.innerHeight) {
         open();
       } else {
         close();
       }
     };
-    window.addEventListener("load", handleResize);
+    handleResize();
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("load", handleResize);
+      window.removeEventListener("DomContentLoaded", handleResize);
     };
     // eslint-disable-next-line
   }, []);
@@ -236,6 +240,8 @@ function App() {
                 }
               ></Route>
               <Route path="privacy-policy" element={<PrivacyPolicy />}></Route>
+              <Route path="refund-policy" element={<RefundPolicy />}></Route>
+
               <Route element={<WebLayout />}>
                 {/* <Route index element={<Navigate to="login" replace />}></Route> */}
                 <Route index element={<Home />}></Route>
