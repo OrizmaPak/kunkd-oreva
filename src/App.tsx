@@ -14,7 +14,7 @@ import moengage from "@moengage/web-sdk";
 import AudiobooksV2 from "./pages/AudioBooks/AudiobooksV2/AudiobooksV2";
 import LandScapeModal from "./components/LandScapeModal";
 import { Modal } from "@mantine/core";
-import { useDisclosure, useWindowEvent } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
 import { Story } from "./pages/Stories/Stories";
 import Videos from "./pages/AfricanLanguages/Videos";
 import { Books } from "./pages/AudioBooks/AudioBooks";
