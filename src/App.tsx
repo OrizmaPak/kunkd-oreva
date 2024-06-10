@@ -172,11 +172,27 @@ function App() {
   const [opened, { open, close }] = useDisclosure(false);
 
   useEffect(() => {
+    function isMobileView() {
+      // Check if the viewport width is less than or equal to 768 pixels (common breakpoint for mobile devices)
+      const isMobileWidth = window.matchMedia("(max-width: 768px)").matches;
+
+      // Optional: Further refine the check using the user agent
+      const userAgent = navigator.userAgent || navigator.vendor;
+      const isMobileUserAgent =
+        /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+          userAgent.toLowerCase()
+        );
+
+      return isMobileWidth && isMobileUserAgent;
+    }
     const handleResize = () => {
       const path = location.pathname;
 
       const isPolicyPath = path.includes("privacy-policy");
-      if (window.innerWidth < window.innerHeight && !isPolicyPath) {
+      if (
+        (window.innerWidth < window.innerHeight && !isPolicyPath) ||
+        (isMobileView() && !isPolicyPath)
+      ) {
         open();
       } else {
         close();
