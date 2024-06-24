@@ -6,8 +6,8 @@ import {
   useGetUpdatedProfile,
 } from "@/api/queries";
 import AddAvatarIcon from "@/assets/AddAvatarIcon.svg";
-import YaJump from "@/assets/yaa24.png";
-import LessDOwnIcon from "@/assets/lessthanIcon.svg";
+// import YaJump from "@/assets/yaa24.png";
+import LessDOwnIcon from "@/assets/backIcon.png";
 import YajSucces from "@/assets/yaacongrat24.png";
 import InputFormat from "@/common/InputFormat";
 import { FormData } from "@/common/User/FormValidation/Schema";
@@ -22,13 +22,25 @@ import { ZodType, z } from "zod";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
 import { useEffect } from "react";
-import GroupIcon from "@/assets/groupIcons.svg";
-import { STEP_1, STEP_2, STEP_3, STEP_4, STEP_5 } from "@/utils/constants";
+// import GroupIcon from "@/assets/groupIcons.svg";
+import {
+  STEP_1,
+  STEP_2,
+  STEP_3,
+  STEP_4,
+  STEP_5,
+  STEP_6,
+} from "@/utils/constants";
 import { useNavigate } from "react-router-dom";
 
 import { MdClose } from "react-icons/md";
 import { selectAvatarType } from "./SelectProfile";
 import moengage from "@moengage/web-sdk";
+import Logo from "@/assets/KundaLogo.svg";
+import facebook from "@/assets/facebook.svg";
+import insta from "@/assets/insta.svg";
+import twitter from "@/assets/twitter.svg";
+import Ema from "@/assets/ema.png";
 
 export type avatarType = {
   name: string;
@@ -40,55 +52,134 @@ const ChildProfileSetUp = ({
   setChildProfile: (val: string) => void;
 }) => {
   const [currentStep, setCurrentStep] = useState(STEP_1);
-  const [name, setName] = useState<string>("");
+  const [name, setName] = useState("");
+  const [userName, setUserName] = useState<string>("");
+  const [schoolName, setSchoolName] = useState("");
   const [age, setAge] = useState<string>("");
 
   const navigate = useNavigate();
+  const openInNewTab = (url: string) => {
+    const newWindow: Window | null = window.open(url, "_blank");
+    if (newWindow) {
+      newWindow.opener = null; // Ensure no access to the current window
+    }
+  };
   return (
     <div
-      style={{
-        backgroundImage: `url(${GroupIcon})`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "contain",
-        backgroundPosition: "center",
-      }}
-      className="relative h-screen w-full flex justify-center items-center  "
+      // style={{
+      //   backgroundImage: `url(${GroupIcon})`,
+      //   backgroundRepeat: "no-repeat",
+      //   backgroundSize: "contain",
+      //   backgroundPosition: "center",
+      // }}
+      className=" h-screen w-full max-w-[1440px]  mx-auto flex flex-col "
     >
-      <div className="border-2 border-[#FBECFF] rounded-3xl ">
-        {currentStep === STEP_1 && (
-          <WelcomeModal
-            onContinue={() => {
-              setCurrentStep(STEP_2);
-            }}
-          />
-        )}
-        {currentStep === STEP_2 && (
-          <ChildNameModal
-            onContinue={() => setCurrentStep(STEP_3)}
-            goBack={() => setCurrentStep(currentStep - 1)}
-            showGoBackIcon={true}
-            setName={setName}
-          />
-        )}
-        {currentStep === STEP_3 && (
-          <ChildAgeModal
-            onContinue={() => setCurrentStep(STEP_4)}
-            goBack={() => setCurrentStep(currentStep - 1)}
-            setAge={setAge}
-          />
-        )}
-        {currentStep === STEP_4 && (
-          <SelectAvatar
-            setChildProfile={setChildProfile}
-            onContinue={() => setCurrentStep(STEP_5)}
-            goBack={() => setCurrentStep(currentStep - 1)}
-            age={age}
-            name={name}
-          />
-        )}
-        {currentStep === STEP_5 && (
-          <WellDoneModal onContinue={() => navigate("/parent")} />
-        )}
+      <div className="my-3">
+        <img src={Logo} alt="" />
+      </div>
+      <div className="flex flex-grow justify-center mt-10  ">
+        <div className=" w-full ">
+          {currentStep === STEP_1 && (
+            <WelcomeModal
+              onContinue={() => {
+                setCurrentStep(STEP_2);
+              }}
+            />
+          )}
+          {currentStep === STEP_2 && (
+            <ChildNameModal
+              onContinue={() => setCurrentStep(STEP_3)}
+              goBack={() => setCurrentStep(currentStep - 1)}
+              showGoBackIcon={true}
+              setName={setName}
+              userName={userName}
+              name={name}
+              setUserName={setUserName}
+            />
+          )}
+
+          {currentStep === STEP_3 && (
+            <ChildSchoolNameModal
+              onContinue={() => setCurrentStep(STEP_4)}
+              goBack={() => setCurrentStep(currentStep - 1)}
+              showGoBackIcon={true}
+              setSchoolName={setSchoolName}
+              schoolName={schoolName}
+              name={name}
+              setUserName={setUserName}
+            />
+          )}
+          {currentStep === STEP_4 && (
+            <ChildAgeModal
+              onContinue={() => setCurrentStep(STEP_5)}
+              goBack={() => setCurrentStep(currentStep - 1)}
+              setAge={setAge}
+            />
+          )}
+          {currentStep === STEP_5 && (
+            <SelectAvatar
+              setChildProfile={setChildProfile}
+              onContinue={() => setCurrentStep(STEP_6)}
+              goBack={() => setCurrentStep(currentStep - 1)}
+              age={age}
+              name={name}
+            />
+          )}
+          {currentStep === STEP_6 && (
+            <WellDoneModal onContinue={() => navigate("/parent")} />
+          )}
+        </div>
+      </div>
+      <div>
+        <div className="flex justify-between items-center gap- text3 font-semibold py-3">
+          <div>
+            <p className="text-[#98A2B3] text2">
+              {" "}
+              &copy; Copyright 2023 Kunda Kids, All rights reserved.
+            </p>
+          </div>
+
+          <div className="flex items-center justify-between w-[150px] cursor-pointer">
+            <button
+              onClick={() => {
+                openInNewTab("https://m.facebook.com/kundakids/");
+              }}
+            >
+              <img
+                loading="lazy"
+                src={facebook}
+                alt="facebooklogo"
+                className="facebookLogo cursor-pointer  w-[20px]"
+              />
+            </button>
+            <button
+              onClick={() => {
+                openInNewTab(
+                  " https://instagram.com/kundakids?igshid=NzZlODBkYWE4Ng=="
+                );
+              }}
+            >
+              <img
+                loading="lazy"
+                src={insta}
+                alt="instalogo"
+                className="instaLogo cursor-pointe  w-[24px]r"
+              />
+            </button>
+            <button
+              onClick={() => {
+                openInNewTab(" https://twitter.com/kundakids?lang=en");
+              }}
+            >
+              <img
+                loading="lazy"
+                src={twitter}
+                alt="twitterlogo"
+                className="twitterLogo cursor-pointer w-[24px]"
+              />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -103,9 +194,9 @@ export const WelcomeModal = ({ onContinue }: { onContinue: () => void }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className=" max-w-[600px] rounded-3xl w-[100%] py-10 px-10"
+      className=""
     >
-      <div>
+      <div className="mt-20">
         <h1 className="text-center font-bold text-[35px] font-Recoleta ">
           Welcome to Kunda Kids
         </h1>
@@ -128,21 +219,31 @@ export const ChildNameModal = ({
   goBack,
   showGoBackIcon,
   setName,
+  name,
+  userName,
   close,
+  setUserName,
   showCancelBtn,
 }: {
   onContinue: () => void;
   goBack: () => void;
+  name: string;
+  userName: string;
   showGoBackIcon: boolean;
   setName: (val: string) => void;
   close?: () => void;
+  setUserName: (val: string) => void;
   showCancelBtn?: boolean;
 }) => {
-  const schema: ZodType<Pick<FormData, "name">> = z.object({
+  const schema: ZodType<Pick<FormData, "name" | "username">> = z.object({
     name: z
       .string()
       .min(2, { message: "Name must be at least 2 characters long" })
       .max(20, { message: "Name must not exceed 20 characters" }),
+    username: z
+      .string()
+      .min(2, { message: "Username must be at least 2 characters long" })
+      .max(20, { message: "Username must not exceed 20 characters" }),
   });
 
   const {
@@ -156,6 +257,9 @@ export const ChildNameModal = ({
     if (data.name) {
       setName(data.name);
     }
+    if (data.username) {
+      setUserName(data.username);
+    }
   };
   return (
     <motion.div
@@ -163,18 +267,16 @@ export const ChildNameModal = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="  rounded-3xl w-[100%] py-7 "
+      className="  "
     >
-      <div className="flex px-4 gap-4 justify-between items-center">
+      <div className="">
         <span></span>
         {showGoBackIcon && (
           <p onClick={goBack} className="">
             <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
           </p>
         )}
-        <h1 className="text-center font-bold text-[20px]  font-Recoleta text30">
-          What is your child’s name?
-        </h1>
+
         <span>
           {showCancelBtn && (
             <MdClose onClick={close} size={35} className=" cursor-pointer" />
@@ -183,23 +285,151 @@ export const ChildNameModal = ({
       </div>
 
       <div className="px-14">
-        <div>
-          <p className="text-center text2">Input your child’s full name</p>
-        </div>
         <div className="flex justify-center items-center p-4">
-          <img loading="lazy" src={YaJump} alt="jump" />
+          <img loading="lazy" src={Ema} alt="jump" />
         </div>
         <div>
-          <form onSubmit={handleSubmit(submitData)}>
-            <p className="mb-12">
+          <h1 className="text-center font-bold   font-Recoleta text30">
+            What is your child’s name?
+          </h1>
+          <p className="text-center text2 font-medium">
+            Enter the child’s name below
+          </p>
+        </div>
+
+        <div>
+          <form
+            onSubmit={handleSubmit(submitData)}
+            className="max-w-[400px] mx-auto mt-10"
+          >
+            <p className="my-5">
+              <label htmlFor="name" className="text1 font-medium">
+                Name
+              </label>
               <InputFormat
+                value={name}
                 reg={register("name")}
                 errorMsg={errors?.name?.message}
                 type="text"
-                placeholder="Full Name"
+                placeholder="Enter Name"
               />
             </p>
             <p className="mb-8">
+              <label htmlFor="name" className="text1 font-medium">
+                Username
+              </label>
+              <InputFormat
+                value={userName}
+                reg={register("username")}
+                errorMsg={errors?.username?.message}
+                type="text"
+                placeholder="Enter username"
+              />
+              <p className="text3 my-1">
+                Note: the username will be display on the leaderboard.
+              </p>
+            </p>
+            <p className="mb-8">
+              <Button type="submit">Continue</Button>
+            </p>
+          </form>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+export const ChildSchoolNameModal = ({
+  onContinue,
+  goBack,
+  showGoBackIcon,
+  close,
+  schoolName,
+  setSchoolName,
+  name,
+  showCancelBtn,
+}: {
+  onContinue: () => void;
+  goBack: () => void;
+  showGoBackIcon: boolean;
+  close?: () => void;
+  name: string;
+  setUserName: (val: string) => void;
+  showCancelBtn?: boolean;
+  schoolName: string;
+  setSchoolName: (val: string) => void;
+}) => {
+  const schema: ZodType<Pick<FormData, "school_name">> = z.object({});
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const submitData = async (data: FormData) => {
+    onContinue();
+    if (data.school_name) {
+      setSchoolName(data.school_name);
+    }
+  };
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="  rounded-3xl   "
+    >
+      <div className="flex px-4 gap-4 justify-between items-center">
+        {showGoBackIcon && (
+          <p onClick={goBack} className="">
+            <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
+          </p>
+        )}
+      </div>
+      <div>
+        <div className="flex justify-center items-center p-4">
+          <img loading="lazy" src={Ema} alt="jump" />
+        </div>
+        <h1 className="text-center font-bold   font-Hanken text30">
+          {`  What is ${name}’s school name?`}
+        </h1>
+        <span>
+          {showCancelBtn && (
+            <MdClose onClick={close} size={35} className=" cursor-pointer" />
+          )}
+        </span>
+      </div>
+      <div className="px-14">
+        <div>
+          <p className="text-center text2 font-medium">
+            {`Enter ${name}’s school name below.`}
+          </p>
+        </div>
+
+        <div className="max-w-[400px] mx-auto mt-20">
+          <form onSubmit={handleSubmit(submitData)}>
+            <p className="my-5">
+              <label htmlFor="name" className="text1 font-medium">
+                School Name (Optional)
+              </label>
+              <InputFormat
+                value={schoolName}
+                reg={register("school_name")}
+                type="text"
+                placeholder="Enter Your Name"
+              />
+              <p className="text2">
+                You can win a gift for your school if you provide this
+                information.
+              </p>
+            </p>
+
+            <p className="mb-8 flex gap-3">
+              <Button varient="outlined" type="submit">
+                <strong className="text-[#8530C1]"> Skip</strong>
+              </Button>
               <Button type="submit">Continue</Button>
             </p>
           </form>
@@ -247,15 +477,13 @@ export const ChildAgeModal = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="  rounded-3xl w-[100%] py-7  "
+      className="   "
     >
       <div className="flex px-10 justify-between items-center">
         <p onClick={goBack} className="">
           <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
         </p>
-        <h1 className="text-center font-bold text30 font-Recoleta">
-          What is your child’s age?
-        </h1>
+
         <span>
           {showCancelBtn && (
             <MdClose onClick={close} size={35} className=" cursor-pointer" />
@@ -264,15 +492,19 @@ export const ChildAgeModal = ({
       </div>
       <div className="px-28">
         <div>
-          <p className="text-center">
+          <div className="flex justify-center items-center p-4">
+            <img loading="lazy" src={Ema} alt="jump" />
+            {/* {isKid? <Skeleton height={150} width={100}></Skeleton>:<img loading="lazy" src={YaJump} alt="jump" onLoad={()=>setIsKid(false)} />} */}
+          </div>
+          <h1 className="text-center font-bold text30 font-Hanken">
+            What is your child’s age?
+          </h1>
+          <p className="text-center text1">
             We will try to customize the app for your child’s age.
           </p>
         </div>
-        <div className="flex justify-center items-center p-4">
-          <img loading="lazy" src={YaJump} alt="jump" />
-          {/* {isKid? <Skeleton height={150} width={100}></Skeleton>:<img loading="lazy" src={YaJump} alt="jump" onLoad={()=>setIsKid(false)} />} */}
-        </div>
-        <div>
+
+        <div className="max-w-[400px] mx-auto mt-20">
           <form onSubmit={handleSubmit(submitData)}>
             <p className="mb-12">
               <InputFormat
@@ -350,6 +582,8 @@ export const SelectAvatar = ({
       {
         onSuccess(data) {
           if (setChildProfile) setChildProfile(data?.data.data.profile_id);
+
+          sessionStorage.setItem("newaccount", "true");
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -381,7 +615,7 @@ export const SelectAvatar = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="  rounded-3xl  py-7  px-5  "
+      className=" "
     >
       {error ? (
         <h1>something went wrong</h1>
@@ -391,9 +625,7 @@ export const SelectAvatar = ({
             <p onClick={goBack} className=" ">
               <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
             </p>
-            <h1 className="text-center font-bold  text30 font-Recoleta">
-              Select Avatar
-            </h1>
+
             <span>
               {showCancelBtn && (
                 <MdClose
@@ -407,6 +639,9 @@ export const SelectAvatar = ({
 
           <div className="px-14">
             <div>
+              <h1 className="text-center font-bold  text30 font-Recoleta">
+                Select Avatar
+              </h1>
               <p className="text-center mb-4 text2">
                 Pick an avatar you think your child might like
               </p>
@@ -439,7 +674,7 @@ export const SelectAvatar = ({
                       })}
               </div>
             </div>
-            <div className="">
+            <div className="max-w-[400px] mx-auto">
               <button
                 disabled={!selected}
                 onClick={onSubmit}
@@ -530,12 +765,14 @@ export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
         <div className="flex justify-center items-center p-4">
           <img loading="lazy" src={YajSucces} alt="success" />
         </div>
-        <p className="text-center my-4">You have successfully added a child</p>
-        <p className="mb-12 ">
+        <p className="text-center text1 my-4">
+          You have successfully added a child
+        </p>
+        <div className="mb-12 max-w-[400px] mx-auto mt-2">
           <Button onClick={handleSubmit}>
             <span className="text-white">Continue</span>
           </Button>
-        </p>
+        </div>
       </div>
     </motion.div>
   );

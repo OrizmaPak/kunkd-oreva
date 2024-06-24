@@ -14,6 +14,10 @@ import { useForm } from "react-hook-form";
 import { AiOutlineMail } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { ZodType, z } from "zod";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
+import { useState } from "react";
+import { isValidPhoneNumber } from "libphonenumber-js";
 
 // import { motion } from "framer-motion";
 
@@ -31,10 +35,6 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
       .min(2, { message: "Last name must be at least 2 characters long" })
       .max(40, { message: "Last name must not exceed 30 characters" }),
     email: z.string().email(),
-    phone: z
-      .string()
-      .min(11, { message: "Phone number must not less than 11 characters" })
-      .max(14, { message: "Phone number must not more than 14 characters" }),
   });
 
   const {
@@ -42,14 +42,27 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
+  const [value, setValue] = useState<string | undefined>();
+  const [isValid, setIsValid] = useState<boolean>(true);
 
+  const handleChange = (newValue: string | undefined) => {
+    setValue(newValue);
+    if (newValue) {
+      setIsValid(isValidPhoneNumber(newValue));
+    } else {
+      setIsValid(true); // Handle case when input is cleared
+    }
+
+    console.log(value);
+    console.log(value?.slice(0, 4));
+  };
   const submitData = async (datta: FormData) => {
     sessionStorage.clear();
 
     setUser({ email: datta.email });
 
     mutate(
-      { ...datta },
+      { ...datta, phone: value, international_code: value?.slice(0, 4) },
 
       {
         onSuccess(data) {
@@ -90,7 +103,7 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
               Start learning and reading without restrictions.{" "}
             </p>
             <form className="mt-8" onSubmit={handleSubmit(submitData)}>
-              <p className="my-8 flex  w-full justify-between gap-2">
+              <p className="my-5 flex  w-full justify-between gap-2">
                 <InputFormat
                   type="text"
                   placeholder="First Name"
@@ -105,16 +118,29 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
                   errorMsg={errors.lastname?.message}
                 />
               </p>
-              <p className="my-8">
-                <InputFormat
+              <p className="my-5">
+                {/* <InputFormat
                   type="number"
                   placeholder="Phone number"
                   reg={register("phone")}
                   errorMsg={errors.lastname?.message}
+                /> */}
+
+                <PhoneInput
+                  getCountryCallingCode
+                  placeholder="Enter phone number"
+                  value={value}
+                  onChange={handleChange}
+                  className="phone-input rounded-full flex items-center gap-2 mt-1  border-[#F3DAFF] border py-3 my-2 px-2 focus:outline-none"
                 />
+                {!isValid && (
+                  <p style={{ color: "red" }}>
+                    Please enter a valid phone number.
+                  </p>
+                )}
               </p>
 
-              <p className="my-8">
+              <p className="my-5">
                 <InputFormat
                   type="text"
                   placeholder="Email"
@@ -140,7 +166,7 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
               </Button>
             </form>
 
-            <p className="mt-2  text-center text2 text-gray-400 ">
+            <p className="  text-center text2 text-gray-400 ">
               <span className="font-Hanken">Already hava an account? </span>
               <button
                 onClick={() => navigate("/login")}

@@ -401,3 +401,11 @@ export const GetClassTotalTimeSpent = (
 export const RemoveAccount = ({}) => {
   return axios.delete(`/user/account`);
 };
+
+export const UpdateParentCountryPhone = (payload: object) => {
+  return axios.patch(`/user/phone/country`, payload);
+};
+
+export const UpdateProfileUserNameSchoolName = (payload: object) => {
+  return axios.patch(`/profile/username/school`, payload);
+};

@@ -7,12 +7,18 @@ import { Skeleton } from "@mantine/core";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { Navigate, useNavigate } from "react-router-dom";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { useEffect } from "react";
+import { getUserState } from "@/store/authStore";
+import ParentUpdateModal from "./ParentUpdateModal";
 
 export type selectAvatarType = {
   name: string;
   image: string;
   id: number;
   dob?: string;
+  username?: string;
   student?: {
     assigned_teacher_id: number;
     assigned_teacher_name: string;
@@ -30,11 +36,37 @@ const SelectProfile = ({
   setChildProfile: (val: string) => void;
 }) => {
   const [profiles] = useStore(getProfileState);
+  const [user] = useStore(getUserState);
 
   const { data, isLoading } = useGetProfile();
 
+  const [opened, { open, close }] = useDisclosure(false);
+
+  useEffect(() => {
+    if (user?.phone == "") {
+      open();
+    }
+  }, []);
+
   return (
     <>
+      <Modal
+        opened={opened}
+        radius={6}
+        size="md"
+        onClose={close}
+        overlayProps={{
+          opacity: 0.85,
+          blur: 3,
+        }}
+        closeButtonProps={{ size: "lg" }}
+        centered
+        closeOnClickOutside={false}
+        withCloseButton={false}
+      >
+        <ParentUpdateModal close={close} />
+      </Modal>
+
       {!isLoading && data?.data?.data?.length === 0 ? (
         <Navigate to="/childprofilesetup" replace />
       ) : (

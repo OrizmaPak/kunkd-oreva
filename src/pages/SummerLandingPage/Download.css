@@ -1,0 +1,3 @@
+.iphone-mac {
+  width: clamp(25rem, 22.1113rem + 18.4874vw, 38.75rem) !important;
+}

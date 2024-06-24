@@ -52,6 +52,7 @@ const InputFormat = ({
           {...reg}
           placeholder={placeholder}
           type={ttype}
+          // value={value}
           defaultValue={value}
           readOnly={readonly}
           onChange={onChange}

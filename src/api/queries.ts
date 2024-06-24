@@ -78,6 +78,8 @@ import {
   GetClassTotalTimeSpent,
   ConnectStripe,
   RemoveAccount,
+  UpdateParentCountryPhone,
+  UpdateProfileUserNameSchoolName,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery, useInfiniteQuery } from "@tanstack/react-query";
@@ -748,3 +750,11 @@ export const useRemoveAccount = () => {
   return useMutation({ mutationFn: RemoveAccount });
 };
 // const {mutate, isLoading, isError} = useCreateSchoolUser();
+
+export const useUpdateParentCountryPhone = () => {
+  return useMutation({ mutationFn: UpdateParentCountryPhone });
+};
+
+export const useUpdateProfileUserNameSchoolName = () => {
+  return useMutation({ mutationFn: UpdateProfileUserNameSchoolName });
+};
