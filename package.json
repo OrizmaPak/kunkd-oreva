@@ -28,6 +28,7 @@
     "aos": "^2.3.4",
     "axios": "^1.4.0",
     "chart.js": "^4.3.0",
+    "dayjs": "^1.11.11",
     "embla-carousel-react": "^8.0.0-rc12",
     "firebase": "^9.23.0",
     "framer-motion": "^10.12.16",

@@ -1,42 +1,16 @@
 import InnerWrapper from "@/common/User/InnerWrapper";
 import Wrapper from "@/common/User/Wrapper";
 import SummerBannerImage from "@/assets/summerBannerImage.png";
-import Quiz1 from "@/assets/Quizone.png";
-import Quiz2 from "@/assets/Quiztwo.png";
+// import Quiz1 from "@/assets/Quizone.png";
+// import Quiz2 from "@/assets/Quiztwo.png";
+import { useGetSummerChallengeQuizzes } from "@/api/queries";
+import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 const SummerQuiz = () => {
-  const data = [
-    {
-      image: Quiz1,
-    },
-    {
-      image: Quiz2,
-    },
-    {
-      image: Quiz1,
-    },
-    {
-      image: Quiz2,
-    },
-    {
-      image: Quiz1,
-    },
-    {
-      image: Quiz2,
-    },
-    {
-      image: Quiz1,
-    },
-    {
-      image: Quiz2,
-    },
-    {
-      image: Quiz1,
-    },
-    {
-      image: Quiz2,
-    },
-  ];
+  const { data } = useGetSummerChallengeQuizzes();
+  console.log("summer challenge quizzes", data);
+  const quizzes = data?.data?.data?.quizzes;
   return (
     <div>
       <Wrapper bgColor="white">
@@ -54,9 +28,9 @@ const SummerQuiz = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 mt-20 gap-8 justify-center items-center px-10">
-            {data.map((datta, index) => (
-              <img key={index} src={datta.image} />
+          <div className="grid grid-cols-5 mt-20 gap-8 justify-center items-center px-10">
+            {quizzes?.map((data, index) => (
+              <SummerQuizCard key={index} {...data} />
             ))}
           </div>
         </InnerWrapper>
@@ -66,3 +40,43 @@ const SummerQuiz = () => {
 };
 
 export default SummerQuiz;
+
+type CardProps = { name: string; id: number; publish_date: string };
+export const SummerQuizCard = ({ name, id, publish_date }: CardProps) => {
+  console.log(name, "name");
+  const arrayName = name && name?.split(" ");
+
+  const publishDate = dayjs(publish_date);
+  const isFuturDate = dayjs().isBefore(publishDate);
+  const isToday = dayjs().isSame(publishDate);
+  const isPast = dayjs().isAfter(publishDate);
+
+  console.log({
+    isFuturDate,
+    today: dayjs().format("YYYY-MM-DD"),
+    publish_date,
+    isToday,
+    isPast,
+  });
+  const navigate = useNavigate();
+  return (
+    <>
+      <button
+        onClick={() => {
+          sessionStorage.setItem("summerQuizId", id.toString());
+          navigate("/summer-quiz/preview-summer-challenge");
+        }}
+        disabled={isFuturDate}
+        className={`  ${
+          isFuturDate
+            ? "border-[#D0D5DD] border-[2px] text-[#D0D5DD]"
+            : " bg-[#EBFFE8] text-[#2BB457] "
+        }  flex justify-center items-center p-2 flex-col rounded w-[200px] h-[135px]`}
+      >
+        <p className="text-[20px]">{arrayName && arrayName[0]}</p>
+        <p className="font-bold text-[20px]">{arrayName && arrayName[1]}</p>
+        {isFuturDate && <p className="text-[20px]">Coming Soon</p>}
+      </button>
+    </>
+  );
+};

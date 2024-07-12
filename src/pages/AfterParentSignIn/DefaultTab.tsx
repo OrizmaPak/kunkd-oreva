@@ -2,6 +2,7 @@ import {
   useContentForHome,
   useGetOngoingContents,
   useGetUpdatedProfile,
+  useGetSummerChallengeQuizzes,
 } from "@/api/queries";
 import AdsButton from "@/common/User/AdsButton";
 import CardHome from "@/common/User/CardHome";
@@ -15,6 +16,7 @@ import Slider from "react-slick";
 import { TStoryContent } from "@/api/types";
 
 import "./parenthomepage.css";
+import { SummerQuizCard } from "../SummerQuiz/SummerQuiz";
 
 const DefaultTab = () => {
   const [useri, setUser] = useStore(getUserState);
@@ -31,6 +33,10 @@ const DefaultTab = () => {
   const { isLoading, data: contentData } = useContentForHome();
   const recommendedStories = contentData?.data.data.recommended_stories;
   const newTrending = contentData?.data.data.trending_stories;
+
+  const { data: datta } = useGetSummerChallengeQuizzes();
+  console.log("summer challenge quizzes", data);
+  const quizzes = datta?.data?.data?.quizzes;
 
   useEffect(() => {
     sessionStorage.setItem("gotToHome", "true");
@@ -57,7 +63,48 @@ const DefaultTab = () => {
 
   return (
     <div>
-      <div className="mt-[98px]  ">
+      <div className="mt-[60px]">
+        {quizzes?.length > 0 && (
+          <div className=" mx-10 mt-4">
+            <div className="flex justify-between">
+              <p className=" text25 font-semibold  font-Hanken  mb-[50px]">
+                Summer Challenge
+              </p>
+              <button
+                onClick={() => navigate("/summer-quiz")}
+                className="font-semibold"
+              >
+                View All
+              </button>
+            </div>
+            <div className=" relative   ">
+              <div className=" gap-5  relative group grid grid-cols-5 ">
+                {/* <div className="absolute hidden group-hover:block z-30 "> */}
+                {/* <button
+                  className="p-4 bg-[rgba(238,238,238)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-10 "
+                  onClick={() => sliderReff?.current?.slickPrev()}
+                >
+                  <GrPrevious size={40} />
+                </button>
+                <button
+                  className="p-4 bg-[rgba(238,238,238)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-[95.7%]"
+                  onClick={() => sliderReff?.current?.slickNext()}
+                >
+                  <GrNext size={40} />
+                </button> */}
+                {/* </div> */}
+                {/* <Slider ref={sliderReff} {...settings}> */}
+                {quizzes?.slice(0, 5)?.map((data, index) => {
+                  return <SummerQuizCard key={index} {...data} />;
+                })}
+                {/* </Slider> */}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="mt-[60px]  ">
         {ongoingContents?.length > 0 && (
           <div className=" mx-10 mt-4">
             <p className=" text25 font-semibold  font-Hanken  mb-[50px]">

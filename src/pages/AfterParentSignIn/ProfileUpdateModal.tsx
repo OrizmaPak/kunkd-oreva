@@ -4,9 +4,20 @@ import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useUpdateProfileUserNameSchoolName } from "@/api/queries";
+import {
+  useUpdateProfileUserNameSchoolName,
+  useGetSuggestUserName,
+  useUserNameChecker,
+  useGetProfile,
+  querykeys,
+} from "@/api/queries";
+import { useDebouncedValue } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { Loader } from "@mantine/core";
+import { JsonInput, Loader, TextInput } from "@mantine/core";
+import { Switch } from "@mantine/core";
+import { useState } from "react";
+import { Checkbox } from "@mantine/core";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ProfileUpdateModal = ({
   close,
@@ -22,13 +33,23 @@ const ProfileUpdateModal = ({
   openJoinChanllenge: () => void;
 }) => {
   console.log(image, id);
-  const schema: ZodType<Pick<FormData, "username" | "school_name">> = z.object({
-    username: z
-      .string()
-      .min(2, { message: "Name must be at least 2 characters long" })
-      .max(20, { message: "Name must not exceed 20 characters" }),
+  const schema: ZodType<Pick<FormData, "school_name">> = z.object({
     school_name: z.string().optional(), // Add validation for school_name if needed
   });
+  const queryClient = useQueryClient();
+  useGetProfile(true);
+
+  const [userName, setUserName] = useState("");
+  const { data: datta } = useGetSuggestUserName();
+  const suggestions = datta?.data?.data?.suggestions;
+  const [debounced] = useDebouncedValue(userName, 200);
+  const {
+    data,
+    isError,
+    isLoading: isLoadingCheck,
+    isInitialLoading,
+  } = useUserNameChecker(debounced);
+  const [joinSummerChallenge, setJoinSummerChallenge] = useState(false);
   const { mutate, isLoading } = useUpdateProfileUserNameSchoolName();
   const {
     register,
@@ -37,17 +58,20 @@ const ProfileUpdateModal = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    console.log("dataaaaa", data);
+    console.log("dataaaaa", joinSummerChallenge);
     mutate(
       {
-        profile_id: +sessionStorage.getItem("profileId")!,
+        profile_id: Number(sessionStorage.getItem("profileId")),
         schoolname: data?.school_name,
-        username: data?.username,
+        username: userName,
+        accept_challenge: joinSummerChallenge,
       },
       {
         async onSuccess(data) {
-          close();
-          openJoinChanllenge();
+          queryClient.refetchQueries(querykeys.profiles).then(() => {
+            close();
+          });
+          // openJoinChanllenge();
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -76,29 +100,59 @@ const ProfileUpdateModal = ({
             {`  Please update ${name}’s profile to continue`}
           </p>
         </div>
-        <div className="my-4 mt-8">
+        <div className="my-4 mt-6">
           <p className="text1 font-bold leading-4">Update profile</p>
           <p className="text2 leading-4">
             Please update your profile to continue
           </p>
           <form onSubmit={handleSubmit(submitData)}>
             <div className="mt-4">
-              <p>
-                <label htmlFor="phone" className="text2 font-medium">
+              <p className="mb-8 suggestion-wrapper">
+                <label htmlFor="name" className="text1 font-medium">
                   Username
                 </label>
-                <InputFormat
-                  reg={register("username")}
-                  errorMsg={errors?.username?.message}
-                  type="text"
-                  placeholder="Enter Username"
-                />
-                <p className="text3 ">
+                {/* <InputFormat
+                value={userName}
+                reg={register("username")}
+                errorMsg={errors?.username?.message}
+                type="text"
+                placeholder="Enter username"
+                /> */}
+
+                {suggestions && (
+                  <TextInput
+                    id="useNameSuggestion"
+                    placeholder="Choose one or enter your desired username."
+                    name="user name"
+                    onChange={(e) => setUserName(e.target.value)}
+                    value={userName}
+                    list="user-name-suggestion"
+                    autoComplete="false"
+                    rightSection={
+                      isInitialLoading && isLoadingCheck ? (
+                        <Loader size="xs" />
+                      ) : null
+                    }
+                    error={
+                      !isLoadingCheck && isError && "user name already exist"
+                    }
+                  />
+                )}
+
+                {suggestions && (
+                  <datalist id="user-name-suggestion" className="w-full">
+                    {suggestions?.map((suggest: string) => (
+                      <option key={suggest} value={suggest} className="w-full">
+                        {suggest}
+                      </option>
+                    ))}
+                  </datalist>
+                )}
+                <p className="text3 my-1">
                   Note: the username will be display on the leaderboard.
                 </p>
               </p>
-
-              <p className="mt-2 mb-8">
+              <p className="mt-2 ">
                 <p className="my-5">
                   <label htmlFor="name" className="text2  font-medium">
                     School (Optional)
@@ -108,11 +162,20 @@ const ProfileUpdateModal = ({
                     type="text"
                     placeholder="Enter School Name"
                   />
-                  <p className="text2">
+                  <p className="text-[13px]">
                     You can win a gift for your school if you provide this
                     information.
                   </p>
                 </p>
+              </p>
+
+              <p className="mt-2 mb-4">
+                <Checkbox
+                  onChange={(event) =>
+                    setJoinSummerChallenge(event.currentTarget.checked)
+                  }
+                  label="I agree to join summer chanllenge"
+                />
               </p>
               <Button type="submit">
                 {isLoading ? (

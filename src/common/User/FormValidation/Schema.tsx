@@ -30,4 +30,5 @@ export type FormData = {
   teacher_id?: string;
   schoolid?: string;
   username?: string;
+  schoolName?: string;
 };

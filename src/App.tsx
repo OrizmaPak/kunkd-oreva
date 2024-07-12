@@ -23,6 +23,8 @@ import SummerLandingPage from "./pages/SummerLandingPage/SummerLandingPage";
 import PageInProduction from "./pages/PageInProduction/PageInProduction";
 import LeaderBoard from "./pages/LeaderBoard/LeaderBoard";
 import SummerQuiz from "./pages/SummerQuiz/SummerQuiz";
+import PreviewSummerChallengePage from "./pages/SummerQuiz/PreviewSummerChallengePage";
+import SummerQuizLayout from "./pages/SummerQuiz/SummerQuizLayout";
 const VideoV2 = lazy(() => import("./pages/AfricanLanguages/VideosV2/VideoV2"));
 const StoriesV2 = lazy(() => import("./pages/Stories/StoriesV2/StoriesV2"));
 const DefaultTab = lazy(() => import("./pages/AfterParentSignIn/DefaultTab"));
@@ -313,7 +315,18 @@ function App() {
 
                 <Route path="mylist" element={<MyList />}></Route>
                 <Route path="leaderboard" element={<LeaderBoard />}></Route>
-                <Route path="summer-quiz" element={<SummerQuiz />} />
+
+                <Route path="summer-quiz/*">
+                  <Route index element={<SummerQuiz />} />
+                  <Route
+                    path="preview-summer-challenge"
+                    element={<PreviewSummerChallengePage />}
+                  />
+                  <Route
+                    path="summer-challenge-quiz"
+                    element={<SummerQuizLayout />}
+                  />
+                </Route>
 
                 <Route
                   path="progressreport"

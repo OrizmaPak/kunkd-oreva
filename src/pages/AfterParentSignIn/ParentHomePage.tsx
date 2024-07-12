@@ -36,25 +36,24 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
   useEffect(() => {
     sessionStorage.setItem("gotToHome", "true");
   }, []);
+
   const [user] = useStore(getUserState);
 
   const profile = childProfile
     ? profiles?.find((each) => each.id === +childProfile)
     : profiles[0];
 
+  console.log({ childProfile, profiles }, "===>> profiles data");
+
   useEffect(() => {
-    const profile = childProfile
-      ? profiles?.find((each) => each.id === +childProfile)
-      : "";
-    if (
-      !sessionStorage.getItem("newaccount") &&
-      profile &&
-      profile.username == ""
-    ) {
+    if (profile?.username == "") {
       console.log("whatisProfile1", profile);
       open();
     }
-    if (sessionStorage.getItem("newaccount") == "true") {
+    if (
+      profile?.accepted_summer_challenge === false &&
+      profile.username !== ""
+    ) {
       console.log("whatisProfile2", profile);
       openJoinChanllenge();
     }

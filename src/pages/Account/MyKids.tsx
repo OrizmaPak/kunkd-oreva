@@ -33,10 +33,18 @@ import "./Mykids.css";
 import {
   ChildAgeModal,
   ChildNameModal,
+  ChildSchoolNameModal,
   SelectAvatar,
   WellDoneModal,
 } from "@/pages/AfterParentSignIn/ChildProfileSetUp";
-import { STEP_1, STEP_2, STEP_3, STEP_4 } from "@/utils/constants";
+import {
+  STEP_1,
+  STEP_2,
+  STEP_3,
+  STEP_4,
+  STEP_5,
+  STEP_6,
+} from "@/utils/constants";
 import { Skeleton } from "@mantine/core";
 import { motion } from "framer-motion";
 import { AiOutlineClose } from "react-icons/ai";
@@ -45,12 +53,16 @@ import { handleEventTracking } from "@/api/moengage";
 
 const MyKids = () => {
   const [profile] = useStore(getProfileState);
-  const [currentStep, setCurrentStep] = useState<number | null>(STEP_1);
+  const [currentStep, setCurrentStep] = useState<number | null>(STEP_2);
   const [opened, { open, close }] = useDisclosure(false);
   const [name, setName] = useState<string>("");
   const [age, setAge] = useState<string>("");
+  const [userName, setUserName] = useState("");
+  const [schoolName, setSchoolName] = useState("");
 
   const { isLoading, refetch } = useGetProfile();
+
+  console.log(currentStep, "curr step");
 
   return (
     <>
@@ -61,7 +73,7 @@ const MyKids = () => {
         transition={{ duration: 1 }}
       >
         <Modal
-          padding="xm"
+          padding="xm "
           opened={opened}
           onClose={close}
           centered
@@ -70,42 +82,59 @@ const MyKids = () => {
           // closeOnClickOutside={false}
           withCloseButton={false}
         >
-          {currentStep === STEP_1 && (
-            <ChildNameModal
-              onContinue={() => setCurrentStep(STEP_2)}
-              goBack={() => currentStep - 1}
-              showGoBackIcon={false}
-              setName={setName}
-              close={() => close()}
-              showCancelBtn={true}
+          {/* {currentStep === STEP_1 && (
+            <WelcomeModal
+              onContinue={() => {
+                setCurrentStep(STEP_2);
+              }}
             />
-          )}
+          )} */}
           {currentStep === STEP_2 && (
-            <ChildAgeModal
+            <ChildNameModal
               onContinue={() => setCurrentStep(STEP_3)}
               goBack={() => setCurrentStep(currentStep - 1)}
-              setAge={setAge}
-              close={() => close()}
-              showCancelBtn={true}
+              showGoBackIcon={true}
+              setName={setName}
+              userName={userName}
+              name={name}
+              setUserName={setUserName}
+              cancel={close}
             />
           )}
+
           {currentStep === STEP_3 && (
-            <SelectAvatar
+            <ChildSchoolNameModal
               onContinue={() => setCurrentStep(STEP_4)}
               goBack={() => setCurrentStep(currentStep - 1)}
-              age={age}
+              showGoBackIcon={true}
+              setSchoolName={setSchoolName}
+              schoolName={schoolName}
               name={name}
-              close={() => close()}
-              showCancelBtn={true}
+              setUserName={setUserName}
             />
           )}
           {currentStep === STEP_4 && (
-            <WellDoneModal
-              onContinue={() => {
-                close(), setCurrentStep(null);
-              }}
+            <ChildAgeModal
+              onContinue={() => setCurrentStep(STEP_5)}
+              goBack={() => setCurrentStep(currentStep - 1)}
+              setAge={setAge}
             />
           )}
+          {currentStep === STEP_5 && (
+            <SelectAvatar
+              onContinue={() => setCurrentStep(STEP_6)}
+              goBack={() => setCurrentStep(currentStep - 1)}
+              age={age}
+              schoolName={schoolName}
+              userName={userName}
+              name={name}
+              setAge={setAge}
+              setName={setName}
+              setSchoolName={setSchoolName}
+              setUserName={setUserName}
+            />
+          )}
+          {currentStep === STEP_6 && <WellDoneModal onContinue={close} />}
         </Modal>
 
         <div className="px-4 ">
@@ -115,7 +144,7 @@ const MyKids = () => {
             </h1>
             <Button
               onClick={() => {
-                open(), setCurrentStep(STEP_1);
+                open(), setCurrentStep(STEP_2);
               }}
               size="md"
             >

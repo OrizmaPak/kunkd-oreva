@@ -58,6 +58,8 @@ export type TSaveQuiz = object;
 export type TProfileData = {
   name: string;
   dob: string;
+  username: string;
+  schoolname: string;
   image: string;
   is_avatar: string;
 };

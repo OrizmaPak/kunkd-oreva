@@ -80,6 +80,12 @@ import {
   RemoveAccount,
   UpdateParentCountryPhone,
   UpdateProfileUserNameSchoolName,
+  GetSuggestUserName,
+  UserNameChecker,
+  JoinSummerChallenge,
+  GetSummerChallengeQuizzes,
+  GetSummerQuiz,
+  SubmmitSummerQuizQandA,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery, useInfiniteQuery } from "@tanstack/react-query";
@@ -180,6 +186,7 @@ export const useGetProfile = (
     enabled: enabled,
     onSuccess(res) {
       const resp = res.data;
+      console.log(res);
       setProfile(resp.data);
       if (onSucces) {
         onSucces(resp.data);
@@ -757,4 +764,46 @@ export const useUpdateParentCountryPhone = () => {
 
 export const useUpdateProfileUserNameSchoolName = () => {
   return useMutation({ mutationFn: UpdateProfileUserNameSchoolName });
+};
+
+export const useGetSuggestUserName = () => {
+  return useQuery({
+    queryKey: ["GetSuggestUserName"],
+    queryFn: GetSuggestUserName,
+  });
+};
+
+export const useUserNameChecker = (username: string) => {
+  const enabled = username?.trim() !== "";
+  return useQuery({
+    queryKey: ["UserNameChecker", username],
+    queryFn: () => UserNameChecker(username),
+    retry: false,
+    enabled,
+  });
+};
+
+export const useJoinSummerChallenge = () => {
+  return useMutation({ mutationFn: JoinSummerChallenge });
+};
+
+export const useGetSummerChallengeQuizzes = () => {
+  return useQuery({
+    queryKey: ["GetSummerChallengeQuizzes"],
+    queryFn: GetSummerChallengeQuizzes,
+  });
+};
+
+export const useGetSummerQuiz = (quizId: string) => {
+  return useQuery({
+    queryKey: ["GetQuiz", quizId],
+    queryFn: () => GetSummerQuiz(quizId),
+    onSuccess: (response) => {
+      return response;
+    },
+  });
+};
+
+export const useSubmmitSummerQuizQandA = () => {
+  return useMutation({ mutationFn: SubmmitSummerQuizQandA });
 };

@@ -4,6 +4,8 @@ import {
   useGetProfile,
   useProfle,
   useGetUpdatedProfile,
+  useGetSuggestUserName,
+  useUserNameChecker,
 } from "@/api/queries";
 import AddAvatarIcon from "@/assets/AddAvatarIcon.svg";
 // import YaJump from "@/assets/yaa24.png";
@@ -13,7 +15,7 @@ import InputFormat from "@/common/InputFormat";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import Button from "@/components/Button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader, Skeleton } from "@mantine/core";
+import { Loader, Skeleton, TextInput } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -22,6 +24,7 @@ import { ZodType, z } from "zod";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
 import { useEffect } from "react";
+// import { Combobox, TextInput, useCombobox } from "@mantine/core";
 // import GroupIcon from "@/assets/groupIcons.svg";
 import {
   STEP_1,
@@ -41,6 +44,7 @@ import facebook from "@/assets/facebook.svg";
 import insta from "@/assets/insta.svg";
 import twitter from "@/assets/twitter.svg";
 import Ema from "@/assets/ema.png";
+import { useDebouncedValue } from "@mantine/hooks";
 
 export type avatarType = {
   name: string;
@@ -122,7 +126,13 @@ const ChildProfileSetUp = ({
               onContinue={() => setCurrentStep(STEP_6)}
               goBack={() => setCurrentStep(currentStep - 1)}
               age={age}
+              schoolName={schoolName}
+              userName={userName}
               name={name}
+              setAge={setAge}
+              setName={setName}
+              setSchoolName={setSchoolName}
+              setUserName={setUserName}
             />
           )}
           {currentStep === STEP_6 && (
@@ -224,6 +234,7 @@ export const ChildNameModal = ({
   close,
   setUserName,
   showCancelBtn,
+  cancel,
 }: {
   onContinue: () => void;
   goBack: () => void;
@@ -232,18 +243,20 @@ export const ChildNameModal = ({
   showGoBackIcon: boolean;
   setName: (val: string) => void;
   close?: () => void;
+  cancel?: () => void;
   setUserName: (val: string) => void;
   showCancelBtn?: boolean;
 }) => {
+  const { data: datta } = useGetSuggestUserName();
+  const suggestions = datta?.data?.data?.suggestions;
+  const [debounced] = useDebouncedValue(userName, 200);
+  const { data, isError, isLoading, isInitialLoading } =
+    useUserNameChecker(debounced);
   const schema: ZodType<Pick<FormData, "name" | "username">> = z.object({
     name: z
       .string()
       .min(2, { message: "Name must be at least 2 characters long" })
       .max(20, { message: "Name must not exceed 20 characters" }),
-    username: z
-      .string()
-      .min(2, { message: "Username must be at least 2 characters long" })
-      .max(20, { message: "Username must not exceed 20 characters" }),
   });
 
   const {
@@ -261,6 +274,18 @@ export const ChildNameModal = ({
       setUserName(data.username);
     }
   };
+
+  console.log(
+    {
+      isLoading,
+      isInitialLoading,
+      isError,
+      data,
+      isErrorCheck: data && !isLoading && isError,
+    },
+    "user name --- "
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -272,7 +297,13 @@ export const ChildNameModal = ({
       <div className="">
         <span></span>
         {showGoBackIcon && (
-          <p onClick={goBack} className="">
+          <p
+            onClick={() => {
+              goBack();
+              if (cancel) cancel();
+            }}
+            className=""
+          >
             <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
           </p>
         )}
@@ -314,23 +345,51 @@ export const ChildNameModal = ({
                 placeholder="Enter Name"
               />
             </p>
-            <p className="mb-8">
+            <p className="mb-8 suggestion-wrapper">
               <label htmlFor="name" className="text1 font-medium">
                 Username
               </label>
-              <InputFormat
+              {/* <InputFormat
                 value={userName}
                 reg={register("username")}
                 errorMsg={errors?.username?.message}
                 type="text"
                 placeholder="Enter username"
-              />
+                /> */}
+
+              {suggestions && (
+                <TextInput
+                  id="useNameSuggestion"
+                  placeholder="Choose one or enter your desired username."
+                  name="user name"
+                  onChange={(e) => setUserName(e.target.value)}
+                  value={userName}
+                  list="user-name-suggestion"
+                  autoComplete="false"
+                  rightSection={
+                    isInitialLoading && isLoading ? <Loader size="xs" /> : null
+                  }
+                  error={!isLoading && isError && "user name already exist"}
+                />
+              )}
+
+              {suggestions && (
+                <datalist id="user-name-suggestion" className="w-full">
+                  {suggestions?.map((suggest: string) => (
+                    <option key={suggest} value={suggest} className="w-full">
+                      {suggest}
+                    </option>
+                  ))}
+                </datalist>
+              )}
               <p className="text3 my-1">
                 Note: the username will be display on the leaderboard.
               </p>
             </p>
             <p className="mb-8">
-              <Button type="submit">Continue</Button>
+              <Button disable={isError || isLoading} type="submit">
+                Continue
+              </Button>
             </p>
           </form>
         </div>
@@ -359,7 +418,9 @@ export const ChildSchoolNameModal = ({
   schoolName: string;
   setSchoolName: (val: string) => void;
 }) => {
-  const schema: ZodType<Pick<FormData, "school_name">> = z.object({});
+  const schema: ZodType<Pick<FormData, "school_name">> = z.object({
+    school_name: z.string().optional(),
+  });
 
   const {
     register,
@@ -368,9 +429,10 @@ export const ChildSchoolNameModal = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    onContinue();
+    console.log("dataata", data);
     if (data.school_name) {
       setSchoolName(data.school_name);
+      onContinue();
     }
   };
   return (
@@ -427,7 +489,7 @@ export const ChildSchoolNameModal = ({
             </p>
 
             <p className="mb-8 flex gap-3">
-              <Button varient="outlined" type="submit">
+              <Button onClick={onContinue} varient="outlined" type="submit">
                 <strong className="text-[#8530C1]"> Skip</strong>
               </Button>
               <Button type="submit">Continue</Button>
@@ -529,6 +591,12 @@ export const SelectAvatar = ({
   setChildProfile,
   onContinue,
   goBack,
+  userName,
+  schoolName,
+  setName,
+  setUserName,
+  setAge,
+  setSchoolName,
   // arrayAvatar,
   name,
   age,
@@ -539,6 +607,13 @@ export const SelectAvatar = ({
   goBack: () => void;
   setChildProfile?: (val: string) => void;
   // arrayAvatar: avatarType[];
+  userName: string;
+  setName: (val: string) => void;
+  setUserName: (val: string) => void;
+  setAge: (val: string) => void;
+  setSchoolName: (val: string) => void;
+
+  schoolName: string;
   age: string;
   name: string;
   close?: () => void;
@@ -577,18 +652,22 @@ export const SelectAvatar = ({
         dob: age,
         image: selectedAv.image,
         is_avatar: "true",
+        username: userName,
+        schoolname: schoolName,
       },
 
       {
         onSuccess(data) {
           if (setChildProfile) setChildProfile(data?.data.data.profile_id);
 
-          sessionStorage.setItem("newaccount", "true");
           notifications.show({
             title: `Notification`,
             message: data.data.message,
           });
-
+          setName("");
+          setSchoolName("");
+          setAge("");
+          setSchoolName("");
           moengage.track_event("web_add_child", {
             user_id: user?.user_id,
             child_name: name,

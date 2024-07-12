@@ -75,6 +75,8 @@ export const Profile = (payload: TProfileData) => {
   const formData = new FormData();
   formData.append("name", payload?.name);
   formData.append("dob", payload?.dob);
+  formData.append("username", payload?.username);
+  formData.append("schoolname", payload?.schoolname);
   formData.append("is_avatar", payload?.is_avatar);
   formData.append("image", payload?.image);
   return axios.post("/profile", formData);
@@ -408,4 +410,28 @@ export const UpdateParentCountryPhone = (payload: object) => {
 
 export const UpdateProfileUserNameSchoolName = (payload: object) => {
   return axios.patch(`/profile/username/school`, payload);
+};
+
+export const GetSuggestUserName = () => {
+  return axios.get(`/profile/username/suggest`);
+};
+
+export const UserNameChecker = (username: string) => {
+  return axios.get(`/profile/username/check`, { params: { username } });
+};
+
+export const JoinSummerChallenge = (payload: object) => {
+  return axios.post(`/summer/challenge/accept`, payload);
+};
+
+export const GetSummerChallengeQuizzes = () => {
+  return axios.get(`/summer/challenge/quizzes`);
+};
+
+export const GetSummerQuiz = (quizId: string) => {
+  return axios.get(`/summer/challenge/quiz/${quizId}`);
+};
+
+export const SubmmitSummerQuizQandA = (payload: object) => {
+  return axios.post(`/summer/challenge/quiz/question/save`, payload);
 };

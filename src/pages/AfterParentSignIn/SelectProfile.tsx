@@ -19,6 +19,7 @@ export type selectAvatarType = {
   id: number;
   dob?: string;
   username?: string;
+  accepted_summer_challenge: boolean;
   student?: {
     assigned_teacher_id: number;
     assigned_teacher_name: string;
