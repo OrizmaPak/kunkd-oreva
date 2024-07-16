@@ -14,6 +14,7 @@ import { GrNext, GrPrevious } from "react-icons/gr";
 import { Navigate, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import { TStoryContent } from "@/api/types";
+import { SummerCardProps } from "../SummerQuiz/SummerQuiz";
 
 import "./parenthomepage.css";
 import { SummerQuizCard } from "../SummerQuiz/SummerQuiz";
@@ -96,9 +97,11 @@ const DefaultTab = () => {
                 </button> */}
                 {/* </div> */}
                 {/* <Slider ref={sliderReff} {...settings}> */}
-                {quizzes?.slice(0, 5)?.map((data, index) => {
-                  return <SummerQuizCard key={index} {...data} />;
-                })}
+                {quizzes
+                  ?.slice(0, 5)
+                  ?.map((data: SummerCardProps, index: number) => {
+                    return <SummerQuizCard key={index} {...data} />;
+                  })}
                 {/* </Slider> */}
               </div>
             </div>

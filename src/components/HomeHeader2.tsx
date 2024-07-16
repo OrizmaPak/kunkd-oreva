@@ -1,25 +1,17 @@
 import {
-  HoverCard,
   Group,
   Button,
-  UnstyledButton,
-  Text,
-  SimpleGrid,
-  ThemeIcon,
-  Anchor,
   Divider,
-  Center,
   Box,
   Burger,
   Drawer,
-  Collapse,
   ScrollArea,
   rem,
-  useMantineTheme,
+  // useMantineTheme,
 } from "@mantine/core";
 // import KundaLogo from "@/assets/schoolIcon.svg";
 import Logo from "@/assets/KundaLogo.svg";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useDisclosure } from "@mantine/hooks";
 
@@ -29,14 +21,14 @@ function HomeHeader2() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const navigate = useNavigate();
-  const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
-  const theme = useMantineTheme();
-  const openInNewTab = (url: string) => {
-    const newWindow: Window | null = window.open(url, "_blank");
-    if (newWindow) {
-      newWindow.opener = null; // Ensure no access to the current window
-    }
-  };
+  // const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
+  // const theme = useMantineTheme();
+  // const openInNewTab = (url: string) => {
+  //   const newWindow: Window | null = window.open(url, "_blank");
+  //   if (newWindow) {
+  //     newWindow.opener = null; // Ensure no access to the current window
+  //   }
+  // };
   return (
     <Box className="p-4">
       <header className={`${classes.header}  `}>

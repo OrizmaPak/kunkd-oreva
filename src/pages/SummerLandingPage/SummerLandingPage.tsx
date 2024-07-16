@@ -1,4 +1,4 @@
-import HomeHeader from "@/components/HomeHeader";
+// import HomeHeader from "@/components/HomeHeader";
 import HomeHeader2 from "@/components/HomeHeader2";
 import Banner from "./Banner";
 import AOS from "aos";
@@ -6,14 +6,13 @@ import { useEffect } from "react";
 import Overview from "./Overview";
 import Existing from "./Existing";
 import Competition from "./Competition";
-import Leaderboard from "./Leaderboard";
-import Download from "./Download";
-import Terms from "./Terms";
+// import Leaderboard from "./Leaderboard";
+// import Download from "./Download";
+// import Terms from "./Terms";
 import Questions from "./Questions";
 import HomeFooter2 from "@/components/HomeFooter2";
 import PrizeSection from "./PrizeSection";
 import Participate from "./Participate";
-import RuleBook from "./RuleBook";
 
 const SummerLandingPage = () => {
   useEffect(() => {

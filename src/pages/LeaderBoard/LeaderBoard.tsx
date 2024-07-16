@@ -6,7 +6,7 @@ import { TLeaderBoardData } from "@/pages/SummerLandingPage/Leaderboard";
 import FirstMedal from "@/assets/firstMedal.png";
 import SecondMedal from "@/assets/secondMedal.png";
 import ThirdMedal from "@/assets/thirdMedal.png";
-import { position } from "@chakra-ui/react";
+// import { position } from "@chakra-ui/react";
 
 const LeaderBoard = () => {
   return (
@@ -114,14 +114,7 @@ const LeaderBoard = () => {
 
 export default LeaderBoard;
 
-const Card = ({
-  name,
-  country,
-  image,
-  points,
-  index,
-  position,
-}: TLeaderBoardData) => {
+const Card = ({ name, country, image, points, position }: TLeaderBoardData) => {
   return (
     <>
       <div className="flex justify-between  py-5 px-8 items-center w-full bg-white rounded-3xl shadow-md my-4">

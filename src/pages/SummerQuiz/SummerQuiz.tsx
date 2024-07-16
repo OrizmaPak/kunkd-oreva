@@ -37,7 +37,7 @@ const SummerQuiz = () => {
           </div>
 
           <div className="grid grid-cols-5 mt-20 gap-8 justify-center items-center px-10">
-            {quizzes?.map((data, index) => (
+            {quizzes?.map((data: SummerCardProps, index: number) => (
               <SummerQuizCard key={index} {...data} />
             ))}
           </div>
@@ -49,7 +49,7 @@ const SummerQuiz = () => {
 
 export default SummerQuiz;
 
-type CardProps = {
+export type SummerCardProps = {
   name: string;
   id: number;
   publish_date: string;
@@ -60,7 +60,7 @@ export const SummerQuizCard = ({
   id,
   publish_date,
   completed,
-}: CardProps) => {
+}: SummerCardProps) => {
   console.log(name, "name");
   const arrayName = name && name?.split(" ");
 

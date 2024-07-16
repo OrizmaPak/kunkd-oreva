@@ -13,8 +13,8 @@ import {
 } from "@/api/queries";
 import { useDebouncedValue } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { JsonInput, Loader, TextInput } from "@mantine/core";
-import { Switch } from "@mantine/core";
+import { Loader, TextInput } from "@mantine/core";
+// import { Switch } from "@mantine/core";
 import { useState } from "react";
 import { Checkbox } from "@mantine/core";
 import { useQueryClient } from "@tanstack/react-query";
@@ -24,8 +24,8 @@ const ProfileUpdateModal = ({
   image,
   name,
   id,
-  openJoinChanllenge,
-}: {
+}: // openJoinChanllenge,
+{
   image: string;
   name: string;
   id: number;
@@ -44,7 +44,7 @@ const ProfileUpdateModal = ({
   const suggestions = datta?.data?.data?.suggestions;
   const [debounced] = useDebouncedValue(userName, 200);
   const {
-    data,
+    // data,
     isError,
     isLoading: isLoadingCheck,
     isInitialLoading,
@@ -54,7 +54,7 @@ const ProfileUpdateModal = ({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {

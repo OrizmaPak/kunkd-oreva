@@ -6,9 +6,10 @@ import { FiExternalLink } from "react-icons/fi";
 import {
   useGetSummerChallengeQuizzes,
   useGetSummerQuiz,
-  useGetContentById,
+  // useGetContentById,
 } from "@/api/queries";
 import { useNavigate } from "react-router-dom";
+import { TStoryContent } from "@/api/types";
 type TQuiz = {
   id: number;
   name: string;
@@ -23,9 +24,7 @@ const PreviewSummerChallengePage = () => {
   );
   const quizzes = data?.data?.data?.quizzes;
   const quizId = sessionStorage.getItem("summerQuizId");
-  const { data: quiz, isLoading } = useGetSummerQuiz(
-    quizId?.toString() as string
-  );
+  const { data: quiz } = useGetSummerQuiz(quizId?.toString() as string);
   const requireData = quiz?.data?.data;
 
   function findObjectById(array: TQuiz[]) {
@@ -94,12 +93,15 @@ const PreviewSummerChallengePage = () => {
                   Stories to read
                 </p>
                 <div className="flex flex-col mt-5">
-                  {requireData?.requirements?.map((story, index) => {
+                  {requireData?.requirements?.map((story: TStoryContent) => {
                     return (
                       <div className="flex justify-between pr-28">
                         <button
                           onClick={() => {
-                            sessionStorage.setItem("contentId", story.id);
+                            sessionStorage.setItem(
+                              "contentId",
+                              story.id?.toString() as string
+                            );
                             sessionStorage.setItem("fromSummer", "true");
                             navigate(
                               `../../parent/stories/sub/${story.slug
@@ -114,7 +116,10 @@ const PreviewSummerChallengePage = () => {
                         </button>
                         <button
                           onClick={() => {
-                            sessionStorage.setItem("contentId", story.id);
+                            sessionStorage.setItem(
+                              "contentId",
+                              story.id?.toString() as string
+                            );
                             sessionStorage.setItem("fromSummer", "true");
 
                             navigate(

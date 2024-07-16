@@ -425,7 +425,7 @@ export const ChildSchoolNameModal = ({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
@@ -594,7 +594,7 @@ export const SelectAvatar = ({
   userName,
   schoolName,
   setName,
-  setUserName,
+  // setUserName,
   setAge,
   setSchoolName,
   // arrayAvatar,

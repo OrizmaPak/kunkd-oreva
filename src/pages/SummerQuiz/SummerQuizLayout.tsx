@@ -8,9 +8,9 @@ import { RingProgress, MantineProvider } from "@mantine/core";
 // import { Slider, MantineProvider } from "@mantine/core";
 
 import {
-  useGetQuiz,
+  // useGetQuiz,
   useGetSummerQuiz,
-  useSaveQuiz,
+  // useSaveQuiz,
   useSubmmitSummerQuizQandA,
   // useSaveQuiz
 } from "@/api/queries";
@@ -38,8 +38,8 @@ const SummerQuizLayout = () => {
   const questions = quiz?.data?.data?.questions;
   //   const quizId = quiz?.data?.data?.quiz_id;
   const profileId = sessionStorage.getItem("profileId") as string;
-  const contentString = sessionStorage.getItem("content");
-  const content = JSON.parse(contentString as string);
+  // const contentString = sessionStorage.getItem("content");
+  // const content = JSON.parse(contentString as string);
   const [currentQues, setCurrentQues] = useState<number>(0);
   const [answers, setAnswers] = useState<answerObj[]>([]);
 
@@ -581,7 +581,7 @@ const Result = ({
 
 const YourResult = ({ answers }: { answers: answerObj[] }) => {
   const navigate = useNavigate();
-  const [user] = useStore(getUserState);
+  // const [user] = useStore(getUserState);
 
   return (
     <div className="relative flex-grow    w-[780px] rounded-3xl">

@@ -1,5 +1,5 @@
 import "./PrizeSection.css";
-import BackgroundBg from "@/assets/backgroundbg.png";
+// import BackgroundBg from "@/assets/backgroundbg.png";
 
 const RuleBook = () => {
   return (

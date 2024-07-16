@@ -1,8 +1,6 @@
 // ScrollToSection.jsx
 
-import React from "react";
 import { Link } from "react-scroll";
-import classNames from "classnames";
 
 const ScrollToSection = ({
   sectionId,

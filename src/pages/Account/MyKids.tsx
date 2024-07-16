@@ -38,7 +38,7 @@ import {
   WellDoneModal,
 } from "@/pages/AfterParentSignIn/ChildProfileSetUp";
 import {
-  STEP_1,
+  // STEP_1,
   STEP_2,
   STEP_3,
   STEP_4,
