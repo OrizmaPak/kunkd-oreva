@@ -1,0 +1,3 @@
+.gift-card {
+  width: clamp(17.5rem, 14.7558rem + 17.563vw, 30.5625rem) !important;
+}

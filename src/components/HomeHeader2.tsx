@@ -46,7 +46,7 @@ function HomeHeader2() {
         >
           <img src={Logo} alt="logo" />
 
-          <Group h="100%" className="hidden lg:flex">
+          {/* <Group h="100%" className="hidden lg:flex">
             <div className="flex justify-between cursor-pointer pl-2 flex-grow text2 font-medium  w-[800px]">
               <NavLink
                 to="/home"
@@ -116,16 +116,9 @@ function HomeHeader2() {
               >
                 <span>Summer Reading Challenge</span>
               </NavLink>
-              {/* <NavLink
-            to="/shop"
-            className={({ isActive }) =>
-              isActive ? " text-[#8530C1]" : "text-black"
-            }
-          >
-            <span>Shop</span>
-          </NavLink> */}
+           
             </div>
-          </Group>
+          </Group> */}
 
           <Group className="hidden lg:flex ">
             <Button
@@ -162,7 +155,7 @@ function HomeHeader2() {
         <ScrollArea h={`calc(100vh - ${rem(80)})`} mx="-md">
           <Divider my="sm" />
 
-          <a href="/dev" className={`${classes.link} px-3 py-1 `}>
+          {/* <a href="/dev" className={`${classes.link} px-3 py-1 `}>
             Home
           </a>
 
@@ -183,7 +176,7 @@ function HomeHeader2() {
           </a>
           <a href="/summer-chanllenge" className={`${classes.link} px-3 py-1 `}>
             Summer Reading Chanllenge
-          </a>
+          </a> */}
 
           <Divider my="sm" />
 

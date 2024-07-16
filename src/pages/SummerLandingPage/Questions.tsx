@@ -8,34 +8,41 @@ import { FiMinusCircle } from "react-icons/fi";
 const Questions = () => {
   const data = [
     {
-      value: "Is there a free trial available?",
+      value: "How do I participate in the daily quizzes?",
       description:
-        "Yes, we allow every new user to consume three for our contents for free.",
+        "Every week, we'll upload new subcategories of stories. Each day at 12:00 noon WAT, a quiz based on these stories will be available on the Kunda Kids app. Log in and take the quiz to test your knowledge and earn points!",
     },
     {
-      value: "How can i download the app",
+      value: "What happens after the challenge?",
       description:
-        "You can download the app from either the Apple App Store or Google Play Store.",
+        "Celebrate your achievements and keep reading! We'll continue to offer engaging content to fuel your child's love for learning.",
     },
     {
-      value: "How often is the app updated with new content?",
-      description:
-        "Yes, we allow every new user to consume three for our contents for free.",
-    },
-    {
-      value: "How does the app ensure child safety?",
-      description:
-        "Yes, we allow every new user to consume three for our contents for free.",
-    },
-    {
-      value: "Does the app offer progress tracking for parents?",
-      description:
-        "Yes, we allow every new user to consume three for our contents for free.",
-    },
-    {
-      value: "Can the app be used in a classroom setting?",
-      description:
-        "Yes, we allow every new user to consume three for our contents for free.",
+      value: "How do I stay on top of the leaderboard?",
+      description: (
+        <>
+          The leaderboard shows the top earners each week. Here are 2 ways to
+          climb the ranks :
+          <ul className=" list-disc pl-8">
+            <li>
+              <strong> Be a Daily Reader:</strong> Read the assigned stories for
+              the challenge every day! This earns you 5 points a day.
+            </li>
+            <li>
+              <strong> Master the Quizzes:</strong> Difficulty brings rewards!
+              Challenge yourself with medium and hard quizzes (worth 7 and 10
+              points each) and aim for high scores by answering correctly (bonus
+              points per question).
+            </li>
+            <li>
+              {" "}
+              <strong> Bonus Tip:</strong> Consistency is key! Log in daily,
+              complete your reading tasks, and ace the quizzes to rack up points
+              and climb the leaderboard!"
+            </li>
+          </ul>
+        </>
+      ),
     },
   ];
 
@@ -73,7 +80,7 @@ const Questions = () => {
     </Accordion.Item>
   ));
   return (
-    <div className="bg-[#fafafc] pad-y-96 pad-x-40">
+    <div id="questions" className="bg-[#fafafc] pad-y-96 pad-x-40">
       <div className=" max-w-[1440px] mx-auto ">
         <p className="text30 font-medium text-center">
           Frequently asked questions

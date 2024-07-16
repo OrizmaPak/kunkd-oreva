@@ -424,8 +424,8 @@ export const JoinSummerChallenge = (payload: object) => {
   return axios.post(`/summer/challenge/accept`, payload);
 };
 
-export const GetSummerChallengeQuizzes = () => {
-  return axios.get(`/summer/challenge/quizzes`);
+export const GetSummerChallengeQuizzes = (profileId: string) => {
+  return axios.get(`/summer/challenge/quizzes/${profileId}`);
 };
 
 export const GetSummerQuiz = (quizId: string) => {

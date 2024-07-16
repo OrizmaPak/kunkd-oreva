@@ -34,7 +34,9 @@ const DefaultTab = () => {
   const recommendedStories = contentData?.data.data.recommended_stories;
   const newTrending = contentData?.data.data.trending_stories;
 
-  const { data: datta } = useGetSummerChallengeQuizzes();
+  const { data: datta } = useGetSummerChallengeQuizzes(
+    sessionStorage.getItem("profileId") as string
+  );
   console.log("summer challenge quizzes", data);
   const quizzes = datta?.data?.data?.quizzes;
 

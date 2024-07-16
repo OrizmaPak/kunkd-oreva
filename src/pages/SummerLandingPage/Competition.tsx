@@ -1,4 +1,4 @@
-import Clock from "@/assets/clock.png";
+import Clock from "@/assets/brainpowerboost.png";
 import Checklist from "@/assets/Checklist.png";
 import Crown from "@/assets/crown.png";
 
@@ -12,21 +12,20 @@ const Competition = () => {
   const data = [
     {
       image: Clock,
-      title: "Daily Quiz",
+      title: "Brainpower Boost",
       message:
-        "A new quiz will be available every day at 12 noon, and participants can take it until 12 am. The quiz will become inactive at midnight.",
+        "Enhance your child’s reading and comprehension skills with exciting story categories, such as confidence-building, inspiring biographies, money smarts, career chronicles and lots more!",
     },
     {
       image: Checklist,
-      title: "Sub-Categories",
+      title: "Leaderboard Race",
       message:
-        "Participants will be informed of the reading sub-categories at the start of the competition and weekly thereafter.",
+        "Top the ranks and compete with fellow bookworms on a global platform. Stand out as a reading leader and have your name shine on the leaderboard! ",
     },
     {
       image: Crown,
-      title: "Leaderboard",
-      message:
-        "The leaderboard will be updated in real-time as participants complete the quizzes, showcasing their progress and ranking.",
+      title: "Weekly Badges",
+      message: "Earn cool badges every week for your dedication to reading. ",
     },
   ];
 
@@ -34,12 +33,14 @@ const Competition = () => {
     <div className="bg-[rgb(250,250,252)] pad-y-96 pad-x-40">
       <div className="max-w-[1440px] mx-auto">
         <div className="">
-          <p className="text-center header2 font-medium">Competition Rules</p>
-          <p className="text-center text1">
+          <p className="header2 text-center text-black  font-medium max-w-[950px] mx-auto px-2">
+            Why your child should join the Kunda Kids Daily Reading Challenge:
+          </p>
+          <p className="text-center text20">
             Stay on track with daily quizzes and weekly reading challenges.
           </p>
         </div>
-        <div className="flex flex-col md:flex-row gap-8 mt-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:flex-row gap-8 mt-20">
           {data.map((datta, index) => (
             <Card key={index} {...datta} />
           ))}

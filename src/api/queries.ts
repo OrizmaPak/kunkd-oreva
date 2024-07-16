@@ -787,10 +787,10 @@ export const useJoinSummerChallenge = () => {
   return useMutation({ mutationFn: JoinSummerChallenge });
 };
 
-export const useGetSummerChallengeQuizzes = () => {
+export const useGetSummerChallengeQuizzes = (profileId: string) => {
   return useQuery({
-    queryKey: ["GetSummerChallengeQuizzes"],
-    queryFn: GetSummerChallengeQuizzes,
+    queryKey: ["GetSummerChallengeQuizzes", profileId],
+    queryFn: () => GetSummerChallengeQuizzes(profileId),
   });
 };
 

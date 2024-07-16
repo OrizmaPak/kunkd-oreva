@@ -11,6 +11,9 @@ import Download from "./Download";
 import Terms from "./Terms";
 import Questions from "./Questions";
 import HomeFooter2 from "@/components/HomeFooter2";
+import PrizeSection from "./PrizeSection";
+import Participate from "./Participate";
+import RuleBook from "./RuleBook";
 
 const SummerLandingPage = () => {
   useEffect(() => {
@@ -20,13 +23,16 @@ const SummerLandingPage = () => {
     <div>
       <HomeHeader2 />
       <Banner />
-      <Overview />
-      <Existing />
+      <PrizeSection />
       <Competition />
-      <Leaderboard />
+      <Overview />
+      <Participate />
+      <Existing />
+      {/* <Leaderboard /> */}
       <Download />
       <Terms />
       <Questions />
+      <RuleBook />
       <HomeFooter2 />
     </div>
   );
