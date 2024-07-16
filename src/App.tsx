@@ -183,7 +183,7 @@ function App() {
       const path = location.pathname;
 
       const isPolicyPath = path.includes("privacy-policy");
-      const isSummerPath = path.includes("summer-chanllenge");
+      const isSummerPath = path.includes("summer-challenge");
       const isDevPath = path.includes("dev");
 
       const isRefundPolicyPath = path.includes("refund-policy");
