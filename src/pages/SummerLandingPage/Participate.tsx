@@ -6,11 +6,11 @@ const Participate = () => {
     <div className="bg-white pad-y-96 pad-x-10 ">
       <div className="max-w-[1440px] mx-auto relative">
         <div className="flex justify-center items-center "></div>
-        <p className="header2 text-center text-black  font-medium max-w-[1000px] mx-auto px-2">
+        <p className="header2 text-center text-black  font-medium max-w-[1000px] mx-auto px-2 font-Inter">
           How to participate in the daily reading summer challenge
         </p>
 
-        <ul className=" max-w-[800px] mx-auto list-disc text20 mt-6 px-10">
+        <ul className=" max-w-[800px] mx-auto list-disc text20 mt-8 px-10 font-InterReg">
           <li className="md:my-5 my-2">
             You must have an active subscription to take part in the challenge.
           </li>

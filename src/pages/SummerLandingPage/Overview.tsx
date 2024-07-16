@@ -28,23 +28,28 @@ const Overview = () => {
 
         <div className="grid  grid-cols-1 md:grid-cols-2  gap-5 md:gap-10 mx-auto text1  max-w-[800px]   px-3">
           <div className="">
-            <p className="text-[#a5a1a1] text-center md:text-start">TIMELINE</p>
-            <p className="text-white text20 flex gap-2 font-medium  justify-center items-center md:justify-start ">
-              <CiCalendar size={25} /> 25 June – 25 July 2024
+            <p className="text-[#a5a1a1] text-center md:text-start font-InterReg ">
+              TIMELINE
+            </p>
+            <p className="text-white text20 flex gap-2 font-medium  justify-center items-center md:justify-start font-InterReg">
+              <CiCalendar size={25} /> August 1st - August 21st, 2024.
             </p>
           </div>
           <div className="  text-[#a5a1a1] flex md:justify-end md:items-end flex-col">
-            <p className="md:pr-4 text-center"> ELIGIBILITY</p>
-            <p className="text-white flex gap-2 font-medium text20 justify-center items-center md:justify-start">
+            <p className="md:pr-4 text-center font-InterReg"> ELIGIBILITY</p>
+            <p className="text-white flex gap-2 font-medium text20 justify-center items-center md:justify-start font-InterReg">
               <LuSmilePlus size={25} />
               All young scholars aged 6 to 10
             </p>
           </div>
         </div>
         <div className="flex items-center justify-center mt-6 md:mt-14">
-          <Button size="md" className="text-black bg-white flex gap-1">
+          <Button
+            size="md"
+            className="text-black bg-white flex gap-1 font-Inter"
+          >
             <LuUserPlus size={20} />
-            Register for the Summer Challenge
+            Sign Up for the Summer Challenge
           </Button>
         </div>
       </div>

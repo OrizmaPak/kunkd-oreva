@@ -29,10 +29,10 @@ const SummerLandingPage = () => {
       <Participate />
       <Existing />
       {/* <Leaderboard /> */}
-      <Download />
-      <Terms />
+      {/* <Download /> */}
+      {/* <Terms /> */}
       <Questions />
-      <RuleBook />
+      {/* <RuleBook /> */}
       <HomeFooter2 />
     </div>
   );

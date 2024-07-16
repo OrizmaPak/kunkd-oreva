@@ -644,6 +644,7 @@ const BookPagination = ({
     continuePage && Number(continuePage) < pageTotal ? Number(continuePage) : 1
   );
   const [user] = useStore(getUserState);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setPage(currentPage);
@@ -703,7 +704,12 @@ const BookPagination = ({
       },
       {
         onSuccess(data) {
-          setIsFinish();
+          if (sessionStorage.getItem("fromSummer") === "true") {
+            navigate("/summer-quiz/preview-summer-challenge");
+            sessionStorage.removeItem("fromSummer");
+          } else {
+            setIsFinish();
+          }
           return data;
         },
         onError(err) {

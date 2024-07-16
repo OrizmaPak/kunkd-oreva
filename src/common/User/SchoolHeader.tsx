@@ -23,6 +23,7 @@ import { LuUser2 } from "react-icons/lu";
 import { logOut } from "@/auth/sdk";
 import "./SchoolHeader.css";
 import { handleEventTracking } from "@/api/moengage";
+import { useDebouncedValue } from "@mantine/hooks";
 
 type THints = {
   id: number;
@@ -192,7 +193,7 @@ _logout`,
               >
                 {
                   <button className="text-[16px]  font-bold nav-link">
-                    Leader Board
+                    LeaderBoard
                   </button>
                 }
               </NavLink>

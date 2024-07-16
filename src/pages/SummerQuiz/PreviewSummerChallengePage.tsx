@@ -1,6 +1,8 @@
 import InnerWrapper from "@/common/User/InnerWrapper";
 import Wrapper from "@/common/User/Wrapper";
 import { GrNext } from "react-icons/gr";
+import FeatureIcon from "@/assets/Featured icon.png";
+import { FiExternalLink } from "react-icons/fi";
 import {
   useGetSummerChallengeQuizzes,
   useGetSummerQuiz,
@@ -53,7 +55,7 @@ const PreviewSummerChallengePage = () => {
     <div>
       <Wrapper bgColor="white">
         <InnerWrapper>
-          <div className="flex gap-3">
+          <div className="flex gap-3 mt-8">
             <button className="text-[18px] font-bold flex">
               Storie <GrNext size={20} />
             </button>
@@ -94,19 +96,39 @@ const PreviewSummerChallengePage = () => {
                 <div className="flex flex-col mt-5">
                   {requireData?.requirements?.map((story, index) => {
                     return (
-                      <button
-                        onClick={() => {
-                          sessionStorage.setItem("contentId", story.id);
-                          navigate(
-                            `../../parent/stories/sub/${story.slug
-                              ?.toLocaleLowerCase()
-                              .replace(/\s/g, "-")}`
-                          );
-                        }}
-                        className="block  text-start py-2 text-blue-500"
-                      >
-                        {story?.name}
-                      </button>
+                      <div className="flex justify-between pr-28">
+                        <button
+                          onClick={() => {
+                            sessionStorage.setItem("contentId", story.id);
+                            sessionStorage.setItem("fromSummer", "true");
+                            navigate(
+                              `../../parent/stories/sub/${story.slug
+                                ?.toLocaleLowerCase()
+                                .replace(/\s/g, "-")}`
+                            );
+                          }}
+                          className="  text-start py-2 text-white flex items-center gap-2 "
+                        >
+                          <img src={FeatureIcon} alt="image" />
+                          {story?.name}
+                        </button>
+                        <button
+                          onClick={() => {
+                            sessionStorage.setItem("contentId", story.id);
+                            sessionStorage.setItem("fromSummer", "true");
+
+                            navigate(
+                              `../../parent/stories/sub/${story.slug
+                                ?.toLocaleLowerCase()
+                                .replace(/\s/g, "-")}`
+                            );
+                          }}
+                          className="text-white flex gap-2 items-center"
+                        >
+                          Read
+                          <FiExternalLink size={20} color="white" />
+                        </button>
+                      </div>
                     );
                   })}
                 </div>

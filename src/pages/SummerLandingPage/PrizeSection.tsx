@@ -1,6 +1,8 @@
 import Ball from "@/assets/ball.png";
 import ABCPencil from "@/assets/abcpencil.png";
-import GiftCard from "@/assets/gift.png";
+import Gift01 from "@/assets/gift01.png";
+import Gift02 from "@/assets/gift02.png";
+
 import "./PrizeSection.css";
 
 const PrizeSection = () => {
@@ -14,11 +16,11 @@ const PrizeSection = () => {
           className=" absolute bottom-[40px] right-0 hidden lg:block "
         />
         <div className="flex justify-center items-center "></div>
-        <p className="header2 text-center text-white  font-medium max-w-[950px] mx-auto px-2">
+        <p className="header2 text-center text-white  font-medium max-w-[950px] font-Inter mx-auto px-2">
           Are you ready for a summer adventure filled with learning and fun?
         </p>
 
-        <p className="text20 text-center  text-white  font-thin max-w-[950px] mx-auto px-2">
+        <p className="text1 text-center   text-white   max-w-[950px] mx-auto px-2 font-InterReg font-light">
           Join the Kunda Kids 21-Day Summer Reading Challenge! Ignite your
           child's love for reading and empower them to become lifelong learners
           with daily reading and quizzes!
@@ -26,10 +28,10 @@ const PrizeSection = () => {
 
         <div className=" flex flex-col md:flex-row gap-14 justify-center items-center mt-16  px-3">
           <div>
-            <img src={GiftCard} alt="image" className="gift-card" />
+            <img src={Gift02} alt="image" className="gift-card" />
           </div>
           <div>
-            <img src={GiftCard} alt="image" className="gift-card" />
+            <img src={Gift01} alt="image" className="gift-card" />
           </div>
         </div>
       </div>

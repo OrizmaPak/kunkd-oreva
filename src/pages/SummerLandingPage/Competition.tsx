@@ -33,10 +33,10 @@ const Competition = () => {
     <div className="bg-[rgb(250,250,252)] pad-y-96 pad-x-40">
       <div className="max-w-[1440px] mx-auto">
         <div className="">
-          <p className="header2 text-center text-black  font-medium max-w-[950px] mx-auto px-2">
+          <p className="header2 text-center text-black font-Inter max-w-[950px] mx-auto px-2">
             Why your child should join the Kunda Kids Daily Reading Challenge:
           </p>
-          <p className="text-center text20">
+          <p className="text-center text20 font-InterReg mt-3 ">
             Stay on track with daily quizzes and weekly reading challenges.
           </p>
         </div>
@@ -56,8 +56,8 @@ const Card = ({ image, title, message }: Tdata) => {
   return (
     <div className="flex flex-col justify-center items-center gap-1 px-2 ">
       <img src={image} alt="image" className="mb-3" />
-      <p className="text25 font-medium mt-2">{title}</p>
-      <p className="text-center text1">{message}</p>
+      <p className="text25 font-medium mt-2 font-Inter">{title}</p>
+      <p className="text-center text1 font-InterReg">{message}</p>
     </div>
   );
 };

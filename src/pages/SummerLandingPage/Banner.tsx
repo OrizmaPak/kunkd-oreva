@@ -20,13 +20,13 @@ const Banner = () => {
           <h1 className=" text-[#101828] text-center md:text-start font-Brico  header1  max-w-[650px]">
             Kunda Kids Summer Reading Challenge: Unleash Your Inner Genius!
           </h1>
-          <div className="max-w-[500px] flex my-2 justify-center items-center md:justify-start ">
+          <div className="max-w-[500px] flex my-2 mt-8 justify-center items-center md:justify-start ">
             <Button
               onClick={() => navigate("/signup")}
               size="md"
               className=" cursor-pointer z-[1000] hidden md:block"
             >
-              Register Now
+              Sign Up
             </Button>
           </div>
         </div>
