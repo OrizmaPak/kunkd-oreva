@@ -250,7 +250,7 @@ function App() {
                 }
               ></Route>
               <Route
-                path="summer-chanllenge"
+                path="summer-challenge"
                 element={<SummerLandingPage />}
               ></Route>
 
