@@ -23,7 +23,7 @@ import { LuUser2 } from "react-icons/lu";
 import { logOut } from "@/auth/sdk";
 import "./SchoolHeader.css";
 import { handleEventTracking } from "@/api/moengage";
-import { useDebouncedValue } from "@mantine/hooks";
+// import { useDebouncedValue } from "@mantine/hooks";
 
 type THints = {
   id: number;

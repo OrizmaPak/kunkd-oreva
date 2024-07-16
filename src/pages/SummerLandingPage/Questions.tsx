@@ -4,7 +4,7 @@ import GetInTouchImage from "@/assets/getintouchImage.png";
 import Button from "@/components/Button";
 import { FiPlusCircle } from "react-icons/fi";
 import { FiMinusCircle } from "react-icons/fi";
-import { Tabs, rem } from "@mantine/core";
+import { Tabs } from "@mantine/core";
 import "./Questions.css";
 // import { IconPhoto, IconMessageCircle, IconSettings } from '@tabler/icons-react';
 
