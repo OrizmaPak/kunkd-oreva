@@ -1,6 +1,6 @@
 import {
   Group,
-  Button,
+  // Button,
   Divider,
   Box,
   Burger,
@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 
 import classes from "./HomeHeader2.module.css";
+import Button from "./Button";
 
 function HomeHeader2() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
@@ -112,21 +113,21 @@ function HomeHeader2() {
             </div>
           </Group> */}
 
-          <Group className="hidden lg:flex ">
+          <div className="hidden lg:flex gap-3 w-[200px] z-[1000]">
             <Button
+              varient="outlined"
               onClick={() => navigate("/login")}
-              variant="default"
-              className="text-[#8530C1] text1 font-Inter "
+              className=" text "
             >
-              Log in
+              <strong className="text-[#8530C1]">Log in</strong>
             </Button>
             <Button
               onClick={() => navigate("/signup")}
-              className="bg-[#8530C1] hover:bg-[#8530C1] text1 font-Inter"
+              className="bg-[#8530C1] hover:bg-[#8530C1] "
             >
               Enroll
             </Button>
-          </Group>
+          </div>
 
           <Burger
             className="lg:hidden "
