@@ -33,7 +33,7 @@ const Competition = () => {
     <div className="bg-[rgb(250,250,252)] pad-y-96 pad-x-40">
       <div className="max-w-[1440px] mx-auto">
         <div className="">
-          <p className="header2 text-center text-black font-Inter max-w-[950px] mx-auto px-2">
+          <p className="header2 text-center text-black font-Inter  mx-auto px-2">
             Why your child should join the Kunda Kids Daily Reading Challenge:
           </p>
           <p className="text-center text20 font-InterReg mt-3 ">

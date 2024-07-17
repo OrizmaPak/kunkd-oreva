@@ -5,17 +5,17 @@ import { useNavigate } from "react-router-dom";
 import "./Banner.css";
 import SummerBannerImage from "@/assets/summerBanner2.png";
 
-import Hero from "@/pages/Parents/ParentHero";
+// import Hero from "@/pages/Parents/ParentHero";
 
 const Banner = () => {
   const navigate = useNavigate();
   return (
-    <Hero>
+    <div className=" w-full max-w-[1440px]  md:h-[679.61px] z-[50] mx-auto px-4">
       <div className="flex justify-between   flex-col lg:flex-row    ">
         <div
           data-aos="fade-right"
           data-aos-once="true"
-          className=" hero-text-container pt-8  md:pt-16  mb-8 md:mb-0 "
+          className=" hero-text-container pt-8  md:pt-16   md:mb-0 "
         >
           <h1 className=" text-[#101828] text-center md:text-start font-Brico  header1  max-w-[650px]">
             Kunda Kids Summer Reading Challenge: Unleash Your Inner Genius!
@@ -24,14 +24,14 @@ const Banner = () => {
             <Button
               onClick={() => navigate("/signup")}
               size="md"
-              className=" cursor-pointer z-[1000] hidden md:block"
+              className=" cursor-pointer z-[1000] hidden md:block font-InterReg"
             >
               Sign Up
             </Button>
           </div>
         </div>
 
-        <div className=" md:relative md:-top-[100px]">
+        <div className=" md:relative md:-top-[50px]">
           <div
             data-aos="fade-left"
             data-aos-once="true"
@@ -45,7 +45,7 @@ const Banner = () => {
           </div>
         </div>
       </div>
-    </Hero>
+    </div>
   );
 };
 

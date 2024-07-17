@@ -87,17 +87,17 @@ const Questions = () => {
   return (
     <>
       <Tabs color="rgba(109, 3, 173, 1)" variant="pills" defaultValue="Faqs">
-        <div className=" bg-[#6C08A9] md:py-10 py-4  pad-x-40 flex justify-center items-center gap-4 text30 ">
-          <Tabs.List className=" bg-[#8530c1] p-4 rounded-3xl flex  gap-28">
+        <div className=" bg-[#6C08A9] md:py-10 py-4  pad-x-40 flex justify-center items-center gap-4 text30 px-10">
+          <Tabs.List className=" bg-[#8530c1] p-4 rounded-3xl flex justify-center items-center md:gap-28">
             <Tabs.Tab
               value="Faqs"
-              className="text25 font-bold rounded-3xl py-4 font-Inter"
+              className="text25 font-bold rounded-3xl py-4 font-Inter w-full md:w-auto"
             >
               Frequently Asked Questions
             </Tabs.Tab>
             <Tabs.Tab
               value="Rulebook"
-              className="text25 font-bold rounded-3xl py-4 font-Inter"
+              className="text25 font-bold rounded-3xl py-4 font-Inter w-full md:w-auto"
             >
               Rulebook
             </Tabs.Tab>
@@ -141,10 +141,10 @@ const Questions = () => {
         </Tabs.Panel>
 
         <Tabs.Panel value="Rulebook">
-          <div>
+          <div className="pad-y-96 ">
             <div
               id="rulebook"
-              className=" bg-[#FDFDFF]  pad-x-10  contain  bg-no-repeat mt-20 "
+              className=" bg-[#FDFDFF]  pad-x-10  contain  bg-no-repeat  "
               //   style={{ backgroundImage: `url(${BackgroundBg})` }}
             >
               <div className="max-w-[1440px] mx-auto relative">

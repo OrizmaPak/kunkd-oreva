@@ -55,3 +55,7 @@
   border-top: rem(1px) solid
     light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-5));
 }
+
+.logow {
+  width: clamp(9.375rem, 8.3246rem + 6.7227vw, 14.375rem) !important;
+}

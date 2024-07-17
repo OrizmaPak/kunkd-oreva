@@ -36,7 +36,7 @@ function HomeHeader2() {
           className="flex justify-between max-w-[1440px] mx-auto"
           h="100%  "
         >
-          <img src={Logo} alt="logo" />
+          <img src={Logo} alt="logo" className={`${classes.logow}`} />
 
           {/* <Group h="100%" className="hidden lg:flex">
             <div className="flex justify-between cursor-pointer pl-2 flex-grow text2 font-medium  w-[800px]">
@@ -116,13 +116,13 @@ function HomeHeader2() {
             <Button
               onClick={() => navigate("/login")}
               variant="default"
-              className="text-[#8530C1]"
+              className="text-[#8530C1] text1 font-Inter "
             >
               Log in
             </Button>
             <Button
               onClick={() => navigate("/signup")}
-              className="bg-[#8530C1] hover:bg-[#8530C1]"
+              className="bg-[#8530C1] hover:bg-[#8530C1] text1 font-Inter"
             >
               Enroll
             </Button>

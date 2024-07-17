@@ -20,9 +20,9 @@ const ScrollToSection = ({
         offset={-70} // Adjust this offset based on your header height or any fixed header
         duration={500}
         className={`
-         p-2  ${
-           textColor ? `color-${textColor}` : "text-[#8530C1]"
-         } rounded-full cursor-pointer",
+          ${
+            textColor ? `color-${textColor}` : "text-[#8530C1]"
+          } rounded-full cursor-pointer",
        
       `}
       >

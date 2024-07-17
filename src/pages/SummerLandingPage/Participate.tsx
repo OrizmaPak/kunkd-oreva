@@ -6,7 +6,7 @@ const Participate = () => {
     <div className="bg-white pad-y-96 pad-x-10 ">
       <div className="max-w-[1440px] mx-auto relative">
         <div className="flex justify-center items-center "></div>
-        <p className="header2 text-center text-black  font-medium max-w-[1000px] mx-auto px-2 font-Inter">
+        <p className="header2 text-center text-black  font-medium  mx-auto px-2 font-Inter">
           How to participate in the daily reading summer challenge
         </p>
 
@@ -24,7 +24,7 @@ const Participate = () => {
             period.
           </li>
           <li className="md:my-5 my-2 ">
-            <p className="flex">
+            <p className="flex flex-col md:flex-row">
               Earn points for correct answers, daily reading, streaks.
               <ScrollToSection
                 sectionId="questions"
