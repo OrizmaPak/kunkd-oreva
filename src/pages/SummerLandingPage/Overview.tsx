@@ -29,7 +29,7 @@ const Overview = () => {
         <div className="flex items-center justify-center mt-6 md:mt-14 px-4">
           <Button
             size="md"
-            className="text-black bg-white flex gap-1 font-Inter"
+            className="text-black bg-white flex gap-2 font-InterReg font-medium md:font-Inter"
           >
             <LuUserPlus size={20} />
             Sign Up for the Summer Challenge
