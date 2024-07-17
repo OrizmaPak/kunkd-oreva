@@ -87,7 +87,10 @@ const Questions = () => {
   return (
     <>
       <Tabs color="rgba(109, 3, 173, 1)" variant="pills" defaultValue="Faqs">
-        <div className=" bg-[#6C08A9] md:py-10 py-4  pad-x-40 flex justify-center items-center gap-4 text30 px-10">
+        <div
+          id="questions"
+          className=" bg-[#6C08A9] md:py-10 py-4  pad-x-40 flex justify-center items-center gap-4 text30 px-10"
+        >
           <Tabs.List className=" bg-[#8530c1] p-4 rounded-3xl flex justify-center items-center md:gap-28">
             <Tabs.Tab
               value="Faqs"
@@ -106,7 +109,7 @@ const Questions = () => {
 
         <Tabs.Panel value="Faqs">
           <div>
-            <div id="questions" className="bg-[#fafafc] pad-y-96 pad-x-40">
+            <div className="bg-[#fafafc] pad-y-96 pad-x-40">
               <div className=" max-w-[1440px] mx-auto ">
                 <p className="text1 text-center text-[#667085] font-medium font-InterReg">
                   Everything you need to know about how users can participate in
