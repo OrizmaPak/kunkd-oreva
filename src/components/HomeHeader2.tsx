@@ -175,11 +175,11 @@ function HomeHeader2() {
 
           <Group className="center" grow pb="xl" px="md">
             <Button
+              varient="outlined"
               onClick={() => navigate("/dev")}
-              variant="default"
-              className="text-[#8530C1]"
+              className=""
             >
-              Log in
+              <strong className="text-[#8530C1]">Log in</strong>
             </Button>
             <Button
               onClick={() => navigate("/dev")}

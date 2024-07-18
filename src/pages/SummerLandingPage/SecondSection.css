@@ -1,0 +1,7 @@
+.second-section-icon {
+  width: clamp(6.25rem, 5.3834rem + 5.5462vw, 10.375rem) !important;
+}
+
+.arrow {
+  width: clamp(3.75rem, 2.8046rem + 6.0504vw, 8.25rem) !important;
+}

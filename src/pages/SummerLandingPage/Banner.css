@@ -3,6 +3,10 @@
   width: clamp(31.25rem, 29.0704rem + 13.9496vw, 41.625rem) !important;
 }
 
+.effect {
+  width: clamp(1.25rem, 0.7248rem + 3.3613vw, 3.75rem) !important;
+}
+
 /* .amina-container {
   right: clamp(6.25rem, 3.6411rem + 11.9266vw, 14.375rem) !important;
 } */

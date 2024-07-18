@@ -3,16 +3,18 @@ import HomeHeader2 from "@/components/HomeHeader2";
 import Banner from "./Banner";
 import AOS from "aos";
 import { useEffect } from "react";
-import Overview from "./Overview";
-import Existing from "./Existing";
-import Competition from "./Competition";
+import ThirdSection from "./ThirdSection";
+import FifthSection from "./FifthSection";
+import SecondSection from "./SecondSection";
 // import Leaderboard from "./Leaderboard";
 // import Download from "./Download";
 // import Terms from "./Terms";
 import Questions from "./Questions";
 import HomeFooter2 from "@/components/HomeFooter2";
-import PrizeSection from "./PrizeSection";
-import Participate from "./Participate";
+// import PrizeSection from "./FirstSection";
+import ForthSection from "./ForthSection";
+import FirstSection from "./FirstSection";
+import SixthSection from "./SixthSection";
 
 const SummerLandingPage = () => {
   useEffect(() => {
@@ -22,16 +24,13 @@ const SummerLandingPage = () => {
     <div>
       <HomeHeader2 />
       <Banner />
-      <PrizeSection />
-      <Competition />
-      <Overview />
-      <Participate />
-      <Existing />
-      {/* <Leaderboard /> */}
-      {/* <Download /> */}
-      {/* <Terms /> */}
+      <FirstSection />
+      <SecondSection />
+      <ThirdSection />
+      <ForthSection />
+      <FifthSection />
+      <SixthSection />
       <Questions />
-      {/* <RuleBook /> */}
       <HomeFooter2 />
     </div>
   );
