@@ -18,9 +18,6 @@ const ThirdSection = () => {
         className=" left-[10%] top- md:top-0 absolute earth"
       />
       <div className="max-w-[1440px] mx-auto">
-        <p className="text-[#8530C1] text20 font-semibold text-center">
-          Prizes to be won
-        </p>
         <p className="header-1 font-Inter text-center">
           Amazing <strong className="text-[#8530C1]"> Prizes </strong>To Be Won
         </p>

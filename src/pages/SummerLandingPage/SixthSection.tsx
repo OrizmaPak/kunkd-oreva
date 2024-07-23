@@ -44,9 +44,6 @@ const SixthSection = () => {
       />
 
       <div className="max-w-[1440px] mx-auto">
-        <p className="text-[#8530C1]  font-Inter text-center text20">
-          Our Apps
-        </p>
         <p className="header-1 font-Inter text-center">
           Available on Web and Mobile
         </p>

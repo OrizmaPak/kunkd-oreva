@@ -22,9 +22,6 @@ const FifthSection = () => {
         </div>
         <div className="md:w-1/2">
           <div>
-            <p className="text20 text-[#8530C1] font-Inter  text-center md:text-start">
-              Summer Challenge
-            </p>
             <p className="header-1 font-Inter text-center md:text-start">
               Here is how to participate in the daily reading summer challenge:
             </p>

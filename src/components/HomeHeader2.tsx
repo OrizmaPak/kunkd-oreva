@@ -113,8 +113,9 @@ function HomeHeader2() {
             </div>
           </Group> */}
 
-          <div className="hidden lg:flex gap-3 w-[200px] z-[1000]">
+          <div className="hidden lg:flex justify-end  gap-3 w-[500px] z-[1000] ">
             <Button
+              size="md"
               varient="outlined"
               onClick={() => navigate("/login")}
               className=" text "
@@ -122,6 +123,7 @@ function HomeHeader2() {
               <strong className="text-[#8530C1]">Log in</strong>
             </Button>
             <Button
+              size="md"
               onClick={() => navigate("/signup")}
               className="bg-[#8530C1] hover:bg-[#8530C1] "
             >

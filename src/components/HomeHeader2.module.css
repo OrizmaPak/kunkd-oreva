@@ -57,5 +57,5 @@
 }
 
 .logow {
-  width: clamp(9.375rem, 8.3246rem + 6.7227vw, 14.375rem) !important;
+  width: clamp(12.5rem, 11.187rem + 8.4034vw, 18.75rem) !important;
 }

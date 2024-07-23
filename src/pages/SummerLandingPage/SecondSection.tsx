@@ -26,7 +26,7 @@ const SecondSection = () => {
     },
     {
       image: Checklist,
-      title1: "Eligibility",
+      title1: "ELIGIBILITY",
       title2: "Age 6 - 10",
     },
   ];
@@ -61,7 +61,7 @@ const SecondSection = () => {
           </div>
         </div>
         <div className="bg-[#29B256] py-10 md:py-[64px] md:px-[80px] flex flex-col md:flex-row justify-center gap-4  mt-20 rounded-[36px]">
-          <p className="text30 font-Inter text-white text-center md:text-start">
+          <p className="text30 hidden md:block font-Inter text-white text-center md:text-start">
             Secure a spot for your child now!
           </p>
           <Button
