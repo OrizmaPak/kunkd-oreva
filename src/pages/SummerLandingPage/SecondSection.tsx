@@ -20,13 +20,13 @@ const SecondSection = () => {
   const data = [
     {
       image: Clock,
-      title1: "TIMELINE",
+      title1: "Timeline",
       title2: "1st - 21st ",
       message: "August, 2024",
     },
     {
       image: Checklist,
-      title1: "ELIGIBILITY",
+      title1: "Eligibility",
       title2: "Age 6 - 10",
     },
   ];
@@ -60,17 +60,19 @@ const SecondSection = () => {
             <img src={SchoolGirl} alt="" className="school-boy" />
           </div>
         </div>
-        <div className="bg-[#29B256] py-10 md:py-[64px] md:px-[80px] flex flex-col md:flex-row justify-center gap-4  mt-20 rounded-[36px]">
-          <p className="text30 hidden md:block font-Inter text-white text-center md:text-start">
+        <div className="bg-[#29B256] hidden md:flex py-10 md:py-[30px] md:px-[80px]   flex-col justify-center gap-1  mt-20 rounded-[36px]">
+          <p className="text30  font-Inter tex text-white text-center ">
             Secure a spot for your child now!
           </p>
-          <Button
-            onClick={() => navigate("/signup")}
-            size="md"
-            className="bg-white text-black  font-Inter hidden md:block"
-          >
-            Secure spot
-          </Button>
+          <div className="flex justify-center">
+            <Button
+              onClick={() => navigate("/signup")}
+              size="md"
+              className="bg-white text-black  font-Inter hidden md:block"
+            >
+              Secure spot
+            </Button>
+          </div>
           {/* <div className=" flex flex-col md:hidden   items-center justify-center  gap-4 my-2">
             <AppleStore />
             <GooglePlay />

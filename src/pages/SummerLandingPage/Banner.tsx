@@ -4,7 +4,7 @@ import KundaLogo from "@/assets/schoolIcon.svg";
 
 const Banner = () => {
   return (
-    <div className=" w-full max-w-[1440px] mb-8 md:mb-28  mt-4 md:mt-16   z-[50] mx-auto px-4">
+    <div className=" w-full max-w-[1440px] mb-8 md:mb-16  mt-4 md:mt-10   z-[50] mx-auto px-4">
       <div className="flex justify-between   flex-col lg:flex-row  relative  ">
         <img src={KundaLogo} alt="image" className="effect absolute left-20" />
         <img

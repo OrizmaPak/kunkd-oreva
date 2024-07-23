@@ -11,11 +11,11 @@ import { useNavigate } from "react-router-dom";
 const ThirdSection = () => {
   const navigate = useNavigate();
   return (
-    <div className=" pad-y-96 pad-x-10 relative mt-8 ">
+    <div className=" pad-y-96 pad-x-10 relative mt-4 md:mt-8 ">
       <img
         src={Earth}
         alt="image"
-        className=" left-[10%] top- md:top-0 absolute earth"
+        className=" left-[10%] top-20 md:top-0 absolute earth"
       />
       <div className="max-w-[1440px] mx-auto">
         <p className="header-1 font-Inter text-center">
@@ -28,7 +28,7 @@ const ThirdSection = () => {
           <img src={AmazonIpad} alt="image" className="gift-card" />
         </div>
       </div>
-      <div className="mt-16 flex justify-center">
+      <div className=" mt-10 md:mt-16 flex justify-center">
         <Button
           onClick={() => navigate("/signup")}
           size="md"
@@ -36,7 +36,7 @@ const ThirdSection = () => {
         >
           Sign Up Now
         </Button>
-        <div className=" flex flex-col md:hidden   items-center justify-center  gap-4 my-3">
+        <div className=" flex flex-col md:hidden   items-center justify-center  gap-4 ">
           <AppleStore sizes />
           <GooglePlay sizes />
         </div>
