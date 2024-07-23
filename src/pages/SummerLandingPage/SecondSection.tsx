@@ -71,9 +71,9 @@ const SecondSection = () => {
           >
             Secure spot
           </Button>
-          <div className=" flex md:hidden   items-center justify-center  gap-4 my-2">
-            <AppleStore sizes />
-            <GooglePlay sizes />
+          <div className=" flex flex-col md:hidden   items-center justify-center  gap-4 my-2">
+            <AppleStore />
+            <GooglePlay />
           </div>
         </div>
       </div>

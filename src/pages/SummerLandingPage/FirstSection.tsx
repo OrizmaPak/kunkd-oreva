@@ -39,9 +39,9 @@ const FirstSection = () => {
               Sign Up Now
             </Button>
           </div>
-          <div className=" flex md:hidden   items-center justify-center  gap-4 my-10">
-            <AppleStore sizes />
-            <GooglePlay sizes />
+          <div className=" flex flex-col md:hidden   items-center justify-center  gap-4 my-10">
+            <AppleStore />
+            <GooglePlay />
           </div>
         </div>
       </div>
