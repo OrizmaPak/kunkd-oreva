@@ -130,7 +130,7 @@ function HomeHeader2() {
           </div>
 
           <Burger
-            className="lg:hidden "
+            className="lg:hidden hidden"
             opened={drawerOpened}
             onClick={toggleDrawer}
           />
