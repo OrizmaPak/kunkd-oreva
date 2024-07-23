@@ -5,8 +5,8 @@ import SchoolGirl from "@/assets/schoolGirl02.png";
 import "./SecondSection.css";
 import Arrow07 from "@/assets/Arrow 07.png";
 import Button from "@/components/Button";
-import AppleStore from "../Home/AppleStore";
-import GooglePlay from "../Home/GooglePlay";
+// import AppleStore from "../Home/AppleStore";
+// import GooglePlay from "../Home/GooglePlay";
 import { useNavigate } from "react-router-dom";
 
 type Tdata = {
