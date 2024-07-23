@@ -10,6 +10,10 @@ import Button from "@/components/Button";
 import ContactImage from "@/assets/getintouchImage.png";
 
 const Questions = () => {
+  const emailAddress = "Support@kundakids.com";
+
+  const mailtoLink = `mailto:${emailAddress}`;
+
   const data = [
     {
       value: "How do I participate in the daily quizzes?",
@@ -149,9 +153,12 @@ const Questions = () => {
                     friendly team.
                   </p>
                   <div className="flex justify-center mt-3">
-                    <Button size="md" className=" font-Inter inline">
+                    <a
+                      href={mailtoLink}
+                      className=" font-Inter text-white inline bg-[#8530C1] py-2 px-3 rounded hover:text-white hover:no-underline"
+                    >
                       Get in touch
-                    </Button>
+                    </a>
                   </div>
                 </div>
               </div>

@@ -594,7 +594,7 @@ export const SelectAvatar = ({
   userName,
   schoolName,
   setName,
-  // setUserName,
+  setUserName,
   setAge,
   setSchoolName,
   // arrayAvatar,
@@ -669,6 +669,7 @@ export const SelectAvatar = ({
           setSchoolName("");
           setAge("");
           setSchoolName("");
+          setUserName("");
           moengage.track_event("web_add_child", {
             user_id: user?.user_id,
             child_name: name,
