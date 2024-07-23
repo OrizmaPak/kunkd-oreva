@@ -97,7 +97,7 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
           <div className="w-[100%] ">
             <span></span>
             <h1 className="font-bold fon header2 font-Recoleta">
-              Sign up for parent
+              Sign Up as a Parent
             </h1>
             <p className="text2 text-[#A7A7A7] font-Hanken">
               Start learning and reading without restrictions.{" "}
