@@ -33,7 +33,7 @@ const SecondSection = () => {
   const navigate = useNavigate();
   return (
     <div className=" mt-8 md:mt-20">
-      <div className="max-w-[1440px] mx-auto ">
+      <div className="max-w-[1440px] mx-auto px-3 ">
         <div className="relative flex gap-10  md:gap-0  flex-col md:flex-row ">
           <img
             src={Arrow07}
@@ -71,10 +71,10 @@ const SecondSection = () => {
           >
             Secure spot
           </Button>
-          <div className=" flex flex-col md:hidden   items-center justify-center  gap-4 my-2">
+          {/* <div className=" flex flex-col md:hidden   items-center justify-center  gap-4 my-2">
             <AppleStore />
             <GooglePlay />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

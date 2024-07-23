@@ -40,8 +40,8 @@ const FirstSection = () => {
             </Button>
           </div>
           <div className=" flex flex-col md:hidden   items-center justify-center  gap-4 my-10">
-            <AppleStore />
-            <GooglePlay />
+            <AppleStore sizes />
+            <GooglePlay sizes />
           </div>
         </div>
       </div>
