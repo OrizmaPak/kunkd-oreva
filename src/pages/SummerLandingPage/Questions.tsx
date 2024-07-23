@@ -6,7 +6,6 @@ import { Tabs } from "@mantine/core";
 import "./Questions.css";
 import CurveArrow01 from "@/assets/curveArrow01.png";
 import CurveArrow02 from "@/assets/curveArrow02.png";
-import Button from "@/components/Button";
 import ContactImage from "@/assets/getintouchImage.png";
 
 const Questions = () => {
