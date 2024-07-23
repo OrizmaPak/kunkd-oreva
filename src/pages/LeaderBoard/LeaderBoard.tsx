@@ -144,8 +144,8 @@ const Card = ({
   avatar,
   score,
   index,
-  country_code,
-}: TLeaderBoardData) => {
+}: // country_code,
+TLeaderBoardData) => {
   let formattedNumber;
 
   // Check if the number has decimals
