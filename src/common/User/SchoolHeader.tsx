@@ -193,7 +193,7 @@ _logout`,
               >
                 {
                   <button className="text-[16px]  font-bold nav-link">
-                    LeaderBoard
+                    Leaderboard
                   </button>
                 }
               </NavLink>
