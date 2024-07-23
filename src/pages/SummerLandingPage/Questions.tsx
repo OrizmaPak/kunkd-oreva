@@ -6,27 +6,28 @@ import { Tabs } from "@mantine/core";
 import "./Questions.css";
 import CurveArrow01 from "@/assets/curveArrow01.png";
 import CurveArrow02 from "@/assets/curveArrow02.png";
-import { IoCheckmarkDoneSharp } from "react-icons/io5";
+import Button from "@/components/Button";
+import ContactImage from "@/assets/getintouchImage.png";
 
 const Questions = () => {
   const data = [
     {
       value: "How do I participate in the daily quizzes?",
       description:
-        "Every week, we'll upload new subcategories of stories. Each day at 12:00 noon WAT, a quiz based on these stories will be available on the Kunda Kids app. Log in and take the quiz to test your knowledge and earn points!",
+        "Every day at 12 noon (GMT+1), a new quiz will be uploaded on the app. Log in and take the quiz to test your knowledge and earn points!",
     },
-    {
-      value: "What happens after the challenge?",
-      description:
-        "Celebrate your achievements and keep reading! We'll continue to offer engaging content to fuel your child's love for learning.",
-    },
+    // {
+    //   value: "What happens after the challenge?",
+    //   description:
+    //     "Celebrate your achievements and keep reading! We'll continue to offer engaging content to fuel your child's love for learning.",
+    // },
     {
       value: "How do I stay on top of the leaderboard?",
       description: (
         <>
           <p className="text20 font-InterReg">
             The leaderboard shows the top earners each week. Here are 2 ways to
-            climb the ranks :
+            climb the ranks:
           </p>
           <ul className=" list-disc pl-8">
             <li className="my-4 text1 font-InterReg">
@@ -35,9 +36,8 @@ const Questions = () => {
             </li>
             <li className="my-4 text1 font-InterReg">
               <strong> Master the Quizzes:</strong> Difficulty brings rewards!
-              Challenge yourself with medium and hard quizzes (worth 7 and 10
-              points each) and aim for high scores by answering correctly (bonus
-              points per question).
+              Challenge yourself and keep reading. Quizzes get more difficult as
+              the challenge progresses.
             </li>
             <li className="my-4 text1 font-InterReg">
               <strong> Bonus Tip:</strong> Consistency is key! Log in daily,
@@ -122,17 +122,36 @@ const Questions = () => {
 
           <Tabs.Panel value="Faqs">
             <div>
-              <div className=" pad-x-40 mb-20 py-8">
+              <div className=" pad-x-40 mt-3 md:my-8 ">
                 <div className=" max-w-[1440px] mx-auto ">
-                  <p className="text25 text-center  font-semibold font-InterReg">
+                  {/* <p className="text25 text-center  font-semibold font-InterReg">
                     Everything you need to know about how users can participate
                     in this competition
-                  </p>
+                  </p> */}
 
-                  <div className="mt-8 max-w-[1000px] mx-auto px-2">
+                  <div className="mt-4 max-w-[1000px] mx-auto px-2">
                     <Accordion variant="contained" defaultValue="Apples">
                       {items}
                     </Accordion>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-5 p-[32px] bg-[#F6F4F7] justify-center max-w-[1440px] mx-auto  mt-16 rounded-[16px]">
+                  <div className="flex justify-center items-center">
+                    <img src={ContactImage} alt="image" className="w-[120px]" />
+                  </div>
+                  <p className="text20 font-Inter text-center ">
+                    {" "}
+                    Still have questions?
+                  </p>
+                  <p className="text1 font-InterReg text-center">
+                    Can’t find the answer you’re looking for? Please chat to our
+                    friendly team.
+                  </p>
+                  <div className="flex justify-center mt-3">
+                    <Button size="md" className=" font-Inter inline">
+                      Get in touch
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -141,16 +160,13 @@ const Questions = () => {
 
           <Tabs.Panel value="Rulebook">
             <div className=" ">
-              <div
-                id="rulebook"
-                className="   pad-x-10  contain  bg-no-repeat  "
-              >
+              <div id="rulebook" className="   pad-x-10  mt-3 md:my-8 ">
                 <div className="max-w-[1440px] mx-auto relative">
                   <p className="text25 text-center text-black  font-medium max-w-[1000px] mx-auto px-2">
                     Here’s how to stack up points:
                   </p>
 
-                  <ol className=" max-w-[800px] mx-auto list-decimal  text-[22px] mt-10 px-10 ">
+                  <ol className=" max-w-[800px] mx-auto list-decimal  text-[22px] mt-5 px-10 ">
                     <li className="my-5 text25  font-Inter">
                       Daily Reading
                       <br />
@@ -164,17 +180,14 @@ const Questions = () => {
                       <p className="text1 text-[#434750] font-InterReg">
                         Base points for completing a quiz):
                       </p>
-                      <ul className="text2 text-[#667085]">
+                      <ul className="text2 list-disc text-[#667085]">
                         <li className="flex gap-1 items-center text1 font-InterReg">
-                          <IoCheckmarkDoneSharp size={20} color="#8530C1" />
                           Easy (Week 1) - 5 points
                         </li>
                         <li className="flex gap-1 items-center text1 font-InterReg">
-                          <IoCheckmarkDoneSharp size={20} color="#8530C1" />
                           Medium (Week 2) - 7 points
                         </li>
                         <li className="flex gap-1 items-center text1 font-InterReg">
-                          <IoCheckmarkDoneSharp size={20} color="#8530C1" />
                           Hard (Week 3) - 10 points (The tougher the quiz, the
                           higher your rewards)
                         </li>
@@ -185,36 +198,28 @@ const Questions = () => {
                       <p className="text1 text-[#434750] font-InterReg ">
                         (We would love to reward your consistency)
                       </p>
-                      <ul className="text2   text-[#667085]">
+                      <ul className="text2 list-disc  text-[#667085]">
                         <li className="my-3 flex gap-1 items-center font-InterReg">
-                          <IoCheckmarkDoneSharp size={20} color="#8530C1" />2
-                          points - Login for 2 consecutive days
+                          2 points - Login for 2 consecutive days
                         </li>
                         <li className="my-3 flex gap-1 items-center font-InterReg">
-                          <IoCheckmarkDoneSharp size={20} color="#8530C1" />3
-                          points - Login for 3 consecutive days{" "}
+                          3 points - Login for 3 consecutive days{" "}
                         </li>
                         <li className="my-3 flex gap-1 items-center font-InterReg">
-                          <IoCheckmarkDoneSharp size={20} color="#8530C1" /> 4
-                          points - Login for 4 consecutive days
+                          4 points - Login for 4 consecutive days
                         </li>
                         <li className="my-3 flex gap-1 items-center font-InterReg">
-                          <IoCheckmarkDoneSharp size={20} color="#8530C1" />5
-                          points - Login for 5 consecutive days{" "}
+                          5 points - Login for 5 consecutive days{" "}
                         </li>
                         <li className="my-3 flex gap-1 items-center font-InterReg">
-                          <IoCheckmarkDoneSharp size={20} color="#8530C1" />6
-                          points - Login for 6 consecutive days
+                          6 points - Login for 6 consecutive days
                         </li>
                         <li className="my-3 flex gap-1 items-center font-InterReg">
-                          <IoCheckmarkDoneSharp size={20} color="#8530C1" />7
-                          points - Login for 7 consecutive days
+                          7 points - Login for 7 consecutive days
                         </li>
                       </ul>
                     </li>
                   </ol>
-
-                  <div className=" flex flex-col md:flex-row gap-14 justify-center items-center mt-16  px-3"></div>
                 </div>
               </div>
             </div>

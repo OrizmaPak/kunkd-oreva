@@ -4,6 +4,7 @@ import {
   useGetContentById,
   useGetLikedContent,
   useLikedContent,
+  useSummerChallengeContentTracking,
   useUnLikedContent,
 } from "@/api/queries";
 import AfamBlur from "@/assets/afamblur.jpg";
@@ -410,6 +411,7 @@ const ReadPage = ({
   };
   const max = 35;
   const { mutate } = useContentTracking();
+  const { mutate: mutateSummer } = useSummerChallengeContentTracking();
   const profileId = sessionStorage.getItem("profileId");
   const contentId = sessionStorage.getItem("contentId");
 
@@ -418,27 +420,53 @@ const ReadPage = ({
 
     const handleUpdateData = async () => {
       try {
-        mutate(
-          {
-            profile_id: Number(profileId),
-            content_id: Number(contentId),
-            status: `${pageNumber === pageTotal ? "complete" : "ongoing"}`,
-            pages_read: Number(pageNumber + 1),
-            timespent: 23,
-            signal: abortControllerRef.signal,
-          },
-          {
-            onSuccess(data) {
-              return data;
+        if (sessionStorage.getItem("fromSummer") === "true") {
+          mutateSummer(
+            {
+              profile_id: Number(profileId),
+              summer_challenge_quiz_id: Number(
+                sessionStorage.getItem("summerQuizId")
+              ),
+              content_id: Number(contentId),
+              status: `${pageNumber === pageTotal ? "complete" : "ongoing"}`,
+              pages_read: Number(pageNumber + 1),
+              // timespent: 23,
             },
-            onError() {
-              // notifications.show({
-              //   title: `Notification`,
-              //   message: getApiErrorMessage(err),
-              // });
+            {
+              onSuccess(data) {
+                return data;
+              },
+              onError(err) {
+                notifications.show({
+                  title: `Notification`,
+                  message: getApiErrorMessage(err),
+                });
+              },
+            }
+          );
+        } else {
+          mutate(
+            {
+              profile_id: Number(profileId),
+              content_id: Number(contentId),
+              status: `${pageNumber === pageTotal ? "complete" : "ongoing"}`,
+              pages_read: Number(pageNumber + 1),
+              timespent: 23,
+              signal: abortControllerRef.signal,
             },
-          }
-        );
+            {
+              onSuccess(data) {
+                return data;
+              },
+              onError() {
+                // notifications.show({
+                //   title: `Notification`,
+                //   message: getApiErrorMessage(err),
+                // });
+              },
+            }
+          );
+        }
       } catch (err) {
         // Handle errors if needed
       }
@@ -637,6 +665,7 @@ const BookPagination = ({
   divRef: RefObject<HTMLDivElement>;
 }) => {
   const { mutate } = useContentTracking();
+  const { mutate: mutateSummer } = useSummerChallengeContentTracking();
   const continuePage = sessionStorage.getItem("continuePage");
   const profileId = sessionStorage.getItem("profileId");
   const contentId = sessionStorage.getItem("contentId");
@@ -694,32 +723,60 @@ const BookPagination = ({
         end_time: timeString,
       }
     );
-    mutate(
-      {
-        profile_id: Number(profileId),
-        content_id: Number(contentId),
-        status: "complete",
-        pages_read: Number(pageTotal + 1),
-        timespent: 23,
-      },
-      {
-        onSuccess(data) {
-          if (sessionStorage.getItem("fromSummer") === "true") {
+    if (sessionStorage.getItem("fromSummer") === "true") {
+      mutateSummer(
+        {
+          profile_id: Number(profileId),
+          summer_challenge_quiz_id: Number(
+            sessionStorage.getItem("summerQuizId")
+          ),
+          content_id: Number(contentId),
+          status: "complete",
+          pages_read: Number(pageTotal + 1),
+          // timespent: 23,
+        },
+        {
+          onSuccess(data) {
             navigate("/summer-quiz/preview-summer-challenge");
             sessionStorage.removeItem("fromSummer");
-          } else {
-            setIsFinish();
-          }
-          return data;
+            return data;
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    } else {
+      mutate(
+        {
+          profile_id: Number(profileId),
+          content_id: Number(contentId),
+          status: "complete",
+          pages_read: Number(pageTotal + 1),
+          timespent: 23,
         },
-        onError(err) {
-          notifications.show({
-            title: `Notification`,
-            message: getApiErrorMessage(err),
-          });
-        },
-      }
-    );
+        {
+          onSuccess(data) {
+            if (sessionStorage.getItem("fromSummer") === "true") {
+              navigate("/summer-quiz/preview-summer-challenge");
+              sessionStorage.removeItem("fromSummer");
+            } else {
+              setIsFinish();
+            }
+            return data;
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    }
   };
 
   const options = [];

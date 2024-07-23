@@ -9,7 +9,7 @@ import "./FifthSection.css";
 const FifthSection = () => {
   return (
     <div className=" md:pad-y-96  relative">
-      <div className="max-w-[1440px]  mx-auto relative rounded-3xl py-8 px-4 flex  md:flex-row flex-col gap-10 md:gap-40">
+      <div className="max-w-[1440px]  mx-auto relative rounded-3xl  px-4 flex  md:flex-row flex-col gap-10 md:gap-40">
         <div
           className=" md:w-1/3 px-10 md:px-0
         "
@@ -22,16 +22,30 @@ const FifthSection = () => {
         </div>
         <div className="md:w-1/2">
           <div>
-            <p className="text20 text-[#8530C1]">Summer Challenge</p>
-            <p className="header1 font-Inter">
-              Here is to participate in the daily reading summer challenge
+            <p className="text20 text-[#8530C1] font-Inter  text-center md:text-start">
+              Summer Challenge
+            </p>
+            <p className="header-1 font-Inter text-center md:text-start">
+              Here is how to participate in the daily reading summer challenge:
             </p>
           </div>
-          <div className="grid grid-cols-2  gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 mt-10  md:mt-16  gap-2">
             <img src={Card1} alt="image" />
-            <img src={Card2} alt="image" />
-            <img src={Card3} alt="image" />
-            <img src={Card4} alt="image" />
+            <img
+              src={Card2}
+              alt="image"
+              className="relative top-[-20px] md:top-0"
+            />
+            <img
+              src={Card3}
+              alt="image"
+              className="relative top-[-50px] md:top-0"
+            />
+            <img
+              src={Card4}
+              alt="image"
+              className="relative top-[-80px] md:top-0  w-[500px]"
+            />
           </div>
         </div>
       </div>

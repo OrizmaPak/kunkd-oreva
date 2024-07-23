@@ -86,6 +86,8 @@ import {
   GetSummerChallengeQuizzes,
   GetSummerQuiz,
   SubmmitSummerQuizQandA,
+  SummerChallengeContentTracking,
+  GetLeaderBoardList,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery, useInfiniteQuery } from "@tanstack/react-query";
@@ -794,10 +796,10 @@ export const useGetSummerChallengeQuizzes = (profileId: string) => {
   });
 };
 
-export const useGetSummerQuiz = (quizId: string) => {
+export const useGetSummerQuiz = (quizId: string, profileId: string) => {
   return useQuery({
-    queryKey: ["GetQuiz", quizId],
-    queryFn: () => GetSummerQuiz(quizId),
+    queryKey: ["GetQuiz", quizId, profileId],
+    queryFn: () => GetSummerQuiz(quizId, profileId),
     onSuccess: (response) => {
       return response;
     },
@@ -806,4 +808,15 @@ export const useGetSummerQuiz = (quizId: string) => {
 
 export const useSubmmitSummerQuizQandA = () => {
   return useMutation({ mutationFn: SubmmitSummerQuizQandA });
+};
+
+export const useSummerChallengeContentTracking = () => {
+  return useMutation({ mutationFn: SummerChallengeContentTracking });
+};
+
+export const useGetLeaderBoardList = () => {
+  return useQuery({
+    queryKey: ["GetLeaderBoardList"],
+    queryFn: GetLeaderBoardList,
+  });
 };

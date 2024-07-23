@@ -18,22 +18,20 @@ const SixthSection = () => {
   const baseUrl = window.location.origin;
   const data = [
     {
-      message:
-        "Sign Up on the web app as a parent or log in to your existing account",
+      message: "Sign Up at or simply login if you already have an account.",
       title: "Web App",
       image: WebAppCard,
       url: `${baseUrl}/signup`,
     },
     {
-      message:
-        "Download our mobile app on Appstore, Playstore and Amazon to join the summer challenge",
+      message: "Download the mobile app on Appstore, Play Store and Amazon.",
       title: "Mobile App",
       image: MobileAppCard,
       url: "https://play.google.com/store/apps/details?id=com.lhamycodes.kundakids",
     },
   ];
   return (
-    <div className=" pad-y-96 pad-x-10 relative ">
+    <div className=" md:mt-28 pad-x-10 relative ">
       <img
         src={Laugh01}
         alt="image"
@@ -46,11 +44,11 @@ const SixthSection = () => {
       />
 
       <div className="max-w-[1440px] mx-auto">
-        <p className="text-[#8530C1]  font-semibold text-center text20">
+        <p className="text-[#8530C1]  font-Inter text-center text20">
           Our Apps
         </p>
-        <p className="header1 font-Inter text-center">
-          Don't miss out on the fun!
+        <p className="header-1 font-Inter text-center">
+          Available on Web and Mobile
         </p>
 
         <div className="flex md:flex-row flex-col justify-between mt-8 md:mt-20 gap-8 md:gap-20   px-10">
@@ -58,10 +56,18 @@ const SixthSection = () => {
             return <Card key={index} data={data} />;
           })}
         </div>
-
-        <div className=" flex md:flex-row flex-col items-center justify-center  gap-8 my-10">
-          <AppleStore sizes />
-          <GooglePlay sizes />
+        <div className="bg-[#8530C1] py-6 md:py-[64px] px-[80px]  rounded-3xl my-16">
+          <p className="text-center font-Inter text30 text-white">
+            Download the app for free!
+          </p>
+          <p className="text-center text-white font-InterReg text20 ">
+            Remember, you’ll need an active subscription to finish the
+            challenge.
+          </p>
+          <div className=" flex md:flex-row flex-col items-center justify-center  gap-3 md:gap-8  my-4 md:my-10">
+            <AppleStore sizes />
+            <GooglePlay sizes />
+          </div>
         </div>
       </div>
     </div>
@@ -88,9 +94,9 @@ const Card = ({ data }: { data: TWebMobiledata }) => {
             onClick={() => {
               openInNewTab(`${data?.url}`);
             }}
-            className="text30 font-Inter  flex  items-center gap-2"
+            className="text25 font-Inter  flex  items-center gap-2"
           >
-            {data?.title} <HiExternalLink color="black" size={30} />
+            {data?.title} <HiExternalLink color="black" size={25} />
           </button>
           <p className="text20 font-InterReg">{data?.message}</p>
         </div>

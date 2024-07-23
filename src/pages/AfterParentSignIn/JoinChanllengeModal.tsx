@@ -29,6 +29,7 @@ const JoinChanllengeModal = ({ close }: { close: () => void }) => {
             title: `Notification`,
             message: data.data.message,
           });
+          sessionStorage.removeItem("showJoinChallenge");
           queryClient.refetchQueries(querykeys.profiles).then(() => {
             close();
           });
@@ -64,7 +65,13 @@ const JoinChanllengeModal = ({ close }: { close: () => void }) => {
             <span className="text-white">Yes</span>
           )}
         </Button>
-        <Button varient="outlined" onClick={close}>
+        <Button
+          varient="outlined"
+          onClick={() => {
+            sessionStorage.removeItem("showJoinChallenge");
+            close();
+          }}
+        >
           <strong className=" text-[#8530C1]">No</strong>
         </Button>
       </div>

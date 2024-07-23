@@ -78,7 +78,7 @@ const ChildProfileSetUp = ({
       // }}
       className=" h-screen w-full max-w-[1440px]  mx-auto flex flex-col "
     >
-      <div className="my-3">
+      <div className="my-3 px-8">
         <img src={Logo} alt="" />
       </div>
       <div className="flex flex-grow justify-center mt-10  ">
@@ -141,7 +141,7 @@ const ChildProfileSetUp = ({
         </div>
       </div>
       <div>
-        <div className="flex justify-between items-center gap- text3 font-semibold py-3">
+        <div className="flex justify-between items-center gap- text3 font-semibold py-3 px-8">
           <div>
             <p className="text-[#98A2B3] text2">
               {" "}
@@ -294,7 +294,7 @@ export const ChildNameModal = ({
       transition={{ duration: 0.3 }}
       className="  "
     >
-      <div className="">
+      <div className="px-8">
         <span></span>
         {showGoBackIcon && (
           <p
@@ -443,7 +443,7 @@ export const ChildSchoolNameModal = ({
       transition={{ duration: 0.3 }}
       className="  rounded-3xl   "
     >
-      <div className="flex px-4 gap-4 justify-between items-center">
+      <div className="flex px-8 gap-4 justify-between items-center">
         {showGoBackIcon && (
           <p onClick={goBack} className="">
             <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
@@ -664,6 +664,7 @@ export const SelectAvatar = ({
             title: `Notification`,
             message: data.data.message,
           });
+          sessionStorage.setItem("showJoinChallenge", "true");
           setName("");
           setSchoolName("");
           setAge("");

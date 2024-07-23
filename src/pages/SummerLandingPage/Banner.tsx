@@ -17,8 +17,9 @@ const Banner = () => {
           data-aos-once="true"
           className=" hero-text-container pt-8  md:pt-16  w-full md:mb-0 "
         >
-          <h1 className=" text-[#101828] md:text-center  text-start font-Brico   header1 w-full header2 ">
-            Summer Reading Challenge: <br /> Unleash Your Inner Genius!
+          <h1 className=" text-[#101828] text-center max-w-[800px] mx-auto  font-Brico   header1 w-full  ">
+            Wondering how to keep your kids engaged while having fun this
+            summer?
           </h1>
         </div>
       </div>

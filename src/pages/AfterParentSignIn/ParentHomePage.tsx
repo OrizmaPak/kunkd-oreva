@@ -47,14 +47,13 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
 
   useEffect(() => {
     if (profile?.username == "") {
-      console.log("whatisProfile1", profile);
       open();
     }
     if (
       profile?.accepted_summer_challenge === false &&
-      profile.username !== ""
+      profile.username !== "" &&
+      sessionStorage.getItem("showJoinChallenge")
     ) {
-      console.log("whatisProfile2", profile);
       openJoinChanllenge();
     }
   }, [profile]);

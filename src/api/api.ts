@@ -428,10 +428,18 @@ export const GetSummerChallengeQuizzes = (profileId: string) => {
   return axios.get(`/summer/challenge/quizzes/${profileId}`);
 };
 
-export const GetSummerQuiz = (quizId: string) => {
-  return axios.get(`/summer/challenge/quiz/${quizId}`);
+export const GetSummerQuiz = (quizId: string, profileId: string) => {
+  return axios.get(`/summer/challenge/quiz/${quizId}/${profileId}`);
 };
 
 export const SubmmitSummerQuizQandA = (payload: object) => {
   return axios.post(`/summer/challenge/quiz/question/save`, payload);
+};
+
+export const SummerChallengeContentTracking = (payload: object) => {
+  return axios.post(`/summer/challenge/content/track`, payload);
+};
+
+export const GetLeaderBoardList = () => {
+  return axios.get(`/summer/challenge/leaderboard/`);
 };

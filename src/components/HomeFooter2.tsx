@@ -16,7 +16,7 @@ const HomeFooter2 = () => {
   };
   const navigate = useNavigate();
   return (
-    <div className="py-14  max-w-[1440px] w-full px-8 mx-auto ">
+    <div className="py-8 md:mt-28 max-w-[1440px] w-full px-8 mx-auto ">
       <div className="flex flex-col md:flex-row md:items-center justify-between">
         <div className="max-w-[500px]">
           <img loading="lazy" src={Logo} alt="Logo" />

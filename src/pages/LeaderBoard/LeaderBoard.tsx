@@ -1,14 +1,28 @@
 import InnerWrapper from "@/common/User/InnerWrapper";
 import Wrapper from "@/common/User/Wrapper";
 import LeaderboardBg1 from "@/assets/leaderboardbg1.png";
-import { leaderboarData } from "@/pages/SummerLandingPage/Leaderboard";
-import { TLeaderBoardData } from "@/pages/SummerLandingPage/Leaderboard";
+// import { TLeaderBoardData } from "@/pages/SummerLandingPage/Leaderboard";
 import FirstMedal from "@/assets/firstMedal.png";
 import SecondMedal from "@/assets/secondMedal.png";
 import ThirdMedal from "@/assets/thirdMedal.png";
 // import { position } from "@chakra-ui/react";
+import CountryFlag from "react-country-flag";
+import { useGetLeaderBoardList } from "@/api/queries";
+import { Skeleton } from "@mantine/core";
+
+type TLeaderBoardData = {
+  username: string;
+  score: number;
+  avatar: string;
+  country: string;
+  country_code: string;
+  index: number;
+};
 
 const LeaderBoard = () => {
+  const { data, isLoading } = useGetLeaderBoardList();
+  const leaderboard = data?.data?.data;
+  console.log(data);
   return (
     <div>
       <Wrapper bgColor="white">
@@ -30,16 +44,16 @@ const LeaderBoard = () => {
                     </p>
                     <p className="border-[5px] border-[#A14FDE] rounded-full">
                       <img
-                        src={leaderboarData[1].image}
+                        src={leaderboard && leaderboard[1]?.avatar}
                         alt=""
                         className="w-[70px]  "
                       />
                     </p>
                     <p className="text-white font-bold">
-                      {leaderboarData[1].name}
+                      {leaderboard && leaderboard[1]?.username}
                     </p>
                     <p className="bg-[#A14FDE] p-2 rounded-xl text-white font-medium px-4">
-                      {leaderboarData[1].points} P
+                      {leaderboard && leaderboard[1]?.score} P
                     </p>
                   </div>
                   <div className="flex justify-center items-center flex-col pb-20">
@@ -48,16 +62,16 @@ const LeaderBoard = () => {
                     </p>
                     <p className="border-[5px] border-[#A14FDE] rounded-full">
                       <img
-                        src={leaderboarData[0].image}
+                        src={leaderboard && leaderboard[0]?.avatar}
                         alt="image"
                         className="w-[70px] "
                       />
                     </p>
                     <p className="text-white font-bold">
-                      {leaderboarData[0].name}
+                      {leaderboard && leaderboard[0]?.username}
                     </p>
                     <p className="bg-[#8632C2] p-2 rounded-xl text-white font-medium px-4">
-                      {leaderboarData[0].points} P
+                      {leaderboard && leaderboard[0]?.score} P
                     </p>
                   </div>
                   <div className="flex justify-center items-center flex-col">
@@ -66,16 +80,16 @@ const LeaderBoard = () => {
                     </p>
                     <p className="border-[5px] border-[#A14FDE] rounded-full">
                       <img
-                        src={leaderboarData[2].image}
+                        src={leaderboard && leaderboard[2]?.avatar}
                         alt="image"
                         className="w-[70px]"
                       />
                     </p>
                     <p className="text-white font-bold">
-                      {leaderboarData[2].name}
+                      {leaderboard && leaderboard[2]?.username}
                     </p>
                     <p className="bg-[#8632C2] p-2 rounded-xl text-white font-medium px-4">
-                      {leaderboarData[2].points} P
+                      {leaderboard && leaderboard[2]?.score} P
                     </p>
                   </div>
                 </div>
@@ -87,10 +101,10 @@ const LeaderBoard = () => {
                   </p>
                   <p className="text30 font-bold">1st Place</p>
                 </div>
-                <div>
+                {/* <div>
                   <p className="text25 text-[#15151566] font-medium">Streak:</p>
                   <p className="text30 font-bold">19 days</p>
-                </div>
+                </div> */}
                 <div>
                   <p className="text25 text-[#15151566] font-medium">
                     Total points:
@@ -100,11 +114,22 @@ const LeaderBoard = () => {
               </div>
             </div>
 
-            <div className="mt-20">
-              {leaderboarData.slice(3).map((datta, index) => (
-                <Card {...datta} index={index} />
-              ))}
-            </div>
+            {isLoading ? (
+              <p>
+                {isLoading &&
+                  new Array(10).fill(1).map((array, index) => (
+                    <Skeleton key={index} height={60} my={10} visible={true}>
+                      <h1 className="w-full">{array}</h1>
+                    </Skeleton>
+                  ))}
+              </p>
+            ) : (
+              <div className="mt-20">
+                {leaderboard?.map((datta: TLeaderBoardData, index: number) => (
+                  <Card {...datta} index={index} />
+                ))}
+              </div>
+            )}
           </div>
         </InnerWrapper>
       </Wrapper>
@@ -114,7 +139,21 @@ const LeaderBoard = () => {
 
 export default LeaderBoard;
 
-const Card = ({ name, country, image, points, position }: TLeaderBoardData) => {
+const Card = ({
+  username,
+  avatar,
+  score,
+  index,
+  country_code,
+}: TLeaderBoardData) => {
+  let formattedNumber;
+
+  // Check if the number has decimals
+  if (score % 1 !== 0) {
+    formattedNumber = score?.toFixed(2); // Rounds to 2 decimal places
+  } else {
+    formattedNumber = score?.toString(); // Convert to string without formatting
+  }
   return (
     <>
       <div className="flex justify-between  py-5 px-8 items-center w-full bg-white rounded-3xl shadow-md my-4">
@@ -122,21 +161,25 @@ const Card = ({ name, country, image, points, position }: TLeaderBoardData) => {
           <p
             className={`rounded-full border-[3px] h-8 w-8 text-center   text-[#D2D2DF] border-[#D2D2DF] bg-[#ffff] font-medium`}
           >
-            {position}
+            {index + 1}
           </p>
-          <img src={image} alt="image" />
+          <img src={avatar} alt="image" className="w-[60px]" />
 
           <div>
-            <p className="font-bold text1">{name}</p>
+            <p className="font-bold text1">{username}</p>
           </div>
         </div>
         <div className=" w-full ">
           <p className="text2 text-center text-[#7E7E89] font-medium">
-            {points} Points
+            {formattedNumber} Points
           </p>
         </div>
         <div className="w-full flex justify-end items-end">
-          <img src={country} alt="image" />
+          <CountryFlag
+            countryCode="NG"
+            svg
+            style={{ width: "40px", height: "auto" }}
+          />
         </div>
       </div>
     </>

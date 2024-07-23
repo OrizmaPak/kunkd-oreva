@@ -5,6 +5,8 @@ import SchoolBoy from "@/assets/schoolBoy.png";
 import "./FirstSection.css";
 import Button from "@/components/Button";
 import { useNavigate } from "react-router-dom";
+import AppleStore from "../Home/AppleStore";
+import GooglePlay from "../Home/GooglePlay";
 
 const FirstSection = () => {
   const navigate = useNavigate();
@@ -24,19 +26,22 @@ const FirstSection = () => {
           <img src={SchoolBoy} alt="" className="school-boy" />
         </div>
         <div className="flex flex-col justify-center items-center flex-grow w-full px-4 text-center md:text-start   ">
-          <p className="font-Inter header1">
+          <p className="font-Inter header-1">
             Join the Kunda Kids <br /> 21-Day Summer Reading Challenge!{" "}
           </p>
-          <p className="text20 font-InterReg mt-4 md:mt-8">
-            Ignite your child's love for reading and empower them to become
-            lifelong learners with daily reading and quizzes!
+          <p className="text20 font-InterReg mt-4 md:mt-8  w-full">
+            Ignite your child’s love for reading and win amazing prizes.
           </p>
 
-          <div className="flex justify-center md:justify-start  items-start  mt-4 md:mt-10 w-full">
+          <div className=" hidden md:flex justify-center md:justify-start  items-start  mt-7 md:mt-10 w-full">
             <Button onClick={() => navigate("/signup")} size="md">
               {" "}
               Sign Up Now
             </Button>
+          </div>
+          <div className=" flex md:hidden   items-center justify-center  gap-4 my-10">
+            <AppleStore sizes />
+            <GooglePlay sizes />
           </div>
         </div>
       </div>

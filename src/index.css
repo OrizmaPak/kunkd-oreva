@@ -79,13 +79,13 @@ body {
 .header1 {
   /* font-size: clamp(1.875rem, 1.4548rem + 2.6891vw, 3.875rem) !important; */
   font-size: clamp(1.875rem, 1.5336rem + 2.1849vw, 3.5rem) !important;
-  line-height: clamp(2.8125rem, 2.458rem + 2.2689vw, 4.5rem) !important;
+  line-height: clamp(2.8125rem, 2.0852rem + 2.9608vw, 4.75rem) !important;
   /* line-height: clamp(1.75rem, 1.1985rem + 5.5294vw, 6.375rem) !important; */
 }
 
 .header-1 {
-  font-size: clamp(1.875rem, 1.6387rem + 1.5126vw, 3rem) !important;
-  line-height: clamp(1.75rem, 1.1985rem + 3.5294vw, 4.375rem) !important;
+  font-size: clamp(1.75rem, 1.2808rem + 1.9102vw, 3rem) !important;
+  line-height: clamp(2.25rem, 1.64rem + 2.4833vw, 3.875rem) !important;
 }
 /* 18 */
 .text1 {

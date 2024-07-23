@@ -12,13 +12,48 @@ import { useDisclosure } from "@mantine/hooks";
 import useStore from "@/store/index";
 import { getProfileState } from "@/store/profileStore";
 import { selectAvatarType } from "../AfterParentSignIn/SelectProfile";
-
+import { Tabs } from "@mantine/core";
+import { useEffect, useState } from "react";
+import moment from "moment";
 const SummerQuiz = () => {
   const { data } = useGetSummerChallengeQuizzes(
     sessionStorage.getItem("profileId") as string
   );
   console.log("summer challenge quizzes", data);
   const quizzes = data?.data?.data?.quizzes;
+  const [futureQUiz, setFutureQuiz] = useState([]);
+  const [missedQuiz, setMissedQuiz] = useState([]);
+  const [completedQuiz, setCompletedQuiz] = useState([]);
+
+  useEffect(() => {
+    if (quizzes) {
+      const currentTime = moment(); // Current date and time
+      const specificTime = moment("12:00", "HH:mm"); // Start time at 12:00:00
+
+      const filteredQuizzes = quizzes.filter(
+        (quiz: SummerCardProps) =>
+          dayjs().isBefore(quiz?.publish_date, "day") ||
+          (dayjs().isSame(quiz?.publish_date, "day") && // Quiz publish date is after current time
+            currentTime.isBefore(specificTime))
+      );
+      setFutureQuiz(filteredQuizzes);
+
+      const filteredMissedQuizzes = quizzes.filter(
+        (quiz: SummerCardProps) =>
+          dayjs().isAfter(quiz?.publish_date, "day") && // Quiz publish date is after current time
+          quiz.completed === false // Current time is after start time (12:00:00)
+      );
+      setMissedQuiz(filteredMissedQuizzes);
+
+      const filteredCompletedQuizzes = quizzes.filter(
+        (quiz: SummerCardProps) =>
+          dayjs().isAfter(quiz?.publish_date, "day") && // Quiz publish date is after current time
+          quiz.completed === true // Current time is after start time (12:00:00)
+      );
+      setCompletedQuiz(filteredCompletedQuizzes);
+    }
+  }, [quizzes]);
+
   return (
     <div>
       <Wrapper bgColor="white">
@@ -36,11 +71,63 @@ const SummerQuiz = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-5 mt-20 gap-8 justify-center items-center px-10">
+          <Tabs variant="pills" defaultValue="all" className="mt-20 ">
+            <Tabs.List className="mb-10 px-8 text-[21px] ">
+              <Tabs.Tab value="all" className="text-[21px]">
+                All
+              </Tabs.Tab>
+              <Tabs.Tab value="completed" className="text-[21px]">
+                Completed
+              </Tabs.Tab>
+              <Tabs.Tab value="missed" className="text-[21px]">
+                Missed
+              </Tabs.Tab>
+              <Tabs.Tab value="incoming" className="text-[21px]">
+                Incoming
+              </Tabs.Tab>
+            </Tabs.List>
+
+            <Tabs.Panel value="all">
+              {" "}
+              <div className="grid grid-cols-5  gap-8 justify-center items-center px-8">
+                {quizzes?.map((data: SummerCardProps, index: number) => (
+                  <SummerQuizCard key={index} {...data} />
+                ))}
+              </div>
+            </Tabs.Panel>
+
+            <Tabs.Panel value="completed">
+              {" "}
+              <div className="grid grid-cols-5  gap-8 justify-center items-center px-10">
+                {completedQuiz?.map((data: SummerCardProps, index: number) => (
+                  <SummerQuizCard key={index} {...data} />
+                ))}
+              </div>
+            </Tabs.Panel>
+
+            <Tabs.Panel value="missed">
+              {" "}
+              <div className="grid grid-cols-5  gap-8 justify-center items-center px-10">
+                {missedQuiz?.map((data: SummerCardProps, index: number) => (
+                  <SummerQuizCard key={index} {...data} />
+                ))}
+              </div>
+            </Tabs.Panel>
+            <Tabs.Panel value="incoming">
+              {" "}
+              <div className="grid grid-cols-5  gap-8 justify-center items-center px-10">
+                {futureQUiz?.map((data: SummerCardProps, index: number) => (
+                  <SummerQuizCard key={index} {...data} />
+                ))}
+              </div>
+            </Tabs.Panel>
+          </Tabs>
+
+          {/* <div className="grid grid-cols-5 mt-20 gap-8 justify-center items-center px-10">
             {quizzes?.map((data: SummerCardProps, index: number) => (
               <SummerQuizCard key={index} {...data} />
             ))}
-          </div>
+          </div> */}
         </InnerWrapper>
       </Wrapper>
     </div>
@@ -65,18 +152,20 @@ export const SummerQuizCard = ({
   const arrayName = name && name?.split(" ");
 
   const publishDate = dayjs(publish_date);
-  const isFuturDate = dayjs().isBefore(publishDate);
-  const isToday = dayjs().isSame(publishDate);
+  const isFuturDate = dayjs().isBefore(publishDate, "day");
+  const isToday = dayjs().isSame(publishDate, "day");
   const isPast = dayjs().isAfter(publishDate);
   const [opened, { open, close }] = useDisclosure(false);
+  console.log("today", dayjs().format("HH:mm:ss"));
 
-  console.log("heeeeeeeee", {
-    isFuturDate,
-    today: dayjs().format("YYYY-MM-DD"),
-    publish_date,
-    isToday,
-    isPast,
-  });
+  const specificTime = moment("12:00", "HH:mm"); // Example: 14:30
+
+  // Get the current time
+  const currentTime2 = moment();
+
+  // Compare times
+  const isPastSpecificTime = currentTime2.isAfter(specificTime);
+
   const navigate = useNavigate();
   const [profiles] = useStore(getProfileState);
 
@@ -93,7 +182,7 @@ export const SummerQuizCard = ({
   }
 
   const profile = findObjectById(profiles);
-  console.log("--------->", profile);
+  // console.log("--------->", profile);
   return (
     <>
       <Modal
@@ -122,21 +211,30 @@ export const SummerQuizCard = ({
             navigate("/summer-quiz/preview-summer-challenge");
           }
         }}
-        disabled={isFuturDate}
+        disabled={isFuturDate || (isToday && isPastSpecificTime === false)}
         className={`  ${
-          isFuturDate && !completed
-            ? "border-[#D0D5DD] border-[2px] text-[#D0D5DD]"
-            : isPast || (isToday && !completed)
-            ? "bg-[#EBFFE8] text-[#2BB457]"
-            : " bg-[#EBFFE8] text-[#2BB457]"
-        }  flex justify-center items-center p-2 flex-col rounded w-[200px] h-[135px]`}
+          isFuturDate || (isToday && !isPastSpecificTime)
+            ? "border-[#D0D5DD] text-[#D0D5DD]"
+            : (isPast && completed) ||
+              (isToday && isPastSpecificTime && completed)
+            ? "bg-[#EBFFE8] text-[#2BB457] border-[#2BB457]"
+            : (isPast && !completed) ||
+              (isToday && isPastSpecificTime && !completed)
+            ? " bg-[#FFEDEA] text-[#ED1C24] border-[#ED1C24]"
+            : ""
+        }  flex justify-center items-center p-2 flex-col rounded-[16px] w-[200px] h-[135px]  border-[2px]`}
       >
         <p className="text-[20px]">{arrayName && arrayName[0]}</p>
-        <p className="font-bold text-[20px]">{arrayName && arrayName[1]}</p>
+        <p className="font-bold text-[40px]">{arrayName && arrayName[1]}</p>
         {/* {!isFuturDate && !completed && (
           <p className="text-[14px]">You haven't taken this Quiz ⚠</p>
         )} */}
-        {isFuturDate && <p className="text-[20px]">Coming Soon</p>}
+        {isFuturDate ||
+          (isToday && !isPastSpecificTime ? (
+            <p className="text-[20px]">Coming Soon</p>
+          ) : (
+            ""
+          ))}
       </button>
     </>
   );

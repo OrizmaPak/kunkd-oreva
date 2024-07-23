@@ -29,15 +29,18 @@ import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
 import { useNavigate } from "react-router-dom";
 import { handleEventTracking } from "@/api/moengage";
+import { GrNext } from "react-icons/gr";
 
 const SummerQuizLayout = () => {
   const summerQuizId = sessionStorage.getItem("summerQuizId");
+  const profileId = sessionStorage.getItem("profileId") as string;
   const { data: quiz, isLoading } = useGetSummerQuiz(
-    summerQuizId?.toString() as string
+    summerQuizId?.toString() as string,
+    profileId
   );
+  const quizName = quiz?.data?.data?.name;
   const questions = quiz?.data?.data?.questions;
   //   const quizId = quiz?.data?.data?.quiz_id;
-  const profileId = sessionStorage.getItem("profileId") as string;
   // const contentString = sessionStorage.getItem("content");
   // const content = JSON.parse(contentString as string);
   const [currentQues, setCurrentQues] = useState<number>(0);
@@ -83,24 +86,25 @@ const SummerQuizLayout = () => {
   };
   const progress = 100 / questions?.length;
   const [curentStep, setcurrentStep] = useState(STEP_1);
+  const navigate = useNavigate();
 
   return (
     <>
       <Wrapper bgColor="#fff7fd">
         <InnerWrapper>
           <div className=" min-h-[calc(92vh-60px)] h-[100%] flex flex-col bg-[#fff7fd] w-[100%] ">
-            {/* <Skeleton visible={isLoading}>
-              <StoriesNav
-                category={content?.category}
-                genre={content && content.sub_categories[0].sub_category_name}
-                title={content && content.name}
-                subCategoryId={
-                  content && content.sub_categories[0].sub_category_id
-                }
-                slug={content && content.sub_categories[0].sub_category_name}
-                quiz="Quiz"
-              />
-            </Skeleton> */}
+            <div className="flex gap-3 mt-8 px-2">
+              <button
+                onClick={() => navigate("/summer-quiz")}
+                className="text-[18px] font-bold flex"
+              >
+                Summer Challenge <GrNext size={20} />
+              </button>
+              <button className="text-[18px] font-bold text-[#8530C1] flex gap-2">
+                {quizName}
+                <GrNext size={20} color="#8530C1]" />
+              </button>
+            </div>
 
             {curentStep === STEP_1 && (
               <>
@@ -245,6 +249,21 @@ const Question = ({
           selected_option={"c"}
           question_id={quesObject?.question_id}
           title={quesObject?.option_c}
+          question={quesObject?.question}
+          selected={selected[currentQuestion]}
+          actual_answer={
+            quesObject?.answer
+              ? (quesObject[
+                  `option_${quesObject?.answer}` as keyof questionType
+                ] as string)
+              : ""
+          }
+          setSelected={setSelected}
+        />
+        <AnsButton
+          selected_option={"d"}
+          question_id={quesObject?.question_id}
+          title={quesObject?.option_d}
           question={quesObject?.question}
           selected={selected[currentQuestion]}
           actual_answer={
@@ -595,7 +614,7 @@ const YourResult = ({ answers }: { answers: answerObj[] }) => {
         <p className="flex justify-center mt-14 items-center">
           <button
             onClick={() => {
-              navigate(-2);
+              navigate("/summer-quiz");
             }}
             className="p-3 px-20 text-white bg-[#8530C1] rounded"
           >
