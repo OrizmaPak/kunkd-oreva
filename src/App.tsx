@@ -19,6 +19,7 @@ import { Story } from "./pages/Stories/Stories";
 import Videos from "./pages/AfricanLanguages/Videos";
 import { Books } from "./pages/AudioBooks/AudioBooks";
 import RefundPolicy from "./pages/RefundPolicy/RefundPolicy";
+import SummerLandingPage from "./pages/SummerLandingPage/SummerLandingPage";
 const VideoV2 = lazy(() => import("./pages/AfricanLanguages/VideosV2/VideoV2"));
 const StoriesV2 = lazy(() => import("./pages/Stories/StoriesV2/StoriesV2"));
 const DefaultTab = lazy(() => import("./pages/AfterParentSignIn/DefaultTab"));
@@ -177,8 +178,9 @@ function App() {
       const path = location.pathname;
 
       const isPolicyPath = path.includes("privacy-policy");
+      const isSummerPath = path.includes("summer-challenge");
       const isRefundPolicyPath = path.includes("refund-policy");
-      if (isPolicyPath || isRefundPolicyPath) return;
+      if (isPolicyPath || isRefundPolicyPath || isSummerPath) return;
       if (window.innerWidth < window.innerHeight) {
         open();
       } else {
@@ -238,6 +240,10 @@ function App() {
                     <Login />
                   </>
                 }
+              ></Route>
+              <Route
+                path="summer-challenge"
+                element={<SummerLandingPage />}
               ></Route>
               <Route path="privacy-policy" element={<PrivacyPolicy />}></Route>
               <Route path="refund-policy" element={<RefundPolicy />}></Route>

@@ -1,0 +1,199 @@
+import {
+  Group,
+  // Button,
+  Divider,
+  Box,
+  Burger,
+  Drawer,
+  ScrollArea,
+  rem,
+  // useMantineTheme,
+} from "@mantine/core";
+// import KundaLogo from "@/assets/schoolIcon.svg";
+import Logo from "@/assets/KundaLogo.svg";
+import { useNavigate } from "react-router-dom";
+
+import { useDisclosure } from "@mantine/hooks";
+
+import classes from "./HomeHeader2.module.css";
+import Button from "./Button";
+
+function HomeHeader2() {
+  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
+    useDisclosure(false);
+  const navigate = useNavigate();
+  // const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
+  // const theme = useMantineTheme();
+  // const openInNewTab = (url: string) => {
+  //   const newWindow: Window | null = window.open(url, "_blank");
+  //   if (newWindow) {
+  //     newWindow.opener = null; // Ensure no access to the current window
+  //   }
+  // };
+  return (
+    <Box className="p-4">
+      <header className={`${classes.header}  `}>
+        <Group
+          className="flex justify-between max-w-[1440px] mx-auto"
+          h="100%  "
+        >
+          <img src={Logo} alt="logo" className={`${classes.logow}`} />
+
+          {/* <Group h="100%" className="hidden lg:flex">
+            <div className="flex justify-between cursor-pointer pl-2 flex-grow text2 font-medium  w-[800px]">
+              <NavLink
+                to="/home"
+                className={({ isActive }) =>
+                  isActive ? " text-[#8530C1]" : "text-black"
+                }
+              >
+                <span>Home</span>
+              </NavLink>
+              <NavLink
+                to="/parents"
+                className={({ isActive }) =>
+                  isActive ? " text-[#8530C1]" : "text-black"
+                }
+              >
+                <span>Parents</span>
+              </NavLink>
+              <NavLink
+                to="/schools"
+                className={({ isActive }) =>
+                  isActive ? " text-[#8530C1]" : "text-black"
+                }
+              >
+                <span>Schools</span>
+              </NavLink>
+              <NavLink
+                to="#"
+                onClick={() => openInNewTab("https://kundakids.com/en-ng")}
+                className={({ isActive }) =>
+                  isActive ? " text-black" : "text-black"
+                }
+              >
+                <span>Animation</span>
+              </NavLink>
+              <NavLink
+                to="#"
+                onClick={() => openInNewTab("https://kundakids.com/en-ng")}
+                className={({ isActive }) =>
+                  isActive ? " text-black" : "text-black"
+                }
+              >
+                <span>Publishing</span>
+              </NavLink>
+              <NavLink
+                to="#"
+                onClick={() => openInNewTab("https://kundakids.com/en-ng")}
+                className={({ isActive }) =>
+                  isActive ? " text-black" : "text-black"
+                }
+              >
+                <span>Shop</span>
+              </NavLink>
+
+              <NavLink
+                to="/aboutus"
+                className={({ isActive }) =>
+                  isActive ? " text-[#8530C1]" : "text-black"
+                }
+              >
+                <span>About Us</span>
+              </NavLink>
+              <NavLink
+                to="/summer-chanllenge"
+                className={({ isActive }) =>
+                  isActive ? " text-[#8530C1]" : "text-black"
+                }
+              >
+                <span>Summer Reading Challenge</span>
+              </NavLink>
+           
+            </div>
+          </Group> */}
+
+          <div className="hidden lg:flex justify-end  gap-3 w-[500px] z-[1000] ">
+            <Button
+              size="md"
+              varient="outlined"
+              onClick={() => navigate("/login")}
+              className=" text "
+            >
+              <strong className="text-[#8530C1]">Log in</strong>
+            </Button>
+            <Button
+              size="md"
+              onClick={() => navigate("/signup")}
+              className="bg-[#8530C1] hover:bg-[#8530C1] "
+            >
+              Enroll
+            </Button>
+          </div>
+
+          <Burger
+            className="lg:hidden hidden"
+            opened={drawerOpened}
+            onClick={toggleDrawer}
+          />
+        </Group>
+      </header>
+
+      <Drawer
+        opened={drawerOpened}
+        onClose={closeDrawer}
+        size="100%"
+        padding="md"
+        // title="Navigation"
+        zIndex={1000000}
+      >
+        <ScrollArea h={`calc(100vh - ${rem(80)})`} mx="-md">
+          <Divider my="sm" />
+
+          {/* <a href="/dev" className={`${classes.link} px-3 py-1 `}>
+            Home
+          </a>
+
+          <a href="/dev" className={`${classes.link} px-3 py-1 `}>
+            Parents
+          </a>
+          <a href="/dev" className={`${classes.link} px-3 py-1 `}>
+            Schools
+          </a>
+          <a href="/dev" className={`${classes.link} px-3 py-1 `}>
+            Animation
+          </a>
+          <a href="/dev" className={`${classes.link} px-3 py-1 `}>
+            Publishing
+          </a>
+          <a href="/dev" className={`${classes.link} px-3 py-1 `}>
+            Shop
+          </a>
+          <a href="/summer-chanllenge" className={`${classes.link} px-3 py-1 `}>
+            Summer Reading Chanllenge
+          </a> */}
+
+          <Divider my="sm" />
+
+          <Group className="center" grow pb="xl" px="md">
+            <Button
+              varient="outlined"
+              onClick={() => navigate("/dev")}
+              className=""
+            >
+              <strong className="text-[#8530C1]">Log in</strong>
+            </Button>
+            <Button
+              onClick={() => navigate("/dev")}
+              className="bg-[#8530C1] hover:bg-[#8530C1]"
+            >
+              Sign up
+            </Button>
+          </Group>
+        </ScrollArea>
+      </Drawer>
+    </Box>
+  );
+}
+
+export default HomeHeader2;
