@@ -113,11 +113,11 @@ const PreviewSummerChallengePage = () => {
                                 "contentId",
                                 story.id?.toString() as string
                               );
-                              sessionStorage.setItem("fromSummer", "true");
+
                               navigate(
                                 `../../parent/stories/sub/${story.slug
                                   ?.toLocaleLowerCase()
-                                  .replace(/\s/g, "-")}`
+                                  .replace(/\s/g, "-")}?from=challenge`
                               );
                             }}
                             className="  text-start py-2 text-white flex items-center gap-2 "
@@ -143,7 +143,6 @@ const PreviewSummerChallengePage = () => {
                                 "contentId",
                                 story.id?.toString() as string
                               );
-                              sessionStorage.setItem("fromSummer", "true");
 
                               navigate(
                                 `../../parent/stories/sub/${story.slug

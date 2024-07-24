@@ -15,7 +15,7 @@ import { MantineProvider, Skeleton, Slider } from "@mantine/core";
 import { RefObject, useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import StoriesNav from "./StoriesNav";
 import { getApiErrorMessage } from "@/api/helper";
 import TeacherNotificationModal from "@/components/TeacherWarningModal";
@@ -50,6 +50,7 @@ const Stories1 = () => {
   // const [user] = useStore(getUserState);
   const contentId = sessionStorage.getItem("contentId");
   const profileId = sessionStorage.getItem("profileId");
+  const location = useLocation();
   const [opened, { open, close }] = useDisclosure(false);
 
   const [
@@ -77,6 +78,9 @@ const Stories1 = () => {
   }, [content]);
 
   useTimeSpent(Number(contentId), Number(profileId), arrayOfSubCatId);
+
+  const queryString = new URLSearchParams(location.search.split("?")[1]);
+  const isReadingFromChallenge = !!queryString.get("from");
 
   const { data: recommendedData, isLoading } = useContentForHome();
   const recommendedStories = recommendedData?.data.data.recommended_stories;
@@ -146,16 +150,16 @@ const Stories1 = () => {
                 <div className="flex-grow mt-5 rounded-2xl ">
                   {!isFinish ? (
                     <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
-                      {!startRead && (
+                      {!startRead && !isReadingFromChallenge ? (
                         <Skeleton visible={contentIsLoading}>
                           <AboutPage
                             story={content as TStoryContent}
                             setStartRead={() => setStartRead(true)}
                           />
                         </Skeleton>
-                      )}
+                      ) : null}
 
-                      {content && startRead && (
+                      {content && (startRead || isReadingFromChallenge) && (
                         <ReadPage
                           thumbnail={content.thumbnail as string}
                           content={content.pages as TContentPage[]}
@@ -489,7 +493,7 @@ const ReadPage = ({
     if (goFull) {
       e?.requestFullscreen();
     } else {
-      document.exitFullscreen();
+      if (document?.exitFullscreen) document?.exitFullscreen();
     }
   }, [goFull]);
 
@@ -674,6 +678,8 @@ const BookPagination = ({
   );
   const [user] = useStore(getUserState);
   const navigate = useNavigate();
+  const queryString = new URLSearchParams(location.search.split("?")[1]);
+  const isReadingFromChallenge = !!queryString.get("from");
 
   useEffect(() => {
     setPage(currentPage);
@@ -723,7 +729,7 @@ const BookPagination = ({
         end_time: timeString,
       }
     );
-    if (sessionStorage.getItem("fromSummer") === "true") {
+    if (isReadingFromChallenge) {
       mutateSummer(
         {
           profile_id: Number(profileId),

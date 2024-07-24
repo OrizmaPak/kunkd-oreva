@@ -348,13 +348,16 @@ const QuestionPagination = ({
     ? (question[`option_${question?.answer}` as keyof questionType] as string)
     : "";
   const handleNext = () => {
+    console.log("Next-Button", actual_answer, answers);
     if (!answers[currentQues]) {
       handleSelectAnswer({
         question: question?.question,
         actual_answer,
       });
     }
-    handlePagination("next");
+    if (answers[currentQues]?.selected_option != undefined) {
+      handlePagination("next");
+    }
   };
   return (
     <div>

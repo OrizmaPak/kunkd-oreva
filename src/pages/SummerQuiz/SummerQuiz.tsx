@@ -98,11 +98,17 @@ const SummerQuiz = () => {
 
             <Tabs.Panel value="completed">
               {" "}
-              <div className="grid grid-cols-5  gap-8 justify-center items-center px-10">
-                {completedQuiz?.map((data: SummerCardProps, index: number) => (
-                  <SummerQuizCard key={index} {...data} />
-                ))}
-              </div>
+              {completedQuiz?.length > 0 ? (
+                <div className="grid grid-cols-5  gap-8 justify-center items-center px-10">
+                  {completedQuiz?.map(
+                    (data: SummerCardProps, index: number) => (
+                      <SummerQuizCard key={index} {...data} />
+                    )
+                  )}
+                </div>
+              ) : (
+                <p>⁠Take your first quiz </p>
+              )}
             </Tabs.Panel>
 
             <Tabs.Panel value="missed">
