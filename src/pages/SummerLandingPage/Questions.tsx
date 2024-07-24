@@ -148,8 +148,8 @@ const Questions = () => {
                     Still have questions?
                   </p>
                   <p className="text1 font-InterReg text-center">
-                    Can’t find the answer you’re looking for? Please chat to our
-                    friendly team.
+                    Can’t find the answer you’re looking for? Please chat with
+                    our friendly team.
                   </p>
                   <div className="flex justify-center mt-3">
                     <a
