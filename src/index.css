@@ -79,7 +79,8 @@ body {
 .header1 {
   /* font-size: clamp(1.875rem, 1.4548rem + 2.6891vw, 3.875rem) !important; */
   font-size: clamp(1.875rem, 1.0857rem + 3.2381vw, 4rem) !important;
-  line-height: clamp(2.25rem, 1.64rem + 2.4833vw, 3.875rem) !important;
+  /* line-height: clamp(2.25rem, 1.64rem + 2.4833vw, 3.875rem) ; */
+  line-height: clamp(3.125rem, 2.475rem + 2.6667vw, 4.875rem) !important;
 }
 
 .header-1 {
