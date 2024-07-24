@@ -107,7 +107,7 @@ const SummerQuiz = () => {
                   )}
                 </div>
               ) : (
-                <p>⁠Take your first quiz </p>
+                <p className="text25 pl-10">⁠Take your first quiz </p>
               )}
             </Tabs.Panel>
 

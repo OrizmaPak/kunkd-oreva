@@ -409,7 +409,7 @@ const ReadPage = ({
   const [pageNumber, setPageNumber] = useState(0);
   // const audioRef = useRef<HTMLAudioElement>(null);
   const reducedMotion = useReducedMotion();
-  const [size, setSize] = useState(20);
+  const [size, setSize] = useState(25);
   const handleSizeChange = (value: number) => {
     setSize(value);
   };
@@ -539,7 +539,8 @@ const ReadPage = ({
               ></p>
               <p className=" pb-2">Read to me</p>
             </button>
-            <p className="w-[100px]">
+            <p className="w-[200px] flex items-center gap-2 ">
+              <strong>A-</strong>
               <MantineProvider
                 theme={{
                   colors: {
@@ -559,15 +560,17 @@ const ReadPage = ({
                 }}
               >
                 <Slider
+                  className="w-full"
                   color="ocean-blue.0"
                   value={size}
                   onChange={handleSizeChange}
                   min={20}
                   max={max}
                   disabled={reducedMotion}
-                  size={"sm"}
+                  size={"lg"}
                 />
               </MantineProvider>
+              <strong>A+</strong>
             </p>
             <p className="cursor-pointer">
               {goFull ? (

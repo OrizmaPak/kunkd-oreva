@@ -27,9 +27,6 @@ const ForthSection = () => {
           className="absolute right-4 top-[100px] hidden md:block"
         />
         <div>
-          <p className="text1 text-white md:text-start text-center">
-            Reasons to join
-          </p>
           <p className="header-1 font-Inter text-white md:text-start text-center">
             Why your child should join the Kunda Kids Daily Reading Challenge:
           </p>
