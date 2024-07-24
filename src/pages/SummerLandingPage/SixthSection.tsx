@@ -18,7 +18,7 @@ const SixthSection = () => {
   const baseUrl = window.location.origin;
   const data = [
     {
-      message: "Sign Up at or simply login if you already have an account.",
+      message: "Sign up or simply login if you already have an account.",
       title: "Web App",
       image: WebAppCard,
       url: `${baseUrl}/signup`,
