@@ -1,0 +1,7 @@
+.gift-card {
+  width: clamp(18.75rem, 17.437rem + 8.4034vw, 25rem) !important;
+}
+
+.earth {
+  width: clamp(1.875rem, 0.9821rem + 5.7143vw, 6.125rem) !important;
+}
