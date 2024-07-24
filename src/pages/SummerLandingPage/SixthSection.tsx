@@ -35,12 +35,12 @@ const SixthSection = () => {
       <img
         src={Laugh01}
         alt="image"
-        className="absolute right-[10%]  -rotate-12 top-[200px] earth"
+        className="absolute right-[10%]  -rotate-12 top-[50px]  md:top-[200px] earth"
       />
       <img
         src={Laugh02}
         alt="image"
-        className="absolute left-[10%]  rotate-12  earth "
+        className="absolute left-[10%]  rotate-12 top-[80px] earth "
       />
 
       <div className="max-w-[1440px] mx-auto">
