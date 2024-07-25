@@ -9,6 +9,8 @@ import ThirdMedal from "@/assets/thirdMedal.png";
 import CountryFlag from "react-country-flag";
 import { useGetLeaderBoardList } from "@/api/queries";
 import { Skeleton } from "@mantine/core";
+import useStore from "@/store/index";
+import { getProfileState } from "@/store/profileStore";
 
 type TLeaderBoardData = {
   username: string;
@@ -16,20 +18,42 @@ type TLeaderBoardData = {
   avatar: string;
   country: string;
   country_code: string;
-  index: number;
+  position: number;
 };
 
 const LeaderBoard = () => {
   const { data, isLoading } = useGetLeaderBoardList();
+  const capitalizeFirstLetter = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
   const leaderboard = data?.data?.data;
   console.log(data);
+  const [profiles] = useStore(getProfileState);
+  const activeProfile = profiles.find(
+    (profile) => profile.id == Number(sessionStorage.getItem("profileId"))
+  );
+  const viewProfile = leaderboard?.find(
+    (data: TLeaderBoardData) => data.username == activeProfile?.username
+  );
+  console.log("View", viewProfile, activeProfile, profiles);
+  const firstPosition = leaderboard?.find(
+    (data: TLeaderBoardData) => data?.position == 1
+  );
+  const secondPosition = leaderboard?.find(
+    (data: TLeaderBoardData) => data?.position == 2
+  );
+  const thirdPosition = leaderboard?.find(
+    (data: TLeaderBoardData) => data?.position == 3
+  );
+
+  console.log("Position", firstPosition, secondPosition, thirdPosition);
   return (
     <div>
       <Wrapper bgColor="white">
         <InnerWrapper>
           <div className="p-4">
             <h1 className=" header2  font-Brico font-medium mb-10 pl-4">
-              Leader Board
+              Leaderboard
             </h1>
 
             <div className="flex h-[416px] gap-14">
@@ -44,16 +68,17 @@ const LeaderBoard = () => {
                     </p>
                     <p className="border-[5px] border-[#A14FDE] rounded-full">
                       <img
-                        src={leaderboard && leaderboard[1]?.avatar}
+                        src={secondPosition && secondPosition?.avatar}
                         alt=""
                         className="w-[70px]  "
                       />
                     </p>
                     <p className="text-white font-bold">
-                      {leaderboard && leaderboard[1]?.username}
+                      {secondPosition &&
+                        capitalizeFirstLetter(secondPosition?.username)}
                     </p>
                     <p className="bg-[#A14FDE] p-2 rounded-xl text-white font-medium px-4">
-                      {leaderboard && leaderboard[1]?.score} P
+                      {secondPosition && secondPosition?.score} P
                     </p>
                   </div>
                   <div className="flex justify-center items-center flex-col pb-20">
@@ -62,16 +87,17 @@ const LeaderBoard = () => {
                     </p>
                     <p className="border-[5px] border-[#A14FDE] rounded-full">
                       <img
-                        src={leaderboard && leaderboard[0]?.avatar}
+                        src={firstPosition && firstPosition?.avatar}
                         alt="image"
                         className="w-[70px] "
                       />
                     </p>
                     <p className="text-white font-bold">
-                      {leaderboard && leaderboard[0]?.username}
+                      {firstPosition &&
+                        capitalizeFirstLetter(firstPosition?.username)}
                     </p>
                     <p className="bg-[#8632C2] p-2 rounded-xl text-white font-medium px-4">
-                      {leaderboard && leaderboard[0]?.score} P
+                      {firstPosition && firstPosition?.score} P
                     </p>
                   </div>
                   <div className="flex justify-center items-center flex-col">
@@ -80,36 +106,45 @@ const LeaderBoard = () => {
                     </p>
                     <p className="border-[5px] border-[#A14FDE] rounded-full">
                       <img
-                        src={leaderboard && leaderboard[2]?.avatar}
+                        src={thirdPosition && thirdPosition.avatar}
                         alt="image"
                         className="w-[70px]"
                       />
                     </p>
                     <p className="text-white font-bold">
-                      {leaderboard && leaderboard[2]?.username}
+                      {thirdPosition &&
+                        capitalizeFirstLetter(thirdPosition?.username)}
                     </p>
                     <p className="bg-[#8632C2] p-2 rounded-xl text-white font-medium px-4">
-                      {leaderboard && leaderboard[2]?.score} P
+                      {thirdPosition?.score} P
                     </p>
                   </div>
                 </div>
               </div>
               <div className="w-[435px] border-2 border-[#F2F4F7] rounded-3xl p-10 flex flex-col justify-between my-3">
-                <div>
-                  <p className="text25 text-[#15151566] font-medium">
-                    Rank today:
+                <div className="flex flex-col justify-center items-center ">
+                  <p className="text25 text-[#15151566] font-medium flex-grow">
+                    <img
+                      src={viewProfile?.avatar}
+                      alt="image"
+                      className="w-[120px]"
+                    />
                   </p>
-                  <p className="text30 font-bold">1st Place</p>
+                  <p className="text25 font-bold">
+                    {capitalizeFirstLetter(viewProfile?.username)}
+                  </p>
                 </div>
-                {/* <div>
-                  <p className="text25 text-[#15151566] font-medium">Streak:</p>
-                  <p className="text30 font-bold">19 days</p>
-                </div> */}
                 <div>
                   <p className="text25 text-[#15151566] font-medium">
-                    Total points:
+                    My today Rank: {viewProfile?.position}
                   </p>
-                  <p className="text30 font-bold">2,354</p>
+                </div>
+
+                <div>
+                  <p className="text25 text-[#15151566] font-medium">
+                    Total points: {viewProfile?.score}
+                  </p>
+                  {/* <p className="text30 font-bold">{viewProfile?.score}</p> */}
                 </div>
               </div>
             </div>
@@ -126,7 +161,7 @@ const LeaderBoard = () => {
             ) : (
               <div className="mt-20">
                 {leaderboard?.map((datta: TLeaderBoardData, index: number) => (
-                  <Card {...datta} index={index} />
+                  <Card {...datta} key={index} />
                 ))}
               </div>
             )}
@@ -143,8 +178,9 @@ const Card = ({
   username,
   avatar,
   score,
-  index,
-}: // country_code,
+  position,
+  country_code,
+}: //
 TLeaderBoardData) => {
   let formattedNumber;
 
@@ -154,6 +190,9 @@ TLeaderBoardData) => {
   } else {
     formattedNumber = score?.toString(); // Convert to string without formatting
   }
+  const capitalizeFirstLetter = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
   return (
     <>
       <div className="flex justify-between  py-5 px-8 items-center w-full bg-white rounded-3xl shadow-md my-4">
@@ -161,12 +200,12 @@ TLeaderBoardData) => {
           <p
             className={`rounded-full border-[3px] h-8 w-8 text-center   text-[#D2D2DF] border-[#D2D2DF] bg-[#ffff] font-medium`}
           >
-            {index + 1}
+            {position}
           </p>
           <img src={avatar} alt="image" className="w-[60px]" />
 
           <div>
-            <p className="font-bold text1">{username}</p>
+            <p className="font-bold text1">{capitalizeFirstLetter(username)}</p>
           </div>
         </div>
         <div className=" w-full ">
@@ -176,7 +215,7 @@ TLeaderBoardData) => {
         </div>
         <div className="w-full flex justify-end items-end">
           <CountryFlag
-            countryCode="NG"
+            countryCode={country_code}
             svg
             style={{ width: "40px", height: "auto" }}
           />
