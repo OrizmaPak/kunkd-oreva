@@ -10,7 +10,13 @@ import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
 import { useQueryClient } from "@tanstack/react-query";
 
-const JoinChanllengeModal = ({ close }: { close: () => void }) => {
+const JoinChanllengeModal = ({
+  close,
+  openTopLeaderboard,
+}: {
+  close: () => void;
+  openTopLeaderboard: () => void;
+}) => {
   const { mutate, isLoading } = useJoinSummerChallenge();
   const queryClient = useQueryClient();
   useGetProfile(true);
@@ -32,6 +38,7 @@ const JoinChanllengeModal = ({ close }: { close: () => void }) => {
           sessionStorage.removeItem("showJoinChallenge");
           queryClient.refetchQueries(querykeys.profiles).then(() => {
             close();
+            openTopLeaderboard();
           });
           // refetch();
           // close();

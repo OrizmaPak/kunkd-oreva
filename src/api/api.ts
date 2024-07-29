@@ -412,8 +412,8 @@ export const UpdateProfileUserNameSchoolName = (payload: object) => {
   return axios.patch(`/profile/username/school`, payload);
 };
 
-export const GetSuggestUserName = () => {
-  return axios.get(`/profile/username/suggest`);
+export const GetSuggestUserName = (payload: object) => {
+  return axios.post(`/profile/username/suggest`, payload);
 };
 
 export const UserNameChecker = (username: string) => {
@@ -440,6 +440,6 @@ export const SummerChallengeContentTracking = (payload: object) => {
   return axios.post(`/summer/challenge/content/track`, payload);
 };
 
-export const GetLeaderBoardList = () => {
-  return axios.get(`/summer/challenge/leaderboard/`);
+export const GetLeaderBoardList = (pid: string) => {
+  return axios.get(`/summer/challenge/leaderboard`, { params: { pid } });
 };

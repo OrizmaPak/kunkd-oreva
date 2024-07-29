@@ -402,7 +402,7 @@ _login`,
             <p className="my-2">
               <InputFormat
                 type="password"
-                placeholder="password"
+                placeholder="Password"
                 reg={register("password")}
                 leftIcon={<RiLockLine size={20} color="#c4ccd0" />}
                 rightIcon={<AiOutlineEye size={22} color="#c4ccd0" />}

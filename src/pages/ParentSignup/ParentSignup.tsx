@@ -27,9 +27,9 @@ const ParentSignup = () => {
 
         {activeStep === STEP_3 ? (
           <ParentCongratulations
-            // onSubmit={() => {
-            //   handleNext(STEP_3);
-            // }}
+          // onSubmit={() => {
+          //   handleNext(STEP_3);
+          // }}
           />
         ) : null}
         {/* <div className="flex gap-2 justify-center  bottom-20  items-center  bg-red-400 w-full ">

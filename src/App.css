@@ -29,11 +29,15 @@ body {
 #useNameSuggestion[type="text"]::-webkit-calendar-picker-indicator {
   display: none !important;
   -webkit-appearance: none !important;
+  border-color: #f3daff;
 }
 
 /* For Firefox */
 #useNameSuggestion[type="text"] {
   -moz-appearance: textfield !important;
+  border-color: #f3daff !important;
+  padding-block: 24px;
+  border-radius: 20px;
 }
 
 /* Hide the arrow for IE and Edge */

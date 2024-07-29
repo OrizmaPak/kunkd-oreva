@@ -73,14 +73,13 @@ body {
 .header2 {
   /* font-size: clamp(1.125rem, 0.8887rem + 1.5126vw, 2.25rem) !important; */
   font-size: clamp(1rem, 0.7374rem + 1.6807vw, 2.25rem) !important;
-  line-height: clamp(1.5625rem, 1.2868rem + 1.7647vw, 2.875rem) !important;
+  line-height: 35px;
 }
 
 .header1 {
   /* font-size: clamp(1.875rem, 1.4548rem + 2.6891vw, 3.875rem) !important; */
-  font-size: clamp(1.875rem, 1.5336rem + 2.1849vw, 3.5rem) !important;
-  line-height: clamp(2.25rem, 1.64rem + 2.4833vw, 3.875rem) !important;
-  /* line-height: clamp(1.75rem, 1.1985rem + 5.5294vw, 6.375rem) !important; */
+  font-size: clamp(1.875rem, 1.0857rem + 3.2381vw, 4rem) !important;
+  line-height: clamp(3.125rem, 2.475rem + 2.6667vw, 4.875rem) !important;
 }
 
 .header-1 {
@@ -127,11 +126,7 @@ body {
   padding-inline: clamp(0.625rem, -1.1486rem + 4.0541vw, 2.5rem);
 }
 .pad-x-10 {
-  padding-inline: clamp(0.25rem, 0.1296rem + 0.5505vw, 0.625rem) !important;
-}
-
-.pad-y-96 {
-  padding-block: clamp(2.1875rem, 1.3866rem + 5.1261vw, 6rem) !important;
+  padding-inline: clamp(0.25rem, 0.1296rem + 0.5505vw, 0.625rem);
 }
 
 .content-nav {
@@ -154,7 +149,15 @@ body {
   /* color: var(--rs-btn-primary-text); */
 }
 
-.PhoneInputInput:focus-visible {
-  border: none;
-  outline: none;
+.react-international-phone-input-container .react-international-phone-input {
+  width: 100% !important;
+  font-size: 20px !important;
+  border-color: #f3daff !important ;
+  height: 40px !important;
+}
+
+.react-international-phone-country-selector-button {
+  border-color: #f3daff !important ;
+  height: 40px !important;
+  width: 50px !important;
 }

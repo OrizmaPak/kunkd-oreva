@@ -15,10 +15,10 @@ import InputFormat from "@/common/InputFormat";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import Button from "@/components/Button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader, Skeleton, TextInput } from "@mantine/core";
+import { Chip, Loader, Skeleton, TextInput } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { getUserState } from "@/store/authStore";
@@ -247,33 +247,34 @@ export const ChildNameModal = ({
   setUserName: (val: string) => void;
   showCancelBtn?: boolean;
 }) => {
-  const { data: datta } = useGetSuggestUserName();
-  const suggestions = datta?.data?.data?.suggestions;
+  const { mutate } = useGetSuggestUserName();
+  const [suggestions, setSuggestion] = useState<[]>();
+  const handleUsernameSuggestion = (name: string) => {
+    console.log("name", name);
+    mutate(
+      {
+        name,
+      },
+
+      {
+        onSuccess(data) {
+          setSuggestion(data?.data?.data?.suggestions);
+        },
+
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  };
+  // const suggestions = datta?.data?.data?.suggestions;
+  const ref = useRef(null);
   const [debounced] = useDebouncedValue(userName, 200);
   const { data, isError, isLoading, isInitialLoading } =
     useUserNameChecker(debounced);
-  const schema: ZodType<Pick<FormData, "name" | "username">> = z.object({
-    name: z
-      .string()
-      .min(2, { message: "Name must be at least 2 characters long" })
-      .max(20, { message: "Name must not exceed 20 characters" }),
-  });
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({ resolver: zodResolver(schema) });
-
-  const submitData = async (data: FormData) => {
-    onContinue();
-    if (data.name) {
-      setName(data.name);
-    }
-    if (data.username) {
-      setUserName(data.username);
-    }
-  };
 
   console.log(
     {
@@ -329,49 +330,59 @@ export const ChildNameModal = ({
         </div>
 
         <div>
-          <form
-            onSubmit={handleSubmit(submitData)}
-            className="max-w-[400px] mx-auto mt-10"
-          >
+          <div className="max-w-[400px] mx-auto mt-10">
             <p className="my-5">
               <label htmlFor="name" className="text1 font-medium">
                 Name
               </label>
-              <InputFormat
+              <input
                 value={name}
-                reg={register("name")}
-                errorMsg={errors?.name?.message}
+                className="border rounded-full py-3  px-4 items-center gap-2 mt-1  border-[#F3DAFF] block  w-full  h-full flex-1 text-black text-[14px]  focus:outline-none"
+                onBlur={() => handleUsernameSuggestion(name)}
                 type="text"
-                placeholder="Enter Name"
+                placeholder="Enter your child's name"
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
               />
             </p>
             <p className="mb-8 suggestion-wrapper">
               <label htmlFor="name" className="text1 font-medium">
                 Username
               </label>
-              {/* <InputFormat
-                value={userName}
-                reg={register("username")}
-                errorMsg={errors?.username?.message}
-                type="text"
-                placeholder="Enter username"
-                /> */}
 
-              {suggestions && (
+              {
                 <TextInput
                   id="useNameSuggestion"
                   placeholder="Choose one or enter your desired username."
                   name="user name"
                   onChange={(e) => setUserName(e.target.value)}
                   value={userName}
+                  ref={ref}
                   list="user-name-suggestion"
-                  autoComplete="false"
+                  // autoComplete="false"
                   rightSection={
                     isInitialLoading && isLoading ? <Loader size="xs" /> : null
                   }
                   error={!isLoading && isError && "user name already exist"}
                 />
-              )}
+              }
+              {
+                <Chip.Group
+                  onChange={(value) => {
+                    setUserName(value as string);
+                  }}
+                  value={userName}
+                >
+                  <div className="flex my-2  flex-wrap gap-2 gap-y-3">
+                    {suggestions?.map((suggest: string) => (
+                      <Chip width={"auto"} key={suggest} value={suggest}>
+                        {suggest}
+                      </Chip>
+                    ))}
+                  </div>
+                </Chip.Group>
+              }
 
               {suggestions && (
                 <datalist id="user-name-suggestion" className="w-full">
@@ -387,11 +398,15 @@ export const ChildNameModal = ({
               </p>
             </p>
             <p className="mb-8">
-              <Button disable={isError || isLoading} type="submit">
+              <Button
+                disable={isError || isLoading || name == ""}
+                type="reset"
+                onClick={onContinue}
+              >
                 Continue
               </Button>
             </p>
-          </form>
+          </div>
         </div>
       </div>
     </motion.div>
@@ -429,11 +444,8 @@ export const ChildSchoolNameModal = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    console.log("dataata", data);
-    if (data.school_name) {
-      setSchoolName(data.school_name);
-      onContinue();
-    }
+    setSchoolName(data.school_name as string);
+    onContinue();
   };
   return (
     <motion.div
@@ -489,7 +501,7 @@ export const ChildSchoolNameModal = ({
             </p>
 
             <p className="mb-8 flex gap-3">
-              <Button onClick={onContinue} varient="outlined" type="submit">
+              <Button onClick={onContinue} varient="outlined">
                 <strong className="text-[#8530C1]"> Skip</strong>
               </Button>
               <Button type="submit">Continue</Button>

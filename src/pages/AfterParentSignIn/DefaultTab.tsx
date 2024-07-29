@@ -38,7 +38,6 @@ const DefaultTab = () => {
   const { data: datta } = useGetSummerChallengeQuizzes(
     sessionStorage.getItem("profileId") as string
   );
-  console.log("summer challenge quizzes", data);
   const quizzes = datta?.data?.data?.quizzes;
 
   useEffect(() => {

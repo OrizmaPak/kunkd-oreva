@@ -15,11 +15,13 @@ import { selectAvatarType } from "../AfterParentSignIn/SelectProfile";
 import { Tabs } from "@mantine/core";
 import { useEffect, useState } from "react";
 import moment from "moment";
+// import { useDisclosure } from "@mantine/hooks";
+import TopLeaderboardModal from "./TopLeaderboardModal";
+
 const SummerQuiz = () => {
   const { data } = useGetSummerChallengeQuizzes(
     sessionStorage.getItem("profileId") as string
   );
-  console.log("summer challenge quizzes", data);
   const quizzes = data?.data?.data?.quizzes;
   const [futureQUiz, setFutureQuiz] = useState([]);
   const [missedQuiz, setMissedQuiz] = useState([]);
@@ -154,15 +156,16 @@ export const SummerQuizCard = ({
   publish_date,
   completed,
 }: SummerCardProps) => {
-  console.log(name, "name");
   const arrayName = name && name?.split(" ");
-
+  const [
+    openedTopLeaderboard,
+    { open: openTopLeaderboard, close: closeTopLeaderboard },
+  ] = useDisclosure(false);
   const publishDate = dayjs(publish_date);
   const isFuturDate = dayjs().isBefore(publishDate, "day");
   const isToday = dayjs().isSame(publishDate, "day");
   const isPast = dayjs().isAfter(publishDate);
   const [opened, { open, close }] = useDisclosure(false);
-  console.log("today", dayjs().format("HH:mm:ss"));
 
   const specificTime = moment("12:00", "HH:mm"); // Example: 14:30
 
@@ -206,7 +209,27 @@ export const SummerQuizCard = ({
         closeOnClickOutside={false}
         withCloseButton={false}
       >
-        <JoinChanllengeModal close={close} />
+        <JoinChanllengeModal
+          close={close}
+          openTopLeaderboard={openTopLeaderboard}
+        />
+      </Modal>
+      <Modal
+        opened={openedTopLeaderboard}
+        radius={6}
+        size="lg"
+        padding={14}
+        onClose={closeTopLeaderboard}
+        overlayProps={{
+          opacity: 0.85,
+          blur: 3,
+        }}
+        closeButtonProps={{ size: "lg" }}
+        centered
+        // closeOnClickOutside={false}
+        // withCloseButton={false}
+      >
+        <TopLeaderboardModal />
       </Modal>
       <button
         onClick={() => {

@@ -14,7 +14,7 @@ const ForthSection = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-white pad-y-96 pad-x-10 ">
+    <div className="bg-white pad-y-96 pad-x-10 my-20 md:my-28 ">
       <div className="max-w-[1440px] bg-[#8530C1] mx-auto relative rounded-3xl p-8 py-12">
         <img
           src={Star}

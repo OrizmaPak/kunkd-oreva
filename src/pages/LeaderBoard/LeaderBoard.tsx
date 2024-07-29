@@ -11,6 +11,9 @@ import { useGetLeaderBoardList } from "@/api/queries";
 import { Skeleton } from "@mantine/core";
 import useStore from "@/store/index";
 import { getProfileState } from "@/store/profileStore";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import TopLeaderboardModal from "../SummerQuiz/TopLeaderboardModal";
 
 type TLeaderBoardData = {
   username: string;
@@ -22,12 +25,17 @@ type TLeaderBoardData = {
 };
 
 const LeaderBoard = () => {
-  const { data, isLoading } = useGetLeaderBoardList();
+  const [
+    openedTopLeaderboard,
+    { open: openTopLeaderboard, close: closeTopLeaderboard },
+  ] = useDisclosure(false);
+  const profileId = sessionStorage.getItem("profileId");
+  const { data, isLoading } = useGetLeaderBoardList(profileId as string);
   const capitalizeFirstLetter = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    return str?.charAt(0)?.toUpperCase() + str?.slice(1);
   };
   const leaderboard = data?.data?.data;
-  console.log(data);
+  console.log("data------->", profileId, data);
   const [profiles] = useStore(getProfileState);
   const activeProfile = profiles.find(
     (profile) => profile.id == Number(sessionStorage.getItem("profileId"))
@@ -46,23 +54,52 @@ const LeaderBoard = () => {
     (data: TLeaderBoardData) => data?.position == 3
   );
 
-  console.log("Position", firstPosition, secondPosition, thirdPosition);
+  const leaderboard20 = leaderboard?.filter(
+    (data: TLeaderBoardData) =>
+      data?.position !== 1 && data?.position !== 2 && data?.position !== 3
+  );
+
   return (
     <div>
+      <Modal
+        opened={openedTopLeaderboard}
+        radius={6}
+        size="lg"
+        padding={14}
+        onClose={closeTopLeaderboard}
+        overlayProps={{
+          opacity: 0.85,
+          blur: 3,
+        }}
+        closeButtonProps={{ size: "lg" }}
+        centered
+        // closeOnClickOutside={false}
+        // withCloseButton={false}
+      >
+        <TopLeaderboardModal />
+      </Modal>
       <Wrapper bgColor="white">
         <InnerWrapper>
           <div className="p-4">
-            <h1 className=" header2  font-Brico font-medium mb-10 pl-4">
-              Leaderboard
-            </h1>
+            <div className="flex justify-between">
+              <h1 className=" header2  font-Brico font-medium mb-10 pl-4 ">
+                Leaderboard
+              </h1>
+              <button
+                onClick={openTopLeaderboard}
+                className="text25 text-[#8530C1]"
+              >
+                Read how to top the leaderboard here?
+              </button>
+            </div>
 
-            <div className="flex h-[416px] gap-14">
+            <div className="flex h-[416px]  gap-40 ">
               <div
-                className=" bg-contain bg-no-repeat w-[797px]  bg-center flex-grow "
+                className=" bg-contain bg-no-repeat w-[797px]   bg-left flex-grow b "
                 style={{ backgroundImage: `url(${LeaderboardBg1})` }}
               >
                 <div className=" grid grid-cols-3 gap-10 h-full px-28  pb-14">
-                  <div className="flex justify-center items-center flex-col">
+                  <div className="flex justify-center items-center flex-col ">
                     <p>
                       <img src={SecondMedal} alt="image" />
                     </p>
@@ -81,11 +118,11 @@ const LeaderBoard = () => {
                       {secondPosition && secondPosition?.score} P
                     </p>
                   </div>
-                  <div className="flex justify-center items-center flex-col pb-20">
+                  <div className="flex justify-center items-center flex-col pb-20 ">
                     <p>
                       <img src={FirstMedal} alt="image" />
                     </p>
-                    <p className="border-[5px] border-[#A14FDE] rounded-full">
+                    <p className="border-[5px] border-[#A14FDE] rounded-full ">
                       <img
                         src={firstPosition && firstPosition?.avatar}
                         alt="image"
@@ -100,14 +137,14 @@ const LeaderBoard = () => {
                       {firstPosition && firstPosition?.score} P
                     </p>
                   </div>
-                  <div className="flex justify-center items-center flex-col">
+                  <div className="flex justify-center items-center flex-col ">
                     <p>
                       <img src={ThirdMedal} alt="image" />
                     </p>
                     <p className="border-[5px] border-[#A14FDE] rounded-full">
                       <img
                         src={thirdPosition && thirdPosition.avatar}
-                        alt="image"
+                        alt=""
                         className="w-[70px]"
                       />
                     </p>
@@ -121,28 +158,35 @@ const LeaderBoard = () => {
                   </div>
                 </div>
               </div>
+
               <div className="w-[435px] border-2 border-[#F2F4F7] rounded-3xl p-10 flex flex-col justify-between my-3">
-                <div className="flex flex-col justify-center items-center ">
-                  <p className="text25 text-[#15151566] font-medium flex-grow">
-                    <img
-                      src={viewProfile?.avatar}
-                      alt="image"
-                      className="w-[120px]"
-                    />
+                {viewProfile == undefined ? (
+                  <p className="text30 font-Inter">
+                    Take your first quiz to see your rank and point
                   </p>
-                  <p className="text25 font-bold">
-                    {capitalizeFirstLetter(viewProfile?.username)}
-                  </p>
-                </div>
+                ) : (
+                  <div className="flex flex-col justify-center items-center ">
+                    <p className="text25 text-[#15151566] font-medium flex-grow">
+                      <img
+                        src={viewProfile?.avatar}
+                        alt="image"
+                        className="w-[120px]"
+                      />
+                    </p>
+                    <p className="text25 font-bold">
+                      {capitalizeFirstLetter(viewProfile?.username)}
+                    </p>
+                  </div>
+                )}
                 <div>
                   <p className="text25 text-[#15151566] font-medium">
-                    My today Rank: {viewProfile?.position}
+                    My today Rank: {viewProfile?.position || "null"}
                   </p>
                 </div>
 
                 <div>
                   <p className="text25 text-[#15151566] font-medium">
-                    Total points: {viewProfile?.score}
+                    Total points: {viewProfile?.score || "null"}
                   </p>
                   {/* <p className="text30 font-bold">{viewProfile?.score}</p> */}
                 </div>
@@ -160,9 +204,11 @@ const LeaderBoard = () => {
               </p>
             ) : (
               <div className="mt-20">
-                {leaderboard?.map((datta: TLeaderBoardData, index: number) => (
-                  <Card {...datta} key={index} />
-                ))}
+                {leaderboard20
+                  ?.slice(0, -1)
+                  .map((datta: TLeaderBoardData, index: number) => (
+                    <Card {...datta} key={index} />
+                  ))}
               </div>
             )}
           </div>

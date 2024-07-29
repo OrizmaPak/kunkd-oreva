@@ -1,10 +1,14 @@
 import { Progress } from "@mantine/core";
 // import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import RemarkBg from "@/assets/remarkbg.svg";
-import RemarkIcon from "@/assets/remarkIcon.svg";
-import Button from "@/components/Button";
-import { RingProgress, MantineProvider } from "@mantine/core";
+// import RemarkBg from "@/assets/remarkbg.svg";
+// import RemarkIcon from "@/assets/remarkIcon.svg";
+import WinnerBadge from "@/assets/goodresultIcon.png";
+import WeldoneIcone from "@/assets/weldoneIcone.png";
+import QuestionIcone from "@/assets/questionIcon.png";
+
+// import Button from "@/components/Button";
+import { MantineProvider } from "@mantine/core";
 // import { Slider, MantineProvider } from "@mantine/core";
 
 import {
@@ -15,7 +19,7 @@ import {
   // useSaveQuiz
 } from "@/api/queries";
 import { STEP_1, STEP_2, STEP_3, STEP_4 } from "@/utils/constants";
-import Contour from "@/assets/contour.svg";
+// import Contour from "@/assets/contour.svg";
 import DangerCircle from "@/assets/Danger Circle.svg";
 import CheckCircle from "@/assets/CheckCircle-f.svg";
 import SmileIcon from "@/assets/SmileyMeh-d.svg";
@@ -96,13 +100,13 @@ const SummerQuizLayout = () => {
             <div className="flex gap-3 mt-8 px-2">
               <button
                 onClick={() => navigate("/summer-quiz")}
-                className="text-[18px] font-bold flex"
+                className="text25 font-bold flex"
               >
-                Summer Challenge <GrNext size={20} />
+                Summer Challenge <GrNext size={30} />
               </button>
-              <button className="text-[18px] font-bold text-[#8530C1] flex gap-2">
+              <button className="text25 font-bold text-[#8530C1] flex gap-2">
                 {quizName}
-                <GrNext size={20} color="#8530C1]" />
+                <GrNext size={30} color="#8530C1]" />
               </button>
             </div>
 
@@ -140,6 +144,7 @@ const SummerQuizLayout = () => {
                       selected={answers}
                       setSelected={handleSelectAnswer}
                       currentQuestion={currentQues}
+                      currentQues={questions && currentQues}
                     />
 
                     <QuestionPagination
@@ -150,19 +155,16 @@ const SummerQuizLayout = () => {
                       questions={questions ?? []}
                       handleSelectAnswer={handleSelectAnswer}
                       setShowResult={() => setcurrentStep(STEP_2)}
+                      profileId={+profileId}
+                      summerQuizId={(summerQuizId && +summerQuizId) as number}
                     />
                   </div>
                 </Skeleton>
               </>
             )}
             {curentStep === STEP_2 && (
-              <div className="flex-grow mt-5 pt-10 flex  justify-center items-center  mx-auto w-[100%]  flex-col py-14 bg-white m rounded-3xl ">
-                <Result
-                  profileId={+profileId}
-                  summerQuizId={(summerQuizId && +summerQuizId) as number}
-                  answers={answers}
-                  setShowRemark={() => setcurrentStep(STEP_3)}
-                />
+              <div className="flex-grow mt-10  flex  justify-center items-center  mx-auto w-[100%]  flex-col py-14 bg-white  rounded-3xl ">
+                <Result answers={answers} />
               </div>
             )}
             {curentStep === STEP_3 && (
@@ -202,14 +204,25 @@ const Question = ({
   selected,
   setSelected,
   currentQuestion,
+  currentQues,
 }: {
   quesObject: questionType;
   selected: answerObj[];
   setSelected: (val: answerObj) => void;
   currentQuestion: number;
+  currentQues: number;
 }) => {
+  const currentPage = currentQues + 1;
+  const isDivisibleBy5 = currentPage % 5 === 0;
+
   return (
-    <div className=" flex justify-start mt-20 items-center flex-col gap-y-4 flex-grow ">
+    <div className=" flex justify-start mt-20 items-center flex-col gap-y-4 flex-grow relative ">
+      {isDivisibleBy5 && (
+        <img src={WeldoneIcone} alt="" className="absolute left-[-220px]" />
+      )}
+      {isDivisibleBy5 && (
+        <img src={QuestionIcone} alt="" className="absolute right-[-100px]" />
+      )}
       <h1
         className="text-[24px] font-bold  text-center mb-8"
         dangerouslySetInnerHTML={{ __html: `${quesObject?.question}` }}
@@ -333,12 +346,16 @@ const QuestionPagination = ({
   answers,
   setShowResult,
   questions,
+  profileId,
+  summerQuizId,
   handleSelectAnswer,
 }: {
   handlePagination: (val: string) => void;
   currentQues: number;
   totalQuestion: number;
   answers: answerObj[];
+  profileId: number;
+  summerQuizId: number;
   questions: questionType[];
   setShowResult: () => void;
   handleSelectAnswer: (answer: answerObj) => void;
@@ -359,131 +376,13 @@ const QuestionPagination = ({
       handlePagination("next");
     }
   };
-  return (
-    <div>
-      <hr className="mb-5" />
-      <div className="flex justify-between items-center">
-        <button
-          onClick={() => handlePagination("prev")}
-          className="py-3 px-16 bg-[#E2B6FF]   rounded text-white"
-        >
-          Prev
-        </button>
-        <span>
-          Question {currentQues + 1} of {totalQuestion}
-        </span>
-        {answers.length === totalQuestion &&
-        currentQues + 1 === totalQuestion ? (
-          <button
-            onClick={setShowResult}
-            className="py-3 px-16 bg-green-600 rounded  text-white"
-          >
-            Finish Quiz
-          </button>
-        ) : (
-          <button
-            onClick={handleNext}
-            className="py-3 px-16 bg-[#8530C1] rounded text-white"
-          >
-            Next
-          </button>
-        )}
-      </div>
-    </div>
-  );
-};
 
-const GoodRemarkMsg = ({
-  setShowYourResult,
-  answers,
-}: {
-  setShowYourResult: () => void;
-  answers: answerObj[];
-}) => {
-  const refreshPage = () => {
-    window.location.reload();
-  };
-
-  const result = answers.filter(
-    (answer) => answer.selected_option_value === answer.actual_answer
-  );
-
-  return (
-    <>
-      {result.length < answers.length / 2 ? (
-        <div className="relative flex-grow bg-white ">
-          <img
-            src={SmileIcon}
-            alt="remarkIcon"
-            className="absolute left-1/2 top-[30%] transform -translate-x-1/2 -translate-y-1/2"
-          />
-          <div className="text-center  mt-[290px]">
-            <h1 className="font-bold">You can do better!</h1>
-            <p className="text-[18px] text-[#B5B5C3]">
-              You answered {result.length} questions correct
-            </p>
-          </div>
-        </div>
-      ) : (
-        <div className="relative flex-grow bg-white ">
-          <img
-            src={RemarkBg}
-            alt=""
-            className="absolute left-1/2 top-[30%]  transform -translate-x-1/2 -translate-y-1/2"
-          />
-          <img
-            src={RemarkIcon}
-            alt="remarkIcon"
-            className="absolute left-1/2 top-[30%] transform -translate-x-1/2 -translate-y-1/2"
-          />
-          <div className="text-center  mt-[290px]">
-            <h1 className="font-bold">Good Job!</h1>
-            <p className="text-[18px] text-[#B5B5C3]">
-              You answered {result.length} questions correct
-            </p>
-          </div>
-        </div>
-      )}
-      <div>
-        <div className="flex justify-between items-center text-white">
-          <Button
-            onClick={refreshPage}
-            size="sm"
-            color="black"
-            varient="outlined"
-          >
-            <strong className="text-[#8530C1] py-3">Retake Quiz</strong>
-          </Button>
-          <div className="flex gap-20">
-            <button
-              onClick={setShowYourResult}
-              className="py-3 px-16 bg-[#8530C1] rounded"
-            >
-              Review quiz
-            </button>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
-
-const Result = ({
-  answers,
-  profileId,
-  summerQuizId,
-  setShowRemark,
-}: {
-  answers: answerObj[];
-  profileId: number;
-  summerQuizId: number;
-  setShowRemark: () => void;
-}) => {
   const { mutate, isLoading } = useSubmmitSummerQuizQandA();
   const [user] = useStore(getUserState);
   function formatTimeComponent(component: number) {
     return component < 10 ? "0" + component : component;
   }
+  // const navigate = useNavigate();
   const currentTime = new Date();
   // Extract hours, minutes, and seconds
   const hours = currentTime.getHours();
@@ -524,7 +423,7 @@ const Result = ({
               quiz_score: (100 / answers.length) * attempted.length,
             }
           );
-          setShowRemark();
+          setShowResult();
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -544,56 +443,129 @@ const Result = ({
     (answer) => answer.selected_option_value !== undefined
   );
   return (
-    <div className="relative mx-auto flex-grow bg-white  w-[780px] rounded-3xl">
-      <div className="flex mx-auto relative justify-center items-center gap-10 px-5 bg-[#2BB457] w-[672px] h-[385px] rounded-3xl">
-        <img
-          src={Contour}
-          alt="image"
-          className="absolute object-cover w-[100%]"
-        />
-        <p>
-          <RingProgress
-            size={300}
-            thickness={30}
-            sections={[
-              {
-                value: (100 / answers.length) * attempted.length,
-                color: "white",
-              },
-            ]}
-            label={
-              <h1 className="font-bold text-white  text-center text-[30px]">
-                <span className="text-[40px]">{attempted.length}</span>/
-                {answers.length}
-              </h1>
-            }
-            rootColor="rgba(255,255,255,0.4)"
-          />
-        </p>
-        <p className="text-[24px] font-semibold  text-white ">
-          You answered {attempted.length} of {answers.length} questions
-        </p>
-        {/* </div> */}
-      </div>
-      <div className="my-10 text-center">
-        <h1 className="text-[24px] font-bold ">Your Answers</h1>
-      </div>
-      <div className=" flex bg-[#FFF7FD] py-10 rounded-3xl   flex-col">
-        {answers.map((data, index) => (
-          <ResultRow {...data} index={index} />
-        ))}
-        <p className="flex justify-center mt-14 items-center">
+    <div>
+      <hr className="mb-5" />
+      <div className="flex justify-between items-center">
+        <button
+          onClick={() => handlePagination("prev")}
+          className="py-3 px-16 bg-[#E2B6FF]   rounded text-white"
+        >
+          Prev
+        </button>
+        <span>
+          Question {currentQues + 1} of {totalQuestion}
+        </span>
+        {answers.length === totalQuestion &&
+        currentQues + 1 === totalQuestion ? (
           <button
             onClick={handleSaveQuiz}
-            className="p-3 px-20 text-white bg-[#8530C1] rounded"
+            className="py-3 px-16 bg-green-600 rounded  text-white"
           >
             {isLoading ? (
               <p className="flex justify-center items-center">
                 <Loader color="white" size="sm" />
               </p>
             ) : (
-              <span className="text3">Submit</span>
+              <span className="text20"> Finish Quiz</span>
             )}
+          </button>
+        ) : (
+          <button
+            onClick={handleNext}
+            className="py-3 px-16 bg-[#8530C1] rounded text-white"
+          >
+            Next
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const GoodRemarkMsg = ({
+  // setShowYourResult,
+  answers,
+}: {
+  setShowYourResult?: () => void;
+  answers: answerObj[];
+}) => {
+  // const refreshPage = () => {
+  //   window.location.reload();
+  // };
+
+  const result = answers.filter(
+    (answer) => answer.selected_option_value === answer.actual_answer
+  );
+
+  return (
+    <>
+      {result.length < answers.length / 2 ? (
+        <div className="">
+          <div className="flex justify-center items-center">
+            <img
+              src={SmileIcon}
+              alt="remarkIcon"
+              // className="absolute left-1/2 top-[-150%] transform -translate-x-1/2 -translate-y-1/2"
+            />
+          </div>
+          <div className="text-center  ">
+            <h1 className="font-bold">You can do better!</h1>
+            <p className="text25 text-[#667085]">
+              You answered {result.length} questions correct
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div className="relative flex-grow mt-4 bg-white ">
+          <div className="flex justify-center items-center">
+            <img src={WinnerBadge} alt="" className="" />
+          </div>
+          <div className="text-center ">
+            <h1 className="font-bold">Good Job!</h1>
+            <p className="text25 text-[#667085]">
+              You answered {result.length} questions correct
+            </p>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+const Result = ({ answers }: { answers: answerObj[] }) => {
+  const navigate = useNavigate();
+
+  const attempted = answers.filter(
+    (answer) => answer.selected_option_value !== undefined
+  );
+  return (
+    <div className="relative mx-auto flex-grow bg-white  w-[900px] rounded-3xl">
+      <div className="">
+        <p>
+          <GoodRemarkMsg
+            answers={answers}
+            // setShowYourResult={() => setcurrentStep(STEP_4)}
+          />
+        </p>
+
+        <p className="text-[24px] font-semibold  text-white ">
+          You answered {attempted.length} of {answers.length} questions
+        </p>
+        {/* </div> */}
+      </div>
+      <div className="my-3 text-center">
+        <h1 className="text-[24px] font-bold ">Your Answers</h1>
+      </div>
+      <div className=" flex bg-[#FFF7FD] py-10 rounded-3xl   flex-col">
+        {answers.map((data, index) => (
+          <ResultRow2 {...data} index={index} />
+        ))}
+        <p className="flex justify-center mt-14 items-center">
+          <button
+            onClick={() => navigate("/summer-quiz")}
+            className="p-3 px-20 text-white bg-[#8530C1] rounded"
+          >
+            <span className="text20"> Done</span>
           </button>
         </p>
       </div>
@@ -606,7 +578,7 @@ const YourResult = ({ answers }: { answers: answerObj[] }) => {
   // const [user] = useStore(getUserState);
 
   return (
-    <div className="relative flex-grow    w-[780px] rounded-3xl">
+    <div className="relative flex-grow    w-[1000px]  bg-red-500 rounded-3xl">
       <div className="my-10 text-center">
         <h1 className="text-[24px] font-bold ">Your Answers</h1>
       </div>
@@ -629,44 +601,44 @@ const YourResult = ({ answers }: { answers: answerObj[] }) => {
   );
 };
 
-const ResultRow = ({
-  question,
-  selected_option_value,
-  index,
-}: {
-  question: string;
-  selected_option_value?: string;
-  index?: number;
-}) => {
-  return (
-    <div
-      className={`pt-7 py-5 px-16 ${
-        !selected_option_value && "bg-[#ED1C241A]"
-      } `}
-    >
-      <p className={`flex gap-10 items-center `}>
-        <p className="text-[#8530C1]  rounded-full p-3 bg-white w-[30px] h-[30px] flex justify-center items-center">
-          {(index as number) + 1}
-        </p>
-        <div
-          className={`text-[20px]  w-full flex  justify-between font-semibold `}
-        >
-          <p dangerouslySetInnerHTML={{ __html: question }}></p>
-          <p>
-            {" "}
-            {!selected_option_value && <img src={DangerCircle} alt="image" />}
-          </p>
-        </div>
-      </p>
-      <p
-        className="pl-20 text-[20px] text-[#B5B5C3] py-2"
-        dangerouslySetInnerHTML={{
-          __html: `${selected_option_value ? selected_option_value : "-"}`,
-        }}
-      ></p>
-    </div>
-  );
-};
+// const ResultRow = ({
+//   question,
+//   selected_option_value,
+//   index,
+// }: {
+//   question: string;
+//   selected_option_value?: string;
+//   index?: number;
+// }) => {
+//   return (
+//     <div
+//       className={`pt-7 py-5 px-16 ${
+//         !selected_option_value && "bg-[#ED1C241A]"
+//       } `}
+//     >
+//       <p className={`flex gap-10 items-center `}>
+//         <p className="text-[#8530C1]  rounded-full p-3 bg-white w-[30px] h-[30px] flex justify-center items-center">
+//           {(index as number) + 1}
+//         </p>
+//         <div
+//           className={`text-[20px]  w-full flex  justify-between font-semibold `}
+//         >
+//           <p dangerouslySetInnerHTML={{ __html: question }}></p>
+//           <p>
+//             {" "}
+//             {!selected_option_value && <img src={DangerCircle} alt="image" />}
+//           </p>
+//         </div>
+//       </p>
+//       <p
+//         className="pl-20 text-[20px] text-[#B5B5C3] py-2"
+//         dangerouslySetInnerHTML={{
+//           __html: `${selected_option_value ? selected_option_value : "-"}`,
+//         }}
+//       ></p>
+//     </div>
+//   );
+// };
 
 const ResultRow2 = ({
   question,
@@ -681,12 +653,12 @@ const ResultRow2 = ({
 }) => {
   return (
     <div
-      className={`pt-7 py-5 px-16 ${
+      className={`pt-7 py-5 px-10 ${
         selected_option_value !== actual_answer && "bg-[#ED1C241A]"
       } `}
     >
       <p className={`flex gap-10 items-center `}>
-        <p className="text-[#8530C1]  rounded-full p-3 bg-white w-[30px] h-[30px] flex justify-center items-center">
+        <p className="text-[#8530C1]  rounded-full p-3 bg-white w-[40px] h-[40px] flex justify-center items-center text25">
           {(index as number) + 1}
         </p>
         <div
@@ -701,9 +673,9 @@ const ResultRow2 = ({
         </div>
         <p>
           {!selected_option_value || selected_option_value !== actual_answer ? (
-            <img src={DangerCircle} alt="image" />
+            <img src={DangerCircle} alt="image" className="w-10" />
           ) : (
-            <img src={CheckCircle} alt="iamge" />
+            <img src={CheckCircle} alt="iamge" className="w-10" />
           )}
         </p>
       </p>
@@ -720,15 +692,15 @@ const ResultRow2 = ({
             className="pl-16 text-[20px] text-[#B5B5C3] py-2"
             dangerouslySetInnerHTML={{
               __html: `${
-                selected_option_value !== actual_answer
-                  ? selected_option_value
-                  : ""
+                selected_option_value !== actual_answer ? actual_answer : ""
               }`,
             }}
           ></p>
           <p
             className="text-red-500 font=semibold ml-16 flex gap-2 "
-            dangerouslySetInnerHTML={{ __html: ` Answer:${actual_answer}` }}
+            dangerouslySetInnerHTML={{
+              __html: ` Answer:${selected_option_value}`,
+            }}
           ></p>
         </div>
       ) : (

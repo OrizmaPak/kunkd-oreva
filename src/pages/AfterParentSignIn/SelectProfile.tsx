@@ -54,7 +54,7 @@ const SelectProfile = ({
       <Modal
         opened={opened}
         radius={6}
-        size="md"
+        size="lg"
         onClose={close}
         overlayProps={{
           opacity: 0.85,

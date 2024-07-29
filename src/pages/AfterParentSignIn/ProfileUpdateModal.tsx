@@ -4,6 +4,11 @@ import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { getApiErrorMessage } from "@/api/helper";
+import useStore from "@/store/index";
+import { getProfileState } from "@/store/profileStore";
+import { Chip, Loader, TextInput } from "@mantine/core";
+
 import {
   useUpdateProfileUserNameSchoolName,
   useGetSuggestUserName,
@@ -13,9 +18,9 @@ import {
 } from "@/api/queries";
 import { useDebouncedValue } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { Loader, TextInput } from "@mantine/core";
+// import { Loader, TextInput } from "@mantine/core";
 // import { Switch } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Checkbox } from "@mantine/core";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -40,8 +45,43 @@ const ProfileUpdateModal = ({
   useGetProfile(true);
 
   const [userName, setUserName] = useState("");
-  const { data: datta } = useGetSuggestUserName();
-  const suggestions = datta?.data?.data?.suggestions;
+  const [suggestions, setSuggestion] = useState<[]>();
+
+  const [profiles] = useStore(getProfileState);
+
+  const activeProfile = profiles.find(
+    (data) => data?.id == Number(sessionStorage.getItem("profileId"))
+  );
+  console.log("ACTIVE PROFILE", activeProfile);
+  const { mutate: mutateSuggest } = useGetSuggestUserName();
+  const ref = useRef(null);
+
+  const handleUsernameSuggestion = (name: string) => {
+    console.log("name", name);
+    mutateSuggest(
+      {
+        name,
+      },
+
+      {
+        onSuccess(data) {
+          setSuggestion(data?.data?.data?.suggestions);
+        },
+
+        onError(err) {
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  };
+
+  useEffect(() => {
+    handleUsernameSuggestion(activeProfile?.name as string);
+  }, []);
+
   const [debounced] = useDebouncedValue(userName, 200);
   const {
     // data,
@@ -111,33 +151,41 @@ const ProfileUpdateModal = ({
                 <label htmlFor="name" className="text1 font-medium">
                   Username
                 </label>
-                {/* <InputFormat
-                value={userName}
-                reg={register("username")}
-                errorMsg={errors?.username?.message}
-                type="text"
-                placeholder="Enter username"
-                /> */}
 
-                {suggestions && (
+                {
                   <TextInput
                     id="useNameSuggestion"
                     placeholder="Choose one or enter your desired username."
                     name="user name"
                     onChange={(e) => setUserName(e.target.value)}
                     value={userName}
+                    ref={ref}
                     list="user-name-suggestion"
-                    autoComplete="false"
+                    // autoComplete="false"
                     rightSection={
-                      isInitialLoading && isLoadingCheck ? (
+                      isInitialLoading && isLoading ? (
                         <Loader size="xs" />
                       ) : null
                     }
-                    error={
-                      !isLoadingCheck && isError && "user name already exist"
-                    }
+                    error={!isLoading && isError && "user name already exist"}
                   />
-                )}
+                }
+                {
+                  <Chip.Group
+                    onChange={(value) => {
+                      setUserName(value as string);
+                    }}
+                    value={userName}
+                  >
+                    <div className="flex my-2  flex-wrap gap-2 gap-y-3">
+                      {suggestions?.map((suggest: string) => (
+                        <Chip width={"auto"} key={suggest} value={suggest}>
+                          {suggest}
+                        </Chip>
+                      ))}
+                    </div>
+                  </Chip.Group>
+                }
 
                 {suggestions && (
                   <datalist id="user-name-suggestion" className="w-full">
@@ -169,13 +217,18 @@ const ProfileUpdateModal = ({
                 </p>
               </p>
 
-              <p className="mt-2 mb-4">
+              <p className="mt-2 mb-4 flex  justify-start gap-2 items-center">
                 <Checkbox
+                  size="lg"
                   onChange={(event) =>
                     setJoinSummerChallenge(event.currentTarget.checked)
                   }
-                  label="I agree to join summer chanllenge"
+                  className="text25"
+                  // label="I agree to join summer chanllenge"
                 />
+                <p className="text20  font-Inter">
+                  I agree to join summer chanllenge
+                </p>
               </p>
               <Button type="submit">
                 {isLoading ? (

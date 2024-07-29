@@ -769,10 +769,7 @@ export const useUpdateProfileUserNameSchoolName = () => {
 };
 
 export const useGetSuggestUserName = () => {
-  return useQuery({
-    queryKey: ["GetSuggestUserName"],
-    queryFn: GetSuggestUserName,
-  });
+  return useMutation({ mutationFn: GetSuggestUserName });
 };
 
 export const useUserNameChecker = (username: string) => {
@@ -814,9 +811,9 @@ export const useSummerChallengeContentTracking = () => {
   return useMutation({ mutationFn: SummerChallengeContentTracking });
 };
 
-export const useGetLeaderBoardList = () => {
+export const useGetLeaderBoardList = (pid: string) => {
   return useQuery({
-    queryKey: ["GetLeaderBoardList"],
-    queryFn: GetLeaderBoardList,
+    queryKey: ["GetLeaderBoardList", pid],
+    queryFn: () => GetLeaderBoardList(pid),
   });
 };

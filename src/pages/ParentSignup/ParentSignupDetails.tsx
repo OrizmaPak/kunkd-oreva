@@ -15,9 +15,14 @@ import { AiOutlineMail } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { ZodType, z } from "zod";
 import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
-import { useState } from "react";
-import { isValidPhoneNumber } from "libphonenumber-js";
+// import PhoneInput from "react-phone-number-input";
+import { useEffect, useState } from "react";
+// import { isValidPhoneNumber } from "libphonenumber-js";
+// import MobileNumber from "@/components/MobileNumber";
+import { ParsedCountry, PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
+// import { CountryData } from "react-international-phone";
+import { PhoneNumberUtil } from "google-libphonenumber";
 
 // import { motion } from "framer-motion";
 
@@ -42,27 +47,37 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
-  const [value, setValue] = useState<string | undefined>();
-  const [isValid, setIsValid] = useState<boolean>(true);
+  const [phone, setPhone] = useState("");
+  const [countryCode, setCountryCode] = useState<string>("");
+  const [isTouched, setIsTouched] = useState<boolean>(false);
+  const phoneUtil = PhoneNumberUtil.getInstance();
 
-  const handleChange = (newValue: string | undefined) => {
-    setValue(newValue);
-    if (newValue) {
-      setIsValid(isValidPhoneNumber(newValue));
-    } else {
-      setIsValid(true); // Handle case when input is cleared
+  const isPhoneValid = (phone: string) => {
+    try {
+      return phoneUtil.isValidNumber(phoneUtil.parseAndKeepRawInput(phone));
+    } catch (error) {
+      return false;
     }
-
-    console.log(value);
-    console.log(value?.slice(0, 4));
   };
+
+  const handleChange2 = (
+    value: string,
+    countryData: { country: ParsedCountry; inputValue: string }
+  ) => {
+    setPhone(value);
+    setIsTouched(true);
+    setCountryCode(countryData?.country?.dialCode);
+  };
+  const isValid2 = isPhoneValid(phone);
+  useEffect(() => {
+    setIsTouched(false);
+  }, []);
+
   const submitData = async (datta: FormData) => {
     sessionStorage.clear();
-
     setUser({ email: datta.email });
-
     mutate(
-      { ...datta, phone: value, international_code: value?.slice(0, 4) },
+      { ...datta, phone: phone, international_code: countryCode },
 
       {
         onSuccess(data) {
@@ -118,27 +133,25 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
                   errorMsg={errors.lastname?.message}
                 />
               </p>
-              <p className="my-5">
-                {/* <InputFormat
-                  type="number"
-                  placeholder="Phone number"
-                  reg={register("phone")}
-                  errorMsg={errors.lastname?.message}
-                /> */}
 
+              {/* <p>
+                <MobileNumber />
+              </p> */}
+
+              <p className="w-full">
                 <PhoneInput
-                  getCountryCallingCode
-                  placeholder="Enter phone number"
-                  value={value}
-                  onChange={handleChange}
-                  className="phone-input rounded-full flex items-center gap-2 mt-1  border-[#F3DAFF] border py-3 my-2 px-2 focus:outline-none"
+                  // style={width:"100%"}}
+                  defaultCountry="ng"
+                  value={phone.toString()}
+                  onChange={(phone, dialCode) => handleChange2(phone, dialCode)}
+                  className="w-full text20 "
                 />
-                {!isValid && (
-                  <p style={{ color: "red" }}>
-                    Please enter a valid phone number.
-                  </p>
-                )}
               </p>
+              {isTouched && !isValid2 && (
+                <p className="text2 text-red-600">
+                  Please enter a valid phone number.
+                </p>
+              )}
 
               <p className="my-5">
                 <InputFormat

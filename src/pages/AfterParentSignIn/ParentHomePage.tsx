@@ -16,12 +16,17 @@ import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import ProfileUpdateModal from "./ProfileUpdateModal";
 import JoinChanllengeModal from "./JoinChanllengeModal";
+import TopLeaderboardModal from "../SummerQuiz/TopLeaderboardModal";
 
 const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
   const [useri, setUser] = useStore(getUserState);
   const { data } = useGetUpdatedProfile();
   const currentUserProfile = data?.data?.data;
   const [opened, { open, close }] = useDisclosure(false);
+  const [
+    openedTopLeaderboard,
+    { open: openTopLeaderboard, close: closeTopLeaderboard },
+  ] = useDisclosure(false);
   const [
     openedJoinChanllenge,
     { open: openJoinChanllenge, close: closeJoinChanllenge },
@@ -43,8 +48,6 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
     ? profiles?.find((each) => each.id === +childProfile)
     : profiles[0];
 
-  console.log({ childProfile, profiles }, "===>> profiles data");
-
   useEffect(() => {
     if (profile?.username == "") {
       open();
@@ -56,6 +59,8 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
     ) {
       openJoinChanllenge();
     }
+    // eslint disabled the next line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile]);
 
   if (!user || !profile) {
@@ -67,7 +72,7 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
       <Modal
         opened={opened}
         radius={6}
-        size="md"
+        size="lg"
         padding={14}
         onClose={close}
         overlayProps={{
@@ -102,7 +107,27 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
         closeOnClickOutside={false}
         withCloseButton={false}
       >
-        <JoinChanllengeModal close={closeJoinChanllenge} />
+        <JoinChanllengeModal
+          close={closeJoinChanllenge}
+          openTopLeaderboard={openTopLeaderboard}
+        />
+      </Modal>
+      <Modal
+        opened={openedTopLeaderboard}
+        radius={6}
+        size="lg"
+        padding={14}
+        onClose={closeTopLeaderboard}
+        overlayProps={{
+          opacity: 0.85,
+          blur: 3,
+        }}
+        closeButtonProps={{ size: "lg" }}
+        centered
+        // closeOnClickOutside={false}
+        // withCloseButton={false}
+      >
+        <TopLeaderboardModal />
       </Modal>
       <div>
         <Wrapper>

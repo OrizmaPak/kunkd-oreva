@@ -79,7 +79,7 @@ const Hero = ({ username, userimage }: Props) => {
           .slick-dots {
             bottom: 20px;
             left:-350px !important;
-            z-index: 1000 !important;
+            z-index:50 !important;
       
           }
 
