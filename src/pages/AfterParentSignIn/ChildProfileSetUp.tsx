@@ -564,7 +564,7 @@ export const ChildAgeModal = ({
           )}
         </span>
       </div>
-      <div className="px-28">
+      <div className="px-20">
         <div>
           <div className="flex justify-center items-center p-4">
             <img loading="lazy" src={Ema} alt="jump" />
