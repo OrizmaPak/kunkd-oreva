@@ -80,13 +80,14 @@ const ProfileUpdateModal = ({
 
   useEffect(() => {
     handleUsernameSuggestion(activeProfile?.name as string);
+    // eslint-disable-next-line
   }, []);
 
   const [debounced] = useDebouncedValue(userName, 200);
   const {
     // data,
     isError,
-    isLoading: isLoadingCheck,
+
     isInitialLoading,
   } = useUserNameChecker(debounced);
   const [joinSummerChallenge, setJoinSummerChallenge] = useState(false);
