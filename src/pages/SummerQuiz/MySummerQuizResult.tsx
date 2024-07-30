@@ -25,8 +25,8 @@ const MySummerQuizResult = ({ close }: { close: () => void }) => {
 
   const questionAnswer = data?.data?.data;
   console.log("my quiz answers", questionAnswer);
-  const result = questionAnswer.questions.filter(
-    (answer: TquestionAnswer) => answer.selected_option_key === answer.answer
+  const result = questionAnswer?.questions.filter(
+    (answer: TquestionAnswer) => answer?.selected_option_key === answer?.answer
   );
   return (
     <div>
@@ -34,7 +34,7 @@ const MySummerQuizResult = ({ close }: { close: () => void }) => {
         <div className="">
           <p>
             <>
-              {result.length < questionAnswer.questions.length / 2 ? (
+              {result?.length < questionAnswer?.questions?.length / 2 ? (
                 <div className="">
                   <div className="flex justify-center items-center">
                     <img
@@ -46,7 +46,7 @@ const MySummerQuizResult = ({ close }: { close: () => void }) => {
                   <div className="text-center  ">
                     <h1 className="font-bold">You can do better!</h1>
                     <p className="text25 text-[#667085]">
-                      You answered {result.length}{" "}
+                      You answered {result?.length}{" "}
                       {`question${result?.length > 1 ? "s" : ""}`} correctly out
                       of {questionAnswer?.questions?.length} questions
                     </p>
@@ -60,7 +60,7 @@ const MySummerQuizResult = ({ close }: { close: () => void }) => {
                   <div className="text-center ">
                     <h1 className="font-bold">Good Job!</h1>
                     <p className="text25 text-[#667085]">
-                      You answered {result.length} questions correctly out of{" "}
+                      You answered {result?.length} questions correctly out of{" "}
                       {questionAnswer?.questions?.length} questions
                     </p>
                   </div>

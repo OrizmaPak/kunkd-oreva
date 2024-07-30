@@ -4,7 +4,7 @@ import { GrNext } from "react-icons/gr";
 import { FiExternalLink } from "react-icons/fi";
 // import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 // import { Popover, Text } from "@mantine/core";
-import { useGetSummerQuiz, useGetSummerQuizAnswers } from "@/api/queries";
+import { useGetSummerQuiz } from "@/api/queries";
 import { useNavigate } from "react-router-dom";
 import { TStoryContent } from "@/api/types";
 import { Skeleton } from "@mantine/core";
@@ -24,13 +24,13 @@ const PreviewSummerChallengePage = () => {
   );
   const requireData = quiz?.data?.data;
   const [opened, { open, close }] = useDisclosure(false);
-  const { data } = useGetSummerQuizAnswers(
-    quizId?.toString() as string,
-    sessionStorage.getItem("profileId") as string
-  );
+  // const { data } = useGetSummerQuizAnswers(
+  //   quizId?.toString() as string,
+  //   sessionStorage.getItem("profileId") as string
+  // );
 
-  const myResultData = data?.data?.data;
-  console.log("my quiz answers", myResultData?.completed);
+  // const myResultData = data?.data?.data;
+  // console.log("my quiz answers", myResultData?.completed);
   // const capitalizeFirstLetter = (str: string) => {
   //   return str.charAt(0).toUpperCase() + str.slice(1);
   // };
@@ -69,8 +69,8 @@ const PreviewSummerChallengePage = () => {
       </Modal>
       <div>
         <div className="bg-[#8530C1]  h-[30%] overflow-visible ">
-          <div className="max-w-[1280px] w -full mx-auto  h-[650px]">
-            <div className=" pt-28">
+          <div className="max-w-[1280px] w -full mx-auto  h-[500px]">
+            <div className=" pt-20">
               <div className="flex gap-3 mt-8 y">
                 <button
                   onClick={() => navigate("/summer-quiz")}
@@ -91,7 +91,7 @@ const PreviewSummerChallengePage = () => {
                   className="mt-10"
                 ></Skeleton>
               ) : (
-                <div className=" mt-28  rounded-xl ">
+                <div className=" mt-10  rounded-xl ">
                   <div className="flex justify-between">
                     <div className=" w-full flex flex-col">
                       <p className="header1 font-Inter font-bold flex-grow-1  text-white">
@@ -108,9 +108,7 @@ const PreviewSummerChallengePage = () => {
                       </div>
                     </div>
                     <div>
-                      {requireData?.completed &&
-                      myResultData?.completed &&
-                      myResultData.questions?.length > 0 ? (
+                      {requireData?.completed ? (
                         <button
                           onClick={open}
                           className="w-[200px] w py-3 rounded bg-green-500 text-white"
