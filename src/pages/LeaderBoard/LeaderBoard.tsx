@@ -83,7 +83,7 @@ const LeaderBoard = () => {
               </h1>
               <button
                 onClick={openTopLeaderboard}
-                className="text25 text-[#8530C1] font-Inter flex gap-2"
+                className="text20 text-[#8530C1] font-Inter flex gap-2"
               >
                 Read how to top the leaderboard here?{" "}
                 <FaArrowRight color="#8530C1" size={30} />
