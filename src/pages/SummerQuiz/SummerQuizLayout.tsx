@@ -511,7 +511,9 @@ const GoodRemarkMsg = ({
           <div className="text-center  ">
             <h1 className="font-bold">You can do better!</h1>
             <p className="text25 text-[#667085]">
-              You answered {result.length} questions correct
+              You answered {result.length}{" "}
+              {`question${result.length > 1 ? "s" : ""}`} correctly out of{" "}
+              {answers?.length} questions
             </p>
           </div>
         </div>
@@ -523,7 +525,8 @@ const GoodRemarkMsg = ({
           <div className="text-center ">
             <h1 className="font-bold">Good Job!</h1>
             <p className="text25 text-[#667085]">
-              You answered {result.length} questions correct
+              You answered {result.length} questions correctly out of{" "}
+              {answers?.length} questions
             </p>
           </div>
         </div>

@@ -443,3 +443,7 @@ export const SummerChallengeContentTracking = (payload: object) => {
 export const GetLeaderBoardList = (pid: string) => {
   return axios.get(`/summer/challenge/leaderboard`, { params: { pid } });
 };
+
+export const GetSummerQuizAnswers = (quizId: string, profileId: string) => {
+  return axios.get(`/summer/challenge/quiz/answers/${quizId}/${profileId}`);
+};

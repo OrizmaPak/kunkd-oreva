@@ -9,11 +9,11 @@ import ThirdMedal from "@/assets/thirdMedal.png";
 import CountryFlag from "react-country-flag";
 import { useGetLeaderBoardList } from "@/api/queries";
 import { Skeleton } from "@mantine/core";
-import useStore from "@/store/index";
-import { getProfileState } from "@/store/profileStore";
+
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import TopLeaderboardModal from "../SummerQuiz/TopLeaderboardModal";
+import { FaArrowRight } from "react-icons/fa6";
 
 type TLeaderBoardData = {
   username: string;
@@ -35,15 +35,8 @@ const LeaderBoard = () => {
     return str?.charAt(0)?.toUpperCase() + str?.slice(1);
   };
   const leaderboard = data?.data?.data;
-  console.log("data------->", profileId, data);
-  const [profiles] = useStore(getProfileState);
-  const activeProfile = profiles.find(
-    (profile) => profile.id == Number(sessionStorage.getItem("profileId"))
-  );
-  const viewProfile = leaderboard?.find(
-    (data: TLeaderBoardData) => data.username == activeProfile?.username
-  );
-  console.log("View", viewProfile, activeProfile, profiles);
+
+  const viewProfile = leaderboard?.[leaderboard.length - 1];
   const firstPosition = leaderboard?.find(
     (data: TLeaderBoardData) => data?.position == 1
   );
@@ -54,10 +47,13 @@ const LeaderBoard = () => {
     (data: TLeaderBoardData) => data?.position == 3
   );
 
-  const leaderboard20 = leaderboard?.filter(
-    (data: TLeaderBoardData) =>
-      data?.position !== 1 && data?.position !== 2 && data?.position !== 3
-  );
+  function removeElements(arr: TLeaderBoardData[]) {
+    if (arr?.length <= 3) {
+      return [];
+    }
+    return arr?.slice(3, -1);
+  }
+  const leaderboardTable = removeElements(leaderboard);
 
   return (
     <div>
@@ -82,18 +78,19 @@ const LeaderBoard = () => {
         <InnerWrapper>
           <div className="p-4">
             <div className="flex justify-between">
-              <h1 className=" header2  font-Brico font-medium mb-10 pl-4 ">
+              <h1 className=" header2  font-Inter font-medium mb-10 pl-4 ">
                 Leaderboard
               </h1>
               <button
                 onClick={openTopLeaderboard}
-                className="text25 text-[#8530C1]"
+                className="text25 text-[#8530C1] font-Inter flex gap-2"
               >
-                Read how to top the leaderboard here?
+                Read how to top the leaderboard here?{" "}
+                <FaArrowRight color="#8530C1" size={30} />
               </button>
             </div>
 
-            <div className="flex h-[416px]  gap-40 ">
+            <div className="flex h-[416px] gap-10 ">
               <div
                 className=" bg-contain bg-no-repeat w-[797px]   bg-left flex-grow b "
                 style={{ backgroundImage: `url(${LeaderboardBg1})` }}
@@ -161,34 +158,39 @@ const LeaderBoard = () => {
 
               <div className="w-[435px] border-2 border-[#F2F4F7] rounded-3xl p-10 flex flex-col justify-between my-3">
                 {viewProfile == undefined ? (
-                  <p className="text30 font-Inter">
+                  <p className="text30  font-Hanken">
                     Take your first quiz to see your rank and point
                   </p>
                 ) : (
-                  <div className="flex flex-col justify-center items-center ">
-                    <p className="text25 text-[#15151566] font-medium flex-grow">
+                  <div className="flex  justify-start  items-center gap-6">
+                    <p className="text25 text-[#15151566] font-medium ">
                       <img
                         src={viewProfile?.avatar}
                         alt="image"
-                        className="w-[120px]"
+                        className="w-[70px]"
                       />
                     </p>
-                    <p className="text25 font-bold">
+                    <p className="text-[36px] font-bold tracking-wide">
                       {capitalizeFirstLetter(viewProfile?.username)}
                     </p>
                   </div>
                 )}
                 <div>
-                  <p className="text25 text-[#15151566] font-medium">
-                    My today Rank: {viewProfile?.position || "null"}
+                  <p className="text25 text-[#15151566] font-medium tracking-wider">
+                    My today Rank:
+                  </p>
+                  <p className="text-[36px] font-bold font-Hanken tracking-wider">
+                    {viewProfile?.position || 0}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text25 text-[#15151566] font-medium">
-                    Total points: {viewProfile?.score || "null"}
+                  <p className="text25 text-[#15151566] font-medium tracking-wider">
+                    Total points:
                   </p>
-                  {/* <p className="text30 font-bold">{viewProfile?.score}</p> */}
+                  <p className="text-[36px] font-bold font-Hanken  tracking-wider">
+                    {viewProfile?.score || 0}
+                  </p>
                 </div>
               </div>
             </div>
@@ -204,11 +206,11 @@ const LeaderBoard = () => {
               </p>
             ) : (
               <div className="mt-20">
-                {leaderboard20
-                  ?.slice(0, -1)
-                  .map((datta: TLeaderBoardData, index: number) => (
+                {leaderboardTable?.map(
+                  (datta: TLeaderBoardData, index: number) => (
                     <Card {...datta} key={index} />
-                  ))}
+                  )
+                )}
               </div>
             )}
           </div>

@@ -88,6 +88,7 @@ import {
   SubmmitSummerQuizQandA,
   SummerChallengeContentTracking,
   GetLeaderBoardList,
+  GetSummerQuizAnswers,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery, useInfiniteQuery } from "@tanstack/react-query";
@@ -815,5 +816,12 @@ export const useGetLeaderBoardList = (pid: string) => {
   return useQuery({
     queryKey: ["GetLeaderBoardList", pid],
     queryFn: () => GetLeaderBoardList(pid),
+  });
+};
+
+export const useGetSummerQuizAnswers = (quizId: string, profileId: string) => {
+  return useQuery({
+    queryKey: ["GetSummerQuizAnswers", quizId, profileId],
+    queryFn: () => GetSummerQuizAnswers(quizId, profileId),
   });
 };
