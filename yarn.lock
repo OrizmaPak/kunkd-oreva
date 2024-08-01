@@ -2049,7 +2049,6 @@
     "@types/react" "*"
     csstype "^3.0.2"
 
-<<<<<<< HEAD
 "@types/react-phone-number-input@^3.1.37":
   version "3.1.37"
   resolved "https://registry.yarnpkg.com/@types/react-phone-number-input/-/react-phone-number-input-3.1.37.tgz#7781cbb31d693da99eff4dbfad5635021477cb77"
@@ -2057,8 +2056,6 @@
   dependencies:
     react-phone-number-input "*"
 
-=======
->>>>>>> 73e8904f (Summer Challenge Landing Page)
 "@types/react-scroll@^1.8.10":
   version "1.8.10"
   resolved "https://registry.yarnpkg.com/@types/react-scroll/-/react-scroll-1.8.10.tgz#585a5c4bd0654434f3e55a08e94ed2e048bae7c7"
