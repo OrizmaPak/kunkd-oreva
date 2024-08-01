@@ -1,8 +1,8 @@
-import WinnerBadge from "@/assets/goodresultIcon.png";
 import DangerCircle from "@/assets/Danger Circle.svg";
 import CheckCircle from "@/assets/CheckCircle-f.svg";
-import SmileIcon from "@/assets/SmileyMeh-d.svg";
 import { useGetSummerQuizAnswers } from "@/api/queries";
+import GoodJob from "@/assets/goodJob.png";
+import Excellent from "@/assets/excellent.png";
 
 type TquestionAnswer = {
   question: string;
@@ -38,13 +38,13 @@ const MySummerQuizResult = ({ close }: { close: () => void }) => {
                 <div className="">
                   <div className="flex justify-center items-center">
                     <img
-                      src={SmileIcon}
+                      src={GoodJob}
                       alt="remarkIcon"
                       // className="absolute left-1/2 top-[-150%] transform -translate-x-1/2 -translate-y-1/2"
                     />
                   </div>
                   <div className="text-center  ">
-                    <h1 className="font-bold">You can do better!</h1>
+                    <h1 className="font-bold"></h1>Good Job!
                     <p className="text25 text-[#667085]">
                       You answered {result?.length}{" "}
                       {`question${result?.length > 1 ? "s" : ""}`} correctly out
@@ -55,10 +55,10 @@ const MySummerQuizResult = ({ close }: { close: () => void }) => {
               ) : (
                 <div className="relative flex-grow mt-4 bg-white ">
                   <div className="flex justify-center items-center">
-                    <img src={WinnerBadge} alt="" className="" />
+                    <img src={Excellent} alt="" className="" />
                   </div>
                   <div className="text-center ">
-                    <h1 className="font-bold">Good Job!</h1>
+                    <h1 className="font-bold">Excellent</h1>
                     <p className="text25 text-[#667085]">
                       You answered {result?.length} questions correctly out of{" "}
                       {questionAnswer?.questions?.length} questions

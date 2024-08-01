@@ -145,7 +145,7 @@ const LeaderBoard = () => {
                     </p>
                     <p className="bg-[#A14FDE] p-2 rounded-xl text-white font-medium px-4 flex gap-1">
                       {secondPosition && secondPosition?.score}{" "}
-                      <img src={CoinPoint} alt="image" />
+                      <img src={CoinPoint} alt="image" className="w-[25px]" />
                     </p>
                   </div>
                   <div className="flex justify-center items-center flex-col pb-20 ">
@@ -155,7 +155,7 @@ const LeaderBoard = () => {
                     <p className="border-[5px] border-[#A14FDE] rounded-full ">
                       <img
                         src={firstPosition && firstPosition?.avatar}
-                        alt="image"
+                        alt=""
                         className="w-[70px] "
                       />
                     </p>
@@ -165,7 +165,7 @@ const LeaderBoard = () => {
                     </p>
                     <p className="bg-[#8632C2] p-2 rounded-xl text-white font-medium px-4 flex gap-1">
                       {firstPosition && firstPosition?.score}{" "}
-                      <img src={CoinPoint} alt="image" />
+                      <img src={CoinPoint} alt="image" className="w-[25px]" />
                     </p>
                   </div>
                   <div className="flex justify-center items-center flex-col ">
@@ -184,7 +184,8 @@ const LeaderBoard = () => {
                         capitalizeFirstLetter(thirdPosition?.username)}
                     </p>
                     <p className="bg-[#8632C2] p-2 rounded-xl text-white font-medium px-4 flex gap-1">
-                      {thirdPosition?.score} <img src={CoinPoint} alt="image" />
+                      {thirdPosition?.score}{" "}
+                      <img src={CoinPoint} alt="image" className="w-[25px]" />
                     </p>
                   </div>
                 </div>
