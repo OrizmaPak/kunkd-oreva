@@ -248,7 +248,7 @@ const TableRow = ({ story }: { story: TStoryContent }) => {
       >
         {story?.status == "complete" ? (
           <p className="bg-[#8530C1] text-white flex gap-2 p-3 rounded items-center justify-center">
-            Complete <FiExternalLink size={20} color="white" />
+            Completed <FiExternalLink size={20} color="white" />
           </p>
         ) : story.status == "ongoing" ? (
           <p
@@ -283,7 +283,7 @@ const TableRow = ({ story }: { story: TStoryContent }) => {
       >
         {story?.status == "complete" ? (
           <p className="text-[#039855] flex gap-1 items-center">
-            <img src={CompleteContent} alt="image" /> Complete
+            <img src={CompleteContent} alt="image" /> Completed
           </p>
         ) : story.status == "ongoing" ? (
           <p

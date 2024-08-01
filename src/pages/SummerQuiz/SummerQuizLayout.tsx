@@ -3,8 +3,8 @@ import { Progress } from "@mantine/core";
 import { useState } from "react";
 // import RemarkBg from "@/assets/remarkbg.svg";
 // import RemarkIcon from "@/assets/remarkIcon.svg";
-import WeldoneIcone from "@/assets/weldoneIcone.png";
-import QuestionIcone from "@/assets/questionIcon.png";
+// import WeldoneIcone from "@/assets/weldoneIcone.png";
+// import QuestionIcone from "@/assets/questionIcon.png";
 
 // import Button from "@/components/Button";
 import { MantineProvider } from "@mantine/core";
@@ -35,6 +35,8 @@ import useStore from "@/store/index";
 import { useNavigate } from "react-router-dom";
 import { handleEventTracking } from "@/api/moengage";
 import { GrNext } from "react-icons/gr";
+import Thandi1 from "@/assets/Thandi.png";
+import Thandi2 from "@/assets/Thandi2.png";
 
 const SummerQuizLayout = () => {
   const summerQuizId = sessionStorage.getItem("summerQuizId");
@@ -219,10 +221,18 @@ const Question = ({
   return (
     <div className=" flex justify-start mt-20 items-center flex-col gap-y-4 flex-grow relative ">
       {isDivisibleBy5 && (
-        <img src={WeldoneIcone} alt="" className="absolute left-[-220px]" />
+        <img
+          src={Thandi1}
+          alt=""
+          className="absolute  w-[200px] left-[-100px]"
+        />
       )}
       {isDivisibleBy5 && (
-        <img src={QuestionIcone} alt="" className="absolute right-[-100px]" />
+        <img
+          src={Thandi2}
+          alt=""
+          className="absolute w-[250px] right-[-100px]"
+        />
       )}
       <h1
         className="text-[24px] font-bold  text-center mb-8"
