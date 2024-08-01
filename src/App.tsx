@@ -253,7 +253,6 @@ function App() {
                 path="summer-challenge"
                 element={<SummerLandingPage />}
               ></Route>
-
               <Route path="privacy-policy" element={<PrivacyPolicy />}></Route>
               <Route path="refund-policy" element={<RefundPolicy />}></Route>
               <Route path="dev" element={<PageInProduction />}></Route>
