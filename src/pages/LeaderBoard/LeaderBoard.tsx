@@ -14,6 +14,11 @@ import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import TopLeaderboardModal from "../SummerQuiz/TopLeaderboardModal";
 import { FaArrowRight } from "react-icons/fa6";
+import CoinPoint from "@/assets/coinpoint.png";
+import useStore from "@/store/index";
+import { getProfileState } from "@/store/profileStore";
+import { LuBell } from "react-icons/lu";
+import JoinChanllengeModal from "../AfterParentSignIn/JoinChanllengeModal";
 
 type TLeaderBoardData = {
   username: string;
@@ -25,11 +30,16 @@ type TLeaderBoardData = {
 };
 
 const LeaderBoard = () => {
+  const [profiles] = useStore(getProfileState);
+  const profileId = sessionStorage.getItem("profileId");
+  const activeProfile = profiles?.find((data) => data?.id == Number(profileId));
+
+  console.log("Active pro", activeProfile);
   const [
     openedTopLeaderboard,
     { open: openTopLeaderboard, close: closeTopLeaderboard },
   ] = useDisclosure(false);
-  const profileId = sessionStorage.getItem("profileId");
+  const [opened, { open, close }] = useDisclosure(false);
   const { data, isLoading } = useGetLeaderBoardList(profileId as string);
   const capitalizeFirstLetter = (str: string) => {
     return str?.charAt(0)?.toUpperCase() + str?.slice(1);
@@ -74,6 +84,28 @@ const LeaderBoard = () => {
       >
         <TopLeaderboardModal />
       </Modal>
+
+      <Modal
+        opened={opened}
+        radius={6}
+        size="md"
+        padding={14}
+        onClose={close}
+        overlayProps={{
+          opacity: 0.85,
+          blur: 3,
+        }}
+        closeButtonProps={{ size: "lg" }}
+        centered
+        closeOnClickOutside={false}
+        withCloseButton={false}
+      >
+        <JoinChanllengeModal
+          close={close}
+          openTopLeaderboard={openTopLeaderboard}
+        />
+      </Modal>
+
       <Wrapper bgColor="white">
         <InnerWrapper>
           <div className="p-4">
@@ -111,8 +143,9 @@ const LeaderBoard = () => {
                       {secondPosition &&
                         capitalizeFirstLetter(secondPosition?.username)}
                     </p>
-                    <p className="bg-[#A14FDE] p-2 rounded-xl text-white font-medium px-4">
-                      {secondPosition && secondPosition?.score} P
+                    <p className="bg-[#A14FDE] p-2 rounded-xl text-white font-medium px-4 flex gap-1">
+                      {secondPosition && secondPosition?.score}{" "}
+                      <img src={CoinPoint} alt="image" />
                     </p>
                   </div>
                   <div className="flex justify-center items-center flex-col pb-20 ">
@@ -130,8 +163,9 @@ const LeaderBoard = () => {
                       {firstPosition &&
                         capitalizeFirstLetter(firstPosition?.username)}
                     </p>
-                    <p className="bg-[#8632C2] p-2 rounded-xl text-white font-medium px-4">
-                      {firstPosition && firstPosition?.score} P
+                    <p className="bg-[#8632C2] p-2 rounded-xl text-white font-medium px-4 flex gap-1">
+                      {firstPosition && firstPosition?.score}{" "}
+                      <img src={CoinPoint} alt="image" />
                     </p>
                   </div>
                   <div className="flex justify-center items-center flex-col ">
@@ -149,19 +183,15 @@ const LeaderBoard = () => {
                       {thirdPosition &&
                         capitalizeFirstLetter(thirdPosition?.username)}
                     </p>
-                    <p className="bg-[#8632C2] p-2 rounded-xl text-white font-medium px-4">
-                      {thirdPosition?.score} P
+                    <p className="bg-[#8632C2] p-2 rounded-xl text-white font-medium px-4 flex gap-1">
+                      {thirdPosition?.score} <img src={CoinPoint} alt="image" />
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="w-[435px] border-2 border-[#F2F4F7] rounded-3xl p-10 flex flex-col justify-between my-3">
-                {viewProfile == undefined ? (
-                  <p className="text30  font-Hanken">
-                    Take your first quiz to see your rank and point
-                  </p>
-                ) : (
+              {activeProfile && activeProfile.accepted_summer_challenge ? (
+                <div className="w-[435px] border-2 border-[#F2F4F7] rounded-3xl p-10 flex flex-col justify-between my-3">
                   <div className="flex  justify-start  items-center gap-6">
                     <p className="text25 text-[#15151566] font-medium ">
                       <img
@@ -174,25 +204,77 @@ const LeaderBoard = () => {
                       {capitalizeFirstLetter(viewProfile?.username)}
                     </p>
                   </div>
-                )}
-                <div>
-                  <p className="text25 text-[#15151566] font-medium tracking-wider">
-                    My today Rank:
-                  </p>
-                  <p className="text-[36px] font-bold font-Hanken tracking-wider">
-                    {viewProfile?.position || 0}
-                  </p>
-                </div>
 
-                <div>
-                  <p className="text25 text-[#15151566] font-medium tracking-wider">
-                    Total points:
-                  </p>
-                  <p className="text-[36px] font-bold font-Hanken  tracking-wider">
-                    {viewProfile?.score || 0}
-                  </p>
+                  <div>
+                    <p className="text25 text-[#15151566] font-medium tracking-wider">
+                      My today Rank:
+                    </p>
+                    <p className="text-[36px] font-bold font-Hanken tracking-wider">
+                      {viewProfile?.position || "N / A"}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text25 text-[#15151566] font-medium tracking-wider">
+                      Total points:
+                    </p>
+                    <p className="text-[36px] font-bold font-Hanken  tracking-wider">
+                      {viewProfile?.score || "N / A"}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="w-[435px] border-2 border-[#F2F4F7] rounded-3xl p-10 flex flex-col justify-between my-3">
+                  <div className="flex  justify-start  items-center gap-6">
+                    <p className="text25 text-[#15151566] font-medium ">
+                      <img
+                        src={viewProfile?.avatar}
+                        alt="image"
+                        className="w-[70px]"
+                      />
+                    </p>
+                    <p className="text-[36px] font-bold tracking-wide">
+                      {capitalizeFirstLetter(viewProfile?.username)}
+                    </p>
+                  </div>
+                  <div className="flex gap-3 justify-between">
+                    <div className="">
+                      <p className="text20 text-[#15151566] font-bold tracking-wider">
+                        My today Rank:
+                      </p>
+                      <p className="text-[36px] font-bold font-Hanken tracking-wider">
+                        {viewProfile?.position || "N / A"}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text20 text-[#15151566]  font-bold tracking-wider">
+                        Total points:
+                      </p>
+                      <p className="text-[36px] font-bold font-Hanken  tracking-wider">
+                        {viewProfile?.score || "N / A"}
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    onClick={open}
+                    className="flex bg-[#8530C1] p-3 rounded-3xl gap-2 cursor-pointer"
+                  >
+                    <div>
+                      <LuBell size={25} color="white" />
+                    </div>
+                    <div>
+                      <p className="text-white text20 font-Hanken text25  ">
+                        Join Summer Challenge Now!
+                      </p>
+                      <p className="text-white text3 font-Hanken">
+                        Compete with hundreds of children from all over the
+                        world.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {isLoading ? (
@@ -257,8 +339,9 @@ TLeaderBoardData) => {
           </div>
         </div>
         <div className=" w-full ">
-          <p className="text2 text-center text-[#7E7E89] font-medium">
-            {formattedNumber} Points
+          <p className="text20 text-center text-[#7E7E89] font-medium flex justify-center items-center gap-2 ">
+            {formattedNumber}{" "}
+            <img src={CoinPoint} alt="image" className="w-[25px]" />
           </p>
         </div>
         <div className="w-full flex justify-end items-end">

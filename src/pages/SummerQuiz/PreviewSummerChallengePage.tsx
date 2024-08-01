@@ -153,121 +153,26 @@ const PreviewSummerChallengePage = () => {
                   </div>
 
                   <div className="mt-16">
-                    <div className="grid grid-cols-2 gap-20 ">
+                    <div className="grid  gap-20 ">
                       <div className=" text-[16px] border-[#B5B5C340] bg-white border-[2px] shadow-lg font-semibold font-Inter  rounded-lg p-[28px] ">
                         <p className="text20 font-Inter text-[#151515] p-3">
                           Read stories below to take Quiz
                         </p>
                         <div className="flex flex-col mt-1 rounded-2xl p-3">
+                          <div className="grid   grid-cols-[600px_1fr_1fr] mb-3 ">
+                            <p>Stories</p>
+                            <p>Action</p>
+                            <p>Status</p>
+                          </div>
                           {requireData?.requirements?.map(
                             (story: TStoryContent) => {
-                              return (
-                                <div className="flex justify-between  my-2  ">
-                                  <div>
-                                    <div className="flex justify-center items-center gap-3">
-                                      {" "}
-                                      <img
-                                        src={story?.thumbnail}
-                                        alt="image"
-                                        className="w-[100px] h-[100px] rounded"
-                                      />
-                                      <button
-                                        onClick={() => {
-                                          sessionStorage.setItem(
-                                            "contentId",
-                                            story.id?.toString() as string
-                                          );
-                                          if (story?.status === "ongoing") {
-                                            sessionStorage.setItem(
-                                              "continuePage",
-                                              story?.pages_read?.toString() as string
-                                            );
-                                          }
-                                          navigate(
-                                            `../../parent/stories/sub/${story.slug
-                                              ?.toLocaleLowerCase()
-                                              .replace(
-                                                /\s/g,
-                                                "-"
-                                              )}?from=challenge`
-                                          );
-                                        }}
-                                        className="  text-start py-2 text-black  items-center gap-2 flex flex-col  "
-                                      >
-                                        {story?.name}
-                                        <strong className="w-full text-start text-[#8530C1] rounded-full flex gap-2 p-[1px]">
-                                          Read
-                                          <FiExternalLink
-                                            size={20}
-                                            color="#8530C1"
-                                          />
-                                          {/* {story?.status == "complete" ? (
-                                      <IoMdCheckmarkCircleOutline
-                                        size={30}
-                                        color="green"
-                                      />
-                                    ) : (
-                                      <IoMdCheckmarkCircleOutline
-                                        size={30}
-                                        color="red"
-                                      />
-                                    )} */}
-                                        </strong>
-                                      </button>
-                                    </div>
-                                  </div>
-
-                                  <button
-                                    onClick={() => {
-                                      sessionStorage.setItem(
-                                        "contentId",
-                                        story.id?.toString() as string
-                                      );
-
-                                      navigate(
-                                        `../../parent/stories/sub/${story.slug
-                                          ?.toLocaleLowerCase()
-                                          .replace(/\s/g, "-")}?from=challenge`
-                                      );
-                                    }}
-                                    className="text-white flex gap-2 items-center "
-                                  >
-                                    {story?.status == "complete" ? (
-                                      <p className="text-[#039855] flex gap-1 items-center">
-                                        <img
-                                          src={CompleteContent}
-                                          alt="image"
-                                        />{" "}
-                                        Complete
-                                      </p>
-                                    ) : story.status == "ongoing" ? (
-                                      <p
-                                        onClick={() =>
-                                          sessionStorage.setItem(
-                                            "continuePage",
-                                            story?.pages_read?.toString() as string
-                                          )
-                                        }
-                                        className="text-[#FBC70D] flex gap-1 items-center"
-                                      >
-                                        <img src={OngoingContent} alt="image" />
-                                        On-going
-                                      </p>
-                                    ) : (
-                                      <p className="text-[#B5B5C3] flex gap-1 items-center">
-                                        <img src={NotTaken} alt="image" />
-                                        Not started
-                                      </p>
-                                    )}
-                                  </button>
-                                </div>
-                              );
+                              return <TableRow story={story} />;
                             }
                           )}
                         </div>
                       </div>
 
-                      <div className="border-[#B5B5C340] border-[2px] rounded-t-2xl  shadow-lg bg-white  overflow-hidden">
+                      {/* <div className="border-[#B5B5C340] border-[2px] rounded-t-2xl  shadow-lg bg-white  overflow-hidden">
                         <p className="text-[25px] font-bold font-Inter text-black bg-[#B5B5C333] p-[28px]">
                           Overview
                         </p>
@@ -277,7 +182,7 @@ const PreviewSummerChallengePage = () => {
                             __html: `${requireData?.description}`,
                           }}
                         ></p>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -291,3 +196,115 @@ const PreviewSummerChallengePage = () => {
 };
 
 export default PreviewSummerChallengePage;
+
+const TableRow = ({ story }: { story: TStoryContent }) => {
+  const navigate = useNavigate();
+  return (
+    <div className="grid   grid-cols-[600px_1fr_1fr]  my-2  border-t-[1px] py-4 ">
+      <div>
+        <div className="flex gap-4 items-center">
+          {" "}
+          <img
+            src={story?.thumbnail}
+            alt="image"
+            className="w-[80px] h-[80px] rounded"
+          />
+          <button
+            onClick={() => {
+              sessionStorage.setItem(
+                "contentId",
+                story.id?.toString() as string
+              );
+              if (story?.status === "ongoing") {
+                sessionStorage.setItem(
+                  "continuePage",
+                  story?.pages_read?.toString() as string
+                );
+              }
+              navigate(
+                `../../parent/stories/sub/${story.slug
+                  ?.toLocaleLowerCase()
+                  .replace(/\s/g, "-")}?from=challenge`
+              );
+            }}
+            className="  text-start py-2 text-black  items-center gap-2 flex flex-col  "
+          >
+            {story?.name}
+          </button>
+        </div>
+      </div>
+
+      <button
+        onClick={() => {
+          sessionStorage.setItem("contentId", story.id?.toString() as string);
+
+          navigate(
+            `../../parent/stories/sub/${story.slug
+              ?.toLocaleLowerCase()
+              .replace(/\s/g, "-")}?from=challenge`
+          );
+        }}
+        className="text-white flex gap-2 items-center "
+      >
+        {story?.status == "complete" ? (
+          <p className="bg-[#8530C1] text-white flex gap-2 p-3 rounded items-center justify-center">
+            Complete <FiExternalLink size={20} color="white" />
+          </p>
+        ) : story.status == "ongoing" ? (
+          <p
+            onClick={() =>
+              sessionStorage.setItem(
+                "continuePage",
+                story?.pages_read?.toString() as string
+              )
+            }
+            className="bg-[#8530C1] text-white  gap-1  p-3 rounded flex items-center justify-center"
+          >
+            Continue reading <FiExternalLink size={20} color="white" />
+          </p>
+        ) : (
+          <p className="bg-[#8530C1] text-white flex gap-1  p-3 rounded items-center justify-center">
+            Read <FiExternalLink size={20} color="white" />
+          </p>
+        )}
+      </button>
+
+      <button
+        onClick={() => {
+          sessionStorage.setItem("contentId", story.id?.toString() as string);
+
+          navigate(
+            `../../parent/stories/sub/${story.slug
+              ?.toLocaleLowerCase()
+              .replace(/\s/g, "-")}?from=challenge`
+          );
+        }}
+        className="text-white flex gap-2 items-center "
+      >
+        {story?.status == "complete" ? (
+          <p className="text-[#039855] flex gap-1 items-center">
+            <img src={CompleteContent} alt="image" /> Complete
+          </p>
+        ) : story.status == "ongoing" ? (
+          <p
+            onClick={() =>
+              sessionStorage.setItem(
+                "continuePage",
+                story?.pages_read?.toString() as string
+              )
+            }
+            className="text-[#FBC70D] flex gap-1 items-center"
+          >
+            <img src={OngoingContent} alt="image" />
+            On-going
+          </p>
+        ) : (
+          <p className="text-[#B5B5C3] flex gap-1 items-center">
+            <img src={NotTaken} alt="image" />
+            Not started
+          </p>
+        )}
+      </button>
+    </div>
+  );
+};
