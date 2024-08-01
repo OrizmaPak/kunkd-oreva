@@ -11,11 +11,7 @@ import { useNavigate } from "react-router-dom";
 const ThirdSection = () => {
   const navigate = useNavigate();
   return (
-<<<<<<< HEAD
     <div className=" pad-y-96 pad-x-10 relative mt-4 md:mt-8  ">
-=======
-    <div className=" pad-y-96 pad-x-10 relative mt-14 md:mt-20 ">
->>>>>>> 55ff2f7f (Summer Challenge Landing Page)
       <img
         src={Earth}
         alt="image"
