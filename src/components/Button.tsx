@@ -49,7 +49,7 @@ const getClassName = (options: TClassName) => {
       : borderColors[borderColor || "default"];
   // varient  || backgroundColor - border -
 
-  return `rounded-[8px]  text-[16px] ${sizes[size || "md"]} ${
+  return `rounded-[8px]  text-[16px]  ${sizes[size || "md"]} ${
     colors[color || "default"]
   } ${btnVarientStyle}`;
 };
@@ -84,7 +84,7 @@ const Button = ({
         size,
         backgroundColor,
         borderColor,
-      })} ${className}`}
+      })} ${className} `}
     >
       {children}
     </button>

@@ -58,6 +58,8 @@ export type TSaveQuiz = object;
 export type TProfileData = {
   name: string;
   dob: string;
+  username: string;
+  schoolname: string;
   image: string;
   is_avatar: string;
 };
@@ -190,6 +192,22 @@ export type TStoryContent = {
   web_synopsis?: string;
   quiz_result?: TQuizResult;
   timespent?: number;
+};
+
+export type TCountry = {
+  name: string;
+  callingCodes: string[];
+  alpha2Code: string;
+  alpha3Code?: string;
+  currencies: {
+    code: string;
+    name: string;
+    symbol: string;
+  }[];
+  flags: {
+    svg: string;
+    png: string;
+  };
 };
 
 /**

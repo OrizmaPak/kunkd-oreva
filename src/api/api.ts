@@ -75,6 +75,8 @@ export const Profile = (payload: TProfileData) => {
   const formData = new FormData();
   formData.append("name", payload?.name);
   formData.append("dob", payload?.dob);
+  formData.append("username", payload?.username);
+  formData.append("schoolname", payload?.schoolname);
   formData.append("is_avatar", payload?.is_avatar);
   formData.append("image", payload?.image);
   return axios.post("/profile", formData);
@@ -400,4 +402,48 @@ export const GetClassTotalTimeSpent = (
 // eslint-disable-next-line no-empty-pattern
 export const RemoveAccount = ({}) => {
   return axios.delete(`/user/account`);
+};
+
+export const UpdateParentCountryPhone = (payload: object) => {
+  return axios.patch(`/user/phone/country`, payload);
+};
+
+export const UpdateProfileUserNameSchoolName = (payload: object) => {
+  return axios.patch(`/profile/username/school`, payload);
+};
+
+export const GetSuggestUserName = (payload: object) => {
+  return axios.post(`/profile/username/suggest`, payload);
+};
+
+export const UserNameChecker = (username: string) => {
+  return axios.get(`/profile/username/check`, { params: { username } });
+};
+
+export const JoinSummerChallenge = (payload: object) => {
+  return axios.post(`/summer/challenge/accept`, payload);
+};
+
+export const GetSummerChallengeQuizzes = (profileId: string) => {
+  return axios.get(`/summer/challenge/quizzes/${profileId}`);
+};
+
+export const GetSummerQuiz = (quizId: string, profileId: string) => {
+  return axios.get(`/summer/challenge/quiz/${quizId}/${profileId}`);
+};
+
+export const SubmmitSummerQuizQandA = (payload: object) => {
+  return axios.post(`/summer/challenge/quiz/question/save`, payload);
+};
+
+export const SummerChallengeContentTracking = (payload: object) => {
+  return axios.post(`/summer/challenge/content/track`, payload);
+};
+
+export const GetLeaderBoardList = (pid: string) => {
+  return axios.get(`/summer/challenge/leaderboard`, { params: { pid } });
+};
+
+export const GetSummerQuizAnswers = (quizId: string, profileId: string) => {
+  return axios.get(`/summer/challenge/quiz/answers/${quizId}/${profileId}`);
 };

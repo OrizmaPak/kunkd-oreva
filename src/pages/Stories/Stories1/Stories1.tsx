@@ -4,6 +4,7 @@ import {
   useGetContentById,
   useGetLikedContent,
   useLikedContent,
+  useSummerChallengeContentTracking,
   useUnLikedContent,
 } from "@/api/queries";
 import AfamBlur from "@/assets/afamblur.jpg";
@@ -14,7 +15,7 @@ import { MantineProvider, Skeleton, Slider } from "@mantine/core";
 import { RefObject, useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import StoriesNav from "./StoriesNav";
 import { getApiErrorMessage } from "@/api/helper";
 import TeacherNotificationModal from "@/components/TeacherWarningModal";
@@ -32,7 +33,7 @@ import ConnectedStudentModal from "@/components/ConnectedStudentModal";
 import { RiFullscreenFill } from "react-icons/ri";
 import { AiOutlineFullscreenExit } from "react-icons/ai";
 import { useReducedMotion } from "@mantine/hooks";
-import { TContentPage, TStoryContent } from "@/api/types";
+import { ApiResponse, TContentPage, TStoryContent } from "@/api/types";
 import Wrapper from "@/common/User/Wrapper";
 import InnerWrapper from "@/common/User/InnerWrapper";
 // import { getUserState } from "@/store/authStore";
@@ -49,6 +50,7 @@ const Stories1 = () => {
   // const [user] = useStore(getUserState);
   const contentId = sessionStorage.getItem("contentId");
   const profileId = sessionStorage.getItem("profileId");
+  const location = useLocation();
   const [opened, { open, close }] = useDisclosure(false);
 
   const [
@@ -76,12 +78,16 @@ const Stories1 = () => {
   }, [content]);
 
   useTimeSpent(Number(contentId), Number(profileId), arrayOfSubCatId);
-
+  const queryString = new URLSearchParams(location.search.split("?")[1]);
+  const isReadingFromChallenge = !!queryString.get("from");
   const { data: recommendedData, isLoading } = useContentForHome();
   const recommendedStories = recommendedData?.data.data.recommended_stories;
   const navigate = useNavigate();
   const myRef: RefObject<HTMLDivElement> = useRef(null);
-
+  const rawData = (data as ApiResponse<unknown>) ?? false;
+  const isContentViewable =
+    rawData?.data?.status !== false ||
+    rawData?.data?.message !== "Number of allowed contents reached!";
   return (
     <>
       <Modal
@@ -145,23 +151,35 @@ const Stories1 = () => {
                 <div className="flex-grow mt-5 rounded-2xl ">
                   {!isFinish ? (
                     <div className="flex h-full  gap-4  flex-grow-1 flex-col ">
-                      {!startRead && (
+                      {!startRead && !isReadingFromChallenge ? (
                         <Skeleton visible={contentIsLoading}>
                           <AboutPage
                             story={content as TStoryContent}
                             setStartRead={() => setStartRead(true)}
                           />
                         </Skeleton>
+                      ) : null}
+
+                      {contentIsLoading ? (
+                        <Skeleton
+                          visible={contentIsLoading}
+                          height={700}
+                        ></Skeleton>
+                      ) : (
+                        <>
+                          {content &&
+                            (startRead || isReadingFromChallenge) &&
+                            isContentViewable && (
+                              <ReadPage
+                                thumbnail={content.thumbnail as string}
+                                content={content.pages as TContentPage[]}
+                                setIsFinish={() => setIsFinish(true)}
+                                divRef={myRef}
+                              />
+                            )}
+                        </>
                       )}
 
-                      {content && startRead && (
-                        <ReadPage
-                          thumbnail={content.thumbnail as string}
-                          content={content.pages as TContentPage[]}
-                          setIsFinish={() => setIsFinish(true)}
-                          divRef={myRef}
-                        />
-                      )}
                       <TabInReadingPage />
 
                       <div className="w-full bg-white rounded-3xl mt-4">
@@ -213,6 +231,7 @@ const AboutPage = ({
   story: TStoryContent;
   setStartRead: () => void;
 }) => {
+  console.log("About Page", story);
   const profileId = sessionStorage.getItem("profileId");
   const { data, refetch } = useGetLikedContent(profileId as string);
   const likeContents: TStoryContent[] = data?.data.data.records;
@@ -398,47 +417,76 @@ const ReadPage = ({
   thumbnail: string;
   divRef: RefObject<HTMLDivElement>;
 }) => {
+  console.log("content", content);
   const [isReading, setIsReading] = useState(false);
   const [page, setPage] = useState(0);
-  const pageTotal = content.length - 1;
+  const pageTotal = content?.length - 1;
   const [pageNumber, setPageNumber] = useState(0);
   // const audioRef = useRef<HTMLAudioElement>(null);
   const reducedMotion = useReducedMotion();
-  const [size, setSize] = useState(20);
+  const [size, setSize] = useState(25);
   const handleSizeChange = (value: number) => {
     setSize(value);
   };
   const max = 35;
   const { mutate } = useContentTracking();
+  const { mutate: mutateSummer } = useSummerChallengeContentTracking();
   const profileId = sessionStorage.getItem("profileId");
   const contentId = sessionStorage.getItem("contentId");
-
+  const queryString = new URLSearchParams(location.search.split("?")[1]);
+  const isReadingFromChallenge = !!queryString.get("from");
   useEffect(() => {
     const abortControllerRef = new AbortController();
 
     const handleUpdateData = async () => {
       try {
-        mutate(
-          {
-            profile_id: Number(profileId),
-            content_id: Number(contentId),
-            status: `${pageNumber === pageTotal ? "complete" : "ongoing"}`,
-            pages_read: Number(pageNumber + 1),
-            timespent: 23,
-            signal: abortControllerRef.signal,
-          },
-          {
-            onSuccess(data) {
-              return data;
+        if (isReadingFromChallenge) {
+          mutateSummer(
+            {
+              profile_id: Number(profileId),
+              summer_challenge_quiz_id: Number(
+                sessionStorage.getItem("summerQuizId")
+              ),
+              content_id: Number(contentId),
+              status: `${pageNumber === pageTotal ? "complete" : "ongoing"}`,
+              pages_read: Number(pageNumber + 1),
+              // timespent: 23,
             },
-            onError() {
-              // notifications.show({
-              //   title: `Notification`,
-              //   message: getApiErrorMessage(err),
-              // });
+            {
+              onSuccess(data) {
+                return data;
+              },
+              onError(err) {
+                notifications.show({
+                  title: `Notification`,
+                  message: getApiErrorMessage(err),
+                });
+              },
+            }
+          );
+        } else {
+          mutate(
+            {
+              profile_id: Number(profileId),
+              content_id: Number(contentId),
+              status: `${pageNumber === pageTotal ? "complete" : "ongoing"}`,
+              pages_read: Number(pageNumber + 1),
+              timespent: 23,
+              signal: abortControllerRef.signal,
             },
-          }
-        );
+            {
+              onSuccess(data) {
+                return data;
+              },
+              onError() {
+                // notifications.show({
+                //   title: `Notification`,
+                //   message: getApiErrorMessage(err),
+                // });
+              },
+            }
+          );
+        }
       } catch (err) {
         // Handle errors if needed
       }
@@ -461,7 +509,7 @@ const ReadPage = ({
     if (goFull) {
       e?.requestFullscreen();
     } else {
-      document.exitFullscreen();
+      if (document?.exitFullscreen) document?.exitFullscreen();
     }
   }, [goFull]);
 
@@ -476,150 +524,161 @@ const ReadPage = ({
   }
 
   return (
-    <div
-      id="container"
-      className={`flex py-16  rounded-3xl px-10 justify-center items-center bg-white  ${
-        goFull ? "md:px-[50px] lg:px-[100px] " : ""
-      }`}
-    >
-      {/* <button>change</button> */}
-      <div className={` basis-3/4 flex  items-center  max-h-[500px] `}>
-        <img
-          loading="lazy"
-          src={content[page]?.image || thumbnail}
-          alt="image"
-          className="read-img rounded-xl"
-        />
-      </div>
-      <div className=" basis-full flex flex-col  ">
-        <div className="flex-grow">
-          <p className="mb-5 flex justify-between items-center ">
-            <button
-              onClick={() => setIsReading(!isReading)}
-              className={`flex border py-1 ${
-                isReading ? "bg-[#8530C1] text-white" : "text-[#8530C1]"
-              } px-6 rounded-3xl border-[#8530C1] justify-center items-center`}
-            >
-              <p
-                className={`h-[10px] ${
-                  isReading ? "bg-green-600" : "bg-yellow-600"
-                } rounded-full w-[10px] p-[5px] inline-block mr-2`}
-              ></p>
-              <p className=" pb-2">Read to me</p>
-            </button>
-            <p className="w-[100px]">
-              <MantineProvider
-                theme={{
-                  colors: {
-                    "ocean-blue": [
-                      "#8530c1",
-                      "#5FCCDB",
-                      "#44CADC",
-                      "#2AC9DE",
-                      "#1AC2D9",
-                      "#11B7CD",
-                      "#09ADC3",
-                      "#0E99AC",
-                      "#128797",
-                      "#147885",
-                    ],
-                  },
-                }}
-              >
-                <Slider
-                  color="ocean-blue.0"
-                  value={size}
-                  onChange={handleSizeChange}
-                  min={20}
-                  max={max}
-                  disabled={reducedMotion}
-                  size={"sm"}
-                />
-              </MantineProvider>
-            </p>
-            <p className="cursor-pointer">
-              {goFull ? (
-                <AiOutlineFullscreenExit
-                  color="#8530C1"
-                  size={35}
-                  onClick={() => {
-                    setGoFull((prev) => !prev);
-                  }}
-                />
-              ) : (
-                <RiFullscreenFill
-                  color="#8530C1"
-                  size={35}
-                  onClick={() => {
-                    setGoFull((prev) => !prev);
-                  }}
-                />
+    <>
+      {content ? (
+        <div
+          id="container"
+          className={`flex py-16  rounded-3xl px-10 justify-center items-center bg-white  ${
+            goFull ? "md:px-[50px] lg:px-[100px] " : ""
+          }`}
+        >
+          {/* <button>change</button> */}
+          <div className={` basis-3/4 flex  items-center  max-h-[500px] `}>
+            <img
+              loading="lazy"
+              src={content[page]?.image || thumbnail}
+              alt="image"
+              className="read-img rounded-xl"
+            />
+          </div>
+          <div className=" basis-full flex flex-col  ">
+            <div className="flex-grow">
+              <p className="mb-5 flex justify-between items-center ">
+                <button
+                  onClick={() => setIsReading(!isReading)}
+                  className={`flex border py-1 ${
+                    isReading ? "bg-[#8530C1] text-white" : "text-[#8530C1]"
+                  } px-6 rounded-3xl border-[#8530C1] justify-center items-center`}
+                >
+                  <p
+                    className={`h-[10px] ${
+                      isReading ? "bg-green-600" : "bg-yellow-600"
+                    } rounded-full w-[10px] p-[5px] inline-block mr-2`}
+                  ></p>
+                  <p className=" pb-2">Read to me</p>
+                </button>
+                <p className="w-[200px] flex items-center gap-2 ">
+                  <strong>A-</strong>
+                  <MantineProvider
+                    theme={{
+                      colors: {
+                        "ocean-blue": [
+                          "#8530c1",
+                          "#5FCCDB",
+                          "#44CADC",
+                          "#2AC9DE",
+                          "#1AC2D9",
+                          "#11B7CD",
+                          "#09ADC3",
+                          "#0E99AC",
+                          "#128797",
+                          "#147885",
+                        ],
+                      },
+                    }}
+                  >
+                    <Slider
+                      className="w-full"
+                      color="ocean-blue.0"
+                      value={size}
+                      onChange={handleSizeChange}
+                      min={20}
+                      max={max}
+                      disabled={reducedMotion}
+                      size={"lg"}
+                    />
+                  </MantineProvider>
+                  <strong>A+</strong>
+                </p>
+                <p className="cursor-pointer">
+                  {goFull ? (
+                    <AiOutlineFullscreenExit
+                      color="#8530C1"
+                      size={35}
+                      onClick={() => {
+                        setGoFull((prev) => !prev);
+                      }}
+                    />
+                  ) : (
+                    <RiFullscreenFill
+                      color="#8530C1"
+                      size={35}
+                      onClick={() => {
+                        setGoFull((prev) => !prev);
+                      }}
+                    />
+                  )}
+                </p>
+              </p>
+              {!isReading && (
+                <p
+                  style={{ fontSize: `${size}px` }}
+                  ref={divRef}
+                  className={` leading-10 flex  ${
+                    goFull ? "h-[450px]" : "h-[350px]"
+                  }   overflow-y-auto  ${
+                    size + "px"
+                  } font-medium font-Hanken pr-8 text-justify `}
+                >
+                  {/* {content[page].web_body} */}
+
+                  <p
+                    className="content_cont leading-10 [&>img]:hidden text-center"
+                    dangerouslySetInnerHTML={{
+                      __html: content[page]?.web_body,
+                    }}
+                  ></p>
+                </p>
               )}
-            </p>
-          </p>
-          {!isReading && (
-            <p
-              style={{ fontSize: `${size}px` }}
-              ref={divRef}
-              className={` leading-10 flex  ${
-                goFull ? "h-[450px]" : "h-[350px]"
-              }   overflow-y-auto  ${
-                size + "px"
-              } font-medium font-Hanken pr-8 text-justify `}
-            >
-              {/* {content[page].web_body} */}
+            </div>
 
-              <p
-                className="content_cont leading-10 [&>img]:hidden text-center"
-                dangerouslySetInnerHTML={{ __html: content[page]?.web_body }}
-              ></p>
-            </p>
-          )}
-        </div>
-
-        <div className="mt-8">
-          {isReading ? (
-            <CustomTTSComponent
-              setIsFinish={setIsFinish}
-              pageNumber={pageNumber}
-              pageTotal={pageTotal}
-              autoPlay={true}
-              setPage={setPageNumber}
-              setPageNumber={() => {
-                if (pageNumber === pageTotal) {
-                  return;
-                }
-                setPageNumber((prev) => prev + 1);
-              }}
-              highlight
-            >
-              {/* <p
+            <div className="mt-8">
+              {isReading ? (
+                <CustomTTSComponent
+                  setIsFinish={setIsFinish}
+                  pageNumber={pageNumber}
+                  pageTotal={pageTotal}
+                  autoPlay={true}
+                  setPage={setPageNumber}
+                  setPageNumber={() => {
+                    if (pageNumber === pageTotal) {
+                      return;
+                    }
+                    setPageNumber((prev) => prev + 1);
+                  }}
+                  highlight
+                >
+                  {/* <p
                 className="text20"
                 dangerouslySetInnerHTML={{ __html:  content[page].web_body }}
               ></p> */}
-              <p
-                style={{ fontSize: `${size}px` }}
-                className="content_cont leading-10  [&>img]:hidden text-center"
-              >
-                {ReactHtmlParser(
-                  removeTags(content[pageNumber]?.web_body) as string
-                )}
-              </p>
+                  <p
+                    style={{ fontSize: `${size}px` }}
+                    className="content_cont leading-10  [&>img]:hidden text-center"
+                  >
+                    {ReactHtmlParser(
+                      removeTags(content[pageNumber]?.web_body) as string
+                    )}
+                  </p>
 
-              {/* <p>{content[pageNumber].web_body}</p> */}
-            </CustomTTSComponent>
-          ) : (
-            <BookPagination
-              setIsFinish={setIsFinish}
-              setPage={setPage}
-              pageTotal={pageTotal}
-              setPageNumber={setPageNumber}
-              divRef={divRef}
-            />
-          )}
+                  {/* <p>{content[pageNumber].web_body}</p> */}
+                </CustomTTSComponent>
+              ) : (
+                <BookPagination
+                  setIsFinish={setIsFinish}
+                  setPage={setPage}
+                  pageTotal={pageTotal}
+                  setPageNumber={setPageNumber}
+                  divRef={divRef}
+                />
+              )}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        ""
+      )}
+    </>
   );
 };
 
@@ -637,6 +696,7 @@ const BookPagination = ({
   divRef: RefObject<HTMLDivElement>;
 }) => {
   const { mutate } = useContentTracking();
+  const { mutate: mutateSummer } = useSummerChallengeContentTracking();
   const continuePage = sessionStorage.getItem("continuePage");
   const profileId = sessionStorage.getItem("profileId");
   const contentId = sessionStorage.getItem("contentId");
@@ -644,6 +704,9 @@ const BookPagination = ({
     continuePage && Number(continuePage) < pageTotal ? Number(continuePage) : 1
   );
   const [user] = useStore(getUserState);
+  const navigate = useNavigate();
+  const queryString = new URLSearchParams(location.search.split("?")[1]);
+  const isReadingFromChallenge = !!queryString.get("from");
 
   useEffect(() => {
     setPage(currentPage);
@@ -693,27 +756,60 @@ const BookPagination = ({
         end_time: timeString,
       }
     );
-    mutate(
-      {
-        profile_id: Number(profileId),
-        content_id: Number(contentId),
-        status: "complete",
-        pages_read: Number(pageTotal + 1),
-        timespent: 23,
-      },
-      {
-        onSuccess(data) {
-          setIsFinish();
-          return data;
+    if (isReadingFromChallenge) {
+      mutateSummer(
+        {
+          profile_id: Number(profileId),
+          summer_challenge_quiz_id: Number(
+            sessionStorage.getItem("summerQuizId")
+          ),
+          content_id: Number(contentId),
+          status: "complete",
+          pages_read: Number(pageTotal + 1),
+          // timespent: 23,
         },
-        onError(err) {
-          notifications.show({
-            title: `Notification`,
-            message: getApiErrorMessage(err),
-          });
+        {
+          onSuccess(data) {
+            navigate("/summer-quiz/preview-summer-challenge");
+            sessionStorage.removeItem("fromSummer");
+            return data;
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    } else {
+      mutate(
+        {
+          profile_id: Number(profileId),
+          content_id: Number(contentId),
+          status: "complete",
+          pages_read: Number(pageTotal + 1),
+          timespent: 23,
         },
-      }
-    );
+        {
+          onSuccess(data) {
+            if (sessionStorage.getItem("fromSummer") === "true") {
+              navigate("/summer-quiz/preview-summer-challenge");
+              sessionStorage.removeItem("fromSummer");
+            } else {
+              setIsFinish();
+            }
+            return data;
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    }
   };
 
   const options = [];
