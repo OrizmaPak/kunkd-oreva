@@ -3,7 +3,7 @@ import ArrowDown from "@/assets/arrowdown.svg";
 import UserIcon from "@/assets/usericon.svg";
 import { Menu, Popover } from "@mantine/core";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useGetMainSearch } from "@/api/queries";
+import { useGetMainSearch, useGetSummerChallengeQuizzes } from "@/api/queries";
 import KundaLogo from "@/assets/schoolIcon.svg";
 // import UserIcon2 from "@/assets/userIcon2.svg";
 import useDebounce from "@/hooks/useDebounce";
@@ -62,6 +62,11 @@ const SchoolHeader = ({
       navigate("../schooldashboard");
     }
   };
+
+  const { data: datta } = useGetSummerChallengeQuizzes(
+    sessionStorage.getItem("profileId") as string
+  );
+  const quizzes = datta?.data?.data?.quizzes;
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -181,7 +186,7 @@ _logout`,
                 Progress Report
               </button>
             </NavLink>
-            {user?.role === "user" && (
+            {user?.role === "user" && quizzes?.length > 0 && (
               <NavLink
                 onClick={() => {
                   setDashboardActive(false);
