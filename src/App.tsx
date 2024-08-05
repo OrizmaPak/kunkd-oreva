@@ -20,6 +20,11 @@ import Videos from "./pages/AfricanLanguages/Videos";
 import { Books } from "./pages/AudioBooks/AudioBooks";
 import RefundPolicy from "./pages/RefundPolicy/RefundPolicy";
 import SummerLandingPage from "./pages/SummerLandingPage/SummerLandingPage";
+import PageInProduction from "./pages/PageInProduction/PageInProduction";
+import LeaderBoard from "./pages/LeaderBoard/LeaderBoard";
+import SummerQuiz from "./pages/SummerQuiz/SummerQuiz";
+import PreviewSummerChallengePage from "./pages/SummerQuiz/PreviewSummerChallengePage";
+import SummerQuizLayout from "./pages/SummerQuiz/SummerQuizLayout";
 const VideoV2 = lazy(() => import("./pages/AfricanLanguages/VideosV2/VideoV2"));
 const StoriesV2 = lazy(() => import("./pages/Stories/StoriesV2/StoriesV2"));
 const DefaultTab = lazy(() => import("./pages/AfterParentSignIn/DefaultTab"));
@@ -179,8 +184,11 @@ function App() {
 
       const isPolicyPath = path.includes("privacy-policy");
       const isSummerPath = path.includes("summer-challenge");
+      const isDevPath = path.includes("dev");
+
       const isRefundPolicyPath = path.includes("refund-policy");
-      if (isPolicyPath || isRefundPolicyPath || isSummerPath) return;
+      if (isPolicyPath || isRefundPolicyPath || isSummerPath || isDevPath)
+        return;
       if (window.innerWidth < window.innerHeight) {
         open();
       } else {
@@ -247,10 +255,12 @@ function App() {
               ></Route>
               <Route path="privacy-policy" element={<PrivacyPolicy />}></Route>
               <Route path="refund-policy" element={<RefundPolicy />}></Route>
+              <Route path="dev" element={<PageInProduction />}></Route>
 
               <Route element={<WebLayout />}>
                 {/* <Route index element={<Navigate to="login" replace />}></Route> */}
                 <Route index element={<Home />}></Route>
+                <Route path="home" element={<Home />}></Route>
                 <Route path="parents" element={<Parents />}></Route>
                 <Route path="schools" element={<Schools />}></Route>
               </Route>
@@ -303,6 +313,20 @@ function App() {
                 </Route>
 
                 <Route path="mylist" element={<MyList />}></Route>
+                <Route path="leaderboard" element={<LeaderBoard />}></Route>
+
+                <Route path="summer-quiz/*">
+                  <Route index element={<SummerQuiz />} />
+                  <Route
+                    path="preview-summer-challenge"
+                    element={<PreviewSummerChallengePage />}
+                  />
+                  <Route
+                    path="summer-challenge-quiz"
+                    element={<SummerQuizLayout />}
+                  />
+                </Route>
+
                 <Route
                   path="progressreport"
                   element={<ProgressReport />}
@@ -318,6 +342,7 @@ function App() {
                     }
                   >
                     <Route index element={<DefaultTab />}></Route>
+
                     <Route path="stories" element={<StoriesV2 />} />
                     <Route path="audiobooks" element={<AudiobooksV2 />}></Route>
                     <Route path="languages" element={<VideoV2 />}></Route>

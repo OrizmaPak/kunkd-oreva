@@ -16,7 +16,7 @@ const GooglePlay = ({ sizes }: { sizes?: boolean }) => {
           );
         }}
         className={`bg-black text-white items-center justify-center flex rounded-md ${
-          sizes ? "pad-x-14 py-2 gap-3 " : "pad-x-10 py-2 gap-2 "
+          sizes ? "pad-x-14 py-2 gap-3 " : "pad-x-10 py-2 gap-4  "
         } pad-x-10 py-2 h-auto w-auto`}
       >
         <div>
@@ -30,13 +30,15 @@ const GooglePlay = ({ sizes }: { sizes?: boolean }) => {
         </div>
         <div className="flex flex-col">
           <span
-            className={`text-start ${sizes ? "text-[12px] " : "text-[8px]"}`}
+            className={`text-start ${
+              sizes ? "text-[12px] " : "text-[8px]  font-normal"
+            }`}
           >
             GET IT ON
           </span>
           <span
             className={`font-simebold font-InterReg  ${
-              sizes ? "text-[20px]" : "text3"
+              sizes ? "text-[20px]" : "text3 font-bold"
             }`}
           >
             Google Play

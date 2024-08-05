@@ -23,6 +23,7 @@ const InputFormat = ({
   rightIcon,
   reg,
   value,
+
   smallPadding,
   readonly,
   onChange,
@@ -52,11 +53,12 @@ const InputFormat = ({
           {...reg}
           placeholder={placeholder}
           type={ttype}
+          // value={value}
           defaultValue={value}
           readOnly={readonly}
           onChange={onChange}
           max={dateMax}
-          className="w-full  h-full flex-1 text-black text-[14px]  focus:outline-none"
+          className="w-full  h-full flex-1 text-black text-[18px]  focus:outline-none"
         />
         {rightIcon ? (
           <span

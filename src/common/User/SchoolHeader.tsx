@@ -23,6 +23,7 @@ import { LuUser2 } from "react-icons/lu";
 import { logOut } from "@/auth/sdk";
 import "./SchoolHeader.css";
 import { handleEventTracking } from "@/api/moengage";
+// import { useDebouncedValue } from "@mantine/hooks";
 
 type THints = {
   id: number;
@@ -115,8 +116,8 @@ _logout`,
   const totalConnectList = classConnect?.data?.data?.totalRecord;
 
   return (
-    <div className="bg-white w-full fixed top-0 h-[8vh] z-50">
-      <div className="flex text-[#B5B5C3] text-[15px] text3  font-medium top-0 left-0 right-0  mx-auto  app-mai-nwidth-container  w-full   py-4   justify-between items-center bg-white  z-[1000] gap-4  h-[8vh] ">
+    <div className="bg-white w-full fixed top-0 h-[8vh] z-50 border-b border-[#F2F4F7]">
+      <div className="flex text-[#B5B5C3] text-[15px] text3  font-medium top-0 left-0 right-0  mx-auto  app-main-width-container  border-b border-[#F2F4F7] w-full   py-4   justify-between items-center bg-white  z-[1000] gap-4  h-[8vh] ">
         <div className="flex items-center gap-10">
           <Link
             onClick={() => {
@@ -180,6 +181,23 @@ _logout`,
                 Progress Report
               </button>
             </NavLink>
+            {user?.role === "user" && (
+              <NavLink
+                onClick={() => {
+                  setDashboardActive(false);
+                }}
+                to="/leaderboard"
+                className={({ isActive }) =>
+                  isActive ? " text-[#8530C1]" : "text-[#B5B5C3]"
+                }
+              >
+                {
+                  <button className="text-[16px]  font-bold nav-link">
+                    Leaderboard
+                  </button>
+                }
+              </NavLink>
+            )}
 
             <p className="w-40  flex justisfy-center item-center">
               {user?.role === "schoolAdmin" && (

@@ -1,4 +1,4 @@
-import KundaLogo from "@/assets/schoolIcon.svg";
+import KundaLogo from "@/assets/KundaLogo.svg";
 import { NavLink, useNavigate } from "react-router-dom";
 import Button from "./Button";
 import "./homeheader.css";
@@ -14,25 +14,19 @@ const HomeHeader = () => {
   // https://kundakids.com/en-ng
   return (
     <div className=" w-[100%] bg-white px-8 fixed z-[100] flex justify-center items-center">
-      <div className="flex home-header-w font-[500] py-2 text2  justify-between items-center bg-white   ">
+      <div className="flex home-header-w font-[500] py-3 text2  justify-between items-center bg-white   ">
         <NavLink
           to="/"
           className={({ isActive }) => (isActive ? "" : "text-black")}
         >
           <div>
-            <img
-              src={KundaLogo}
-              alt="logo"
-              width="45.91px"
-              height="35pxs"
-              className="min-w-[45.91px]"
-            />
+            <img src={KundaLogo} alt="logo" className="" />
           </div>
         </NavLink>
 
-        <div className="flex justify-between cursor-pointer pl-2 w-[565px]">
+        <div className="flex justify-between cursor-pointer pl-2 w-[800px]">
           <NavLink
-            to="/"
+            to="/home"
             className={({ isActive }) =>
               isActive ? " text-[#8530C1]" : "text-black"
             }
@@ -90,6 +84,14 @@ const HomeHeader = () => {
             }
           >
             <span>About Us</span>
+          </NavLink>
+          <NavLink
+            to="/summer-chanllenge"
+            className={({ isActive }) =>
+              isActive ? " text-[#8530C1]" : "text-black"
+            }
+          >
+            <span>Summer Reading Challenge</span>
           </NavLink>
           {/* <NavLink
             to="/shop"

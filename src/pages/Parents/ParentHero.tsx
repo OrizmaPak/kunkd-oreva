@@ -15,8 +15,8 @@ type Props = {
 
 const Hero = ({ children }: Props) => {
   return (
-    <div className="w-full  pt-[160px]">
-      <div className=" w-full max-w-[1440px]  h-[879.61px] z-[50] mx-auto px-8 ">
+    <div className="w-full   md:pt-[120px]  ">
+      <div className=" w-full max-w-[1440px]  md:h-[679.61px] z-[50] mx-auto px-4  ">
         {/* <img
           loading="lazy"
           src={Ellipse1}
