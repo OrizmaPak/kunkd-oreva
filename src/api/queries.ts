@@ -78,6 +78,17 @@ import {
   GetClassTotalTimeSpent,
   ConnectStripe,
   RemoveAccount,
+  UpdateParentCountryPhone,
+  UpdateProfileUserNameSchoolName,
+  GetSuggestUserName,
+  UserNameChecker,
+  JoinSummerChallenge,
+  GetSummerChallengeQuizzes,
+  GetSummerQuiz,
+  SubmmitSummerQuizQandA,
+  SummerChallengeContentTracking,
+  GetLeaderBoardList,
+  GetSummerQuizAnswers,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery, useInfiniteQuery } from "@tanstack/react-query";
@@ -178,6 +189,7 @@ export const useGetProfile = (
     enabled: enabled,
     onSuccess(res) {
       const resp = res.data;
+      console.log(res);
       setProfile(resp.data);
       if (onSucces) {
         onSucces(resp.data);
@@ -748,3 +760,68 @@ export const useRemoveAccount = () => {
   return useMutation({ mutationFn: RemoveAccount });
 };
 // const {mutate, isLoading, isError} = useCreateSchoolUser();
+
+export const useUpdateParentCountryPhone = () => {
+  return useMutation({ mutationFn: UpdateParentCountryPhone });
+};
+
+export const useUpdateProfileUserNameSchoolName = () => {
+  return useMutation({ mutationFn: UpdateProfileUserNameSchoolName });
+};
+
+export const useGetSuggestUserName = () => {
+  return useMutation({ mutationFn: GetSuggestUserName });
+};
+
+export const useUserNameChecker = (username: string) => {
+  const enabled = username?.trim() !== "";
+  return useQuery({
+    queryKey: ["UserNameChecker", username],
+    queryFn: () => UserNameChecker(username),
+    retry: false,
+    enabled,
+  });
+};
+
+export const useJoinSummerChallenge = () => {
+  return useMutation({ mutationFn: JoinSummerChallenge });
+};
+
+export const useGetSummerChallengeQuizzes = (profileId: string) => {
+  return useQuery({
+    queryKey: ["GetSummerChallengeQuizzes", profileId],
+    queryFn: () => GetSummerChallengeQuizzes(profileId),
+  });
+};
+
+export const useGetSummerQuiz = (quizId: string, profileId: string) => {
+  return useQuery({
+    queryKey: ["GetQuiz", quizId, profileId],
+    queryFn: () => GetSummerQuiz(quizId, profileId),
+    onSuccess: (response) => {
+      return response;
+    },
+  });
+};
+
+export const useSubmmitSummerQuizQandA = () => {
+  return useMutation({ mutationFn: SubmmitSummerQuizQandA });
+};
+
+export const useSummerChallengeContentTracking = () => {
+  return useMutation({ mutationFn: SummerChallengeContentTracking });
+};
+
+export const useGetLeaderBoardList = (pid: string) => {
+  return useQuery({
+    queryKey: ["GetLeaderBoardList", pid],
+    queryFn: () => GetLeaderBoardList(pid),
+  });
+};
+
+export const useGetSummerQuizAnswers = (quizId: string, profileId: string) => {
+  return useQuery({
+    queryKey: ["GetSummerQuizAnswers", quizId, profileId],
+    queryFn: () => GetSummerQuizAnswers(quizId, profileId),
+  });
+};

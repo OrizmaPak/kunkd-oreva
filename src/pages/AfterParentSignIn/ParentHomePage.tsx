@@ -12,59 +12,132 @@ import Hero from "./Hero";
 import "./parenthomepage.css";
 import HomeTab from "./HomTab";
 import { Outlet } from "react-router-dom";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import ProfileUpdateModal from "./ProfileUpdateModal";
+import JoinChanllengeModal from "./JoinChanllengeModal";
+import TopLeaderboardModal from "../SummerQuiz/TopLeaderboardModal";
 
 const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
   const [useri, setUser] = useStore(getUserState);
   const { data } = useGetUpdatedProfile();
   const currentUserProfile = data?.data?.data;
+  const [opened, { open, close }] = useDisclosure(false);
+  const [
+    openedTopLeaderboard,
+    { open: openTopLeaderboard, close: closeTopLeaderboard },
+  ] = useDisclosure(false);
+  const [
+    openedJoinChanllenge,
+    { open: openJoinChanllenge, close: closeJoinChanllenge },
+  ] = useDisclosure(false);
+
   useEffect(() => {
     setUser({ ...useri, ...currentUserProfile });
     //  eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUserProfile]);
   const [profiles] = useStore(getProfileState);
-  // const profileId = sessionStorage.getItem("profileId") as string;
-  // const { data: ongoingData } = useGetOngoingContents(profileId);
-  // const ongoingContents: TStoryContent[] =
-  //   ongoingData?.data.data.ongoing_contents;
-  // const { isLoading, data: contentData } = useContentForHome();
-  // const recommendedStories = contentData?.data.data.recommended_stories;
-  // const newTrending = contentData?.data.data.trending_stories;
 
   useEffect(() => {
     sessionStorage.setItem("gotToHome", "true");
   }, []);
 
-  // const user2 = sessionStorage.getItem("user");
-  // const userObject = JSON.parse(user2 as string);
   const [user] = useStore(getUserState);
-  // const settings = {
-  //   dots: false,
-  //   centerMode: false,
-  //   infinite: false,
-  //   speed: 800,
-  //   slidesToShow: 5,
-  //   swipeToSlide: true,
-  //   slidesToScroll: 5,
-  // };
-  // const sliderReff = useRef<Slider>(null);
 
   const profile = childProfile
     ? profiles?.find((each) => each.id === +childProfile)
     : profiles[0];
+
+  useEffect(() => {
+    if (profile?.username == "") {
+      open();
+    }
+    if (
+      profile?.accepted_summer_challenge === false &&
+      profile.username !== "" &&
+      sessionStorage.getItem("showJoinChallenge")
+    ) {
+      openJoinChanllenge();
+    }
+    // eslint disabled the next line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile]);
+
   if (!user || !profile) {
     return <Navigate to="/" replace />;
   }
 
   return (
-    <div>
-      <Wrapper>
-        <InnerWrapper>
-          <Hero userimage={profile?.image} username={profile?.name} />
-          <h1 className="text-center font-bold text30   font-Hanken   ">
-            Our Library
-          </h1>
+    <>
+      <Modal
+        opened={opened}
+        radius={6}
+        size="lg"
+        padding={14}
+        onClose={close}
+        overlayProps={{
+          opacity: 0.85,
+          blur: 3,
+        }}
+        closeButtonProps={{ size: "lg" }}
+        centered
+        closeOnClickOutside={false}
+        withCloseButton={false}
+      >
+        <ProfileUpdateModal
+          name={profile?.name}
+          image={profile?.image}
+          id={profile?.id}
+          close={close}
+          openJoinChanllenge={openJoinChanllenge}
+        />
+      </Modal>
+      <Modal
+        opened={openedJoinChanllenge}
+        radius={6}
+        size="md"
+        padding={14}
+        onClose={closeJoinChanllenge}
+        overlayProps={{
+          opacity: 0.85,
+          blur: 3,
+        }}
+        closeButtonProps={{ size: "lg" }}
+        centered
+        closeOnClickOutside={false}
+        withCloseButton={false}
+      >
+        <JoinChanllengeModal
+          close={closeJoinChanllenge}
+          openTopLeaderboard={openTopLeaderboard}
+        />
+      </Modal>
+      <Modal
+        opened={openedTopLeaderboard}
+        radius={6}
+        size="lg"
+        padding={14}
+        onClose={closeTopLeaderboard}
+        overlayProps={{
+          opacity: 0.85,
+          blur: 3,
+        }}
+        closeButtonProps={{ size: "lg" }}
+        centered
+        // closeOnClickOutside={false}
+        // withCloseButton={false}
+      >
+        <TopLeaderboardModal />
+      </Modal>
+      <div>
+        <Wrapper>
+          <InnerWrapper>
+            <Hero userimage={profile?.image} username={profile?.name} />
+            <h1 className="text-center font-bold text30   font-Hanken   ">
+              Our Library
+            </h1>
 
-          {/* <div className="flex justify-center items-center mt-8">
+            {/* <div className="flex justify-center items-center mt-8">
             <div className=" justify-center items-center category-gap  ">
               <CategoriesCard
                 image={BookIcon}
@@ -83,11 +156,12 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
               />
             </div>
           </div> */}
-          <HomeTab />
-          <Outlet />
-        </InnerWrapper>
-      </Wrapper>
-    </div>
+            <HomeTab />
+            <Outlet />
+          </InnerWrapper>
+        </Wrapper>
+      </div>
+    </>
   );
 };
 

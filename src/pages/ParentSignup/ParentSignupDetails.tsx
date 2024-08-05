@@ -14,6 +14,15 @@ import { useForm } from "react-hook-form";
 import { AiOutlineMail } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { ZodType, z } from "zod";
+import "react-phone-number-input/style.css";
+// import PhoneInput from "react-phone-number-input";
+import { useEffect, useState } from "react";
+// import { isValidPhoneNumber } from "libphonenumber-js";
+// import MobileNumber from "@/components/MobileNumber";
+import { ParsedCountry, PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
+// import { CountryData } from "react-international-phone";
+import { PhoneNumberUtil } from "google-libphonenumber";
 
 // import { motion } from "framer-motion";
 
@@ -31,10 +40,6 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
       .min(2, { message: "Last name must be at least 2 characters long" })
       .max(40, { message: "Last name must not exceed 30 characters" }),
     email: z.string().email(),
-    phone: z
-      .string()
-      .min(11, { message: "Phone number must not less than 11 characters" })
-      .max(14, { message: "Phone number must not more than 14 characters" }),
   });
 
   const {
@@ -42,14 +47,37 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
+  const [phone, setPhone] = useState("");
+  const [countryCode, setCountryCode] = useState<string>("");
+  const [isTouched, setIsTouched] = useState<boolean>(false);
+  const phoneUtil = PhoneNumberUtil.getInstance();
+
+  const isPhoneValid = (phone: string) => {
+    try {
+      return phoneUtil.isValidNumber(phoneUtil.parseAndKeepRawInput(phone));
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleChange2 = (
+    value: string,
+    countryData: { country: ParsedCountry; inputValue: string }
+  ) => {
+    setPhone(value);
+    setIsTouched(true);
+    setCountryCode(countryData?.country?.dialCode);
+  };
+  const isValid2 = isPhoneValid(phone);
+  useEffect(() => {
+    setIsTouched(false);
+  }, []);
 
   const submitData = async (datta: FormData) => {
     sessionStorage.clear();
-
     setUser({ email: datta.email });
-
     mutate(
-      { ...datta },
+      { ...datta, phone: phone, international_code: countryCode },
 
       {
         onSuccess(data) {
@@ -84,13 +112,13 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
           <div className="w-[100%] ">
             <span></span>
             <h1 className="font-bold fon header2 font-Recoleta">
-              Sign up for parent
+              Sign Up as a Parent
             </h1>
             <p className="text2 text-[#A7A7A7] font-Hanken">
               Start learning and reading without restrictions.{" "}
             </p>
             <form className="mt-8" onSubmit={handleSubmit(submitData)}>
-              <p className="my-8 flex  w-full justify-between gap-2">
+              <p className="my-5 flex  w-full justify-between gap-2">
                 <InputFormat
                   type="text"
                   placeholder="First Name"
@@ -105,16 +133,27 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
                   errorMsg={errors.lastname?.message}
                 />
               </p>
-              <p className="my-8">
-                <InputFormat
-                  type="number"
-                  placeholder="Phone number"
-                  reg={register("phone")}
-                  errorMsg={errors.lastname?.message}
+
+              {/* <p>
+                <MobileNumber />
+              </p> */}
+
+              <p className="w-full">
+                <PhoneInput
+                  // style={width:"100%"}}
+                  defaultCountry="ng"
+                  value={phone.toString()}
+                  onChange={(phone, dialCode) => handleChange2(phone, dialCode)}
+                  className="w-full text20 "
                 />
               </p>
+              {isTouched && !isValid2 && (
+                <p className="text2 text-red-600">
+                  Please enter a valid phone number.
+                </p>
+              )}
 
-              <p className="my-8">
+              <p className="my-5">
                 <InputFormat
                   type="text"
                   placeholder="Email"
@@ -140,7 +179,7 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
               </Button>
             </form>
 
-            <p className="mt-2  text-center text2 text-gray-400 ">
+            <p className="  text-center text2 text-gray-400 ">
               <span className="font-Hanken">Already hava an account? </span>
               <button
                 onClick={() => navigate("/login")}

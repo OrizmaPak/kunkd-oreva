@@ -79,7 +79,6 @@ body {
 .header1 {
   /* font-size: clamp(1.875rem, 1.4548rem + 2.6891vw, 3.875rem) !important; */
   font-size: clamp(1.875rem, 1.0857rem + 3.2381vw, 4rem) !important;
-  /* line-height: clamp(2.25rem, 1.64rem + 2.4833vw, 3.875rem) ; */
   line-height: clamp(3.125rem, 2.475rem + 2.6667vw, 4.875rem) !important;
 }
 
@@ -119,7 +118,7 @@ body {
 }
 
 /* App body width responsive */
-.app-mai-nwidth-container {
+.app-main-width-container {
   width: clamp(34.375rem, -8.7838rem + 98.6486vw, 80rem) !important;
 }
 
@@ -148,4 +147,17 @@ body {
   border: none;
   /* color: #fff; */
   /* color: var(--rs-btn-primary-text); */
+}
+
+.react-international-phone-input-container .react-international-phone-input {
+  width: 100% !important;
+  font-size: 20px !important;
+  border-color: #f3daff !important ;
+  height: 40px !important;
+}
+
+.react-international-phone-country-selector-button {
+  border-color: #f3daff !important ;
+  height: 40px !important;
+  width: 50px !important;
 }
