@@ -21,7 +21,7 @@ const SecondSection = () => {
     {
       image: Clock,
       title1: "Timeline",
-      title2: "1st - 21st ",
+      title2: "11st - 31st ",
       message: "August, 2024",
     },
     {
