@@ -68,8 +68,10 @@ const ChoosePlanContent = () => {
               title="1 Month"
               btn="Subscribe"
               price={
-                planData && planData?.countryCode === "NG"
+                planData && planData?.countryCode == "NG"
                   ? planData?.plans[0]?.naira_value
+                  : planData?.countryCode == "GB"
+                  ? planData?.plans[0]?.pounds_value
                   : planData?.plans[0]?.dollar_value
               }
               content={[
@@ -91,6 +93,8 @@ const ChoosePlanContent = () => {
               price={
                 planData && planData?.countryCode == "NG"
                   ? planData?.plans[1]?.naira_value
+                  : planData?.countryCode == "GB"
+                  ? planData?.plans[1]?.pounds_value
                   : planData?.plans[1]?.dollar_value
               }
               content={[
