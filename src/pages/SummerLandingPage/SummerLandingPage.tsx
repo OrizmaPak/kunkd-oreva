@@ -15,6 +15,7 @@ import HomeFooter2 from "@/components/HomeFooter2";
 import ForthSection from "./ForthSection";
 import FirstSection from "./FirstSection";
 import SixthSection from "./SixthSection";
+import Leaderboard from "./Leaderboard";
 
 const SummerLandingPage = () => {
   useEffect(() => {
@@ -27,6 +28,7 @@ const SummerLandingPage = () => {
       <FirstSection />
       <SecondSection />
       <ThirdSection />
+      <Leaderboard />
       <ForthSection />
       <FifthSection />
       <SixthSection />

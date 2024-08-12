@@ -1,158 +1,27 @@
-import Av1 from "@/assets/av1.png";
-import Av2 from "@/assets/av2.png";
-import Av3 from "@/assets/av3.png";
-import Av4 from "@/assets/av4.png";
-import Av5 from "@/assets/av5.png";
-import Av6 from "@/assets/av6.png";
-import Av7 from "@/assets/av7.png";
-import Nigeria from "@/assets/nigeria.png";
-import America from "@/assets/America.png";
-import Ghana from "@/assets/ghana.png";
-import Portugal from "@/assets/Potugal.png";
-import Australia from "@/assets/Australia.png";
 import Laugh01 from "@/assets/laugh01.png";
 import Laugh02 from "@/assets/laugh02.png";
 import Kite from "@/assets/Kite.png";
 import Book from "@/assets/Book Illustration.png";
+import { useGetLeaderBoardList } from "@/api/queries";
+import CountryFlag from "react-country-flag";
+import { Skeleton } from "@mantine/core";
+
 export type TLeaderBoardData = {
-  name: string;
-  points: number;
-  country: string;
-  image: string;
-  index: number;
+  username: string;
   position: number;
+  score: number;
+  avatar: string;
+  country: string;
+  country_code: string;
 };
-export const leaderboarData = [
-  {
-    name: "Aliyah Ojo",
-    points: 190,
-    country: Nigeria,
-    image: Av1,
-    position: 1,
-  },
-  {
-    name: "Alfred Jackson",
-    points: 180,
-    country: Nigeria,
-    image: Av2,
-    position: 2,
-  },
-  {
-    name: "Mitchelle Memma",
-    points: 170,
-    country: America,
-    image: Av3,
-    position: 3,
-  },
-  {
-    name: "Dapo Ogunmekpon",
-    points: 120,
-    country: Australia,
-    image: Av4,
-    position: 4,
-  },
-  {
-    name: "Matthew Postomeni",
-    points: 180,
-    country: Ghana,
-    image: Av5,
-    position: 5,
-  },
-  {
-    name: "Elon notmusk",
-    points: 120,
-    country: Nigeria,
-    image: Av6,
-    position: 6,
-  },
-  {
-    name: "Ebele Tmare",
-    points: 75,
-    country: America,
-    image: Av7,
-    position: 7,
-  },
-  {
-    name: "Michael Jone",
-    points: 120,
-    country: America,
-    image: Av4,
-    position: 8,
-  },
-  {
-    name: "Kizito Jamba",
-    points: 120,
-    country: Portugal,
-    image: Av2,
-    position: 9,
-  },
-  {
-    name: "Aliyah Ojo",
-    points: 120,
-    country: Nigeria,
-    image: Av1,
-    position: 10,
-  },
-  {
-    name: "Alfred Jackson",
-    points: 150,
-    country: Nigeria,
-    image: Av2,
-    position: 11,
-  },
-  {
-    name: "Mitchelle Memma",
-    points: 80,
-    country: America,
-    image: Av3,
-    position: 12,
-  },
-  {
-    name: "Dapo Ogunmekpon",
-    points: 120,
-    country: Australia,
-    image: Av4,
-    position: 13,
-  },
-  {
-    name: "Matthew Postomeni",
-    points: 180,
-    country: Ghana,
-    image: Av5,
-    position: 14,
-  },
-  {
-    name: "Elon notmusk",
-    points: 120,
-    country: Nigeria,
-    image: Av6,
-    position: 15,
-  },
-  {
-    name: "Ebele Tmare",
-    points: 75,
-    country: America,
-    image: Av7,
-    position: 16,
-  },
-  {
-    name: "Michael Jone",
-    points: 120,
-    country: America,
-    image: Av4,
-    position: 17,
-  },
-  {
-    name: "Kizito Jamba",
-    points: 120,
-    country: Portugal,
-    image: Av2,
-    position: 18,
-  },
-];
+
 const Leaderboard = () => {
+  const { data, isLoading } = useGetLeaderBoardList();
+
+  const leaderboarData = data?.data?.data;
+
   return (
-    <div className="bg-[#8530C1] pad-y-96 pad-x-40 relative">
+    <div className="bg-[#8530C1] pad-y-96 pad-x-40 relative my-20 pb-10">
       <img
         src={Laugh02}
         alt="image"
@@ -175,12 +44,18 @@ const Leaderboard = () => {
       />
 
       <div className="max-w-[1440px] mx-auto relative">
-        <p className="text30 text-center font-medium text-white">
+        <p className="header-1 font-Inter text-center font-medium text-white pt-10">
           The Leaderboard
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 md:mt-14 max-w-[1000px] mx-auto px-1">
-          {leaderboarData.map((datta, index) => (
-            <Card {...datta} index={index} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-x-20 mt-8 md:mt-14 max-w-[1100px] mx-auto px-1">
+          {isLoading &&
+            new Array(10).fill(1).map((array, index) => (
+              <Skeleton key={index} height={60} my={10} visible={true}>
+                <h1 className="w-full">{array}</h1>
+              </Skeleton>
+            ))}
+          {leaderboarData?.map((datta: TLeaderBoardData) => (
+            <Card {...datta} />
           ))}
         </div>
       </div>
@@ -190,47 +65,57 @@ const Leaderboard = () => {
 
 export default Leaderboard;
 
-const Card = ({ name, country, image, points, index }: TLeaderBoardData) => {
+const Card = ({
+  username,
+  avatar,
+  score,
+  position,
+  country_code,
+}: TLeaderBoardData) => {
   return (
     <>
-      <div className="flex justify-between  py-3 px-4 items-center w-full bg-white rounded-3xl">
+      <div className="flex justify-between  py-[10px] md:py-3 px-4 md:px-6 items-center w-full bg-white rounded">
         <div className="flex  items-center gap-3">
-          {index + 1 === 1 && (
-            <p
-              className={`rounded-full border-[3px] h-10 w-10 text-center p-1 text-[#FFBB0D] border-[#FFBB0D] bg-[#FFDD28] font-medium`}
+          {position === 1 && (
+            <strong
+              className={`rounded-full border-[3px] h-8 w-8  md:h-10 md:w-10 text-center  md:p-1 text-[#FFBB0D] border-[#FFBB0D] bg-[#FFDD28] font-medium`}
             >
-              {index + 1}
+              {position}
+            </strong>
+          )}
+          {position === 2 && (
+            <p
+              className={`rounded-full border-[3px] h-8 w-8  md:h-10 md:w-10 text-center  md:p-1 text-[#727283] border-[#727283] bg-[#D2D2DF] font-medium`}
+            >
+              {position}
             </p>
           )}
-          {index + 1 === 2 && (
+          {position === 3 && (
             <p
-              className={`rounded-full border-[3px] h-10 w-10 text-center  p-1 text-[#727283] border-[#727283] bg-[#D2D2DF] font-medium`}
+              className={`rounded-full border-[3px] h-8 w-8  md:h-10 md:w-10 text-center  md:p-1 text-[#C38144] border-[#C38144] bg-[#DCA16A] font-medium`}
             >
-              {index + 1}
+              {position}
             </p>
           )}
-          {index + 1 === 3 && (
+          {position > 3 && (
             <p
-              className={`rounded-full border-[3px] h-10 w-10 text-center  p-1 text-[#C38144] border-[#C38144] bg-[#DCA16A] font-medium`}
+              className={`rounded-full border-[3px] h-8 w-8  md:h-10 md:w-10   text-center  md:p-1 text-[#D2D2DF] border-[#D2D2DF] bg-[#ffff] font-medium`}
             >
-              {index + 1}
+              {position}
             </p>
           )}
-          {index + 1 > 3 && (
-            <p
-              className={`rounded-full border-[3px] h-10 w-10 text-center  p-1 text-[#D2D2DF] border-[#D2D2DF] bg-[#ffff] font-medium`}
-            >
-              {index + 1}
-            </p>
-          )}
-          <img src={image} alt="image" />
+          <img src={avatar} alt="image" className="md:w-[80px] w-[50px]" />
           <div>
-            <p className="font-medium text1">{name}</p>
-            <p className="text2">{points} Points</p>
+            <p className="font-medium text1">{username}</p>
+            <p className="text2">{score} Points</p>
           </div>
         </div>
         <div>
-          <img src={country} alt="image" />
+          <CountryFlag
+            countryCode={country_code}
+            svg
+            style={{ width: "40px", height: "auto" }}
+          />
         </div>
       </div>
     </>
