@@ -812,10 +812,10 @@ export const useSummerChallengeContentTracking = () => {
   return useMutation({ mutationFn: SummerChallengeContentTracking });
 };
 
-export const useGetLeaderBoardList = (pid: string) => {
+export const useGetLeaderBoardList = (pid?: string) => {
   return useQuery({
     queryKey: ["GetLeaderBoardList", pid],
-    queryFn: () => GetLeaderBoardList(pid),
+    queryFn: () => GetLeaderBoardList(pid as string),
   });
 };
 
