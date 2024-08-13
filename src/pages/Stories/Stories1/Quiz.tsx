@@ -202,7 +202,7 @@ const Question = ({
   currentQuestion: number;
 }) => {
   return (
-    <div className=" flex justify-start mt-20 items-center flex-col gap-y-4 flex-grow ">
+    <div className=" flex justify-start mt-14 items-center flex-col gap-y-4 flex-grow ">
       <h1
         className="text-[24px] font-bold  text-center mb-8"
         dangerouslySetInnerHTML={{ __html: `${quesObject?.question}` }}
@@ -253,6 +253,23 @@ const Question = ({
           }
           setSelected={setSelected}
         />
+        {quesObject?.option_d && quesObject?.option_d !== "" && (
+          <AnsButton
+            selected_option={"d"}
+            question_id={quesObject?.question_id}
+            title={quesObject?.option_d}
+            question={quesObject?.question}
+            selected={selected[currentQuestion]}
+            actual_answer={
+              quesObject?.answer
+                ? (quesObject[
+                    `option_${quesObject?.answer}` as keyof questionType
+                  ] as string)
+                : ""
+            }
+            setSelected={setSelected}
+          />
+        )}
       </div>
     </div>
   );
