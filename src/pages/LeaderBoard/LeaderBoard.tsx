@@ -34,7 +34,6 @@ const LeaderBoard = () => {
   const profileId = sessionStorage.getItem("profileId");
   const activeProfile = profiles?.find((data) => data?.id == Number(profileId));
 
-  console.log("Active pro", activeProfile);
   const [
     openedTopLeaderboard,
     { open: openTopLeaderboard, close: closeTopLeaderboard },
