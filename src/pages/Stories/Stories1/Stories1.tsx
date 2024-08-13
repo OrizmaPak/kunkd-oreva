@@ -231,7 +231,6 @@ const AboutPage = ({
   story: TStoryContent;
   setStartRead: () => void;
 }) => {
-  console.log("About Page", story);
   const profileId = sessionStorage.getItem("profileId");
   const { data, refetch } = useGetLikedContent(profileId as string);
   const likeContents: TStoryContent[] = data?.data.data.records;
@@ -417,7 +416,6 @@ const ReadPage = ({
   thumbnail: string;
   divRef: RefObject<HTMLDivElement>;
 }) => {
-  console.log("content", content);
   const [isReading, setIsReading] = useState(false);
   const [page, setPage] = useState(0);
   const pageTotal = content?.length - 1;

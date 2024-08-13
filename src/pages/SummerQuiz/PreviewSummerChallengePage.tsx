@@ -35,7 +35,6 @@ const PreviewSummerChallengePage = () => {
   //   return str.charAt(0).toUpperCase() + str.slice(1);
   // };
 
-  console.log("The Selected Quiz", requireData?.requirements);
   const checkStatusComplete = (books: TStoryContent[]) => {
     for (let i = 0; i < books?.length; i++) {
       if (books[i]?.status !== "complete") {
@@ -45,7 +44,6 @@ const PreviewSummerChallengePage = () => {
     return true; // If all books have status 'complete', return true
   };
   const allBooksComplete = checkStatusComplete(requireData?.requirements);
-  console.log("allBooksComplete", allBooksComplete);
   const navigate = useNavigate();
   return (
     <>
