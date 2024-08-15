@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 const ThirdSection = () => {
   const navigate = useNavigate();
   return (
-    <div className=" pad-y-96 pad-x-10 relative mt-4 md:mt-8  ">
+    <div className=" pad-y-96 pad-x-10 relative mt-14 lg:mt-20  ">
       <img
         src={Earth}
         alt="image"
@@ -22,21 +22,27 @@ const ThirdSection = () => {
           Amazing <strong className="text-[#8530C1]"> Prizes </strong>To Be Won
         </p>
 
-        <div className="flex md:flex-row flex-col justify-between mt-8 md:mt-20 gap-8 md:gap-0 px-10">
-          <img src={Camera} alt="image" className="gift-card" />
-          <img src={Bicycle} alt="image" className="gift-card" />
-          <img src={AmazonIpad} alt="image" className="gift-card" />
+        <div className="grid grid-cols-1  lg:grid-cols-3  items-center justify-between mt-8 md:mt-20 gap-8 lg:gap-4 px-10 ">
+          <div className="flex justify-center">
+            <img src={Camera} alt="image" className="gift-card" />
+          </div>
+          <div className="flex justify-center">
+            <img src={Bicycle} alt="image" className="gift-card" />
+          </div>
+          <div className="flex justify-center">
+            <img src={AmazonIpad} alt="image" className="gift-card" />
+          </div>
         </div>
       </div>
       <div className=" mt-10 md:mt-16 flex justify-center">
         <Button
           onClick={() => navigate("/signup")}
           size="md"
-          className="hidden md:block "
+          className="hidden lg:block "
         >
           Sign Up Now
         </Button>
-        <div className=" flex flex-col md:hidden   items-center justify-center  gap-4 ">
+        <div className=" flex flex-col lg:hidden   items-center justify-center  gap-4 ">
           <AppleStore sizes />
           <GooglePlay sizes />
         </div>
