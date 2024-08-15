@@ -94,12 +94,12 @@ const Questions = () => {
         <img
           src={CurveArrow01}
           alt="image"
-          className="absolute right-[10%] hidden md:block"
+          className="absolute right-[10%] hidden lg:block"
         />
         <img
           src={CurveArrow02}
           alt="image"
-          className="absolute top-[50%] left-[10%] z-50 hidden md:block"
+          className="absolute top-[50%] left-[10%] z-50 hidden lg:block"
         />
 
         <Tabs color="rgba(109, 3, 173, 1)" variant="pills" defaultValue="Faqs">
@@ -107,7 +107,7 @@ const Questions = () => {
             id="questions"
             className="  md:py-10 py-4  pad-x-40 flex justify-center items-center gap-4 text30 px-10"
           >
-            <Tabs.List className=" bg-[#8530c1] p-4 rounded-3xl flex md:grid grid-cols-2 justify-center items-center  md:gap-60">
+            <Tabs.List className=" bg-[#8530c1]  p-4 rounded-3xl flex md:grid grid-cols-2 justify-center items-center  lg:gap-60">
               <Tabs.Tab
                 value="Faqs"
                 className="text25 font-bold rounded-3xl py-4 font-Inter w-full "

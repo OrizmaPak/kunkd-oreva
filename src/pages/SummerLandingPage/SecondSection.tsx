@@ -34,14 +34,15 @@ const SecondSection = () => {
   return (
     <div className=" mt-8 md:mt-20">
       <div className="max-w-[1440px] mx-auto px-3 ">
-        <div className="relative flex gap-10  md:gap-0  flex-col md:flex-row ">
+        <div className="relative flex gap-10  md:gap-0  flex-col lg:flex-row ">
           <img
             src={Arrow07}
             alt="image"
             className="absolute arrow top-0 md:top-[-180px] md:right-[200px] right-0"
           />
 
-          <div className="flex flex-col justify-center items-center flex-grow w-full px-8 text-center md:text-start   ">
+          {/* <div className=" bg-red-500"> */}
+          <div className="flex flex-col justify-center items-center flex-grow w-full px-8 text-center lg:text-start ">
             {data.map((data, index) => {
               return (
                 <Card
@@ -56,11 +57,12 @@ const SecondSection = () => {
 
             <div className="flex justify-center md:justify-start  items-start   md:mt-10 w-full"></div>
           </div>
+          {/* </div> */}
           <div className="flex-grow  w-full flex justify-center  ">
             <img src={SchoolGirl} alt="" className="school-boy" />
           </div>
         </div>
-        <div className="bg-[#29B256] hidden md:flex py-10 md:py-[30px] md:px-[80px]   flex-col justify-center gap-1  mt-20 rounded-[36px]">
+        <div className="bg-[#29B256] hidden lg:flex py-10 md:py-[30px] md:px-[80px]   flex-col justify-center gap-1  mt-20 rounded-[36px]">
           <p className="text30  font-Inter tex text-white text-center ">
             Secure a spot for your child now!
           </p>
@@ -87,7 +89,7 @@ export default SecondSection;
 
 const Card = ({ image, title1, title2, message }: Tdata) => {
   return (
-    <div className="flex  justify-center md:justify-start   items-center     w-full gap-8 md:gap-20 mt-10">
+    <div className="flex  justify-center md:justify-start   items-center     w-full gap-8 md:gap-20 mt-10 ">
       <div className="">
         <img src={image} alt="image" className="mb-3 second-section-icon" />
       </div>

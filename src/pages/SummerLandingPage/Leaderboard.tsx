@@ -25,29 +25,29 @@ const Leaderboard = () => {
       <img
         src={Laugh02}
         alt="image"
-        className=" absolute bottom-0 left-40 hidden md:block"
+        className=" absolute bottom-0 left-40 hidden lg:block"
       />
       <img
         src={Laugh01}
         alt="image"
-        className=" absolute bottom-0 right-40 hidden md:block "
+        className=" absolute bottom-0 right-40 hidden lg:block "
       />
       <img
         src={Kite}
         alt="image"
-        className=" absolute top-28 left-40 hidden md:block"
+        className=" absolute top-28 left-40 hidden lg:block"
       />
       <img
         src={Book}
         alt="image"
-        className=" absolute  top-60 right-40 hidden md:block "
+        className=" absolute  top-60 right-40 hidden lg:block "
       />
 
       <div className="max-w-[1440px] mx-auto relative">
         <p className="header-1 font-Inter text-center font-medium text-white pt-10">
           The Leaderboard
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-x-20 mt-8 md:mt-14 max-w-[1100px] mx-auto px-1">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 gap-x-20 mt-8 md:mt-14 max-w-[1100px] mx-auto px-1">
           {isLoading &&
             new Array(10).fill(1).map((array, index) => (
               <Skeleton key={index} height={60} my={10} visible={true}>
