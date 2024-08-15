@@ -19,29 +19,29 @@ const ForthSection = () => {
         <img
           src={Star}
           alt="image"
-          className="absolute left-1/2 transform -translate-x-1/2 md:top-[-37px] top-[-21px]  star-w "
+          className=" hidden lg:block absolute left-1/2 transform -translate-x-1/2 md:top-[-37px] top-[-21px]   star-w "
         />
         <img
           src={ABCPencil}
           alt="image"
-          className="absolute right-4 top-[100px] hidden md:block"
+          className="absolute right-4 top-[100px] hidden lg:block"
         />
         <div>
           <p className="header-1 font-Inter text-white md:text-start text-center">
             Why your child should join the Kunda Kids Daily Reading Challenge:
           </p>
-          <div className="grid md:grid-cols-3 grid-cols-1 gap-5 md:gap-[40px] justify-between  mt-8 md:mt-20 mb-10 ">
-            <div>
+          <div className="grid lg:grid-cols-3 grid-cols-1 gap-5 md:gap-[40px] justify-between  mt-8 md:mt-20 mb-10 ">
+            <div className="mx-auto">
               <img src={BrainPower} alt="image" className="card-w-forth" />
             </div>
-            <div className="md:relative">
+            <div className="lg:relative mx-auto lg:mx-0 ">
               <img
                 src={LeaderBoard}
                 alt="image"
-                className=" md:absolute top-[-20px] card-w-forth"
+                className=" lg:absolute top-[-20px] card-w-forth"
               />
             </div>
-            <div>
+            <div className="mx-auto">
               <img src={CreativePark} alt="image" className="card-w-forth" />
             </div>
           </div>
@@ -49,11 +49,11 @@ const ForthSection = () => {
             <Button
               onClick={() => navigate("/signup")}
               size="md"
-              className="bg-white font-Inter text-black hidden md:block"
+              className="bg-white font-Inter text-black hidden lg:block"
             >
               Sign Up Now
             </Button>
-            <div className=" flex  flex-col md:hidden   items-center justify-center  gap-4 my-4-10">
+            <div className=" flex flex-col md:flex-row lg:hidden   items-center justify-center  gap-4 my-4-10">
               <AppleStore sizes />
               <GooglePlay sizes />
             </div>

@@ -33,13 +33,13 @@ const FirstSection = () => {
             Ignite your child’s love for reading and win amazing prizes.
           </p>
 
-          <div className=" hidden md:flex justify-center md:justify-start  items-start  mt-7 md:mt-10 w-full">
+          <div className=" hidden lg:flex justify-center md:justify-start  items-start  mt-7 md:mt-10 w-full">
             <Button onClick={() => navigate("/signup")} size="md">
               {" "}
               Sign Up Now
             </Button>
           </div>
-          <div className=" flex flex-col md:hidden   items-center justify-center  gap-4 my-10">
+          <div className=" flex flex-col lg:hidden   items-center justify-center  gap-4 my-10">
             <AppleStore sizes />
             <GooglePlay sizes />
           </div>
