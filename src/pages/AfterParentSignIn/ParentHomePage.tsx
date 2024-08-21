@@ -6,7 +6,7 @@ import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
 import { getProfileState } from "@/store/profileStore";
 import { useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import Hero from "./Hero";
 import "./parenthomepage.css";
@@ -22,6 +22,7 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
   const [useri, setUser] = useStore(getUserState);
   const { data } = useGetUpdatedProfile();
   const currentUserProfile = data?.data?.data;
+  const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
   const [
     openedTopLeaderboard,
@@ -46,7 +47,7 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
 
   const profile = childProfile
     ? profiles?.find((each) => each.id === +childProfile)
-    : profiles[0];
+    : profiles?.[0];
 
   useEffect(() => {
     if (profile?.username == "") {
@@ -95,7 +96,7 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
       <Modal
         opened={openedJoinChanllenge}
         radius={6}
-        size="md"
+        size="lg"
         padding={14}
         onClose={closeJoinChanllenge}
         overlayProps={{
@@ -117,7 +118,12 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
         radius={6}
         size="lg"
         padding={14}
-        onClose={closeTopLeaderboard}
+        // onClose={() => navigate("/summer-quiz")}
+        // onClose={closeTopLeaderboard}
+        onClose={() => {
+          navigate("/summer-quiz"); // Call custom function
+          closeTopLeaderboard(); // Close the modal
+        }}
         overlayProps={{
           opacity: 0.85,
           blur: 3,
