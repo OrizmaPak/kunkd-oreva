@@ -197,7 +197,7 @@ export const SummerQuizCard = ({
       <Modal
         opened={opened}
         radius={6}
-        size="md"
+        size="lg"
         padding={14}
         onClose={close}
         overlayProps={{
@@ -219,7 +219,10 @@ export const SummerQuizCard = ({
         radius={6}
         size="lg"
         padding={14}
-        onClose={closeTopLeaderboard}
+        onClose={() => {
+          navigate("/summer-quiz"); // Call custom function
+          closeTopLeaderboard(); // Close the modal
+        }}
         overlayProps={{
           opacity: 0.85,
           blur: 3,
