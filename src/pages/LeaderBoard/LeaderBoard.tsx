@@ -19,6 +19,7 @@ import useStore from "@/store/index";
 import { getProfileState } from "@/store/profileStore";
 import { LuBell } from "react-icons/lu";
 import JoinChanllengeModal from "../AfterParentSignIn/JoinChanllengeModal";
+import { useNavigate } from "react-router-dom";
 
 type TLeaderBoardData = {
   username: string;
@@ -32,6 +33,7 @@ type TLeaderBoardData = {
 const LeaderBoard = () => {
   const [profiles] = useStore(getProfileState);
   const profileId = sessionStorage.getItem("profileId");
+  const navigate = useNavigate();
   const activeProfile = profiles?.find((data) => data?.id == Number(profileId));
 
   const [
@@ -71,7 +73,10 @@ const LeaderBoard = () => {
         radius={6}
         size="lg"
         padding={14}
-        onClose={closeTopLeaderboard}
+        onClose={() => {
+          navigate("/summer-quiz"); // Call custom function
+          closeTopLeaderboard(); // Close the modal
+        }}
         overlayProps={{
           opacity: 0.85,
           blur: 3,
@@ -87,7 +92,7 @@ const LeaderBoard = () => {
       <Modal
         opened={opened}
         radius={6}
-        size="md"
+        size="lg"
         padding={14}
         onClose={close}
         overlayProps={{
