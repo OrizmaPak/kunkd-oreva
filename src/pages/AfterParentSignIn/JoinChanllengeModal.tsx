@@ -1,4 +1,4 @@
-import Medal from "@/assets/Medal.png";
+// import Medal from "@/assets/Medal.png";
 import Button from "@/components/Button";
 import {
   querykeys,
