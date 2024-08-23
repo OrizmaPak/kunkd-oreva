@@ -417,6 +417,7 @@ const ReadPage = ({
   divRef: RefObject<HTMLDivElement>;
 }) => {
   const [isReading, setIsReading] = useState(false);
+  console.log(setIsReading);
   const [page, setPage] = useState(0);
   const pageTotal = content?.length - 1;
   const [pageNumber, setPageNumber] = useState(0);
@@ -542,7 +543,7 @@ const ReadPage = ({
           <div className=" basis-full flex flex-col  ">
             <div className="flex-grow">
               <p className="mb-5 flex justify-between items-center ">
-                <button
+                {/* <button
                   onClick={() => setIsReading(!isReading)}
                   className={`flex border py-1 ${
                     isReading ? "bg-[#8530C1] text-white" : "text-[#8530C1]"
@@ -554,7 +555,7 @@ const ReadPage = ({
                     } rounded-full w-[10px] p-[5px] inline-block mr-2`}
                   ></p>
                   <p className=" pb-2">Read to me</p>
-                </button>
+                </button> */}
                 <p className="w-[200px] flex items-center gap-2 ">
                   <strong>A-</strong>
                   <MantineProvider
