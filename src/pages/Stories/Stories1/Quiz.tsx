@@ -304,7 +304,7 @@ const AnsButton = ({
   return (
     <button
       onClick={handleSelected}
-      className={`py-3 px-10 w-[478px] ${
+      className={`py-3 px-10 w-[478px] font-thin ${
         selected?.selected_option_value === title
           ? "bg-[#8530C1] text-white "
           : "text-[#8530C1]"
