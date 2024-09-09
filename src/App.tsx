@@ -190,9 +190,9 @@ function App() {
       if (isPolicyPath || isRefundPolicyPath || isSummerPath || isDevPath)
         return;
       if (window.innerWidth < window.innerHeight) {
-        open();
+        // open();
       } else {
-        close();
+        // close();
       }
     };
     handleResize();

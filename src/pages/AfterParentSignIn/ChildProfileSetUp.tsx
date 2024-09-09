@@ -32,7 +32,7 @@ import {
   STEP_3,
   STEP_4,
   STEP_5,
-  STEP_6,
+  // STEP_6,
 } from "@/utils/constants";
 import { useNavigate } from "react-router-dom";
 
@@ -102,7 +102,7 @@ const ChildProfileSetUp = ({
             />
           )}
 
-          {currentStep === STEP_3 && (
+          {/* {currentStep === STEP_3 && (
             <ChildSchoolNameModal
               onContinue={() => setCurrentStep(STEP_4)}
               goBack={() => setCurrentStep(currentStep - 1)}
@@ -112,18 +112,18 @@ const ChildProfileSetUp = ({
               name={name}
               setUserName={setUserName}
             />
-          )}
-          {currentStep === STEP_4 && (
+          )} */}
+          {currentStep === STEP_3 && (
             <ChildAgeModal
-              onContinue={() => setCurrentStep(STEP_5)}
+              onContinue={() => setCurrentStep(STEP_4)}
               goBack={() => setCurrentStep(currentStep - 1)}
               setAge={setAge}
             />
           )}
-          {currentStep === STEP_5 && (
+          {currentStep === STEP_4 && (
             <SelectAvatar
               setChildProfile={setChildProfile}
-              onContinue={() => setCurrentStep(STEP_6)}
+              onContinue={() => setCurrentStep(STEP_5)}
               goBack={() => setCurrentStep(currentStep - 1)}
               age={age}
               schoolName={schoolName}
@@ -135,7 +135,7 @@ const ChildProfileSetUp = ({
               setUserName={setUserName}
             />
           )}
-          {currentStep === STEP_6 && (
+          {currentStep === STEP_5 && (
             <WellDoneModal onContinue={() => navigate("/parent")} />
           )}
         </div>

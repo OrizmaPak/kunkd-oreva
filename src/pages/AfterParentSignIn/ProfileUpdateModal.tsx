@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import InputFormat from "@/common/InputFormat";
+// import InputFormat from "@/common/InputFormat";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
@@ -21,7 +21,7 @@ import { notifications } from "@mantine/notifications";
 // import { Loader, TextInput } from "@mantine/core";
 // import { Switch } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
-import { Checkbox } from "@mantine/core";
+// import { Checkbox } from "@mantine/core";
 import { useQueryClient } from "@tanstack/react-query";
 
 const ProfileUpdateModal = ({
@@ -90,22 +90,21 @@ const ProfileUpdateModal = ({
 
     isInitialLoading,
   } = useUserNameChecker(debounced);
-  const [joinSummerChallenge, setJoinSummerChallenge] = useState(false);
+  // const [joinSummerChallenge, setJoinSummerChallenge] = useState(false);
   const { mutate, isLoading } = useUpdateProfileUserNameSchoolName();
   const {
-    register,
+    // register,
     handleSubmit,
     // formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (data: FormData) => {
-    console.log("dataaaaa", joinSummerChallenge);
     mutate(
       {
         profile_id: Number(sessionStorage.getItem("profileId")),
         schoolname: data?.school_name,
         username: userName,
-        accept_challenge: joinSummerChallenge,
+        // accept_challenge: joinSummerChallenge,
       },
       {
         async onSuccess(data) {
@@ -202,7 +201,7 @@ const ProfileUpdateModal = ({
                 </p>
               </p>
               <p className="mt-2 ">
-                <p className="my-5">
+                {/* <p className="my-5">
                   <label htmlFor="name" className="text2  font-medium">
                     School (Optional)
                   </label>
@@ -215,10 +214,10 @@ const ProfileUpdateModal = ({
                     You can win a gift for your school if you provide this
                     information.
                   </p>
-                </p>
+                </p> */}
               </p>
 
-              <p className="mt-2 mb-4 flex  justify-start gap-2 items-center">
+              {/* <p className="mt-2 mb-4 flex  justify-start gap-2 items-center">
                 <Checkbox
                   size="lg"
                   onChange={(event) =>
@@ -230,7 +229,7 @@ const ProfileUpdateModal = ({
                 <p className="text20  font-Inter">
                   I agree to join summer chanllenge
                 </p>
-              </p>
+              </p> */}
               <Button type="submit">
                 {isLoading ? (
                   <p className="flex justify-center items-center">

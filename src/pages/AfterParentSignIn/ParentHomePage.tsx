@@ -1,4 +1,7 @@
-import { useGetUpdatedProfile } from "@/api/queries";
+import {
+  useGetSummerChallengeQuizzes,
+  useGetUpdatedProfile,
+} from "@/api/queries";
 
 import InnerWrapper from "@/common/User/InnerWrapper";
 import Wrapper from "@/common/User/Wrapper";
@@ -49,6 +52,11 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
     ? profiles?.find((each) => each.id === +childProfile)
     : profiles?.[0];
 
+  const { data: datta } = useGetSummerChallengeQuizzes(
+    sessionStorage.getItem("profileId") as string
+  );
+  const quizzes = datta?.data?.data?.quizzes;
+
   useEffect(() => {
     if (profile?.username == "") {
       open();
@@ -56,7 +64,8 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
     if (
       profile?.accepted_summer_challenge === false &&
       profile.username !== "" &&
-      sessionStorage.getItem("showJoinChallenge")
+      sessionStorage.getItem("showJoinChallenge") &&
+      quizzes?.length > 0
     ) {
       openJoinChanllenge();
     }
