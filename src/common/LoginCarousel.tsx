@@ -49,7 +49,7 @@ const LoginCarousel = () => {
   const sliderRef = useRef<Slider>(null);
   const [isLoading, setIsLoading] = useState(true);
   return (
-    <Skeleton visible={isLoading} className="hidden md:block">
+    <Skeleton visible={isLoading} className="hidden lg:block">
       <div className="w-full h-full bg-center  ">
         <img
           src={`${activeDot ? images[activeDot] : ParentalCtrl}`}
