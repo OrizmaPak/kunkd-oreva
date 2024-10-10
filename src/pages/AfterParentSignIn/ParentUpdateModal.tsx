@@ -2,19 +2,19 @@ import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
 import "react-phone-number-input/style.css";
 // import PhoneInput from "react-phone-number-input";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 // import { isValidPhoneNumber } from "libphonenumber-js";
 import Button from "@/components/Button";
 import { notifications } from "@mantine/notifications";
 import { Loader } from "@mantine/core";
-import { ParsedCountry, PhoneInput } from "react-international-phone";
+// import { ParsedCountry, PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 // import { CountryData } from "react-international-phone";
-import { PhoneNumberUtil } from "google-libphonenumber";
+// import { PhoneNumberUtil } from "google-libphonenumber";
 import InputFormat from "@/common/InputFormat";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { ZodType, unknown, z } from "zod";
+import { ZodType, z } from "zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
 
 import { useGetCountries, useUpdateParentCountryPhone } from "@/api/queries";
@@ -28,18 +28,11 @@ const ParentUpdateModal = ({ close }: { close: () => void }) => {
   const { data } = useGetCountries();
   const countries: TCountry[] = data?.data?.data;
   const [user] = useStore(getUserState);
-  const [phone, setPhone] = useState("");
-  const [countryCode, setCountryCode] = useState<string>("");
-  const [isTouched, setIsTouched] = useState<boolean>(false);
-  const phoneUtil = PhoneNumberUtil.getInstance();
+  // const [phone, setPhone] = useState("");
+  // const [countryCode, setCountryCode] = useState<string>("");
+  // const [isTouched, setIsTouched] = useState<boolean>(false);
+  // const phoneUtil = PhoneNumberUtil.getInstance();
 
-  const isPhoneValid = (phone: string) => {
-    try {
-      return phoneUtil.isValidNumber(phoneUtil.parseAndKeepRawInput(phone));
-    } catch (error) {
-      return false;
-    }
-  };
   const schema: ZodType<FormData> = z.object({
     phone: z
       .string()
