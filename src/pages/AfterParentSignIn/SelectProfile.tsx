@@ -44,7 +44,7 @@ const SelectProfile = ({
   const [opened, { open, close }] = useDisclosure(false);
 
   useEffect(() => {
-    if (user?.phone == "") {
+    if (user?.country_id == 0) {
       open();
     }
   }, []);

@@ -11,10 +11,22 @@ import { ParsedCountry, PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 // import { CountryData } from "react-international-phone";
 import { PhoneNumberUtil } from "google-libphonenumber";
+import InputFormat from "@/common/InputFormat";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { ZodType, unknown, z } from "zod";
+import { FormData } from "@/common/User/FormValidation/Schema";
 
-import { useUpdateParentCountryPhone } from "@/api/queries";
+import { useGetCountries, useUpdateParentCountryPhone } from "@/api/queries";
+
+import ReactFlagsSelect from "react-flags-select";
+import countryList from "react-select-country-list";
+import { useMemo } from "react";
+import { TCountry } from "../ParentSignup/ParentSignupDetails";
 
 const ParentUpdateModal = ({ close }: { close: () => void }) => {
+  const { data } = useGetCountries();
+  const countries: TCountry[] = data?.data?.data;
   const [user] = useStore(getUserState);
   const [phone, setPhone] = useState("");
   const [countryCode, setCountryCode] = useState<string>("");
@@ -28,37 +40,44 @@ const ParentUpdateModal = ({ close }: { close: () => void }) => {
       return false;
     }
   };
+  const schema: ZodType<FormData> = z.object({
+    phone: z
+      .string()
+      .optional() // Allow phone to be optional
+      .refine(
+        (value) =>
+          value === undefined ||
+          value === "" ||
+          (value.length >= 8 && value.length <= 15),
+        {
+          message: "Phone number is not vaid",
+        }
+      ),
+  });
 
-  const handleChange2 = (
-    value: string,
-    countryData: { country: ParsedCountry; inputValue: string }
-  ) => {
-    setPhone(value);
-    setIsTouched(true);
-    setCountryCode(countryData?.country?.dialCode);
-  };
-  const isValid2 = isPhoneValid(phone);
-  useEffect(() => {
-    setIsTouched(false);
-  }, []);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
   const { isLoading, mutate } = useUpdateParentCountryPhone();
 
-  // const handleChange = (newValue: string | undefined) => {
-  //   setValue(newValue);
-  //   if (newValue) {
-  //     setIsValid(isValidPhoneNumber(newValue));
-  //   } else {
-  //     setIsValid(true); // Handle case when input is cleared
-  //   }
+  const [selectedCountry, setSelectedCountry] = useState<TCountry>();
+  const [selectedCode, setSelectedCode] = useState("US");
 
-  //   console.log(value);
-  // };
+  const handleSelect = (code: string) => {
+    setSelectedCode(code);
+    console.log("Selected c:", code);
+    setSelectedCountry(countries?.find((data: TCountry) => data.iso2 === code));
+  };
+  const options = useMemo(() => countryList().getValues(), []);
 
-  const handleSubmit = () => {
+  const submitData = async (datta: FormData) => {
     mutate(
       {
-        international_code: countryCode,
-        phone: phone,
+        ...datta,
+        country_id: selectedCountry?.id || 233,
       },
       {
         async onSuccess(data) {
@@ -87,34 +106,39 @@ const ParentUpdateModal = ({ close }: { close: () => void }) => {
         <div className="my-4 mt-4">
           <p className="text1 font-bold">Update profile</p>
           <p className="text1">Please update your profile to continue</p>
-          <div className="mt-10">
-            <label htmlFor="phone" className="text2 mb-2">
-              Enter your phone number
-            </label>
-            <p className="w-full mt-3">
-              <PhoneInput
-                // style={width:"100%"}}
-                defaultCountry="ng"
-                value={phone.toString()}
-                onChange={(phone, dialCode) => handleChange2(phone, dialCode)}
-                className="w-full text20 "
-              />
-            </p>
-            {isTouched && !isValid2 && (
-              <p className="text2 text-red-600 ">
-                Please enter a valid phone number.
+          <div className="mt-4">
+            <form className="" onSubmit={handleSubmit(submitData)}>
+              <p className="my-5 flex  w-full justify-between gap-2"></p>
+
+              <div>
+                <ReactFlagsSelect
+                  selected={selectedCode}
+                  onSelect={handleSelect}
+                  countries={options}
+                  searchable
+                />
+              </div>
+
+              <p className="w-full mt-8">
+                <InputFormat
+                  type="text"
+                  placeholder="Phone Number (optional)"
+                  reg={register("phone")}
+                  errorMsg={errors.phone?.message}
+                />
               </p>
-            )}
-            <Button onClick={handleSubmit} className="mt-5">
-              {" "}
-              {isLoading ? (
-                <p className="flex justify-center items-center ">
-                  <Loader color="white" size="sm" />
-                </p>
-              ) : (
-                <span>Continue</span>
-              )}
-            </Button>
+
+              <Button type="submit" className="mt-8">
+                {" "}
+                {isLoading ? (
+                  <p className="flex justify-center items-center ">
+                    <Loader color="white" size="sm" />
+                  </p>
+                ) : (
+                  <span>Continue</span>
+                )}
+              </Button>
+            </form>
           </div>
         </div>
       </div>

@@ -11,17 +11,29 @@ import { FormData } from "@/common/User/FormValidation/Schema";
 import { z, ZodType } from "zod";
 import { useNavigate } from "react-router-dom";
 import useStore from "@/store";
-import { useCreateSchoolUser } from "@/api/queries";
+import { useCreateSchoolUser, useGetCountries } from "@/api/queries";
 import { getPushTokenState } from "@/store/pushTokenStore";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
+import ReactFlagsSelect from "react-flags-select";
+import { TCountry } from "../ParentSignup/ParentSignupDetails";
+import { useState } from "react";
 
 const SchoolSignupContent = () => {
   const navigate = useNavigate();
   const { isLoading, mutate } = useCreateSchoolUser();
   const [pushToken] = useStore(getPushTokenState);
+  const { data } = useGetCountries();
+  const countries: TCountry[] = data?.data?.data;
+  const [selectedCountry, setSelectedCountry] = useState<TCountry>();
+  const [selectedCode, setSelectedCode] = useState("US");
 
+  const handleSelect = (code: string) => {
+    setSelectedCode(code);
+    console.log("Selected c:", code);
+    setSelectedCountry(countries?.find((data: TCountry) => data.iso2 === code));
+  };
   const schema: ZodType<FormData> = z.object({
     school_name: z
       .string()
@@ -55,7 +67,7 @@ const SchoolSignupContent = () => {
   const submitData = async (data: FormData) => {
     sessionStorage.clear();
     mutate(
-      { ...data, fcm_token: pushToken },
+      { ...data, fcm_token: pushToken, country_id: selectedCountry?.id || 233 },
       {
         onSuccess(data) {
           notifications.show({
@@ -119,6 +131,15 @@ const SchoolSignupContent = () => {
                 errorMsg={errors.name?.message}
               />
             </p>
+
+            <div className="my-3">
+              <ReactFlagsSelect
+                selected={selectedCode}
+                onSelect={handleSelect}
+                // countries={{name:"Nigeria", id:"NG"}}
+                searchable
+              />
+            </div>
 
             <p className="my-3">
               <InputFormat

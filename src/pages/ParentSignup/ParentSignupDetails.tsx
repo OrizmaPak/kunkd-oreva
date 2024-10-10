@@ -1,5 +1,5 @@
 import { getApiErrorMessage } from "@/api/helper";
-import { useCreateParentUser } from "@/api/queries";
+import { useCreateParentUser, useGetCountries } from "@/api/queries";
 import Cancel from "@/assets/Cancel.svg";
 import FormWrapper from "@/common/FormWrapper";
 import InputFormat from "@/common/InputFormat";
@@ -8,28 +8,49 @@ import Button from "@/components/Button";
 import useStore from "@/store";
 import { getUserState } from "@/store/authStore";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { useForm } from "react-hook-form";
 import { AiOutlineMail } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { ZodType, z } from "zod";
 import "react-phone-number-input/style.css";
 // import PhoneInput from "react-phone-number-input";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 // import { isValidPhoneNumber } from "libphonenumber-js";
 // import MobileNumber from "@/components/MobileNumber";
-import { ParsedCountry, PhoneInput } from "react-international-phone";
+// import { ParsedCountry, PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 // import { CountryData } from "react-international-phone";
-import { PhoneNumberUtil } from "google-libphonenumber";
+// import { PhoneNumberUtil } from "google-libphonenumber";
 
 // import { motion } from "framer-motion";
+import ReactFlagsSelect from "react-flags-select";
+// import countryList from "react-select-country-list";
+// import { useMemo } from "react";
+
+export type TCountry = {
+  id: number;
+  iso2: string;
+  iso3: string;
+  name: string;
+};
 
 const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
   const navigate = useNavigate();
   const { isLoading, mutate } = useCreateParentUser();
   const [, setUser] = useStore(getUserState);
+  const { data } = useGetCountries();
+  const countries: TCountry[] = data?.data?.data;
+  const [selectedCountry, setSelectedCountry] = useState<TCountry>();
+  const [selectedCode, setSelectedCode] = useState("US");
+
+  const handleSelect = (code: string) => {
+    setSelectedCode(code);
+    console.log("Selected c:", code);
+    setSelectedCountry(countries?.find((data: TCountry) => data.iso2 === code));
+  };
+
   const schema: ZodType<FormData> = z.object({
     firstname: z
       .string()
@@ -39,45 +60,33 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
       .string()
       .min(2, { message: "Last name must be at least 2 characters long" })
       .max(40, { message: "Last name must not exceed 30 characters" }),
+    phone: z
+      .string()
+      .optional() // Allow phone to be optional
+      .refine(
+        (value) =>
+          value === undefined ||
+          value === "" ||
+          (value.length >= 8 && value.length <= 15),
+        {
+          message: "Phone number is not vaid",
+        }
+      ),
     email: z.string().email(),
   });
 
+  console.log("sele", selectedCountry);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
-  const [phone, setPhone] = useState("");
-  const [countryCode, setCountryCode] = useState<string>("");
-  const [isTouched, setIsTouched] = useState<boolean>(false);
-  const phoneUtil = PhoneNumberUtil.getInstance();
-
-  const isPhoneValid = (phone: string) => {
-    try {
-      return phoneUtil.isValidNumber(phoneUtil.parseAndKeepRawInput(phone));
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const handleChange2 = (
-    value: string,
-    countryData: { country: ParsedCountry; inputValue: string }
-  ) => {
-    setPhone(value);
-    setIsTouched(true);
-    setCountryCode(countryData?.country?.dialCode);
-  };
-  const isValid2 = isPhoneValid(phone);
-  useEffect(() => {
-    setIsTouched(false);
-  }, []);
 
   const submitData = async (datta: FormData) => {
     sessionStorage.clear();
     setUser({ email: datta.email });
     mutate(
-      { ...datta, phone: phone, international_code: countryCode },
+      { ...datta, country_id: selectedCountry?.id || 233 },
 
       {
         onSuccess(data) {
@@ -138,20 +147,30 @@ const ParentSignupDetails = ({ onSubmit }: { onSubmit: () => void }) => {
                 <MobileNumber />
               </p> */}
 
-              <p className="w-full">
-                <PhoneInput
+              <div>
+                <ReactFlagsSelect
+                  selected={selectedCode}
+                  onSelect={handleSelect}
+                  // countries={{name:"Nigeria", id:"NG"}}
+                  searchable
+                />
+              </div>
+
+              <p className="w-full mt-4">
+                <InputFormat
+                  type="text"
+                  placeholder="Phone Number (optional)"
+                  reg={register("phone")}
+                  errorMsg={errors.phone?.message}
+                />
+                {/* <PhoneInput
                   // style={width:"100%"}}
                   defaultCountry="ng"
                   value={phone.toString()}
                   onChange={(phone, dialCode) => handleChange2(phone, dialCode)}
                   className="w-full text20 "
-                />
+                /> */}
               </p>
-              {isTouched && !isValid2 && (
-                <p className="text2 text-red-600">
-                  Please enter a valid phone number.
-                </p>
-              )}
 
               <p className="my-5">
                 <InputFormat
