@@ -101,11 +101,19 @@ const PackageCard = ({
       )}
       {price && (
         <div
-          className={`text-center text-[30px]font-Hanken font-bold text-[#8530C1] ${
+          className={`text-center text-[30px]font-Hanken font-bold text-[#8530C1] mt-2 ${
             recommended ? "text-white" : ""
           } `}
         >
           {price}
+
+          {title == "1 Month" ? (
+            <p className="text-center text-[30px]font-Hanken  font-light text-[#8530C1] line-through mt-2">
+              {price}
+            </p>
+          ) : (
+            <p className=" invisible mt-2">price </p>
+          )}
         </div>
       )}
       {content && !isIcon && (

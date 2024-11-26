@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // public/firebase-messaging-sw.ts
 
 /// <reference lib="webworker" />

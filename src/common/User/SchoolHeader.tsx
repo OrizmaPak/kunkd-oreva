@@ -5,6 +5,8 @@ import { Menu, Popover } from "@mantine/core";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useGetMainSearch, useGetSummerChallengeQuizzes } from "@/api/queries";
 import KundaLogo from "@/assets/schoolIcon.svg";
+import KKChristmasLogo from "@/assets/KK christmas Logo 2.png";
+
 // import UserIcon2 from "@/assets/userIcon2.svg";
 import useDebounce from "@/hooks/useDebounce";
 import { getUserState } from "@/store/authStore";
@@ -132,10 +134,12 @@ _logout`,
           >
             <div>
               <img
-                src={KundaLogo}
+                src={KKChristmasLogo}
                 alt="logo"
-                width="45.91px"
-                height="35pxs"
+                width="220px"
+                height="220px"
+                // width="45.91px"
+                // height="35pxs"
                 className="min-w-[45.91px]"
               />
             </div>

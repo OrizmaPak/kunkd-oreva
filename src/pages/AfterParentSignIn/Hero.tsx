@@ -1,6 +1,7 @@
 import Slider from "react-slick";
 import PImages1 from "@/assets/pcaorosel124.png";
 import PImages2 from "@/assets/pcaorosel224.png";
+import Present from "@/assets/Presents3.png";
 import "./hero.css";
 
 type Props = {
@@ -25,7 +26,7 @@ const Hero = ({ username, userimage }: Props) => {
     // <Skeleton visible={isLoading}>
     <div>
       <div className="flex  w-full  justify-between">
-        <div className="py-8 pl-24 mt-4">
+        <div className="py-8 pl-10 mt-4">
           <p className=" mb-2">
             <img
               loading="lazy"
@@ -34,10 +35,11 @@ const Hero = ({ username, userimage }: Props) => {
               className="hero-img object-cover rounded-full"
             />
           </p>
-          <h1 className="font-bold font-Recoleta text25">
-            Hello{" "}
-            {username && username.charAt(0).toUpperCase() + username.slice(1)},
-          </h1>
+          <p className="font-bold font-Recoleta text20 flex  gap-2 items-center   ">
+            Happy Holidays,{" "}
+            {username && username.charAt(0).toUpperCase() + username.slice(1)}!
+            <img src={Present} alt="present" className=" h-[40px] w-[40px]" />
+          </p>
           <p className=" font-Hanken text-lg text-gray-400 text2">
             Start reading.
           </p>
