@@ -4,7 +4,7 @@ import UserIcon from "@/assets/usericon.svg";
 import { Menu, Popover } from "@mantine/core";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useGetMainSearch, useGetSummerChallengeQuizzes } from "@/api/queries";
-import KundaLogo from "@/assets/schoolIcon.svg";
+// import KundaLogo from "@/assets/schoolIcon.svg";
 import KKChristmasLogo from "@/assets/KK christmas Logo 2.png";
 
 // import UserIcon2 from "@/assets/userIcon2.svg";
