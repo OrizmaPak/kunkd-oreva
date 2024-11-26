@@ -161,3 +161,14 @@ body {
   height: 40px !important;
   width: 50px !important;
 }
+
+.ReactFlagsSelect-module_filterBox__3m8EU input {
+  border: 2px solid #f3daff !important ;
+  /* border-color: #f3daff !important ; */
+}
+
+.ReactFlagsSelect-module_selectBtn__19wW7 {
+  border: 1.5px solid #f3daff !important ;
+  padding-block: 10px !important;
+  border-radius: 20px !important;
+}

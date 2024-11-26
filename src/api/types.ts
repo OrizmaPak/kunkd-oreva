@@ -22,6 +22,7 @@ export type returnUser = {
   user_image: string;
   contact_name: string;
   school: TSchool;
+  country_id: number;
   default_password: boolean;
   // post_code: string;
   // tax_id: string;
