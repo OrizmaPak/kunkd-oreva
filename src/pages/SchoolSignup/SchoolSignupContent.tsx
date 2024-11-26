@@ -143,7 +143,7 @@ const SchoolSignupContent = () => {
 
             <p className="my-3">
               <InputFormat
-                type="number"
+                type="text"
                 placeholder="Phone number"
                 reg={register("phone")}
                 errorMsg={errors.name?.message}
