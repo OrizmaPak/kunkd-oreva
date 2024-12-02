@@ -15,8 +15,8 @@ const ChoosePlanContent = () => {
         <div className="mx-auto  flex items-center justify-center">
           <div className="flex mt-16 w-full  justify-center  items-center ">
             <PackageCard
-              title={<div className=" opacity-0">a</div>}
-              price={<div className=" opacity-0">a</div>}
+              title={<div className="  opacity-0">a</div>}
+              price={<div className=" opacity-0 mt-2">a</div>}
               noBorder={true}
               content={[
                 "Safe, ad-free content",
@@ -69,6 +69,13 @@ const ChoosePlanContent = () => {
               btn="Subscribe"
               price={
                 planData && planData?.countryCode == "NG"
+                  ? planData?.plans[0]?.naira_discount_value
+                  : planData?.countryCode == "GB"
+                  ? planData?.plans[0]?.pounds_discount_value
+                  : planData?.plans[0]?.dollar_discount_value
+              }
+              discountPrice={
+                planData && planData?.countryCode == "NG"
                   ? planData?.plans[0]?.naira_value
                   : planData?.countryCode == "GB"
                   ? planData?.plans[0]?.pounds_value
@@ -91,6 +98,13 @@ const ChoosePlanContent = () => {
               noBorder={true}
               btn="Subscribe"
               price={
+                planData && planData?.countryCode == "NG"
+                  ? planData?.plans[1]?.naira_discount_value
+                  : planData?.countryCode == "GB"
+                  ? planData?.plans[1]?.pounds_discount_value
+                  : planData?.plans[1]?.dollar_discount_value
+              }
+              discountPrice={
                 planData && planData?.countryCode == "NG"
                   ? planData?.plans[1]?.naira_value
                   : planData?.countryCode == "GB"
