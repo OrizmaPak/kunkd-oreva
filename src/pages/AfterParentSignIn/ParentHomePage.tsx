@@ -20,7 +20,6 @@ import { useDisclosure } from "@mantine/hooks";
 import ProfileUpdateModal from "./ProfileUpdateModal";
 import JoinChanllengeModal from "./JoinChanllengeModal";
 import TopLeaderboardModal from "../SummerQuiz/TopLeaderboardModal";
-import Snowfall from "react-snowfall";
 
 const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
   const [useri, setUser] = useStore(getUserState);
