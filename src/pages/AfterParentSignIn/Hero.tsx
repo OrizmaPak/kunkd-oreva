@@ -35,12 +35,10 @@ const Hero = ({ username, userimage }: Props) => {
               className="hero-img object-cover rounded-full"
             />
           </p>
-          <p className="font-bold font-Recoleta text20 flex  gap-2 items-center   ">
-            Happy Holidays,{" "}
+          <p className="font-bold font-Recoleta text30 flex  gap-2 items-center   ">
             {username && username.charAt(0).toUpperCase() + username.slice(1)}!
-            <img src={Present} alt="present" className=" h-[40px] w-[40px]" />
           </p>
-          <p className=" font-Hanken text-lg text-gray-400 text2">
+          <p className=" font-Hanken text-lg text-gray-400 text1">
             Start reading.
           </p>
         </div>

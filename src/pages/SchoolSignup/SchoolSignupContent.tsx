@@ -146,7 +146,7 @@ const SchoolSignupContent = () => {
                 type="text"
                 placeholder="Phone number"
                 reg={register("phone")}
-                errorMsg={errors.name?.message}
+                errorMsg={errors.phone?.message}
               />
             </p>
             <p className="my-3">
