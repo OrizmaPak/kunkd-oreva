@@ -1,8 +1,10 @@
 import {
   useContentForHome,
+  useContentSchoolTracking,
   useContentTracking,
   useGetContentById,
   useGetLikedContent,
+  useGetSchoolAndTeacherContent,
   useLikedContent,
   useSummerChallengeContentTracking,
   useUnLikedContent,
@@ -58,13 +60,38 @@ const Stories1 = () => {
     { open: openConnectedStudent, close: closeConnectedStudent },
   ] = useDisclosure(false);
 
-  const { data, isLoading: contentIsLoading } = useGetContentById(
-    contentId?.toString() as string,
-    // contentId!,
-    profileId?.toString() || "0",
+  const [user] = useStore(getUserState);
+
+  const shouldCallFirstAPI = user?.role === "user"; // Replace with your condition
+  const contentIdStr = contentId?.toString() as string;
+  const profileIdStr = profileId?.toString() || "0";
+
+  const firstAPIResult = useGetContentById(
+    shouldCallFirstAPI,
+    contentIdStr,
+    profileIdStr,
     open,
     openConnectedStudent
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
+
+  const secondAPIResult = useGetSchoolAndTeacherContent(
+    shouldCallFirstAPI,
+    contentIdStr,
+    open
+  ) as UseQueryResult<{ data: { data: TStoryContent } }>;
+
+  const { data, isLoading: contentIsLoading } = shouldCallFirstAPI
+    ? firstAPIResult
+    : secondAPIResult;
+
+  // const { data, isLoading: contentIsLoading } = useGetContentById(
+  //   contentId?.toString() as string,
+  //   // contentId!,
+  //   profileId?.toString() || "0",
+  //   open,
+  //   openConnectedStudent
+  // ) as UseQueryResult<{ data: { data: TStoryContent } }>;
+
   const content = data?.data.data;
   const [arrayOfSubCatId, setArraySubCatId] = useState<number>(0);
 
@@ -429,11 +456,14 @@ const ReadPage = ({
   };
   const max = 35;
   const { mutate } = useContentTracking();
+  const { mutate: mutateSchool } = useContentSchoolTracking();
   const { mutate: mutateSummer } = useSummerChallengeContentTracking();
   const profileId = sessionStorage.getItem("profileId");
   const contentId = sessionStorage.getItem("contentId");
   const queryString = new URLSearchParams(location.search.split("?")[1]);
   const isReadingFromChallenge = !!queryString.get("from");
+  const [user] = useStore(getUserState);
+
   useEffect(() => {
     const abortControllerRef = new AbortController();
 
@@ -464,27 +494,50 @@ const ReadPage = ({
             }
           );
         } else {
-          mutate(
-            {
-              profile_id: Number(profileId),
-              content_id: Number(contentId),
-              status: `${pageNumber === pageTotal ? "complete" : "ongoing"}`,
-              pages_read: Number(pageNumber + 1),
-              timespent: 23,
-              signal: abortControllerRef.signal,
-            },
-            {
-              onSuccess(data) {
-                return data;
+          if (user?.role === "user") {
+            mutate(
+              {
+                profile_id: Number(profileId),
+                content_id: Number(contentId),
+                status: `${pageNumber === pageTotal ? "complete" : "ongoing"}`,
+                pages_read: Number(pageNumber + 1),
+                timespent: 23,
+                signal: abortControllerRef.signal,
               },
-              onError() {
-                // notifications.show({
-                //   title: `Notification`,
-                //   message: getApiErrorMessage(err),
-                // });
+              {
+                onSuccess(data) {
+                  return data;
+                },
+                onError() {
+                  // notifications.show({
+                  //   title: `Notification`,
+                  //   message: getApiErrorMessage(err),
+                  // });
+                },
+              }
+            );
+          } else {
+            mutateSchool(
+              {
+                content_id: Number(contentId),
+                status: `${pageNumber === pageTotal ? "complete" : "ongoing"}`,
+                pages_read: Number(pageNumber + 1),
+                timespent: 23,
+                signal: abortControllerRef.signal,
               },
-            }
-          );
+              {
+                onSuccess(data) {
+                  return data;
+                },
+                onError() {
+                  // notifications.show({
+                  //   title: `Notification`,
+                  //   message: getApiErrorMessage(err),
+                  // });
+                },
+              }
+            );
+          }
         }
       } catch (err) {
         // Handle errors if needed
@@ -695,7 +748,10 @@ const BookPagination = ({
   divRef: RefObject<HTMLDivElement>;
 }) => {
   const { mutate } = useContentTracking();
+  const { mutate: mutateSchool } = useContentSchoolTracking();
+
   const { mutate: mutateSummer } = useSummerChallengeContentTracking();
+
   const continuePage = sessionStorage.getItem("continuePage");
   const profileId = sessionStorage.getItem("profileId");
   const contentId = sessionStorage.getItem("contentId");
@@ -782,32 +838,60 @@ const BookPagination = ({
         }
       );
     } else {
-      mutate(
-        {
-          profile_id: Number(profileId),
-          content_id: Number(contentId),
-          status: "complete",
-          pages_read: Number(pageTotal + 1),
-          timespent: 23,
-        },
-        {
-          onSuccess(data) {
-            if (sessionStorage.getItem("fromSummer") === "true") {
-              navigate("/summer-quiz/preview-summer-challenge");
-              sessionStorage.removeItem("fromSummer");
-            } else {
-              setIsFinish();
-            }
-            return data;
+      if (user?.role === "user") {
+        mutate(
+          {
+            profile_id: Number(profileId),
+            content_id: Number(contentId),
+            status: "complete",
+            pages_read: Number(pageTotal + 1),
+            timespent: 23,
           },
-          onError(err) {
-            notifications.show({
-              title: `Notification`,
-              message: getApiErrorMessage(err),
-            });
+          {
+            onSuccess(data) {
+              if (sessionStorage.getItem("fromSummer") === "true") {
+                navigate("/summer-quiz/preview-summer-challenge");
+                sessionStorage.removeItem("fromSummer");
+              } else {
+                setIsFinish();
+              }
+              return data;
+            },
+            onError(err) {
+              notifications.show({
+                title: `Notification`,
+                message: getApiErrorMessage(err),
+              });
+            },
+          }
+        );
+      } else {
+        mutateSchool(
+          {
+            content_id: Number(contentId),
+            status: "complete",
+            pages_read: Number(pageTotal + 1),
+            timespent: 23,
           },
-        }
-      );
+          {
+            onSuccess(data) {
+              if (sessionStorage.getItem("fromSummer") === "true") {
+                navigate("/summer-quiz/preview-summer-challenge");
+                sessionStorage.removeItem("fromSummer");
+              } else {
+                setIsFinish();
+              }
+              return data;
+            },
+            onError(err) {
+              notifications.show({
+                title: `Notification`,
+                message: getApiErrorMessage(err),
+              });
+            },
+          }
+        );
+      }
     }
   };
 

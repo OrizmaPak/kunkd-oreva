@@ -10,7 +10,6 @@ import Ongoing from "./Ongoing";
 import Completed from "./Completed";
 import { useAllProgressContent } from "@/api/queries";
 import { TStoryContent } from "@/api/types";
-import Snowfall from "react-snowfall";
 
 export type TContentLog = {
   content: {
@@ -48,15 +47,6 @@ const ProgressReport = () => {
   const [currentStep, setCurrentStep] = useState(STEP_1);
   return (
     <div>
-      <Snowfall
-        snowflakeCount={200}
-        style={{
-          position: "fixed", // Keep the confetti fixed on the screen
-          top: 0, // Align the confetti to the top of the screen
-          left: 0, // Align the confetti to the left side of the screen
-          zIndex: 9999, // Ensure the confetti is on top of other elements
-        }}
-      />
       <Wrapper>
         <InnerWrapper>
           <div className="min-h-[calc(100vh-80px-8vh)]">
