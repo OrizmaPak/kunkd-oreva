@@ -12,7 +12,6 @@ import { useDisclosure } from "@mantine/hooks";
 import { useEffect } from "react";
 import { getUserState } from "@/store/authStore";
 import ParentUpdateModal from "./ParentUpdateModal";
-import Snowfall from "react-snowfall";
 
 export type selectAvatarType = {
   name: string;
@@ -52,15 +51,6 @@ const SelectProfile = ({
 
   return (
     <>
-      <Snowfall
-        snowflakeCount={200}
-        style={{
-          position: "fixed", // Keep the confetti fixed on the screen
-          top: 0, // Align the confetti to the top of the screen
-          left: 0, // Align the confetti to the left side of the screen
-          zIndex: 9999, // Ensure the confetti is on top of other elements
-        }}
-      />
       <Modal
         opened={opened}
         radius={6}

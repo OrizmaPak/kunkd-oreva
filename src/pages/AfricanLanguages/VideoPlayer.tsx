@@ -10,6 +10,8 @@ import {
   useLikedContent,
   useUnLikedContent,
   useLearningHour,
+  useGetSchoolAndTeacherContent,
+  useContentSchoolTracking,
 } from "@/api/queries";
 import AfamBlur from "@/assets/afamblur.jpg";
 import Congrats from "@/assets/congrats.svg";
@@ -112,12 +114,38 @@ const VideoPlayer = () => {
   // const profileId =sessionStorage.getItem("profileId");
   const videoRef = useRef<HTMLVideoElement>(null);
   // const [user] = useStore(getUserState);
-  const { data, isLoading } = useGetContentById(
-    contentId?.toString() as string,
-    profileId?.toString() || ("0" as string),
+
+  //  const [user] = useStore(getUserState);
+
+  const shouldCallFirstAPI = user?.role === "user"; // Replace with your condition
+  const contentIdStr = contentId?.toString() as string;
+  const profileIdStr = profileId?.toString() || "0";
+
+  const firstAPIResult = useGetContentById(
+    shouldCallFirstAPI,
+    contentIdStr,
+    profileIdStr,
     open,
     openConnectedStudent
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
+
+  const secondAPIResult = useGetSchoolAndTeacherContent(
+    shouldCallFirstAPI,
+    contentIdStr,
+    open
+  ) as UseQueryResult<{ data: { data: TStoryContent } }>;
+
+  const { data, isLoading } = shouldCallFirstAPI
+    ? firstAPIResult
+    : secondAPIResult;
+
+  // const { data, isLoading } = useGetContentById(
+  //   contentId?.toString() as string,
+  //   profileId?.toString() || ("0" as string),
+  //   open,
+  //   openConnectedStudent
+  // ) as UseQueryResult<{ data: { data: TStoryContent } }>;
+
   const mediaContent = data?.data.data;
   const { data: recommendedData, isLoading: recommendedIsLoading } =
     useGetRecommendedVideo(contentId?.toString() as string);
@@ -128,6 +156,8 @@ const VideoPlayer = () => {
 
   const [currentVideoTime, setCurrentVideotime] = useState(0);
   const { mutate } = useContentTracking();
+  const { mutate: mutateSchool } = useContentSchoolTracking();
+
   const [delay, setDelay] = useState(0);
   const { mutate: mutateLearning } = useLearningHour();
 
@@ -143,35 +173,59 @@ const VideoPlayer = () => {
     const handleUpdateData = async () => {
       if (delay > 0 && currentVideoTime > 0 && !videoRef.current?.paused) {
         try {
-          mutate(
-            {
-              profile_id: Number(profileId),
+          if (user?.role === "user") {
+            mutate(
+              {
+                profile_id: Number(profileId),
+                content_id: Number(contentId),
+                status: "ongoing",
+                pages_read: Math.ceil(currentVideoTime),
+                timespent: Math.ceil(currentVideoTime),
+                // signal: abortControllerRef.signal,
+              },
+              {
+                onSuccess(data) {
+                  setLastTime(Math.ceil(currentVideoTime));
+                  return data;
+                },
+                onError(err) {
+                  notifications.show({
+                    title: `Notification`,
+                    message: getApiErrorMessage(err),
+                  });
+                },
+              }
+            );
+            mutateLearning({
               content_id: Number(contentId),
-              status: "ongoing",
-              pages_read: Math.ceil(currentVideoTime),
-              timespent: Math.ceil(currentVideoTime),
-              // signal: abortControllerRef.signal,
-            },
-            {
-              onSuccess(data) {
-                setLastTime(Math.ceil(currentVideoTime));
-                return data;
+              profile_id: Number(profileId),
+              timespent: Math.ceil(currentVideoTime) - lastTime,
+              sub_category_id:
+                data?.data?.data?.sub_categories?.[0]?.sub_category_id,
+            });
+          } else {
+            mutateSchool(
+              {
+                content_id: Number(contentId),
+                status: "ongoing",
+                pages_read: Math.ceil(currentVideoTime),
+                timespent: Math.ceil(currentVideoTime),
+                // signal: abortControllerRef.signal,
               },
-              onError(err) {
-                notifications.show({
-                  title: `Notification`,
-                  message: getApiErrorMessage(err),
-                });
-              },
-            }
-          );
-          mutateLearning({
-            content_id: Number(contentId),
-            profile_id: Number(profileId),
-            timespent: Math.ceil(currentVideoTime) - lastTime,
-            sub_category_id:
-              data?.data?.data?.sub_categories?.[0]?.sub_category_id,
-          });
+              {
+                onSuccess(data) {
+                  setLastTime(Math.ceil(currentVideoTime));
+                  return data;
+                },
+                onError(err) {
+                  notifications.show({
+                    title: `Notification`,
+                    message: getApiErrorMessage(err),
+                  });
+                },
+              }
+            );
+          }
         } catch (err) {
           // Handle errors if needed
         }
@@ -222,27 +276,52 @@ const VideoPlayer = () => {
       }
     );
     try {
-      mutate(
-        {
-          profile_id: Number(profileId),
-          content_id: Number(contentId),
-          status: "complete",
-          pages_read: Math.ceil(currentVideoTime),
-          timespent: Math.ceil(currentVideoTime),
-          // signal: abortControllerRef.signal,
-        },
-        {
-          onSuccess(data) {
-            return data;
+      if (user?.role === "user") {
+        mutate(
+          {
+            profile_id: Number(profileId),
+            content_id: Number(contentId),
+            status: "ongoing",
+            pages_read: Math.ceil(currentVideoTime),
+            timespent: Math.ceil(currentVideoTime),
+            // signal: abortControllerRef.signal,
           },
-          onError(err) {
-            notifications.show({
-              title: `Notification`,
-              message: getApiErrorMessage(err),
-            });
+          {
+            onSuccess(data) {
+              setLastTime(Math.ceil(currentVideoTime));
+              return data;
+            },
+            onError(err) {
+              notifications.show({
+                title: `Notification`,
+                message: getApiErrorMessage(err),
+              });
+            },
+          }
+        );
+      } else {
+        mutateSchool(
+          {
+            content_id: Number(contentId),
+            status: "ongoing",
+            pages_read: Math.ceil(currentVideoTime),
+            timespent: Math.ceil(currentVideoTime),
+            // signal: abortControllerRef.signal,
           },
-        }
-      );
+          {
+            onSuccess(data) {
+              setLastTime(Math.ceil(currentVideoTime));
+              return data;
+            },
+            onError(err) {
+              notifications.show({
+                title: `Notification`,
+                message: getApiErrorMessage(err),
+              });
+            },
+          }
+        );
+      }
     } catch (err) {
       // Handle errors if needed
     }

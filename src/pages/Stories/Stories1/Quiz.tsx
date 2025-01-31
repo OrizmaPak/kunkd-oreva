@@ -11,6 +11,7 @@ import { RingProgress, MantineProvider } from "@mantine/core";
 import {
   useGetQuiz,
   useSaveQuiz,
+  useSaveSchoolQuiz,
   // useSaveQuiz
 } from "@/api/queries";
 import { STEP_1, STEP_2, STEP_3, STEP_4 } from "@/utils/constants";
@@ -472,6 +473,9 @@ const Result = ({
   setShowRemark: () => void;
 }) => {
   const { mutate, isLoading } = useSaveQuiz();
+  const { mutate: mutateSchoolSaveQuiz, isLoading: isLoadingSchoolSaveQuiz } =
+    useSaveSchoolQuiz();
+
   const [user] = useStore(getUserState);
   function formatTimeComponent(component: number) {
     return component < 10 ? "0" + component : component;
@@ -490,47 +494,90 @@ const Result = ({
     formatTimeComponent(seconds);
 
   const handleSaveQuiz = () => {
-    mutate(
-      {
-        quiz_id: quizId,
-        profile_id: profileId ? profileId : 0,
-        questions: [...answers],
-      },
-      {
-        onSuccess(data) {
-          handleEventTracking(
-            `${
-              user?.role == "teacher"
-                ? "teacher"
-                : user?.role == "user"
-                ? "parent"
-                : "school"
-            }_quiz_completed`,
-            {
-              user_id: user?.user_id,
-              profile_d: sessionStorage.getItem("profileId"),
-              lesson_id: sessionStorage.getItem("contentId"),
-              lesson_category: "stories",
-              media_type: "text",
-              start_time: timeString,
-              quiz_score: (100 / answers.length) * attempted.length,
-            }
-          );
-          setShowRemark();
-          notifications.show({
-            title: `Notification`,
-            message: data.data.message,
-          });
+    if (user?.role === "user") {
+      mutate(
+        {
+          quiz_id: quizId,
+          profile_id: profileId ? profileId : 0,
+          questions: [...answers],
         },
+        {
+          onSuccess(data) {
+            handleEventTracking(
+              `${
+                user?.role == "teacher"
+                  ? "teacher"
+                  : user?.role == "user"
+                  ? "parent"
+                  : "school"
+              }_quiz_completed`,
+              {
+                user_id: user?.user_id,
+                profile_d: sessionStorage.getItem("profileId"),
+                lesson_id: sessionStorage.getItem("contentId"),
+                lesson_category: "stories",
+                media_type: "text",
+                start_time: timeString,
+                quiz_score: (100 / answers.length) * attempted.length,
+              }
+            );
+            setShowRemark();
+            notifications.show({
+              title: `Notification`,
+              message: data.data.message,
+            });
+          },
 
-        onError(err) {
-          notifications.show({
-            title: `Notification`,
-            message: getApiErrorMessage(err),
-          });
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    } else {
+      mutateSchoolSaveQuiz(
+        {
+          quiz_id: quizId,
+          questions: [...answers],
         },
-      }
-    );
+        {
+          onSuccess(data) {
+            handleEventTracking(
+              `${
+                user?.role == "teacher"
+                  ? "teacher"
+                  : user?.role == "user"
+                  ? "parent"
+                  : "school"
+              }_quiz_completed`,
+              {
+                user_id: user?.user_id,
+                profile_d: sessionStorage.getItem("profileId"),
+                lesson_id: sessionStorage.getItem("contentId"),
+                lesson_category: "stories",
+                media_type: "text",
+                start_time: timeString,
+                quiz_score: (100 / answers.length) * attempted.length,
+              }
+            );
+            setShowRemark();
+            notifications.show({
+              title: `Notification`,
+              message: data.data.message,
+            });
+          },
+
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    }
   };
   const attempted = answers.filter(
     (answer) => answer.selected_option_value !== undefined
@@ -579,7 +626,7 @@ const Result = ({
             onClick={handleSaveQuiz}
             className="p-3 px-20 text-white bg-[#8530C1] rounded"
           >
-            {isLoading ? (
+            {isLoading || isLoadingSchoolSaveQuiz ? (
               <p className="flex justify-center items-center">
                 <Loader color="white" size="sm" />
               </p>

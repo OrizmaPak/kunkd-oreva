@@ -16,6 +16,8 @@ import {
   useUnLikedContent,
   useRecommendedAudiobooks,
   useLearningHour,
+  useGetSchoolAndTeacherContent,
+  useContentSchoolTracking,
 } from "@/api/queries";
 import AfamBlur from "@/assets/afamblur.jpg";
 // import { TMedia, TStoryContent } from "@/pages/Stories/Stories1/Stories1";
@@ -75,12 +77,52 @@ const BookLayout = () => {
     dataRecommended?.data?.data?.recommended_contents;
   const profileId = sessionStorage.getItem("profileId");
 
-  const { data, isLoading } = useGetContentById(
-    contentId?.toString() as string,
-    profileId?.toString() || ("0" as string),
+  const [user] = useStore(getUserState);
+
+  const shouldCallFirstAPI = user?.role === "user"; // Replace with your condition
+  const contentIdStr = contentId?.toString() as string;
+  const profileIdStr = profileId?.toString() || "0";
+
+  const firstAPIResult = useGetContentById(
+    shouldCallFirstAPI,
+    contentIdStr,
+    profileIdStr,
     open,
     openConnectedStudent
   ) as UseQueryResult<{ data: { data: TStoryContent } }>;
+
+  const secondAPIResult = useGetSchoolAndTeacherContent(
+    shouldCallFirstAPI,
+    contentIdStr,
+    open
+  ) as UseQueryResult<{ data: { data: TStoryContent } }>;
+
+  const { data, isLoading } = shouldCallFirstAPI
+    ? firstAPIResult
+    : secondAPIResult;
+
+  // const shouldCallFirstAPI = user?.role === "user"; // Replace with your condition
+
+  // const { data, isLoading } = shouldCallFirstAPI
+  //   ? (useGetContentById(
+  //       contentId?.toString() as string,
+  //       profileId?.toString() || ("0" as string),
+  //       open,
+  //       openConnectedStudent
+  //     ) as UseQueryResult<{ data: { data: TStoryContent } }>)
+  //   : (useGetSchoolAndTeacherContent(
+  //       contentId?.toString() as string
+  //     ) as UseQueryResult<{
+  //       data: { data: TStoryContent };
+  //     }>);
+
+  // const { data, isLoading } = useGetContentById(
+  //   contentId?.toString() as string,
+  //   profileId?.toString() || ("0" as string),
+  //   open,
+  //   openConnectedStudent
+  // ) as UseQueryResult<{ data: { data: TStoryContent } }>;
+  console.log("matthew", data);
   const audioBookId = data?.data.data.id;
   const audiobook = data?.data.data.media?.[0];
   const [startRead, setStartRead] = useState(false);
@@ -475,6 +517,8 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
     }
   };
   const { mutate } = useContentTracking();
+  const { mutate: mutateSchool } = useContentSchoolTracking();
+
   const profileId = sessionStorage.getItem("profileId");
   const contentId = sessionStorage.getItem("contentId");
   const { mutate: mutateLearning } = useLearningHour();
@@ -510,27 +554,50 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
 
   useEffect(() => {
     if (delay > 0) {
-      mutate(
-        {
-          profile_id: Number(profileId),
-          content_id: Number(contentId),
-          status: currentTTime === durationn ? "complete" : "ongoing",
-          pages_read: Math.ceil(currentTTime),
-          timespent: Math.ceil(currentTTime),
-        },
-        {
-          onSuccess(data) {
-            setLastTime(Math.ceil(currentTTime));
-            return data;
+      if (user?.role === "user") {
+        mutate(
+          {
+            profile_id: Number(profileId),
+            content_id: Number(contentId),
+            status: currentTTime === durationn ? "complete" : "ongoing",
+            pages_read: Math.ceil(currentTTime),
+            timespent: Math.ceil(currentTTime),
           },
-          onError(err) {
-            notifications.show({
-              title: `Notification`,
-              message: getApiErrorMessage(err),
-            });
+          {
+            onSuccess(data) {
+              setLastTime(Math.ceil(currentTTime));
+              return data;
+            },
+            onError(err) {
+              notifications.show({
+                title: `Notification`,
+                message: getApiErrorMessage(err),
+              });
+            },
+          }
+        );
+      } else {
+        mutateSchool(
+          {
+            content_id: Number(contentId),
+            status: currentTTime === durationn ? "complete" : "ongoing",
+            pages_read: Math.ceil(currentTTime),
+            timespent: Math.ceil(currentTTime),
           },
-        }
-      );
+          {
+            onSuccess(data) {
+              setLastTime(Math.ceil(currentTTime));
+              return data;
+            },
+            onError(err) {
+              notifications.show({
+                title: `Notification`,
+                message: getApiErrorMessage(err),
+              });
+            },
+          }
+        );
+      }
 
       mutateLearning({
         content_id: Number(contentId),
@@ -550,26 +617,49 @@ const AudioControls = ({ audio, title }: { audio?: string; title: string }) => {
       media_type: "audio",
       end_time: timeString,
     });
-    mutate(
-      {
-        profile_id: Number(profileId),
-        content_id: Number(contentId),
-        status: "complete",
-        pages_read: Math.ceil(currentTTime),
-        timespent: Math.ceil(currentTTime),
-      },
-      {
-        onSuccess(data) {
-          return data;
+    if (user?.role === "user") {
+      mutate(
+        {
+          profile_id: Number(profileId),
+          content_id: Number(contentId),
+          status: "complete",
+          pages_read: Math.ceil(currentTTime),
+          timespent: Math.ceil(currentTTime),
         },
-        onError(err) {
-          notifications.show({
-            title: `Notification`,
-            message: getApiErrorMessage(err),
-          });
+        {
+          onSuccess(data) {
+            return data;
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    } else {
+      mutateSchool(
+        {
+          profile_id: Number(profileId),
+          content_id: Number(contentId),
+          status: "complete",
+          pages_read: Math.ceil(currentTTime),
+          timespent: Math.ceil(currentTTime),
         },
-      }
-    );
+        {
+          onSuccess(data) {
+            return data;
+          },
+          onError(err) {
+            notifications.show({
+              title: `Notification`,
+              message: getApiErrorMessage(err),
+            });
+          },
+        }
+      );
+    }
   };
 
   return (

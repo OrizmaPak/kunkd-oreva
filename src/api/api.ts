@@ -317,6 +317,9 @@ export const RejectStudentAdmission = (payload: TAddTeacherData) => {
 export const SaveQuiz = (payload: TSaveQuiz) => {
   return axios.post(`/quiz/question/save`, payload);
 };
+export const SaveSchoolQuiz = (payload: TSaveQuiz) => {
+  return axios.post(`/quiz/school/question/save`, payload);
+};
 
 export const GetMainSearch = (payload: string) => {
   return axios.get(`/search?s=${payload}`);
@@ -446,4 +449,16 @@ export const GetLeaderBoardList = (pid: string) => {
 
 export const GetSummerQuizAnswers = (quizId: string, profileId: string) => {
   return axios.get(`/summer/challenge/quiz/answers/${quizId}/${profileId}`);
+};
+
+export const GetSchoolAndTeacherContent = (id: string) => {
+  return axios.get(`/content/school/${id}`);
+};
+// export const GetSchoolAndTeacherContent = (id: string) => {
+//   return axios.get(`/content/school/${id}`);
+// };
+
+export const ContentSchoolTracking = (payload: TContentTracking) => {
+  const { signal, ...restPayload } = payload;
+  return axios.post("/content/school/track", restPayload, { signal });
 };
