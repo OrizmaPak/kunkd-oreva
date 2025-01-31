@@ -7,7 +7,6 @@ import DataList from "./DataList";
 import { useGetLikedContent } from "@/api/queries";
 import { useState } from "react";
 import { TStoryContent } from "@/api/types";
-import Snowfall from "react-snowfall";
 
 const MyList = () => {
   const user = sessionStorage.getItem("user");
@@ -44,15 +43,6 @@ const MyList = () => {
 
   return (
     <div>
-      <Snowfall
-        snowflakeCount={200}
-        style={{
-          position: "fixed", // Keep the confetti fixed on the screen
-          top: 0, // Align the confetti to the top of the screen
-          left: 0, // Align the confetti to the left side of the screen
-          zIndex: 9999, // Ensure the confetti is on top of other elements
-        }}
-      />
       <Wrapper>
         <InnerWrapper>
           <Header setMyListType={setMyListType} myListType={myListType} />

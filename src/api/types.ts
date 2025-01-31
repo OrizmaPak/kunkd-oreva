@@ -47,7 +47,7 @@ export type TPayStackInitData = object;
 export type TLikedContentData = object;
 export type TContentTracking = {
   signal?: AbortSignal;
-  profile_id: number;
+  profile_id?: number;
   content_id: number;
   status: string;
   pages_read: number;

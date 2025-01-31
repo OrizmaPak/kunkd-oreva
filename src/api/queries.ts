@@ -89,6 +89,9 @@ import {
   SummerChallengeContentTracking,
   GetLeaderBoardList,
   GetSummerQuizAnswers,
+  GetSchoolAndTeacherContent,
+  ContentSchoolTracking,
+  SaveSchoolQuiz,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery, useInfiniteQuery } from "@tanstack/react-query";
@@ -224,6 +227,7 @@ export const useContentForHome = () => {
 };
 
 export const useGetContentById = (
+  shouldCallFirstAPI: boolean,
   contentId: string,
   userId: string,
   open?: () => void,
@@ -232,6 +236,7 @@ export const useGetContentById = (
   const [user] = useStore(getUserState);
   const navigate = useNavigate();
   return useQuery({
+    enabled: shouldCallFirstAPI,
     queryKey: ["getContentById", contentId, userId],
     queryFn: () => GetContentById(contentId, userId),
     onSuccess: (response: unknown) => {
@@ -521,6 +526,12 @@ export const useContentTracking = () => {
   });
 };
 
+export const useContentSchoolTracking = () => {
+  return useMutation({
+    mutationFn: ContentSchoolTracking,
+  });
+};
+
 export const useAddTeacherData = () => {
   return useMutation({
     mutationFn: AddTeacherData,
@@ -635,6 +646,12 @@ export const useGetAdmittedStudentsInClass = (
 export const useSaveQuiz = () => {
   return useMutation({
     mutationFn: SaveQuiz,
+  });
+};
+
+export const useSaveSchoolQuiz = () => {
+  return useMutation({
+    mutationFn: SaveSchoolQuiz,
   });
 };
 
@@ -823,5 +840,38 @@ export const useGetSummerQuizAnswers = (quizId: string, profileId: string) => {
   return useQuery({
     queryKey: ["GetSummerQuizAnswers", quizId, profileId],
     queryFn: () => GetSummerQuizAnswers(quizId, profileId),
+  });
+};
+
+export const useGetSchoolAndTeacherContent = (
+  shouldCallFirstAPI: boolean,
+  contentId: string,
+  open?: () => void
+) => {
+  const [user] = useStore(getUserState);
+  const navigate = useNavigate();
+  return useQuery({
+    enabled: !shouldCallFirstAPI,
+    queryKey: ["getContentById", contentId],
+    queryFn: () => GetSchoolAndTeacherContent(contentId),
+    onSuccess: (response: unknown) => {
+      const res = response as ApiResponse<unknown>;
+      const status = res.data.status;
+
+      if (
+        status === false ||
+        res.data.message === "Number of allowed contents reached!"
+      ) {
+        if (user?.role === "schoolAdmin") {
+          navigate("/kundakidsunlimited");
+          notifications.show({
+            title: `Notification`,
+            message: res.data.message,
+          });
+        } else if (user?.role === "teacher") {
+          open && open();
+        }
+      }
+    },
   });
 };
