@@ -1,11 +1,11 @@
 import { useRef, useState } from "react";
-// import ParentalCtrl from "@/assets/logincarousel224.png";
-// import LearnImage1 from "@/assets/logincarosel124.png";
-// import LearnImage2 from "@/assets/logincarousel324.png";
+import ParentalCtrl from "@/assets/logincarousel224.png";
+import LearnImage1 from "@/assets/logincarosel124.png";
+import LearnImage2 from "@/assets/logincarousel324.png";
 
-import XmaJPG01 from "@/assets/xmasJPG01.jpg";
-import XmaJPG02 from "@/assets/xmasJPG02.jpg";
-import XmaJPG03 from "@/assets/xmasJPG03.jpg";
+// import XmaJPG01 from "@/assets/xmasJPG01.jpg";
+// import XmaJPG02 from "@/assets/xmasJPG02.jpg";
+// import XmaJPG03 from "@/assets/xmasJPG03.jpg";
 
 import CarouselCard from "./CarouselCard";
 import Slider from "react-slick";
@@ -13,24 +13,24 @@ import { Skeleton } from "@mantine/core";
 const LoginCarousel = () => {
   const [activeDot, setActiveDot] = useState(0);
 
-  const images = [XmaJPG01, XmaJPG02, XmaJPG03];
+  const images = [ParentalCtrl, LearnImage1, LearnImage2];
   const carouselData = [
     {
-      bgImage: XmaJPG01,
+      bgImage: ParentalCtrl,
       title: "Read, Listen & Enjoy",
       className:
         "bg-[rgba(230,230,230,0.4)]  backdrop-blur  border-white border-[1.5px]",
       body: "Get access to fun and inspiring stories & audiobooks that build on soft skills, values, reading and numeracy on a weekly basis.",
     },
     {
-      bgImage: XmaJPG02,
+      bgImage: LearnImage1,
       title: "Access a World of Stories",
       className:
         "bg-[rgba(230,230,230,0.4)]  backdrop-blur  border-white border-[1.5px]",
       body: "Get access to fun and inspiring stories & audiobooks that build on soft skills, values, reading and numeracy on a weekly basis.",
     },
     {
-      bgImage: XmaJPG03,
+      bgImage: LearnImage2,
       title: "Learn African Languages",
       className:
         "bg-[rgba(230,230,230,0.4)]  backdrop-blur border-white border-[1.5px] ",
@@ -56,7 +56,7 @@ const LoginCarousel = () => {
     <Skeleton visible={isLoading} className="hidden lg:block">
       <div className="w-full h-full bg-center  ">
         <img
-          src={`${activeDot ? images[activeDot] : XmaJPG01}`}
+          src={`${activeDot ? images[activeDot] : ParentalCtrl}`}
           alt=""
           className="w-full h-full absolute object-cover  object-top  "
           onLoad={() => setIsLoading(false)}

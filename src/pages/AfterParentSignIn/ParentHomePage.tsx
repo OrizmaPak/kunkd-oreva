@@ -2,7 +2,6 @@ import {
   useGetSummerChallengeQuizzes,
   useGetUpdatedProfile,
 } from "@/api/queries";
-
 import InnerWrapper from "@/common/User/InnerWrapper";
 import Wrapper from "@/common/User/Wrapper";
 import { getUserState } from "@/store/authStore";
@@ -10,7 +9,6 @@ import useStore from "@/store/index";
 import { getProfileState } from "@/store/profileStore";
 import { useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-
 import Hero from "./Hero";
 import "./parenthomepage.css";
 import HomeTab from "./HomTab";
@@ -22,8 +20,15 @@ import JoinChanllengeModal from "./JoinChanllengeModal";
 import TopLeaderboardModal from "../SummerQuiz/TopLeaderboardModal";
 
 const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
-  const [useri, setUser] = useStore(getUserState);
+  {
+    /* Calling the store  */
+  }
+  const [user, setUser] = useStore(getUserState);
+  {
+    /* Calling  useGetUpdatedProfile to update the store, this only necessary for new users  */
+  }
   const { data } = useGetUpdatedProfile();
+
   const currentUserProfile = data?.data?.data;
   const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
@@ -37,7 +42,10 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
   ] = useDisclosure(false);
 
   useEffect(() => {
-    setUser({ ...useri, ...currentUserProfile });
+    {
+      /* Updating the store inside this useEffect  */
+    }
+    setUser({ ...user, ...currentUserProfile });
     //  eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUserProfile]);
   const [profiles] = useStore(getProfileState);
@@ -45,8 +53,6 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
   useEffect(() => {
     sessionStorage.setItem("gotToHome", "true");
   }, []);
-
-  const [user] = useStore(getUserState);
 
   const profile = childProfile
     ? profiles?.find((each) => each.id === +childProfile)
@@ -79,6 +85,7 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
 
   return (
     <>
+      {/* Calling  Modal for updating profile   */}
       <Modal
         opened={opened}
         radius={6}
@@ -102,6 +109,9 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
           openJoinChanllenge={openJoinChanllenge}
         />
       </Modal>
+
+      {/* Calling  Modal for joining sunmmer challenge   */}
+
       <Modal
         opened={openedJoinChanllenge}
         radius={6}
@@ -122,13 +132,13 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
           openTopLeaderboard={openTopLeaderboard}
         />
       </Modal>
+
+      {/* Calling  Modal for instruction on how to top leaderboard  */}
       <Modal
         opened={openedTopLeaderboard}
         radius={6}
         size="lg"
         padding={14}
-        // onClose={() => navigate("/summer-quiz")}
-        // onClose={closeTopLeaderboard}
         onClose={() => {
           navigate("/summer-quiz"); // Call custom function
           closeTopLeaderboard(); // Close the modal
@@ -139,8 +149,6 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
         }}
         closeButtonProps={{ size: "lg" }}
         centered
-        // closeOnClickOutside={false}
-        // withCloseButton={false}
       >
         <TopLeaderboardModal />
       </Modal>
@@ -151,26 +159,6 @@ const ParentHomePage = ({ childProfile }: { childProfile: string }) => {
             <h1 className="text-center font-bold text30   font-Hanken   ">
               Our Library
             </h1>
-
-            {/* <div className="flex justify-center items-center mt-8">
-            <div className=" justify-center items-center category-gap  ">
-              <CategoriesCard
-                image={BookIcon}
-                label="Stories"
-                goTo={() => navigate("stories")}
-              />
-              <CategoriesCard
-                image={musicIcon}
-                label="Audiobooks"
-                goTo={() => navigate("audiobooks")}
-              />
-              <CategoriesCard
-                image={videoIcon}
-                label="African Languages"
-                goTo={() => navigate("africanlanguages")}
-              />
-            </div>
-          </div> */}
             <HomeTab />
             <Outlet />
           </InnerWrapper>
