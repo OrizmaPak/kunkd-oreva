@@ -1,15 +1,16 @@
 import { useGetTeacherList } from "@/api/queries";
-import ArrowDown from "@/assets/arrowdown.svg";
+// import ArrowDown from "@/assets/arrowdown.svg";
 import { STEP_1, STEP_3 } from "@/utils/constants";
-import { Menu, Modal, Pagination, Skeleton } from "@mantine/core";
+import { Modal, Pagination, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import EditAssignedClass from "./EditAssignedClass";
+import EditClassTeacher from "./EditTeacher";
 import NewTeacher from "./NewTeacher";
 import Profile from "./Profile";
 import Row from "./Row";
 import SchoolNotificationModal from "@/components/SchoolNotificationModal";
+import SearchFilter from "../SearchFilter";
+import EmptyState from "@/assets/connectionEmpty.png";
 
 export type DashBoardDataType = {
   noOfTeacher: number;
@@ -33,11 +34,11 @@ export type TTeacherList = {
     id: number;
     image: string;
     lastname: string;
+    status_name: string;
   };
 };
 
 const Teachers = () => {
-  const queryClient = useQueryClient();
   const [status, setStatus] = useState("active");
   const [activePage, setPage] = useState(1);
 
@@ -67,35 +68,6 @@ const Teachers = () => {
     <div className="h-full flex flex-col overflow-y-scroll">
       <Modal
         radius={10}
-        padding={30}
-        size={currentClickedProfile && modalStep === STEP_1 ? "700" : "md"}
-        opened={opened}
-        onClose={close}
-        withCloseButton={false}
-        centered
-      >
-        {modalStep === STEP_1 && currentClickedProfile && (
-          <Profile
-            name={
-              currentClickedProfile?.user?.firstname +
-              " " +
-              currentClickedProfile?.user?.lastname
-            }
-            asignClass={currentClickedProfile?.user?.class_name}
-            image={currentClickedProfile?.user?.image}
-            email={currentClickedProfile?.user?.email}
-            handleClick={() => close()}
-            onEdit={() => setModalStep(STEP_3)}
-          />
-        )}
-
-        {modalStep === STEP_3 && (
-          <EditAssignedClass onClose={close} currentClicked={currentClicked} />
-        )}
-      </Modal>
-
-      <Modal
-        radius={10}
         size="md"
         opened={openedSchNotifications}
         onClose={closeSchNotifications}
@@ -107,59 +79,25 @@ const Teachers = () => {
           label="teachers"
         />
       </Modal>
-      <div className=" flex-grow flex flex-col rounded-3xl py-4 bg-white border-[2px] border-[#F2EAF1]">
-        <div className="grid grid-cols-3 justify-center items-center w-full px-8 ">
-          <div>
-            <h1 className="text-[25px]  font-Inter">
-              Teachers
-              <span className="text-[#8530C1] bg-[#FFF7FD] rounded-3xl py-1 px-4">
-                {teacherList?.length || 0}
-              </span>
-            </h1>
-          </div>
-          <div className="flex gap-2 justify-center font-bold">
-            <Menu>
-              <Menu.Target>
-                <div className="flex gap-2">
-                  <button>Sort by</button>
-                  <img loading="lazy" src={ArrowDown} alt="Arrowdown" />
-                </div>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item>
-                  <button
-                    onClick={() => {
-                      setStatus("active");
-                      queryClient.invalidateQueries({
-                        queryKey: ["GetTeacherList"],
-                      });
-                    }}
-                  >
-                    Active
-                  </button>
-                </Menu.Item>
-                <Menu.Item>
-                  <button
-                    onClick={() => {
-                      setStatus("disable");
-                      queryClient.invalidateQueries({
-                        queryKey: ["GetTeacherList"],
-                      });
-                    }}
-                  >
-                    Disabled
-                  </button>
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          </div>
-          <div className="flex gap-3 justify-end">
-            <NewTeacher openSchNotifications={openSchNotifications} />
-          </div>
+
+      <div className="flex justify-between items-center px-8 py-4">
+        <h1 className="text-[25px]  font-Inter">
+          Teachers
+          <span className="text-[#667185] bg-[#C2DBB0] rounded-2xl p-2 ml-5">
+            {teacherList?.length || 0}
+          </span>
+        </h1>
+        <div className="flex gap-3 justify-end">
+          <NewTeacher openSchNotifications={openSchNotifications} />
+        </div>
+      </div>
+      <div className=" flex-grow flex flex-col rounded-3xl py-4 bg-white border-[2px] border-[#E4E7EC]">
+        <div>
+          <SearchFilter setFilterValue={setStatus} />
         </div>
 
         <div>
-          <div className="grid  grid-cols-[1fr_300px_150px] mt-5 font-normal  px-8 text-[#7E7E89]  py-4 border-b-2 bg-[#FFF7FD] border-[#F3DAFF]">
+          <div className="grid  grid-cols-[1fr_1fr_1fr_300px_250px] mt-5  px-8 text-[#101928]  font-semibold py-4 border-b-2 bg-[#F9FAFB] border-[#E4E7EC]">
             {/* <div className="flex justify-start items-center">
               <span className=" ">
                 <img loading="lazy" src={Rectangle} alt="" />
@@ -167,6 +105,8 @@ const Teachers = () => {
             </div> */}
             <div>Name</div>
             <div className="">Email</div>
+            <div>Class</div>
+            <div>Last Active</div>
             {/* <div>Gender</div> */}
             <div className="flex justify-end   items-center">
               <span></span>{" "}
@@ -175,27 +115,39 @@ const Teachers = () => {
         </div>
 
         <div className="flex flex-col flex-grow">
-          {isLoading
-            ? new Array(10).fill(1).map((array) => (
-                <Skeleton height={60} my={10} visible={true}>
-                  <h1 className="w-full">{array}</h1>
-                </Skeleton>
-              ))
-            : teacherList?.map((data: TTeacherList, index: number) => {
-                return (
-                  <Row
-                    status={status}
-                    currentClicked={data?.user?.id}
-                    onClick={() => {
-                      open();
-                      setCucrrentClicked(data?.user?.id);
-                      setModalStep(STEP_1);
-                    }}
-                    key={index}
-                    data={data}
-                  />
-                );
-              })}
+          {isLoading ? (
+            new Array(10).fill(1).map((_, index) => (
+              <Skeleton key={index} height={60} my={10} visible={true}>
+                <h1 className="w-full"></h1>
+              </Skeleton>
+            ))
+          ) : teacherList?.length > 0 ? (
+            teacherList.map((data: TTeacherList, index: number) => (
+              <Row
+                status={data?.user?.status_name}
+                currentClicked={data?.user?.id}
+                onClick={() => {
+                  open();
+                  setCucrrentClicked(data?.user?.id);
+                  setModalStep(STEP_1);
+                }}
+                key={index}
+                data={data}
+              />
+            ))
+          ) : (
+            <div className="flex justify-center items-center h-full mt-24 flex-col">
+              <img
+                src={EmptyState}
+                alt="No teachers"
+                className="w-[150px] h-[150px] object-contain"
+              />
+              <p className="font-Inter text-[18px]">No teachers available</p>
+              <p className="font-Baloo text-[14px]">
+                Teachers will appear here once added.
+              </p>
+            </div>
+          )}
         </div>
       </div>
       <div>

@@ -3,6 +3,7 @@ import {
   useGetSchoolContentStat,
   useGetTeacherList,
   useGetLicense,
+  useGetUpdatedProfile,
 } from "@/api/queries";
 import StudentIcon from "@/assets/dstudenticon.png";
 import TeacherIcon from "@/assets/dteachericon.png";
@@ -13,7 +14,9 @@ import { TTeacherList } from "../Teachers/Teachers";
 import Card from "./Card";
 import ClassLeaderboard from "./ClassLeaderboard";
 import StudentLeaderboard from "./StudentLeaderboard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
 
 export type TLogData = {
   stories: number;
@@ -32,6 +35,13 @@ type TLicense = {
 };
 
 const Main = () => {
+  const [useri, setUser] = useStore(getUserState);
+  const { data } = useGetUpdatedProfile();
+  const currentUserProfile = data?.data?.data;
+  useEffect(() => {
+    setUser({ ...useri, ...currentUserProfile });
+    //  eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUserProfile]);
   const { data: dataLicense } = useGetLicense();
   const license: TLicense = dataLicense?.data.data.school.licence;
   const [startDate, setStartDate] = useState("");

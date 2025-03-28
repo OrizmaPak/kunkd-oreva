@@ -6,7 +6,7 @@ const StoriesV2 = () => {
   const { data } = useGetSubCategories();
   const subCategory = data?.data.data[0].sub_categories;
   return (
-    <div>
+    <div className=" ">
       <div className=" mt-14">
         {subCategory?.map((sub: TSubCategory) => {
           return (

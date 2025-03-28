@@ -1,7 +1,7 @@
-import ErrorIcon from "@/assets/errorIcon.svg";
 import React, { useState } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import ErrorIcon from "@/assets/errorIcon.svg";
 
 type Props = {
   type?: "text" | "password" | "email" | "number" | "date";
@@ -17,13 +17,13 @@ type Props = {
   dateMax?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
+
 const InputFormat = ({
   type,
   placeholder,
   rightIcon,
   reg,
   value,
-
   smallPadding,
   readonly,
   onChange,
@@ -31,38 +31,48 @@ const InputFormat = ({
   errorMsg,
 }: Props) => {
   const [ttype, setType] = useState(type);
-  const handlePaswordToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const [hasInput, setHasInput] = useState(false); // State to track if the user has input something
+
+  const handlePasswordToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (ttype === "password") {
       setType("text");
-    }
-    if (ttype === "text") {
+    } else if (ttype === "text") {
       setType("password");
     }
   };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setHasInput(!!e.target.value); // Update state based on whether the input has a value
+    if (onChange) {
+      onChange(e); // Call the passed onChange handler if provided
+    }
+  };
+
   return (
     <div>
       <div
-        className={`border ${
-          errorMsg ? "border-red-700" : "border-[#F3DAFF]"
+        className={`border h-[44px] ${
+          errorMsg ? "border-red-700" : "bg-[#F1F1F1]"
         } py-3 ${
           smallPadding ? "px-2" : "px-8"
-        }  rounded-full flex items-center gap-2 mt-1   `}
+        } rounded-full flex items-center gap-2 mt-1 ${
+          hasInput ? "bg-[#FFF6D9]" : "bg-[#F1F1F1]" // Change background color if input has value
+        }`}
       >
         <input
           {...reg}
           placeholder={placeholder}
           type={ttype}
-          // value={value}
           defaultValue={value}
           readOnly={readonly}
-          onChange={onChange}
+          onChange={handleInputChange} // Use the custom input change handler
           max={dateMax}
-          className="w-full  h-full flex-1 text-black text-[18px]  focus:outline-none"
+          className="w-full h-full flex-1 text-black text-[14px] bg-inherit focus:outline-none"
         />
         {rightIcon ? (
           <span
-            onClick={handlePaswordToggle}
+            onClick={handlePasswordToggle}
             className="flex justify-center items-center"
           >
             {ttype === "text" ? (

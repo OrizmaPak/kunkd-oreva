@@ -9,6 +9,14 @@ export default {
       Inter: ["Inter", "sans-serif"],
       InterReg: ["InterReg", "san-serif"],
       DMSans: ["DMSans", "san-serif"],
+      BalooSemiBold: ["BalooSemiBold", "san-serif"],
+      Arimo: ["ArimoRegular", "san-serif"],
+    },
+    extend: {
+      colors: {
+        customGreen: "#9FC43E",
+        customGreen2: "#C2DBB0",
+      },
     },
   },
   plugins: [],

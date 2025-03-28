@@ -18,14 +18,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { ZodType, z } from "zod";
 import { getPushTokenState } from "@/store/pushTokenStore";
 import moengage from "@moengage/web-sdk";
-
 import InputFormat from "../../common/InputFormat";
-// import { signInWithEmailAndPassword } from "firebase/auth";
-// import { auth } from "@/firebase";
 import { logOut } from "@/auth/sdk";
 import { useEffect } from "react";
 import { TproviderData } from "../Signup/SignupContent";
 import { formattedDate, handleEventTracking } from "@/api/moengage";
+import KundaLogo from "@/assets/KundaLogo.svg";
 
 const LoginContent = () => {
   const { isLoading, mutate } = useLogin();
@@ -323,7 +321,7 @@ _login`,
           });
 
           if (res?.role === "schoolAdmin" || res?.role === "teacher") {
-            navigate("/school");
+            navigate("/schooldashboard");
           } else if (res?.role === "parent" || res?.role === "user") {
             navigate("/selectprofile");
           }
@@ -359,28 +357,20 @@ _login`,
   };
 
   return (
-    <div className="flex justify-center items-center w-full h-full">
-      <div className="inner-form-w relative  my-auto flex justify-end items-center ">
-        {/* <Link to="/"> */}
-        {/* <span
-          onClick={() => {
-            logOut();
-            navigate("/");
-          }}
-          className="absolute top-[-150px] "
-        >
-          <img loading="lazy" src={Cancel} alt="cancel" />
-        </span> */}
-        {/* </Link> */}
-        <div className="w-[100%]">
+    <div className="flex justify-center   h-full bg-white rounded-3xl w-[600px]">
+      <div className="inner-form-w relative  ">
+        <div className="flex justify-center items-center my-12 ">
+          <img src={KundaLogo} alt="image" className="w-[200px]" />
+        </div>
+        <div className="w-[100%] ">
           <span></span>
-          <h1 className="font-bold fon header2 font-Recoleta   ">
+          <h1 className="font-bold fon header2 font-BalooSemiBold text-center   ">
             Welcome back
           </h1>
-          <p className="text3 text-[#A7A7A7] font-Hanken">
+          <p className="text3 text-[#A7A7A7] font-ArimoRegular text-center ">
             Welcome back! please enter your details
           </p>
-          <form onSubmit={handleSubmit(submitData)} className="text3">
+          <form onSubmit={handleSubmit(submitData)} className="text3 mt-14">
             <p className="my-4">
               {
                 <InputFormat
@@ -409,12 +399,12 @@ _login`,
                 errorMsg={errors.password?.message}
               />
             </p>
-            <p className="flex justify-end text3 mb-4 text-[#8530C1] font-bold">
+            <p className="flex justify-end text3 mb-4 text-customGreen font-bold">
               <Link to="/forgotpassword">
                 <button>Forgot password?</button>
               </Link>
             </p>
-            <Button type="submit" size="full">
+            <Button type="submit" size="full" backgroundColor="green">
               {isLoading ? (
                 <p className="flex justify-center items-center">
                   <Loader color="white" size="sm" />
@@ -439,16 +429,23 @@ _login`,
               size="full"
               onClick={handleGoogleLogin}
               varient="outlined"
+              borderColor="green"
             >
               <FcGoogle size={20} className={" mx-auto"} />
             </Button>
-            <Button onClick={handleAppleSignIn} size="full" varient="outlined">
+            <Button
+              onClick={handleAppleSignIn}
+              size="full"
+              varient="outlined"
+              borderColor="green"
+            >
               <BsApple size={20} className={" mx-auto"} color={"black"} />
             </Button>
             <Button
               onClick={handleFacebookLogin}
               size="full"
               varient="outlined"
+              borderColor="green"
             >
               <AiFillFacebook size={20} className={" mx-auto"} color="black" />
             </Button>
@@ -456,7 +453,9 @@ _login`,
           <p className="mt-2 text-center text-[] text-gray-400 ">
             <span className="font-Hanken">Don't hava an account? </span>
             <Link to="/signup">
-              <button className="mt-4 text-[#8530C1] font-bold">Sign up</button>
+              <button className="mt-4 text-customGreen font-bold">
+                Sign up
+              </button>
             </Link>
           </p>
         </div>

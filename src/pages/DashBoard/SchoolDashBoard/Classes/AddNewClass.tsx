@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { z, ZodType } from "zod";
 // import { useNavigate } from "react-router-dom";
 // import useStore from "@/store";
-import { useAddClassData } from "@/api/queries";
+import { useAddClassData, useGetTeacherList } from "@/api/queries";
 // import { getPushTokenState } from "@/store/pushTokenStore";
 import { getApiErrorMessage } from "@/api/helper";
 import { Loader } from "@mantine/core";
@@ -16,6 +16,7 @@ import Addicon from "@/assets/addicon24.png";
 import { formattedDate, handleEventTracking } from "@/api/moengage";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
+import { TTeacherList } from "../Teachers/Teachers";
 
 const AddNewClass = ({
   newClassClose,
@@ -26,6 +27,8 @@ const AddNewClass = ({
 }) => {
   const [user] = useStore(getUserState);
   const queryClient = useQueryClient();
+  const { data } = useGetTeacherList();
+  const teacherList = data?.data.data.records;
   const { mutate, isLoading } = useAddClassData();
   const schema: ZodType<FormData> = z.object({
     name: z
@@ -73,21 +76,15 @@ const AddNewClass = ({
   };
 
   return (
-    <div className="px-10">
-      <div className="flex justify-center items-center my-2">
-        <img
-          src={Addicon}
-          alt="image"
-          className="w-[60px] h-[60px] object-contain"
-        />
+    <div className="">
+      <div className="flex justify-between items-center bg-customGreen py-[12px] px-[20px]">
+        <p className="font-Arimo text-white text-[22px] text-center">
+          Add new class
+        </p>
       </div>
-      <h1 className="text-center font-Recoleta text20 leading-[20px]">
-        Add new class
-      </h1>
-      <div>
+      <div className="px-[24px] py-[32px]">
         <form onSubmit={handleSubmit(submitData)}>
-          <p className="my-5  mb-8">
-            <label htmlFor="classname">Class name</label>
+          <p className="">
             <InputFormat
               reg={register("name")}
               errorMsg={errors?.name?.message}
@@ -95,6 +92,67 @@ const AddNewClass = ({
               placeholder="Enter class name"
             />
           </p>
+
+          <div className="mt-5">
+            <p
+              className={`p-3  px-8 rounded-full flex items-center gap-2 h-[44px] ${
+                errors?.ageGroup
+                  ? "border-red-700 border-[1px]"
+                  : " bg-[#F1F1F1]"
+              }`}
+            >
+              <select
+                {...register("ageGroup")}
+                name="age-group"
+                id="age-group"
+                className="w-full  h-full focus-within:outline-none bg-inherit"
+              >
+                <option className=" bg:in " value="">
+                  Select Age Group
+                </option>
+                <option value="2-4">2-4</option>
+                <option value="5-7">5-7</option>
+                <option value="8-10">8-10</option>
+              </select>
+            </p>
+            <span className="text-red-600 mb-10 ">
+              {errors?.ageGroup?.message}
+            </span>
+          </div>
+
+          <div className="mt-5">
+            <p
+              className={`p-3 mb-8 px-8 rounded-full flex items-center gap-2 h-[44px] ${
+                errors?.teacher_id
+                  ? "border-red-700 border-[1px]"
+                  : " bg-[#F1F1F1]"
+              }`}
+            >
+              <select
+                {...register("teacher_id")}
+                name="teacher_id"
+                id="classid"
+                className="w-full  h-full flex-1  focus:outline-none bg-inherit"
+              >
+                <option value="">Select Teacher</option>
+                {teacherList
+                  ?.filter(
+                    (data: TTeacherList) => data?.user?.class_name === ""
+                  )
+                  .map((data: TTeacherList) => (
+                    <option value={data?.user?.id}>
+                      {data?.user.firstname} {data?.user?.lastname}
+                    </option>
+                  ))}
+                {/* <option value="classA">Class A</option>
+                            <option value="classB">Class B</option> */}
+              </select>
+            </p>
+            <span className="text-red-600 mb-10">
+              {errors.teacher_id?.message}
+            </span>
+          </div>
+
           {/* <p className="my-5 mb-8">
             <label htmlFor="assignteacher">Assign teacher</label>
             <p className="border border-[#F3DAFF] py-4 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
@@ -111,22 +169,27 @@ const AddNewClass = ({
               </select>
             </p>
           </p> */}
-          <p className="my-5 flex gap-2">
+          <p className="mt-6 flex gap-5 justify-center">
             <Button
               onClick={newClassClose}
-              varient="outlined"
-              className="text-black"
+              className="text-black bg-[#F5F7F8] px-[35px] rounded-full"
+              size="sm"
             >
               Cancel
             </Button>
-            <Button type="submit">
+            <Button
+              type="submit"
+              size="sm"
+              backgroundColor="green"
+              className="px-[35px] rounded-full"
+            >
               {" "}
               {isLoading ? (
-                <p className="flex justify-center items-center">
+                <p className="flex justify-center items-center ">
                   <Loader color="white" size="sm" />
                 </p>
               ) : (
-                <span>Save</span>
+                <span>Create Class</span>
               )}
             </Button>
           </p>

@@ -1,7 +1,7 @@
 // import ToggleIcon from "@/assets/toggl.svg";
 import { getApiErrorMessage } from "@/api/helper";
 import { useDisableSchoolTeacher, useEnableSchoolTeacher } from "@/api/queries";
-import UserIcon from "@/assets/profileavatar24.png";
+// import UserIcon from "@/assets/profileavatar24.png";
 import ChangeProfileStatus from "@/pages/DashBoard/SchoolDashBoard/Teachers/ChangeProfileStatus";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -11,6 +11,8 @@ import { TTeacherList } from "./Teachers";
 import { formattedDate, handleEventTracking } from "@/api/moengage";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
+import { FaUserCircle } from "react-icons/fa";
+import EditTeacher from "./EditTeacher";
 
 const Row = ({
   data,
@@ -80,12 +82,14 @@ const Row = ({
   };
 
   const [opened, { open, close }] = useDisclosure(false);
+  const [openedEdit, { open: openEdit, close: closeEdit }] =
+    useDisclosure(false);
 
   return (
     <>
       <Modal
-        radius={10}
-        padding={30}
+        radius={20}
+        padding={0}
         size={"md"}
         opened={opened}
         onClose={close}
@@ -106,9 +110,21 @@ const Row = ({
           label="Teacher"
         />
       </Modal>
+
+      <Modal
+        radius={20}
+        padding={0}
+        size={"md"}
+        opened={openedEdit}
+        onClose={closeEdit}
+        withCloseButton={false}
+        centered
+      >
+        <EditTeacher currentData={data} close={closeEdit} />
+      </Modal>
       <div className=" hover:cursor-pointer  font-medium">
         <div>
-          <div className="grid  grid-cols-[1fr_300px_150px]  py-3  px-8 border-b-2 border-[#F2F4F7]">
+          <div className="grid  grid-cols-[1fr_1fr_1fr_300px_250px] text-[#101928]  font-InterReg py-6  px-8 border-b-2 border-[#F2F4F7]">
             {/* <div className="flex justify-start items-center ">
             <span className=" ">
               <img loading="lazy" src={Rectangle} alt="image" />
@@ -116,23 +132,20 @@ const Row = ({
           </div> */}
             <div
               onClick={onClick}
-              className="flex items-center justify-start gap-2 "
+              className="flex items-center justify-start gap-3 "
             >
               <span>
-                <img
-                  loading="lazy"
-                  src={data.user.image || UserIcon}
-                  alt="image"
-                  className="w-[45px] h-[45px] object-cover rounded-xl "
-                />
+                <FaUserCircle size={30} color="#BCD678" />
               </span>
               <span>
                 {data.user.firstname} {data.user.lastname}
               </span>
             </div>
-            <div className="flex justify-start items-center  text-[#7E7E89]">
+            <div className="flex justify-start items-center ">
               {data.user.email}
             </div>
+            <div>{data?.user?.class_name || "No class has been assigned"}</div>
+            <div>Apr 12, 2023 | 09:32AM</div>
             {/* <div className="flex justify-start items-center ">
               {data.user.gender === "Male" ? (
                 <span className="text-[#2BB457] bg-[#ECFDF3] rounded-3xl py-1 px-5">
@@ -144,7 +157,7 @@ const Row = ({
                 </span>
               )}
             </div> */}
-            <div className="flex justify-end  gap-4  items-center">
+            <div className="flex justify-between  gap-4  items-center pr-10">
               <span>
                 {/* <img loading="lazy" src={ToggleIcon} alt="image" /> */}
               </span>
@@ -158,8 +171,8 @@ const Row = ({
               </button>
               <button
                 disabled={status !== "active"}
-                onClick={onClick}
-                className=" text-[#8530C1] font-Inter"
+                onClick={openEdit}
+                className=" text-customGreen font-Inter"
               >
                 Edit
               </button>

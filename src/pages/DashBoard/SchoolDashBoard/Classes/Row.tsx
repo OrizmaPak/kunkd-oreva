@@ -11,6 +11,7 @@ import { TClassList } from "./Classes";
 import { formattedDate, handleEventTracking } from "@/api/moengage";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
+import OuterRec from "@/assets/Outer Rectangle.png";
 
 const Row = ({
   data,
@@ -85,8 +86,8 @@ const Row = ({
   return (
     <>
       <Modal
-        radius={10}
-        padding={30}
+        radius={20}
+        padding={0}
         size={"md"}
         opened={opened}
         onClose={close}
@@ -97,6 +98,7 @@ const Row = ({
         //     </h1>
         //   ) : null
         // }
+
         withCloseButton={false}
         centered
       >
@@ -106,11 +108,12 @@ const Row = ({
           isLoading={isLoading}
           onCancel={close}
           label="Class"
+          status={status}
         />
       </Modal>
-      <div className="   my-auto border-b-[2px] border-[#eee]   py-4 font-medium ">
+      <div className="   my-auto border-b-[2px] border-[#eee] text-[#101928]  py-6 font-medium ">
         <div>
-          <div className="grid  grid-cols-[300px_1fr_1fr_150px]    pr-4 pl-8">
+          <div className="grid  grid-cols-[300px_1fr_1fr_250px]  text-[#101928] font-Arimo  px-8">
             {/* <div className="flex justify-start items-center ">
               <span className=" ">
                 <img loading="lazy" src={Rectangle} alt="" />
@@ -118,17 +121,17 @@ const Row = ({
             </div> */}
             <div
               onClick={onClick}
-              className="flex hover:cursor-pointer items-center justify-start gap-2 "
+              className="flex hover:cursor-pointer items-center  text-[#101928] justify-start gap-3 "
             >
-              <span>{data.name}</span>
+              <img src={OuterRec} alt="image" className="w-[20px] h-[20px]" />
+
+              <span className="text-[#101928] font-Arimo">{data.name}</span>
             </div>
-            <div className="flex justify-start items-center ">
+            <div className="flex justify-start items-center   ">
               {data.student_count}
             </div>
-            <div className="flex justify-start items-center ">
-              {data.teacher_count}
-            </div>
-            <div className="flex justify-start  gap-4  items-center">
+            <div className="">Mike Smith</div>
+            <div className="flex justify-between  gap-4  items-center pr-4 ">
               <span>
                 {/* <img loading="lazy" src={ToggleIcon} alt="" /> */}
               </span>
@@ -143,7 +146,10 @@ const Row = ({
                   {status === "active" ? "Disable" : "Enable"}
                 </span>
               </button>
-              <button onClick={onClick} className=" text-[#8530C1] font-Inter">
+              <button
+                onClick={onClick}
+                className=" text-customGreen font-Inter"
+              >
                 Edit
               </button>
             </div>

@@ -20,7 +20,12 @@ const NewTeacher = ({
         exit={{ opacity: 0 }}
         transition={{ duration: 1 }}
       >
-        <Button onClick={open} size="sm" varient="filled">
+        <Button
+          onClick={open}
+          size="sm"
+          varient="filled"
+          backgroundColor="green"
+        >
           <span className="flex  h-[25px]  px-3 justify-between items-center gap-2">
             <img loading="lazy" src={AddTeacherIcon} alt="" />
             <span className="py-1">Add new teacher</span>
@@ -35,10 +40,11 @@ const NewTeacher = ({
         ) : null} */}
 
         <Modal
-          radius={10}
-          size={"lg"}
+          radius={20}
+          size={450}
           opened={opened}
           onClose={close}
+          padding={0}
           withCloseButton={false}
           // closeButtonProps={{
           //   size: "xl",

@@ -1,9 +1,9 @@
-import DasboardIcon from "@/assets/adminIcon.svg";
-import ClassesIcon from "@/assets/classes.svg";
-import Arrow from "@/assets/greatericon.svg";
-import LogoutIcon from "@/assets/logout.svg";
-import StudentIcon from "@/assets/student.svg";
-import TeacherIcon from "@/assets/teacher.svg";
+// import DasboardIcon from "@/assets/adminIcon.svg";
+// import ClassesIcon from "@/assets/classes.svg";
+// import Arrow from "@/assets/greatericon.svg";
+// import LogoutIcon from "@/assets/logout.svg";d
+// import StudentIcon from "@/assets/student.svg";
+// import TeacherIcon from "@/assets/teacher.svg";
 import LogoutModal from "@/pages/DashBoard/SchoolDashBoard/LogoutModal";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -13,7 +13,17 @@ import { Outlet, useMatch, useNavigate } from "react-router-dom";
 // import useStore from "@/store/index";
 // import { getProfileState } from "@/store/profileStore";
 
-import SchoolIcon from "@/assets/schoolIcon.svg";
+// import SchoolIcon from "@/assets/schoolIcon.svg";
+import DashboardIcon from "@/assets/components/DashboardIcon";
+// import { Icon } from "@chakra-ui/react";
+import TeachersIcon from "@/assets/components/TeachersIcon";
+import ClasssesIcon from "@/assets/components/ClassesIcon";
+import StudentsIcon from "@/assets/components/StudentsIcon";
+import ConnectionIcon from "@/assets/components/ConnectionIcon";
+import KundaLogo from "@/assets/KundaLogo.svg";
+import { SlSettings } from "react-icons/sl";
+import ContentIcon from "@/assets/components/ContentIcon";
+import { TfiEmail } from "react-icons/tfi";
 
 const routeBaseUrl = "/schooldashboard";
 const links = [
@@ -22,36 +32,41 @@ const links = [
     route: routeBaseUrl,
     href: "",
     index: true,
-    icon: DasboardIcon,
+    icon: DashboardIcon,
+  },
+  {
+    label: "Connection Requests",
+    href: "request",
+    route: routeBaseUrl + "/request/",
+    icon: ConnectionIcon,
   },
   {
     label: "Classes",
     href: "classes",
     route: routeBaseUrl + "/classes",
-    icon: ClassesIcon,
+    icon: ClasssesIcon,
   },
   {
     label: "Teachers",
     route: routeBaseUrl + "/teacher",
     href: "teacher",
     index: true,
-    icon: TeacherIcon,
+    icon: TeachersIcon,
   },
   {
     label: "Students",
     href: "student",
     route: routeBaseUrl + "/student/*",
-    icon: StudentIcon,
+    icon: StudentsIcon,
     hasSub: true,
   },
-
   {
-    label: "Requests",
-    href: "request",
-    route: routeBaseUrl + "/request/",
-    icon: StudentIcon,
+    label: "Contents",
+    href: "content-library",
+    route: routeBaseUrl + "/content-library/*",
+    icon: ContentIcon,
+    hasSub: true,
   },
-
   // {
   //   label: "Setting",
   //   href: "setting",
@@ -78,29 +93,17 @@ const SchoolLayout = () => {
         <LogoutModal onCloseModal={() => close()} />
       </Modal>
 
-      <div className="w-full   bg-[#FFF7FD] px-[100px] mt-[8vh] py-2  pb-4 h-[91vh]  ">
-        <div className="flex max-w-[1280px] w-full mx-auto  h-full gap-6 mt-[1vh]">
-          <div className="basis-1/4 bg-white   h-full rounded-[40px] px- flex  flex-col pb-4 px-2">
+      <div className="w-full   bg-[#FFF7FD]   h-[91vh]  ">
+        <div className="flex  w-full   h-full ">
+          <div className="w-[15%] bg-white   h-full  pt-8 flex  flex-col pb-4 px-2  border-r-[1px] border-[#E4E7EC] ">
             <div className="flex-grow-1 flex-1">
-              <Header
-                icon1={
-                  <img
-                    loading="lazy"
-                    src={SchoolIcon}
-                    alt="icon"
-                    className="w-[40px]"
-                  />
-                }
-                title="Pampers Schools"
-                icon2={<img loading="lazy" src={Arrow} alt="icon" />}
-              />
               {links.map((link) => (
                 <NavButton
                   key={link.label}
                   title={link.label}
                   href={link.href}
                   route={link.route}
-                  icon={<img loading="lazy" src={link.icon} alt="icon" />}
+                  icon={<link.icon />}
                 />
               ))}
               {/* <hr className="my-10" />
@@ -114,13 +117,19 @@ const SchoolLayout = () => {
             <div>
               <DasboardButton
                 onClick={() => open()}
-                title="Logout"
-                icon={<img loading="lazy" src={LogoutIcon} alt="icon" />}
+                title="Contact Us"
+                icon={<TfiEmail size={20} />}
               />
+
+              <div className="flex px-4  justify-start items-center mb-8 mt-4">
+                <img src={KundaLogo} alt="" />
+              </div>
             </div>
           </div>
 
-          <div className="basis-full    h-full">{<Outlet />}</div>
+          <div className="w-[85%]  bg-[#F0F2F5] px-8 pt-10  overflow-hidden overflow-y-auto  ">
+            {<Outlet />}
+          </div>
         </div>
       </div>
     </>
@@ -143,14 +152,12 @@ const DasboardButton = ({
   return (
     <button
       onClick={onClick}
-      className={` transition-all duration-700 px-2 py-2   rounded-[8px] flex items-center justify-between gap-8 w-full my-8 text2 ${
-        active
-          ? "bg-[#8530c1] text-white"
-          : "hover:bg-[#8530C1] hover:text-white text-[#B5B5C3]"
+      className={` transition-all duration-700 px-1 py-4  text-[#101928] rounded-[4px] flex items-center justify-between gap-8 w-full my-2 text2  ${
+        active ? "bg-customGreen " : "hover:bg-customGreen "
       }  my-4`}
     >
-      <span className="flex gap-3 justify-center">
-        <span className="ml-3">{icon}</span>
+      <span className="flex gap-3 justify-center items-center">
+        <span className="ml-3"> {icon} </span>
         <span
           className={` text-[16px] font-normal ${
             title === "Logout" && "text-red-600"
@@ -159,7 +166,6 @@ const DasboardButton = ({
           {title}
         </span>
       </span>
-      <span className="h-8 w-2 bg-white rounded-2xl"></span>
     </button>
   );
 };
@@ -198,7 +204,10 @@ const NavButton = (props: {
   return (
     <DasboardButton
       onClick={handleNavigate}
-      {...{ title, icon }}
+      {...{ title }}
+      icon={React.cloneElement(icon as React.ReactElement, {
+        color: match ? "#101928" : "#667185", // Active color: #9FC43E, Inactive color: #667185
+      })}
       active={match ? true : false}
     />
   );

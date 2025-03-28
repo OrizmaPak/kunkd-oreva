@@ -15,8 +15,10 @@ import useStore from "@/store/index";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { AiOutlineMail } from "react-icons/ai";
+// import { MdClose } from "react-icons/md";
 import { z, ZodType } from "zod";
 import { formattedDate, handleEventTracking } from "@/api/moengage";
+import { TTeacherList } from "./Teachers";
 
 export type Tclass = {
   id: number;
@@ -26,12 +28,12 @@ export type Tclass = {
   teacher_count: number;
 };
 
-const AddTeacherForm = ({
+const EditTeacher = ({
   close,
-  openSchNotifications,
+  currentData,
 }: {
   close: () => void;
-  openSchNotifications: () => void;
+  currentData: TTeacherList;
 }) => {
   const { mutate, isLoading } = useAddTeacherData();
   const queryClient = useQueryClient();
@@ -95,12 +97,6 @@ const AddTeacherForm = ({
 
         onError(err) {
           close();
-          if (
-            getApiErrorMessage(err) ===
-            "Please upgrade your license to add more teachers"
-          ) {
-            openSchNotifications();
-          }
           notifications.show({
             title: `Notification`,
             message: getApiErrorMessage(err),
@@ -120,7 +116,7 @@ const AddTeacherForm = ({
       <div className="pb-5">
         <div className="flex justify-between items-center mb-8 bg-customGreen px-6 py-4 ">
           <p className=" font-InterReg text20   flex-grow text-white ">
-            Add New Teacher
+            Edit Teacher
           </p>
         </div>
 
@@ -131,6 +127,7 @@ const AddTeacherForm = ({
               errorMsg={errors?.firstname?.message}
               placeholder="First name"
               type="text"
+              value={currentData?.user.firstname}
             />
           </div>
           <div className="mb-5">
@@ -139,6 +136,7 @@ const AddTeacherForm = ({
               errorMsg={errors?.lastname?.message}
               placeholder="Last name"
               type="text"
+              value={currentData?.user.lastname}
             />
           </div>
 
@@ -149,6 +147,7 @@ const AddTeacherForm = ({
               type="email"
               placeholder="Email"
               leftIcon={<AiOutlineMail size={20} color="#c4ccd0" />}
+              value={currentData?.user.email}
             />
           </div>
 
@@ -159,11 +158,10 @@ const AddTeacherForm = ({
                   {...register("classid")}
                   name="classid"
                   id="classid"
-                  // placeholder="Select class"
-                  className="w-full  h-full flex-1  focus:outline-none bg-inherit"
+                  defaultValue={currentData?.user?.class_id || ""} // Set default value to currentData's class_id
+                  className="w-full h-full flex-1 focus:outline-none bg-inherit"
                 >
                   <option value="">Select Class</option>
-                  {/* <div> */}
                   {availableClassList?.map((classs: Tclass, index: number) => (
                     <option key={index} value={classs.id}>
                       {classs.name}
@@ -173,6 +171,23 @@ const AddTeacherForm = ({
               </p>
               <span className="text-red-600">{errors.classid?.message}</span>
             </div>
+            {/* <div className="flex-grow">
+              <label htmlFor="class">Select gender</label>
+              <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
+                <select
+                  {...register("genderid")}
+                  name="genderid"
+                  id="genderid"
+                  placeholder="Select gender"
+                  className="w-full  h-full flex-1  focus:outline-none"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="1">Male</option>
+                  <option value="2">Female</option>
+                </select>
+              </p>
+              <span className="text-red-600">{errors.genderid?.message}</span>
+            </div> */}
           </div>
           <div className=" mx-auto my-4 flex gap-3 justify-center ">
             <Button
@@ -203,4 +218,4 @@ const AddTeacherForm = ({
   );
 };
 
-export default AddTeacherForm;
+export default EditTeacher;

@@ -1,11 +1,10 @@
 import { useGetClassList, useGetTeacherList } from "@/api/queries";
-import ArrowDown from "@/assets/arrowdown.svg";
-import ClassesIcon from "@/assets/classes.svg";
+// import ArrowDown from "@/assets/arrowdown.svg";
+// import ClassesIcon from "@/assets/classes.svg";
 import EditPencil from "@/assets/editPencil.svg";
 import Button from "@/components/Button";
-import { Menu, Modal, Pagination, Skeleton } from "@mantine/core";
+import { Modal, Pagination, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useQueryClient } from "@tanstack/react-query";
 import AddNewClass from "./AddNewClass";
 import EditClassName from "./EditClassName";
 import { TTeacherList } from "../Teachers/Teachers";
@@ -14,6 +13,10 @@ import EditClassTeachers from "./EditClassTeachers";
 import Grade from "./Grade";
 import Row from "./Row";
 import SchoolNotificationModal from "@/components/SchoolNotificationModal";
+import OuterRec from "@/assets/Outer Rectangle.png";
+import SearchFilter from "../SearchFilter";
+import { IoMdAddCircleOutline } from "react-icons/io";
+import EmptyState from "@/assets/connectionEmpty.png";
 
 export type TClassList = {
   id: number;
@@ -24,28 +27,23 @@ export type TClassList = {
 };
 
 const Classes = () => {
-  const queryClient = useQueryClient();
   const [activePage, setPage] = useState(1);
   const { data: teacherDataList } = useGetTeacherList();
-  const teacherList: TTeacherList[] = teacherDataList?.data.data.records;
+  const teacherList = teacherDataList?.data.data.records;
   const [status, setStatus] = useState("active");
+  console.log("status", status);
   const {
     data: classDataList,
     isLoading,
     refetch,
   } = useGetClassList(status, activePage.toString());
   const totalPage = Math.ceil(classDataList?.data.data.totalRecord / 10);
-  const [opened, { open, close }] = useDisclosure(false);
-  const [editOpened, { open: editOpen, close: editClose }] =
+
+  const [openednewClass, { open: newClassOpen, close: newClassClose }] =
     useDisclosure(false);
 
-  const [newClass, { open: newClassOpen, close: newClassClose }] =
+  const [OpenedEdit, { open: openEdit, close: closeEdit }] =
     useDisclosure(false);
-
-  const [
-    newClassNameOpened,
-    { open: newClassNameOpen, close: newClassNameClose },
-  ] = useDisclosure(false);
 
   const [
     openedSchNotifications,
@@ -53,9 +51,6 @@ const Classes = () => {
   ] = useDisclosure(false);
 
   // const [modalStep, setModalStep] = useState(STEP_1);
-  const handleClick = () => {
-    close();
-  };
 
   //   const classDataList =  useEffect(() =>{
   // const { data, isLoading } = useGetClassList(status);
@@ -64,72 +59,41 @@ const Classes = () => {
 
   const listOfClass = classDataList?.data.data.records;
 
-  const [currentClicked, setCucrrentClicked] = useState(0);
-  const currentClickedTeacherData = teacherList?.find(
-    (el: TTeacherList) => el?.user?.class_id == currentClicked
-  );
+  const [currentClicked, setCurrentClicked] = useState(0);
+
   const currentClickedClassData: TClassList = listOfClass?.find(
     (el: TClassList) => el?.id == currentClicked
   );
-
+  const currentClickedTeacherData: TTeacherList = teacherList?.find(
+    (el: TTeacherList) => el?.user?.class_id == currentClicked
+  );
   return (
     <div className="h-full flex flex-col overflow-y-scroll">
       <Modal
-        radius={10}
-        padding={"xl"}
-        xOffset={500}
-        withCloseButton={false}
-        title={
-          <h1 className=" pl-8 text-[24px] font-semibold flex gap-2">
-            <span>{currentClickedClassData?.name}</span>
-            <img
-              onClick={() => {
-                newClassNameOpen();
-                close();
-              }}
-              src={EditPencil}
-              alt=""
-            />
-          </h1>
-        }
-        size="md"
-        opened={opened}
-        onClose={close}
-        // closeButtonProps={{ size: "lg" }}
-        centered
-      >
-        {
-          <Grade
-            data={currentClickedTeacherData}
-            onEdit={() => (editOpen(), close())}
-            handleClick={handleClick}
-            student_count={currentClickedClassData?.student_count}
-          />
-        }
-      </Modal>
-
-      <Modal
-        radius={10}
-        padding={"xl"}
+        radius={16}
+        padding={0}
         xOffset={500}
         size="md"
-        opened={newClassNameOpened}
-        onClose={newClassNameClose}
+        opened={OpenedEdit}
+        onClose={closeEdit}
         centered
         withCloseButton={false}
       >
         {
           <EditClassName
+            currentClassData={currentClickedClassData}
+            currentTeacherData={currentClickedTeacherData}
             currentClicked={currentClicked}
-            editClose={newClassNameClose}
+            editClose={closeEdit}
           />
         }
       </Modal>
 
       <Modal
-        radius={10}
-        size="md"
-        opened={newClass}
+        radius={16}
+        padding={0}
+        size={450}
+        opened={openednewClass}
         onClose={newClassClose}
         // closeButtonProps={{ size: "lg" }}
         centered
@@ -139,23 +103,6 @@ const Classes = () => {
           newClassClose={newClassClose}
           openSchNotifications={openSchNotifications}
         />
-      </Modal>
-
-      <Modal
-        radius={10}
-        size="md"
-        opened={editOpened}
-        onClose={editClose}
-        // closeButtonProps={{ size: "lg" }}
-        withCloseButton={false}
-        centered
-      >
-        {
-          <EditClassTeachers
-            currentClicked={currentClicked}
-            editClose={editClose}
-          />
-        }
       </Modal>
 
       <Modal
@@ -172,91 +119,76 @@ const Classes = () => {
         />
       </Modal>
 
-      <div className=" flex-grow flex flex-col rounded-3xl py-4 bg-white border-[2px] border-[#F2EAF1] ">
-        <div className="grid grid-cols-3 justify-center items-center w-full px-8 ">
-          <div>
-            <h1 className="text-[25px]  font-Inter">
-              Classes
-              <span className="text-[#8530C1] bg-[#FFF7FD] rounded-3xl py-1 px-4">
-                {listOfClass?.length || 0}
-              </span>{" "}
-            </h1>
-          </div>
-          <div className="flex gap-2">
-            <Menu>
-              <Menu.Target>
-                <div className="flex gap-2">
-                  <button>Sort by</button>
-                  <img loading="lazy" src={ArrowDown} alt="Arrowdown" />
-                </div>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item>
-                  <button
-                    onClick={() => {
-                      queryClient.invalidateQueries({
-                        queryKey: ["GetClassList"],
-                      });
-                      setStatus("");
-                    }}
-                  >
-                    Active
-                  </button>
-                </Menu.Item>
-                <Menu.Item>
-                  <button
-                    onClick={() => {
-                      queryClient.invalidateQueries({
-                        queryKey: ["GetClassList"],
-                      });
+      <div className="flex justify-between items-center px-8 py-4">
+        <h1 className="text-[25px]  font-Inter mb-4">
+          Classes
+          <span className="text-[#667185] bg-[#C2DBB0] rounded-2xl p-2 ml-3">
+            {listOfClass?.length || 0}
+          </span>{" "}
+        </h1>
 
-                      setStatus("disabled");
-                    }}
-                  >
-                    Disabled
-                  </button>
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          </div>
-          <div className="flex justify-center">
-            <Button onClick={() => newClassOpen()} size="sm">
-              <span className="flex  h-[25px] w-[] justify-center items-center gap-2">
-                <img loading="lazy" src={ClassesIcon} alt="" />
-                <span>Add new class</span>
-              </span>
-            </Button>
-          </div>
+        <div className="flex justify-center">
+          <Button
+            onClick={() => newClassOpen()}
+            size="sm"
+            backgroundColor="green"
+          >
+            <span className="flex  h-[25px] w-[] justify-center items-center gap-2">
+              <IoMdAddCircleOutline color="white" size={25} />
+              <span className="text-white">Add new class</span>
+            </span>
+          </Button>
+        </div>
+      </div>
+
+      <div className=" flex-grow flex flex-col rounded-3xl py-4 bg-white border-[2px] border-[#E4E7EC] ">
+        <div className="px-8 flex gap-5 justify-end">
+          <SearchFilter setFilterValue={setStatus} />
         </div>
 
         <div className="   ">
-          <div className="grid  grid-cols-[300px_1fr_1fr_150px] mt-5 font-normal  px-8 text-[#7E7E89]  py-4 border-b-2 bg-[#FFF7FD] border-[#F3DAFF]">
-            <div>Name</div>
-            <div>No of Students</div>
-            <div>No of Teachers</div>
-            <div className="flex justify-end   items-center">
+          <div className="grid  grid-cols-[300px_1fr_1fr_250px] mt-5    text-[#344054] font-semibold  py-4 border-b-[2px] bg-[#F9FAFB] border-[#E4E7EC] px-8">
+            <div className="flex gap-3 items-center  ">
+              <img src={OuterRec} alt="image" className="w-[20px] h-[20px]" />
+              Name
+            </div>
+            <div className="">No of Students</div>
+            <div className="">Name of Teachers</div>
+            <div className="flex justify-end   items-center  ">
               <span></span>
             </div>
           </div>
         </div>
         <div className="flex flex-col  flex-grow">
           <div>
-            {isLoading
-              ? new Array(8).fill(1).map((array) => (
-                  <Skeleton height={60} my={10} visible={true}>
-                    <h1 className="w-full">{array}</h1>
-                  </Skeleton>
-                ))
-              : listOfClass?.map((data: TClassList, index: number) => {
-                  return (
-                    <Row
-                      key={index}
-                      data={data}
-                      onClick={() => (setCucrrentClicked(data.id), open())}
-                      status={status}
-                    />
-                  );
-                })}
+            {isLoading ? (
+              new Array(8).fill(1).map((_, index) => (
+                <Skeleton key={index} height={60} my={10} visible={true}>
+                  <h1 className="w-full"></h1>
+                </Skeleton>
+              ))
+            ) : listOfClass?.length > 0 ? (
+              listOfClass.map((data: TClassList, index: number) => (
+                <Row
+                  key={index}
+                  data={data}
+                  onClick={() => (setCurrentClicked(data.id), openEdit())}
+                  status={status}
+                />
+              ))
+            ) : (
+              <div className="flex justify-center items-center h-full mt-24 flex-col">
+                <img
+                  src={EmptyState}
+                  alt="No classes"
+                  className="w-[150px] h-[150px] object-contain"
+                />
+                <p className="font-Inter text-[18px]">No classes available</p>
+                <p className="font-Baloo text-[14px]">
+                  Classes will appear here once added.
+                </p>
+              </div>
+            )}
           </div>
         </div>
         <div className="flex  justify-end mt-2 px-4">
@@ -273,7 +205,7 @@ const Classes = () => {
                 styles={() => ({
                   control: {
                     "&[data-active]": {
-                      backgroundColor: "#8530C1 !important",
+                      backgroundColor: "#C2DBB0 !important",
                     },
                   },
                 })}

@@ -25,6 +25,7 @@ import LeaderBoard from "./pages/LeaderBoard/LeaderBoard";
 import SummerQuiz from "./pages/SummerQuiz/SummerQuiz";
 import PreviewSummerChallengePage from "./pages/SummerQuiz/PreviewSummerChallengePage";
 import SummerQuizLayout from "./pages/SummerQuiz/SummerQuizLayout";
+import SchoolDashboardHeader from "./common/User/DashBoard/School/SchoolDashboardHeader";
 const VideoV2 = lazy(() => import("./pages/AfricanLanguages/VideosV2/VideoV2"));
 const StoriesV2 = lazy(() => import("./pages/Stories/StoriesV2/StoriesV2"));
 const DefaultTab = lazy(() => import("./pages/AfterParentSignIn/DefaultTab"));
@@ -280,6 +281,8 @@ function App() {
                 }
               >
                 {/* <Route path="newlyregistereduser/*"> */}
+
+                {/* School content Routes */}
                 <Route path="school/*">
                   <Route element={<NewlyRegisteredUser />}>
                     <Route index element={<DefaultSchoolTab />}></Route>
@@ -332,6 +335,8 @@ function App() {
                   element={<ProgressReport />}
                 ></Route>
 
+                {/* Parent Content Routes  */}
+
                 <Route path="parent/*">
                   <Route
                     element={
@@ -370,7 +375,7 @@ function App() {
                 </Route>
 
                 {/* ///////////////School Dashboard////////////// */}
-                <Route path="schooldashboard/*" element={<SchoolLayout />}>
+                {/* <Route path="schooldashboard/*" element={<SchoolLayout />}>
                   <Route index element={<Main />}></Route>
                   <Route path="teacher" element={<Teachers />}></Route>
                   <Route path="student/*">
@@ -383,8 +388,8 @@ function App() {
                   <Route path="classes" element={<Classes />}></Route>
                   <Route path="request" element={<SchoolRquest />}></Route>
 
-                  {/* <Route path="setting" element={<Setting />}></Route> */}
-                </Route>
+                </Route> */}
+
                 {/* Teacher Teacher Teacher Teacher DashBoard */}
 
                 <Route path="teacherdashboard/*" element={<TeacherLayout />}>
@@ -412,6 +417,36 @@ function App() {
                     path="accountpassword"
                     element={<SettingPassword />}
                   ></Route>
+                </Route>
+              </Route>
+
+              {/* school Routes after sign up or login */}
+
+              <Route element={<SchoolAppLayout />}>
+                <Route path="schooldashboard/*" element={<SchoolLayout />}>
+                  <Route index element={<Main />}></Route>
+                  <Route path="teacher" element={<Teachers />}></Route>
+                  <Route path="student/*">
+                    <Route index element={<Students />} />
+                    <Route
+                      path="profile/:studentId"
+                      element={<StudentProfile />}
+                    ></Route>
+                  </Route>
+                  <Route path="classes" element={<Classes />}></Route>
+                  <Route path="request" element={<SchoolRquest />}></Route>
+                  <Route
+                    path="content-library/*"
+                    element={<NewlyRegisteredUser />}
+                  >
+                    {" "}
+                    <Route index element={<DefaultSchoolTab />}></Route>
+                    <Route path="stories" element={<StoriesV2 />} />
+                    <Route path="audiobooks" element={<AudiobooksV2 />}></Route>
+                    <Route path="languages" element={<VideoV2 />}></Route>
+                  </Route>
+
+                  {/* <Route path="setting" element={<Setting />}></Route> */}
                 </Route>
               </Route>
 
@@ -520,6 +555,17 @@ const AppLayout = ({
         childProfile={childProfile}
         setChildProfile={setChildProfile}
       />
+      <Outlet />
+    </>
+  );
+};
+
+const SchoolAppLayout = () => {
+  return (
+    <>
+      <div>
+        <SchoolDashboardHeader />
+      </div>
       <Outlet />
     </>
   );

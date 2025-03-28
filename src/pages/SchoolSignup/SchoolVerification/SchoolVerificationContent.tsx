@@ -1,8 +1,8 @@
 // import EmailLogo from '@/assets/emaillogo.svg'
-import Cancel from "@/assets/Cancel.svg";
+// import Cancel from "@/assets/Cancel.svg";
 import Button from "@/components/Button";
 import { PinInput, Group } from "@mantine/core";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +18,10 @@ import { TUser } from "@/api/types";
 import { useState, useEffect } from "react";
 import { handleEventTracking } from "@/api/moengage";
 import moengage from "@moengage/web-sdk";
+import KundaLogo from "@/assets/KundaLogo.svg";
+import { useDisclosure } from "@mantine/hooks";
+import { Modal } from "@mantine/core";
+import SchoolCongratulationsContent from "../SchoolCongratulations/SchoolCongratulationContent";
 
 const SchoolVerificationContent = () => {
   const navigate = useNavigate();
@@ -91,7 +95,8 @@ const SchoolVerificationContent = () => {
             verification_status: "true",
           });
           setUser({ ...res });
-          navigate("/schoolcongratulations");
+          open();
+          // navigate("/schoolcongratulations");
         },
         onError(err) {
           notifications.show({
@@ -110,54 +115,82 @@ const SchoolVerificationContent = () => {
     setValue("otp", value);
     trigger("pin");
   };
-
+  const [opened, { open, close }] = useDisclosure(false);
   return (
-    <div className="h-full w-full flex justify-center items-center">
-      <div className="inner-form-w mx-auto relative">
-        <Link to="/">
-          <span className="absolute top-[-200px]">
-            <img loading="lazy" src={Cancel} alt="cancel" />
-          </span>
-        </Link>
-        <div className="w-[100%]  my-auto ">
-          <span></span>
-          <h1 className=" font-semibold header2 font-Recoleta">
-            Verify account
-          </h1>
-          <p className="text3 text-[#A7A7A7] font-Hanken">
-            A code has been sent to email, enter to verify your account{" "}
-          </p>
-          <form onSubmit={handleSubmit(submitData)}>
-            <div className="mt-8 flex justify-center items-center flex-col">
-              <Group position="center">
-                <PinInput value={otp} onChange={handlePinChange} />
-              </Group>
-              <br />
-              {formState.errors.otp && (
-                <p className="text-red-700 text3">
-                  PIN must be exactly 4 characters long
-                </p>
-              )}
-            </div>
-
-            <p className="mt-4">
-              <Button type="submit" size="full">
-                {isLoading ? (
-                  <p className="flex justify-center items-center">
-                    <Loader color="white" size="sm" />
-                  </p>
-                ) : (
-                  <span className="text2">Verify</span>
-                )}
-              </Button>
+    <>
+      <Modal
+        opened={opened}
+        radius={34}
+        centered
+        size={"495px"}
+        onClose={close}
+        withCloseButton={false}
+        closeOnClickOutside={false}
+        transitionProps={{ duration: 500, timingFunction: "ease" }}
+      >
+        <SchoolCongratulationsContent />
+      </Modal>
+      <div className="flex justify-center  rounded-[50px] w-[600px]  py-[50px] bg-white">
+        <div className="inner-form-w mx-auto relative">
+          <div className="flex justify-center items-center  mb-7 ">
+            <img src={KundaLogo} alt="image" className="w-[200px]" />
+          </div>
+          <div className="w-[100%]  my-auto ">
+            <h1 className=" font-semibold header2 font-BalooSemiBold text-center">
+              Verify account
+            </h1>
+            <p className="text3 text-[#A7A7A7]  font-ArimoRegular text-center mb-8 mt-2">
+              A code has been sent to email, enter to verify your account{" "}
             </p>
-          </form>
-          <p className="mt-4 text-center text3  ">
-            <strong>Resend in {secondsLeft}s</strong>
-          </p>
+            <form onSubmit={handleSubmit(submitData)}>
+              <div className="mt-8 flex justify-center items-center gap-4 flex-col">
+                <Group position="center">
+                  <PinInput
+                    value={otp}
+                    onChange={handlePinChange}
+                    size="5"
+                    color="red"
+                    radius={10}
+                    placeholder=""
+                    autoFocus
+                  />
+                </Group>
+                <br />
+                {formState.errors.otp && (
+                  <p className="text-red-700 text3">
+                    PIN must be exactly 4 characters long
+                  </p>
+                )}
+              </div>
+
+              <p className="mt-4 flex justify-center items-center">
+                <Button
+                  type="submit"
+                  // onClick={}
+                  size="sm"
+                  backgroundColor="green"
+                  className="px-[50px] rounded-full px-[80px]"
+                >
+                  {isLoading ? (
+                    <p className="flex justify-center items-center">
+                      <Loader color="white" size="sm" />
+                    </p>
+                  ) : (
+                    <span className="text2">Verify</span>
+                  )}
+                </Button>
+              </p>
+            </form>
+            <p className="mt-4 text-center text3  ">
+              <p className="font-ArimoRegular">
+                Resend in{" "}
+                <span className="text-customGreen">{secondsLeft}s </span>
+              </p>
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

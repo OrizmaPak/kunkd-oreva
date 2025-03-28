@@ -16,11 +16,13 @@ const bgColors = {
   default: "bg-[#8530C1]",
   cream: "bg-cream-500",
   white: "bg-white",
+  green: "bg-customGreen",
 };
 const borderColors = {
   default: "border border-[#8530C1]",
   cream: "border border-cream-500",
   white: "border border-white",
+  green: "border border-customGreen",
 };
 
 interface ButtonProps {

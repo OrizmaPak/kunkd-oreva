@@ -58,8 +58,8 @@ const Row = ({
     // <div className="  py-3  h-[72px] hover:cursor-pointer flex-grow font-medium">
     <>
       <Modal
-        radius={10}
-        padding={30}
+        radius={20}
+        padding={0}
         size={"md"}
         opened={opened}
         onClose={close}
@@ -74,7 +74,7 @@ const Row = ({
         />
       </Modal>
       <div>
-        <div className="grid   grid-cols-[450px_1fr_150px]  py-3  px-8 border-b-2 border-[#F2F4F7] ">
+        <div className="grid   grid-cols-[1fr_1fr_200px]  py-3  px-8 border-b-2 border-[#F2F4F7] ">
           <div
             onClick={onClick}
             className="flex items-center justify-start gap-4 cursor-pointer "
@@ -95,7 +95,7 @@ const Row = ({
             {data.class.class_name}
           </div>
 
-          <div className="flex justify-end  gap-8  items-end ">
+          <div className="flex   gap-12   ">
             <button
               disabled={status !== "active"}
               onClick={() => {
@@ -110,7 +110,7 @@ const Row = ({
             <button
               disabled={status !== "active"}
               onClick={onClick}
-              className=" text-[#8530C1] font-Inter"
+              className=" text-customGreen font-Inter"
             >
               View
             </button>

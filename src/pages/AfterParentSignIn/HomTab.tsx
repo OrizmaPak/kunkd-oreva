@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
 import { useLocation } from "react-router-dom";
+
 const HomTab = () => {
   const [user] = useStore(getUserState);
   const tabRef = useRef<HTMLDivElement>(null);
@@ -28,11 +29,13 @@ const HomTab = () => {
   };
   useEffect(() => {
     const secondPath =
-      location.pathname.split("/")[2] ??
+      location.pathname.split("/")[3] ??
       `${user?.role === "user" ? "/parent" : "/school"}`;
     setActiveTab(secondPath);
     // eslint-disable-next-line
   }, [location.pathname]);
+
+  console.log("activeTab mattthew", activeTab);
 
   return (
     <div
@@ -40,76 +43,76 @@ const HomTab = () => {
       id="tab-container"
       className="  px-10 pt-10 sticky top-[40px] z-30 bg-white"
     >
-      <Tabs value={activeTab} onTabChange={onChanged}>
-        <div className="px-10 sticky    bg-white">
-          <Tabs.List className="flex justify-between ">
-            <Tabs.Tab
-              value={`${user?.role === "user" ? "/parent" : "/school"}`}
+      <Tabs value={activeTab} onTabChange={onChanged} variant="pills">
+        {/* <div className="px-10 sticky    bg-white"> */}
+        <Tabs.List>
+          <Tabs.Tab
+            value={`${user?.role === "user" ? "/parent" : "/school"}`}
 
-              //    leftSection={<IconPhoto style={iconStyle} />}
-            >
-              <div className="flex gap-3 justify-center items-center cursor-pointer">
-                <span>
-                  <FaThumbsUp color="#8530C1" size={40} />
-                </span>
-                <p className="font-semibold  font-Hanken text1">For You</p>
-              </div>
-            </Tabs.Tab>
-            <Tabs.Tab
-              //   onClick={() => navigate("stories")}
-              value="stories"
-              // leftSection={<IconMessageCircle style={iconStyle} />}
-            >
-              <div className="flex gap-3 justify-center items-center cursor-pointer">
-                <span>
-                  <img
-                    loading="lazy"
-                    src={BookIcon}
-                    alt="image"
-                    className="w-[70px] h-[70px]"
-                  />
-                </span>
-                <p className="font-semibold  font-Hanken text1">Stories</p>
-              </div>
-            </Tabs.Tab>
-            <Tabs.Tab
-              //   onClick={() => navigate("audiobooks")}
-              value="audiobooks"
-              // leftSection={<IconSettings style={iconStyle} />}
-            >
-              <div className="flex gap-3 justify-center items-center cursor-pointer">
-                <span>
-                  <img
-                    loading="lazy"
-                    src={musicIcon}
-                    alt="image"
-                    className="w-[70px] h-[70px]"
-                  />
-                </span>
-                <p className="font-semibold  font-Hanken text1">Audiobooks</p>
-              </div>
-            </Tabs.Tab>
-            <Tabs.Tab
-              //   onClick={() => navigate("africanlanguages")}
-              value="languages"
-              // leftSection={<IconSettings style={iconStyle} />}
-            >
-              <div className="flex gap-3 justify-center items-center cursor-pointer">
-                <span>
-                  <img
-                    loading="lazy"
-                    src={videoIcon}
-                    alt="image"
-                    className="w-[70px] h-[70px]"
-                  />
-                </span>
-                <p className="font-semibold  font-Hanken text1">
-                  African Languages
-                </p>
-              </div>
-            </Tabs.Tab>
-          </Tabs.List>
-        </div>
+            //    leftSection={<IconPhoto style={iconStyle} />}
+          >
+            <div className="flex gap-3 justify-center items-center cursor-pointer">
+              <span>
+                <FaThumbsUp color="#8530C1" size={40} />
+              </span>
+              <p className="font-semibold  font-Hanken text1">For You</p>
+            </div>
+          </Tabs.Tab>
+          <Tabs.Tab
+            //   onClick={() => navigate("stories")}
+            value="stories"
+            // leftSection={<IconMessageCircle style={iconStyle} />}
+          >
+            <div className="flex gap-3 justify-center items-center cursor-pointer">
+              <span>
+                <img
+                  loading="lazy"
+                  src={BookIcon}
+                  alt="image"
+                  className="w-[70px] h-[70px]"
+                />
+              </span>
+              <p className="font-semibold  font-Hanken text1">Stories</p>
+            </div>
+          </Tabs.Tab>
+          <Tabs.Tab
+            //   onClick={() => navigate("audiobooks")}
+            value="audiobooks"
+            // leftSection={<IconSettings style={iconStyle} />}
+          >
+            <div className="flex gap-3 justify-center items-center cursor-pointer">
+              <span>
+                <img
+                  loading="lazy"
+                  src={musicIcon}
+                  alt="image"
+                  className="w-[70px] h-[70px]"
+                />
+              </span>
+              <p className="font-semibold  font-Hanken text1">Audiobooks</p>
+            </div>
+          </Tabs.Tab>
+          <Tabs.Tab
+            //   onClick={() => navigate("africanlanguages")}
+            value="languages"
+            // leftSection={<IconSettings style={iconStyle} />}
+          >
+            <div className="flex gap-3 justify-center items-center cursor-pointer">
+              <span>
+                <img
+                  loading="lazy"
+                  src={videoIcon}
+                  alt="image"
+                  className="w-[70px] h-[70px]"
+                />
+              </span>
+              <p className="font-semibold  font-Hanken text1">
+                African Languages
+              </p>
+            </div>
+          </Tabs.Tab>
+        </Tabs.List>
+        {/* </div> */}
 
         {/* <Tabs.Panel value="home">
           <DefaultTab />

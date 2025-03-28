@@ -15,6 +15,10 @@ import { useState } from "react";
 import { handleEventTracking } from "@/api/moengage";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
+import EmptyState from "@/assets/connectionEmpty.png";
+import RequestSearch from "./RequestSearch";
+import Button from "@/components/Button";
+import DenyRequest from "./DenyRequest";
 
 export type TRequestStudents = {
   parent: {
@@ -47,59 +51,116 @@ const Request = () => {
   const totalPage = Math.ceil(data?.data.data.totalRecord / 10);
 
   const attemptConnectStudents: TRequestStudents[] = data?.data.data.records;
+  const [isPending, setIsPending] = useState(true);
 
   return (
     <>
       <div className="h-full flex flex-col overflow-y-scroll">
-        <div className=" flex-grow flex flex-col  p-4  rounded-3xl py-4 bg-white border-[2px] border-[#F2EAF1]  ">
-          <div className="flex  justify-between items-center w-full px-8 ">
-            <div>
-              <h1 className="text-[24px]  font-Inter">
-                Requests
-                <span className="text-[#8530C1] bg-[#FFF7FD] rounded-3xl py-1 px-4">
-                  {attemptConnectStudents?.length || 0}
-                </span>
-              </h1>
+        <div className="mb-5">
+          <h1 className="text-[24px]  font-Inter  gap-3">
+            Requests
+            <span className="text-gray-500 font-[14px] ml-6 bg-customGreen2 rounded-2xl p-2">
+              {attemptConnectStudents?.length || 0}
+            </span>
+          </h1>
+        </div>
+        <div className=" flex-grow flex flex-col   rounded-3xl py-4 bg-white border-[2px] border-[#E4E7EC]  ">
+          <div className="flex justify-between mt-4 mb-2 ">
+            <div className="grid grid-cols-2 h-[40px]  rounded-xl items-center ml-10 ">
+              <button
+                onClick={() => setIsPending(true)}
+                className={`h-full  w-full rounded-l-xl border-t-[2px] border-b-[2px] text-[14px] font-Inter border-[#E4E7EC] text-center py-[10px] px-[16px] border-l-[2px] ${
+                  isPending
+                    ? "bg-customGreen2 border-customGreen2 text-[#1D2739]"
+                    : "bg-[#F5F7F8] border-[#E4E7EC] text-[#667185]"
+                }`}
+              >
+                Pending
+              </button>
+              <button
+                onClick={() => setIsPending(false)}
+                className={`h-full  w-full rounded-r-xl text-center py-[10px] px-[16px] text-[14px] font-Inter border-t-[2px] border-b-[2px]  border-r-[2px] ${
+                  !isPending
+                    ? "bg-customGreen2 border-customGreen2 text-[#1D2739]"
+                    : "bg-[#F5F7F8] border-[#E4E7EC] text-[#667185]"
+                }`}
+              >
+                Denied
+              </button>
             </div>
-          </div>
-          <div className="flex-grow">
-            <div>
-              {isLoading
-                ? new Array(8).fill(1).map((array) => (
-                    <Skeleton height={60} my={10} visible={true}>
-                      <h1 className="w-full">{array}</h1>
-                    </Skeleton>
-                  ))
-                : attemptConnectStudents?.map(
-                    (res: TRequestStudents, index) => (
-                      <Row key={index} requestData={res} refetch={refetch} />
-                    )
-                  )}
-            </div>
+
+            <RequestSearch />
           </div>
 
-          <div className="flex  justify-end mt-2 px-4">
-            {totalPage > 1 && (
-              <div className="  mr-2 flex justify-end  pb-4">
-                <Pagination
-                  total={totalPage}
-                  value={activePage}
-                  defaultChecked={true}
-                  onChange={setPage}
-                  onClick={() => {
-                    refetch();
-                  }}
-                  styles={() => ({
-                    control: {
-                      "&[data-active]": {
-                        backgroundColor: "#8530C1 !important",
-                      },
-                    },
-                  })}
-                />
+          {isPending ? (
+            <div>
+              <div className="grid  grid-cols-[1fr_200px_1fr_1fr_200px] mt-5  px-8 text-[#344054] font-semibold  py-4 border-b-2 bg-[#F9FAFB] border-[#F0F2F5]">
+                <div>Student's Name</div>
+                <div>Class</div>
+                <div>Parent's Email</div>
+                <div>Parent's Name</div>
+                <div>Actions</div>
               </div>
-            )}
-          </div>
+              <div className="flex-grow">
+                <div>
+                  {isLoading ? (
+                    new Array(8).fill(1).map((_, index) => (
+                      <Skeleton key={index} height={60} my={10} visible={true}>
+                        <h1 className="w-full"></h1>
+                      </Skeleton>
+                    ))
+                  ) : attemptConnectStudents?.length > 0 ? (
+                    attemptConnectStudents.map(
+                      (res: TRequestStudents, index) => (
+                        <Row key={index} requestData={res} refetch={refetch} />
+                      )
+                    )
+                  ) : (
+                    <div className="flex justify-center items-center h-full mt-24 flex-col ">
+                      <img
+                        src={EmptyState}
+                        alt="No requests"
+                        className="w-[150px] h-[150px] object-contain"
+                      />
+                      <p className=" font-Inter text-[18px] ">
+                        No connection requests{" "}
+                      </p>
+                      <p className=" font-Baloo text-[14px] ">
+                        Connection requests would appear here.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex  justify-end mt-2 px-4">
+                {totalPage > 1 && (
+                  <div className="  mr-2 flex justify-end  pb-4">
+                    <Pagination
+                      total={totalPage}
+                      value={activePage}
+                      defaultChecked={true}
+                      onChange={setPage}
+                      onClick={() => {
+                        refetch();
+                      }}
+                      styles={() => ({
+                        control: {
+                          "&[data-active]": {
+                            backgroundColor: "#C2DBB0 !important",
+                          },
+                        },
+                      })}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <>
+              <DenyRequest />
+            </>
+          )}
         </div>
 
         <style>
@@ -127,6 +188,16 @@ const Row = ({
   const [user] = useStore(getUserState);
   const queryClient = useQueryClient();
   const [opened, { open, close }] = useDisclosure(false);
+  const [
+    openedAcceptConnection,
+    { open: openAcceptConnection, close: closeAcceptConnection },
+  ] = useDisclosure(false);
+
+  const [
+    openedDenyConnection,
+    { open: openDenyConnection, close: closeDenyConnection },
+  ] = useDisclosure(false);
+
   const { mutate, isLoading: acceptIsLoading } = useAcceptStudentAdmission();
   const { mutate: mutateReject, isLoading: rejectIsLoading } =
     useRejectStudentAdmission();
@@ -164,6 +235,7 @@ const Row = ({
       }
     );
   };
+
   const handleReject = (objData: TRequestStudents) => {
     mutateReject(
       { student_id: objData?.id },
@@ -210,58 +282,149 @@ const Row = ({
         <SchoolNotificationModal onCancel={close} label="Students" />
       </Modal>
 
-      <div className="grid grid-cols-[1fr_300px] my-4 ">
-        <div className="flex item-center ">
-          <p className="mr-6 flex justify-center ">
+      <Modal
+        radius={16}
+        size="md"
+        padding={0}
+        opened={openedAcceptConnection}
+        onClose={closeAcceptConnection}
+        closeButtonProps={{ size: "lg" }}
+        withCloseButton={false}
+        centered
+        mr={500}
+      >
+        <AcceptStudentModal
+          close={closeAcceptConnection}
+          submit={() => handleAccept(requestData)}
+          isLoading={acceptIsLoading}
+        />
+      </Modal>
+
+      <Modal
+        radius={16}
+        size="md"
+        padding={0}
+        opened={openedDenyConnection}
+        onClose={closeDenyConnection}
+        closeButtonProps={{ size: "lg" }}
+        withCloseButton={false}
+        centered
+      >
+        <DenyStudentModal
+          close={closeDenyConnection}
+          submit={() => handleReject(requestData)}
+          isLoading={rejectIsLoading}
+        />
+      </Modal>
+
+      <div className="grid grid-cols-[1fr_200px_1fr_1fr_200px] my-2 py-4 px-8 border-b-2 border-[#F0F2F5] text-[#101928]">
+        <div>
+          <p className="text-center items-center flex gap-3">
             <img
-              src={requestData?.image ? requestData?.image : Blxst}
-              alt="image"
-              className=" rounded-full w-[60px]"
+              src={requestData?.image || Blxst}
+              alt="Student"
+              className="w-[40px] h-[40px] rounded-full"
             />
+            <span>
+              {requestData?.firstname.charAt(0).toUpperCase() +
+                requestData?.firstname.slice(1)}{" "}
+              {requestData?.lastname}
+            </span>
           </p>
-          <div className="flex justify-center items-center">
-            <p className="text-[#7E7E89] text2 font-medium  text-center inline  items-center">
-              <span className="text-[#8530C1] ">
-                {requestData?.firstname.charAt(0).toUpperCase() +
-                  requestData?.firstname.slice(1)}{" "}
-                {requestData?.lastname}
-              </span>{" "}
-              is requesting to join your school
-            </p>
-          </div>
+        </div>
+        <div>
+          <p>{requestData?.class?.class_name}</p>
+        </div>
+        <div>
+          <p>sample123@gmail.com</p>
+        </div>
+        <div>
+          <p>
+            {requestData?.parent?.firstname} {requestData?.parent?.lastname}
+          </p>
         </div>
 
-        <div className="flex  text-white gap-5 items-center justify-center ">
+        <div className="flex justify-between text-white gap-5">
           <button
-            onClick={() => {
-              handleReject(requestData);
-            }}
-            className=" pad-x-40   text-[16px]   h-[38px] flex justify-center items-center rounded bg-[#E2B6FF] "
+            onClick={() => openDenyConnection()}
+            className="text-[16px] h-[38px] flex justify-center items-center rounded text-[#2C3137] font-semibold"
           >
-            {rejectIsLoading ? (
-              <p className="flex justify-center items-center">
-                <Loader color="white" size="sm" />
-              </p>
-            ) : (
-              <span>Decline</span>
-            )}
+            <span>Deny</span>
           </button>
           <button
-            onClick={() => {
-              handleAccept(requestData);
-            }}
-            className="pad-x-40 text-[16px]  h-[38px]  flex justify-center items-center rounded bg-[#8530C1]"
+            onClick={() => openAcceptConnection()}
+            className="text-[16px] h-[38px] flex justify-center items-center rounded font-semibold text-customGreen"
           >
-            {acceptIsLoading ? (
-              <p className="flex justify-center items-center">
-                <Loader color="white" size="sm" />
-              </p>
-            ) : (
-              <span>Accept</span>
-            )}
+            <span>Accept</span>
           </button>
         </div>
       </div>
     </>
+  );
+};
+
+export const AcceptStudentModal = ({
+  close,
+  submit,
+  isLoading,
+}: {
+  close: () => void;
+  isLoading: boolean;
+  submit: () => void;
+}) => {
+  return (
+    <div className="">
+      <p className="font-Inter bg-customGreen text-[18px] px-[20px] py-4 text-white rounded-t-lg">
+        Accept Request
+      </p>
+      <p className="mt-8 text-center text-[16px]">
+        Are sure you want to accept this connection request?
+      </p>
+      <div className="flex justify-center items-center mt-8 gap-5 pb-5">
+        <Button onClick={close} size="sm" className="bg-[#F5F7F8] text-black">
+          Cancel
+        </Button>
+        <Button onClick={submit} backgroundColor="green" size="sm">
+          {isLoading ? (
+            <Loader color="green" size="sm" />
+          ) : (
+            <span>Yes, accept request</span>
+          )}
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+const DenyStudentModal = ({
+  close,
+  submit,
+  isLoading,
+}: {
+  close: () => void;
+  isLoading: boolean;
+  submit: () => void;
+}) => {
+  return (
+    <div className="">
+      <p className="font-Inter bg-customGreen text-[18px] px-[20px] py-4 text-white rounded-t-lg">
+        Deny Request
+      </p>
+      <p className="mt-8 text-center text-[16px]">
+        Are sure you want to deny this connection request?
+      </p>
+      <div className="flex justify-center items-center mt-8 gap-5 pb-5">
+        <Button onClick={close} size="sm" className="bg-[#F5F7F8] text-black">
+          Cancel
+        </Button>
+        <Button onClick={submit} backgroundColor="green" size="sm">
+          {isLoading ? (
+            <Loader color="green" size="sm" />
+          ) : (
+            <span>Yes, deny request</span>
+          )}
+        </Button>
+      </div>
+    </div>
   );
 };

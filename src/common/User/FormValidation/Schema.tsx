@@ -31,4 +31,6 @@ export type FormData = {
   schoolid?: string;
   username?: string;
   schoolName?: string;
+  state?: string;
+  ageGroup?: string;
 };

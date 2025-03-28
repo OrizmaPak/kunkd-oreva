@@ -1,14 +1,15 @@
 import FormWrapper from "../../common/FormWrapper";
 import SchSignupContent from "@/pages/SchoolSignup/SchoolSignupContent";
 import LoginCarousel from "../../common/LoginCarousel";
+import SignInWrapper from "@/common/SignInWrapper";
 
 const SchoolSignUp = () => {
   return (
     <div className="flex">
-      <FormWrapper>
+      <SignInWrapper>
         <SchSignupContent />
-      </FormWrapper>
-      <LoginCarousel />
+      </SignInWrapper>
+      {/* <LoginCarousel /> */}
     </div>
   );
 };

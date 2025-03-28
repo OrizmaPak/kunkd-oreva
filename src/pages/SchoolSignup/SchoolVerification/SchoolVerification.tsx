@@ -1,14 +1,14 @@
-import FormWrapper from "../../../common/FormWrapper";
+// import FormWrapper from "../../../common/FormWrapper";
 import SchoolVerificationContent from "./SchoolVerificationContent";
-import LoginCarousel from "../../../common/LoginCarousel";
+// import LoginCarousel from "../../../common/LoginCarousel";
+import SignInWrapper from "@/common/SignInWrapper";
 
 const SchoolVerification = () => {
   return (
     <div className="flex">
-      <FormWrapper>
+      <SignInWrapper>
         <SchoolVerificationContent />
-      </FormWrapper>
-      <LoginCarousel />
+      </SignInWrapper>
     </div>
   );
 };

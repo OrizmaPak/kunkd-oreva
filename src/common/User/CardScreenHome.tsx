@@ -58,7 +58,7 @@ const CardScreen = ({
   }, [inView, fetchNextPage, hasNextPage]);
 
   return (
-    <div className="   mx-10 pb-4 ">
+    <div className="    pb-4 ">
       <div className="flex justify-between mb-[20px] pt-8 ">
         <span className=" text25 font-semibold  font-Hanken ">{header}</span>
         <button onClick={action} className=" text-[#8530C1] text2">
@@ -79,23 +79,23 @@ const CardScreen = ({
       <div className="relative group  ">
         {/* <div className="absolute hidden group-hover:flex controls-container  w-full justify-between z-30  group"> */}
         <button
-          className="p-4 bg-[rgba(238,238,238)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-10 "
+          className=" h-full bg-[rgba(131,130,130,0.5)] caourosel-button  absolute hidden group-hover:block z-30  left-0 "
           onClick={() => sliderReff?.current?.slickPrev()}
         >
-          <GrPrevious size={40} />
+          <GrPrevious size={40} color="white" />
         </button>
 
         <button
-          className="p-4 bg-[rgba(238,238,238)] caourosel-button rounded-full absolute hidden group-hover:block z-30  left-[95.7%]"
+          className="h-full bg-[rgba(131,130,130,0.5)] caourosel-button  absolute hidden group-hover:block z-30  right-0 "
           onClick={() => sliderReff?.current?.slickNext()}
         >
-          <GrNext size={40} />
+          <GrNext size={40} color="white" />
         </button>
         {/* </div> */}
 
         <Slider ref={sliderReff} {...settings}>
           {isLoading
-            ? Array(5)
+            ? Array(8)
                 .fill(1)
                 .map((arr, index) => (
                   <Skeleton key={index} visible={isLoading} className="">

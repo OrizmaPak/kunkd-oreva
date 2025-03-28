@@ -27,18 +27,19 @@ const NewlyRegisteredUser = () => {
   }, [currentUserProfile]);
 
   return (
-    <Wrapper>
-      <InnerWrapper>
-        <Hero />
-        <hr className="mt-[16px] mx-16 " />
-
-        <h1 className="text-center font-bold text30  font-Hanken my-10  ">
-          Our Library
-        </h1>
-        <HomTab />
-        <Outlet />
-      </InnerWrapper>
-    </Wrapper>
+    <div className="overflow-y-scroll ">
+      {/* <Wrapper> */}
+      {/* <InnerWrapper> */}
+      <Hero />
+      <hr className="mt-[16px] mx-16 " />
+      <h1 className="text-center font-bold text30  font-Hanken my-10  ">
+        Our Library
+      </h1>
+      <HomTab />
+      <Outlet />
+      {/* </InnerWrapper> */}
+      {/* </Wrapper> */}
+    </div>
   );
 };
 

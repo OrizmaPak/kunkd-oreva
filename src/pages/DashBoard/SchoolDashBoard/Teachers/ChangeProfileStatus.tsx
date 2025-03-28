@@ -8,7 +8,7 @@ const ChangeProfileStatus = ({
   onContinue,
   isLoading,
   activeIsLoading,
-
+  status,
   label,
 }: {
   onCancel: () => void;
@@ -16,6 +16,7 @@ const ChangeProfileStatus = ({
   activeIsLoading?: boolean;
   label?: string;
   onContinue?: () => void;
+  status?: string;
 }) => {
   return (
     <motion.div
@@ -23,35 +24,57 @@ const ChangeProfileStatus = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
+      className="p-0"
     >
-      <div className="flex  justify-center items-center mb-3">
-        <img src={DisAbledIcon} alt="image" className="w-[60px] h-[60px]" />
-      </div>
-      <h1 className="font-bold text20  text-center  leading-8 mb-10">
-        Do you want to disable this {label}?
+      <h1 className="font-bold text20  text-white py-4 px-5  bg-customGreen leading-8 mb-10">
+        {status == "active"
+          ? "Disable Class"
+          : `Enable ${
+              label == "class"
+                ? "Class"
+                : label == "Student"
+                ? "Student"
+                : "Teacher"
+            }`}
       </h1>
-      {/* <p className="text-center mb-10 ">
-        If you change status of this {label} you can reverse it
-      </p> */}
+      <p className="text-center mb-10 ">
+        {` Are sure you want to ${
+          status == "active" ? "disable" : "enable"
+        } this ${
+          label == "Class"
+            ? "Class"
+            : label == "Student"
+            ? "Student"
+            : "Teacher"
+        }`}
+      </p>
 
       <div className="flex justify-end gap-4 mb-5 px-5">
         <Button
-          varient="outlined"
+          size="sm"
           onClick={onCancel}
-          className="p-3 pad-x-10 text-black rounded flex-grow"
+          className="p-3 pad-x-10 text-black flex-grow bg-[#F5F7F8] rounded-full "
         >
           Cancel
         </Button>
         <Button
           onClick={onContinue}
-          className="p-3 pad-x-10 bg-red-600 text-white rounded flex-grow"
+          backgroundColor="green"
+          size="sm"
+          className="p-3 pad-x-10  text-white flex-grow px-40 rounded-full"
         >
           {isLoading || activeIsLoading ? (
             <p className="flex justify-center items-center">
               <Loader color="white" size="sm" />
             </p>
           ) : (
-            <span>Yes</span>
+            <span>{` Yes, ${status == "active" ? "disable " : "enable "}${
+              label == "Class"
+                ? "Class"
+                : label == "Student"
+                ? "Student"
+                : "Teacher"
+            }`}</span>
           )}
         </Button>
       </div>
