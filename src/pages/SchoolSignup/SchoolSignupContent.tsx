@@ -92,7 +92,7 @@ const SchoolSignupContent = () => {
   };
 
   return (
-    <div className="flex justify-center   bg-white rounded-[50px] w-[600px] h-full  overflow-y-scroll ">
+    <div className="flex justify-center   bg-white rounded-[50px] w-[500px] h-full  overflow-y-scroll ">
       <div className="inner-form-w mx-auto relative">
         <div className="flex justify-center items-center mt-10 mb-7 ">
           <img src={KundaLogo} alt="image" className="w-[200px]" />

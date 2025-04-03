@@ -21,9 +21,10 @@ import ClasssesIcon from "@/assets/components/ClassesIcon";
 import StudentsIcon from "@/assets/components/StudentsIcon";
 import ConnectionIcon from "@/assets/components/ConnectionIcon";
 import KundaLogo from "@/assets/KundaLogo.svg";
-import { SlSettings } from "react-icons/sl";
+// import { SlSettings } from "react-icons/sl";
 import ContentIcon from "@/assets/components/ContentIcon";
 import { TfiEmail } from "react-icons/tfi";
+import ContactUsModal from "@/components/ContactUsModal";
 
 const routeBaseUrl = "/schooldashboard";
 const links = [
@@ -61,7 +62,7 @@ const links = [
     hasSub: true,
   },
   {
-    label: "Contents",
+    label: "Content Library",
     href: "content-library",
     route: routeBaseUrl + "/content-library/*",
     icon: ContentIcon,
@@ -76,6 +77,9 @@ const links = [
 ];
 const SchoolLayout = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const [openedContactUs, { open: openContactUs, close: closeContactUs }] =
+    useDisclosure(false);
+
   // const [profiles, setProfiles] = useStore(getProfileState);
 
   // const navigate = useNavigate();
@@ -93,9 +97,21 @@ const SchoolLayout = () => {
         <LogoutModal onCloseModal={() => close()} />
       </Modal>
 
+      <Modal
+        radius={20}
+        padding={0}
+        size={450}
+        opened={openedContactUs}
+        onClose={closeContactUs}
+        withCloseButton={false}
+        centered
+      >
+        <ContactUsModal close={closeContactUs} />
+      </Modal>
+
       <div className="w-full   bg-[#FFF7FD]   h-[91vh]  ">
         <div className="flex  w-full   h-full ">
-          <div className="w-[15%] bg-white   h-full  pt-8 flex  flex-col pb-4 px-2  border-r-[1px] border-[#E4E7EC] ">
+          <div className="w-[18%] bg-white   h-full  pt-8 flex  flex-col pb-4 px-2  border-r-[1px] border-[#E4E7EC] ">
             <div className="flex-grow-1 flex-1">
               {links.map((link) => (
                 <NavButton
@@ -116,7 +132,7 @@ const SchoolLayout = () => {
             </div>
             <div>
               <DasboardButton
-                onClick={() => open()}
+                onClick={() => openContactUs()}
                 title="Contact Us"
                 icon={<TfiEmail size={20} />}
               />
@@ -127,7 +143,7 @@ const SchoolLayout = () => {
             </div>
           </div>
 
-          <div className="w-[85%]  bg-[#F0F2F5] px-8 pt-10  overflow-hidden overflow-y-auto  ">
+          <div className="w-[82%]  bg-[#F0F2F5] px-8 pt-10  overflow-hidden overflow-y-auto  ">
             {<Outlet />}
           </div>
         </div>
@@ -152,7 +168,7 @@ const DasboardButton = ({
   return (
     <button
       onClick={onClick}
-      className={` transition-all duration-700 px-1 py-4  text-[#101928] rounded-[4px] flex items-center justify-between gap-8 w-full my-2 text2  ${
+      className={` transition-all duration-700 px-1 py-4  text-[#101928] font-InterReg rounded-[4px] flex items-center justify-between gap-8 w-full my-2 text-[14px]  ${
         active ? "bg-customGreen " : "hover:bg-customGreen "
       }  my-4`}
     >

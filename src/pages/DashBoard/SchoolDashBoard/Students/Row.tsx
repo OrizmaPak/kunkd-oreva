@@ -10,6 +10,7 @@ import { TRequestStudents } from "../../TeacherDashboard/Request/Request";
 import { handleEventTracking } from "@/api/moengage";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
+import { FaUserCircle } from "react-icons/fa";
 
 const Row = ({
   status,
@@ -74,18 +75,24 @@ const Row = ({
         />
       </Modal>
       <div>
-        <div className="grid   grid-cols-[1fr_1fr_200px]  py-3  px-8 border-b-2 border-[#F2F4F7] ">
+        <div className="grid h-[72px]   grid-cols-[1fr_1fr_200px]    px-8 border-b-2 border-[#E5E7EB] ">
           <div
             onClick={onClick}
-            className="flex items-center justify-start gap-4 cursor-pointer "
+            className="flex items-center justify-start gap-[20px] cursor-pointer "
           >
             <span>
-              <img
-                loading="lazy"
-                src={data.image}
-                alt="image"
-                className=" w-[46px]"
-              />
+              {data?.image ? (
+                <img
+                  loading="lazy"
+                  src={data.image}
+                  alt="image"
+                  className=" w-[46px]"
+                />
+              ) : (
+                <span>
+                  <FaUserCircle size={30} color="#BCD678" />
+                </span>
+              )}
             </span>
             <span>
               {data.firstname} {data.lastname}

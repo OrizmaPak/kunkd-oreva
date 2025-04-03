@@ -130,12 +130,12 @@ const SchoolVerificationContent = () => {
       >
         <SchoolCongratulationsContent />
       </Modal>
-      <div className="flex justify-center  rounded-[50px] w-[600px]  py-[50px] bg-white">
+      <div className="flex justify-center  rounded-[50px] w-[500px]  py-[50px] bg-white">
         <div className="inner-form-w mx-auto relative">
           <div className="flex justify-center items-center  mb-7 ">
             <img src={KundaLogo} alt="image" className="w-[200px]" />
           </div>
-          <div className="w-[100%]  my-auto ">
+          <div className="w-[100%]  my-auto mt-12 ">
             <h1 className=" font-semibold header2 font-BalooSemiBold text-center">
               Verify account
             </h1>
@@ -176,7 +176,7 @@ const SchoolVerificationContent = () => {
                       <Loader color="white" size="sm" />
                     </p>
                   ) : (
-                    <span className="text2">Verify</span>
+                    <span className="text2 py-3">Verify</span>
                   )}
                 </Button>
               </p>

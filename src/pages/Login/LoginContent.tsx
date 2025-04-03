@@ -77,6 +77,7 @@ const LoginContent = () => {
           onSuccess(data) {
             const res = data?.data?.data as TUser;
             notifications.show({
+              color: "lime",
               title: `Notification`,
               message: data.data.message,
             });
@@ -105,6 +106,7 @@ const LoginContent = () => {
 
           onError(err) {
             notifications.show({
+              color: "lime",
               title: `Notification`,
               message: getApiErrorMessage(err),
             });
@@ -113,6 +115,8 @@ const LoginContent = () => {
       );
     } catch (error) {
       notifications.show({
+        color: "lime",
+
         title: `Notification`,
         message: getApiErrorMessage(error),
       });
@@ -316,6 +320,7 @@ _login`,
           setUser({ ...res });
 
           notifications.show({
+            // color: "lime",
             title: `Notification`,
             message: data.data.message,
           });
@@ -328,6 +333,7 @@ _login`,
         },
         onError() {
           notifications.show({
+            color: "lime",
             title: `Notification`,
             message: "Invalid username or password",
           });
@@ -357,7 +363,7 @@ _login`,
   };
 
   return (
-    <div className="flex justify-center   h-full bg-white rounded-3xl w-[600px]">
+    <div className="flex justify-center   h-full bg-white rounded-[50px] w-[500px] ">
       <div className="inner-form-w relative  ">
         <div className="flex justify-center items-center my-12 ">
           <img src={KundaLogo} alt="image" className="w-[200px]" />
@@ -404,7 +410,12 @@ _login`,
                 <button>Forgot password?</button>
               </Link>
             </p>
-            <Button type="submit" size="full" backgroundColor="green">
+            <Button
+              type="submit"
+              size="full"
+              backgroundColor="green"
+              className="rounded-full"
+            >
               {isLoading ? (
                 <p className="flex justify-center items-center">
                   <Loader color="white" size="sm" />
@@ -419,7 +430,7 @@ _login`,
             </button>
           </p> */}
           </form>
-          <p className="flex items-center text3 justify-items-center py-10 gap-3  text-gray-400 font-400">
+          <p className="flex items-center text3 justify-items-center py-5 gap-3  text-gray-400 font-400">
             <hr className="flex-1" />
             <span>or continue with</span> <hr className="flex-1" />
           </p>

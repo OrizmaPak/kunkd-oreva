@@ -172,8 +172,12 @@ body {
 }
 
 .ReactFlagsSelect-module_filterBox__3m8EU input {
-  border: 2px solid #f3daff !important ;
+  border: 2px solid #9fc43e !important ;
+  border-radius: 10px !important ;
   /* border-color: #f3daff !important ; */
+}
+.ReactFlagsSelect-module_fullWidthOptions__1XeR6 {
+  border-radius: 10px !important ;
 }
 
 .ReactFlagsSelect-module_selectBtn__19wW7 {
@@ -184,4 +188,7 @@ body {
 }
 .mantine-PinInput-input {
   border-color: #9fc43e !important;
+}
+.mantine-ym7ws5::before {
+  background-color: #9fc43e !important;
 }

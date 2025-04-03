@@ -119,8 +119,8 @@ const Classes = () => {
         />
       </Modal>
 
-      <div className="flex justify-between items-center px-8 py-4">
-        <h1 className="text-[25px]  font-Inter mb-4">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-[25px]  font-Inter ">
           Classes
           <span className="text-[#667185] bg-[#C2DBB0] rounded-2xl p-2 ml-3">
             {listOfClass?.length || 0}
@@ -148,7 +148,7 @@ const Classes = () => {
 
         <div className="   ">
           <div className="grid  grid-cols-[300px_1fr_1fr_250px] mt-5    text-[#344054] font-semibold  py-4 border-b-[2px] bg-[#F9FAFB] border-[#E4E7EC] px-8">
-            <div className="flex gap-3 items-center  ">
+            <div className="flex gap-[20px] items-center  ">
               <img src={OuterRec} alt="image" className="w-[20px] h-[20px]" />
               Name
             </div>

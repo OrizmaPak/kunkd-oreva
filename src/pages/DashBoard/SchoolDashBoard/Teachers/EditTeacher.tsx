@@ -1,23 +1,23 @@
-import { useGetClassList } from "@/api/queries";
+import { useGetClassList, useReAssignTeacher } from "@/api/queries";
 import InputFormat from "@/common/InputFormat";
 import { FormData } from "@/common/User/FormValidation/Schema";
 import Button from "@/components/Button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
-import { useAddTeacherData } from "@/api/queries";
+// import { useAddTeacherData } from "@/api/queries";
 import { getApiErrorMessage } from "@/api/helper";
 import { notifications } from "@mantine/notifications";
 import { Loader } from "@mantine/core";
-import { getUserState } from "@/store/authStore";
-import useStore from "@/store/index";
+// import { getUserState } from "@/store/authStore";
+// import useStore from "@/store/index";
 
 import { useQueryClient } from "@tanstack/react-query";
 
 import { AiOutlineMail } from "react-icons/ai";
 // import { MdClose } from "react-icons/md";
 import { z, ZodType } from "zod";
-import { formattedDate, handleEventTracking } from "@/api/moengage";
+// import { formattedDate, handleEventTracking } from "@/api/moengage";
 import { TTeacherList } from "./Teachers";
 
 export type Tclass = {
@@ -35,9 +35,9 @@ const EditTeacher = ({
   close: () => void;
   currentData: TTeacherList;
 }) => {
-  const { mutate, isLoading } = useAddTeacherData();
+  // const { mutate, isLoading } = useAddTeacherData();
   const queryClient = useQueryClient();
-  const [user] = useStore(getUserState);
+  // const [user] = useStore(getUserState);
   const { data } = useGetClassList();
   const classList: Tclass[] = data?.data?.data.records;
   const availableClassList = classList?.filter(
@@ -55,7 +55,8 @@ const EditTeacher = ({
     classid: z.string().optional(),
     email: z.string().email(),
   });
-
+  const { mutate: mutateAssignTeacher, isLoading: isLoadingAssignTeacher } =
+    useReAssignTeacher();
   const {
     register,
     handleSubmit,
@@ -63,31 +64,57 @@ const EditTeacher = ({
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const submitData = async (datta: FormData) => {
-    mutate(
-      {
-        firstname: datta?.firstname,
-        lastname: datta?.lastname,
-        email: datta?.email,
+    // mutate(
+    //   {
+    //     firstname: datta?.firstname,
+    //     lastname: datta?.lastname,
+    //     email: datta?.email,
 
-        redirect_url: `${window.location.origin}/passwordsetup`,
-        gender_id: 1,
-        // password: data?.password,
+    //     redirect_url: `${window.location.origin}/passwordsetup`,
+    //     gender_id: 1,
+    //     // password: data?.password,
+    //     class_id: Number(datta?.classid),
+    //   },
+    //   {
+    //     onSuccess(data) {
+    //       handleEventTracking("teacher_otp_verification_status", {
+    //         teacher_name: datta.firstname + " " + datta.lastname,
+    //         verification_status: "true",
+    //       });
+    //       queryClient.invalidateQueries(["GetTeacherList"]);
+    //       queryClient.invalidateQueries(["GetLicense"]);
+    //       handleEventTracking("add_teacher", {
+    //         school_id: user?.user_id,
+    //         teacher_name: datta.firstname + " " + datta.lastname,
+    //         date_added: formattedDate,
+    //       });
+
+    //       close();
+    //       notifications.show({
+    //         title: `Notification`,
+    //         message: data.data.message,
+    //       });
+    //     },
+
+    //     onError(err) {
+    //       close();
+    //       notifications.show({
+    //         title: `Notification`,
+    //         message: getApiErrorMessage(err),
+    //       });
+    //     },
+    //   }
+    // );
+
+    mutateAssignTeacher(
+      {
+        user_id: currentData?.user?.id,
         class_id: Number(datta?.classid),
       },
       {
         onSuccess(data) {
-          handleEventTracking("teacher_otp_verification_status", {
-            teacher_name: datta.firstname + " " + datta.lastname,
-            verification_status: "true",
-          });
-          queryClient.invalidateQueries(["GetTeacherList"]);
-          queryClient.invalidateQueries(["GetLicense"]);
-          handleEventTracking("add_teacher", {
-            school_id: user?.user_id,
-            teacher_name: datta.firstname + " " + datta.lastname,
-            date_added: formattedDate,
-          });
-
+          queryClient.invalidateQueries({ queryKey: ["GetClassList"] });
+          queryClient.invalidateQueries({ queryKey: ["GetTeacherList"] });
           close();
           notifications.show({
             title: `Notification`,
@@ -96,7 +123,6 @@ const EditTeacher = ({
         },
 
         onError(err) {
-          close();
           notifications.show({
             title: `Notification`,
             message: getApiErrorMessage(err),
@@ -171,23 +197,6 @@ const EditTeacher = ({
               </p>
               <span className="text-red-600">{errors.classid?.message}</span>
             </div>
-            {/* <div className="flex-grow">
-              <label htmlFor="class">Select gender</label>
-              <p className="border border-[#F3DAFF] py-3 px-8 rounded-full flex items-center gap-2 mt-2  mb-2 ">
-                <select
-                  {...register("genderid")}
-                  name="genderid"
-                  id="genderid"
-                  placeholder="Select gender"
-                  className="w-full  h-full flex-1  focus:outline-none"
-                >
-                  <option value="">Select Gender</option>
-                  <option value="1">Male</option>
-                  <option value="2">Female</option>
-                </select>
-              </p>
-              <span className="text-red-600">{errors.genderid?.message}</span>
-            </div> */}
           </div>
           <div className=" mx-auto my-4 flex gap-3 justify-center ">
             <Button
@@ -203,12 +212,12 @@ const EditTeacher = ({
               backgroundColor="green"
               className="text-white rounded-full px-[40px] "
             >
-              {isLoading ? (
+              {isLoadingAssignTeacher ? (
                 <p className="flex justify-center items-center ">
                   <Loader color="white" size="sm" />
                 </p>
               ) : (
-                <span>Add New Teacher</span>
+                <span>Edit Teacher</span>
               )}
             </Button>
           </div>

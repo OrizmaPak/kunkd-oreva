@@ -63,7 +63,7 @@ const Main = () => {
           <h1 className="text-[25px] font-bold pl-4">Overview</h1>
         </div>
         <div className="flex justify-center  gap-2 items-center  ">
-          <span className="text-[#8530C1]">Sort by Date:</span>
+          <span className="text-customGreen">Sort by Date:</span>
 
           <div>
             <MyDateFilter setStartDate={setStartDate} setEndDate={setEndDate} />

@@ -8,7 +8,7 @@ import useStore from "@/store";
 import { getUserState } from "@/store/authStore";
 import { IoChevronDown } from "react-icons/io5";
 import { Menu } from "@mantine/core";
-import { FaRegUserCircle, FaUserFriends } from "react-icons/fa";
+import { FaRegUserCircle } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
 import { handleEventTracking } from "@/api/moengage";
 import { logOut } from "@/auth/sdk";
@@ -64,7 +64,7 @@ _logout`,
               alt="bell icon"
               className="min-w-[17px]"
             /> */}
-            <AiOutlineBell size={30} color="#667185" className={" mx-auto"} />
+            <AiOutlineBell size={25} color="#667185" className={" mx-auto"} />
           </span>
         </div>
 
@@ -88,13 +88,13 @@ _logout`,
                 className="w-[40px] h-[40px]"
               />
               <span className="flex items-center gap-2">
-                {user?.firstname}
+                Administrator
                 <IoChevronDown size={22} color="#667185" />
               </span>
             </div>
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Item>
+            <Menu.Item onClick={() => navigate("schooldashboard/settings")}>
               <p className="flex items-center gap-2 text-[14] text-[#667185] font-Arimo">
                 <FaRegUserCircle color="#667185" size={25} />
                 Settings

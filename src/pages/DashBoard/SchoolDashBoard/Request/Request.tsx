@@ -56,7 +56,7 @@ const Request = () => {
   return (
     <>
       <div className="h-full flex flex-col overflow-y-scroll">
-        <div className="mb-5">
+        <div className="mb-4">
           <h1 className="text-[24px]  font-Inter  gap-3">
             Requests
             <span className="text-gray-500 font-[14px] ml-6 bg-customGreen2 rounded-2xl p-2">
@@ -94,7 +94,7 @@ const Request = () => {
 
           {isPending ? (
             <div>
-              <div className="grid  grid-cols-[1fr_200px_1fr_1fr_200px] mt-5  px-8 text-[#344054] font-semibold  py-4 border-b-2 bg-[#F9FAFB] border-[#F0F2F5]">
+              <div className="grid   grid-cols-[1fr_120px_250px_1fr_150px] mt-5  px-8 text-[#344054] font-semibold  py-4 border-b-2 bg-[#F9FAFB] border-[#F0F2F5]">
                 <div>Student's Name</div>
                 <div>Class</div>
                 <div>Parent's Email</div>
@@ -317,7 +317,7 @@ const Row = ({
         />
       </Modal>
 
-      <div className="grid grid-cols-[1fr_200px_1fr_1fr_200px] my-2 py-4 px-8 border-b-2 border-[#F0F2F5] text-[#101928]">
+      <div className="grid grid-cols-[1fr_120px_250px_1fr_150px] my-2 h-[72px] items-center px-8 border-b-2 border-[#E5E7EB] text-[#101928]">
         <div>
           <p className="text-center items-center flex gap-3">
             <img
@@ -344,7 +344,7 @@ const Row = ({
           </p>
         </div>
 
-        <div className="flex justify-between text-white gap-5">
+        <div className="flex justify-between text-white gap-4">
           <button
             onClick={() => openDenyConnection()}
             className="text-[16px] h-[38px] flex justify-center items-center rounded text-[#2C3137] font-semibold"

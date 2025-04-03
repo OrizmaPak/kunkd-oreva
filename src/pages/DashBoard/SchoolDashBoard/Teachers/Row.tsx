@@ -93,13 +93,6 @@ const Row = ({
         size={"md"}
         opened={opened}
         onClose={close}
-        // title={
-        //   modalStep && modalStep === STEP_3 ? (
-        //     <h1 className="text-[22px] font-semibold text-center  ml-20 font-Recoleta">
-        //       Edit Assigned Class
-        //     </h1>
-        //   ) : null
-        // }
         withCloseButton={false}
         centered
       >
@@ -124,7 +117,7 @@ const Row = ({
       </Modal>
       <div className=" hover:cursor-pointer  font-medium">
         <div>
-          <div className="grid  grid-cols-[1fr_1fr_1fr_300px_250px] text-[#101928]  font-InterReg py-6  px-8 border-b-2 border-[#F2F4F7]">
+          <div className="grid  grid-cols-[1fr_1fr_200px_200px_200px] text-[#101928]  font-InterReg h-[72px] items-center   px-8 border-b-2 border-[#E5E7EB]">
             {/* <div className="flex justify-start items-center ">
             <span className=" ">
               <img loading="lazy" src={Rectangle} alt="image" />
@@ -132,7 +125,7 @@ const Row = ({
           </div> */}
             <div
               onClick={onClick}
-              className="flex items-center justify-start gap-3 "
+              className="flex items-center justify-start gap-[20px] "
             >
               <span>
                 <FaUserCircle size={30} color="#BCD678" />

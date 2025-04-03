@@ -1,5 +1,5 @@
 import { useGetAdmittedStudentsInSchool } from "@/api/queries";
-import ArrowDown from "@/assets/arrowdown.svg";
+// import ArrowDown from "@/assets/arrowdown.svg";
 // import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
 import { TRequestStudents } from "../../TeacherDashboard/Request/Request";
@@ -31,10 +31,10 @@ const Students = () => {
           </span>{" "}
         </h1>
       </div>
-      <div className=" flex-grow flex flex-col  rounded-3xl py-4 bg-white border-[2px] border-[#F2EAF1]  ">
+      <div className=" flex-grow flex flex-col  rounded-3xl py-4 bg-white border-[2px] border-[#E4E7EC]  ">
         <SearchFilter setFilterValue={setStatus} />
 
-        <div className="grid  grid-cols-[1fr_1fr_200px]  mt-5 font-normal  px-8 text-[#7E7E89]  py-4 border-b-2  bg-[#F9FAFB] border-[#E4E7EC]">
+        <div className="grid text-[#344054]  grid-cols-[1fr_1fr_200px]  mt-5   px-8 font-semibold  py-4 border-b-2  bg-[#F9FAFB] border-[#E4E7EC]">
           <div className=" ">Name</div>
           <div className="">Class</div>
           <div className="flex justify-end   items-center">

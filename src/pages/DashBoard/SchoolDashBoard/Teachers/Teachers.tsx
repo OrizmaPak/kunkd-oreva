@@ -80,7 +80,7 @@ const Teachers = () => {
         />
       </Modal>
 
-      <div className="flex justify-between items-center px-8 py-4">
+      <div className="flex justify-between items-center mb-4">
         <h1 className="text-[25px]  font-Inter">
           Teachers
           <span className="text-[#667185] bg-[#C2DBB0] rounded-2xl p-2 ml-5">
@@ -97,7 +97,7 @@ const Teachers = () => {
         </div>
 
         <div>
-          <div className="grid  grid-cols-[1fr_1fr_1fr_300px_250px] mt-5  px-8 text-[#101928]  font-semibold py-4 border-b-2 bg-[#F9FAFB] border-[#E4E7EC]">
+          <div className="grid  grid-cols-[1fr_1fr_200px_200px_200px] mt-5  px-8 text-[#101928]  font-semibold py-4 border-b-2 bg-[#F9FAFB] border-[#E4E7EC]">
             {/* <div className="flex justify-start items-center">
               <span className=" ">
                 <img loading="lazy" src={Rectangle} alt="" />

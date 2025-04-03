@@ -282,16 +282,16 @@ const SignContent = () => {
     }
   };
   return (
-    <div className="flex justify-center  relative h-full bg-white rounded-3xl w-[600px] ">
+    <div className="flex justify-center  relative h-full bg-white rounded-[50px] w-[500px]  overflow-auto ">
       <div className="inner-form-w  mx-auto relative ">
         <div className="flex justify-center items-center my-12 ">
           <img src={KundaLogo} alt="image" className="w-[200px]" />
         </div>
         <div className="w-[100%]">
-          <h1 className="font-bold text-[48px] font-BalooSemiBold text-center tracking-n ">
+          <p className="font-bold text-[48px] font-BalooSemiBold text-center tracking-n  leading-[40px] ">
             Get Started
-          </h1>
-          <p className="text3 text-[#A7A7A7] font-ArimoRegular text-center">
+          </p>
+          <p className="text3 text-[#A7A7A7] font-ArimoRegular text-center leading-none">
             Let's create account that fits you!
           </p>
           <div className="my-8 ">
@@ -332,7 +332,7 @@ const SignContent = () => {
             </div>
           </div>
           {userId === 2 ? (
-            <div className="flex gap-8">
+            <div className="flex gap-8 my-4">
               <Button
                 onClick={handleGoogleSignUp}
                 size="full"
@@ -363,7 +363,7 @@ const SignContent = () => {
               </Button>
             </div>
           ) : null}
-          <p className="mt-4  text-gray-400 text-center ">
+          <p className="  text-gray-400 text-center mb-4">
             <span>Already signed up? </span>
             <button
               onClick={() => navigate("/login")}

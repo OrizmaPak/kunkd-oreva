@@ -86,7 +86,7 @@ const Row = ({
   return (
     <>
       <Modal
-        radius={20}
+        radius={10}
         padding={0}
         size={"md"}
         opened={opened}
@@ -111,7 +111,7 @@ const Row = ({
           status={status}
         />
       </Modal>
-      <div className="   my-auto border-b-[2px] border-[#eee] text-[#101928]  py-6 font-medium ">
+      <div className="   my-auto border-b-[2px] border-[#E5E7EB] text-[#101928]  py-6 font-medium ">
         <div>
           <div className="grid  grid-cols-[300px_1fr_1fr_250px]  text-[#101928] font-Arimo  px-8">
             {/* <div className="flex justify-start items-center ">
@@ -121,7 +121,7 @@ const Row = ({
             </div> */}
             <div
               onClick={onClick}
-              className="flex hover:cursor-pointer items-center  text-[#101928] justify-start gap-3 "
+              className="flex hover:cursor-pointer items-center  text-[#101928] justify-start gap-[20px] "
             >
               <img src={OuterRec} alt="image" className="w-[20px] h-[20px]" />
 

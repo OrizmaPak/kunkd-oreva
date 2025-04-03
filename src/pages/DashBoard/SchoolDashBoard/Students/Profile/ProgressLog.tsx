@@ -59,7 +59,7 @@ const Card = ({
   total?: number;
 }) => {
   return (
-    <div className=" rounded-3xl  p-6 border-[#FBECFF] border-[2px]">
+    <div className=" rounded-3xl  p-6 border-customGreen border-[2px]">
       <div>
         <img loading="lazy" src={image} alt="image" className="w-[38px]" />
       </div>

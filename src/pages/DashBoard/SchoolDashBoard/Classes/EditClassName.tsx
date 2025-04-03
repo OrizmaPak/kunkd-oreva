@@ -15,7 +15,6 @@ import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
-import EditIcon from "@/assets/editicon24.png";
 import { formattedDate, handleEventTracking } from "@/api/moengage";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
@@ -117,7 +116,7 @@ const EditClassName = ({
     <div>
       <div className="flex justify-between items-center bg-customGreen py-[12px] px-[20px]">
         <p className=" font-Arimo text-white text-[22px] text-center  ">
-          Edit Class Name
+          Edit Class
         </p>
         <MdClose onClick={editClose} color="white" size={35} />
       </div>
@@ -162,7 +161,7 @@ const EditClassName = ({
                 id="age-group"
                 className="w-full  h-full focus-within:outline-none bg-inherit"
               >
-                <option className=" bg:in " value="">
+                <option className=" bg:in " value="age-group">
                   Select Age Group
                 </option>
                 <option value="2-4">2-4</option>
@@ -194,6 +193,7 @@ const EditClassName = ({
                 {...register("teacher_id")}
                 name="teacher_id"
                 id="classid"
+                // value={currentClassData?.}
                 className="w-full  h-full flex-1  focus:outline-none bg-inherit"
               >
                 <option value="">Select Teacher</option>
@@ -215,14 +215,19 @@ const EditClassName = ({
             </span>
           </div>
           <p className="my-5 flex  justify-end">
-            <Button type="submit" size="sm" backgroundColor="green">
+            <Button
+              type="submit"
+              size="sm"
+              backgroundColor="green"
+              className="rounded-full"
+            >
               {isLoading || isLoadingAssignTeacher ? (
                 <p className="flex justify-center items-center">
                   <Loader color="white" size="sm" />
                 </p>
               ) : (
                 <span className="flex gap-3 items-center">
-                  <MdModeEdit color="white" size={20} /> Save
+                  <MdModeEdit color="white" size={20} /> Edit Class
                 </span>
               )}
             </Button>
