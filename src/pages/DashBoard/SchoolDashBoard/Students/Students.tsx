@@ -3,7 +3,7 @@ import { useGetAdmittedStudentsInSchool } from "@/api/queries";
 // import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
 import { TRequestStudents } from "../../TeacherDashboard/Request/Request";
-import { Menu, Pagination, Skeleton } from "@mantine/core";
+import { Pagination, Skeleton } from "@mantine/core";
 import { useState } from "react";
 import Row from "./Row";
 import SearchFilter from "../SearchFilter";

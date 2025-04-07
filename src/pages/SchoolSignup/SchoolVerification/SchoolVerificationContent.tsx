@@ -3,7 +3,6 @@
 import Button from "@/components/Button";
 import { PinInput, Group } from "@mantine/core";
 // import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
@@ -24,7 +23,6 @@ import { Modal } from "@mantine/core";
 import SchoolCongratulationsContent from "../SchoolCongratulations/SchoolCongratulationContent";
 
 const SchoolVerificationContent = () => {
-  const navigate = useNavigate();
   const { isLoading, mutate } = useVerifyOtp();
   const [, setUser] = useStore(getUserState);
   // const [isActive, setIsActive] = useState(false);

@@ -1,6 +1,6 @@
 import SignInWrapper from "@/common/SignInWrapper";
-import FormWrapper from "../../common/FormWrapper";
-import LoginCarousel from "../../common/LoginCarousel";
+// import FormWrapper from "../../common/FormWrapper";
+// import LoginCarousel from "../../common/LoginCarousel";
 import LoginContent from "./LoginContent";
 
 const Login = () => {

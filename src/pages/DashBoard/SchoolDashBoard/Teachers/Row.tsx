@@ -101,6 +101,7 @@ const Row = ({
           onContinue={handleDisableTeacher}
           isLoading={isLoading || enableLoading}
           label="Teacher"
+          status={status}
         />
       </Modal>
 

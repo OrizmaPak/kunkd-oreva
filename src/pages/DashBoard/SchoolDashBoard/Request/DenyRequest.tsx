@@ -1,23 +1,9 @@
-import { getApiErrorMessage } from "@/api/helper";
-import {
-  useAcceptStudentAdmission,
-  useGetAttemptAllStudentConnect,
-  useRejectStudentAdmission,
-} from "@/api/queries";
+import { useGetAttemptAllStudentConnect } from "@/api/queries";
 import Blxst from "@/assets/Blxst.svg";
-import { Loader, Skeleton, Pagination } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import { useQueryClient } from "@tanstack/react-query";
-import SchoolNotificationModal from "@/components/SchoolNotificationModal";
-import { Modal } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { handleEventTracking } from "@/api/moengage";
-import { getUserState } from "@/store/authStore";
-import useStore from "@/store/index";
+import { Skeleton, Pagination } from "@mantine/core";
+
 import EmptyState from "@/assets/connectionEmpty.png";
-import RequestSearch from "./RequestSearch";
-import Button from "@/components/Button";
-import { AcceptStudentModal, TRequestStudents } from "./Request";
+import { TRequestStudents } from "./Request";
 import { useState } from "react";
 
 const DenyRequest = () => {
@@ -52,7 +38,7 @@ const DenyRequest = () => {
               .slice() // Create a shallow copy to avoid mutating the original array
               .reverse() // Reverse the order of the array
               .map((res: TRequestStudents, index) => (
-                <Row key={index} requestData={res} refetch={refetch} />
+                <Row key={index} requestData={res} />
               ))
           ) : (
             <div className="flex justify-center items-center h-full mt-24 flex-col">
@@ -98,88 +84,9 @@ const DenyRequest = () => {
 
 export default DenyRequest;
 
-const Row = ({
-  requestData,
-  refetch,
-}: {
-  requestData: TRequestStudents;
-  refetch: () => void;
-}) => {
-  const [user] = useStore(getUserState);
-  const queryClient = useQueryClient();
-  const [opened, { open, close }] = useDisclosure(false);
-  const [
-    openedAcceptConnection,
-    { open: openAcceptConnection, close: closeAcceptConnection },
-  ] = useDisclosure(false);
-
-  const { mutate, isLoading: acceptIsLoading } = useAcceptStudentAdmission();
-
-  const handleAccept = (objData: TRequestStudents) => {
-    mutate(
-      { student_id: objData?.id },
-      {
-        onSuccess(data) {
-          handleEventTracking("handle_student_request", {
-            school_id: user?.user_id,
-            class_name: objData?.class?.class_name,
-            student_name: objData?.firstname + " " + objData?.lastname,
-            request_status: "accepted",
-          });
-          refetch();
-          queryClient.invalidateQueries({
-            queryKey: ["GetAttemptStudentConnect"],
-          });
-          queryClient.invalidateQueries({
-            queryKey: ["GetAttemptAllStudentConnect"],
-          });
-          notifications.show({
-            title: `Notification`,
-            message: data.data.message,
-          });
-        },
-        onError(err) {
-          open();
-          notifications.show({
-            title: `Notification`,
-            message: getApiErrorMessage(err),
-          });
-        },
-      }
-    );
-  };
-
+const Row = ({ requestData }: { requestData: TRequestStudents }) => {
   return (
     <>
-      <Modal
-        radius={10}
-        size="md"
-        opened={opened}
-        onClose={close}
-        closeButtonProps={{ size: "lg" }}
-        centered
-      >
-        <SchoolNotificationModal onCancel={close} label="Students" />
-      </Modal>
-
-      <Modal
-        radius={16}
-        size="md"
-        padding={0}
-        opened={openedAcceptConnection}
-        onClose={closeAcceptConnection}
-        closeButtonProps={{ size: "lg" }}
-        withCloseButton={false}
-        centered
-        mr={500}
-      >
-        <AcceptStudentModal
-          close={closeAcceptConnection}
-          submit={() => handleAccept(requestData)}
-          isLoading={acceptIsLoading}
-        />
-      </Modal>
-
       <div className="grid grid-cols-[1fr_120px_250px_1fr_150px] my-2 py-4 px-8 border-b-2 border-[#F0F2F5] text-[#101928]">
         <div>
           <p className="text-center items-center flex gap-3">

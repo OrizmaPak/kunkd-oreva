@@ -1,7 +1,6 @@
 import { getApiErrorMessage } from "@/api/helper";
 import { useSocialSignUp } from "@/api/queries";
 import { TUser } from "@/api/types";
-import Cancel from "@/assets/Cancel.svg";
 import { facebookSignIn, googleSignIn, appleSignIn } from "@/auth/sdk";
 import Button from "@/components/Button";
 import useStore from "@/store";

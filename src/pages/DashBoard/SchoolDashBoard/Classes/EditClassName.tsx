@@ -27,7 +27,6 @@ const EditClassName = ({
   editClose,
   currentClicked,
   currentClassData,
-  currentTeacherData,
 }: {
   editClose: () => void;
   currentClicked: number;

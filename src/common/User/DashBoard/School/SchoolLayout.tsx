@@ -4,7 +4,7 @@
 // import LogoutIcon from "@/assets/logout.svg";d
 // import StudentIcon from "@/assets/student.svg";
 // import TeacherIcon from "@/assets/teacher.svg";
-import LogoutModal from "@/pages/DashBoard/SchoolDashBoard/LogoutModal";
+// import LogoutModal from "@/pages/DashBoard/SchoolDashBoard/LogoutModal";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import React from "react";
@@ -76,7 +76,7 @@ const links = [
   // },
 ];
 const SchoolLayout = () => {
-  const [opened, { open, close }] = useDisclosure(false);
+  // const [opened, { open, close }] = useDisclosure(false);
   const [openedContactUs, { open: openContactUs, close: closeContactUs }] =
     useDisclosure(false);
 
@@ -86,7 +86,7 @@ const SchoolLayout = () => {
 
   return (
     <>
-      <Modal
+      {/* <Modal
         radius={6}
         size="md"
         opened={opened}
@@ -95,7 +95,7 @@ const SchoolLayout = () => {
         centered
       >
         <LogoutModal onCloseModal={() => close()} />
-      </Modal>
+      </Modal> */}
 
       <Modal
         radius={20}

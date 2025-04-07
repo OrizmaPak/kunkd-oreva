@@ -1,7 +1,6 @@
 import { useGetClassList, useGetTeacherList } from "@/api/queries";
 // import ArrowDown from "@/assets/arrowdown.svg";
 // import ClassesIcon from "@/assets/classes.svg";
-import EditPencil from "@/assets/editPencil.svg";
 import Button from "@/components/Button";
 import { Modal, Pagination, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -9,8 +8,6 @@ import AddNewClass from "./AddNewClass";
 import EditClassName from "./EditClassName";
 import { TTeacherList } from "../Teachers/Teachers";
 import { useState } from "react";
-import EditClassTeachers from "./EditClassTeachers";
-import Grade from "./Grade";
 import Row from "./Row";
 import SchoolNotificationModal from "@/components/SchoolNotificationModal";
 import OuterRec from "@/assets/Outer Rectangle.png";

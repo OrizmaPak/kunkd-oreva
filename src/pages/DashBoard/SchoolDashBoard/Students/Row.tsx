@@ -15,8 +15,8 @@ import { FaUserCircle } from "react-icons/fa";
 const Row = ({
   status,
   data,
-  onClick,
-}: {
+}: // onClick,
+{
   data: TRequestStudents;
   status: string;
   classCode?: string;
@@ -76,10 +76,7 @@ const Row = ({
       </Modal>
       <div>
         <div className="grid h-[72px]   grid-cols-[1fr_1fr_200px]    px-8 border-b-2 border-[#E5E7EB] ">
-          <div
-            onClick={onClick}
-            className="flex items-center justify-start gap-[20px] cursor-pointer "
-          >
+          <div className="flex items-center justify-start gap-[20px] cursor-pointer ">
             <span>
               {data?.image ? (
                 <img
@@ -116,7 +113,7 @@ const Row = ({
             </button>
             <button
               disabled={status !== "active"}
-              onClick={onClick}
+              // onClick={onClick}
               className=" text-customGreen font-Inter"
             >
               View

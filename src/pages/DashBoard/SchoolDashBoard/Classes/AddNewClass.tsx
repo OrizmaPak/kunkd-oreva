@@ -12,7 +12,6 @@ import { getApiErrorMessage } from "@/api/helper";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
-import Addicon from "@/assets/addicon24.png";
 import { formattedDate, handleEventTracking } from "@/api/moengage";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";

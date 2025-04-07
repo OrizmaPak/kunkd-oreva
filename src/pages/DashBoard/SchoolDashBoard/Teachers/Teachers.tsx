@@ -1,12 +1,12 @@
 import { useGetTeacherList } from "@/api/queries";
 // import ArrowDown from "@/assets/arrowdown.svg";
-import { STEP_1, STEP_3 } from "@/utils/constants";
+// import { STEP_1, STEP_3 } from "@/utils/constants";
 import { Modal, Pagination, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
-import EditClassTeacher from "./EditTeacher";
+// import EditClassTeacher from "./EditTeacher";
 import NewTeacher from "./NewTeacher";
-import Profile from "./Profile";
+// import Profile from "./Profile";
 import Row from "./Row";
 import SchoolNotificationModal from "@/components/SchoolNotificationModal";
 import SearchFilter from "../SearchFilter";
@@ -52,17 +52,17 @@ const Teachers = () => {
   const teacherList: TTeacherList[] = data?.data.data.records;
   const totalPage = data?.data.data.number_pages;
 
-  const [opened, { open, close }] = useDisclosure(false);
-  const [modalStep, setModalStep] = useState(STEP_1);
+  // const [opened, { open, close }] = useDisclosure(false);
+  // const [modalStep, setModalStep] = useState(STEP_1);
   const [
     openedSchNotifications,
     { open: openSchNotifications, close: closeSchNotifications },
   ] = useDisclosure(false);
 
-  const [currentClicked, setCucrrentClicked] = useState(0);
-  const currentClickedProfile = teacherList?.find(
-    (el) => el?.user?.id == currentClicked
-  );
+  // const [currentClicked, setCucrrentClicked] = useState(0);
+  // const currentClickedProfile = teacherList?.find(
+  //   (el) => el?.user?.id == currentClicked
+  // );
   // const activeClassTeacher = teacherList?.filter(data=> data?.user?.class_name !== "")
   return (
     <div className="h-full flex flex-col overflow-y-scroll">
@@ -128,8 +128,8 @@ const Teachers = () => {
                 currentClicked={data?.user?.id}
                 onClick={() => {
                   open();
-                  setCucrrentClicked(data?.user?.id);
-                  setModalStep(STEP_1);
+                  // setCucrrentClicked(data?.user?.id);
+                  // setModalStep(STEP_1);
                 }}
                 key={index}
                 data={data}
