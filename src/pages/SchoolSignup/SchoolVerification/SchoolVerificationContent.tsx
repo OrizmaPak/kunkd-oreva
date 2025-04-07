@@ -130,7 +130,7 @@ const SchoolVerificationContent = () => {
       >
         <SchoolCongratulationsContent />
       </Modal>
-      <div className="flex justify-center  rounded-[50px] w-[500px]  py-[50px] bg-white">
+      <div className="flex justify-center  rounded-[50px] w-[550px]  py-[50px] bg-white">
         <div className="inner-form-w mx-auto relative">
           <div className="flex justify-center items-center  mb-7 ">
             <img src={KundaLogo} alt="image" className="w-[200px]" />

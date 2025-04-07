@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Profile from "./Profile";
+import Billing from "./Billing";
+import Password from "./Password";
 
 const Settings = () => {
   const [active, setActive] = useState("1");
@@ -7,7 +9,7 @@ const Settings = () => {
     <>
       <div>
         <p className=" font-Inter  text-[28px] ">Settings</p>
-        <p className="text-[12px] text-[#667185]">
+        <p className="text-[12px] text-[#667185] mb-5 ">
           Take a look at your policies and the new policy to see what is covered
         </p>
 
@@ -45,7 +47,9 @@ const Settings = () => {
         </div>
       </div>
       <div className="mt-4 bg-white rounded-2xl p-5">
-        <Profile />
+        {active == "1" && <Profile />}
+        {active == "2" && <Billing />}
+        {active == "3" && <Password />}
       </div>
     </>
   );

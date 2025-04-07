@@ -13,6 +13,7 @@ import { CiLogout } from "react-icons/ci";
 import { handleEventTracking } from "@/api/moengage";
 import { logOut } from "@/auth/sdk";
 import { useNavigate } from "react-router-dom";
+import { useGetAttemptAllStudentConnect } from "@/api/queries";
 const SchoolDashboardHeader = () => {
   const navigate = useNavigate();
 
@@ -47,6 +48,10 @@ _logout`,
     navigate("/");
   };
   const [user] = useStore(getUserState);
+  const { data } = useGetAttemptAllStudentConnect(user?.role === "schoolAdmin");
+
+  const totalSchoolConnectList = data?.data?.data?.totalRecord;
+
   return (
     <div className="relative flex font-[500] py-4 text-[16px] px-[30px] justify-between items-center z-50 gap-4 h-[8vh] shadow-md bg-white">
       <div>
@@ -56,18 +61,25 @@ _logout`,
       </div>
 
       <div className="flex items-center  justify-end pl-2 gap-5">
-        <div className="flex gap-5 ">
-          <span>
-            {/* <img
-              loading="lazy"
-              src={BellIcon}
-              alt="bell icon"
-              className="min-w-[17px]"
-            /> */}
-            <AiOutlineBell size={25} color="#667185" className={" mx-auto"} />
-          </span>
+        <div
+          onClick={() => navigate("schooldashboard/request")}
+          className="relative cursor-pointer"
+        >
+          {user?.role === "schoolAdmin" || user?.role === "teacher" ? (
+            <div>
+              <AiOutlineBell size={22} className={" mx-auto"} color="#667185" />
+              <p
+                className={`absolute -top-4 text-white  right-[-14px] py-[1px] rounded-full px-[3px] ${
+                  totalSchoolConnectList > 0 ? "bg-red-700" : "bg-white"
+                }  `}
+              >
+                {totalSchoolConnectList || 0}
+              </p>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
-
         <Menu
           width={250}
           shadow="lg"

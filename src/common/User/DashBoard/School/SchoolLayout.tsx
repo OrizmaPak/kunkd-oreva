@@ -63,8 +63,8 @@ const links = [
   },
   {
     label: "Content Library",
-    href: "content-library",
-    route: routeBaseUrl + "/content-library/*",
+    // href: "content-library",
+    // route: routeBaseUrl + "/content-library/*",
     icon: ContentIcon,
     hasSub: true,
   },
@@ -117,8 +117,8 @@ const SchoolLayout = () => {
                 <NavButton
                   key={link.label}
                   title={link.label}
-                  href={link.href}
-                  route={link.route}
+                  href={link.href || ""}
+                  route={link.route || ""}
                   icon={<link.icon />}
                 />
               ))}
@@ -168,7 +168,7 @@ const DasboardButton = ({
   return (
     <button
       onClick={onClick}
-      className={` transition-all duration-700 px-1 py-4  text-[#101928] font-InterReg rounded-[4px] flex items-center justify-between gap-8 w-full my-2 text-[14px]  ${
+      className={` transition-all duration-700 px-1 py-4  text-[#101928] font-InterReg rounded-[4px] flex items-center justify-between gap-8 w-full  text-[14px]  ${
         active ? "bg-customGreen " : "hover:bg-customGreen "
       }  my-4`}
     >

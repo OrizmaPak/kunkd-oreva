@@ -234,7 +234,7 @@ function App() {
         <Suspense
           fallback={
             <Center h="100vh" maw={"100%"}>
-              <Loader color="#8530C1" size={100} />
+              <Loader color="#9FC43E" size={100} />
             </Center>
           }
         >

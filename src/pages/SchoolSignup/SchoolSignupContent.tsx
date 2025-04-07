@@ -92,7 +92,7 @@ const SchoolSignupContent = () => {
   };
 
   return (
-    <div className="flex justify-center   bg-white rounded-[50px] w-[500px] h-full  overflow-y-scroll ">
+    <div className="flex justify-center   bg-white rounded-[50px] w-[550px] h-full  overflow-y-scroll ">
       <div className="inner-form-w mx-auto relative">
         <div className="flex justify-center items-center mt-10 mb-7 ">
           <img src={KundaLogo} alt="image" className="w-[200px]" />
@@ -123,23 +123,23 @@ const SchoolSignupContent = () => {
               />
             </p>
 
-            <div className="my-4">
+            <div className="my-4 grid grid-cols-2 gap-4">
               <ReactFlagsSelect
                 selected={selectedCode}
                 onSelect={handleSelect}
                 // countries={{name:"Nigeria", id:"NG"}}
                 searchable
               />
-            </div>
 
-            <p className="my-4">
               <InputFormat
                 type="text"
                 placeholder="Enter State"
                 reg={register("state")}
                 errorMsg={errors.state?.message}
               />
-            </p>
+            </div>
+
+            <p className="my-4"></p>
 
             <div className="mt-10 mb-2 border-b-[1px] border-gray-200">
               <p className="text-bold  font-Hanken text-customGreen">

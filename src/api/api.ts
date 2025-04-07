@@ -16,6 +16,7 @@ import type {
   TSchoolSignupData,
   TSecurePortalData,
   TSetPasswordData,
+  TSupportMessage,
   TUdateParentImageData,
   TUdateParentProfileData,
   TUdateProfileData,
@@ -461,4 +462,12 @@ export const GetSchoolAndTeacherContent = (id: string) => {
 export const ContentSchoolTracking = (payload: TContentTracking) => {
   const { signal, ...restPayload } = payload;
   return axios.post("/content/school/track", restPayload, { signal });
+};
+
+export const GetSupportCategories = () => {
+  return axios.get("/support/category");
+};
+
+export const SupportMessage = (payload: TSupportMessage) => {
+  return axios.post("/support", payload);
 };

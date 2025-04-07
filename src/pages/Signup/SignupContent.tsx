@@ -282,7 +282,7 @@ const SignContent = () => {
     }
   };
   return (
-    <div className="flex justify-center  relative h-full bg-white rounded-[50px] w-[500px]  overflow-auto ">
+    <div className="flex justify-center  relative h-full bg-white rounded-[50px] w-[550px]  overflow-auto ">
       <div className="inner-form-w  mx-auto relative ">
         <div className="flex justify-center items-center my-12 ">
           <img src={KundaLogo} alt="image" className="w-[200px]" />
@@ -363,7 +363,7 @@ const SignContent = () => {
               </Button>
             </div>
           ) : null}
-          <p className="  text-gray-400 text-center mb-4">
+          <p className="  text-gray-400 text-center pb-5">
             <span>Already signed up? </span>
             <button
               onClick={() => navigate("/login")}

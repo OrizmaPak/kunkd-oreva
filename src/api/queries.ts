@@ -92,6 +92,8 @@ import {
   GetSchoolAndTeacherContent,
   ContentSchoolTracking,
   SaveSchoolQuiz,
+  GetSupportCategories,
+  SupportMessage,
 } from "./api";
 // import { TGetContentById } from "./types";
 import { useMutation, useQuery, useInfiniteQuery } from "@tanstack/react-query";
@@ -873,5 +875,18 @@ export const useGetSchoolAndTeacherContent = (
         }
       }
     },
+  });
+};
+
+export const useGetSupportCategories = () => {
+  return useQuery({
+    queryKey: ["GetSupportCategories"],
+    queryFn: GetSupportCategories,
+  });
+};
+
+export const useSupportMessage = () => {
+  return useMutation({
+    mutationFn: SupportMessage,
   });
 };

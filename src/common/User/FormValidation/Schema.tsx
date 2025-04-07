@@ -33,6 +33,6 @@ export type FormData = {
   schoolName?: string;
   state?: string;
   ageGroup?: string;
-  subject?: string;
+  subjectId?: string;
   body?: string;
 };

@@ -32,7 +32,7 @@ const DenyRequest = () => {
 
   return (
     <div>
-      <div className="grid  grid-cols-[1fr_150px_200px_1fr_150px] mt-5  px-8 text-[#344054] font-semibold  py-4 border-b-2 bg-[#F9FAFB] border-[#F0F2F5]">
+      <div className="grid  grid-cols-[1fr_120px_250px_1fr_150px] mt-5  px-8 text-[#344054] font-semibold  py-4 border-b-2 bg-[#F9FAFB] border-[#F0F2F5]">
         <div>Student's Name</div>
         <div>Class</div>
         <div>Parent's Email</div>
@@ -180,7 +180,7 @@ const Row = ({
         />
       </Modal>
 
-      <div className="grid grid-cols-[1fr_150px_200px_1fr_150px] my-2 py-4 px-8 border-b-2 border-[#F0F2F5] text-[#101928]">
+      <div className="grid grid-cols-[1fr_120px_250px_1fr_150px] my-2 py-4 px-8 border-b-2 border-[#F0F2F5] text-[#101928]">
         <div>
           <p className="text-center items-center flex gap-3">
             <img

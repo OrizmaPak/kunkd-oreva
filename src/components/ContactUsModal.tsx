@@ -5,14 +5,18 @@ import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
-import { MdModeEdit } from "react-icons/md";
-import { useState } from "react";
+import { useGetSupportCategories, useSupportMessage } from "@/api/queries";
+import { TSupportCategory } from "@/api/types";
+import { getApiErrorMessage } from "@/api/helper";
 const ContactUsModal = ({ close }: { close: () => void }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const schema: ZodType<FormData> = z.object({
-    subject: z.string().min(1, { message: "Subject is invalid" }),
+    subjectId: z.string().min(1, { message: "Subject is invalid" }),
     body: z.string().min(1, { message: "Body of messeage is empty" }),
   });
+  const { data } = useGetSupportCategories();
+  const supportcategories = data?.data?.data;
+  const { mutate, isLoading } = useSupportMessage();
+  // console.log("matthew ");
 
   const {
     register,
@@ -20,6 +24,34 @@ const ContactUsModal = ({ close }: { close: () => void }) => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
+  const SubmitData = async (datta: FormData) => {
+    console.log("matthew ");
+    console.log("data", datta);
+    mutate(
+      {
+        category_id: Number(datta?.subjectId),
+        content: datta?.body || "",
+      },
+      {
+        onSuccess(data) {
+          close();
+          notifications.show({
+            title: `Notification`,
+            message: data.data.message,
+          });
+        },
+
+        onError(err) {
+          close();
+
+          notifications.show({
+            title: `Notification`,
+            message: getApiErrorMessage(err),
+          });
+        },
+      }
+    );
+  };
   return (
     <div className="h-[481px]">
       <div>
@@ -30,71 +62,72 @@ const ContactUsModal = ({ close }: { close: () => void }) => {
 
       <div>
         <div className=" px-8 mt-7">
-          <form>
+          <form onSubmit={handleSubmit(SubmitData)}>
             <div className="mt-4">
+              {/* Dropdown for selecting category */}
               <p
-                className={`p-3 mb-2  rounded-full flex items-center gap-2 h-[44px] ${
-                  errors?.subject
+                className={`p-3 mb-2 rounded-full flex items-center gap-2 h-[44px] ${
+                  errors?.subjectId
                     ? "border-red-700 border-[1px]"
-                    : " bg-[#F1F1F1]"
+                    : "bg-[#F1F1F1]"
                 }`}
               >
                 <select
-                  {...register("subject")}
-                  name="age-group"
-                  id="age-group"
+                  {...register("subjectId")} // Ensure this matches the schema
+                  name="subjectId"
+                  id="subjectId"
                   className="w-full bg-[#F1F1F1] h-full focus-within:outline-none bg-inherit"
                 >
-                  <option className=" bg:in " value="">
-                    Select Age Group
-                  </option>
-                  <option value="2-4">General Inquiries</option>
-                  <option value="5-7">Technical Support</option>
-                  <option value="8-10">Subscription & Billing</option>
-                  <option value="Feature Requests & Feedback">
-                    Feature Requests & Feedback
-                  </option>
-                  <option value="Content & Learning Resources">
-                    Content & Learning Resources
-                  </option>
+                  <option value="">Select Category</option>
+                  {supportcategories?.map((each: TSupportCategory) => (
+                    <option key={each.id} value={each.id}>
+                      {each.name}
+                    </option>
+                  ))}
                 </select>
               </p>
-              <span className="text-red-600 mb-10 ">
-                {errors?.ageGroup?.message}
+              <span className="text-red-600 mb-10">
+                {errors?.subjectId?.message}
               </span>
             </div>
+
             <div className="mt-4">
+              {/* Textarea for message body */}
               <textarea
-                {...register("subject")}
+                {...register("body")} // Corrected to match the schema
                 name="body"
                 id="body"
                 placeholder="Message"
-                className="w-full h-[250px]  bg-[#F1F1F1] rounded-2xl p-4 focus:outline-none "
+                className="w-full h-[250px] bg-[#F1F1F1] rounded-2xl p-4 focus:outline-none"
               ></textarea>
-              <span className="text-red-600 mb-10 ">
-                {errors?.ageGroup?.message}
+              <span className="text-red-600 mb-10">
+                {errors?.body?.message}
               </span>
             </div>
-            <p className="my-5 flex gap-5  justify-center">
+
+            <p className="my-5 flex gap-5 justify-center">
+              {/* Close button */}
               <Button
                 size="sm"
                 onClick={close}
-                className="text-black bg-[#F1F1F1] rounded-full px-[40px] "
+                className="text-black bg-[#F1F1F1] rounded-full px-[40px]"
               >
                 Close
               </Button>
+
+              {/* Submit button */}
               <Button
-                type="submit"
                 size="sm"
+                type="submit"
                 backgroundColor="green"
                 className="rounded-full px-[20px]"
               >
                 {isLoading ? (
                   <p className="flex justify-center items-center">
-                    <Loader color="white" size="sm" />
+                    <Loader color="#BCD678" size="sm" />
                   </p>
                 ) : (
-                  <span className="flex gap-3 items-center ">Send message</span>
+                  <span className="flex gap-3 items-center">Send message</span>
                 )}
               </Button>
             </p>

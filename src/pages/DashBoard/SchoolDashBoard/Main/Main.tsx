@@ -24,7 +24,7 @@ export type TLogData = {
   languages: number;
   quiz: number;
 };
-type TLicense = {
+export type TLicense = {
   added_class_count: number;
   added_student_count: number;
   added_teacher_count: number;

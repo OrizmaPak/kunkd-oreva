@@ -456,7 +456,7 @@ const SearchService = () => {
 
 export default SchoolHeader;
 
-const SchNotification = ({ data }: { data: TRequestStudents[] }) => {
+export const SchNotification = ({ data }: { data: TRequestStudents[] }) => {
   const [user] = useStore(getUserState);
   const navigate = useNavigate();
   return (

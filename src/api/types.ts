@@ -103,6 +103,7 @@ export type TUdateSchProfileData = {
   contact_name: string;
   email: string;
   address: string;
+  phone?: string;
 };
 
 export type TUdateParentProfileData = {
@@ -196,6 +197,7 @@ export type TStoryContent = {
 };
 
 export type TCountry = {
+  id?: number;
   name: string;
   callingCodes: string[];
   alpha2Code: string;
@@ -210,7 +212,15 @@ export type TCountry = {
     png: string;
   };
 };
-
+export type TSupportCategory = {
+  id: number;
+  name: string;
+  slug: string;
+};
+export type TSupportMessage = {
+  category_id: number;
+  content: string;
+};
 /**
  * {
  * data, status, statusText, message, config, response, request}
