@@ -1,7 +1,7 @@
 import { useGetUpdatedProfile } from "@/api/queries";
 
-import InnerWrapper from "@/common/User/InnerWrapper";
-import Wrapper from "@/common/User/Wrapper";
+// import InnerWrapper from "@/common/User/InnerWrapper";
+// import Wrapper from "@/common/User/Wrapper";
 import { Outlet } from "react-router-dom";
 import Hero from "./Hero";
 import "./newlyregistereduser.css";

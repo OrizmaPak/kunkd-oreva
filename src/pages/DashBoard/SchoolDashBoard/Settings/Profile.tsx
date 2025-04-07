@@ -15,7 +15,7 @@ import { useDisclosure } from "@mantine/hooks";
 import UpdateProfileModal from "./UpdateProfileModal";
 
 const Profile = () => {
-  const [user, setUser] = useStore(getUserState);
+  const [user] = useStore(getUserState);
   console.log("User-------->", user);
   const [textToCopy] = useState(user?.school?.code as string);
   const handleCopy = () => {

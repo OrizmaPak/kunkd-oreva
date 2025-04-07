@@ -1,7 +1,7 @@
 import { CiSearch } from "react-icons/ci";
 import { CgSortAz } from "react-icons/cg";
 import { Menu } from "@mantine/core";
-import { useQueryClient } from "@tanstack/react-query";
+// import { useQueryClient } from "@tanstack/react-query";
 
 const SearchFilter = ({
   setSearchValue,
@@ -10,7 +10,7 @@ const SearchFilter = ({
   setFilterValue: (value: string) => void;
   setSearchValue?: (value: string) => void;
 }) => {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   return (
     <div className="flex justify-end items-center gap-5  px-8">

@@ -1,6 +1,6 @@
 import { Loader } from "@mantine/core";
 import { motion } from "framer-motion";
-import DisAbledIcon from "@/assets/deleteicon24.png";
+// import DisAbledIcon from "@/assets/deleteicon24.png";
 import Button from "@/components/Button";
 
 const ChangeProfileStatus = ({
