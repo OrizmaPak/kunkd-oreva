@@ -4,7 +4,13 @@ import { Link } from "react-router-dom";
 import "./schoolcongratulationcontent.css";
 import CongratIcon from "@/assets/congratIcon.png";
 
-const SchoolCongratulationsContent = ({ route }: { route: string }) => {
+const SchoolCongratulationsContent = ({
+  route,
+  message,
+}: {
+  route: string;
+  message: string;
+}) => {
   return (
     <div className="w-full h-full flex justify-center  items-center p-5">
       <div className="inner-form-w mx-auto">
@@ -18,7 +24,7 @@ const SchoolCongratulationsContent = ({ route }: { route: string }) => {
               Congratulations
             </h1>
             <p className="text2 text-[#A7A7A7] text-center mt-2 mb-5 font-ArimoRegular">
-              Your profile has been created
+              {message}
             </p>
             <p className="">
               <Link to={route}>
