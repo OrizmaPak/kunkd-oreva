@@ -103,10 +103,7 @@ const ProgressReport = lazy(
 const TMain = lazy(
   () => import("@/pages/DashBoard/TeacherDashboard/Main/Main")
 );
-const SchoolCongrtulations = lazy(
-  () =>
-    import("@/pages/SchoolSignup/SchoolCongratulations/SchoolCongratulations")
-);
+
 const ScrollToTop = lazy(() => import("@/components/ScrollToTop"));
 const AccountLayout = lazy(() => import("./pages/Account/AccountLayout"));
 const SettingPassword = lazy(() => import("./pages/Account/AccountPassword"));
@@ -478,10 +475,6 @@ function App() {
               <Route
                 path="kundakidsunlimited"
                 element={<KundaKidsUnlimited />}
-              ></Route>
-              <Route
-                path="schoolcongratulations"
-                element={<SchoolCongrtulations />}
               ></Route>
 
               {/* Parent sign up routes */}
