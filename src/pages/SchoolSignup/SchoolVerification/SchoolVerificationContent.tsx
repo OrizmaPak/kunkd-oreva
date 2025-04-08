@@ -126,12 +126,15 @@ const SchoolVerificationContent = () => {
         closeOnClickOutside={false}
         transitionProps={{ duration: 500, timingFunction: "ease" }}
       >
-        <SchoolCongratulationsContent />
+        <SchoolCongratulationsContent
+          route="/schooldashboard"
+          message=" Your profile has been created"
+        />
       </Modal>
-      <div className="flex justify-center  rounded-[50px] w-[550px]  py-[50px] bg-white">
+      <div className="flex justify-center  rounded-[50px] w-[550px]  py-[30px] bg-white">
         <div className="inner-form-w mx-auto relative">
-          <div className="flex justify-center items-center  mb-7 ">
-            <img src={KundaLogo} alt="image" className="w-[200px]" />
+          <div className="flex justify-center items-center mt-8 mb-12 ">
+            <img src={KundaLogo} alt="image" className="w-[160px]" />
           </div>
           <div className="w-[100%]  my-auto mt-12 ">
             <h1 className=" font-semibold header2 font-BalooSemiBold text-center">
@@ -141,7 +144,7 @@ const SchoolVerificationContent = () => {
               A code has been sent to email, enter to verify your account{" "}
             </p>
             <form onSubmit={handleSubmit(submitData)}>
-              <div className="mt-8 flex justify-center items-center gap-4 flex-col">
+              <div className="mt-10 flex justify-center items-center gap-4 flex-col">
                 <Group position="center">
                   <PinInput
                     value={otp}

@@ -13,7 +13,12 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { AiOutlineMail } from "react-icons/ai";
 import Button from "@/components/Button";
-import { useUpdateSchoolNameAddress, useUpdateSchProfile } from "@/api/queries";
+import {
+  // useGetUpdatedProfile,
+  useUpdateSchoolNameAddress,
+  useUpdateSchProfile,
+} from "@/api/queries";
+import { TUser } from "@/api/types";
 
 const UpdateProfileModal = ({ close }: { close: () => void }) => {
   const [user, setUser] = useStore(getUserState);
@@ -38,7 +43,7 @@ const UpdateProfileModal = ({ close }: { close: () => void }) => {
       .max(14, { message: "Phone number must not more than 14 characters" }),
   });
 
-  const { mutate, isLoading } = useUpdateSchoolNameAddress();
+  const { mutateAsync, isLoading } = useUpdateSchoolNameAddress();
   const { mutate: mutateContactPerson, isLoading: isLoadingContactPerson } =
     useUpdateSchProfile();
 
@@ -47,9 +52,12 @@ const UpdateProfileModal = ({ close }: { close: () => void }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
+  // const { refetch } = useGetUpdatedProfile();
 
   const submitData = async (datta: FormData) => {
-    mutate(
+    let newUserData: Partial<TUser> = {};
+
+    await mutateAsync(
       {
         ...user?.school,
         school_name: datta.school_name as string,
@@ -58,10 +66,8 @@ const UpdateProfileModal = ({ close }: { close: () => void }) => {
       {
         onSuccess(data) {
           queryClient.invalidateQueries(["GetUpdatedProfile"]);
-          console.log("data", data?.data?.data?.name);
-          console.log("data", data?.data?.data?.address);
 
-          setUser({
+          newUserData = {
             ...user,
             school: {
               ...user?.school,
@@ -69,8 +75,9 @@ const UpdateProfileModal = ({ close }: { close: () => void }) => {
               address: data?.data?.data?.address,
             },
             address: data?.data?.data?.address,
-          });
-          close();
+          };
+          console.log({ newUserData, data }, "new update user data");
+          setUser(newUserData);
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -98,13 +105,14 @@ const UpdateProfileModal = ({ close }: { close: () => void }) => {
         onSuccess(data) {
           queryClient.invalidateQueries(["GetUpdatedProfile"]);
           setUser({
-            ...user,
+            ...newUserData,
             school: {
-              ...user?.school,
+              ...newUserData?.school,
               address: data.data.data.address,
               contact_name: data?.data?.data?.contact_name,
             },
           });
+
           close();
           notifications.show({
             title: `Notification`,

@@ -185,6 +185,7 @@ body {
   background-color: #eceff1 !important;
   padding-block: 10px !important;
   border-radius: 20px !important;
+  height: 42px !important;
 }
 .mantine-PinInput-input {
   border-color: #9fc43e !important;

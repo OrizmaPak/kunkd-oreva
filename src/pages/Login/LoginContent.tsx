@@ -363,10 +363,10 @@ _login`,
   };
 
   return (
-    <div className="flex justify-center   h-full bg-white rounded-[50px] w-[550px] ">
+    <div className="flex justify-center   py-[30px] bg-white rounded-[50px] min-w-[550px] ">
       <div className="inner-form-w relative  ">
-        <div className="flex justify-center items-center my-12 ">
-          <img src={KundaLogo} alt="image" className="w-[200px]" />
+        <div className="flex justify-center items-center mt-8 mb-12 ">
+          <img src={KundaLogo} alt="image" className="w-[160px]" />
         </div>
         <div className="w-[100%] ">
           <span></span>
@@ -376,7 +376,7 @@ _login`,
           <p className="text3 text-[#A7A7A7] font-ArimoRegular text-center ">
             Welcome back! please enter your details
           </p>
-          <form onSubmit={handleSubmit(submitData)} className="text3 mt-14">
+          <form onSubmit={handleSubmit(submitData)} className="text3 mt-10">
             <p className="my-4">
               {
                 <InputFormat

@@ -1,4 +1,3 @@
-import InputFormat from "@/common/InputFormat";
 import Button from "@/components/Button";
 import { getUserState } from "@/store/authStore";
 
@@ -16,7 +15,6 @@ import UpdateProfileModal from "./UpdateProfileModal";
 
 const Profile = () => {
   const [user] = useStore(getUserState);
-  console.log("User-------->", user);
   const [textToCopy] = useState(user?.school?.code as string);
   const handleCopy = () => {
     // Create a new textarea element to hold the text
@@ -37,7 +35,6 @@ const Profile = () => {
       message: "Copied",
     });
   };
-
   const { data } = useGetCountries();
   const countries: TCountry[] = data?.data?.data;
   // const [selectedCountry, setSelectedCountry] = useState<TCountry>();
@@ -52,9 +49,11 @@ const Profile = () => {
       setSelectedCode(selectedCountry?.iso2);
     }
   }, [selectedCountry]);
-  console.log("country--code", selectedCountry);
   const [opened, { close, open }] = useDisclosure(false);
 
+  const schoolInfo = user?.school;
+
+  console.log(schoolInfo, "shcool info");
   return (
     <>
       <Modal
@@ -115,13 +114,21 @@ const Profile = () => {
                 >
                   School Name
                 </label>
-                <InputFormat value={user?.school?.name} />
+                <p
+                  className={`border h-[44px] bg-[#F1F1F1] py-3 px-4 rounded-full flex items-center gap-2 mt-1 `}
+                >
+                  {user?.school?.name}
+                </p>
               </p>
               <p className=" mt-4">
                 <label htmlFor="Address" className="text-[14px] font-InterReg">
                   Address
                 </label>
-                <InputFormat value={user?.school?.address} />
+                <p
+                  className={`border h-[44px] bg-[#F1F1F1] py-3 px-4 rounded-full flex items-center gap-2 mt-1 `}
+                >
+                  {user?.school?.address}
+                </p>
               </p>
               <p className=" mt-4">
                 <label htmlFor="country" className="text-[14px] font-InterReg">
@@ -139,7 +146,11 @@ const Profile = () => {
                 <label htmlFor="state" className="text-[14px] font-InterReg">
                   State
                 </label>
-                <InputFormat value={"Lagos"} />
+                <p
+                  className={`border h-[44px] bg-[#F1F1F1] py-3 px-4 rounded-full flex items-center gap-2 mt-1 `}
+                >
+                  Lagos
+                </p>
               </p>
             </div>
           </div>
@@ -158,21 +169,33 @@ const Profile = () => {
                 <label htmlFor="name" className="text-[14px] font-InterReg">
                   Name
                 </label>
-                <InputFormat value={user?.school?.contact_name} />
+                <p
+                  className={`border h-[44px] bg-[#F1F1F1] py-3 px-4 rounded-full flex items-center gap-2 mt-1 `}
+                >
+                  {schoolInfo?.contact_name}
+                </p>
               </p>
 
               <p>
                 <label htmlFor="phone" className="text-[14px] font-InterReg">
                   Phone Number
                 </label>
-                <InputFormat value={user?.phone} />
+                <p
+                  className={`border h-[44px] bg-[#F1F1F1] py-3 px-4 rounded-full flex items-center gap-2 mt-1`}
+                >
+                  {user?.phone}
+                </p>
               </p>
 
               <p>
                 <label htmlFor="email" className="text-[14px] font-InterReg">
                   Email
                 </label>
-                <InputFormat value={user?.email} />
+                <p
+                  className={`border h-[44px] bg-[#F1F1F1] py-3 px-4 rounded-full flex items-center gap-2 mt-1`}
+                >
+                  {user?.email}
+                </p>
               </p>
             </div>
           </div>

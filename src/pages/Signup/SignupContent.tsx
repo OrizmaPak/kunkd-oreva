@@ -281,10 +281,10 @@ const SignContent = () => {
     }
   };
   return (
-    <div className="flex justify-center  relative h-full bg-white rounded-[50px] w-[550px]  overflow-auto ">
+    <div className="flex justify-center  relative  bg-white rounded-[50px] w-[550px]  overflow-auto ">
       <div className="inner-form-w  mx-auto relative ">
-        <div className="flex justify-center items-center my-12 ">
-          <img src={KundaLogo} alt="image" className="w-[200px]" />
+        <div className="flex justify-center items-center mt-8 mb-12 ">
+          <img src={KundaLogo} alt="image" className="w-[160px]" />
         </div>
         <div className="w-[100%]">
           <p className="font-bold text-[48px] font-BalooSemiBold text-center tracking-n  leading-[40px] ">

@@ -6,9 +6,11 @@ import { Menu } from "@mantine/core";
 const SearchFilter = ({
   setSearchValue,
   setFilterValue,
+  filterValue,
 }: {
   setFilterValue: (value: string) => void;
   setSearchValue?: (value: string) => void;
+  filterValue?: string;
 }) => {
   // const queryClient = useQueryClient();
 
@@ -30,7 +32,11 @@ const SearchFilter = ({
         <Menu.Target>
           <div className="flex items-center gap-2 border-[2px] border-gray-300 rounded-[8px]  p-[6px] px-[8px] cursor-pointer">
             <CgSortAz size={35} />
-            <p>Sort By</p>
+            <p>
+              Sort By{" "}
+              {filterValue &&
+                filterValue.charAt(0).toUpperCase() + filterValue.slice(1)}
+            </p>
           </div>
         </Menu.Target>
         <Menu.Dropdown>

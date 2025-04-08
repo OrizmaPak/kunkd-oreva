@@ -1,8 +1,7 @@
 import EmailLogo from "@/assets/emaillogo.svg";
-import Cancel from "@/assets/Cancel.svg";
 import InputFormat from "@/common/InputFormat";
 import Button from "@/components/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData } from "@/common/User/FormValidation/Schema";
@@ -11,6 +10,8 @@ import { useForgotPassword } from "@/api/queries";
 import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { getApiErrorMessage } from "@/api/helper";
+import KundaLogo from "@/assets/KundaLogo.svg";
+
 const ForgotPasswordContent = () => {
   const navigate = useNavigate();
   const { isLoading, mutate } = useForgotPassword();
@@ -49,23 +50,20 @@ const ForgotPasswordContent = () => {
   };
 
   return (
-    <div className="flex justify-center items-center w-full h-full">
-      <div className="inner-form-w relative  my-auto flex justify-end items-center ">
-        <Link to="/">
-          <span className="absolute top-[-60px]">
-            <img loading="lazy" src={Cancel} alt="cancel" className="" />
-          </span>
-        </Link>
+    <div className="flex justify-center py-[30px] bg-white rounded-[50px] min-w-[550px]">
+      <div className="inner-form-w ">
+        <div className="flex justify-center items-center mt-8 mb-12 ">
+          <img src={KundaLogo} alt="image" className="w-[160px]" />
+        </div>
         <div className="w-[90%]  mx-auto my-auto ">
           <span></span>
-          <h1 className="font-bold text-[40px] font-Recoleta mb-2">
+          <h1 className="font-bold text-[36px] text-center  leading-none font-BalooSemiBold mb-2">
             Forgot password?
           </h1>
-          <p className="text-[15px] text-[#A7A7A7] font-Hanken">
-            Forgot your password? Dont't worry enter your email to reset your
-            current password
+          <p className="text-[14px] text-[#A7A7A7] font-Arimo text-center leading-none">
+            Don't worry enter your email to reset your current password
           </p>
-          <form onSubmit={handleSubmit(submitData)} className="mt-8">
+          <form onSubmit={handleSubmit(submitData)} className="mt-10">
             <InputFormat
               type="email"
               placeholder="email"
@@ -74,7 +72,12 @@ const ForgotPasswordContent = () => {
               leftIcon={<img loading="lazy" src={EmailLogo} alt="email icon" />}
             />
             <p className="mt-10">
-              <Button type="submit" size="full">
+              <Button
+                type="submit"
+                size="full"
+                backgroundColor="green"
+                className="rounded-full"
+              >
                 {isLoading ? (
                   <p className="flex justify-center items-center">
                     <Loader color="white" size="sm" />
@@ -89,7 +92,7 @@ const ForgotPasswordContent = () => {
             <span className="font-Hanken">Don't hava an account? </span>
             <button
               onClick={() => navigate("/signup")}
-              className="mt-8 text-[#8530C1] font-bold
+              className="mt-8 text-customGreen font-bold
         "
             >
               Sign up

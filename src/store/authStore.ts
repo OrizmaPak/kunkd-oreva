@@ -22,7 +22,11 @@ type State = {
 };
 
 type Action = {
-  setUser: (user: State["user"]) => void;
+  setUser: (user: Partial<State["user"]>) => void;
+  setSchoolAddress: (address: {
+    address: string;
+    contact_name: string;
+  }) => void;
 };
 
 const getLocalStorage = (key: string): State["user"] => {
@@ -42,11 +46,22 @@ const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
   setUser: (user) =>
     set((state) => {
       setLocalStorage("user", user);
-      return { ...state, user };
+      return { ...state, user: { ...state.user, ...user } };
+    }),
+  setSchoolAddress: (data) =>
+    set((state) => {
+      return {
+        ...state,
+        user: { ...state.user, school: { ...state.user?.school, ...data } },
+      };
     }),
 });
 export default createAuthSlice;
 
 export const getUserState = (
   state: AuthSlice
-): [State["user"], Action["setUser"]] => [state.user, state.setUser];
+): [State["user"], Action["setUser"], Action["setSchoolAddress"]] => [
+  state.user,
+  state.setUser,
+  state.setSchoolAddress,
+];

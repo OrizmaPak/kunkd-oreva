@@ -20,10 +20,17 @@ const Password = () => {
       .string()
       .min(4, { message: "Password must be at least 4 characters long" })
       .max(20, { message: "Password must not exceed 20 characters" }),
-    new_password: z
+    password: z
       .string()
-      .min(4, { message: "Password must be at least 4 characters long" })
-      .max(20, { message: "Password must not exceed 20 characters" }),
+      .min(8, { message: "Password must be at least 8 characters long" })
+      .max(20, { message: "Password must not exceed 20 characters" })
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        {
+          message:
+            "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character",
+        }
+      ),
   });
 
   const {
@@ -63,7 +70,7 @@ const Password = () => {
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
     >
-      <div className="grid grid-cols-[400px_1fr] gap-8 px-4 py-8">
+      <div className="grid grid-cols-[400px_1fr] gap-8 px-4 pb-5">
         <div>
           <h1 className="text-[24px]  font-Inter">Password</h1>
           <p className="text-[#667185] text-[14px] font-InterReg">
@@ -74,7 +81,9 @@ const Password = () => {
           <form onSubmit={handleSubmit(submitData)}>
             <div className=" gap-8 my-6 items-center">
               <p className="flex flex-col">
-                <span className="text-[16px] font-Hanken ">Old Password</span>
+                <span className="text-[16px] font-Hanken ">
+                  Current Password
+                </span>
               </p>
 
               <span>
@@ -82,7 +91,7 @@ const Password = () => {
                   reg={register("current_password")}
                   errorMsg={errors.current_password?.message}
                   type="password"
-                  placeholder="xxxxxxxx"
+                  placeholder="Enter current password"
                   leftIcon={<RiLockLine size={20} color="#c4ccd0" />}
                   rightIcon={<AiOutlineEye size={22} color="#c4ccd0" />}
                 />
@@ -95,16 +104,13 @@ const Password = () => {
 
               <span>
                 <InputFormat
-                  reg={register("new_password")}
-                  errorMsg={errors.new_password?.message}
+                  reg={register("password")}
+                  errorMsg={errors.password?.message}
                   type="password"
-                  placeholder="xxxxxxxx"
+                  placeholder="Enter new password"
                   leftIcon={<RiLockLine size={20} color="#c4ccd0" />}
                   rightIcon={<AiOutlineEye size={22} color="#c4ccd0" />}
                 />
-                <span className="text-gray-400 mt-6 text3 ml-4">
-                  Minimum 4 characters
-                </span>
               </span>
             </div>
 

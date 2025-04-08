@@ -93,7 +93,7 @@ const Teachers = () => {
       </div>
       <div className=" flex-grow flex flex-col rounded-3xl py-4 bg-white border-[2px] border-[#E4E7EC]">
         <div>
-          <SearchFilter setFilterValue={setStatus} />
+          <SearchFilter setFilterValue={setStatus} filterValue={status} />
         </div>
 
         <div>

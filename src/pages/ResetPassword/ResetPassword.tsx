@@ -1,14 +1,15 @@
-import FormWrapper from "../../common/FormWrapper";
+// import FormWrapper from "../../common/FormWrapper";
 import ResetPasswordContent from "./ResetPasswordContent";
-import LoginCarousel from "../../common/LoginCarousel";
+// import LoginCarousel from "../../common/LoginCarousel";
+import SignInWrapper from "@/common/SignInWrapper";
 
 const ResetPassword = () => {
   return (
     <div className="flex">
-      <FormWrapper>
+      <SignInWrapper>
         <ResetPasswordContent />
-      </FormWrapper>
-      <LoginCarousel />
+      </SignInWrapper>
+      {/* <LoginCarousel /> */}
     </div>
   );
 };

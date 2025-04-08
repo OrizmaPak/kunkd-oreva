@@ -1,6 +1,9 @@
 import { useGetLicense } from "@/api/queries";
 import { TLicense } from "../Main/Main";
 import Button from "@/components/Button";
+import ClassesIcon from "@/assets/components/ClassesIcon";
+import TeachersIcon from "@/assets/components/TeachersIcon";
+import StudentsIcon from "@/assets/components/StudentsIcon";
 
 const Billing = () => {
   const { data: dataLicense } = useGetLicense();
@@ -9,67 +12,71 @@ const Billing = () => {
     <div className="px-8 py-5">
       <div className="border-[2px] border-[#ECEFF1] p-8 rounded-md">
         <p className="text-[14px] font-InterReg">Current Plan Summary</p>
-        <hr className="mb-5" />
+        <hr className="mb-5 mt-2" />
         <div className="flex justify-between items-center">
           <div className="w-[165px] h-[94px] text-[14px] font-InterReg">
-            <p>
-              <span className="text-[14px] text-[#0D9013] font-InterReg">
-                {license?.added_class_count || "0 "}
-              </span>
-              active Classes of{" "}
-              <span className="text-[14px] text-[#0D9013] font-InterReg">
-                {license?.license_class_count || "0"}
-              </span>
+            <p className="text-[14px] font-Inter flex gap-2 justify-center">
+              {" "}
+              <ClassesIcon /> Class
             </p>
+
             <p className=" font-Inter text-[20px] text-center">
               {license?.license_class_count || "0"}
             </p>
             <p className="text-[#98A2B3]  font-InterReg text-center text-[12px]">
-              slots available{" "}
+              <span className="text-[14px] px-1 font-Inter text-customGreen">
+                {license?.added_class_count || "0 "}
+              </span>
+              slots available of
+              <span className="text-[14px]  font-Inter px-1">
+                {license?.license_class_count || "0"}
+              </span>
             </p>
           </div>
 
           <div className="w-[165px] h-[94px]">
-            <p>
-              <span className="text-[14px] text-[#0D9013] font-InterReg">
-                {license?.added_teacher_count || "0"}{" "}
-              </span>
-              active Teachers of
-              <span className="text-[14px] text-[#0D9013] font-InterReg">
-                {" "}
-                {license?.license_teacher_count || "0"}
-              </span>
+            <p className="text-[14px] font-Inter flex gap-2 justify-center">
+              <TeachersIcon />
+              Teachers
             </p>
+
             <p className=" font-Inter text-[20px] text-center">
               {license?.license_teacher_count || "0"}
             </p>
             <p className="text-[#98A2B3]  font-InterReg text-center text-[12px]">
-              slots available{" "}
+              <span className="text-[14px] px-1 font-Inter text-customGreen">
+                {license?.added_teacher_count || "0"}
+              </span>
+              slots available of
+              <span className="text-[14px]  font-Inter px-1">
+                {license?.license_teacher_count || "0"}
+              </span>
             </p>
           </div>
 
           <div className="w-[165px] h-[94px]">
-            <p>
-              <span className="text-[14px] text-[#0D9013] font-InterReg">
-                {license?.added_student_count || "0"}
-              </span>{" "}
-              active Students of{" "}
-              <span className="text-[14px] text-[#0D9013] font-InterReg">
-                {" "}
-                {license?.license_student_count || "0"}
-              </span>
+            <p className="text-[14px] font-Inter flex gap-2 justify-center">
+              <StudentsIcon />
+              Students
             </p>
+
             <p className=" font-Inter text-[20px] text-center">
               {license?.license_student_count || "0"}
             </p>
             <p className="text-[#98A2B3]  font-InterReg text-center text-[12px]">
-              slots available{" "}
+              <span className="text-[16px]  font-Inter px-1 text-customGreen ">
+                {license?.added_student_count || "0"}
+              </span>
+              slots available of
+              <span className="text-[14px]  font-Inter px-1">
+                {license?.license_student_count || "0"}
+              </span>
             </p>
           </div>
         </div>
 
-        <p className="text-[14px] font-InterReg mt-6">Subscription Plan</p>
-        <hr className="mb-5" />
+        <p className="text-[14px] font-InterReg mt-8">Subscription Plan</p>
+        <hr className="mb-5 mt-2" />
         <div className="flex justify-between items-center my-4 ">
           <div className="w-[60%] flex justify-between items-center ">
             <div>

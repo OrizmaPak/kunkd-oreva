@@ -52,13 +52,19 @@ const SchoolSignupContent = () => {
       .max(20, { message: "The state name must not exceed 20 characters" }),
     phone: z
       .string()
-      .min(11, { message: "Phone number must not less than 11 characters" })
-      .max(14, { message: "Phone number must not more than 14 characters" }),
+      .min(11, { message: "Phone number must not less than 11 characters" }),
     email: z.string().email(),
     password: z
       .string()
-      .min(4, { message: "Password must be at least 4 characters long" })
-      .max(20, { message: "Password must not exceed 20 characters" }),
+      .min(8, { message: "Password must be at least 8 characters long" })
+      .max(20, { message: "Password must not exceed 20 characters" })
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        {
+          message:
+            "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character",
+        }
+      ),
   });
 
   const {
@@ -95,7 +101,7 @@ const SchoolSignupContent = () => {
     <div className="flex justify-center   bg-white rounded-[50px] w-[550px] h-full  overflow-y-scroll ">
       <div className="inner-form-w mx-auto relative">
         <div className="flex justify-center items-center mt-10 mb-7 ">
-          <img src={KundaLogo} alt="image" className="w-[200px]" />
+          <img src={KundaLogo} alt="image" className="w-[160px]" />
         </div>
         <div className="w-[100%]">
           <h1 className="font-bold fon header2 font-BalooSemiBold text-center">
@@ -123,20 +129,22 @@ const SchoolSignupContent = () => {
               />
             </p>
 
-            <div className="my-4 grid grid-cols-2 gap-4">
+            <div className="my-4 flex justify-end items-center gap-2">
               <ReactFlagsSelect
                 selected={selectedCode}
                 onSelect={handleSelect}
                 // countries={{name:"Nigeria", id:"NG"}}
                 searchable
+                className="w-full h-full "
               />
-
-              <InputFormat
-                type="text"
-                placeholder="Enter State"
-                reg={register("state")}
-                errorMsg={errors.state?.message}
-              />
+              <p className="w-full h-full mb-[10px]">
+                <InputFormat
+                  type="text"
+                  placeholder="Enter State"
+                  reg={register("state")}
+                  errorMsg={errors.state?.message}
+                />
+              </p>
             </div>
 
             <p className="my-4"></p>
@@ -158,11 +166,14 @@ const SchoolSignupContent = () => {
 
             <p className="my-4">
               <InputFormat
-                type="text"
+                type="number"
                 placeholder="Enter Phone number"
                 reg={register("phone")}
                 errorMsg={errors.phone?.message}
               />
+              <p className="text-[10px] text-[#999999] font-Inter px-2 pt-1">
+                Please include your country code
+              </p>
             </p>
             <p className="my-3">
               <InputFormat
@@ -198,7 +209,7 @@ const SchoolSignupContent = () => {
               and
               <strong className="text-customGreen"> Privacy Policy </strong>
             </p>
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center mt-10">
               <Button
                 type="submit"
                 size="sm"

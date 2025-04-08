@@ -140,7 +140,7 @@ const Classes = () => {
 
       <div className=" flex-grow flex flex-col rounded-3xl py-4 bg-white border-[2px] border-[#E4E7EC] ">
         <div className="px-8 flex gap-5 justify-end">
-          <SearchFilter setFilterValue={setStatus} />
+          <SearchFilter setFilterValue={setStatus} filterValue={status} />
         </div>
 
         <div className="   ">

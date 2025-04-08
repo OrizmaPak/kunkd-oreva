@@ -35,14 +35,13 @@ const EditTeacher = ({
   close: () => void;
   currentData: TTeacherList;
 }) => {
+  console.log("currentTeacherdata", currentData);
   // const { mutate, isLoading } = useAddTeacherData();
   const queryClient = useQueryClient();
   // const [user] = useStore(getUserState);
   const { data } = useGetClassList();
   const classList: Tclass[] = data?.data?.data.records;
-  const availableClassList = classList?.filter(
-    (klass: Tclass) => klass?.teacher_count < 1
-  );
+
   const schema: ZodType<FormData> = z.object({
     firstname: z
       .string()
@@ -184,11 +183,11 @@ const EditTeacher = ({
                   {...register("classid")}
                   name="classid"
                   id="classid"
-                  defaultValue={currentData?.user?.class_id || ""} // Set default value to currentData's class_id
+                  defaultValue={currentData?.user?.class_id} // Set default value to currentData's class_id
                   className="w-full h-full flex-1 focus:outline-none bg-inherit"
                 >
                   <option value="">Select Class</option>
-                  {availableClassList?.map((classs: Tclass, index: number) => (
+                  {classList?.map((classs: Tclass, index: number) => (
                     <option key={index} value={classs.id}>
                       {classs.name}
                     </option>

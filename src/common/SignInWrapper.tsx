@@ -11,9 +11,8 @@ const SignInWrapper = ({ children }: Props) => {
         className=" w-full h-full object-cover object-top "
       />
 
-      <div className=" top-0 h-full absolute grid grid-cols-2 w-full py-5 px-10 pl-[300px]">
-        <div></div>
-        <div className=" rounded-3xl flex items-center justify-center  overflow-hidden">
+      <div className=" top-0 h-full absolute flex w-full py-5 px-20  ">
+        <div className=" rounded-3xl w-[50%] flex-grow  flex items-center   justify-end    overflow-hidden">
           {" "}
           {children}
         </div>

@@ -27,6 +27,7 @@ const EditClassName = ({
   editClose,
   currentClicked,
   currentClassData,
+  currentTeacherData,
 }: {
   editClose: () => void;
   currentClicked: number;
@@ -46,14 +47,16 @@ const EditClassName = ({
   const schema: ZodType<FormData> = z.object({
     name: z.string().min(1, { message: "Class Name is invalid" }),
     ageGroup: z.string().min(1, { message: "Age Range is invalid" }),
-    teacher_id: z.string().min(1, { message: "Teacher is invalid" }),
+    teacher_id: z.string().optional(),
   });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({ resolver: zodResolver(schema) });
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
 
   const submitData = async (datta: FormData) => {
     mutate(
@@ -156,8 +159,8 @@ const EditClassName = ({
             >
               <select
                 {...register("ageGroup")}
-                name="age-group"
-                id="age-group"
+                name="ageGroup"
+                id="ageGroup"
                 className="w-full  h-full focus-within:outline-none bg-inherit"
               >
                 <option className=" bg:in " value="age-group">
@@ -191,20 +194,16 @@ const EditClassName = ({
               <select
                 {...register("teacher_id")}
                 name="teacher_id"
-                id="classid"
-                // value={currentClassData?.}
+                id="teacher_id"
+                value={currentTeacherData?.user?.id}
                 className="w-full  h-full flex-1  focus:outline-none bg-inherit"
               >
-                <option value="">Select Teacher</option>
-                {teacherList
-                  ?.filter(
-                    (data: TTeacherList) => data?.user?.class_name === ""
-                  )
-                  .map((data: TTeacherList) => (
-                    <option value={data?.user?.id}>
-                      {data?.user.firstname} {data?.user?.lastname}
-                    </option>
-                  ))}
+                <option>Select Teacher</option>
+                {teacherList?.map((data: TTeacherList) => (
+                  <option value={data?.user?.id}>
+                    {data?.user.firstname} {data?.user?.lastname}
+                  </option>
+                ))}
                 {/* <option value="classA">Class A</option>
                             <option value="classB">Class B</option> */}
               </select>
