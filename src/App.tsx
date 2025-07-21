@@ -27,6 +27,7 @@ import PreviewSummerChallengePage from "./pages/SummerQuiz/PreviewSummerChalleng
 import SummerQuizLayout from "./pages/SummerQuiz/SummerQuizLayout";
 import SchoolDashboardHeader from "./common/User/DashBoard/School/SchoolDashboardHeader";
 import Settings from "./pages/DashBoard/SchoolDashBoard/Settings/Settings";
+import ParentVerification from "./pages/ParentSignup/ParentVerificattion";
 const VideoV2 = lazy(() => import("./pages/AfricanLanguages/VideosV2/VideoV2"));
 const StoriesV2 = lazy(() => import("./pages/Stories/StoriesV2/StoriesV2"));
 const DefaultTab = lazy(() => import("./pages/AfterParentSignIn/DefaultTab"));
@@ -479,6 +480,8 @@ function App() {
 
               {/* Parent sign up routes */}
               <Route path="parentsignup" element={<ParentSignup />}></Route>
+              <Route path="parentverification" element={<ParentVerification />}></Route>
+
               <Route path="secureaccount" element={<SecureAccount />}></Route>
               <Route path="makepayment" element={<MakePayment />}></Route>
               <Route

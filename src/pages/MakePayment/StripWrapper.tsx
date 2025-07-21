@@ -115,7 +115,7 @@ const CheckoutForm = ({
         }}
       />
       <button
-        className="w-[120px] bg-[#8530C1] rounded flex justify-center items-center py-2"
+        className="w-[120px] bg-customGreen rounded flex justify-center items-center py-2"
         disabled={isLoading || !stripe || !elements || !enableSubmit}
         id="submit"
       >

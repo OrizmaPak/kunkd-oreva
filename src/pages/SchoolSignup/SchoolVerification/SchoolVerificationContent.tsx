@@ -170,7 +170,7 @@ const SchoolVerificationContent = () => {
                   // onClick={}
                   size="sm"
                   backgroundColor="green"
-                  className="px-[50px] rounded-full px-[80px]"
+                  className=" rounded-full px-[80px]"
                 >
                   {isLoading ? (
                     <p className="flex justify-center items-center">
