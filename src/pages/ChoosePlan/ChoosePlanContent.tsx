@@ -14,6 +14,31 @@ const ChoosePlanContent = () => {
       <Skeleton visible={isLoading}>
         <div className="mx-auto  flex items-center justify-center">
           <div className="flex mt-16 w-full  justify-center  items-center ">
+
+
+<table>
+<tbody>
+  <th>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+  </th>
+  <tr>
+    <td> Safe, ad-free content,</td>
+    <td>Access unlimited quality content,</td>
+    <td>New content every week,</td>
+    <td>Multiple children's profiles,</td>
+    <td>Monitor child's progress,</td>
+    <td></td>
+  </tr>
+  <tr>
+
+  </tr>
+</tbody>
+</table>
+
             <PackageCard
               title={<div className="  opacity-0">a</div>}
               price={<div className=" opacity-0 mt-2">a</div>}

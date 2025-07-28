@@ -54,7 +54,7 @@ const SchoolSignupContent = () => {
       .string()
       .min(11, { message: "Phone number must not less than 11 characters" }),
     email: z.string().email(),
-    password: z
+    password: z 
       .string()
       .min(8, { message: "Password must be at least 8 characters long" })
       .max(20, { message: "Password must not exceed 20 characters" })
