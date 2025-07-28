@@ -122,7 +122,7 @@ const ParentSignupDetails = () => {
             <p className="text2 text-[#A7A7A7]   font-ArimoRegular text-center mb-8">
               Start learning and reading without restrictions.{" "}
             </p>
-            <form className="mt-8" onSubmit={handleSubmit(submitData)}>
+            <form className="mt-8" onSubmit={handleSubmit(()=>navigate("/parentverification"))}>
               <p className="my-3 flex flex-col  w-full justify-between gap-2">
                 <InputFormat
                   type="text"
