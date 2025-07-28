@@ -7,6 +7,8 @@ import ShoolHeader from "./common/User/SchoolHeader";
 import HomeFooter from "./components/HomeFooter";
 import HomeHeader from "./components/HomeHeader";
 import Home from "./pages/Home/Home";
+import "react-loading-skeleton/dist/skeleton.css";
+
 // import "@type/moengage/web-sdk";
 
 import moengage from "@moengage/web-sdk";
@@ -27,6 +29,7 @@ import PreviewSummerChallengePage from "./pages/SummerQuiz/PreviewSummerChalleng
 import SummerQuizLayout from "./pages/SummerQuiz/SummerQuizLayout";
 import SchoolDashboardHeader from "./common/User/DashBoard/School/SchoolDashboardHeader";
 import Settings from "./pages/DashBoard/SchoolDashBoard/Settings/Settings";
+import ContentLibrary from "./pages/DashBoard/SchoolDashBoard/ContentLibrary";
 const VideoV2 = lazy(() => import("./pages/AfricanLanguages/VideosV2/VideoV2"));
 const StoriesV2 = lazy(() => import("./pages/Stories/StoriesV2/StoriesV2"));
 const DefaultTab = lazy(() => import("./pages/AfterParentSignIn/DefaultTab"));
@@ -434,6 +437,7 @@ function App() {
                   <Route path="classes" element={<Classes />}></Route>
                   <Route path="request" element={<SchoolRquest />}></Route>
                   <Route path="settings" element={<Settings />}></Route>
+                  <Route path="content" element={<ContentLibrary />}></Route>
                   <Route
                     path="content-library/*"
                     element={<NewlyRegisteredUser />}

@@ -281,100 +281,106 @@ const SignContent = () => {
     }
   };
   return (
-    <div className="flex justify-center  relative  bg-white rounded-[50px] w-[550px]  overflow-auto ">
-      <div className="inner-form-w  mx-auto relative ">
-        <div className="flex justify-center items-center mt-8 mb-12 ">
-          <img src={KundaLogo} alt="image" className="w-[160px]" />
-        </div>
-        <div className="w-[100%]">
-          <p className="font-bold text-[48px] font-BalooSemiBold text-center tracking-n  leading-[40px] ">
-            Get Started
-          </p>
-          <p className="text3 text-[#A7A7A7] font-ArimoRegular text-center leading-none">
-            Let's create account that fits you!
-          </p>
-          <div className="my-8 ">
-            {options.map((option) => (
-              <OptionButton
-                clicked={to === option.to}
-                title={option.title}
-                body={option.desc}
-                image={option?.image}
-                id={option.id}
-                userId={userId}
-                setUserId={setUserId}
-                key={option.to}
-                onClick={() => setTo(option.to)}
-                icon={
-                  to === option.to ? (
-                    <CgRadioChecked size={25} color="#9FC43E" />
-                  ) : (
-                    <CgRadioChecked size={25} color="white" />
-                  )
-                }
-              />
-            ))}
-            {/* // <OptionButton title="'I'm a Parent" body="I want to manage my child's access to this platform" image={UnChecked}/> */}
-            <div className="mt-5 flex justify-center items-center">
-              <Link to={to}>
-                <Link to={`/${to || "signup"}`}>
-                  <Button
-                    onClick={handleClick}
-                    size="sm"
-                    backgroundColor={"green"}
-                    className="rounded-full px-[60px]"
-                  >
-                    Get started
-                  </Button>
-                </Link>
-              </Link>
-            </div>
+       <div className="flex justify-center relative bg-white rounded-[50px] w-[550px] overflow-hidden">
+        <div className="inner-form-w mx-auto relative overflow-y-auto scrollbar-hide" style={{ maxHeight: '100vh', scrollbarWidth: 'none' }}>
+          <style>
+            {`
+              .inner-form-w::-webkit-scrollbar {
+                display: none;
+              }
+            `}
+          </style>
+          <div className="flex justify-center items-center mt-8 mb-12">
+            <img src={KundaLogo} alt="image" className="w-[160px]" />
           </div>
-          {userId === 2 ? (
-            <div className="flex gap-8 my-4">
-              <Button
-                onClick={handleGoogleSignUp}
-                size="full"
-                varient="outlined"
-                borderColor="green"
-              >
-                <FcGoogle size={20} className={" mx-auto"} />
-              </Button>
-              <Button
-                onClick={handleAppleSignIn}
-                size="full"
-                varient="outlined"
-                borderColor="green"
-              >
-                <BsApple size={20} className={" mx-auto"} color={"black"} />
-              </Button>
-              <Button
-                onClick={handleFacebookSignUp}
-                size="full"
-                varient="outlined"
-                borderColor="green"
-              >
-                <AiFillFacebook
-                  size={20}
-                  className={" mx-auto"}
-                  color="black"
+          <div className="w-[100%]">
+            <p className="font-bold text-[48px] font-BalooSemiBold text-center tracking-n leading-[40px]">
+              Get Started
+            </p>
+            <p className="text3 text-[#A7A7A7] font-ArimoRegular text-center leading-none">
+              Let's create account that fits you!
+            </p>
+            <div className="my-8">
+              {options.map((option) => (
+                <OptionButton
+                  clicked={to === option.to}
+                  title={option.title}
+                  body={option.desc}
+                  image={option?.image}
+                  id={option.id}
+                  userId={userId}
+                  setUserId={setUserId}
+                  key={option.to}
+                  onClick={() => setTo(option.to)}
+                  icon={
+                    to === option.to ? (
+                      <CgRadioChecked size={25} color="#9FC43E" />
+                    ) : (
+                      <CgRadioChecked size={25} color="white" />
+                    )
+                  }
                 />
-              </Button>
+              ))}
+              <div className="mt-5 flex justify-center items-center">
+                <Link to={to}>
+                  <Link to={`/${to || "signup"}`}>
+                    <Button
+                      onClick={handleClick}
+                      size="sm"
+                      backgroundColor={to ? "green" : "grey"}
+                      className="rounded-full px-[60px]"
+                      disable={!to}
+                    >
+                      Get started
+                    </Button>
+                  </Link>
+                </Link>
+              </div>
             </div>
-          ) : null}
-          <p className="  text-gray-400 text-center pb-5">
-            <span>Already signed up? </span>
-            <button
-              onClick={() => navigate("/login")}
-              className=" text-customGreen font-bold
-              "
-            >
-              Login
-            </button>
-          </p>
+            {userId === 2 ? (
+              <div className="flex gap-8 my-4">
+                <Button
+                  onClick={handleGoogleSignUp}
+                  size="full"
+                  varient="outlined"
+                  borderColor="green"
+                >
+                  <FcGoogle size={20} className={" mx-auto"} />
+                </Button>
+                <Button
+                  onClick={handleAppleSignIn}
+                  size="full"
+                  varient="outlined"
+                  borderColor="green"
+                >
+                  <BsApple size={20} className={" mx-auto"} color={"black"} />
+                </Button>
+                <Button
+                  onClick={handleFacebookSignUp}
+                  size="full"
+                  varient="outlined"
+                  borderColor="green"
+                >
+                  <AiFillFacebook
+                    size={20}
+                    className={" mx-auto"}
+                    color="black"
+                  />
+                </Button>
+              </div>
+            ) : null}
+            <p className="text-gray-400 text-center pb-5">
+              <span>Already signed up? </span>
+              <button
+                onClick={() => navigate("/login")}
+                className="text-customGreen font-bold"
+              >
+                Login
+              </button>
+            </p>
+          </div>
         </div>
       </div>
-    </div>
   );
 };
 
