@@ -42,7 +42,7 @@ export const SecurePortal = (payload: TSecurePortalData) => {
 
 // Parent
 export const ParentSignUp = (payload: TParentSignupData) => {
-  return axios.post("/signup", payload);
+  return axios.post("/signup/parent", payload);
 };
 export const SetPassword = (payload: TSetPasswordData) => {
   return axios.post("/password/set", payload);

@@ -26,6 +26,7 @@ import { getPushTokenState } from "@/store/pushTokenStore";
 import "react-international-phone/style.css";
 
 import ReactFlagsSelect from "react-flags-select";
+import { on } from "rsuite/esm/DOMHelper";
 
 export type TCountry = {
   id: number;
@@ -51,7 +52,11 @@ const ParentSignupDetails = () => {
   };
 
   const schema: ZodType<FormData> = z.object({
-    name: z
+    firstname: z
+      .string()
+      .min(2, { message:"Name must be at least 2 characters long"})
+      .max(40, { message:"Name must not exceed 20 characters"}),
+  lastname: z
       .string()
       .min(2, { message:"Name must be at least 2 characters long"})
       .max(40, { message:"Name must not exceed 20 characters"}),
@@ -84,7 +89,7 @@ const ParentSignupDetails = () => {
     sessionStorage.clear();
     setUser({ email: datta.email });
     mutate(
-      { ...datta, fcm_token:'sdkasjdakjsdka', country_id: selectedCountry?.id || 233 },
+      { ...datta,  country_id: selectedCountry?.id || 233 },
 
       {
         onSuccess(data) {
@@ -122,12 +127,21 @@ const ParentSignupDetails = () => {
             <p className="text2 text-[#A7A7A7]   font-ArimoRegular text-center mb-8">
               Start learning and reading without restrictions.{" "}
             </p>
-            <form className="mt-8" onSubmit={handleSubmit(()=>navigate("/parentverification"))}>
+            <form className="mt-8" onSubmit={handleSubmit(submitData)}>
               <p className="my-3 flex flex-col  w-full justify-between gap-2">
                 <InputFormat
                   type="text"
-                  placeholder="Name"
-                  reg={register("name")}
+                  placeholder="First Name"
+                  reg={register("firstname")}
+                  errorMsg={errors.name?.message}
+                />
+
+              </p>
+               <p className="my-3 flex flex-col  w-full justify-between gap-2">
+                <InputFormat
+                  type="text"
+                  placeholder="Last Name"
+                  reg={register("lastname")}
                   errorMsg={errors.name?.message}
                 />
 
