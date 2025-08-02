@@ -572,7 +572,7 @@ const toggleForYouRow = (catName: string) => {
                 .map(cat => (
                   <BookCategory
                     key={cat.name}
-                    categoryName={cat.name} 
+                    categoryName={cat.name}
                     tabLabel="Stories"
                     parentCategory={undefined}
                     books={cat.books}
