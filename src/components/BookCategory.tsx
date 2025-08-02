@@ -32,17 +32,20 @@ const BookCategory: React.FC<BookCategoryProps> = ({
   hasSub = true,
   emptyMsg, // ← NEW
 }) => {
+  console.log('categoryName', subId, categoryName)
   // decide data source
   const {
     books: lazyBooks,
     loading: lazyInit,
-    loadingMore, // ← NEW
+    loadingMore, 
     containerRef,
     sentryRef,
   } = useSubCategoryLazy(subId, expanded);
 
   const usingLazy = subId !== null;
   const list = usingLazy ? lazyBooks : books;
+
+  console.log('list', list, usingLazy, lazyBooks)
 
   /* show skeletons **only** while we are actually fetching;
      once the fetch is done (even if the list is empty) we’ll

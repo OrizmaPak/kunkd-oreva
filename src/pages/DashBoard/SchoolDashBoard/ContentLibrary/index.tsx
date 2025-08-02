@@ -576,6 +576,7 @@ const toggleForYouRow = (catName: string) => {
                     tabLabel="Stories"
                     parentCategory={undefined}
                     books={cat.books}
+                    subId={cat.subId}
                     hasSub={!!cat.subId}
                     onSeeAll={() => handleStoriesSeeAll(cat.name)}
                     expanded={showAllStories && cat.name === storiesActiveSubSlug}
