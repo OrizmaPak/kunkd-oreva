@@ -2,29 +2,21 @@ import { useEffect, useRef, useState } from "react";
 import { GetContebtBySubCategories } from "@/api/api";
 import { Book } from "@/components/BookCard";
 
-/**
- * Lazily loads and paginates books for ONE sub-category row.
- * • page-1 loads when the row becomes visible
- * • further pages load when row expanded and last item enters viewport
- */
-const useSubCategoryLazy = (
-  subId: number | null,
-  expanded: boolean // track Show-All state
-) => {
+/** Lazily loads and paginates books for ONE sub-category row. */
+const useSubCategoryLazy = (subId: number | null, expanded: boolean) => {
   const [books, setBooks] = useState<Book[]>([]);
   const [page, setPage] = useState(0);
   const [maxPage, setMax] = useState<number | null>(null);
-  const [hasFetched, setFetched] = useState(false); // ← new flag
 
-  // separate flags for page-1 vs. page>1
-  const [loadingInit, setInit] = useState(false);
-  const [loadingMore, setMore] = useState(false);
+  const [loadingInit, setInit] = useState(false); // first page
+  const [loadingMore, setMore] = useState(false); // page > 1
+  const [hasFetched, setFetched] = useState(false); // at least one fetch done
 
   const containerRef = useRef<HTMLDivElement>(null);
   const sentryRef = useRef<HTMLDivElement>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  /* 0️⃣ Clear state when the row switches to a new sub-category */
+  /* reset whenever the row switches to a different sub-ID */
   useEffect(() => {
     setBooks([]);
     setPage(0);
@@ -34,22 +26,18 @@ const useSubCategoryLazy = (
     setFetched(false);
   }, [subId]);
 
-  /* ---------------- fetch helper ---------------- */
+  /* helper to fetch one page */
   const fetchPage = async (next: number) => {
     const first = next === 1;
     const busy = first ? loadingInit : loadingMore;
-
     if (busy || subId == null || (maxPage !== null && next > maxPage)) return;
 
     first ? setInit(true) : setMore(true);
     try {
       const res = await GetContebtBySubCategories(subId, String(next));
-
-      /** payload is sometimes at res.data, sometimes res.data.data */
       const payload = res?.data?.data ?? res?.data;
       const number_pages = payload?.number_pages ?? 0;
       const records = payload?.records ?? [];
-
       const mapped: Book[] = records.map((r: any) => ({
         id: r.id,
         title: r.name,
@@ -57,7 +45,7 @@ const useSubCategoryLazy = (
         progress: 0,
       }));
 
-      /* de-dupe IDs to avoid React key collisions */
+      /* de-dupe by ID so keys stay unique */
       setBooks((prev) => [
         ...prev,
         ...mapped.filter((m) => !prev.some((p) => p.id === m.id)),
@@ -72,22 +60,19 @@ const useSubCategoryLazy = (
     }
   };
 
-  /* -------- 1. first page when row becomes (or is) visible -------- */
+  /* 1️⃣ load page-1 when row first becomes visible */
   useEffect(() => {
     if (subId == null || !sentryRef.current) return;
     const node = sentryRef.current;
 
-    /* 1️⃣ already visible at mount? */
-    const appears = () =>
+    const visible = () =>
       node.getBoundingClientRect().top < window.innerHeight &&
       node.getBoundingClientRect().bottom > 0;
 
-    if (appears()) {
+    if (visible()) {
       fetchPage(1);
       return;
     }
-
-    /* 2️⃣ otherwise: observe until it enters view */
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -99,17 +84,15 @@ const useSubCategoryLazy = (
     );
     io.observe(node);
     return () => io.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subId]);
+  }, [subId]); // eslint-disable-line
 
-  /* 2️⃣ More pages on horizontal scroll */
+  /* 2️⃣ horizontal scroll (collapsed) */
   useEffect(() => {
     const el = containerRef.current;
-    if (!el || expanded) return; // ignore when expanded
-
+    if (!el || expanded) return; // skip when expanded
     const onScroll = () => {
       if (
-        el.scrollLeft + el.clientWidth >= el.scrollWidth - 48 && // near right edge
+        el.scrollLeft + el.clientWidth >= el.scrollWidth - 48 &&
         !loadingMore &&
         (maxPage === null || page < maxPage)
       ) {
@@ -118,9 +101,9 @@ const useSubCategoryLazy = (
     };
     el.addEventListener("scroll", onScroll);
     return () => el.removeEventListener("scroll", onScroll);
-  }, [page, maxPage, loadingMore, expanded]); // include expanded
+  }, [page, maxPage, loadingMore, expanded]); // eslint-disable-line
 
-  /* 3️⃣   when expanded, load on sentinel */
+  /* 3️⃣ bottom sentinel (expanded) */
   useEffect(() => {
     if (!expanded || !loadMoreRef.current) return;
     const node = loadMoreRef.current;
@@ -140,7 +123,7 @@ const useSubCategoryLazy = (
     books,
     loadingInit,
     loadingMore,
-    hasFetched, // ← expose
+    hasFetched,
     containerRef,
     sentryRef,
     loadMoreRef,

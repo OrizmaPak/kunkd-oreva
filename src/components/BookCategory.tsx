@@ -129,7 +129,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
       {loadingMore &&
         Array.from({ length: 6 }).map((_, i) => (
           <Skeleton
-            key={`more-${page}-${i}`}
+            key={`more-${i}`}
             className="w-32 h-44 rounded"
           />
         ))}
