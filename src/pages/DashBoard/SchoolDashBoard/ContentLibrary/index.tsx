@@ -572,7 +572,7 @@ const toggleForYouRow = (catName: string) => {
                 .map(cat => (
                   <BookCategory
                     key={cat.name}
-                    categoryName={cat.name}
+                    categoryName={cat.name} 
                     books={cat.books}
                     hasSub={!!cat.subId}
                     onSeeAll={() => handleStoriesSeeAll(cat.name)}
