@@ -9,48 +9,57 @@ import { Book } from "@/components/BookCard";
  */
 const useSubCategoryLazy = (
   subId: number | null,
-  expanded: boolean // now tracks expanded state
+  expanded: boolean // track Show-All state
 ) => {
   const [books, setBooks] = useState<Book[]>([]);
   const [page, setPage] = useState(0);
-  const [maxPage, setMaxPage] = useState<number | null>(null);
-  const [loadingInit, setLoadingInit] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
+  const [maxPage, setMax] = useState<number | null>(null);
+
+  // separate flags for page-1 vs. page>1
+  const [loadingInit, setInit] = useState(false);
+  const [loadingMore, setMore] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const sentryRef = useRef<HTMLDivElement>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  /* 0️⃣ Clear state when the row switches to a new sub-category */
+  useEffect(() => {
+    setBooks([]);
+    setPage(0);
+    setMax(null);
+  }, [subId]);
+
   /* ---------------- fetch helper ---------------- */
   const fetchPage = async (next: number) => {
-    if (
-      loading ||
-      subId == null ||
-      (maxPage !== null && next > maxPage)
-    ) return;
+    const first = next === 1;
+    const busy = first ? loadingInit : loadingMore;
 
-    setLoading(true);
+    if (busy || subId == null || (maxPage !== null && next > maxPage)) return;
+
+    first ? setInit(true) : setMore(true);
     try {
       const res = await GetContebtBySubCategories(subId, String(next));
 
       /** payload is sometimes at res.data, sometimes res.data.data */
       const payload = res?.data?.data ?? res?.data;
       const number_pages = payload?.number_pages ?? 0;
-      const records      = payload?.records      ?? [];
+      const records = payload?.records ?? [];
 
       const mapped: Book[] = records.map((r: any) => ({
-        id:       r.id,
-        title:    r.name,
+        id: r.id,
+        title: r.name,
         coverUrl: r.thumbnail,
         progress: 0,
       }));
 
-      setBooks(prev => [...prev, ...mapped]);
+      setBooks((prev) => [...prev, ...mapped]);
       setPage(next);
-      setMaxPage(number_pages);
+      setMax(number_pages);
     } catch (e) {
       console.error("GetContebtBySubCategories failed", e);
     } finally {
-      setLoading(false);
+      first ? setInit(false) : setMore(false);
     }
   };
 
@@ -84,15 +93,15 @@ const useSubCategoryLazy = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subId]);
 
-  /* -------- 2. more pages on horizontal scroll -------- */
+  /* 2️⃣ More pages on horizontal scroll */
   useEffect(() => {
     const el = containerRef.current;
-    if (!el) return;
+    if (!el || expanded) return; // ignore when expanded
 
     const onScroll = () => {
       if (
         el.scrollLeft + el.clientWidth >= el.scrollWidth - 48 && // near right edge
-        !loading &&
+        !loadingMore &&
         (maxPage === null || page < maxPage)
       ) {
         fetchPage(page + 1);
@@ -100,10 +109,32 @@ const useSubCategoryLazy = (
     };
     el.addEventListener("scroll", onScroll);
     return () => el.removeEventListener("scroll", onScroll);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, maxPage, loading]);
+  }, [page, maxPage, loadingMore, expanded]); // include expanded
 
-  return { books, loading, containerRef, sentryRef };
+  /* 3️⃣   when expanded, load on sentinel */
+  useEffect(() => {
+    if (!expanded || !loadMoreRef.current) return;
+    const node = loadMoreRef.current;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && (maxPage === null || page < maxPage)) {
+          fetchPage(page + 1);
+        }
+      },
+      { root: null, rootMargin: "200px" }
+    );
+    io.observe(node);
+    return () => io.disconnect();
+  }, [expanded, page, maxPage, loadingMore]); // eslint-disable-line
+
+  return {
+    books,
+    loadingInit,
+    loadingMore,
+    containerRef,
+    sentryRef,
+    loadMoreRef,
+  };
 };
 
 export default useSubCategoryLazy;
