@@ -171,7 +171,6 @@ const ContentLibrary: React.FC = () => {
   const [mainSelected, setMainSelected] = useState<string | null>(null);
   const [subRequested, setSubRequested] = useState(false);
   const [subcategories, setSubcategories] = useState<Category[] | null>(null);
-  const [expandedSub, setExpandedSub] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[] | null>(null);
   const [crumb, setCrumb] = useState<string[]>([]);
   const [expandedSimple, setExpandedSimple] = useState<Record<string, boolean>>(
@@ -210,6 +209,32 @@ const ContentLibrary: React.FC = () => {
 
   const handleReviewDone = () => setShowReview(false);
 
+  // STORIES “See All” handler
+  const handleStoriesSeeAll = (slug: string) => {
+    if (showAllStories && storiesActiveSubSlug === slug) {
+      setShowAllStories(false);
+      setStoriesActiveSubSlug(null);
+    } else {
+      setShowAllStories(true);
+      setStoriesActiveSubSlug(slug);
+      // collapse Languages if open
+      setShowAllLanguages(false);
+    }
+  };
+
+  // LANGUAGES “See All” handler
+  const handleLanguagesSeeAll = (slug: string) => {
+    if (showAllLanguages && languagesActiveSubSlug === slug) {
+      setShowAllLanguages(false);
+      setLanguagesActiveSubSlug(null);
+    } else {
+      setShowAllLanguages(true);
+      setLanguagesActiveSubSlug(slug);
+      // collapse Stories if open
+      setShowAllStories(false);
+    }
+  };
+
   // Helper to detect active tab
   const activeLabel = tabsConfig[activeIndex]?.label;
   const isForYouTab = activeLabel === "For you";
@@ -222,7 +247,6 @@ const ContentLibrary: React.FC = () => {
     setMainSelected(null);
     setSubRequested(false);
     setSubcategories(null);
-    setExpandedSub(null);
     setCrumb([]);
     setCategories(null);
 
@@ -301,38 +325,11 @@ const ContentLibrary: React.FC = () => {
     setMainSelected(name);
     setSubRequested(true);
     setSubcategories(null);
-    setExpandedSub(null);
 
     const t = setTimeout(() => {
       setSubcategories(generateAllSubcategories());
     }, 300);
     return () => clearTimeout(t);
-  };
-
-  // 3) Stories “See all” handler
-  const handleStoriesSeeAll = (slug: string) => {
-    if (showAllStories && storiesActiveSubSlug === slug) {
-      setShowAllStories(false);
-      setStoriesActiveSubSlug(null);
-    } else {
-      setShowAllStories(true);
-      setStoriesActiveSubSlug(slug);
-      // collapse other tab
-      setShowAllLanguages(false);
-    }
-  };
-
-  // 3) Languages “See all” handler
-  const handleLanguagesSeeAll = (slug: string) => {
-    if (showAllLanguages && languagesActiveSubSlug === slug) {
-      setShowAllLanguages(false);
-      setLanguagesActiveSubSlug(null);
-    } else {
-      setShowAllLanguages(true);
-      setLanguagesActiveSubSlug(slug);
-      // collapse other tab
-      setShowAllStories(false);
-    }
   };
 
   // 4) Decide which list to show
@@ -341,10 +338,6 @@ const ContentLibrary: React.FC = () => {
   let list: Category[];
   if (!isSubView) {
     list = categories ?? [];
-  } else if (expandedSub) {
-    list = subcategories?.filter((c) => c.name === expandedSub) ?? [
-      { name: expandedSub, books: [] },
-    ];
   } else {
     list = subcategories ?? generateAllSubcategories();
   }
@@ -365,11 +358,11 @@ const ContentLibrary: React.FC = () => {
       const expandedRow = Object.keys(expandedSimple).find((k) => expandedSimple[k]);
       return expandedRow ? ["For you", expandedRow] : ["For you"];
     }
-    if (["Stories", "Languages"].includes(tabsConfig[activeIndex].label) && expandedSub) {
-      return [tabsConfig[activeIndex].label, expandedSub];
+    if (["Stories", "Languages"].includes(tabsConfig[activeIndex].label)) {
+      return [tabsConfig[activeIndex].label];
     }
     return [tabsConfig[activeIndex].label];
-  }, [activeIndex, expandedSimple, expandedSub, tabsConfig]);
+  }, [activeIndex, expandedSimple, tabsConfig]);
 
   // Simulate pages for a book
   const generateBookPages = (book: Book): Page[] => {
@@ -486,7 +479,6 @@ const toggleForYouRow = (catName: string) => {
                     if (tabsConfig[activeIndex].label !== "For you" && i === 1) {
                       /* Stories / Languages breadcrumb behaviour stays unchanged */
                       setSubRequested(true);
-                      setExpandedSub(null);
                       setCrumb([]);
                     }
                   }}
