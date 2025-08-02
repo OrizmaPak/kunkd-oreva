@@ -4,18 +4,22 @@ import { Book } from "@/components/BookCard";
 
 /**
  * Lazily loads and paginates books for ONE sub-category row.
- *  • page-1 loads the moment the row becomes *or is already* visible
- *  • further pages load when horizontal scroll nears the end
+ * • page-1 loads when the row becomes visible
+ * • further pages load when row expanded and last item enters viewport
  */
-const useSubCategoryLazy = (subId: number | null) => {
-  const [books, setBooks]         = useState<Book[]>([]);
-  const [page,  setPage]          = useState(0);
-  const [maxPage, setMaxPage]     = useState<number | null>(null);
-  const [loading, setLoading]     = useState(false);
+const useSubCategoryLazy = (
+  subId: number | null,
+  expanded: boolean // now tracks expanded state
+) => {
+  const [books, setBooks] = useState<Book[]>([]);
+  const [page, setPage] = useState(0);
+  const [maxPage, setMaxPage] = useState<number | null>(null);
+  const [loadingInit, setLoadingInit] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
 
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const sentryRef    = useRef<HTMLSpanElement | null>(null);
-
+  const containerRef = useRef<HTMLDivElement>(null);
+  const sentryRef = useRef<HTMLDivElement>(null);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
   /* ---------------- fetch helper ---------------- */
   const fetchPage = async (next: number) => {
     if (
