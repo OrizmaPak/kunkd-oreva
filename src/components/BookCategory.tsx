@@ -45,11 +45,11 @@ const BookCategory: React.FC<BookCategoryProps> = ({
   // Lazy-loading hook for sub-categories
   const {
     books: lazyBooks,
-    loadingInit,
-    loadingMore,
+    loadingInit,            // ← first‐page loader
+    loadingMore,            // ← subsequent‐page loader
     containerRef,
     sentryRef,
-    loadMoreRef, // ← pull in the new ref
+    loadMoreRef,            // ← your new sentinel ref
   } = useSubCategoryLazy(subId, expanded);
 
   const usingLazy = subId != null;
@@ -58,11 +58,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
   // First-page load vs. static loading
   const rowLoading = usingLazy ? loadingInit : loading;
 
-  // Layout classes
-  const containerClass = expanded
-    ? "flex flex-wrap gap-4"
-    : "flex space-x-4 overflow-x-auto no-scrollbar";
-
+  // ────────── RENDER ──────────
   return (
     <div className="mb-8">
       {/* HEADER */}
@@ -84,13 +80,13 @@ const BookCategory: React.FC<BookCategoryProps> = ({
         )}
       </div>
 
-      {/* Sentinel for initial lazy load (collapsed state) */}
+      {/* sentinel sits *between* header and the scroll list */}
       {usingLazy && !expanded && (
         <div ref={sentryRef} className="h-1" />
       )}
 
-      {/* BOOK LIST */}
-      <div ref={containerRef} className={containerClass}>
+      {/* ===== HORIZONTAL LIST ===== */}
+      <div ref={containerRef} className={expanded ? "flex flex-wrap gap-4" : "flex space-x-4 overflow-x-auto no-scrollbar"}>
         {/* Empty state after load */}
         {!rowLoading && list.length === 0 ? (
           <div className="text-gray-500">
@@ -123,7 +119,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
           ))}
       </div>
 
-      {/* Sentinel for infinite scroll when expanded */}
+      {/* ─── when expanded, trigger next‐page loads ─── */}
       {usingLazy && expanded && (
         <div ref={loadMoreRef} className="h-1 w-full" />
       )}
