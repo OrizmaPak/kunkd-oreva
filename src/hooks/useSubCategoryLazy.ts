@@ -127,6 +127,7 @@ const useSubCategoryLazy = (subId: number | null, expanded: boolean) => {
     containerRef,
     sentryRef,
     loadMoreRef,
+    page
   };
 };
 

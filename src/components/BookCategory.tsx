@@ -42,12 +42,14 @@ const BookCategory: React.FC<BookCategoryProps> = ({
   hasSub = true,
   emptyMsg,
 }) => {
+  console.log('books', books)
   // Lazy-loading hook for sub-categories
   const {
     books: lazyBooks,
     loadingInit,            // ← first‐page loader
     loadingMore,            // ← subsequent‐page loader
     hasFetched,             // ← new
+    page,                   // ← add this
     containerRef,
     sentryRef,
     loadMoreRef,            // ← your new sentinel ref
@@ -129,7 +131,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
       {loadingMore &&
         Array.from({ length: 6 }).map((_, i) => (
           <Skeleton
-            key={`more-${i}`}
+            key={`more-${page}-${i}`}
             className="w-32 h-44 rounded"
           />
         ))}

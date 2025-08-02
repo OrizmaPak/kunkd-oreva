@@ -584,8 +584,8 @@ const toggleForYouRow = (catName: string) => {
                       openBook(book.id);
                       setCrumb(bc);
                     }}
-                  />
-                ))}
+                    />
+                  ))}
 
             {/* ───── Languages tab ───── */}
             {isLangsTab &&
@@ -595,6 +595,7 @@ const toggleForYouRow = (catName: string) => {
                 )
                 .map(cat => (
                   <BookCategory
+                  subId={cat.subId}
                     key={cat.name}
                     categoryName={cat.name}
                     tabLabel="Languages"
