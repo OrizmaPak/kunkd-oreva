@@ -573,12 +573,12 @@ const toggleForYouRow = (catName: string) => {
                   <BookCategory
                     key={cat.name}
                     categoryName={cat.name} 
+                    tabLabel="Stories"
+                    parentCategory={undefined}
                     books={cat.books}
                     hasSub={!!cat.subId}
                     onSeeAll={() => handleStoriesSeeAll(cat.name)}
                     expanded={showAllStories && cat.name === storiesActiveSubSlug}
-                    tabLabel="Stories"
-                    parentCategory={undefined}
                     onBookClick={(book, bc) => {
                       openBook(book.id);
                       setCrumb(bc);
@@ -596,12 +596,12 @@ const toggleForYouRow = (catName: string) => {
                   <BookCategory
                     key={cat.name}
                     categoryName={cat.name}
+                    tabLabel="Languages"
+                    parentCategory={undefined}
                     books={cat.books}
                     hasSub={!!cat.subId}
                     onSeeAll={() => handleLanguagesSeeAll(cat.name)}
                     expanded={showAllLanguages && cat.name === languagesActiveSubSlug}
-                    tabLabel="Languages"
-                    parentCategory={undefined}
                     onBookClick={(book, bc) => {
                       openBook(book.id);
                       setCrumb(bc);
@@ -615,12 +615,12 @@ const toggleForYouRow = (catName: string) => {
                 <BookCategory
                   key={cat.name}
                   categoryName={cat.name}
+                  tabLabel="For you"
+                  parentCategory={mainSelected ?? undefined}
                   books={cat.books}
                   hasSub={cat.hasSub}
                   onSeeAll={() => toggleForYouRow(cat.name)}
                   expanded={!!expandedSimple[cat.name]}
-                  tabLabel="For you"
-                  parentCategory={mainSelected ?? undefined}
                   emptyMsg={
                     cat.name === "Continue Reading" ? "No content available" : undefined
                   }
