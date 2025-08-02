@@ -309,9 +309,30 @@ const ContentLibrary: React.FC = () => {
     return () => clearTimeout(t);
   };
 
-  // 3) Sub “See all” handler
-  const handleSubSeeAll = (name: string) => {
-    setExpandedSub((prev) => (prev === name ? null : name));
+  // 3) Stories “See all” handler
+  const handleStoriesSeeAll = (slug: string) => {
+    if (showAllStories && storiesActiveSubSlug === slug) {
+      setShowAllStories(false);
+      setStoriesActiveSubSlug(null);
+    } else {
+      setShowAllStories(true);
+      setStoriesActiveSubSlug(slug);
+      // collapse other tab
+      setShowAllLanguages(false);
+    }
+  };
+
+  // 3) Languages “See all” handler
+  const handleLanguagesSeeAll = (slug: string) => {
+    if (showAllLanguages && languagesActiveSubSlug === slug) {
+      setShowAllLanguages(false);
+      setLanguagesActiveSubSlug(null);
+    } else {
+      setShowAllLanguages(true);
+      setLanguagesActiveSubSlug(slug);
+      // collapse other tab
+      setShowAllStories(false);
+    }
   };
 
   // 4) Decide which list to show
@@ -540,43 +561,64 @@ const toggleForYouRow = (catName: string) => {
             Coming soon
           </div>
         ) : (
-          /* everything else (For you, Stories, Languages, Literacy, etc.) */
-          displayList.map((cat) => {
-            const expandedFlag =
-              isForYouTab
-                ? expandedSimple[cat.name] ?? false
-                : isSubView
-                  ? expandedSub === cat.name
-                  : false;
+          <>
+            {isStoriesTab &&
+              displayList
+                .filter(cat =>
+                  !showAllStories || cat.name === storiesActiveSubSlug
+                )
+                .map(cat => (
+                  <BookCategory
+                    key={cat.name}
+                    name={cat.name}
+                    books={cat.books}
+                    hasSub={!!cat.subId}
+                    onSeeAll={() => handleStoriesSeeAll(cat.name)}
+                    expanded={showAllStories && cat.name === storiesActiveSubSlug}
+                  />
+                ))}
 
-            return (
-              <BookCategory
-                key={cat.name}
-                subId={(cat as any).subId ?? null}
-                categoryName={cat.name}
-                books={loading ? [] : cat.books}
-                loading={loading}
-                expanded={expandedFlag}
-                hasSub={false} // “For you” categories never drill down
-                onSeeAll={
-                  tabsConfig[activeIndex].label === "For you"
-                    ? () => toggleForYouRow(cat.name)
-                    : () => setExpandedSub(prev => (prev === cat.name ? null : cat.name))
-                }
-                tabLabel={tabsConfig[activeIndex].label}
-                parentCategory={mainSelected ?? undefined}
-                emptyMsg={
-                  isForYouTab && cat.name === "Continue Reading"
-                    ? "No content available"
-                    : undefined
-                }
-                onBookClick={(book: any, bc) => {
-                  openBook(book.id);
-                  setCrumb(bc);
-                }}
-              />
-            );
-          })
+            {isLangsTab &&
+              displayList
+                .filter(cat =>
+                  !showAllLanguages || cat.name === languagesActiveSubSlug
+                )
+                .map(cat => (
+                  <BookCategory
+                    key={cat.name}
+                    name={cat.name}
+                    books={cat.books}
+                    hasSub={!!cat.subId}
+                    onSeeAll={() => handleLanguagesSeeAll(cat.name)}
+                    expanded={showAllLanguages && cat.name === languagesActiveSubSlug}
+                  />
+                ))}
+
+            {isForYouTab &&
+              displayList.map(cat => (
+                <BookCategory
+                  key={cat.name}
+                  subId={(cat as any).subId ?? null}
+                  categoryName={cat.name}
+                  books={loading ? [] : cat.books}
+                  loading={loading}
+                  expanded={!!expandedSimple[cat.name]}
+                  hasSub={false} // “For you” categories never drill down
+                  onSeeAll={() => toggleForYouRow(cat.name)}
+                  tabLabel={tabsConfig[activeIndex].label}
+                  parentCategory={mainSelected ?? undefined}
+                  emptyMsg={
+                    isForYouTab && cat.name === "Continue Reading"
+                      ? "No content available"
+                      : undefined
+                  }
+                  onBookClick={(book: any, bc) => {
+                    openBook(book.id);
+                    setCrumb(bc);
+                  }}
+                />
+              ))}
+          </>
         )}
       </div>
 
