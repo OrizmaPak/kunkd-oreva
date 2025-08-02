@@ -14,6 +14,7 @@ const useSubCategoryLazy = (
   const [books, setBooks] = useState<Book[]>([]);
   const [page, setPage] = useState(0);
   const [maxPage, setMax] = useState<number | null>(null);
+  const [hasFetched, setFetched] = useState(false); // ← new flag
 
   // separate flags for page-1 vs. page>1
   const [loadingInit, setInit] = useState(false);
@@ -28,6 +29,9 @@ const useSubCategoryLazy = (
     setBooks([]);
     setPage(0);
     setMax(null);
+    setInit(false);
+    setMore(false);
+    setFetched(false);
   }, [subId]);
 
   /* ---------------- fetch helper ---------------- */
@@ -53,9 +57,14 @@ const useSubCategoryLazy = (
         progress: 0,
       }));
 
-      setBooks((prev) => [...prev, ...mapped]);
+      /* de-dupe IDs to avoid React key collisions */
+      setBooks((prev) => [
+        ...prev,
+        ...mapped.filter((m) => !prev.some((p) => p.id === m.id)),
+      ]);
       setPage(next);
       setMax(number_pages);
+      setFetched(true);
     } catch (e) {
       console.error("GetContebtBySubCategories failed", e);
     } finally {
@@ -131,6 +140,7 @@ const useSubCategoryLazy = (
     books,
     loadingInit,
     loadingMore,
+    hasFetched, // ← expose
     containerRef,
     sentryRef,
     loadMoreRef,

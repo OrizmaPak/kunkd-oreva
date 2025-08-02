@@ -47,6 +47,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
     books: lazyBooks,
     loadingInit,            // ← first‐page loader
     loadingMore,            // ← subsequent‐page loader
+    hasFetched,             // ← new
     containerRef,
     sentryRef,
     loadMoreRef,            // ← your new sentinel ref
@@ -88,7 +89,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
       {/* ===== HORIZONTAL LIST ===== */}
       <div ref={containerRef} className={expanded ? "flex flex-wrap gap-4" : "flex space-x-4 overflow-x-auto no-scrollbar"}>
         {/* Empty state after load */}
-        {!rowLoading && list.length === 0 ? (
+        {!rowLoading && hasFetched && list.length === 0 ? (
           <div className="text-gray-500">
             {emptyMsg ?? "No content available"}
           </div>
@@ -113,7 +114,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
         {rowLoading &&
           Array.from({ length: 8 }).map((_, i) => (
             <Skeleton
-              key={i}
+              key={`init-${i}`}
               className="w-32 h-44 rounded"
             />
           ))}
@@ -128,7 +129,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
       {loadingMore &&
         Array.from({ length: 6 }).map((_, i) => (
           <Skeleton
-            key={i}
+            key={`more-${page}-${i}`}
             className="w-32 h-44 rounded"
           />
         ))}
