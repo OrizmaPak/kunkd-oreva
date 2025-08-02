@@ -563,6 +563,7 @@ const toggleForYouRow = (catName: string) => {
           </div>
         ) : (
           <>
+            {/* ───── Stories tab ───── */}
             {isStoriesTab &&
               displayList
                 .filter(cat =>
@@ -571,14 +572,21 @@ const toggleForYouRow = (catName: string) => {
                 .map(cat => (
                   <BookCategory
                     key={cat.name}
-                    name={cat.name}
+                    categoryName={cat.name}
                     books={cat.books}
                     hasSub={!!cat.subId}
                     onSeeAll={() => handleStoriesSeeAll(cat.name)}
                     expanded={showAllStories && cat.name === storiesActiveSubSlug}
+                    tabLabel="Stories"
+                    parentCategory={undefined}
+                    onBookClick={(book, bc) => {
+                      openBook(book.id);
+                      setCrumb(bc);
+                    }}
                   />
                 ))}
 
+            {/* ───── Languages tab ───── */}
             {isLangsTab &&
               displayList
                 .filter(cat =>
@@ -587,33 +595,36 @@ const toggleForYouRow = (catName: string) => {
                 .map(cat => (
                   <BookCategory
                     key={cat.name}
-                    name={cat.name}
+                    categoryName={cat.name}
                     books={cat.books}
                     hasSub={!!cat.subId}
                     onSeeAll={() => handleLanguagesSeeAll(cat.name)}
                     expanded={showAllLanguages && cat.name === languagesActiveSubSlug}
+                    tabLabel="Languages"
+                    parentCategory={undefined}
+                    onBookClick={(book, bc) => {
+                      openBook(book.id);
+                      setCrumb(bc);
+                    }}
                   />
                 ))}
 
+            {/* ───── For-you tab ───── */}
             {isForYouTab &&
               displayList.map(cat => (
                 <BookCategory
                   key={cat.name}
-                  subId={(cat as any).subId ?? null}
                   categoryName={cat.name}
-                  books={loading ? [] : cat.books}
-                  loading={loading}
-                  expanded={!!expandedSimple[cat.name]}
-                  hasSub={false} // “For you” categories never drill down
+                  books={cat.books}
+                  hasSub={cat.hasSub}
                   onSeeAll={() => toggleForYouRow(cat.name)}
-                  tabLabel={tabsConfig[activeIndex].label}
+                  expanded={!!expandedSimple[cat.name]}
+                  tabLabel="For you"
                   parentCategory={mainSelected ?? undefined}
                   emptyMsg={
-                    isForYouTab && cat.name === "Continue Reading"
-                      ? "No content available"
-                      : undefined
+                    cat.name === "Continue Reading" ? "No content available" : undefined
                   }
-                  onBookClick={(book: any, bc) => {
+                  onBookClick={(book, bc) => {
                     openBook(book.id);
                     setCrumb(bc);
                   }}
