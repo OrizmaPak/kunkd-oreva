@@ -338,6 +338,10 @@ const ContentLibrary: React.FC = () => {
   let list: Category[];
   if (!isSubView) {
     list = categories ?? [];
+  } else if (isStoriesTab && showAllStories && storiesActiveSubSlug) {
+    list = subcategories?.filter(c => c.name === storiesActiveSubSlug) ?? [];
+  } else if (isLangsTab && showAllLanguages && languagesActiveSubSlug) {
+    list = subcategories?.filter(c => c.name === languagesActiveSubSlug) ?? [];
   } else {
     list = subcategories ?? generateAllSubcategories();
   }
@@ -358,11 +362,14 @@ const ContentLibrary: React.FC = () => {
       const expandedRow = Object.keys(expandedSimple).find((k) => expandedSimple[k]);
       return expandedRow ? ["For you", expandedRow] : ["For you"];
     }
-    if (["Stories", "Languages"].includes(tabsConfig[activeIndex].label)) {
-      return [tabsConfig[activeIndex].label];
+    if (isStoriesTab && storiesActiveSubSlug) {
+      return ["Stories", storiesActiveSubSlug];
+    }
+    if (isLangsTab && languagesActiveSubSlug) {
+      return ["Languages", languagesActiveSubSlug];
     }
     return [tabsConfig[activeIndex].label];
-  }, [activeIndex, expandedSimple, tabsConfig]);
+  }, [activeIndex, expandedSimple, tabsConfig, storiesActiveSubSlug, languagesActiveSubSlug]);
 
   // Simulate pages for a book
   const generateBookPages = (book: Book): Page[] => {
