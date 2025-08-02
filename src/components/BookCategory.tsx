@@ -49,7 +49,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
     loadingMore,
     containerRef,
     sentryRef,
-    loadMoreRef,
+    loadMoreRef, // ← pull in the new ref
   } = useSubCategoryLazy(subId, expanded);
 
   const usingLazy = subId != null;
@@ -121,21 +121,21 @@ const BookCategory: React.FC<BookCategoryProps> = ({
               className="w-32 h-44 rounded"
             />
           ))}
-
-        {/* Sentinel for infinite scroll when expanded */}
-        {usingLazy && expanded && (
-          <div ref={loadMoreRef} className="h-1" />
-        )}
-
-        {/* Skeletons for loading more pages */}
-        {loadingMore &&
-          Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton
-              key={i}
-              className="w-32 h-44 rounded"
-            />
-          ))}
       </div>
+
+      {/* Sentinel for infinite scroll when expanded */}
+      {usingLazy && expanded && (
+        <div ref={loadMoreRef} className="h-1 w-full" />
+      )}
+
+      {/* Skeletons for loading more pages */}
+      {loadingMore &&
+        Array.from({ length: 6 }).map((_, i) => (
+          <Skeleton
+            key={i}
+            className="w-32 h-44 rounded"
+          />
+        ))}
     </div>
   );
 };
