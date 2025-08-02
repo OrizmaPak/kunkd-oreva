@@ -102,9 +102,11 @@ const ContentLibrary: React.FC = () => {
   // a) Keep the entire cats array so we can reuse sub-categories
   const [allCats, setAllCats] = useState<any[]>([]);
 
+  // Stories expansion state
   const [showAllStories, setShowAllStories] = useState(false);
   const [storiesActiveSubSlug, setStoriesActiveSubSlug] = useState<string | null>(null);
 
+  // Languages expansion state
   const [showAllLanguages, setShowAllLanguages] = useState(false);
   const [languagesActiveSubSlug, setLanguagesActiveSubSlug] = useState<string | null>(null);
 
@@ -209,7 +211,7 @@ const ContentLibrary: React.FC = () => {
 
   const handleReviewDone = () => setShowReview(false);
 
-  // STORIES “See All” handler
+  // Stories “See All” handler
   const handleStoriesSeeAll = (slug: string) => {
     if (showAllStories && storiesActiveSubSlug === slug) {
       setShowAllStories(false);
@@ -222,7 +224,7 @@ const ContentLibrary: React.FC = () => {
     }
   };
 
-  // LANGUAGES “See All” handler
+  // Languages “See All” handler
   const handleLanguagesSeeAll = (slug: string) => {
     if (showAllLanguages && languagesActiveSubSlug === slug) {
       setShowAllLanguages(false);
