@@ -109,7 +109,7 @@ const ParentSignupDetails = () => {
 
   return (
     // <FormWrapper>
-      <div className=" flex justify-center   bg-white rounded-[50px] w-[550px] h-full   ">
+      <div className="flex justify-center bg-white rounded-[50px] w-[550px] h-full overflow-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <div className="inner-form-w mx-auto relative">
           <div className="flex justify-center items-center mt-10 mb-7 ">
           <img src={KundaLogo} alt="image" className="w-[160px]" />

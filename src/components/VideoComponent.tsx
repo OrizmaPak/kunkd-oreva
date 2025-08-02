@@ -12,13 +12,17 @@ import {
 import { MdReplay10, MdForward10 } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
 import video1 from "../VideoBooks/video1.mp4";
+import QuizComponent from "@/components/QuizComponent";
+import WellDoneModal from "@/components/WellDoneModal";
+import { Book } from "@/components/BookCard";
 
 interface VideoComponentProps {
   title: string;
   poster?: string;
   flagUrl?: string;
   onClose: () => void;
-  onComplete?: () => void; // Added onComplete prop
+  onComplete?: () => void; // Called when video ends (optional parent hook)
+  book: Book;               // 🔹 NEW: so we can pass into QuizComponent
 }
 
 /* ────────────────────────────────────────────────────────── */
@@ -31,7 +35,8 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
   title,
   flagUrl,
   onClose,
-  onComplete, // Destructure onComplete prop
+  onComplete, // optional parent callback
+  book,       // 🔹 Destructure new
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);
@@ -46,6 +51,9 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
   /* volume */
   const [volume, setVolume]     = useState(1);       // 0‒1
   const [showVol, setShowVol]   = useState(false);
+
+  const [showDone, setShowDone] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
 
   /* ───────────  metadata & time  ─────────── */
   useEffect(() => {
@@ -121,22 +129,24 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
 
   const percent = duration ? (current / duration) * 100 : 0;
 
-  /* ───────────  render  ─────────── */
+  /* ───────────  render ─────────── */
+  // 1) If they’ve chosen “Take Quiz,” go straight into the quiz UI
+  if (showQuiz) {
+    return <QuizComponent book={book} onComplete={() => setShowQuiz(false)} />;
+  }
+
+  // 2) Otherwise always render the video + controls…
   return (
     <div className="relative mx-auto max-w-[clamp(300px,100%,800px)] mb-4">
       {/* ======================  PLAYER  ====================== */}
-      <div
-        ref={shellRef}
-        className="relative bg-black rounded-t-3xl overflow-hidden"
-      >
+      <div ref={shellRef} className="relative bg-black rounded-t-3xl overflow-hidden">
         {/* ✕ close */}
         <button
-          className="absolute top-2 right-2 z-10 text-white hover:text-gray-300"
+          className="absolute top-2 right-2 z-20 text-white hover:text-gray-300"
           onClick={onClose}
         >
           ✕
         </button>
-
         {/* ───── Center overlay (skip / play) ───── */}
         <div className="absolute z-[10000] inset-0 flex items-center justify-center pointer-events-none">
           <div className="flex items-center gap-12 pointer-events-auto">
@@ -180,7 +190,6 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
             </motion.button>
           </div>
         </div>
-
         {/* ───── actual video ───── */}
         <video
           ref={videoRef}
@@ -190,19 +199,12 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
           controls={false}
           muted={muted}
           onClick={togglePlay}
-          onEnded={() => onComplete && onComplete()} // Call onComplete when video ends
+          onEnded={() => setShowDone(true)}
         />
-
         {/* title + flag */}
-        <div className="absolute top-4 left-4 flex items-center space-x-2">
+        <div className="absolute top-4 left-4 flex items-center space-x-2 z-10">
           <h3 className="text-white font-bold text-lg">{title}</h3>
-          {flagUrl && (
-            <img
-              src={flagUrl}
-              alt="flag"
-              className="w-6 h-4 object-cover rounded-sm"
-            />
-          )}
+          {flagUrl && <img src={flagUrl} alt="flag" className="w-6 h-4 rounded-sm" />}
         </div>
       </div>
 
@@ -232,7 +234,7 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
         </div>
       </div>
 
-      {/* ======================  VOLUME SLIDER overlay ====================== */}
+      {/* ====================== VOLUME SLIDER ====================== */}
       <AnimatePresence>
         {showVol && (
           <motion.div
@@ -254,6 +256,19 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* ======================  WELL-DONE MODAL OVERLAY ====================== */}
+      {showDone && (
+        <WellDoneModal
+          className="absolute inset-0 z-30"
+          message="Great job! You’ve finished the video."
+          onTakeQuiz={() => {
+            setShowDone(false);
+            setShowQuiz(true);
+          }}
+          onLater={() => setShowDone(false)}
+        />
+      )}
     </div>
   );
 };

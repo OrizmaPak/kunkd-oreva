@@ -1,7 +1,8 @@
 // src/components/BookOverview.tsx
-import React from "react";
+import React, { useState } from "react";
 import { FaBookmark } from "react-icons/fa";
 import BookCard, { Book } from "./BookCard";
+import AudioComponent from "./AudioComponent";
 import FrameImg from "@/assets/bigbook.png";
 
 export interface BookOverviewProps {
@@ -10,13 +11,31 @@ export interface BookOverviewProps {
   onBack?: () => void;
   onRead?: (book: Book) => void;
   onWatch?: (book: Book) => void;
+  /** URL or import path to the book’s audio file */
+  audioSrc: string;
 }
 
 const BookOverview: React.FC<BookOverviewProps> = ({
   book,
   onRead,
   onWatch,
+  audioSrc,
 }) => {
+  // track whether we’re showing the AudioComponent
+  const [showAudio, setShowAudio] = useState(false);
+
+  if (showAudio) {
+    return (
+      <AudioComponent
+        book={book}
+        audioSrc={audioSrc}
+        onClose={() => setShowAudio(false)}
+        onRead={() => setShowAudio(false)}
+        onComplete={() => setShowAudio(false)}
+      />
+    );
+  }
+
   return (
     <div className="mx-auto w-[clamp(550px,100%,1440px)] py-8 px-4">
       <div className="flex flex-col sm:flex-row items-center justify-center gap-[72px]">
@@ -66,7 +85,7 @@ const BookOverview: React.FC<BookOverviewProps> = ({
             </button>
             <button
               className="border border-[#9FC43E] text-[#667185] w-[205px] h-[49px] rounded-full"
-              onClick={() => onRead?.(book)}
+              onClick={() => setShowAudio(true)}
             >
               Read to me
             </button>

@@ -28,6 +28,8 @@ export interface ReadingComponentProps {
   pages: Page[];
   onExit: () => void;
   innerCoverUrl?: string;
+  /** whether to include front, cover & title pages */
+  withIntroPages?: boolean;
 }
 
 type SpreadPage =
@@ -44,6 +46,7 @@ interface FlipProps {
   onFlip: (e: any) => void;
   fontSize: number;
   book: Book;
+  showCover: boolean; // whether we rendered the intro spreads
 }
 
 const FlipBook = React.memo(
@@ -57,7 +60,7 @@ const FlipBook = React.memo(
       showPageCorners
       drawShadow
       mobileScrollSupport={false}
-      showCover
+      showCover={props.showCover} // 🔹 use prop so we can turn it off
       onFlip={props.onFlip}
       className="rounded-2xl shadow-2xl"
     >
@@ -123,7 +126,13 @@ const FlipBook = React.memo(
                   </p>
                   {/* page number */}
                   <div className="absolute bottom-2 right-2 text-xs text-gray-500">
-                    Page {Math.ceil(idx / 2) - 1}
+                    Page{" "}
+                    {
+                      /* 🔹 correct numbering based on showCover (intro) */
+                      props.showCover
+                        ? Math.ceil(idx / 2) - 1
+                        : Math.floor(idx / 2) + 1
+                    }
                   </div>
                 </div>
               </div>
@@ -139,7 +148,13 @@ const FlipBook = React.memo(
                   <div className="relative w-full h-full flex justify-center items-center">
                     {/* page number */}
                     <div className="absolute bottom-2 left-2 text-xs text-gray-500">
-                      Page {Math.ceil(idx / 2) - 1}
+                      Page{" "}
+                      {
+                        /* 🔹 correct numbering based on showCover */
+                        props.showCover
+                          ? Math.ceil(idx / 2) - 1
+                          : Math.floor(idx / 2) + 1
+                      }
                     </div>
                     <img
                       src={page.imageUrl}
@@ -166,6 +181,7 @@ const ReadingComponent: React.FC<ReadingComponentProps> = ({
   pages,
   onExit,
   innerCoverUrl,
+  withIntroPages = true,
 }) => {
   const shellRef = useRef<HTMLDivElement>(null);
   const flipRef = useRef<any>(null);
@@ -203,15 +219,22 @@ const ReadingComponent: React.FC<ReadingComponentProps> = ({
 
   // build the spread: front, covers, then for each Page → [image, text]
   const spread = useMemo<SpreadPage[]>(() => {
-    const front: SpreadPage = { type: "front" };
-    const tl: SpreadPage = { type: "title-left" };
-    const tr: SpreadPage = { type: "title-right" };
+    // build the main content pages
     const content = pages.flatMap((p) => [
       { ...p, type: "image" as const },
       { ...p, type: "text" as const },
     ]);
-    return [front, tl, tr, ...content];
-  }, [pages]);
+
+    if (withIntroPages) {
+      const front: SpreadPage = { type: "front" };
+      const tl: SpreadPage = { type: "title-left" };
+      const tr: SpreadPage = { type: "title-right" };
+      return [front, tl, tr, ...content];
+    }
+
+    // skip intro spreads and start directly at page 1
+    return content;
+  }, [pages, withIntroPages]);
 
   // responsive sizing
   useEffect(() => {
@@ -239,7 +262,8 @@ const ReadingComponent: React.FC<ReadingComponentProps> = ({
 
   /* jumpToPage replaces the old implementation */
   const jumpToPage = (pageNum: number) => {
-    const targetIndex = 3 + (pageNum - 1) * 2; // image side of the spread
+    const startOffset = withIntroPages ? 3 : 0; // 🔹 adjust for intro toggle
+    const targetIndex = startOffset + (pageNum - 1) * 2;
     flipRef.current?.pageFlip().flip(targetIndex);
     setIsModalOpen(false); // close picker
   };
@@ -303,12 +327,18 @@ const ReadingComponent: React.FC<ReadingComponentProps> = ({
 
           {/* Flipbook */}
           <div
-            className="flex justify-center p-1"
-            style={{
-              backgroundImage:
-                'url(https://t4.ftcdn.net/jpg/02/23/06/05/360_F_223060577_Up871tVFzW9s3J5y6ILNQnDiPeOOsBTC.jpg)',
-              backgroundSize: "cover",
-            }}
+            className={`flex justify-center p-1 ${
+              withIntroPages ? "" : "bg-white"
+            }`}                                   /* 🔹 white background when intro skipped */
+            style={
+              withIntroPages
+                ? {
+                    backgroundImage:
+                      'url(https://t4.ftcdn.net/jpg/02/23/06/05/360_F_223060577_Up871tVFzW9s3J5y6ILNQnDiPeOOsBTC.jpg)',
+                    backgroundSize: "cover",
+                  }
+                : undefined
+            }
           >
             <FlipBook
               ref={flipRef}
@@ -317,6 +347,7 @@ const ReadingComponent: React.FC<ReadingComponentProps> = ({
               onFlip={onFlip}
               fontSize={fontSize}
               book={book}
+              showCover={withIntroPages}          /* 🔹 hard-cover only if intro pages present */
             />
           </div>
 

@@ -41,7 +41,7 @@ const BookCard: React.FC<{ book: Book }> = ({ book }) => {
   }, [book.progress]);
 
   return (
-    <div className="relative flex-shrink-0 w-fit transition-transform duration-300 active:scale-95 mt-4 cursor-pointer">
+    <div title={book.title} className="relative flex-shrink-0 w-fit transition-transform duration-300 active:scale-95 mt-4 cursor-pointer">
       {/* Frame PNG */}
        <img src={FrameImg} alt="frame" className="block w-[134px] h-[152px]" />
 
@@ -53,18 +53,20 @@ const BookCard: React.FC<{ book: Book }> = ({ book }) => {
       />
 
       {/* Progress bar aligned with the width of the book cover */}
-      <div
-        ref={progressRef}
-        className="absolute bottom-[-10px] left-[0%] w-[100%] h-[6px] bg-green-200 rounded-full group"
-      >
+      {progressWidth > 0 && (
         <div
-          className="h-full bg-[#BCD678] rounded-full transition-width duration-20000"
-          style={{ width: `${progressWidth}%` }}
-        />
-        <div className="absolute top-[-30px] left-1/2 transform -translate-x-1/2 bg-gray-700 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          {`${progressWidth}%`}
+          ref={progressRef}
+          className="absolute bottom-[-10px] left-[0%] w-[100%] h-[6px] bg-green-200 rounded-full group"
+        >
+          <div
+            className="h-full bg-[#BCD678] rounded-full transition-width duration-20000"
+            style={{ width: `${progressWidth}%` }}
+          />
+          <div className="absolute top-[-30px] left-1/2 transform -translate-x-1/2 bg-gray-700 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            {`${progressWidth}%`}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

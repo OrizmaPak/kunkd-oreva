@@ -77,28 +77,29 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, onExit 
 
   const nextEnabled = selected !== null; // require a pick (user can also skip)
 
+  // --- FIX: addAnswer always adds the current question and choice to answers
   const addAnswer = (choice: number | null) => {
-    setAnswers((prev) => [...prev, { question: q, selectedIdx: choice }]);
+    setAnswers(prev => [...prev, { question: q, selectedIdx: choice }]);
   };
 
   const handleNext = () => {
     if (idx + 1 < total) {
       addAnswer(selected);
       setSelected(null);
-      setIdx((i) => i + 1);
+      setIdx(i => i + 1);
     } else {
       finishQuiz(selected);
     }
   };
 
+  // --- FIX: finishQuiz always computes stats from all answers including the last
   const finishQuiz = (choice: number | null) => {
     addAnswer(choice);
     const all = [...answers, { question: q, selectedIdx: choice }];
-    const correct = all.filter((a) => a.selectedIdx === a.question.answerIdx).length;
-    const skipped = all.filter((a) => a.selectedIdx === null).length;
-    const total = all.length;
-    const incorrect = total - correct - skipped;
-    onComplete({ correct, incorrect, skipped, total }, all);
+    const correct   = all.filter(a => a.selectedIdx === a.question.answerIdx).length;
+    const skipped   = all.filter(a => a.selectedIdx === null).length;
+    const incorrect = all.length - correct - skipped;
+    onComplete({ correct, incorrect, skipped, total: all.length }, all);
   };
 
   /* -------------------------------------------------------------- */
@@ -161,7 +162,7 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, onExit 
               const prevAnswer = answers.pop();
               setAnswers([...answers]);
               setSelected(prevAnswer?.selectedIdx ?? null);
-              setIdx((i) => i - 1);
+              setIdx(i => i - 1);
             }}
             className="px-8 py-2 rounded-full border border-[#9FC43E] text-[#9FC43E] hover:bg-gray-50"
           >

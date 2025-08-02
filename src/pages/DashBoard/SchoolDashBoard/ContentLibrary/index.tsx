@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TeacherIllustration from "@/assets/Teacher's_Library_.png";
 import {
   FaUser,
@@ -10,7 +10,6 @@ import {
 import { motion, LayoutGroup } from "framer-motion";
 import BookCategory from "@/components/BookCategory";
 import BookOverview from "@/components/BookOverview";
-import BookCategoryProps from "@/components/BookCategory";
 import { Book } from "@/components/BookCard";
 import ReadingComponent from "@/components/ReadingComponent";
 import { useSearchParams } from "react-router-dom";
@@ -19,6 +18,7 @@ import NigeriaFlag from "@/assets/nigeria-flag.png";
 import WellDoneModal from "@/components/WellDoneModal";
 import QuizComponent, { QuizStats, UserAnswer } from "@/components/QuizComponent";
 import QuizResultModal from "@/components/QuizResultModal";
+import QueenMoremi from "@/audiobooks/QueenMoremi.mp3";
 import AnswerReviewModal from "@/components/AnswerReviewModal";
 
 import KojoAndLolaImage from "@/assets/Kojo and Lola.png";
@@ -27,10 +27,48 @@ import KojoAndLolaImage2 from "@/assets/Kojo and Lola (2).png";
 import KojoAndLolaImage3 from "@/assets/Kojo and Lola (3).png";
 import KojoAndLolaImage4 from "@/assets/Kojo and Lola (4).png";
 import KojoAndLolaImage5 from "@/assets/Kojo and Lola (5).png";
+import { ContentForHome, GetAudioBooks, GetContebtBySubCategories, GetRecommendedVideo, GetSubCategories } from "@/api/api";
+
+/* helper: snake_case → Title Case */
+const toTitle = (s: string) =>
+  s
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+
+/* helper: transform ContentForHome response → Category[] */
+const homeToCategories = (payload: any): Category[] => {
+  if (!payload || typeof payload !== "object") return [];
+  const catArray: Category[] = [
+    {
+      name: "Continue Reading",
+      books: [],
+      hasSub: false, // no sub-view for Continue Reading
+    },
+  ];
+  console.log('payload', payload)
+  Object.entries(payload).forEach(([key, val]: [string, any]) => {
+    if (Array.isArray(val)) {
+      catArray.push({
+        name: toTitle(key),
+        books: val.map((item) => ({
+          id: item.id,
+          title: item.name,
+          coverUrl: item.thumbnail,
+          progress: 0,
+        })),
+        hasSub: false, // all For-you categories expand locally
+      });
+    }
+  });
+  console.log('catArray', catArray)
+  return catArray;
+};
 
 interface Category {
   name: string;
   books: Book[];
+  hasSub?: boolean; // 🔹 new flag
+  subId?: number;   // <-- for lazy subcategory rows
 }
 
 interface Page {
@@ -39,112 +77,15 @@ interface Page {
   text: string;
 }
 
-/** MAIN categories */
-const generateAllCategories = (): Category[] => [
-  {
-    name: "Continue Reading",
-    books: [
-      { id: 1, title: "Book One", coverUrl: KojoAndLolaImage, progress: 20 },
-      { id: 2, title: "Book Two", coverUrl: KojoAndLolaImage1, progress: 50 },
-      { id: 3, title: "Book Three", coverUrl: KojoAndLolaImage2, progress: 30 },
-      { id: 4, title: "Book Four", coverUrl: KojoAndLolaImage3, progress: 60 },
-      { id: 5, title: "Book Five", coverUrl: KojoAndLolaImage4, progress: 40 },
-      { id: 6, title: "Book Six", coverUrl: KojoAndLolaImage5, progress: 70 },
-      { id: 7, title: "Book Seven", coverUrl: KojoAndLolaImage, progress: 80 },
-    ],
-  },
-  {
-    name: "Ages 5-7: Growing Readers",
-    books: [
-      { id: 8, title: "Story One", coverUrl: KojoAndLolaImage1, progress: 70 },
-      { id: 9, title: "Story Two", coverUrl: KojoAndLolaImage2, progress: 90 },
-      { id: 10, title: "Story Three", coverUrl: KojoAndLolaImage3, progress: 50 },
-      { id: 11, title: "Story Four", coverUrl: KojoAndLolaImage4, progress: 60 },
-      { id: 12, title: "Story Five", coverUrl: KojoAndLolaImage5, progress: 30 },
-      { id: 13, title: "Story Six", coverUrl: KojoAndLolaImage, progress: 40 },
-      { id: 14, title: "Story Seven", coverUrl: KojoAndLolaImage1, progress: 20 },
-    ],
-  },
-  {
-    name: "Popular reads",
-    books: [
-      { id: 15, title: "Language One", coverUrl: KojoAndLolaImage2, progress: 30 },
-      { id: 16, title: "Language Two", coverUrl: KojoAndLolaImage3, progress: 60 },
-      { id: 17, title: "Language Three", coverUrl: KojoAndLolaImage4, progress: 50 },
-      { id: 18, title: "Language Four", coverUrl: KojoAndLolaImage5, progress: 70 },
-      { id: 19, title: "Language Five", coverUrl: KojoAndLolaImage, progress: 20 },
-      { id: 20, title: "Language Six", coverUrl: KojoAndLolaImage1, progress: 40 },
-      { id: 21, title: "Language Seven", coverUrl: KojoAndLolaImage2, progress: 80 },
-    ],
-  },
-  {
-    name: "Literacy",
-    books: [
-      { id: 22, title: "Literacy One", coverUrl: KojoAndLolaImage3, progress: 40 },
-      { id: 23, title: "Literacy Two", coverUrl: KojoAndLolaImage4, progress: 80 },
-      { id: 24, title: "Literacy Three", coverUrl: KojoAndLolaImage5, progress: 60 },
-      { id: 25, title: "Literacy Four", coverUrl: KojoAndLolaImage, progress: 30 },
-      { id: 26, title: "Literacy Five", coverUrl: KojoAndLolaImage1, progress: 50 },
-      { id: 27, title: "Literacy Six", coverUrl: KojoAndLolaImage2, progress: 20 },
-      { id: 28, title: "Literacy Seven", coverUrl: KojoAndLolaImage3, progress: 70 },
-    ],
-  },
-];
+interface Tab {
+  label: string;
+  icon: JSX.Element;
+  id: number | null;
+}
 
-/** SUB categories */
-const generateAllSubcategories = (): Category[] => [
-  {
-    name: "Advanced Reading",
-    books: [
-      { id: 29, title: "Advanced Book One", coverUrl: KojoAndLolaImage, progress: 10 },
-      { id: 30, title: "Advanced Book Two", coverUrl: KojoAndLolaImage1, progress: 20 },
-      { id: 31, title: "Advanced Book Three", coverUrl: KojoAndLolaImage2, progress: 30 },
-      { id: 32, title: "Advanced Book Four", coverUrl: KojoAndLolaImage3, progress: 40 },
-      { id: 33, title: "Advanced Book Five", coverUrl: KojoAndLolaImage4, progress: 50 },
-      { id: 34, title: "Advanced Book Six", coverUrl: KojoAndLolaImage5, progress: 60 },
-      { id: 35, title: "Advanced Book Seven", coverUrl: KojoAndLolaImage, progress: 70 },
-      { id: 36, title: "Advanced Book Eight", coverUrl: KojoAndLolaImage1, progress: 80 },
-      { id: 37, title: "Advanced Book Nine", coverUrl: KojoAndLolaImage2, progress: 90 },
-      { id: 38, title: "Advanced Book Ten", coverUrl: KojoAndLolaImage3, progress: 100 },
-      { id: 49, title: "Advanced Book Eleven", coverUrl: KojoAndLolaImage4, progress: 15 },
-      { id: 50, title: "Advanced Book Twelve", coverUrl: KojoAndLolaImage5, progress: 25 },
-    ],
-  },
-  {
-    name: "Young Explorers",
-    books: [
-      { id: 39, title: "Explorer One", coverUrl: KojoAndLolaImage4, progress: 15 },
-      { id: 40, title: "Explorer Two", coverUrl: KojoAndLolaImage5, progress: 25 },
-      { id: 41, title: "Explorer Three", coverUrl: KojoAndLolaImage, progress: 35 },
-      { id: 42, title: "Explorer Four", coverUrl: KojoAndLolaImage1, progress: 45 },
-      { id: 43, title: "Explorer Five", coverUrl: KojoAndLolaImage2, progress: 55 },
-      { id: 44, title: "Explorer Six", coverUrl: KojoAndLolaImage3, progress: 65 },
-      { id: 45, title: "Explorer Seven", coverUrl: KojoAndLolaImage4, progress: 75 },
-      { id: 46, title: "Explorer Eight", coverUrl: KojoAndLolaImage5, progress: 85 },
-      { id: 47, title: "Explorer Nine", coverUrl: KojoAndLolaImage, progress: 95 },
-      { id: 48, title: "Explorer Ten", coverUrl: KojoAndLolaImage1, progress: 100 },
-      { id: 51, title: "Explorer Eleven", coverUrl: KojoAndLolaImage2, progress: 20 },
-      { id: 52, title: "Explorer Twelve", coverUrl: KojoAndLolaImage3, progress: 30 },
-    ],
-  },
-  {
-    name: "New Discoveries",
-    books: [
-      { id: 53, title: "Discovery One", coverUrl: KojoAndLolaImage4, progress: 5 },
-      { id: 54, title: "Discovery Two", coverUrl: KojoAndLolaImage5, progress: 15 },
-      { id: 55, title: "Discovery Three", coverUrl: KojoAndLolaImage, progress: 25 },
-      { id: 56, title: "Discovery Four", coverUrl: KojoAndLolaImage1, progress: 35 },
-      { id: 57, title: "Discovery Five", coverUrl: KojoAndLolaImage2, progress: 45 },
-      { id: 58, title: "Discovery Six", coverUrl: KojoAndLolaImage3, progress: 55 },
-      { id: 59, title: "Discovery Seven", coverUrl: KojoAndLolaImage4, progress: 65 },
-      { id: 60, title: "Discovery Eight", coverUrl: KojoAndLolaImage5, progress: 75 },
-      { id: 61, title: "Discovery Nine", coverUrl: KojoAndLolaImage, progress: 85 },
-      { id: 62, title: "Discovery Ten", coverUrl: KojoAndLolaImage1, progress: 95 },
-    ],
-  },
-];
+const generateAllSubcategories = (): Category[] => [{ name: "Advanced Reading", books: [{ id: 29, title: "Advanced Book One", coverUrl: KojoAndLolaImage, progress: 10 }, { id: 30, title: "Advanced Book Two", coverUrl: KojoAndLolaImage1, progress: 20 }, { id: 31, title: "Advanced Book Three", coverUrl: KojoAndLolaImage2, progress: 30 }, { id: 32, title: "Advanced Book Four", coverUrl: KojoAndLolaImage3, progress: 40 }, { id: 33, title: "Advanced Book Five", coverUrl: KojoAndLolaImage4, progress: 50 }, { id: 34, title: "Advanced Book Six", coverUrl: KojoAndLolaImage5, progress: 60 }, { id: 35, title: "Advanced Book Seven", coverUrl: KojoAndLolaImage, progress: 70 }, { id: 36, title: "Advanced Book Eight", coverUrl: KojoAndLolaImage1, progress: 80 }, { id: 37, title: "Advanced Book Nine", coverUrl: KojoAndLolaImage2, progress: 90 }, { id: 38, title: "Advanced Book Ten", coverUrl: KojoAndLolaImage3, progress: 100 }, { id: 49, title: "Advanced Book Eleven", coverUrl: KojoAndLolaImage4, progress: 15 }, { id: 50, title: "Advanced Book Twelve", coverUrl: KojoAndLolaImage5, progress: 25 },], }, { name: "Young Explorers", books: [{ id: 39, title: "Explorer One", coverUrl: KojoAndLolaImage4, progress: 15 }, { id: 40, title: "Explorer Two", coverUrl: KojoAndLolaImage5, progress: 25 }, { id: 41, title: "Explorer Three", coverUrl: KojoAndLolaImage, progress: 35 }, { id: 42, title: "Explorer Four", coverUrl: KojoAndLolaImage1, progress: 45 }, { id: 43, title: "Explorer Five", coverUrl: KojoAndLolaImage2, progress: 55 }, { id: 44, title: "Explorer Six", coverUrl: KojoAndLolaImage3, progress: 65 }, { id: 45, title: "Explorer Seven", coverUrl: KojoAndLolaImage4, progress: 75 }, { id: 46, title: "Explorer Eight", coverUrl: KojoAndLolaImage5, progress: 85 }, { id: 47, title: "Explorer Nine", coverUrl: KojoAndLolaImage, progress: 95 }, { id: 48, title: "Explorer Ten", coverUrl: KojoAndLolaImage1, progress: 100 }, { id: 51, title: "Explorer Eleven", coverUrl: KojoAndLolaImage2, progress: 20 }, { id: 52, title: "Explorer Twelve", coverUrl: KojoAndLolaImage3, progress: 30 },], }, { name: "New Discoveries", books: [{ id: 53, title: "Discovery One", coverUrl: KojoAndLolaImage4, progress: 5 }, { id: 54, title: "Discovery Two", coverUrl: KojoAndLolaImage5, progress: 15 }, { id: 55, title: "Discovery Three", coverUrl: KojoAndLolaImage, progress: 25 }, { id: 56, title: "Discovery Four", coverUrl: KojoAndLolaImage1, progress: 35 }, { id: 57, title: "Discovery Five", coverUrl: KojoAndLolaImage2, progress: 45 }, { id: 58, title: "Discovery Six", coverUrl: KojoAndLolaImage3, progress: 55 }, { id: 59, title: "Discovery Seven", coverUrl: KojoAndLolaImage4, progress: 65 }, { id: 60, title: "Discovery Eight", coverUrl: KojoAndLolaImage5, progress: 75 }, { id: 61, title: "Discovery Nine", coverUrl: KojoAndLolaImage, progress: 85 }, { id: 62, title: "Discovery Ten", coverUrl: KojoAndLolaImage1, progress: 95 },], },];
 
-const tabsConfig = [
+const defaultTabs: Omit<Tab, "id">[] = [
   { label: "For you", icon: <FaUser /> },
   { label: "Stories", icon: <FaBookOpen /> },
   { label: "Languages", icon: <FaGlobe /> },
@@ -153,6 +94,32 @@ const tabsConfig = [
 
 const ContentLibrary: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  // ensure we can always do tabsConfig[activeIndex].label without crashing
+  const [tabsConfig, setTabsConfig] = useState<Tab[]>(
+    defaultTabs.map((tab) => ({ ...tab, id: null }))
+  );
+
+  // a) Keep the entire cats array so we can reuse sub-categories
+  const [allCats, setAllCats] = useState<any[]>([]);
+
+  useEffect(() => {
+    GetSubCategories().then((res) => {
+      console.log("res", res);
+      if (res.data.status && Array.isArray(res.data.data)) {
+        const cats = res.data.data;
+        console.log("cats", cats);
+        setAllCats(cats);            // <-- NEW
+        const populated: Tab[] = defaultTabs.map((tab) => {
+          const match = cats.find((c) => c.name === tab.label);
+          return { ...tab, id: match?.id ?? null };
+        });
+        setTabsConfig(populated);
+      } else {
+        // fallback: assign null IDs
+        setTabsConfig(defaultTabs.map((tab) => ({ ...tab, id: null })));
+      }
+    });
+  }, []);
 
   const urlState = React.useMemo(() => {
     const tab = Number(searchParams.get("tab")) || 0;
@@ -185,7 +152,7 @@ const ContentLibrary: React.FC = () => {
 
   const allBooks = React.useMemo(
     () =>
-      [...generateAllCategories(), ...generateAllSubcategories()].flatMap(
+      [...generateAllSubcategories()].flatMap(
         (c) => c.books
       ),
     []
@@ -201,6 +168,9 @@ const ContentLibrary: React.FC = () => {
   const [expandedSub, setExpandedSub] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[] | null>(null);
   const [crumb, setCrumb] = useState<string[]>([]);
+  const [expandedSimple, setExpandedSimple] = useState<Record<string, boolean>>(
+    {}
+  );
 
   // ---------- quiz flow state ----------
   const [quizTarget, setQuizTarget] = useState<Book | null>(null);
@@ -234,7 +204,14 @@ const ContentLibrary: React.FC = () => {
 
   const handleReviewDone = () => setShowReview(false);
 
-  // 1) Fetch main categories & reset entire view on tab change
+  // Helper to detect active tab
+  const activeLabel = tabsConfig[activeIndex]?.label;
+  const isForYouTab = activeLabel === "For you";
+  const isStoriesTab = activeLabel === "Stories";
+  const isLangsTab = activeLabel === "Languages";
+  const isLiteracyTab = activeLabel === "Literacy";
+
+  // 1) Fetch categories whenever the active **tab** changes
   React.useEffect(() => {
     setMainSelected(null);
     setSubRequested(false);
@@ -242,11 +219,76 @@ const ContentLibrary: React.FC = () => {
     setExpandedSub(null);
     setCrumb([]);
     setCategories(null);
-    const t = setTimeout(() => {
-      setCategories(generateAllCategories());
-    }, 300);
+
+    const load = async () => {
+      // 1) For-you -------------------------------
+      if (isForYouTab) {
+        try {
+          const res = await ContentForHome();
+          if (res?.status && res.data) {
+            setCategories(homeToCategories(res.data.data));
+            return;
+          }
+        } catch { /* ignore */ }
+        // even if it fails we still want the Continue-Reading row
+        setCategories([{ name: "Continue Reading", books: [] }]);
+        return;
+      }
+
+      // 2) Stories ------------------------------
+      if (isStoriesTab) {
+        // (a) still waiting on GetSubCategories()
+        if (allCats.length === 0) {
+          console.log("allCats.length === 0", allCats.length, allCats);
+          // show one placeholder row so BookCategory shows header skeleton + book skeletons
+          setCategories([{ name: "", books: [], hasSub: false, subId: null }]);
+          return;
+        }
+
+        // (b) now we have the real “Stories” category
+        const storiesCat = allCats.find((c) => c.name === "Stories");
+        setCategories(
+          (storiesCat?.sub_categories || []).map((sub: any) => ({
+            name: sub.name,
+            books: [], // BookCategory will render its skeletons
+            hasSub: false,
+            subId: sub.id,
+          }))
+        );
+        return;
+      }
+
+      // 3) Languages ----------------------------
+      if (isLangsTab) {
+        if (allCats.length === 0) {
+          // show a single placeholder row until GetSubCategories() resolves
+          setCategories([{ name: "", books: [], subId: null }]);
+          return;
+        }
+
+        const langsCat = allCats.find((c) => c.name === "Languages");
+        setCategories(
+          (langsCat?.sub_categories || []).map((sub: any) => ({
+            name: sub.name,
+            books: [], // BookCategory shows skeleton cards
+            hasSub: false,
+            subId: sub.id,
+          }))
+        );
+        return;
+      }
+
+      // 4) Literacy ----------------------------
+      if (isLiteracyTab) {
+        setCategories([]); // nothing to map; we’ll render “Coming soon”
+        return;
+      }
+    };
+
+    // show skeletons for ~300ms
+    const t = setTimeout(load, 1);
     return () => clearTimeout(t);
-  }, [activeIndex]);
+  }, [activeIndex, tabsConfig, allCats]);
 
   // 2) Main “See all” handler
   const handleMainSeeAll = (name: string) => {
@@ -257,7 +299,7 @@ const ContentLibrary: React.FC = () => {
 
     const t = setTimeout(() => {
       setSubcategories(generateAllSubcategories());
-    }, 300); 
+    }, 300);
     return () => clearTimeout(t);
   };
 
@@ -271,7 +313,7 @@ const ContentLibrary: React.FC = () => {
   const loading = isSubView ? subcategories === null : categories === null;
   let list: Category[];
   if (!isSubView) {
-    list = categories ?? generateAllCategories();
+    list = categories ?? [];
   } else if (expandedSub) {
     list = subcategories?.filter((c) => c.name === expandedSub) ?? [
       { name: expandedSub, books: [] },
@@ -280,12 +322,27 @@ const ContentLibrary: React.FC = () => {
     list = subcategories ?? generateAllSubcategories();
   }
 
-  // 5) Build breadcrumb levels (before book)
-  const crumbsBeforeBook = [
-    tabsConfig[activeIndex].label,
-    mainSelected,
-    expandedSub,
-  ].filter(Boolean) as string[];
+  // --- new: when a For-you category is locally expanded, hide all others
+  const expandedNames = Object.entries(expandedSimple)
+    .filter(([, val]) => val)
+    .map(([name]) => name);
+  const displayList =
+    isForYouTab && expandedNames.length === 1
+      ? list.filter((cat) => cat.name === expandedNames[0])
+      : list;
+
+  // 5) Build breadcrumb levels (before book) - REWRITTEN
+  /* ---------- breadcrumb construction ---------- */
+  const crumbsBeforeBook = React.useMemo(() => {
+    if (tabsConfig[activeIndex].label === "For you") {
+      const expandedRow = Object.keys(expandedSimple).find((k) => expandedSimple[k]);
+      return expandedRow ? ["For you", expandedRow] : ["For you"];
+    }
+    if (["Stories", "Languages"].includes(tabsConfig[activeIndex].label) && expandedSub) {
+      return [tabsConfig[activeIndex].label, expandedSub];
+    }
+    return [tabsConfig[activeIndex].label];
+  }, [activeIndex, expandedSimple, expandedSub, tabsConfig]);
 
   // Simulate pages for a book
   const generateBookPages = (book: Book): Page[] => {
@@ -310,7 +367,16 @@ const ContentLibrary: React.FC = () => {
       imageUrl: images[index % images.length],
       text: texts[index % texts.length]
     }));
-  };
+};
+
+/* ───────── helpers specific to “For you” breadcrumb ───────── */
+const toggleForYouRow = (catName: string) => {
+  setExpandedSimple(prev => {
+    const now = !prev[catName];
+    setMainSelected(now ? catName : null); // controls breadcrumb level-2
+    return { ...prev, [catName]: now };
+  });
+};
 
   return (
     <div className="mx-auto w-[clamp(550px,100%,1440px)]">
@@ -378,16 +444,20 @@ const ContentLibrary: React.FC = () => {
                       ? "font-bold text-gray-900"
                       : "hover:underline cursor-pointer"
                   }
+                  /* ---------- breadcrumb click handler ---------- */
                   onClick={() => {
-                    // clicking any crumb resets deeper views
                     if (i === 0) {
-                      setTab(activeIndex);
-                      setMainSelected(null);
-                      setSubRequested(false);
-                      setExpandedSub(null);
-                      setCrumb([]);
+                      setExpandedSimple({});
                     }
-                    if (i === 1) {
+                    if (tabsConfig[activeIndex].label === "For you" && i === 1) {
+                      /* toggle just the clicked row */
+                      setExpandedSimple(prev => ({
+                        ...Object.fromEntries(Object.keys(prev).map(k => [k, false])),
+                        [level]: !prev[level]
+                      }));
+                    }
+                    if (tabsConfig[activeIndex].label !== "For you" && i === 1) {
+                      /* Stories / Languages breadcrumb behaviour stays unchanged */
                       setSubRequested(true);
                       setExpandedSub(null);
                       setCrumb([]);
@@ -439,6 +509,7 @@ const ContentLibrary: React.FC = () => {
             book={readingBook}
             onExit={closeRead}
             pages={generateBookPages(readingBook)}
+            withIntroPages={false}  // <-- start directly at page 1
           />
         ) : watchingBook ? (
           <VideoComponent
@@ -456,28 +527,50 @@ const ContentLibrary: React.FC = () => {
             onBack={closeBook}
             onRead={(b: any) => startRead(b.id)}
             onWatch={(b: any) => startWatch(b.id)}
+            audioSrc={QueenMoremi}
           />
+        ) : isLiteracyTab ? (
+          <div className="flex items-center justify-center h-40 text-lg font-semibold text-gray-500">
+            Coming soon
+          </div>
         ) : (
-          list.map((cat) => (
-            <BookCategory
-              key={cat.name}
-              categoryName={cat.name}
-              books={loading ? [] : cat.books}
-              loading={loading}
-              expanded={expandedSub === cat.name}
-              onSeeAll={() =>
-                isSubView
-                  ? handleSubSeeAll(cat.name)
-                  : handleMainSeeAll(cat.name)
-              }
-              tabLabel={tabsConfig[activeIndex].label}
-              parentCategory={mainSelected ?? undefined}
-              onBookClick={(book:any, bc) => {
-                openBook(book.id);
-                setCrumb(bc);
-              }}
-            />
-          ))
+          /* everything else (For you, Stories, Languages, Literacy, etc.) */
+          displayList.map((cat) => {
+            const expandedFlag =
+              isForYouTab
+                ? expandedSimple[cat.name] ?? false
+                : isSubView
+                  ? expandedSub === cat.name
+                  : false;
+
+            return (
+              <BookCategory
+                key={cat.name}
+                subId={(cat as any).subId ?? null}
+                categoryName={cat.name}
+                books={loading ? [] : cat.books}
+                loading={loading}
+                expanded={expandedFlag}
+                hasSub={false} // “For you” categories never drill down
+                onSeeAll={
+                  tabsConfig[activeIndex].label === "For you"
+                    ? () => toggleForYouRow(cat.name)
+                    : () => setExpandedSub(prev => (prev === cat.name ? null : cat.name))
+                }
+                tabLabel={tabsConfig[activeIndex].label}
+                parentCategory={mainSelected ?? undefined}
+                emptyMsg={
+                  isForYouTab && cat.name === "Continue Reading"
+                    ? "No content available"
+                    : undefined
+                }
+                onBookClick={(book: any, bc) => {
+                  openBook(book.id);
+                  setCrumb(bc);
+                }}
+              />
+            );
+          })
         )}
       </div>
 
