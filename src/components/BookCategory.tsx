@@ -76,7 +76,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
         {!rowLoading && onSeeAll && (hasSub || list.length > 3) && (
           <button
             onClick={onSeeAll}
-            className="text-sm text-blue-600 hover:underline"
+            className="text-md text-[#9FC43E] hover:underline"
           >
             {expanded ? "Show less" : "See all"}
           </button>
