@@ -407,6 +407,28 @@ const toggleForYouRow = (catName: string) => {
   });
 };
 
+/* ---------- breadcrumb click handler ---------- */
+const handleBreadcrumbClick = (label: string) => {
+  if (label === "For you") {
+    setMainSelected(null);
+    return;
+  }
+
+  /* ─── Stories ─── */
+  if (label === "Stories") {
+    setShowAllStories(false);
+    setStoriesActiveSubSlug(null);
+    return;
+  }
+
+  /* ─── Languages ─── */
+  if (label === "Languages") {
+    setShowAllLanguages(false);
+    setLanguagesActiveSubSlug(null);
+    return;
+  }
+};
+
   return (
     <div className="mx-auto w-[clamp(550px,100%,1440px)]">
       {/* Banner */}
@@ -473,24 +495,7 @@ const toggleForYouRow = (catName: string) => {
                       ? "font-bold text-gray-900"
                       : "hover:underline cursor-pointer"
                   }
-                  /* ---------- breadcrumb click handler ---------- */
-                  onClick={() => {
-                    if (i === 0) {
-                      setExpandedSimple({});
-                    }
-                    if (tabsConfig[activeIndex].label === "For you" && i === 1) {
-                      /* toggle just the clicked row */
-                      setExpandedSimple(prev => ({
-                        ...Object.fromEntries(Object.keys(prev).map(k => [k, false])),
-                        [level]: !prev[level]
-                      }));
-                    }
-                    if (tabsConfig[activeIndex].label !== "For you" && i === 1) {
-                      /* Stories / Languages breadcrumb behaviour stays unchanged */
-                      setSubRequested(true);
-                      setCrumb([]);
-                    }
-                  }}
+                  onClick={() => handleBreadcrumbClick(level)}
                 >
                   {level}
                 </span>
