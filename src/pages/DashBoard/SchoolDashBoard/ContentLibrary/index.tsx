@@ -46,16 +46,28 @@ const homeToCategories = (payload: any): Category[] => {
     },
   ];
   console.log('payload', payload)
+  const uniqueBooks = new Set<number | string>();
+
   Object.entries(payload).forEach(([key, val]: [string, any]) => {
     if (Array.isArray(val)) {
-      catArray.push({
-        name: toTitle(key),
-        books: val.map((item) => ({
+      const books = val
+        .filter((item) => {
+          if (!uniqueBooks.has(item.id)) {
+            uniqueBooks.add(item.id);
+            return true;
+          }
+          return false;
+        })
+        .map((item) => ({
           id: item.id,
           title: item.name,
           coverUrl: item.thumbnail,
           progress: 0,
-        })),
+        }));
+
+      catArray.push({
+        name: toTitle(key),
+        books,
         hasSub: false, // all For-you categories expand locally
       });
     }
@@ -671,5 +683,4 @@ const handleBreadcrumbClick = (label: string) => {
     </div>
   );
 };
-
 export default ContentLibrary;

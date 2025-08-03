@@ -9,7 +9,7 @@ export interface Book {
 }
 
 const BookCard: React.FC<{ book: Book }> = ({ book }) => {
-  const [progressWidth, setProgressWidth] = useState(0);
+  const [progressWidth, setProgressWidth] = useState(0); 
   const progressRef = useRef<HTMLDivElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 

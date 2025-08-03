@@ -42,7 +42,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
   hasSub = true,
   emptyMsg,
 }) => {
-  console.log('books', books)
+  console.log('books', books, categoryName, onBookClick)
   // Lazy-loading hook for sub-categories
   const {
     books: lazyBooks,
@@ -103,11 +103,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
               <BookCard
                 book={book}
                 onClick={() =>
-                  onBookClick?.(book, [
-                    tabLabel,
-                    parentCategory ?? "",
-                    categoryName,
-                  ])
+                  onBookClick?.(book.id)
                 }
               />
             </div>
