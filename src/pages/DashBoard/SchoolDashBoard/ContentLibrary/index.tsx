@@ -151,8 +151,10 @@ const ContentLibrary: React.FC = () => {
 
   const setTab = (idx: number) => setSearchParams({ tab: String(idx) });
 
-  const openBook = (id: number) =>
+  const openBook = (id: number) => {
+    console.log("👉 openBook", id);
     setSearchParams({ tab: String(urlState.tab), book: String(id) });
+  };
 
   const startRead = (id: number) =>
     setSearchParams({ tab: String(urlState.tab), book: String(id), read: "1" });
@@ -187,7 +189,7 @@ const ContentLibrary: React.FC = () => {
     []
   );
 
-  const selectedBook = React.useMemo(() => {
+  const selectedBook = React.useMemo<Book | null>(() => {
     if (urlState.book == null) return null;
 
     // 1️⃣ look in the demo list
@@ -596,14 +598,10 @@ const handleBreadcrumbClick = (label: string) => {
             book={selectedBook}
             crumb={crumbsBeforeBook}
             onBack={closeBook}
-            onRead={(b: any) => startRead(b.id)}
-            onWatch={(b: any) => startWatch(b.id)}
+            onRead={(b) => startRead(b.id)}
+            onWatch={(b) => startWatch(b.id)}
             audioSrc={QueenMoremi}
           />
-        ) : isLiteracyTab ? (
-          <div className="flex items-center justify-center h-40 text-lg font-semibold text-gray-500">
-            Coming soon
-          </div>
         ) : (
           <>
             {/* ───── Stories tab ───── */}

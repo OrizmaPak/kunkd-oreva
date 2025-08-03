@@ -29,39 +29,36 @@ interface BookCategoryProps {
   emptyMsg?: string;
 }
 
-const BookCategory: React.FC<BookCategoryProps> = ({
-  books = [],
-  subId = null,
-  categoryName,
-  loading = false,
-  expanded = false,
-  onSeeAll,
-  onBookClick,
-  tabLabel,
-  parentCategory,
-  hasSub = true,
-  emptyMsg,
-}) => {
+const BookCategory: React.FC<BookCategoryProps> = (props) => {
+  const {
+    books = [],
+    subId = null,
+    categoryName,
+    loading = false,
+    expanded = false,
+    onSeeAll,
+    onBookClick,
+    tabLabel,
+    parentCategory,
+    hasSub = true,
+    emptyMsg,
+  } = props;
+
   console.log('books', books, categoryName, onBookClick)
   // Lazy-loading hook for sub-categories
   const {
     books: lazyBooks,
-    loadingInit,            // ← first‐page loader
-    loadingMore,            // ← subsequent‐page loader
-    hasFetched,             // ← new
-    page,                   // ← add this
+    loadingInit,
+    loadingMore,
+    hasFetched,
     containerRef,
     sentryRef,
-    loadMoreRef,            // ← your new sentinel ref
+    loadMoreRef,
   } = useSubCategoryLazy(subId, expanded);
 
-
   const usingLazy = subId != null;
-  // Choose data source based on lazy vs. static
   const list = usingLazy ? lazyBooks : books;
-  // First-page load vs. static loading
   const rowLoading = usingLazy ? loadingInit : loading;
-  const showInitSkels = usingLazy && !hasFetched;   // ← new line
 
   // ────────── RENDER ──────────
   return (
@@ -75,7 +72,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
             <Skeleton width={100} />
           )}
         </h3>
-        {!rowLoading && onSeeAll && ( list.length > 3) && (
+        {!rowLoading && onSeeAll && (list.length > 3) && (
           <button
             onClick={onSeeAll}
             className="text-md text-[#9FC43E] hover:underline"
@@ -92,49 +89,42 @@ const BookCategory: React.FC<BookCategoryProps> = ({
 
       {/* ===== HORIZONTAL LIST ===== */}
       <div ref={containerRef} className={expanded ? "flex flex-wrap gap-4" : "flex space-x-4 overflow-x-auto no-scrollbar"}>
-        {/* Empty state after load */}
-        {!rowLoading && hasFetched && list.length === 0 ? (
-          <div className="text-gray-400 text-center italics text-sm py-8 w-full h-10">
+        {/* new: show skeletons until first fetch, then show empty or books */}
+        {rowLoading || (!hasFetched && usingLazy) ? (
+          Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton key={`init-${i}`} className="w-32 h-44 rounded" />
+          ))
+        ) : list.length === 0 ? (
+          <div className="text-gray-500">
             {emptyMsg ?? "No content available"}
           </div>
         ) : (
-          list.map((book, idx) => (
+          list.map((book) => (
             <div key={book.id} className="flex-shrink-0">
               <BookCard
                 book={book}
                 onClick={() =>
-                  onBookClick?.(book.id)
+                  props.onBookClick?.(book, [
+                    props.tabLabel,
+                    props.parentCategory ?? "",
+                    props.categoryName,
+                  ])
                 }
               />
             </div>
           ))
         )}
-        {categoryName == 'Continue Reading' && <div className="text-gray-400 text-center italics text-sm py-8 w-full h-10">
-            {emptyMsg ?? "No content available"}
-          </div>}
-
-        {/* Skeletons for first-page loading/static loading */}
-        {(rowLoading || showInitSkels) &&
-          Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton
-              key={`init-${i}`}
-              className="w-32 h-44 rounded"
-            />
-          ))}
       </div>
 
-      {/* ─── when expanded, trigger next‐page loads ─── */}
+      {/* when expanded: loadMoreRef */}
       {usingLazy && expanded && (
         <div ref={loadMoreRef} className="h-1 w-full" />
       )}
 
-      {/* Skeletons for loading more pages */}
+      {/* now subsequent-page skeletons */}
       {loadingMore &&
         Array.from({ length: 6 }).map((_, i) => (
-          <Skeleton
-            key={`more-${page}-${i}`}
-            className="w-32 h-44 rounded"
-          />
+          <Skeleton key={`more-${i}`} className="w-32 h-44 rounded" />
         ))}
     </div>
   );
