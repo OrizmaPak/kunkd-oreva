@@ -409,6 +409,62 @@ const ContentLibrary: React.FC = () => {
     }
   }, [urlState.read, urlState.book, fetchBookPages]);
 
+  // ─── new: on a fresh load with ?book=…, pull its real category & slug ───
+  useEffect(() => {
+    // only do this once, when we have a book but no crumb yet
+    if (urlState.book == null || crumb.length > 0 || tabsConfig.length === 0) return;
+
+    (async () => {
+      try {
+        const res = await GetContentById(String(urlState.book), "1");
+        const data = res?.data?.data ?? res?.data;
+
+        const tabLabel = data.category; 
+        const subLabel = data.sub_categories?.[0]?.sub_category_name || "";
+        const bookName = data.name;
+
+        // find the tab index
+        const idx = tabsConfig.findIndex((t) => t.label === tabLabel);
+
+        // if the URL’s tab param is out of sync, correct it
+        if (idx >= 0 && urlState.tab !== idx) {
+          setSearchParams({
+            tab: String(idx),
+            book: String(urlState.book),
+            read: urlState.read ? "1" : undefined,
+            watch: urlState.watch ? "1" : undefined
+          }, { replace: true });
+          return;
+        }
+
+        // otherwise, expand the right row in‐UI:
+        if (tabLabel === "Stories") {
+          setShowAllStories(true);
+          setStoriesActiveSubSlug(subLabel);
+        } else if (tabLabel === "Languages") {
+          setShowAllLanguages(true);
+          setLanguagesActiveSubSlug(subLabel);
+        } else if (tabLabel === "For you") {
+          // expand For-you row
+          setExpandedSimple({ [subLabel]: true });
+          setMainSelected(subLabel);
+        }
+
+        // finally seed the breadcrumb
+        setCrumb([tabLabel, subLabel, bookName]);
+      } catch (err) {
+        console.error("Failed to rehydrate breadcrumb:", err);
+      }
+    })();
+  }, [
+    urlState.book,
+    urlState.tab,
+    urlState.read,
+    urlState.watch,
+    tabsConfig,
+    crumb.length
+  ]);
+
   // 2) Main “See all” handler
   const handleMainSeeAll = (name: string) => {
     setMainSelected(name);
@@ -459,16 +515,6 @@ const ContentLibrary: React.FC = () => {
     }
     return [tabsConfig[activeIndex].label];
   }, [activeIndex, expandedSimple, tabsConfig, storiesActiveSubSlug, languagesActiveSubSlug]);
-
-  // if we already have a book in the URL but crumb[] is empty, plant its title
-  useEffect(() => {
-    if (urlState.book != null && selectedBook && crumb.length === 0) {
-      setCrumb([
-        ...crumbsBeforeBook,
-        selectedBook.title
-      ]);
-    }
-  }, [urlState.book, selectedBook, crumbsBeforeBook, crumb.length]);
 
   // include book-title crumbs when a book is open
   const displayCrumbs = selectedBook && crumb.length > 0

@@ -114,18 +114,30 @@ const FlipBook = React.memo(
             return (
               <div
                 key={`text-${page.id}`}
-                className="flex items-center bg-[#FCFBF6] rounded-2xl border-2 border-[#e2dccf] p-4 overflow-auto"
+                className="relative flex h-full items-center bg-[#FCFBF6] rounded-2xl border-2 border-[#e2dccf] p-4 overflow-hidden"
                 style={style}
               >
-                <div className="relative w-full h-full flex justify-center items-center">
+                <div className="relative w-full h-full flex justify-center items-center overflow-hidden">
                   <p
-                    style={{ fontSize: `${props.fontSize}px` }}
-                    className="font-semibold text-gray-800 whitespace-pre-wrap w-[80%]"
+                    style={{
+                      fontSize: `${props.fontSize}px`,
+                      scrollbarWidth: 'none',
+                      msOverflowStyle: 'none'
+                    }}
+                    className="font-semibold h-full text-gray-800 whitespace-pre-wrap w-[80%] overflow-auto"
                   >
                     <span dangerouslySetInnerHTML={{ __html: page.text }} />
                   </p>
+                  <style>
+                    {`
+                      p::-webkit-scrollbar {
+                        display: none;
+                      }
+                    `}
+                  </style>
                   {/* page number */}
-                  <div className="absolute bottom-2 right-2 text-xs text-gray-500">
+                </div>
+                  <div className="fixed bottom-2 right-2 text-xs text-gray-500">
                     Page{" "}
                     {
                       /* 🔹 correct numbering based on showCover (intro) */
@@ -134,7 +146,6 @@ const FlipBook = React.memo(
                         : Math.floor(idx / 2) + 1
                     }
                   </div>
-                </div>
               </div>
             );
           case "image":
@@ -147,7 +158,7 @@ const FlipBook = React.memo(
                 {page.imageUrl ? (
                   <div className="relative w-full h-full flex justify-center items-center">
                     {/* page number */}
-                    <div className="absolute bottom-2 left-2 text-xs text-gray-500">
+                    <div className="fixed bottom-2 left-2 text-xs text-gray-500">
                       Page{" "}
                       {
                         /* 🔹 correct numbering based on showCover */
