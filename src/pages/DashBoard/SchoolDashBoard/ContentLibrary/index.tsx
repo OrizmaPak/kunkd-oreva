@@ -29,6 +29,10 @@ import KojoAndLolaImage4 from "@/assets/Kojo and Lola (4).png";
 import KojoAndLolaImage5 from "@/assets/Kojo and Lola (5).png";
 import { ContentForHome, GetAudioBooks, GetContebtBySubCategories, GetRecommendedVideo, GetSubCategories } from "@/api/api";
 
+/* ---------------- helper: loud trace ---------------- */
+const trace = (...msg: any[]) =>
+  console.log('%c[ContentLibrary]', 'color:#BCD678;font-weight:bold', ...msg);
+
 /* helper: snake_case → Title Case */
 const toTitle = (s: string) =>
   s
@@ -152,18 +156,22 @@ const ContentLibrary: React.FC = () => {
   const setTab = (idx: number) => setSearchParams({ tab: String(idx) });
 
   const openBook = (id: number) => {
-    console.log("👉 openBook", id);
+    trace('openBook()', id);
     setSearchParams({ tab: String(urlState.tab), book: String(id) });
   };
 
-  const startRead = (id: number) =>
-    setSearchParams({ tab: String(urlState.tab), book: String(id), read: "1" });
+  const startRead = (id: number) => {
+    trace('startRead()', id);
+    setSearchParams({ tab: String(urlState.tab), book: String(id), read: '1' });
+  };
 
   const closeRead = () =>
     setSearchParams({ tab: String(urlState.tab), book: String(urlState.book!) });
 
-  const startWatch = (id: number) =>
-    setSearchParams({ tab: String(urlState.tab), book: String(id), watch: "1" });
+  const startWatch = (id: number) => {
+    trace('startWatch()', id);
+    setSearchParams({ tab: String(urlState.tab), book: String(id), watch: '1' });
+  };
 
   const closeWatch = () =>
     setSearchParams({ tab: String(urlState.tab), book: String(urlState.book!) });

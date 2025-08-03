@@ -31,6 +31,7 @@ const BookOverview: React.FC<BookOverviewProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    console.log('[BookOverview] mount for book-id:', book.id);
     let mounted = true;
     const userId = "1"; // ← replace with real user-id source if you have one
 
