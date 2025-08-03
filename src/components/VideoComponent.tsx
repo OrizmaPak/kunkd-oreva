@@ -11,7 +11,6 @@ import {
 } from "react-icons/fa";
 import { MdReplay10, MdForward10 } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
-import video1 from "../VideoBooks/video1.mp4";
 import QuizComponent from "@/components/QuizComponent";
 import WellDoneModal from "@/components/WellDoneModal";
 import { Book } from "@/components/BookCard";
@@ -23,6 +22,7 @@ interface VideoComponentProps {
   onClose: () => void;
   onComplete?: () => void; // Called when video ends (optional parent hook)
   book: Book;               // 🔹 NEW: so we can pass into QuizComponent
+  videoSrc: string;         // 🔹 NEW: video source URL
 }
 
 /* ────────────────────────────────────────────────────────── */
@@ -37,6 +37,7 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
   onClose,
   onComplete, // optional parent callback
   book,       // 🔹 Destructure new
+  videoSrc,   // 🔹 Destructure new
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);
@@ -193,7 +194,7 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
         {/* ───── actual video ───── */}
         <video
           ref={videoRef}
-          src={video1}
+          src={videoSrc}  // Use the videoSrc prop
           poster={poster}
           className="w-full h-full object-contain bg-black"
           controls={false}
@@ -274,4 +275,3 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
 };
 
 export default VideoComponent;
-

@@ -206,14 +206,14 @@ const ContentLibrary: React.FC = () => {
 
   const startWatch = async (id: number) => {
     trace("startWatch()", id);
-    // 1) update URL so VideoComponent will render
-    setSearchParams({
-      tab: String(urlState.tab),
-      book: String(id),
-      watch: "1",
-    });
+    // 1) clear any previous video
+    setVideoSrc("");
+    setVideoPoster("");
 
-    // 2) fetch the real media[0] record
+    // 2) flip into “watch” mode
+    setSearchParams({ tab: String(urlState.tab), book: String(id), watch: "1" });
+
+    // 3) fetch this book’s media[0]
     try {
       const res = await GetContentById(String(id), "1");
       const data = res?.data?.data ?? res?.data;
@@ -227,8 +227,12 @@ const ContentLibrary: React.FC = () => {
     }
   };
 
-  const closeWatch = () =>
+  const closeWatch = () => {
+    // clear out before we go
+    setVideoSrc("");
+    setVideoPoster("");
     setSearchParams({ tab: String(urlState.tab), book: String(urlState.book!) });
+  };
 
   const closeBook = () => setSearchParams({ tab: String(urlState.tab) });
 
@@ -695,6 +699,7 @@ const ContentLibrary: React.FC = () => {
           )
         ) : watchingBook ? (
           <VideoComponent
+            key={videoSrc || watchingBook.id}
             videoSrc={videoSrc}
             poster={videoPoster}
             title={watchingBook.title}
