@@ -170,6 +170,15 @@ const ContentLibrary: React.FC = () => {
 
   const activeIndex = urlState.tab;
 
+  const [mainSelected, setMainSelected] = useState<string | null>(null);
+  const [subRequested, setSubRequested] = useState(false);
+  const [subcategories, setSubcategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [crumb, setCrumb] = useState<string[]>([]);
+  const [expandedSimple, setExpandedSimple] = useState<Record<string, boolean>>(
+    {}
+  );
+
   const allBooks = React.useMemo(
     () =>
       [...generateAllSubcategories()].flatMap(
@@ -178,18 +187,35 @@ const ContentLibrary: React.FC = () => {
     []
   );
 
-  const selectedBook = allBooks.find((b) => b.id === urlState.book) || null;
+  const selectedBook = React.useMemo(() => {
+    if (urlState.book == null) return null;
+
+    // 1️⃣ look in the demo list
+    let found =
+      allBooks.find((b) => b.id === urlState.book) ?? null;
+    if (found) return found;
+
+    // 2️⃣ look in the currently displayed categories / sub-categories
+    const searchPools = [categories, subcategories];
+    for (const pool of searchPools) {
+      for (const cat of pool) {
+        const hit = cat.books?.find((b) => b.id === urlState.book);
+        if (hit) return hit;
+      }
+    }
+
+    // 3️⃣ still nothing? return a stub so BookOverview
+    //    can fetch real data via GetContentById
+    return {
+      id: urlState.book,
+      title: "",
+      coverUrl: "",
+      progress: 0,
+    };
+  }, [urlState.book, allBooks, categories, subcategories]);
+
   const readingBook = urlState.read ? selectedBook : null;
   const watchingBook = urlState.watch ? selectedBook : null;
-
-  const [mainSelected, setMainSelected] = useState<string | null>(null);
-  const [subRequested, setSubRequested] = useState(false);
-  const [subcategories, setSubcategories] = useState<Category[] | null>(null);
-  const [categories, setCategories] = useState<Category[] | null>(null);
-  const [crumb, setCrumb] = useState<string[]>([]);
-  const [expandedSimple, setExpandedSimple] = useState<Record<string, boolean>>(
-    {}
-  );
 
   // ---------- quiz flow state ----------
   const [quizTarget, setQuizTarget] = useState<Book | null>(null);
@@ -260,9 +286,9 @@ const ContentLibrary: React.FC = () => {
   React.useEffect(() => {
     setMainSelected(null);
     setSubRequested(false);
-    setSubcategories(null);
+    setSubcategories([]);
     setCrumb([]);
-    setCategories(null);
+    setCategories([]);
 
     const load = async () => {
       // 1) For-you -------------------------------
@@ -338,7 +364,7 @@ const ContentLibrary: React.FC = () => {
   const handleMainSeeAll = (name: string) => {
     setMainSelected(name);
     setSubRequested(true);
-    setSubcategories(null);
+    setSubcategories([]);
 
     const t = setTimeout(() => {
       setSubcategories(generateAllSubcategories());
@@ -348,16 +374,16 @@ const ContentLibrary: React.FC = () => {
 
   // 4) Decide which list to show
   const isSubView = subRequested;
-  const loading = isSubView ? subcategories === null : categories === null;
+  const loading = isSubView ? subcategories.length === 0 : categories.length === 0;
   let list: Category[];
   if (!isSubView) {
-    list = categories ?? [];
+    list = categories;
   } else if (isStoriesTab && showAllStories && storiesActiveSubSlug) {
-    list = subcategories?.filter(c => c.name === storiesActiveSubSlug) ?? [];
+    list = subcategories.filter(c => c.name === storiesActiveSubSlug);
   } else if (isLangsTab && showAllLanguages && languagesActiveSubSlug) {
-    list = subcategories?.filter(c => c.name === languagesActiveSubSlug) ?? [];
+    list = subcategories.filter(c => c.name === languagesActiveSubSlug);
   } else {
-    list = subcategories ?? generateAllSubcategories();
+    list = subcategories.length ? subcategories : generateAllSubcategories();
   }
 
   // --- new: when a For-you category is locally expanded, hide all others
