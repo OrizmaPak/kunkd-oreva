@@ -17,12 +17,12 @@ import { Book } from "@/components/BookCard";
 
 interface VideoComponentProps {
   title: string;
-  poster?: string;
-  flagUrl?: string;
+  flagUrl: string;
   onClose: () => void;
-  onComplete?: () => void; // Called when video ends (optional parent hook)
-  book: Book;               // 🔹 NEW: so we can pass into QuizComponent
-  videoSrc: string;         // 🔹 NEW: video source URL
+  onComplete: () => void;
+  videoSrc: string;   // ← make sure these are declared
+  poster: string;     // ← and used below
+  book: Book;         // 🔹 NEW: so we can pass into QuizComponent
 }
 
 /* ────────────────────────────────────────────────────────── */
@@ -31,13 +31,13 @@ const fmt = (sec: number) =>
 
 /* ────────────────────────────────────────────────────────── */
 const VideoComponent: React.FC<VideoComponentProps> = ({
-  poster,
   title,
   flagUrl,
   onClose,
-  onComplete, // optional parent callback
+  onComplete,
+  videoSrc,   // ← make sure these are declared
+  poster,     // ← and used below
   book,       // 🔹 Destructure new
-  videoSrc,   // 🔹 Destructure new
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);
@@ -195,12 +195,14 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
         <video
           ref={videoRef}
           src={videoSrc}  // Use the videoSrc prop
-          poster={poster}
+          poster={poster} // Use the poster prop
           className="w-full h-full object-contain bg-black"
           controls={false}
           muted={muted}
           onClick={togglePlay}
-          onEnded={() => setShowDone(true)}
+          onEnded={onComplete} // Use the onComplete prop
+          preload="auto" // Ensure the video is preloaded for streaming
+          playsInline // Allow inline playback on mobile devices
         />
         {/* title + flag */}
         <div className="absolute top-4 left-4 flex items-center space-x-2 z-10">
