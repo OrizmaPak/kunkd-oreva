@@ -130,6 +130,10 @@ const ContentLibrary: React.FC = () => {
   const [bookPages, setBookPages] = useState<Page[]>([]);
   const [readingLoading, setReadingLoading] = useState(false);
 
+  // ─── 2) state for real video URL + poster ───
+  const [videoSrc, setVideoSrc] = useState<string>("");
+  const [videoPoster, setVideoPoster] = useState<string>("");
+
   useEffect(() => {
     GetSubCategories().then((res) => {
       console.log("res", res);
@@ -200,9 +204,27 @@ const ContentLibrary: React.FC = () => {
     setSearchParams({ tab: String(urlState.tab), book: String(urlState.book!) });
   };
 
-  const startWatch = (id: number) => {
-    trace('startWatch()', id);
-    setSearchParams({ tab: String(urlState.tab), book: String(id), watch: '1' });
+  const startWatch = async (id: number) => {
+    trace("startWatch()", id);
+    // 1) update URL so VideoComponent will render
+    setSearchParams({
+      tab: String(urlState.tab),
+      book: String(id),
+      watch: "1",
+    });
+
+    // 2) fetch the real media[0] record
+    try {
+      const res = await GetContentById(String(id), "1");
+      const data = res?.data?.data ?? res?.data;
+      const mediaItem = data.media?.[0] || {};
+      setVideoSrc(mediaItem.file || "");
+      setVideoPoster(mediaItem.thumbnail || "");
+    } catch (err) {
+      console.error("❌ failed to load video data", err);
+      setVideoSrc("");
+      setVideoPoster("");
+    }
   };
 
   const closeWatch = () =>
@@ -673,8 +695,8 @@ const ContentLibrary: React.FC = () => {
           )
         ) : watchingBook ? (
           <VideoComponent
-            // videoSrc={`/videos/${watchingBook.id}.mp4`}
-            poster={`/videos/${watchingBook.id}-thumb.jpg`}
+            videoSrc={videoSrc}
+            poster={videoPoster}
             title={watchingBook.title}
             flagUrl={NigeriaFlag}
             onClose={closeWatch}

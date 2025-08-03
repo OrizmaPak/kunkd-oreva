@@ -54,8 +54,10 @@ const useSubCategoryLazy = (subId: number | null, expanded: boolean) => {
       ]);
       setPage(next);
       setMax(number_pages);
+      setHasFetched(true);
     } catch (e) {
-      console.error("GetContebtBySubCategories failed", e);
+        setHasFetched(true);
+        console.error("GetContebtBySubCategories failed", e);
     } finally {
       first ? setInit(false) : setMore(false);
     }
@@ -125,6 +127,7 @@ const useSubCategoryLazy = (subId: number | null, expanded: boolean) => {
     containerRef,
     sentryRef,
     loadMoreRef,
+    page
   };
 };
 

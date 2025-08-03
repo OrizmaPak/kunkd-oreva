@@ -146,7 +146,8 @@ const BookOverview: React.FC<BookOverviewProps> = ({
                 <button
                   className="border border-[#9FC43E] text-[#667185] w-[205px] h-[49px] rounded-full"
                   onClick={() => setShowAudio(true)}
-                >
+                  disabled
+                  >
                   Read to me
                 </button>
               </>

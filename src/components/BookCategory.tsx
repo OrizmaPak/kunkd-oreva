@@ -47,6 +47,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
     books: lazyBooks,
     loadingInit,
     loadingMore,
+    hasFetched,
     containerRef,
     sentryRef,
     loadMoreRef,
@@ -92,49 +93,59 @@ const BookCategory: React.FC<BookCategoryProps> = ({
 
       {/* BOOK LIST */}
       <div ref={containerRef} className={containerClass}>
-        {/* Empty state after load */}
-        {!rowLoading && list.length === 0 ? (
-          <div className="text-gray-400 h-[50px] flex items-center justify-center w-full text-sm italic"> 
-            {emptyMsg ?? "No content available"}
+        {/* Special case for "Continue Reading" category */}
+        {categoryName === "Continue Reading" ? (
+          <div className="text-gray-400 h-[50px] flex items-center justify-center w-full text-sm italic">
+            No content available
           </div>
         ) : (
-          list.map((book, idx) => (
-            <div key={book.id} className="flex-shrink-0">
-              <BookCard
-                book={book}
-                onClick={() => {
-                  const crumbs = [tabLabel];
-                  if (parentCategory) crumbs.push(parentCategory);
-                  crumbs.push(categoryName);
-                  onBookClick?.(book, crumbs);
-                }}
-              />
-            </div>
-          ))
+          <>
+            {/* Empty state after load */}
+            {((!rowLoading && hasFetched && list.length === 0 && tabLabel != "For you") || (!rowLoading && list.length === 0 && tabLabel == "For you") ) ? (
+              <div className="text-gray-400 h-[50px] flex items-center justify-center w-full text-sm italic">
+                {emptyMsg ?? "No content available"}
+              </div>
+            ) : (
+              list.map((book, idx) => (
+                <div key={book.id} className="flex-shrink-0">
+                  <BookCard
+                    book={book}
+                    onClick={() => {
+                      const crumbs = [tabLabel];
+                      if (parentCategory) crumbs.push(parentCategory);
+                      crumbs.push(categoryName);
+                      onBookClick?.(book, crumbs);
+                    }}
+                  />
+                </div>
+              ))
+            )}
+
+            {/* Skeletons for first-page loading/static loading */}
+            {((rowLoading || !hasFetched && tabLabel != "For you") || (rowLoading && tabLabel == "For you")) && (
+              Array.from({ length: 8 }).map((_, i) => (
+                <Skeleton
+                  key={i}
+                  className="w-32 h-44 rounded"
+                />
+              ))
+            )}
+
+            {/* Sentinel for infinite scroll when expanded */}
+            {usingLazy && expanded && (
+              <div ref={loadMoreRef} className="h-1" />
+            )}
+
+            {/* Skeletons for loading more pages */}
+            {loadingMore &&
+              Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton
+                  key={i}
+                  className="w-32 h-44 rounded"
+                />
+              ))}
+          </>
         )}
-
-        {/* Skeletons for first-page loading/static loading */}
-        {rowLoading &&
-          Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton
-              key={i}
-              className="w-32 h-44 rounded"
-            />
-          ))}
-
-        {/* Sentinel for infinite scroll when expanded */}
-        {usingLazy && expanded && (
-          <div ref={loadMoreRef} className="h-1" />
-        )}
-
-        {/* Skeletons for loading more pages */}
-        {loadingMore &&
-          Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton
-              key={i}
-              className="w-32 h-44 rounded"
-            />
-          ))}
       </div>
     </div>
   );

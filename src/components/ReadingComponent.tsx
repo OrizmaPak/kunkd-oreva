@@ -367,6 +367,7 @@ const ReadingComponent: React.FC<ReadingComponentProps> = ({
             <button
               onClick={() => setShowAudio(true)}
               className="flex flex-col items-center text-gray-600 hover:text-gray-800"
+              disabled
             >
               <FaHeadphones size={20} />
               <span className="text-xs mt-1">Audiobook</span>
