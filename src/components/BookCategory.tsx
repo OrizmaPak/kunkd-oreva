@@ -55,11 +55,13 @@ const BookCategory: React.FC<BookCategoryProps> = ({
     loadMoreRef,            // ← your new sentinel ref
   } = useSubCategoryLazy(subId, expanded);
 
+
   const usingLazy = subId != null;
   // Choose data source based on lazy vs. static
   const list = usingLazy ? lazyBooks : books;
   // First-page load vs. static loading
   const rowLoading = usingLazy ? loadingInit : loading;
+  const showInitSkels = usingLazy && !hasFetched;   // ← new line
 
   // ────────── RENDER ──────────
   return (
@@ -73,7 +75,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
             <Skeleton width={100} />
           )}
         </h3>
-        {!rowLoading && onSeeAll && (hasSub || list.length > 3) && (
+        {!rowLoading && onSeeAll && ( list.length > 3) && (
           <button
             onClick={onSeeAll}
             className="text-md text-[#9FC43E] hover:underline"
@@ -92,7 +94,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
       <div ref={containerRef} className={expanded ? "flex flex-wrap gap-4" : "flex space-x-4 overflow-x-auto no-scrollbar"}>
         {/* Empty state after load */}
         {!rowLoading && hasFetched && list.length === 0 ? (
-          <div className="text-gray-500">
+          <div className="text-gray-400 text-center italics text-sm py-8 w-full h-10">
             {emptyMsg ?? "No content available"}
           </div>
         ) : (
@@ -111,9 +113,12 @@ const BookCategory: React.FC<BookCategoryProps> = ({
             </div>
           ))
         )}
+        {categoryName == 'Continue Reading' && <div className="text-gray-400 text-center italics text-sm py-8 w-full h-10">
+            {emptyMsg ?? "No content available"}
+          </div>}
 
         {/* Skeletons for first-page loading/static loading */}
-        {rowLoading &&
+        {(rowLoading || showInitSkels) &&
           Array.from({ length: 8 }).map((_, i) => (
             <Skeleton
               key={`init-${i}`}

@@ -34,7 +34,7 @@ const useSubCategoryLazy = (subId: number | null, expanded: boolean) => {
 
     first ? setInit(true) : setMore(true);
     try {
-      const res = await GetContebtBySubCategories(subId, String(next));
+      const res = await GetContebtBySubCategories(String(subId), String(next));
       const payload = res?.data?.data ?? res?.data;
       const number_pages = payload?.number_pages ?? 0;
       const records = payload?.records ?? [];
@@ -54,7 +54,8 @@ const useSubCategoryLazy = (subId: number | null, expanded: boolean) => {
       setMax(number_pages);
       setFetched(true);
     } catch (e) {
-      console.error("GetContebtBySubCategories failed", e);
+        setFetched(true);
+        console.error("GetContebtBySubCategories failed", e);
     } finally {
       first ? setInit(false) : setMore(false);
     }
@@ -118,6 +119,8 @@ const useSubCategoryLazy = (subId: number | null, expanded: boolean) => {
     io.observe(node);
     return () => io.disconnect();
   }, [expanded, page, maxPage, loadingMore]); // eslint-disable-line
+
+  console.log('hasFetched', hasFetched)
 
   return {
     books,
