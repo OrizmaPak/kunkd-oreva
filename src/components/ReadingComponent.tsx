@@ -122,7 +122,7 @@ const FlipBook = React.memo(
                     style={{ fontSize: `${props.fontSize}px` }}
                     className="font-semibold text-gray-800 whitespace-pre-wrap w-[80%]"
                   >
-                    {page.text}
+                    <span dangerouslySetInnerHTML={{ __html: page.text }} />
                   </p>
                   {/* page number */}
                   <div className="absolute bottom-2 right-2 text-xs text-gray-500">

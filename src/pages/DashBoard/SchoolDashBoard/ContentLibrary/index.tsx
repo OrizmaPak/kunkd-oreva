@@ -126,7 +126,7 @@ const ContentLibrary: React.FC = () => {
   const [showAllLanguages, setShowAllLanguages] = useState(false);
   const [languagesActiveSubSlug, setLanguagesActiveSubSlug] = useState<string | null>(null);
 
-  // Track fetched pages and loading state
+  // ─── 1) state for pages + loading ───
   const [bookPages, setBookPages] = useState<Page[]>([]);
   const [readingLoading, setReadingLoading] = useState(false);
 
@@ -164,34 +164,35 @@ const ContentLibrary: React.FC = () => {
     setSearchParams({ tab: String(urlState.tab), book: String(id) });
   };
 
-  const startRead = async (id: number) => {
-    trace("startRead()", id);
-    // kick‐off the read view
+  /** fetch + normalize pages for a given book id */
+  const fetchBookPages = useCallback(async (id: number) => {
     setReadingLoading(true);
-    setSearchParams({
-      tab: String(urlState.tab),
-      book: String(id),
-      read: "1",
-    });
-
-    // now fetch the full content
     try {
       const res = await GetContentById(String(id), "1");
       const data = res?.data?.data ?? res?.data;
-      const rawPages = data.pages || [];
-      // normalize to your Page interface
-      const pages: Page[] = rawPages.map((p: any) => ({
-        id: p.page_number,
-        imageUrl: p.image,        // should be the image URL
-        text: p.web_body || p.body // your HTML/text
-      }));
+      const rawPages: any[] = data.pages || [];
+      const pages: Page[] = rawPages.map((p) => {
+        // 2) pull image either from p.image or from an <img> in the HTML
+        const html = p.web_body || p.body || "";
+        const match = html.match(/<img[^>]+src="([^">]+)"/i);
+        const imgSrc = p.image || (match && match[1]) || "";
+        // 3) strip out any <img> tags so only text remains
+        const text = html.replace(/<img[^>]*>/gi, "").trim();
+        return { id: p.page_number, imageUrl: imgSrc, text };
+      });
       setBookPages(pages);
     } catch (err) {
-      console.error("failed to load pages:", err);
+      console.error("🔴 failed to load pages", err);
       setBookPages([]);
     } finally {
       setReadingLoading(false);
     }
+  }, []);
+
+  const startRead = async (id: number) => {
+    trace("startRead()", id);
+    setSearchParams({ tab: String(urlState.tab), book: String(id), read: "1" });
+    await fetchBookPages(id);
   };
 
   const closeRead = () => {
@@ -401,6 +402,13 @@ const ContentLibrary: React.FC = () => {
     return () => clearTimeout(t);
   }, [activeIndex, tabsConfig, allCats]);
 
+  // when you land with ?read=1&book=### in the URL, rehydrate the pages
+  useEffect(() => {
+    if (urlState.read && urlState.book != null) {
+      fetchBookPages(urlState.book);
+    }
+  }, [urlState.read, urlState.book, fetchBookPages]);
+
   // 2) Main “See all” handler
   const handleMainSeeAll = (name: string) => {
     setMainSelected(name);
@@ -451,6 +459,16 @@ const ContentLibrary: React.FC = () => {
     }
     return [tabsConfig[activeIndex].label];
   }, [activeIndex, expandedSimple, tabsConfig, storiesActiveSubSlug, languagesActiveSubSlug]);
+
+  // if we already have a book in the URL but crumb[] is empty, plant its title
+  useEffect(() => {
+    if (urlState.book != null && selectedBook && crumb.length === 0) {
+      setCrumb([
+        ...crumbsBeforeBook,
+        selectedBook.title
+      ]);
+    }
+  }, [urlState.book, selectedBook, crumbsBeforeBook, crumb.length]);
 
   // include book-title crumbs when a book is open
   const displayCrumbs = selectedBook && crumb.length > 0
@@ -596,7 +614,6 @@ const ContentLibrary: React.FC = () => {
       <div className="mt-8 space-y-8">
         {readingBook ? (
           readingLoading ? (
-            // you can show a spinner or skeleton here:
             <div className="flex justify-center py-20">
               <span>Loading book…</span>
             </div>
