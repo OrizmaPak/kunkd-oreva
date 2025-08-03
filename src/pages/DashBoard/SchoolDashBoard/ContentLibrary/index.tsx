@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import TeacherIllustration from "@/assets/Teacher's_Library_.png";
 import {
   FaUser,
@@ -421,6 +421,11 @@ const ContentLibrary: React.FC = () => {
     return [tabsConfig[activeIndex].label];
   }, [activeIndex, expandedSimple, tabsConfig, storiesActiveSubSlug, languagesActiveSubSlug]);
 
+  // include book-title crumbs when a book is open
+  const displayCrumbs = selectedBook && crumb.length > 0
+    ? crumb
+    : crumbsBeforeBook;
+
   // Simulate pages for a book
   const generateBookPages = (book: Book): Page[] => {
     const images = [
@@ -456,26 +461,54 @@ const toggleForYouRow = (catName: string) => {
 };
 
 /* ---------- breadcrumb click handler ---------- */
-const handleBreadcrumbClick = (label: string) => {
-  if (label === "For you") {
-    setMainSelected(null);
+const handleBreadcrumbClick = useCallback((label: string, level: number) => {
+  // 1) Always close detail view
+  closeBook();
+
+  // 2) Level 0 = top‐level tab
+  if (level === 0) {
+    const tabIndex = tabsConfig.findIndex((t) => t.label === label);
+    if (tabIndex >= 0) {
+      setTab(tabIndex);
+      // reset any open sub‐views / expansions
+      setMainSelected(null);
+      setShowAllStories(false);
+      setStoriesActiveSubSlug(null);
+      setShowAllLanguages(false);
+      setLanguagesActiveSubSlug(null);
+      setExpandedSimple({});
+    }
     return;
   }
 
-  /* ─── Stories ─── */
-  if (label === "Stories") {
-    setShowAllStories(false);
-    setStoriesActiveSubSlug(null);
-    return;
+  // 3) Level 1 = sub‐category or “For you” row
+  if (level === 1) {
+    if (activeLabel === "For you") {
+      // expand that row (or collapse if same)
+      toggleForYouRow(label);
+    } else if (activeLabel === "Stories") {
+      setShowAllStories(true);
+      setStoriesActiveSubSlug(label);
+      setShowAllLanguages(false);
+    } else if (activeLabel === "Languages") {
+      setShowAllLanguages(true);
+      setLanguagesActiveSubSlug(label);
+      setShowAllStories(false);
+    }
   }
-
-  /* ─── Languages ─── */
-  if (label === "Languages") {
-    setShowAllLanguages(false);
-    setLanguagesActiveSubSlug(null);
-    return;
-  }
-};
+}, [
+  tabsConfig,
+  activeLabel,
+  setTab,
+  toggleForYouRow,
+  closeBook,
+  setMainSelected,
+  setShowAllStories,
+  setStoriesActiveSubSlug,
+  setShowAllLanguages,
+  setLanguagesActiveSubSlug,
+  setExpandedSimple,
+]);
 
   return (
     <div className="mx-auto w-[clamp(550px,100%,1440px)]">
@@ -531,54 +564,24 @@ const handleBreadcrumbClick = (label: string) => {
       </LayoutGroup>
 
       {/* Unified Breadcrumb */}
-      {crumbsBeforeBook.length > 0 && (
+      {displayCrumbs.length > 0 && (
         <nav aria-label="Breadcrumb" className="mb-4">
           <ol className="flex items-center text-sm text-gray-600 space-x-2">
-            {crumbsBeforeBook.map((level, i) => (
-              <React.Fragment key={i}>
-                {i > 0 && <FaChevronRight className="text-gray-400" />}
+            {displayCrumbs.map((label, idx) => (
+              <React.Fragment key={idx}>
+                {idx > 0 && <FaChevronRight className="text-gray-400" />}
                 <span
                   className={
-                    i === crumbsBeforeBook.length - 1 && !selectedBook
+                    idx === displayCrumbs.length - 1
                       ? "font-bold text-gray-900"
                       : "hover:underline cursor-pointer"
                   }
-                  onClick={() => handleBreadcrumbClick(level)}
+                  onClick={() => handleBreadcrumbClick(label, idx)}
                 >
-                  {level}
+                  {label}
                 </span>
               </React.Fragment>
             ))}
-
-            {/* Book title */}
-            {selectedBook && (
-              <>
-                <FaChevronRight className="text-gray-400" />
-                <span className="font-bold text-gray-900">
-                  {selectedBook.title}
-                </span>
-
-                {/* Quiz crumb when active */}
-                {showQuiz && (
-                  <>
-                    <FaChevronRight className="text-gray-400" />
-                    <span className="font-bold text-gray-900">
-                      Quiz
-                    </span>
-                  </>
-                )}
-
-                {/* Result crumb when showing results */}
-                {showResult && (
-                  <>
-                    <FaChevronRight className="text-gray-400" />
-                    <span className="font-bold text-gray-900">
-                      Result
-                    </span>
-                  </>
-                )}
-              </>
-            )}
           </ol>
         </nav>
       )}
@@ -631,7 +634,7 @@ const handleBreadcrumbClick = (label: string) => {
                     expanded={showAllStories && cat.name === storiesActiveSubSlug}
                     onBookClick={(book, bc) => {
                       openBook(book.id);
-                      setCrumb(bc);
+                      setCrumb([...bc, book.title]);
                     }}
                     />
                   ))}
@@ -655,7 +658,7 @@ const handleBreadcrumbClick = (label: string) => {
                     expanded={showAllLanguages && cat.name === languagesActiveSubSlug}
                     onBookClick={(book, bc) => {
                       openBook(book.id);
-                      setCrumb(bc);
+                      setCrumb([...bc, book.title]);
                     }}
                   />
                 ))}
@@ -677,7 +680,7 @@ const handleBreadcrumbClick = (label: string) => {
                   }
                   onBookClick={(book, bc) => {
                     openBook(book.id);
-                    setCrumb(bc);
+                    setCrumb([...bc, book.title]);
                   }}
                 />
               ))}

@@ -29,38 +29,40 @@ interface BookCategoryProps {
   emptyMsg?: string;
 }
 
-const BookCategory: React.FC<BookCategoryProps> = (props) => {
-  const {
-    books = [],
-    subId = null,
-    categoryName,
-    loading = false,
-    expanded = false,
-    onSeeAll,
-    onBookClick,
-    tabLabel,
-    parentCategory,
-    hasSub = true,
-    emptyMsg,
-  } = props;
-
-  console.log('books', books, categoryName, onBookClick)
+const BookCategory: React.FC<BookCategoryProps> = ({
+  books = [],
+  subId = null,
+  categoryName,
+  loading = false,
+  expanded = false,
+  onSeeAll,
+  onBookClick,
+  tabLabel,
+  parentCategory,
+  hasSub = true,
+  emptyMsg,
+}) => {
   // Lazy-loading hook for sub-categories
   const {
     books: lazyBooks,
     loadingInit,
     loadingMore,
-    hasFetched,
     containerRef,
     sentryRef,
     loadMoreRef,
   } = useSubCategoryLazy(subId, expanded);
 
   const usingLazy = subId != null;
+  // Choose data source based on lazy vs. static
   const list = usingLazy ? lazyBooks : books;
+  // First-page load vs. static loading
   const rowLoading = usingLazy ? loadingInit : loading;
 
-  // ────────── RENDER ──────────
+  // Layout classes
+  const containerClass = expanded
+    ? "flex flex-wrap gap-4"
+    : "flex space-x-4 overflow-x-auto no-scrollbar";
+
   return (
     <div className="mb-8">
       {/* HEADER */}
@@ -72,60 +74,68 @@ const BookCategory: React.FC<BookCategoryProps> = (props) => {
             <Skeleton width={100} />
           )}
         </h3>
+        {/* {!rowLoading && onSeeAll && (hasSub || list.length > 3) && ( */}
         {!rowLoading && onSeeAll && (list.length > 3) && (
           <button
             onClick={onSeeAll}
-            className="text-md text-[#9FC43E] hover:underline"
+            className="text-sm text-[#9FC43E] hover:underline"
           >
             {expanded ? "Show less" : "See all"}
           </button>
         )}
       </div>
 
-      {/* sentinel sits *between* header and the scroll list */}
+      {/* Sentinel for initial lazy load (collapsed state) */}
       {usingLazy && !expanded && (
         <div ref={sentryRef} className="h-1" />
       )}
 
-      {/* ===== HORIZONTAL LIST ===== */}
-      <div ref={containerRef} className={expanded ? "flex flex-wrap gap-4" : "flex space-x-4 overflow-x-auto no-scrollbar"}>
-        {/* new: show skeletons until first fetch, then show empty or books */}
-        {rowLoading || (!hasFetched && usingLazy) ? (
-          Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={`init-${i}`} className="w-32 h-44 rounded" />
-          ))
-        ) : list.length === 0 ? (
-          <div className="text-gray-400 h-[50px] w-full flex justify-center items-center text-sm italic"> 
+      {/* BOOK LIST */}
+      <div ref={containerRef} className={containerClass}>
+        {/* Empty state after load */}
+        {!rowLoading && list.length === 0 ? (
+          <div className="text-gray-400 h-[50px] flex items-center justify-center w-full text-sm italic"> 
             {emptyMsg ?? "No content available"}
           </div>
         ) : (
-          list.map((book) => (
+          list.map((book, idx) => (
             <div key={book.id} className="flex-shrink-0">
               <BookCard
                 book={book}
-                onClick={() =>
-                  props.onBookClick?.(book, [
-                    props.tabLabel,
-                    props.parentCategory ?? "",
-                    props.categoryName,
-                  ])
-                }
+                onClick={() => {
+                  const crumbs = [tabLabel];
+                  if (parentCategory) crumbs.push(parentCategory);
+                  crumbs.push(categoryName);
+                  onBookClick?.(book, crumbs);
+                }}
               />
             </div>
           ))
         )}
+
+        {/* Skeletons for first-page loading/static loading */}
+        {rowLoading &&
+          Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton
+              key={i}
+              className="w-32 h-44 rounded"
+            />
+          ))}
+
+        {/* Sentinel for infinite scroll when expanded */}
+        {usingLazy && expanded && (
+          <div ref={loadMoreRef} className="h-1" />
+        )}
+
+        {/* Skeletons for loading more pages */}
+        {loadingMore &&
+          Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton
+              key={i}
+              className="w-32 h-44 rounded"
+            />
+          ))}
       </div>
-
-      {/* when expanded: loadMoreRef */}
-      {usingLazy && expanded && (
-        <div ref={loadMoreRef} className="h-1 w-full" />
-      )}
-
-      {/* now subsequent-page skeletons */}
-      {loadingMore &&
-        Array.from({ length: 6 }).map((_, i) => (
-          <Skeleton key={`more-${i}`} className="w-32 h-44 rounded" />
-        ))}
     </div>
   );
 };
