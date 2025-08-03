@@ -27,7 +27,7 @@ import KojoAndLolaImage2 from "@/assets/Kojo and Lola (2).png";
 import KojoAndLolaImage3 from "@/assets/Kojo and Lola (3).png";
 import KojoAndLolaImage4 from "@/assets/Kojo and Lola (4).png";
 import KojoAndLolaImage5 from "@/assets/Kojo and Lola (5).png";
-import { ContentForHome, GetAudioBooks, GetContebtBySubCategories, GetRecommendedVideo, GetSubCategories } from "@/api/api";
+import { ContentForHome, GetAudioBooks, GetContebtBySubCategories, GetRecommendedVideo, GetSubCategories, GetContentById } from "@/api/api";
 
 /* ---------------- helper: loud trace ---------------- */
 const trace = (...msg: any[]) =>
@@ -126,6 +126,10 @@ const ContentLibrary: React.FC = () => {
   const [showAllLanguages, setShowAllLanguages] = useState(false);
   const [languagesActiveSubSlug, setLanguagesActiveSubSlug] = useState<string | null>(null);
 
+  // Track fetched pages and loading state
+  const [bookPages, setBookPages] = useState<Page[]>([]);
+  const [readingLoading, setReadingLoading] = useState(false);
+
   useEffect(() => {
     GetSubCategories().then((res) => {
       console.log("res", res);
@@ -160,13 +164,40 @@ const ContentLibrary: React.FC = () => {
     setSearchParams({ tab: String(urlState.tab), book: String(id) });
   };
 
-  const startRead = (id: number) => {
-    trace('startRead()', id);
-    setSearchParams({ tab: String(urlState.tab), book: String(id), read: '1' });
+  const startRead = async (id: number) => {
+    trace("startRead()", id);
+    // kick‐off the read view
+    setReadingLoading(true);
+    setSearchParams({
+      tab: String(urlState.tab),
+      book: String(id),
+      read: "1",
+    });
+
+    // now fetch the full content
+    try {
+      const res = await GetContentById(String(id), "1");
+      const data = res?.data?.data ?? res?.data;
+      const rawPages = data.pages || [];
+      // normalize to your Page interface
+      const pages: Page[] = rawPages.map((p: any) => ({
+        id: p.page_number,
+        imageUrl: p.image,        // should be the image URL
+        text: p.web_body || p.body // your HTML/text
+      }));
+      setBookPages(pages);
+    } catch (err) {
+      console.error("failed to load pages:", err);
+      setBookPages([]);
+    } finally {
+      setReadingLoading(false);
+    }
   };
 
-  const closeRead = () =>
+  const closeRead = () => {
+    setBookPages([]);
     setSearchParams({ tab: String(urlState.tab), book: String(urlState.book!) });
+  };
 
   const startWatch = (id: number) => {
     trace('startWatch()', id);
@@ -426,89 +457,64 @@ const ContentLibrary: React.FC = () => {
     ? crumb
     : crumbsBeforeBook;
 
-  // Simulate pages for a book
-  const generateBookPages = (book: Book): Page[] => {
-    const images = [
-      KojoAndLolaImage,
-      KojoAndLolaImage1,
-      KojoAndLolaImage,
-      KojoAndLolaImage1,
-      KojoAndLolaImage
-    ];
+  /* ───────── helpers specific to “For you” breadcrumb ───────── */
+  const toggleForYouRow = (catName: string) => {
+    setExpandedSimple(prev => {
+      const now = !prev[catName];
+      setMainSelected(now ? catName : null); // controls breadcrumb level-2
+      return { ...prev, [catName]: now };
+    });
+  };
 
-    const texts = [
-      "Splish, splash, and flip! Meet Dilly, the most curious little dolphin…",
-      "Dolphins are super smart. They use their voices to talk…",
-      "On this page, Dilly meets a sea turtle and they race across the reef…",
-      "Next, Dilly discovers a hidden cave full of sparkly shells…",
-      "Finally, Dilly shares his adventure with his ocean friends…"
-    ];
+  /* ---------- breadcrumb click handler ---------- */
+  const handleBreadcrumbClick = useCallback((label: string, level: number) => {
+    // 1) Always close detail view
+    closeBook();
 
-    return Array.from({ length: 50 }, (_, index) => ({
-      id: index + 1,
-      imageUrl: images[index % images.length],
-      text: texts[index % texts.length]
-    }));
-};
-
-/* ───────── helpers specific to “For you” breadcrumb ───────── */
-const toggleForYouRow = (catName: string) => {
-  setExpandedSimple(prev => {
-    const now = !prev[catName];
-    setMainSelected(now ? catName : null); // controls breadcrumb level-2
-    return { ...prev, [catName]: now };
-  });
-};
-
-/* ---------- breadcrumb click handler ---------- */
-const handleBreadcrumbClick = useCallback((label: string, level: number) => {
-  // 1) Always close detail view
-  closeBook();
-
-  // 2) Level 0 = top‐level tab
-  if (level === 0) {
-    const tabIndex = tabsConfig.findIndex((t) => t.label === label);
-    if (tabIndex >= 0) {
-      setTab(tabIndex);
-      // reset any open sub‐views / expansions
-      setMainSelected(null);
-      setShowAllStories(false);
-      setStoriesActiveSubSlug(null);
-      setShowAllLanguages(false);
-      setLanguagesActiveSubSlug(null);
-      setExpandedSimple({});
+    // 2) Level 0 = top‐level tab
+    if (level === 0) {
+      const tabIndex = tabsConfig.findIndex((t) => t.label === label);
+      if (tabIndex >= 0) {
+        setTab(tabIndex);
+        // reset any open sub‐views / expansions
+        setMainSelected(null);
+        setShowAllStories(false);
+        setStoriesActiveSubSlug(null);
+        setShowAllLanguages(false);
+        setLanguagesActiveSubSlug(null);
+        setExpandedSimple({});
+      }
+      return;
     }
-    return;
-  }
 
-  // 3) Level 1 = sub‐category or “For you” row
-  if (level === 1) {
-    if (activeLabel === "For you") {
-      // expand that row (or collapse if same)
-      toggleForYouRow(label);
-    } else if (activeLabel === "Stories") {
-      setShowAllStories(true);
-      setStoriesActiveSubSlug(label);
-      setShowAllLanguages(false);
-    } else if (activeLabel === "Languages") {
-      setShowAllLanguages(true);
-      setLanguagesActiveSubSlug(label);
-      setShowAllStories(false);
+    // 3) Level 1 = sub‐category or “For you” row
+    if (level === 1) {
+      if (activeLabel === "For you") {
+        // expand that row (or collapse if same)
+        toggleForYouRow(label);
+      } else if (activeLabel === "Stories") {
+        setShowAllStories(true);
+        setStoriesActiveSubSlug(label);
+        setShowAllLanguages(false);
+      } else if (activeLabel === "Languages") {
+        setShowAllLanguages(true);
+        setLanguagesActiveSubSlug(label);
+        setShowAllStories(false);
+      }
     }
-  }
-}, [
-  tabsConfig,
-  activeLabel,
-  setTab,
-  toggleForYouRow,
-  closeBook,
-  setMainSelected,
-  setShowAllStories,
-  setStoriesActiveSubSlug,
-  setShowAllLanguages,
-  setLanguagesActiveSubSlug,
-  setExpandedSimple,
-]);
+  }, [
+    tabsConfig,
+    activeLabel,
+    setTab,
+    toggleForYouRow,
+    closeBook,
+    setMainSelected,
+    setShowAllStories,
+    setStoriesActiveSubSlug,
+    setShowAllLanguages,
+    setLanguagesActiveSubSlug,
+    setExpandedSimple,
+  ]);
 
   return (
     <div className="mx-auto w-[clamp(550px,100%,1440px)]">
@@ -589,12 +595,19 @@ const handleBreadcrumbClick = useCallback((label: string, level: number) => {
       {/* Content area */}
       <div className="mt-8 space-y-8">
         {readingBook ? (
-          <ReadingComponent
-            book={readingBook}
-            onExit={closeRead}
-            pages={generateBookPages(readingBook)}
-            withIntroPages={false}  // <-- start directly at page 1
-          />
+          readingLoading ? (
+            // you can show a spinner or skeleton here:
+            <div className="flex justify-center py-20">
+              <span>Loading book…</span>
+            </div>
+          ) : (
+            <ReadingComponent
+              book={readingBook}
+              onExit={closeRead}
+              pages={bookPages}
+              withIntroPages={false}
+            />
+          )
         ) : watchingBook ? (
           <VideoComponent
             // videoSrc={`/videos/${watchingBook.id}.mp4`}

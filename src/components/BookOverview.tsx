@@ -128,7 +128,7 @@ const BookOverview: React.FC<BookOverviewProps> = ({
           <h2 className="font-arimo font-bold text-[18px] mb-0">Overview</h2>
           {displayBook.description && (
             <p
-              className="font-arimo font-normal text-[18px] min-h-[100px] text-gray-700 mb-6"
+              className="font-arimo font-normal text-[18px]  text-gray-700 mb-6"
               dangerouslySetInnerHTML={{ __html: displayBook.description }}
             />
           )}

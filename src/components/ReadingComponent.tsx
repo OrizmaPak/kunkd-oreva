@@ -59,7 +59,7 @@ const FlipBook = React.memo(
       size="stretch"
       showPageCorners
       drawShadow
-      mobileScrollSupport={false}
+      mobileScrollSupport={true}
       showCover={props.showCover} // 🔹 use prop so we can turn it off
       onFlip={props.onFlip}
       className="rounded-2xl shadow-2xl"
