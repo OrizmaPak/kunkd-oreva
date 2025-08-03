@@ -6,6 +6,7 @@ import AudioComponent from "./AudioComponent";
 import FrameImg from "@/assets/bigbook.png";
 import { GetContentById } from "@/api/api";          // ← new
 import Skeleton from "react-loading-skeleton";      // ← new
+import { showNotification } from "@mantine/notifications";
 
 /* ---------- ① extend the Book shape locally ---------- */
 interface FullBook extends Book {
@@ -35,14 +36,24 @@ const BookOverview: React.FC<BookOverviewProps> = ({
   /* ─── new: fetch full book details ─── */
   const [fullBook, setFullBook] = useState<FullBook | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [shouldMount, setShouldMount] = useState<boolean>(true);
 
   /* ---------- ② fetch mapping ---------- */
   useEffect(() => {
     console.log('[BookOverview] mount for book-id:', book.id);
     let mounted = true;
 
-    GetContentById(String(book.id), '1')
+    GetContentById(String(book.id), '4086')
       .then(res => {
+        if (!res.data.status) {
+          // Assuming there's a notification system in place
+          // showNotification({
+          //   message: res.data.message,
+          //   title: "Notification"
+          // });
+          setShouldMount(false);
+          return;
+        }
         const data = res?.data?.data ?? res?.data;
         console.log('[BookOverview] API payload', data);
 
@@ -64,6 +75,10 @@ const BookOverview: React.FC<BookOverviewProps> = ({
       mounted = false;
     };
   }, [book.id]);
+
+  if (!shouldMount) {
+    return null;
+  }
 
   if (showAudio) {
     return (

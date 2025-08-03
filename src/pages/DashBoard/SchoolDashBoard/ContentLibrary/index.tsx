@@ -28,6 +28,7 @@ import KojoAndLolaImage3 from "@/assets/Kojo and Lola (3).png";
 import KojoAndLolaImage4 from "@/assets/Kojo and Lola (4).png";
 import KojoAndLolaImage5 from "@/assets/Kojo and Lola (5).png";
 import { ContentForHome, GetAudioBooks, GetContebtBySubCategories, GetRecommendedVideo, GetSubCategories, GetContentById } from "@/api/api";
+import { showNotification } from "@mantine/notifications";
 
 /* ---------------- helper: loud trace ---------------- */
 const trace = (...msg: any[]) =>
@@ -134,6 +135,9 @@ const ContentLibrary: React.FC = () => {
   const [videoSrc, setVideoSrc] = useState<string>("");
   const [videoPoster, setVideoPoster] = useState<string>("");
 
+  // ─── overview guard state ───
+  const [overviewChecking, setOverviewChecking] = useState(false);
+
   useEffect(() => {
     GetSubCategories().then((res) => {
       console.log("res", res);
@@ -174,6 +178,14 @@ const ContentLibrary: React.FC = () => {
     try {
       const profileId = sessionStorage.getItem("profileId");
       const res = await GetContentById(String(id), "4086");
+      if (!res.data.status) {
+        // Assuming there's a notification system in place
+        showNotification({
+          message: res.data.message,
+          title: "Notification"
+        });
+        return;
+      }
       const data = res?.data?.data ?? res?.data;
       const rawPages: any[] = data.pages || [];
       const pages: Page[] = rawPages.map((p) => {
@@ -217,6 +229,14 @@ const ContentLibrary: React.FC = () => {
     // 3) fetch this book’s media[0]
     try {
       const res = await GetContentById(String(id), "4086");
+      if (!res.data.status) {
+        // Assuming there's a notification system in place
+        showNotification({
+          message: res.data.message,
+          title: "Notification"
+        });
+        return;
+      }
       const data = res?.data?.data ?? res?.data;
       const mediaItem = data.media?.[0] || {};
       setVideoSrc(mediaItem.file || "");
@@ -282,6 +302,51 @@ const ContentLibrary: React.FC = () => {
       progress: 0,
     };
   }, [urlState.book, allBooks, categories, subcategories]);
+
+  // ─── guard: when you land on ?book=### (but not reading or watching),
+  //      verify that GetContentById returns status=true before showing overview.
+  useEffect(() => {
+    if (
+      urlState.book == null ||
+      urlState.read ||
+      urlState.watch ||
+      !selectedBook
+    ) {
+      return;
+    }
+
+    setOverviewChecking(true);
+    GetContentById(String(urlState.book), "4086")
+      .then((res) => {
+        if (!res.data.status) {
+          showNotification({
+            title: "Oops!",
+            message: res.data.message,
+            color: "red",
+          });
+          // clear the book query param, stay on tab
+          setSearchParams({ tab: String(urlState.tab) }, { replace: true });
+        }
+      })
+      .catch((err) => {
+        console.error("Overview guard error", err);
+        showNotification({
+          title: "Error",
+          message: "Failed to verify book overview.",
+          color: "red",
+        });
+      })
+      .finally(() => {
+        setOverviewChecking(false);
+      });
+  }, [
+    urlState.book,
+    urlState.read,
+    urlState.watch,
+    selectedBook,
+    urlState.tab,
+    setSearchParams,
+  ]);
 
   const readingBook = urlState.read ? selectedBook : null;
   const watchingBook = urlState.watch ? selectedBook : null;
@@ -444,6 +509,15 @@ const ContentLibrary: React.FC = () => {
     (async () => {
       try {
         const res = await GetContentById(String(urlState.book), "4086");
+        if (!res.data.status) {
+          // Assuming there's a notification system in place
+          showNotification({
+            message: res.data.message,
+            title: "Notification"
+          });
+          setSearchParams({ tab: String(urlState.tab) }); // Go back to the tab
+          return;
+        }
         const data = res?.data?.data ?? res?.data;
 
         const tabLabel = data.category; 
@@ -708,7 +782,8 @@ const ContentLibrary: React.FC = () => {
             onClose={closeWatch}
             onComplete={() => handleMediaComplete(watchingBook)}
           />
-        ) : selectedBook ? (
+        ) : /* don't mount overview while checking or if guard failed */ 
+           (selectedBook && !overviewChecking) ? (
           <BookOverview
             book={selectedBook}
             crumb={crumbsBeforeBook}

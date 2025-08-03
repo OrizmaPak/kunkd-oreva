@@ -109,6 +109,7 @@ export const ContentForHome = (payload: TContentForHome) => {
 };
 
 export const GetContentById = (contentId: string, userId: string) => {
+  console.log('GetContentById', contentId, userId)
   return axios.get(`/content/${contentId}/${userId}`);
 };
 

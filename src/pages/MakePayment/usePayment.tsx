@@ -38,10 +38,10 @@
 //         },
 //         () => {
 //           setLoading(false);
-//           showNotification({
+//           ({
 //             message: "Booking payment canceled",
 //             title: "Booking Error",
-//           });
+//           });showNotification
 //         }
 //       );
 //     }

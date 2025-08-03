@@ -1,192 +1,150 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { GetQuiz } from "@/api/api";
 import { Book } from "./BookCard";
-
-export interface Question {
-  q: string;
-  choices: string[];
-  answerIdx: number;
-}
-export interface UserAnswer {
-  question: Question;
-  selectedIdx: number | null; // null = skipped
-}
 
 export interface QuizStats {
   correct: number;
-  incorrect: number;
-  skipped: number;
   total: number;
 }
 
-interface QuizComponentProps {
-  book: Book; // handy if you wish to display breadcrumbs / cover later
-  onComplete: (stats: QuizStats, answers: UserAnswer[]) => void;
-  onExit?: () => void; // optional close handler
+export interface UserAnswer {
+  question_id: number;
+  selected: "a" | "b" | "c" | "d";
+  correct: "a" | "b" | "c" | "d";
 }
 
-/* -------------------------------------------------------------------- */
+interface QuizComponentProps {
+  book: Book;
+  onComplete: (stats: QuizStats, answers: UserAnswer[]) => void;
+}
 
-const QUESTIONS: Question[] = [
-  {
-    q: "Why did Chisom’s grandmother seize her phone?",
-    choices: [
-      "She wanted her to help clean",
-      "She wanted to make her angry",
-      "Chisom wasn’t listening to her",
-      "Chisom refused to eat",
-    ],
-    answerIdx: 0,
-  },
-  {
-    q: "What is the capital of France?",
-    choices: ["Berlin", "Madrid", "Paris", "Rome"],
-    answerIdx: 2,
-  },
-  {
-    q: "Which planet is known as the Red Planet?",
-    choices: ["Earth", "Mars", "Jupiter", "Saturn"],
-    answerIdx: 1,
-  },
-  {
-    q: "What is the largest mammal in the world?",
-    choices: ["Elephant", "Blue Whale", "Giraffe", "Hippopotamus"],
-    answerIdx: 1,
-  },
-  {
-    q: "Who wrote 'Romeo and Juliet'?",
-    choices: [
-      "Charles Dickens",
-      "William Shakespeare",
-      "Mark Twain",
-      "Jane Austen",
-    ],
-    answerIdx: 1,
-  },
-];
+interface QuizQuestion {
+  question_id: number;
+  question: string;
+  option_a: string;
+  option_b: string;
+  option_c: string;
+  option_d: string;
+  answer: "a" | "b" | "c" | "d";
+}
 
-/* -------------------------------------------------------------------- */
-
-const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, onExit }) => {
+const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete }) => {
+  const [loading, setLoading] = useState(true);
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [idx, setIdx] = useState(0);
   const [answers, setAnswers] = useState<UserAnswer[]>([]);
-  const [selected, setSelected] = useState<number | null>(null);
 
-  const q = QUESTIONS[idx];
-  const total = QUESTIONS.length;
-  const progress = (idx / total) * 100; // idx starts at 0
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await GetQuiz(String(book.id));
+        setQuestions(res.data.data.questions);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [book.id]);
 
-  const nextEnabled = selected !== null; // require a pick (user can also skip)
+  if (loading) {
+    return (
+      <div className="p-8 text-center text-gray-600">Loading quiz…</div>
+    );
+  }
 
-  // --- FIX: addAnswer always adds the current question and choice to answers
-  const addAnswer = (choice: number | null) => {
-    setAnswers(prev => [...prev, { question: q, selectedIdx: choice }]);
+  if (questions.length === 0) {
+    return (
+      <div className="p-8 text-center text-gray-600">No quiz available.</div>
+    );
+  }
+
+  const q = questions[idx];
+  const total = questions.length;
+  const progressPct = ((idx + 1) / total) * 100;
+
+  const picked = answers.find(a => a.question_id === q.question_id)?.selected;
+
+  const select = (letter: "a" | "b" | "c" | "d") => {
+    setAnswers(prev => {
+      const filtered = prev.filter(a => a.question_id !== q.question_id);
+      return [...filtered, { question_id: q.question_id, selected: letter, correct: q.answer }];
+    });
   };
 
-  const handleNext = () => {
+  const next = () => {
     if (idx + 1 < total) {
-      addAnswer(selected);
-      setSelected(null);
-      setIdx(i => i + 1);
+      setIdx(idx + 1);
     } else {
-      finishQuiz(selected);
+      const correctCount = answers.filter(a => a.selected === a.correct).length;
+      onComplete({ correct: correctCount, total }, answers);
     }
   };
 
-  // --- FIX: finishQuiz always computes stats from all answers including the last
-  const finishQuiz = (choice: number | null) => {
-    addAnswer(choice);
-    const all = [...answers, { question: q, selectedIdx: choice }];
-    const correct   = all.filter(a => a.selectedIdx === a.question.answerIdx).length;
-    const skipped   = all.filter(a => a.selectedIdx === null).length;
-    const incorrect = all.length - correct - skipped;
-    onComplete({ correct, incorrect, skipped, total: all.length }, all);
-  };
-
-  /* -------------------------------------------------------------- */
-
   return (
-    <div className="relative max-w-5xl mx-auto w-full py-8 px-4 sm:px-8">
-      {/* progress bar */}
-      <div className="h-2 w-[110px] bg-gray-200 rounded overflow-hidden mb-8">
-        <div
-          className="h-full bg-[#9FC43E] transition-all duration-300"
-          style={{ width: `${progress}%` }}
-        />
+    <div className="w-full mx-auto p-10 space-y-6 bg-white">
+      {/* Progress bar + header */}
+      <div className="space-y-2 w-[150px] mb-[-15px]">
+        <div className="w-full bg-gray-200 h-1 rounded-full overflow-hidden h-[7px]  mb-[29px]">
+          <div
+            className="h-full bg-[#BCD678] transition-width duration-300 rounded-full"
+            style={{ width: `${progressPct}%` }}
+          />
+        </div>
+        <div className="text-sm text-gray-700 font-medium">
+          Question {idx + 1} of {total}
+        </div>
       </div>
 
-      <div className="grid grid-cols-12 gap-10">
-        {/* question column */}
-        <div className="col-span-12 md:col-span-5 pr-0 md:pr-6">
-          <p className="text-sm text-gray-500 mb-1">
-            Question {idx + 1} of {total}
-          </p>
-          <p className="font-semibold text-gray-800 leading-relaxed">
-            {q.q}
-          </p>
+      {/* Two-column layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Left: question */}
+        <div className="prose prose-lg border-r">
+          <div dangerouslySetInnerHTML={{ __html: q.question }} />
         </div>
 
-        {/* divider */}
-        <div className="invisible col-span-0 border-r border-gray-300" />
-
-        {/* answers column */}
-        <div className="col-span-12 md:col-span-6 flex flex-col gap-4">
-          {q.choices.map((choice, i) => {
-            const isPicked = selected === i;
-            return (
+        {/* Right: options */}
+        <div className="flex flex-col space-y-4">
+          {(["a", "b", "c", "d"] as const).map(opt => {
+            const isPicked = picked === opt;
+            const optionValue = q[`option_${opt}`];
+            return optionValue ? (
               <button
-                key={i}
-                onClick={() => setSelected(i)}
-                className={`w-full text-left px-4 py-3 rounded-2xl border-[1px] transition  border-[#9FC43E]
-                  ${isPicked ? "bg-[#9FC43E] text-white" : " hover:bg-gray-50"}`}
-              >
-                {choice}
-              </button>
-            );
+                key={opt}
+                onClick={() => select(opt)}
+                className={`border rounded-lg px-4 py-3 text-left transition ${
+                  isPicked
+                    ? "bg-[#BCD678]/40 border-[#BCD678] text-gray-900"
+                    : "bg-white border-[#BCD678] hover:border-[#BCD678] hover:bg-[#F0F9E8]"
+                }`}
+                dangerouslySetInnerHTML={{ __html: optionValue }}
+              />
+            ) : null;
           })}
-          {selected === null && (
-            <button
-              onClick={() => setSelected(null)}
-              className="w-full text-left px-4 py-3 text-gray-500 hover:text-gray-700"
-            >
-              Skip
-            </button>
-          )}
         </div>
       </div>
 
-      {/* nav buttons */}
-      <div className="mt-10 flex justify-end md:justify-end gap-4">
-        {idx !== 0 && (
+      {/* Next button */}
+      <div className="flex justify-end items-center gap-10">
+        {/* Previous */}
+        {idx > 0 ? (
           <button
-            onClick={() => {
-              const prevAnswer = answers.pop();
-              setAnswers([...answers]);
-              setSelected(prevAnswer?.selectedIdx ?? null);
-              setIdx(i => i - 1);
-            }}
-            className="px-8 py-2 rounded-full border border-[#9FC43E] text-[#9FC43E] hover:bg-gray-50"
+            onClick={() => setIdx(idx - 1)}
+            className="px-10 py-3 rounded-full border border-gray-300 text-gray-700 hover:border-[#BCD678] hover:text-[#BCD678] transition"
           >
             Previous
           </button>
+        ) : (
+          <div /> /* placeholder to keep spacing */
         )}
 
+        {/* Next / Finish */}
         <button
-          disabled={!nextEnabled && idx + 1 < total}
-          onClick={handleNext}
-          className="px-8 py-2 rounded-full bg-[#9FC43E] text-white hover:bg-green-600 disabled:opacity-50"
+          onClick={next}
+          disabled={!picked}
+          className="px-10 py-3 rounded-full bg-[#BCD678] text-white font-medium disabled:opacity-50 transition"
         >
           {idx + 1 === total ? "Finish" : "Next"}
         </button>
       </div>
-
-      {onExit && (
-        <button
-          onClick={onExit}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-700"
-        >
-          ✕
-        </button>
-      )}
     </div>
   );
 };
