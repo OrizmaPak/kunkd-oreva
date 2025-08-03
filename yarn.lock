@@ -3216,6 +3216,11 @@ hls.js@^0.14.17:
     eventemitter3 "^4.0.3"
     url-toolkit "^2.1.6"
 
+hls.js@^1.6.7:
+  version "1.6.7"
+  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.6.7.tgz#1b45ed55dfc92e06edc15b98e6374bd13f78af65"
+  integrity sha512-QW2fnwDGKGc9DwQUGLbmMOz8G48UZK7PVNJPcOUql1b8jubKx4/eMHNP5mGqr6tYlJNDG1g10Lx2U/qPzL6zwQ==
+
 hoist-non-react-statics@^3.3.1:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"

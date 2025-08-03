@@ -1,5 +1,6 @@
 // src/components/VideoComponent.tsx
 import React, { useRef, useState, useEffect } from "react";
+import Hls from "hls.js";
 import screenfull from "screenfull";
 import {
   FaVolumeUp,
@@ -128,6 +129,27 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
     setMuted(volume === 0);
   }, [volume]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !videoSrc) return;
+
+    // if Safari or other native HLS support:
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = videoSrc;
+    }
+    // otherwise use hls.js
+    else if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(videoSrc);
+      hls.attachMedia(video);
+      return () => {
+        hls.destroy();
+      };
+    } else {
+      console.error('This browser does not support HLS');
+    }
+  }, [videoSrc]);
+
   const percent = duration ? (current / duration) * 100 : 0;
 
   /* ───────────  render ─────────── */
@@ -194,15 +216,12 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
         {/* ───── actual video ───── */}
         <video
           ref={videoRef}
-          src={videoSrc}  // Use the videoSrc prop
           poster={poster} // Use the poster prop
           className="w-full h-full object-contain bg-black"
           controls={false}
           muted={muted}
           onClick={togglePlay}
           onEnded={onComplete} // Use the onComplete prop
-          preload="auto" // Ensure the video is preloaded for streaming
-          playsInline // Allow inline playback on mobile devices
         />
         {/* title + flag */}
         <div className="absolute top-4 left-4 flex items-center space-x-2 z-10">
