@@ -428,7 +428,7 @@ const toggleForYouRow = (catName: string) => {
 
       {/* Tabs */}
       <LayoutGroup>
-        <div className="flex gap-3 mb-6 flex-wrap mt-[52px]">
+        <div className="sticky top-[-50px] flex gap-3 mb-6 flex-wrap mt-[52px] z-[1000]">
           {tabsConfig.map((tab, idx) => (
             <motion.button
               key={tab.label}
