@@ -95,7 +95,7 @@ const BookCategory: React.FC<BookCategoryProps> = (props) => {
             <Skeleton key={`init-${i}`} className="w-32 h-44 rounded" />
           ))
         ) : list.length === 0 ? (
-          <div className="text-gray-500">
+          <div className="text-gray-400 h-[50px] w-full flex justify-center items-center text-sm italic"> 
             {emptyMsg ?? "No content available"}
           </div>
         ) : (

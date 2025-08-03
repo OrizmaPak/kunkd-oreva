@@ -7,6 +7,12 @@ import FrameImg from "@/assets/bigbook.png";
 import { GetContentById } from "@/api/api";          // ← new
 import Skeleton from "react-loading-skeleton";      // ← new
 
+/* ---------- ① extend the Book shape locally ---------- */
+interface FullBook extends Book {
+  mediaType?: string;        // "text" | "video" | …  (mind the snake-case in API)
+  description?: string;      // web_synopsis / synopsis
+}
+
 export interface BookOverviewProps {
   book: Book;
   crumb?: string[];
@@ -27,29 +33,31 @@ const BookOverview: React.FC<BookOverviewProps> = ({
   const [showAudio, setShowAudio] = useState(false);
 
   /* ─── new: fetch full book details ─── */
-  const [fullBook, setFullBook] = useState<Book | null>(null);
+  const [fullBook, setFullBook] = useState<FullBook | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
+  /* ---------- ② fetch mapping ---------- */
   useEffect(() => {
     console.log('[BookOverview] mount for book-id:', book.id);
     let mounted = true;
-    const userId = "1"; // ← replace with real user-id source if you have one
 
-    GetContentById(String(book.id), userId)
-      .then((res) => {
+    GetContentById(String(book.id), '1')
+      .then(res => {
         const data = res?.data?.data ?? res?.data;
+        console.log('[BookOverview] API payload', data);
+
         if (mounted && data) {
           setFullBook({
             id: data.id,
             title: data.name,
             coverUrl: data.thumbnail,
             progress: 0,
+            mediaType: data.media_type,                 // ⬅︎ snake-case key
+            description: data.web_synopsis || data.synopsis || '',
           });
         }
       })
-      .catch(() => {
-        /* ignore – we’ll fall back to passed-in book */
-      })
+      .catch(() => {/* fall back to the stub */})
       .finally(() => mounted && setLoading(false));
 
     return () => {
@@ -80,7 +88,12 @@ const BookOverview: React.FC<BookOverviewProps> = ({
     );
   }
 
-  const displayBook = fullBook ?? book; // fallback
+  /* ---------- ③ decide which buttons to render ---------- */
+  const displayBook = fullBook ?? book;
+  const mediaType   = fullBook?.mediaType ?? 'text';   // default to text
+
+  const isText   = mediaType === 'text';
+  const isVideo  = mediaType === 'video';
 
   return (
     <div className="mx-auto w-[clamp(550px,100%,1440px)] py-8 px-4">
@@ -112,34 +125,42 @@ const BookOverview: React.FC<BookOverviewProps> = ({
             Created by Kunda Kids
           </p>
 
-          <h2 className="font-arimo font-bold text-[18px]  tracking-[0%] text-gray-900 mb-0">
-            Overview
-          </h2>
-          {("description" in displayBook) && (
-            <p className="font-arimo font-normal text-[18px] tracking-[0%] text-gray-700 mb-6">
-              {(displayBook as any).description}
-            </p>
+          <h2 className="font-arimo font-bold text-[18px] mb-0">Overview</h2>
+          {displayBook.description && (
+            <p
+              className="font-arimo font-normal text-[18px] min-h-[100px] text-gray-700 mb-6"
+              dangerouslySetInnerHTML={{ __html: displayBook.description }}
+            />
           )}
 
           <div className="flex gap-4">
-            <button
-              className="bg-[#9FC43E] text-white w-[205px] h-[49px] rounded-full shadow-sm"
-              onClick={() => onRead?.(displayBook)}
-            >
-              Read by myself
-            </button>
-            <button
-              className="border border-[#9FC43E] text-[#667185] w-[205px] h-[49px] rounded-full"
-              onClick={() => setShowAudio(true)}
-            >
-              Read to me
-            </button>
-            <button
-              className="border border-[#9FC43E] text-[#667185] w-[205px] h-[49px] rounded-full hover:bg-[#9FC43E] hover:text-white transition"
-              onClick={() => onWatch?.(displayBook)}
-            >
-              Watch
-            </button>
+            {isText && (
+              <>
+                <button
+                  className="bg-[#9FC43E] text-white w-[205px] h-[49px] rounded-full shadow-sm"
+                  onClick={() => onRead?.(displayBook)}
+                >
+                  Read by myself
+                </button>
+
+                <button
+                  className="border border-[#9FC43E] text-[#667185] w-[205px] h-[49px] rounded-full"
+                  onClick={() => setShowAudio(true)}
+                >
+                  Read to me
+                </button>
+              </>
+            )}
+
+            {isVideo && (
+              <button
+                /* ④ same green style used for “Read by myself” */
+                className="bg-[#9FC43E] text-white w-[205px] h-[49px] rounded-full shadow-sm"
+                onClick={() => onWatch?.(displayBook)}
+              >
+                Watch
+              </button>
+            )}
           </div>
         </div>
       </div>
