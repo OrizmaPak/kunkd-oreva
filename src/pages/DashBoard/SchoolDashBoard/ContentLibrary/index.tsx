@@ -156,8 +156,8 @@ const ContentLibrary: React.FC = () => {
   const urlState = React.useMemo(() => {
     const tab = Number(searchParams.get("tab")) || 0;
     const book = Number(searchParams.get("book")) || null;
-    const read = searchParams.get("read") === "1";
-    const watch = searchParams.get("watch") === "1";
+    const read = searchParams.get("read") === "4086";
+    const watch = searchParams.get("watch") === "4086";
     return { tab, book, read, watch };
   }, [searchParams]);
 
@@ -172,7 +172,8 @@ const ContentLibrary: React.FC = () => {
   const fetchBookPages = useCallback(async (id: number) => {
     setReadingLoading(true);
     try {
-      const res = await GetContentById(String(id), "1");
+      const profileId = sessionStorage.getItem("profileId");
+      const res = await GetContentById(String(id), "4086");
       const data = res?.data?.data ?? res?.data;
       const rawPages: any[] = data.pages || [];
       const pages: Page[] = rawPages.map((p) => {
@@ -195,7 +196,7 @@ const ContentLibrary: React.FC = () => {
 
   const startRead = async (id: number) => {
     trace("startRead()", id);
-    setSearchParams({ tab: String(urlState.tab), book: String(id), read: "1" });
+    setSearchParams({ tab: String(urlState.tab), book: String(id), read: "4086" });
     await fetchBookPages(id);
   };
 
@@ -211,11 +212,11 @@ const ContentLibrary: React.FC = () => {
     setVideoPoster("");
 
     // 2) flip into “watch” mode
-    setSearchParams({ tab: String(urlState.tab), book: String(id), watch: "1" });
+    setSearchParams({ tab: String(urlState.tab), book: String(id), watch: "4086" });
 
     // 3) fetch this book’s media[0]
     try {
-      const res = await GetContentById(String(id), "1");
+      const res = await GetContentById(String(id), "4086");
       const data = res?.data?.data ?? res?.data;
       const mediaItem = data.media?.[0] || {};
       setVideoSrc(mediaItem.file || "");
@@ -442,7 +443,7 @@ const ContentLibrary: React.FC = () => {
 
     (async () => {
       try {
-        const res = await GetContentById(String(urlState.book), "1");
+        const res = await GetContentById(String(urlState.book), "4086");
         const data = res?.data?.data ?? res?.data;
 
         const tabLabel = data.category; 
@@ -457,8 +458,8 @@ const ContentLibrary: React.FC = () => {
           setSearchParams({
             tab: String(idx),
             book: String(urlState.book),
-            read: urlState.read ? "1" : undefined,
-            watch: urlState.watch ? "1" : undefined
+            read: urlState.read ? "4086" : undefined,
+            watch: urlState.watch ? "4086" : undefined
           }, { replace: true });
           return;
         }

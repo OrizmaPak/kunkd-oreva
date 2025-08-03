@@ -21,9 +21,10 @@ interface VideoComponentProps {
   flagUrl: string;
   onClose: () => void;
   onComplete: () => void;
-  videoSrc: string;   // ← make sure these are declared
-  poster: string;     // ← and used below
-  book: Book;         // 🔹 NEW: so we can pass into QuizComponent
+  videoSrc: string;
+  poster: string;
+  book: Book;
+  showPosterOnPause?: boolean; // defaults to true
 }
 
 /* ────────────────────────────────────────────────────────── */
@@ -36,23 +37,28 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
   flagUrl,
   onClose,
   onComplete,
-  videoSrc,   // ← make sure these are declared
-  poster,     // ← and used below
-  book,       // 🔹 Destructure new
+  videoSrc,
+  poster,
+  book,
+  showPosterOnPause = true,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);
 
+  // ─── overlay (play/skip UI) visibility ───
+  const [overlayVisible, setOverlayVisible] = useState(true);
+  const hideTimeout = useRef<number>();
+
   /* basic state */
-  const [muted, setMuted]       = useState(false);
-  const [isFull, setIsFull]     = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [isFull, setIsFull] = useState(false);
   const [isPlaying, setPlaying] = useState(false);
-  const [current, setCurrent]   = useState(0);
+  const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
 
   /* volume */
-  const [volume, setVolume]     = useState(1);       // 0‒1
-  const [showVol, setShowVol]   = useState(false);
+  const [volume, setVolume] = useState(1); // 0‒1
+  const [showVol, setShowVol] = useState(false);
 
   const [showDone, setShowDone] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
@@ -75,7 +81,7 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
   /* ───────────  play / pause state  ─────────── */
   useEffect(() => {
     const v = videoRef.current!;
-    const onPlay  = () => setPlaying(true);
+    const onPlay = () => setPlaying(true);
     const onPause = () => setPlaying(false);
     v.addEventListener("play", onPlay);
     v.addEventListener("pause", onPause);
@@ -105,6 +111,17 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
     wasPaused ? vid.pause() : vid.play();
   };
 
+  // show the controls, then schedule hide in 3s if playing
+  const showOverlay = () => {
+    setOverlayVisible(true);
+    clearTimeout(hideTimeout.current);
+    if (isPlaying) {
+      hideTimeout.current = window.setTimeout(() => {
+        setOverlayVisible(false);
+      }, 3000);
+    }
+  };
+
   const togglePlay = () => {
     const v = videoRef.current;
     if (!v) return;
@@ -117,6 +134,17 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
       ? await screenfull.exit()
       : await screenfull.request(shellRef.current);
   };
+
+  // whenever play/pause changes, re-run overlay logic
+  useEffect(() => {
+    if (isPlaying) {
+      showOverlay();
+    } else {
+      clearTimeout(hideTimeout.current);
+      setOverlayVisible(true);
+    }
+  }, [isPlaying]);
+
   useEffect(() => {
     const f = () => setIsFull(screenfull.isFullscreen);
     screenfull.on("change", f);
@@ -160,9 +188,13 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
 
   // 2) Otherwise always render the video + controls…
   return (
-    <div className="relative mx-auto max-w-[clamp(300px,100%,800px)] mb-4">
+    <div
+      ref={shellRef}
+      className="relative mx-auto max-w-[clamp(300px,100%,800px)] mb-4"
+      onMouseMove={showOverlay} // <── show on mouse move
+    >
       {/* ======================  PLAYER  ====================== */}
-      <div ref={shellRef} className="relative bg-black rounded-t-3xl overflow-hidden">
+      <div className="relative bg-black rounded-t-3xl overflow-hidden">
         {/* ✕ close */}
         <button
           className="absolute top-2 right-2 z-20 text-white hover:text-gray-300"
@@ -171,7 +203,11 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
           ✕
         </button>
         {/* ───── Center overlay (skip / play) ───── */}
-        <div className="absolute z-[10000] inset-0 flex items-center justify-center pointer-events-none">
+        <div
+          className={`absolute z-[10000] inset-0 flex items-center justify-center
+             transition-opacity duration-300
+             ${overlayVisible ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        >
           <div className="flex items-center gap-12 pointer-events-auto">
             {/* ⏪ 10 */}
             <motion.button
@@ -217,12 +253,29 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
         <video
           ref={videoRef}
           poster={poster} // Use the poster prop
-          className="w-full h-full object-contain bg-black"
+          className="w-[1000px] h-[400px] object-fill bg-black"
           controls={false}
           muted={muted}
           onClick={togglePlay}
           onEnded={onComplete} // Use the onComplete prop
         />
+        {/* overlay the poster when paused (only if poster‐on‐pause is enabled) */}
+        { showPosterOnPause && !isPlaying && (
+          <img
+            src={poster}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+          />
+        )}
+        {/* ─── tiny exit-fullscreen button ─── */}
+        {isFull && (
+          <button
+            onClick={toggleFull}
+            className="absolute top-4 left-4 z-30 text-white hover:text-gray-300"
+          >
+            <FaCompress size={18} />
+          </button>
+        )}
         {/* title + flag */}
         <div className="absolute top-4 left-4 flex items-center space-x-2 z-10">
           <h3 className="text-white font-bold text-lg">{title}</h3>
