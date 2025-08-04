@@ -363,7 +363,7 @@ const ContentLibrary: React.FC = () => {
   const [quizReset, setQuizReset] = useState(0);
 
   const [showResult, setShowResult] = useState(false);
-  const [showReview, setShowReview] = useState(false);
+  const [showAnswerReview, setShowAnswerReview] = useState(false);
 
   // ---------- handlers ----------
   const handleMediaComplete = (book: Book) => {
@@ -381,7 +381,7 @@ const ContentLibrary: React.FC = () => {
     setShowResult(true);
   };
 
-  const handleViewAnswers = () => { setShowResult(false); setShowReview(true); };
+  const handleViewAnswers = () => setShowAnswerReview(true);
 
   const startQuizFlow = () => {
     setShowResult(false);       // hide results modal
@@ -398,7 +398,7 @@ const ContentLibrary: React.FC = () => {
     setQuizReset((s) => s + 1);       // clears answers
   };
 
-  const handleReviewDone = () => setShowReview(false);
+  const handleReviewDone = () => setShowAnswerReview(false);
 
   // Stories “See All” handler
   const handleStoriesSeeAll = (slug: string) => {
@@ -915,7 +915,7 @@ const ContentLibrary: React.FC = () => {
           onViewAnswers={handleViewAnswers}
         />
       )}
-      {showReview && quizAnswers && (
+      {showAnswerReview && quizAnswers && (
         <AnswerReviewModal
           answers={quizAnswers}
           onDone={handleReviewDone}

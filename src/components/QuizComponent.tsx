@@ -8,9 +8,11 @@ export interface QuizStats {
 }
 
 export interface UserAnswer {
-  question_id: number;
-  selected: "a" | "b" | "c" | "d";
-  correct: "a" | "b" | "c" | "d";
+  questionId: number;
+  questionText: string;
+  selectedOption: string;
+  correctOption: string;
+  isCorrect: boolean;
 }
 
 export interface QuizComponentProps {
@@ -75,12 +77,18 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
   const total = questions.length;
   const progressPct = ((step + 1) / total) * 100;
 
-  const picked = answers.find(a => a.question_id === q.question_id)?.selected;
+  const picked = answers.find(a => a.questionId === q.question_id)?.selectedOption;
 
   const select = (letter: "a" | "b" | "c" | "d") => {
     setAnswers(prev => {
-      const filtered = prev.filter(a => a.question_id !== q.question_id);
-      return [...filtered, { question_id: q.question_id, selected: letter, correct: q.answer }];
+      const filtered = prev.filter(a => a.questionId !== q.question_id);
+      return [...filtered, {
+        questionId: q.question_id,
+        questionText: q.question,
+        selectedOption: letter,
+        correctOption: q.answer,
+        isCorrect: letter === q.answer
+      }];
     });
   };
 
@@ -88,7 +96,7 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
     if (step + 1 < total) {
       setStep(step + 1);
     } else {
-      const correctCount = answers.filter(a => a.selected === a.correct).length;
+      const correctCount = answers.filter(a => a.isCorrect).length;
       onComplete({ correct: correctCount, total }, answers);
       setFinished(true);
     }
