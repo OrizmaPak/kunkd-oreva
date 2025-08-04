@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import TeacherIllustration from "@/assets/Teacher's_Library_.png";
 import {
   FaUser,
@@ -11,7 +11,7 @@ import { motion, LayoutGroup } from "framer-motion";
 import BookCategory from "@/components/BookCategory";
 import BookOverview from "@/components/BookOverview";
 import { Book } from "@/components/BookCard";
-import ReadingComponent from "@/components/ReadingComponent";
+import ReadingComponent, { ReadingHandle } from "@/components/ReadingComponent";
 import { useSearchParams } from "react-router-dom";
 import VideoComponent from "@/components/VideoComponent";
 import NigeriaFlag from "@/assets/nigeria-flag.png";
@@ -137,6 +137,8 @@ const ContentLibrary: React.FC = () => {
 
   // ─── overview guard state ───
   const [overviewChecking, setOverviewChecking] = useState(false);
+
+  const readingRef = useRef<ReadingHandle>(null);
 
   useEffect(() => {
     GetSubCategories().then((res) => {
@@ -392,9 +394,8 @@ const ContentLibrary: React.FC = () => {
 
   // ─── Retake quiz ──────────────────────────────────────────────
   const handleRetake = () => {
-    setQuizStats(null);
-    setQuizAnswers(null);
-    startQuizFlow();    // reuse the normal path
+    readingRef.current?.showQuiz();   // 👈 flips internal state
+    setQuizReset((s) => s + 1);       // clears answers
   };
 
   const handleReviewDone = () => setShowReview(false);
@@ -784,6 +785,7 @@ const ContentLibrary: React.FC = () => {
             </div>
           ) : (
             <ReadingComponent
+              ref={readingRef}
               book={readingBook}
               onExit={closeRead}
               pages={bookPages}
@@ -906,7 +908,9 @@ const ContentLibrary: React.FC = () => {
       )}
       {showResult && quizStats && (
         <QuizResultModal
+          isOpen={showResult}
           stats={quizStats}
+          onClose={() => setShowResult(false)}
           onRetake={handleRetake}
           onViewAnswers={handleViewAnswers}
         />
