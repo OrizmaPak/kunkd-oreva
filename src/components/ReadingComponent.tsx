@@ -24,7 +24,7 @@ export interface Page {
   text: string;
 }
 
-export interface ReadingComponentProps {
+export interface ReadingComponentProps { 
   book: Book;
   pages: Page[];
   onExit: () => void;
