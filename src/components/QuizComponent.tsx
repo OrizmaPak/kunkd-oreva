@@ -13,10 +13,10 @@ export interface UserAnswer {
   correct: "a" | "b" | "c" | "d";
 }
 
-interface QuizComponentProps {
+export interface QuizComponentProps {
   book: Book;
   onComplete: (stats: QuizStats, answers: UserAnswer[]) => void;
-  resetSignal?: number; // ← NEW
+  resetSignal?: number; // ← already supplied from parent
 }
 
 interface QuizQuestion {
@@ -32,14 +32,17 @@ interface QuizQuestion {
 const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSignal }) => {
   const [loading, setLoading] = useState(true);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
-  const [idx, setIdx] = useState(0);
+  const [step, setStep] = useState(0); // current question/page
   const [answers, setAnswers] = useState<UserAnswer[]>([]);
+  const [finished, setFinished] = useState(false);
 
+  /* NEW: whenever resetSignal ticks, clear everything */
   useEffect(() => {
     if (resetSignal === undefined) return;
 
-    setIdx(0); // back to Q-1
-    setAnswers([]); // clear responses
+    setStep(0);          // back to the first question
+    setAnswers([]);      // wipe old answers
+    setFinished(false);  // reopen submit button etc.
   }, [resetSignal]);
 
   useEffect(() => {
@@ -65,9 +68,9 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
     );
   }
 
-  const q = questions[idx];
+  const q = questions[step];
   const total = questions.length;
-  const progressPct = ((idx + 1) / total) * 100;
+  const progressPct = ((step + 1) / total) * 100;
 
   const picked = answers.find(a => a.question_id === q.question_id)?.selected;
 
@@ -79,11 +82,12 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
   };
 
   const next = () => {
-    if (idx + 1 < total) {
-      setIdx(idx + 1);
+    if (step + 1 < total) {
+      setStep(step + 1);
     } else {
       const correctCount = answers.filter(a => a.selected === a.correct).length;
       onComplete({ correct: correctCount, total }, answers);
+      setFinished(true);
     }
   };
 
@@ -98,7 +102,7 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
           />
         </div>
         <div className="text-sm text-gray-700 font-medium">
-          Question {idx + 1} of {total}
+          Question {step + 1} of {total}
         </div>
       </div>
 
@@ -133,9 +137,9 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
       {/* Next button */}
       <div className="flex justify-end items-center gap-10">
         {/* Previous */}
-        {idx > 0 ? (
+        {step > 0 ? (
           <button
-            onClick={() => setIdx(idx - 1)}
+            onClick={() => setStep(step - 1)}
             className="px-10 py-3 rounded-full border border-gray-300 text-gray-700 hover:border-[#BCD678] hover:text-[#BCD678] transition"
           >
             Previous
@@ -147,10 +151,10 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
         {/* Next / Finish */}
         <button
           onClick={next}
-          disabled={!picked}
+          disabled={!picked || finished}
           className="px-10 py-3 rounded-full bg-[#BCD678] text-white font-medium disabled:opacity-50 transition"
         >
-          {idx + 1 === total ? "Finish" : "Next"}
+          {step + 1 === total ? "Finish" : "Next"}
         </button>
       </div>
     </div>
