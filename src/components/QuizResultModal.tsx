@@ -100,11 +100,8 @@ const QuizResultModal: React.FC<QuizResultModalProps> = ({
 
         <button
           onClick={() => {
-            /* bubble up to parent so ContentLibrary can reopen a fresh quiz */
             onClose?.();
-            /* remount the QuizComponent */
-            onRetake?.();
-            /* close the modal */
+            onRetake?.();  // ✅ Call parent’s handler
           }}
           className="block w-full font-medium py-3 rounded-full border border-[#9FC43E] text-[#9FC43E] hover:bg-[#f6fdf0] transition"
         >

@@ -382,15 +382,10 @@ const ContentLibrary: React.FC = () => {
   const handleViewAnswers = () => { setShowResult(false); setShowReview(true); };
 // ─── Retake quiz ──────────────────────────────────────────────
 const handleRetake = () => {
-  /* 1️⃣ purge previous attempt data */
   setQuizStats(null);
   setQuizAnswers(null);
-
-  /* 2️⃣ hide the result modal */
   setShowResult(false);
-
-  /* 3️⃣ immediately bump key & remount quiz */
-  setQuizKey(k => k + 1);
+  setQuizKey((k) => k + 1);
   setShowQuiz(true);
 };
 
