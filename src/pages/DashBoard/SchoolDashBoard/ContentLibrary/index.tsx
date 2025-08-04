@@ -380,12 +380,20 @@ const ContentLibrary: React.FC = () => {
   };
 
   const handleViewAnswers = () => { setShowResult(false); setShowReview(true); };
-  const handleRetake = () => {
-    setShowResult(false);
-    // bump the key so QuizComponent unmounts/remounts
-    setQuizKey((k) => k + 1);
-    setShowQuiz(true);
-  };
+// ─── Retake quiz ──────────────────────────────────────────────
+const handleRetake = () => {
+  /* 1️⃣ purge previous attempt data */
+  setQuizStats(null);
+  setQuizAnswers(null);
+
+  /* 2️⃣ hide the result modal */
+  setShowResult(false);
+
+  /* 3️⃣ immediately bump key & remount quiz */
+  setQuizKey(k => k + 1);
+  setShowQuiz(true);
+};
+
 
   const handleReviewDone = () => setShowReview(false);
 
@@ -883,7 +891,7 @@ const ContentLibrary: React.FC = () => {
       )}
       {showQuiz && quizTarget && (
         <QuizComponent
-          key={quizKey}          // ← redraw from scratch whenever quizKey changes
+          key={quizKey}          // ← force fresh mount whenever quizKey changes
           book={quizTarget}
           onComplete={handleQuizComplete}
         />

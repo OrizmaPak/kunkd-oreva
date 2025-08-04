@@ -99,10 +99,16 @@ const QuizResultModal: React.FC<QuizResultModalProps> = ({
         </button>
 
         <button
-          onClick={onRetake}
+          onClick={() => {
+            /* bubble up to parent so ContentLibrary can reopen a fresh quiz */
+            onClose?.();
+            /* remount the QuizComponent */
+            onRetake?.();
+            /* close the modal */
+          }}
           className="block w-full font-medium py-3 rounded-full border border-[#9FC43E] text-[#9FC43E] hover:bg-[#f6fdf0] transition"
         >
-          Retake Quiz
+          Retake quiz
         </button>
       </div>
     </div>
