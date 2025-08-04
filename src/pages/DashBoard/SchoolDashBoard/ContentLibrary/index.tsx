@@ -355,10 +355,10 @@ const ContentLibrary: React.FC = () => {
   const [quizTarget, setQuizTarget] = useState<Book | null>(null);
   const [showWell, setShowWell] = useState(false);
 
-  const [showQuiz, setShowQuiz] = useState(false);
   const [quizKey, setQuizKey] = useState(0);
   const [quizStats, setQuizStats] = useState<QuizStats | null>(null);
   const [quizAnswers, setQuizAnswers] = useState<UserAnswer[] | null>(null);
+  const [quizReset, setQuizReset] = useState(0);
 
   const [showResult, setShowResult] = useState(false);
   const [showReview, setShowReview] = useState(false);
@@ -369,26 +369,25 @@ const ContentLibrary: React.FC = () => {
     setShowWell(true);
   };
 
-  const handleTakeQuiz = () => { setShowWell(false); setShowQuiz(true); };
+  const handleTakeQuiz = () => { setShowWell(false); };
+
   const handleDoLater = () => setShowWell(false);
 
   const handleQuizComplete = (stats: QuizStats, answers: UserAnswer[]) => {
-    setShowQuiz(false);
     setQuizStats(stats);
     setQuizAnswers(answers);
     setShowResult(true);
   };
 
   const handleViewAnswers = () => { setShowResult(false); setShowReview(true); };
-// ─── Retake quiz ──────────────────────────────────────────────
-const handleRetake = () => {
-  setQuizStats(null);
-  setQuizAnswers(null);
-  setShowResult(false);
-  setQuizKey((k) => k + 1);
-  setShowQuiz(true);
-};
 
+  // ─── Retake quiz ──────────────────────────────────────────────
+  const handleRetake = () => {
+    setQuizStats(null);
+    setQuizAnswers(null);
+    setShowResult(false);
+    setQuizReset(n => n + 1);   // 🔔 bump → tells QuizComponent to reset
+  };
 
   const handleReviewDone = () => setShowReview(false);
 
@@ -884,11 +883,12 @@ const handleRetake = () => {
           onLater={handleDoLater}
         />
       )}
-      {showQuiz && quizTarget && (
+      {quizTarget && (
         <QuizComponent
-          key={quizKey}          // ← force fresh mount whenever quizKey changes
+          key={quizTarget.id}          // keep the same instance
           book={quizTarget}
           onComplete={handleQuizComplete}
+          resetSignal={quizReset}      // 👈 NEW
         />
       )}
       {showResult && quizStats && (

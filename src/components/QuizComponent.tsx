@@ -16,6 +16,7 @@ export interface UserAnswer {
 interface QuizComponentProps {
   book: Book;
   onComplete: (stats: QuizStats, answers: UserAnswer[]) => void;
+  resetSignal?: number; // ← NEW
 }
 
 interface QuizQuestion {
@@ -28,11 +29,18 @@ interface QuizQuestion {
   answer: "a" | "b" | "c" | "d";
 }
 
-const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete }) => {
+const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSignal }) => {
   const [loading, setLoading] = useState(true);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [idx, setIdx] = useState(0);
   const [answers, setAnswers] = useState<UserAnswer[]>([]);
+
+  useEffect(() => {
+    if (resetSignal === undefined) return;
+
+    setIdx(0); // back to Q-1
+    setAnswers([]); // clear responses
+  }, [resetSignal]);
 
   useEffect(() => {
     (async () => {
