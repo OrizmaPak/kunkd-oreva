@@ -381,7 +381,10 @@ const ContentLibrary: React.FC = () => {
     setShowResult(true);
   };
 
-  const handleViewAnswers = () => setShowAnswerReview(true);
+  const handleViewAnswers = () => {
+    setShowResult(false);          // ← hide the result modal
+    setShowAnswerReview(true);     //    and open the review modal
+  };
 
   const startQuizFlow = () => {
     setShowResult(false);       // hide results modal
