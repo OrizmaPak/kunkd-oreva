@@ -16,7 +16,7 @@ export interface UserAnswer {
 export interface QuizComponentProps {
   book: Book;
   onComplete: (stats: QuizStats, answers: UserAnswer[]) => void;
-  resetSignal?: number; // ← already supplied from parent
+  resetSignal?: number; 
   onRetake: () => void;
 }
 
@@ -32,7 +32,7 @@ interface QuizQuestion {
 
 const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSignal, onRetake }) => {
 
-  console.log('onRetaker', onRetake);
+  console.log('onRetaker ampper', onComplete, onRetake);
   const [loading, setLoading] = useState(true);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [step, setStep] = useState(0); // current question/page

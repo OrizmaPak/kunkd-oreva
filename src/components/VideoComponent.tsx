@@ -23,6 +23,7 @@ interface VideoComponentProps {
   onComplete: () => void;
   videoSrc: string;
   poster: string;
+  onRetake: () => void;
   book: Book;
   showPosterOnPause?: boolean; // defaults to true
 }
@@ -40,6 +41,7 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
   videoSrc,
   poster,
   book,
+  onRetake,
   showPosterOnPause = true,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -183,7 +185,7 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
   /* ───────────  render ─────────── */
   // 1) If they’ve chosen “Take Quiz,” go straight into the quiz UI
   if (showQuiz) {
-    return <QuizComponent book={book} onComplete={() => setShowQuiz(false)} />;
+    return <QuizComponent book={book} onComplete={() => setShowQuiz(false)} onRetake={onRetake} />
   }
 
   // 2) Otherwise always render the video + controls…

@@ -392,7 +392,6 @@ const ContentLibrary: React.FC = () => {
 
   // ─── Retake quiz ──────────────────────────────────────────────
   const handleRetake = () => {
-    alert("Retake quiz");
     setQuizStats(null);
     setQuizAnswers(null);
     startQuizFlow();    // reuse the normal path
@@ -648,6 +647,8 @@ const ContentLibrary: React.FC = () => {
     });
   };
 
+  // console.log('displayList', handleRetake)
+
   /* ---------- breadcrumb click handler ---------- */
   const handleBreadcrumbClick = useCallback((label: string, level: number) => {
     // 1) Always close detail view
@@ -787,6 +788,7 @@ const ContentLibrary: React.FC = () => {
               onExit={closeRead}
               pages={bookPages}
               withIntroPages={false}
+              onRetake={handleRetake}
             />
           )
         ) : watchingBook ? (
@@ -796,6 +798,7 @@ const ContentLibrary: React.FC = () => {
             poster={videoPoster}
             title={watchingBook.title}
             flagUrl={NigeriaFlag}
+            onRetake={handleRetake}
             onClose={closeWatch}
             onComplete={() => handleMediaComplete(watchingBook)}
           />
@@ -893,17 +896,13 @@ const ContentLibrary: React.FC = () => {
         />
       )}
       {quizTarget && (
-        <QuizComponent
-          key={quizTarget.id}          // keep the same instance
-          book={quizTarget}
-          onComplete={handleQuizComplete}
-          resetSignal={quizReset}      // 👈 NEW
-          onRetake={() => {
-            // hide results & reset the quiz
-            setShowResults(false);
-            setResetSignal((prev) => prev + 1);
-          }}
-        />
+         <QuizComponent
+         onRetake={handleRetake}
+         key={quizTarget.id}    
+         book={quizTarget}
+         onComplete={handleQuizComplete}
+         resetSignal={quizReset}     
+       />
       )}
       {showResult && quizStats && (
         <QuizResultModal
