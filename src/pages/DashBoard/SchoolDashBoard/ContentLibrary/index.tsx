@@ -908,7 +908,7 @@ const ContentLibrary: React.FC = () => {
       {showResult && quizStats && (
         <QuizResultModal
           stats={quizStats}
-           onRetake={handleRetake}
+          onRetake={handleRetake}
           onViewAnswers={handleViewAnswers}
         />
       )}
