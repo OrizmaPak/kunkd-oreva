@@ -898,7 +898,11 @@ const ContentLibrary: React.FC = () => {
           book={quizTarget}
           onComplete={handleQuizComplete}
           resetSignal={quizReset}      // 👈 NEW
-          onRetake={handleRetake}
+          onRetake={() => {
+            // hide results & reset the quiz
+            setShowResults(false);
+            setResetSignal((prev) => prev + 1);
+          }}
         />
       )}
       {showResult && quizStats && (

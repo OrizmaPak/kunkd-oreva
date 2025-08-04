@@ -102,7 +102,7 @@ const QuizResultModal: React.FC<QuizResultModalProps> = ({
           onClick={() => {
             console.log("onRetake", onRetake);
             alert("Retake quiz init");
-            onRetake();       // parent handles modal close
+            onRetake?.();       // parent handles modal close
             // onClose?.();        // <- pretend user clicked X  (optional)
           }}
           className="block w-full font-medium py-3 rounded-full border border-[#9FC43E] text-[#9FC43E] hover:bg-[#f6fdf0] transition"
