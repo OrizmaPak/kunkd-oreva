@@ -26,7 +26,7 @@ const QuizResultModal: React.FC<QuizResultModalProps> = ({
   const completion = Math.round((stats.correct / stats.total) * 100);
 
   return (
-    <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-[5000]">
       {/* optional close */}
       {onClose && (
         <button
@@ -100,9 +100,9 @@ const QuizResultModal: React.FC<QuizResultModalProps> = ({
 
         <button
           onClick={() => {
+            console.log("onRetake", onRetake);
             alert("Retake quiz init");
-            console.log("onRetake", onRetake?.());
-            onRetake?.();       // parent handles modal close
+            onRetake();       // parent handles modal close
             // onClose?.();        // <- pretend user clicked X  (optional)
           }}
           className="block w-full font-medium py-3 rounded-full border border-[#9FC43E] text-[#9FC43E] hover:bg-[#f6fdf0] transition"

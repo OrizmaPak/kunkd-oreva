@@ -31,6 +31,8 @@ interface QuizQuestion {
 }
 
 const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSignal, onRetake }) => {
+
+  console.log('onRetaker', onRetake);
   const [loading, setLoading] = useState(true);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [step, setStep] = useState(0); // current question/page

@@ -898,13 +898,14 @@ const ContentLibrary: React.FC = () => {
           book={quizTarget}
           onComplete={handleQuizComplete}
           resetSignal={quizReset}      // 👈 NEW
+          onRetake={handleRetake}
         />
       )}
       {showResult && quizStats && (
         <QuizResultModal
           stats={quizStats}
+           onRetake={handleRetake}
           onViewAnswers={handleViewAnswers}
-          onRetake={handleRetake}
         />
       )}
       {showReview && quizAnswers && (
