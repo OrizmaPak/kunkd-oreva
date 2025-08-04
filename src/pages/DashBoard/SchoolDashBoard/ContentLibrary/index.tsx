@@ -381,12 +381,21 @@ const ContentLibrary: React.FC = () => {
 
   const handleViewAnswers = () => { setShowResult(false); setShowReview(true); };
 
+  const startQuizFlow = () => {
+    setShowResult(false);       // hide results modal
+    setShowWell(true);  
+    console.log("quizTarget", quizTarget);          // show the *Well-done* modal
+    if (quizTarget) {
+      handleMediaComplete(quizTarget);
+    }
+  };
+
   // ─── Retake quiz ──────────────────────────────────────────────
   const handleRetake = () => {
+    alert("Retake quiz");
     setQuizStats(null);
     setQuizAnswers(null);
-    setShowResult(false);
-    setQuizReset(n => n + 1);   // 🔔 bump → tells QuizComponent to reset
+    startQuizFlow();    // reuse the normal path
   };
 
   const handleReviewDone = () => setShowReview(false);

@@ -99,7 +99,12 @@ const QuizResultModal: React.FC<QuizResultModalProps> = ({
         </button>
 
         <button
-          onClick={() => onRetake?.()} // don’t close Quiz here; parent does that
+          onClick={() => {
+            alert("Retake quiz init");
+            console.log("onRetake", onRetake?.());
+            onRetake?.();       // parent handles modal close
+            // onClose?.();        // <- pretend user clicked X  (optional)
+          }}
           className="block w-full font-medium py-3 rounded-full border border-[#9FC43E] text-[#9FC43E] hover:bg-[#f6fdf0] transition"
         >
           Retake quiz

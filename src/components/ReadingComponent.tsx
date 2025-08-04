@@ -28,6 +28,7 @@ export interface ReadingComponentProps {
   book: Book;
   pages: Page[];
   onExit: () => void;
+  onRetake: () => void;
   innerCoverUrl?: string;
   /** whether to include front, cover & title pages */
   withIntroPages?: boolean;
@@ -195,6 +196,7 @@ const ReadingComponent: React.FC<ReadingComponentProps> = ({
   book,
   pages,
   onExit,
+  onRetake,
   innerCoverUrl,
   withIntroPages = true,
 }) => {
@@ -313,6 +315,7 @@ const ReadingComponent: React.FC<ReadingComponentProps> = ({
           onExit={() => {
             setShowQuiz(false);
           }}
+          onRetake={onRetake}
         />
       ) : showAudio ? (
         <div className="relative mx-auto max-w-[100vw]">
@@ -513,12 +516,14 @@ const ReadingComponent: React.FC<ReadingComponentProps> = ({
             setShowQuiz(true);
           }}
           onLater={() => setShowDone(false)}
+          onRetake={onRetake}
         />
       )}
       {showResult && (
         <QuizResultModal
           stats={quizStats!}
           answers={quizAnswers!}
+          onRetake={onRetake}
           onClose={() => setShowResult(false)}
         />
       )}

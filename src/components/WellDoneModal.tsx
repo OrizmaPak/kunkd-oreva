@@ -5,11 +5,13 @@ import doll from "@/assets/doll.png";
 interface WellDoneModalProps {
   onTakeQuiz: () => void;
   onLater: () => void;
+  onRetake: () => void;
 }
 
 const WellDoneModal: React.FC<WellDoneModalProps> = ({
   onTakeQuiz,
   onLater,
+  onRetake,
 }) => (
   <div className="fixed z-[10000] inset-0 bg-black/40 flex items-center justify-center z-50">
     <div className="bg-white rounded-2xl w-[450px] h-[380px] pt-8 pr-6 pb-8 pl-6 text-center" style={{ transform: 'rotate(0deg)', opacity: 1 }}>
