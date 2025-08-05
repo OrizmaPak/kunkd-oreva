@@ -85,7 +85,7 @@ interface Category {
   name: string;
   books: Book[];
   hasSub?: boolean; // 🔹 new flag
-  subId?: number;   // <-- for lazy subcategory rows
+  subId?: number | null;   // <-- for lazy subcategory rows
 }
 
 interface Page {
@@ -148,7 +148,7 @@ const ContentLibrary: React.FC = () => {
         console.log("cats", cats);
         setAllCats(cats);            // <-- NEW
         const populated: Tab[] = defaultTabs.map((tab) => {
-          const match = cats.find((c) => c.name === tab.label);
+          const match = cats.find((c:any) => c.name === tab.label);
           return { ...tab, id: match?.id ?? null };
         });
         setTabsConfig(populated);
@@ -462,7 +462,7 @@ const ContentLibrary: React.FC = () => {
       // 1) For-you -------------------------------
       if (isForYouTab) {
         try {
-          const res = await ContentForHome();
+          const res = await ContentForHome({});
           if (res?.status && res.data) {
             setCategories(homeToCategories(res.data.data));
             return;
@@ -563,11 +563,27 @@ const ContentLibrary: React.FC = () => {
 
         // if the URL’s tab param is out of sync, correct it
         if (idx >= 0 && urlState.tab !== idx) {
-          setSearchParams({
-            tab: String(idx),
-            book: String(urlState.book),
-            read: urlState.read ? "4086" : undefined,
-            watch: urlState.watch ? "4086" : undefined
+          //  setSearchParams({
+          //   tab: String(idx),
+          //   book: String(urlState.book),
+          //   read: urlState.read ? "4086" : undefined,
+          //   watch: urlState.watch ? "4086" : undefined
+          // }, { replace: true });
+          setSearchParams(prev => {
+            const params = new URLSearchParams(prev);
+            params.set('tab', String(idx));
+            params.set('book', String(urlState.book));
+            if (urlState.read) {
+              params.set('read', "4086");
+            } else {
+              params.delete('read');
+            }
+            if (urlState.watch) {
+              params.set('watch', "4086");
+            } else {
+              params.delete('watch');
+            }
+            return params;
           }, { replace: true });
           return;
         }
@@ -793,162 +809,178 @@ const ContentLibrary: React.FC = () => {
         </nav>
       )}
 
-      {/* Content area & inline review */}
-      {showAnswerReview && (
+      {/* 1) If we’re in “review answers” mode, only show the inline panel */}
+      {showAnswerReview ? (
         <AnswerReviewModal
           answers={quizAnswers ?? []}
           onDone={handleReviewDone}
         />
-      )}
-      <div className="mt-8 space-y-8">
-        {readingBook ? (
-          readingLoading ? (
-            <div className="flex justify-center py-20">
-              <span>Loading book…</span>
-            </div>
-          ) : (
-            <ReadingComponent
-              ref={readingRef}
-              book={readingBook}
-              onExit={closeRead}
-              pages={bookPages}
-              withIntroPages={false}
-              onRetake={handleRetake}
-              onViewAnswers={handleViewAnswers}
-              onAnswersUpdate={(ans) => {
-                console.log("Parent got answers from ReadingComponent:", ans);
-                setQuizAnswers(ans);
+      ) : (
+        /* 2) Otherwise show the normal content area (reader / video / overview / categories) */
+        <div className="mt-8 space-y-8">
+          {readingBook ? (
+            readingLoading ? (
+              <div className="flex justify-center py-20">
+                <span>Loading book…</span>
+              </div>
+            ) : (
+              <ReadingComponent
+                ref={readingRef}
+                book={readingBook}
+                onExit={closeRead}
+                pages={bookPages}
+                withIntroPages={false}
+                onRetake={handleRetake}
+                onViewAnswers={handleViewAnswers}
+                onAnswersUpdate={(ans) => {
+                  console.log("Parent got answers from ReadingComponent:", ans);
+                  setQuizAnswers(ans);
+                }}
+              />
+            )
+          ) : watchingBook ? (
+            <VideoComponent
+              book={{
+                id: watchingBook.id,
+                title: watchingBook.title,
+                coverUrl: watchingBook.title,
+                progress: 0,
               }}
+              key={videoSrc || watchingBook.id}
+              videoSrc={videoSrc}
+              poster={videoPoster}
+              title={watchingBook.title}
+              flagUrl={NigeriaFlag}
+              onRetake={handleRetake}
+              onClose={closeWatch}
+              onViewAnswers={handleViewAnswers}
+              onComplete={() => handleMediaComplete(watchingBook)}
             />
-          )
-        ) : watchingBook ? (
-          <VideoComponent
-            key={videoSrc || watchingBook.id}
-            videoSrc={videoSrc}
-            poster={videoPoster}
-            title={watchingBook.title}
-            flagUrl={NigeriaFlag}
-            onRetake={handleRetake}
-            onClose={closeWatch}
-            onViewAnswers={handleViewAnswers}
-            onComplete={() => handleMediaComplete(watchingBook)}
-          />
-        ) : /* don't mount overview while checking or if guard failed */ 
-           (selectedBook && !overviewChecking) ? (
-          <BookOverview
-            book={selectedBook}
-            crumb={crumbsBeforeBook}
-            onBack={closeBook}
-            onRead={(b) => startRead(b.id)}
-            onWatch={(b) => startWatch(b.id)}
-            audioSrc={QueenMoremi}
-          />
-        ) : (
-          <>
-            {/* ───── Stories tab ───── */}
-            {isStoriesTab &&
-              displayList
-                .filter(cat =>
-                  !showAllStories || cat.name === storiesActiveSubSlug
-                )
-                .map(cat => (
-                  <BookCategory
-                    key={cat.name}
-                    categoryName={cat.name}
-                    tabLabel="Stories"
-                    parentCategory={undefined}
-                    books={cat.books}
+          ) : /* don't mount overview while checking or if guard failed */ 
+            (selectedBook && !overviewChecking) ? (
+            <BookOverview
+              book={selectedBook}
+              crumb={crumbsBeforeBook}
+              onBack={closeBook}
+              onRead={(b: any) => startRead(b.id)}
+              onWatch={(b: any) => startWatch(b.id)}
+              audioSrc={QueenMoremi}
+            />
+          ) : (
+            <>
+              {/* ───── Stories tab ───── */}
+              {isStoriesTab &&
+                displayList
+                  .filter(cat =>
+                    !showAllStories || cat.name === storiesActiveSubSlug
+                  )
+                  .map(cat => (
+                    <BookCategory
+                      key={cat.name}
+                      categoryName={cat.name}
+                      tabLabel="Stories"
+                      parentCategory={undefined}
+                      books={cat.books}
+                      subId={cat.subId}
+                      hasSub={!!cat.subId}
+                      onSeeAll={() => handleStoriesSeeAll(cat.name)}
+                      expanded={showAllStories && cat.name === storiesActiveSubSlug}
+                      onBookClick={(book: any, bc: any) => {
+                        openBook(book.id);
+                        setCrumb([...bc, book.title]);
+                      }}
+                      />
+                    ))}
+
+              {/* ───── Languages tab ───── */}
+              {isLangsTab &&
+                displayList
+                  .filter(cat =>
+                    !showAllLanguages || cat.name === languagesActiveSubSlug
+                  )
+                  .map(cat => (
+                    <BookCategory
                     subId={cat.subId}
-                    hasSub={!!cat.subId}
-                    onSeeAll={() => handleStoriesSeeAll(cat.name)}
-                    expanded={showAllStories && cat.name === storiesActiveSubSlug}
-                    onBookClick={(book, bc) => {
-                      openBook(book.id);
-                      setCrumb([...bc, book.title]);
-                    }}
+                      key={cat.name}
+                      categoryName={cat.name}
+                      tabLabel="Languages"
+                      parentCategory={undefined}
+                      books={cat.books}
+                      hasSub={!!cat.subId}
+                      onSeeAll={() => handleLanguagesSeeAll(cat.name)}
+                      expanded={showAllLanguages && cat.name === languagesActiveSubSlug}
+                      onBookClick={(book: any, bc: any) => {
+                        openBook(book.id);
+                        setCrumb([...bc, book.title]);
+                      }}
                     />
                   ))}
 
-            {/* ───── Languages tab ───── */}
-            {isLangsTab &&
-              displayList
-                .filter(cat =>
-                  !showAllLanguages || cat.name === languagesActiveSubSlug
-                )
-                .map(cat => (
+              {/* ───── For-you tab ───── */}
+              {isForYouTab &&
+                displayList.map(cat => (
                   <BookCategory
-                  subId={cat.subId}
                     key={cat.name}
                     categoryName={cat.name}
-                    tabLabel="Languages"
-                    parentCategory={undefined}
+                    tabLabel="For you"
+                    parentCategory={mainSelected ?? undefined}
                     books={cat.books}
-                    hasSub={!!cat.subId}
-                    onSeeAll={() => handleLanguagesSeeAll(cat.name)}
-                    expanded={showAllLanguages && cat.name === languagesActiveSubSlug}
-                    onBookClick={(book, bc) => {
+                    hasSub={cat.hasSub}
+                    onSeeAll={() => toggleForYouRow(cat.name)}
+                    expanded={!!expandedSimple[cat.name]}
+                    emptyMsg={
+                      cat.name === "Continue Reading" ? "No content available" : undefined
+                    }
+                    onBookClick={(book: any, bc: any) => {
                       openBook(book.id);
                       setCrumb([...bc, book.title]);
                     }}
                   />
                 ))}
+            </>
+          )}
+        </div>
+      )}
 
-            {/* ───── For-you tab ───── */}
-            {isForYouTab &&
-              displayList.map(cat => (
-                <BookCategory
-                  key={cat.name}
-                  categoryName={cat.name}
-                  tabLabel="For you"
-                  parentCategory={mainSelected ?? undefined}
-                  books={cat.books}
-                  hasSub={cat.hasSub}
-                  onSeeAll={() => toggleForYouRow(cat.name)}
-                  expanded={!!expandedSimple[cat.name]}
-                  emptyMsg={
-                    cat.name === "Continue Reading" ? "No content available" : undefined
-                  }
-                  onBookClick={(book, bc) => {
-                    openBook(book.id);
-                    setCrumb([...bc, book.title]);
-                  }}
-                />
-              ))}
-          </>
-        )}
-      </div>
-
-      {/* --------- MODALS & QUIZ --------- */}
-      {showWell && quizTarget && (
-        <WellDoneModal
-          message="You've just finished!"
-          onTakeQuiz={handleTakeQuiz}
-          onLater={handleDoLater}
-        />
+      {/* --------- MODALS & QUIZ (only when NOT reviewing) --------- */}
+      {!showAnswerReview && (
+        <>
+          {showWell && quizTarget && (
+            <WellDoneModal
+              message="You've just finished!"
+              onTakeQuiz={handleTakeQuiz}
+              onLater={handleDoLater}
+              onRetake={handleRetake}
+            />
+          )}
+          {quizTarget && (
+            <QuizComponent
+              onRetake={handleRetake}
+              key={quizTarget.id}    
+              book={quizTarget}
+              onComplete={handleQuizComplete}
+              resetSignal={quizReset}
+              onAnswersChange={(ans) => {
+                console.log("sync parent answers:", ans);
+                setQuizAnswers(ans);
+              }}
+            />
+          )}
+          {showResult && quizStats && (
+             <QuizResultModal
+              stats={{
+                correct: quizStats.correct,
+                 incorrect: quizStats.total - quizStats.correct,
+                skipped: quizStats.skipped,
+                total: quizStats.total
+              }}
+              onClose={() => setShowResult(false)}
+              onRetake={handleRetake}
+              onViewAnswers={handleViewAnswers}
+            />
+          )}
+        </>
       )}
-      {quizTarget && (
-         <QuizComponent
-           onRetake={handleRetake}
-           key={quizTarget.id}    
-           book={quizTarget}
-           onComplete={handleQuizComplete}
-           resetSignal={quizReset}
-           onAnswersChange={(ans) => {
-             console.log("sync parent answers:", ans);
-             setQuizAnswers(ans);
-           }}
-         />
-      )}
-      {showResult && quizStats && (
-        <QuizResultModal
-          isOpen={showResult}
-          stats={quizStats}
-          onClose={() => setShowResult(false)}
-          onRetake={handleRetake}
-          onViewAnswers={handleViewAnswers}
-        />
-      )}
-      {/* (inline above — no modal overlay here any more) */}
     </div>
   );
 };

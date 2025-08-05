@@ -13,6 +13,8 @@ export interface UserAnswer {
   questionText: string;
   selectedOption: string;
   correctOption: string;
+  selectedOptionValue: string; // ← new
+  correctOptionValue: string;  // ← new
   isCorrect: boolean;
 }
 
@@ -95,6 +97,8 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
         questionText: q.question,
         selectedOption: letter,
         correctOption: q.answer,
+        selectedOptionValue: q[`option_${letter}`], // ← new
+        correctOptionValue: q[`option_${q.answer}`], // ← new
         isCorrect: letter === q.answer
       }];
       if (onAnswersChange) onAnswersChange(updated); // notify parent on every change
@@ -180,6 +184,13 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
               />
             ) : null;
           })}
+          <p
+          onClick={skip}
+          disabled={finished || (step + 1 === total && !canFinish)}
+          className="text-black underline text-sm px-4 text-[] disabled:opacity-50 transition cursor-pointer"
+        >
+          Skip
+        </p>
         </div>
       </div>
 
@@ -187,9 +198,9 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
       <div className="flex justify-end items-center gap-10">
         {/* Previous */}
         {step > 0 ? (
-          <button
+           <button
             onClick={() => setStep(step - 1)}
-            className="px-10 py-3 rounded-full border border-gray-300 text-gray-700 hover:border-[#BCD678] hover:text-[#BCD678] transition"
+            className="w-[150px] h-[48px] opacity-100 gap-[6.16px] pr-[18.49px] pl-[18.49px] rounded-[154.12px] font-bold border  text-gray-400 border-[#BCD678] hover:text-[#BCD678] transition"
           >
             Previous
           </button>
@@ -198,13 +209,7 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
         )}
 
         {/* Skip */}
-        <button
-          onClick={skip}
-          disabled={finished || (step + 1 === total && !canFinish)}
-          className="px-10 py-3 rounded-full bg-gray-300 text-white font-medium disabled:opacity-50 transition"
-        >
-          Skip
-        </button>
+        
 
         {/* Next / Finish */}
         <button
@@ -213,7 +218,7 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
             finished ||
             (step + 1 === total ? !canFinish : !picked)
           }
-          className="px-10 py-3 rounded-full bg-[#BCD678] text-white font-medium disabled:opacity-50 transition"
+          className="w-[150px] h-[48px] opacity-100 gap-[6.16px] pr-[18.49px] pl-[18.49px] rounded-[154.12px] font-bold bg-[#BCD678] text-white font-medium disabled:opacity-50 transition"
         >
           {step + 1 === total ? "Finish" : "Next"}
         </button>
