@@ -21,6 +21,7 @@ export interface QuizComponentProps {
   onComplete: (stats: QuizStats, answers: UserAnswer[]) => void;
   resetSignal?: number; 
   onRetake: () => void;
+  onAnswersChange?: (answers: UserAnswer[]) => void; // ← new
 }
 
 interface QuizQuestion {
@@ -33,9 +34,8 @@ interface QuizQuestion {
   answer: "a" | "b" | "c" | "d";
 }
 
-const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSignal, onRetake }) => {
+const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSignal, onRetake, onAnswersChange }) => {
 
-  // console.log('onRetaker ampper', onComplete, onRetake);
   const [loading, setLoading] = useState(true);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [step, setStep] = useState(0); // current question/page
@@ -62,6 +62,11 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
     })();
   }, [book.id]);
 
+  // Notify parent component whenever answers change
+  useEffect(() => {
+    if (onAnswersChange) onAnswersChange(answers);
+  }, [answers, onAnswersChange]);
+
   if (loading) {
     return (
       <div className="p-8 text-center text-gray-600">Loading quiz…</div>
@@ -83,13 +88,15 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
   const select = (letter: "a" | "b" | "c" | "d") => {
     setAnswers(prev => {
       const filtered = prev.filter(a => a.questionId !== q.question_id);
-      return [...filtered, {
+      const updated = [...filtered, {
         questionId: q.question_id,
         questionText: q.question,
         selectedOption: letter,
         correctOption: q.answer,
         isCorrect: letter === q.answer
       }];
+      if (onAnswersChange) onAnswersChange(updated); // notify parent on every change
+      return updated;
     });
   };
 
@@ -99,10 +106,8 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
     } else {
       const correctCount = answers.filter(a => a.isCorrect).length;
       const skippedCount = total - answers.length;
-      console.log('ANSWERS3', onComplete, answers);
       onComplete({ correct: correctCount, total, skipped: skippedCount }, answers);
       setFinished(true);
-      console.log('ANSWERS1', answers);
     }
   };
 
@@ -114,10 +119,8 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
       const skippedCount = total - answers.length;
       onComplete({ correct: correctCount, total, skipped: skippedCount }, answers);
       setFinished(true);
-      console.log('ANSWERS2', answers);
     }
   };
-
 
   return (
     <div className="w-full mx-auto p-10 space-y-6 bg-white">

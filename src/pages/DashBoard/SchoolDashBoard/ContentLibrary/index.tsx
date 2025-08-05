@@ -382,6 +382,8 @@ const ContentLibrary: React.FC = () => {
     setShowResult(true);
     console.log('ANSWERS222', answers);
   };
+  useEffect(() => { console.log('quizAnswers ts', quizAnswers); }, [quizAnswers]);
+
 
   const handleViewAnswers = () => {
     // 🔍 diagnostic: make sure we actually captured answers
@@ -803,6 +805,10 @@ const ContentLibrary: React.FC = () => {
               withIntroPages={false}
               onRetake={handleRetake}
               onViewAnswers={handleViewAnswers}
+              onAnswersUpdate={(ans) => {
+                console.log("Parent got answers from ReadingComponent:", ans);
+                setQuizAnswers(ans);
+              }}
             />
           )
         ) : watchingBook ? (
@@ -912,12 +918,16 @@ const ContentLibrary: React.FC = () => {
       )}
       {quizTarget && (
          <QuizComponent
-         onRetake={handleRetake}
-         key={quizTarget.id}    
-         book={quizTarget}
-         onComplete={handleQuizComplete}
-         resetSignal={quizReset}     
-       />
+           onRetake={handleRetake}
+           key={quizTarget.id}    
+           book={quizTarget}
+           onComplete={handleQuizComplete}
+           resetSignal={quizReset}
+           onAnswersChange={(ans) => {
+             console.log("sync parent answers:", ans);
+             setQuizAnswers(ans);
+           }}
+         />
       )}
       {showResult && quizStats && (
         <QuizResultModal

@@ -44,6 +44,7 @@ export interface ReadingComponentProps {
   /** whether to include front, cover & title pages */
   withIntroPages?: boolean;
   onViewAnswers?: () => void;
+  onAnswersUpdate?: (answers: UserAnswer[] | null) => void;
 }
 
 type SpreadPage =
@@ -202,7 +203,7 @@ const FlipBook = React.memo(
 console.log('GetQuiz', GetQuiz('573'))
 
 const ReadingComponent = forwardRef<ReadingHandle, ReadingComponentProps>(
-  ({ book, pages, onExit, onRetake, innerCoverUrl, withIntroPages = true, onViewAnswers }, ref) => {
+  ({ book, pages, onExit, onRetake, innerCoverUrl, withIntroPages = true, onViewAnswers, onAnswersUpdate }, ref) => {
     const shellRef = useRef<HTMLDivElement>(null);
     const flipRef = useRef<any>(null);
     const [currentPage, setCurrentPage] = useState(0);
@@ -213,7 +214,7 @@ const ReadingComponent = forwardRef<ReadingHandle, ReadingComponentProps>(
     const [showQuiz, setShowQuiz] = useState(false);
     const [showResult, setShowResult] = useState(false);
     const [quizStats, setQuizStats] = useState(null);
-    const [quizAnswers, setQuizAnswers] = useState(null);
+    const [quizAnswers, setQuizAnswers] = useState<UserAnswer[] | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalView, setModalView] = useState<"options" | "pages" | "font">(
       "options"
@@ -238,6 +239,17 @@ const ReadingComponent = forwardRef<ReadingHandle, ReadingComponentProps>(
         setIsFull(true);
       }
     };
+
+    useEffect(() => {
+      if (quizAnswers !== null) {
+        onAnswersUpdate?.(quizAnswers);
+      }
+      if (quizAnswers) {
+        console.log('quizAnswers rc', quizAnswers);
+        onViewAnswers?.();
+      }
+    }, [quizAnswers, onViewAnswers, onAnswersUpdate]);
+
     useEffect(() => {
       const onChange = () => setIsFull(screenfull.isFullscreen);
       screenfull.on("change", onChange);
