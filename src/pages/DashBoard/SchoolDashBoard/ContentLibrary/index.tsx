@@ -411,7 +411,11 @@ const ContentLibrary: React.FC = () => {
     setQuizReset((s) => s + 1);       // clears answers
   };
 
-  const handleReviewDone = () => setShowAnswerReview(false);
+  const handleReviewDone = () => {
+    setShowAnswerReview(false);
+    // leave “read” mode so we fall back to the overview
+    closeRead();
+  };
 
   // Stories “See All” handler
   const handleStoriesSeeAll = (slug: string) => {
@@ -789,7 +793,13 @@ const ContentLibrary: React.FC = () => {
         </nav>
       )}
 
-      {/* Content area */}
+      {/* Content area & inline review */}
+      {showAnswerReview && (
+        <AnswerReviewModal
+          answers={quizAnswers ?? []}
+          onDone={handleReviewDone}
+        />
+      )}
       <div className="mt-8 space-y-8">
         {readingBook ? (
           readingLoading ? (
@@ -938,13 +948,7 @@ const ContentLibrary: React.FC = () => {
           onViewAnswers={handleViewAnswers}
         />
       )}
-      {showAnswerReview && (
-        <AnswerReviewModal
-          // even if quizAnswers is null, fall back to an empty array
-          answers={quizAnswers ?? []}
-          onDone={handleReviewDone}
-        />
-      )}
+      {/* (inline above — no modal overlay here any more) */}
     </div>
   );
 };

@@ -41,6 +41,7 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
   const [step, setStep] = useState(0); // current question/page
   const [answers, setAnswers] = useState<UserAnswer[]>([]);
   const [finished, setFinished] = useState(false);
+  const [showMustAnswerWarning, setShowMustAnswerWarning] = useState(false);
 
   /* NEW: whenever resetSignal ticks, clear everything */
   useEffect(() => {
@@ -82,6 +83,7 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
   const q = questions[step];
   const total = questions.length;
   const progressPct = ((step + 1) / total) * 100;
+  const canFinish = answers.length > 0;
 
   const picked = answers.find(a => a.questionId === q.question_id)?.selectedOption;
 
@@ -101,7 +103,12 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
   };
 
   const next = () => {
-    if (step + 1 < total) {
+    const isLast = step + 1 === total;
+    if (isLast && !canFinish) {
+      setShowMustAnswerWarning(true);
+      return;
+    }
+    if (!isLast) {
       setStep(step + 1);
     } else {
       const correctCount = answers.filter(a => a.isCorrect).length;
@@ -112,7 +119,12 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
   };
 
   const skip = () => {
-    if (step + 1 < total) {
+    const isLast = step + 1 === total;
+    if (isLast && !canFinish) {
+      setShowMustAnswerWarning(true);
+      return;
+    }
+    if (!isLast) {
       setStep(step + 1);
     } else {
       const correctCount = answers.filter(a => a.isCorrect).length;
@@ -124,6 +136,12 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
 
   return (
     <div className="w-full mx-auto p-10 space-y-6 bg-white">
+      {showMustAnswerWarning && (
+        <div className="text-red-600 font-medium">
+          Please answer at least one question before finishing.
+        </div>
+      )}
+
       {/* Progress bar + header */}
       <div className="space-y-2 w-[150px] mb-[-15px]">
         <div className="w-full bg-gray-200 h-1 rounded-full overflow-hidden h-[7px]  mb-[29px]">
@@ -182,7 +200,7 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
         {/* Skip */}
         <button
           onClick={skip}
-          disabled={finished}
+          disabled={finished || (step + 1 === total && !canFinish)}
           className="px-10 py-3 rounded-full bg-gray-300 text-white font-medium disabled:opacity-50 transition"
         >
           Skip
@@ -191,7 +209,10 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
         {/* Next / Finish */}
         <button
           onClick={next}
-          disabled={!picked || finished}
+          disabled={
+            finished ||
+            (step + 1 === total ? !canFinish : !picked)
+          }
           className="px-10 py-3 rounded-full bg-[#BCD678] text-white font-medium disabled:opacity-50 transition"
         >
           {step + 1 === total ? "Finish" : "Next"}
