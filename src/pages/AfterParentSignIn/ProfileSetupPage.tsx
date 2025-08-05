@@ -1,4 +1,4 @@
-import { useGetSuggestUserName, useUserNameChecker } from "@/api/queries";
+import { useGetSuggestUserName, useProfle, useUserNameChecker } from "@/api/queries";
 import SignInWrapper from "@/common/SignInWrapper";
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
@@ -71,11 +71,12 @@ const ProfileSetupPage = ({
   const [debounced] = useDebouncedValue(userName, 200);
   const { data, isError, isLoading, isInitialLoading } =
     useUserNameChecker(debounced);
+  const { isLoading:isLoadingProfileSetUp, mutate:mutateUseProfile } = useProfle();
 
   const onSubmit = () => {
     console.log("name", name);
     console.log("age", age);
-    mutate(
+    mutateUseProfile(
       {
         name,
         dob: age,
@@ -201,9 +202,9 @@ const ProfileSetupPage = ({
                 <Button
                 className="rounded-full w-full"
                   backgroundColor="green"
-                  disable={isError || isLoading || name === ""}
+                  disable={isLoadingProfileSetUp||isError || isLoading || name === ""}
                   type="button"
-                  onClick={ ()=>navigate("/profilesuccess")}
+                  onClick={onSubmit}
                   
                 >
                   Continue
