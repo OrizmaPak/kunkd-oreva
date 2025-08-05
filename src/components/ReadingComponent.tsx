@@ -43,6 +43,7 @@ export interface ReadingComponentProps {
   innerCoverUrl?: string;
   /** whether to include front, cover & title pages */
   withIntroPages?: boolean;
+  onViewAnswers?: () => void;
 }
 
 type SpreadPage =
@@ -201,7 +202,7 @@ const FlipBook = React.memo(
 console.log('GetQuiz', GetQuiz('573'))
 
 const ReadingComponent = forwardRef<ReadingHandle, ReadingComponentProps>(
-  ({ book, pages, onExit, onRetake, innerCoverUrl, withIntroPages = true }, ref) => {
+  ({ book, pages, onExit, onRetake, innerCoverUrl, withIntroPages = true, onViewAnswers }, ref) => {
     const shellRef = useRef<HTMLDivElement>(null);
     const flipRef = useRef<any>(null);
     const [currentPage, setCurrentPage] = useState(0);
@@ -218,6 +219,8 @@ const ReadingComponent = forwardRef<ReadingHandle, ReadingComponentProps>(
       "options"
     );
     const [fontSize, setFontSize] = useState(16);
+
+    // console.log('onViewAnswers11', onViewAnswers);
 
     // 👇 expose the setter to the parent
     useImperativeHandle(ref, () => ({
@@ -532,6 +535,10 @@ const ReadingComponent = forwardRef<ReadingHandle, ReadingComponentProps>(
             answers={quizAnswers!}
             onRetake={onRetake}
             onClose={() => setShowResult(false)}
+            onViewAnswers={() => {
+              onViewAnswers?.();
+              setShowResult(false);
+            }}
           />
         )}
       </div>

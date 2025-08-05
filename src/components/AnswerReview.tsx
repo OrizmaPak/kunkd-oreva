@@ -12,6 +12,7 @@ interface AnswerReviewProps {
 /* ------------------------------------------------------------------ */
 
 const AnswerReview: React.FC<AnswerReviewProps> = ({ answers, onDone }) => {
+  console.log('anseras', answers);
   return (
     <div className="max-w-5xl mx-auto p-4 md:p-8 flex gap-8">
       {/* left rail with Done button */}

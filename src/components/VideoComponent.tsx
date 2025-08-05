@@ -26,6 +26,7 @@ interface VideoComponentProps {
   onRetake: () => void;
   book: Book;
   showPosterOnPause?: boolean; // defaults to true
+  onViewAnswers?: () => void;
 }
 
 /* ────────────────────────────────────────────────────────── */
@@ -43,6 +44,7 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
   book,
   onRetake,
   showPosterOnPause = true,
+  onViewAnswers,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);

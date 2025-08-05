@@ -379,11 +379,16 @@ const ContentLibrary: React.FC = () => {
     setQuizStats(stats);
     setQuizAnswers(answers);
     setShowResult(true);
+    console.log('ANSWERS222', answers);
   };
 
-  const handleViewAnswers = () => {
-    setShowResult(false);          // ← hide the result modal
-    setShowAnswerReview(true);     //    and open the review modal
+  const handleViewAnswers = (stats: any) => {
+    // 1  close the result modal first (prevents stack-over-stack backdrops)
+    setShowResult(false);
+
+    // 2  open the answer-review on the next tick to avoid backdrop flicker
+    setTimeout(() => setShowAnswerReview(true), 0);
+    
   };
 
   const startQuizFlow = () => {
@@ -794,6 +799,7 @@ const ContentLibrary: React.FC = () => {
               pages={bookPages}
               withIntroPages={false}
               onRetake={handleRetake}
+              onViewAnswers={handleViewAnswers}
             />
           )
         ) : watchingBook ? (
@@ -805,6 +811,7 @@ const ContentLibrary: React.FC = () => {
             flagUrl={NigeriaFlag}
             onRetake={handleRetake}
             onClose={closeWatch}
+            onViewAnswers={handleViewAnswers}
             onComplete={() => handleMediaComplete(watchingBook)}
           />
         ) : /* don't mount overview while checking or if guard failed */ 
@@ -918,9 +925,9 @@ const ContentLibrary: React.FC = () => {
           onViewAnswers={handleViewAnswers}
         />
       )}
-      {showAnswerReview && quizAnswers && (
+      {showAnswerReview && (
         <AnswerReviewModal
-          answers={quizAnswers}
+          answers={quizAnswers ?? []}   // ← always give the child *something*
           onDone={handleReviewDone}
         />
       )}

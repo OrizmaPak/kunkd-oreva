@@ -25,6 +25,9 @@ const QuizResultModal: React.FC<QuizResultModalProps> = ({
 }) => {
   const completion = Math.round((stats.correct / stats.total) * 100);
 
+  console.log('onViewAnswers555', onViewAnswers);
+
+
   return (
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-[5000]">
       {/* optional close */}
@@ -86,7 +89,7 @@ const QuizResultModal: React.FC<QuizResultModalProps> = ({
           {/* col 2, row 2 */}
           <div style={{ width: '158px', height: '49px', transform: 'rotate(0deg)', opacity: 1, top: '175.04px', gap: '10px' }}>
             <div className="text-gray-500 mb-1">Incorrect Answer</div>
-            <div className="font-semibold text-gray-900">{stats.incorrect} questions</div>
+            <div className="font-semibold text-gray-900">{stats.total - stats.correct} questions</div>
           </div>
         </div>
 

@@ -5,6 +5,7 @@ import { Book } from "./BookCard";
 export interface QuizStats {
   correct: number;
   total: number;
+  skipped: number;
 }
 
 export interface UserAnswer {
@@ -34,7 +35,7 @@ interface QuizQuestion {
 
 const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSignal, onRetake }) => {
 
-  console.log('onRetaker ampper', onComplete, onRetake);
+  // console.log('onRetaker ampper', onComplete, onRetake);
   const [loading, setLoading] = useState(true);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [step, setStep] = useState(0); // current question/page
@@ -97,10 +98,25 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
       setStep(step + 1);
     } else {
       const correctCount = answers.filter(a => a.isCorrect).length;
-      onComplete({ correct: correctCount, total }, answers);
+      const skippedCount = total - answers.length;
+      onComplete({ correct: correctCount, total, skipped: skippedCount }, answers);
       setFinished(true);
+      console.log('ANSWERS1', answers);
     }
   };
+
+  const skip = () => {
+    if (step + 1 < total) {
+      setStep(step + 1);
+    } else {
+      const correctCount = answers.filter(a => a.isCorrect).length;
+      const skippedCount = total - answers.length;
+      onComplete({ correct: correctCount, total, skipped: skippedCount }, answers);
+      setFinished(true);
+      console.log('ANSWERS2', answers);
+    }
+  };
+
 
   return (
     <div className="w-full mx-auto p-10 space-y-6 bg-white">
@@ -145,7 +161,7 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
         </div>
       </div>
 
-      {/* Next button */}
+      {/* Next and Skip buttons */}
       <div className="flex justify-end items-center gap-10">
         {/* Previous */}
         {step > 0 ? (
@@ -158,6 +174,15 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
         ) : (
           <div /> /* placeholder to keep spacing */
         )}
+
+        {/* Skip */}
+        <button
+          onClick={skip}
+          disabled={finished}
+          className="px-10 py-3 rounded-full bg-gray-300 text-white font-medium disabled:opacity-50 transition"
+        >
+          Skip
+        </button>
 
         {/* Next / Finish */}
         <button
