@@ -99,6 +99,7 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
     } else {
       const correctCount = answers.filter(a => a.isCorrect).length;
       const skippedCount = total - answers.length;
+      console.log('ANSWERS3', onComplete, answers);
       onComplete({ correct: correctCount, total, skipped: skippedCount }, answers);
       setFinished(true);
       console.log('ANSWERS1', answers);

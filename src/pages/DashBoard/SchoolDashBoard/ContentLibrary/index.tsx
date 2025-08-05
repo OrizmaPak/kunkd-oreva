@@ -376,19 +376,22 @@ const ContentLibrary: React.FC = () => {
   const handleDoLater = () => setShowWell(false);
 
   const handleQuizComplete = (stats: QuizStats, answers: UserAnswer[]) => {
+    alert('handleQuizComplete');
     setQuizStats(stats);
     setQuizAnswers(answers);
     setShowResult(true);
     console.log('ANSWERS222', answers);
   };
 
-  const handleViewAnswers = (stats: any) => {
-    // 1  close the result modal first (prevents stack-over-stack backdrops)
+  const handleViewAnswers = () => {
+    // 🔍 diagnostic: make sure we actually captured answers
+    console.log("▶️ handleViewAnswers – quizAnswers state:", quizAnswers);
+
+    // 1) hide the results modal
     setShowResult(false);
 
-    // 2  open the answer-review on the next tick to avoid backdrop flicker
-    setTimeout(() => setShowAnswerReview(true), 0);
-    
+    // 2) show the review modal immediately
+    setShowAnswerReview(true);
   };
 
   const startQuizFlow = () => {
@@ -927,7 +930,8 @@ const ContentLibrary: React.FC = () => {
       )}
       {showAnswerReview && (
         <AnswerReviewModal
-          answers={quizAnswers ?? []}   // ← always give the child *something*
+          // even if quizAnswers is null, fall back to an empty array
+          answers={quizAnswers ?? []}
           onDone={handleReviewDone}
         />
       )}
