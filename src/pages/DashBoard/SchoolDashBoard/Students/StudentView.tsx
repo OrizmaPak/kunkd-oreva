@@ -2,11 +2,14 @@
 // src/pages/StudentView.tsx
 // -------------------------------
 import React from "react";
+import { useParams } from "react-router-dom";
 import ProgressGraph from "@/components/ProgressGraph";
 import StatCard from "@/components/StatCard";
 
 const StudentView: React.FC = () => {
-  // sample student info
+  const { id } = useParams<{ id: string }>(); // “id” comes from :id in the route
+
+  // fetch student by id or use dummy data
   const student = {
     name: "Joy Giver",
     email: "babameg194@yahoo.com",
@@ -20,7 +23,7 @@ const StudentView: React.FC = () => {
   };
 
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+    <div className="p-0 space-y-6 bg-transparent min-h-screen">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-600">
         <span className="cursor-pointer hover:underline">Student</span> &gt; <span className="font-medium text-gray-900">View</span>

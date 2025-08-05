@@ -35,6 +35,7 @@ import ProfileSetupPage from "./pages/AfterParentSignIn/profileSetupPage";
 import ProfileSuccessPage from "./pages/AfterParentSignIn/ProfileSuccessPage";
 import ConnectToSchool from "./pages/AfterParentSignIn/ConnectToSchool";
 import ContentLibrary from "./pages/DashBoard/SchoolDashBoard/ContentLibrary";
+import StudentView from "./pages/DashBoard/SchoolDashBoard/Students/StudentView";
 const VideoV2 = lazy(() => import("./pages/AfricanLanguages/VideosV2/VideoV2"));
 const StoriesV2 = lazy(() => import("./pages/Stories/StoriesV2/StoriesV2"));
 const DefaultTab = lazy(() => import("./pages/AfterParentSignIn/DefaultTab"));
@@ -432,8 +433,9 @@ function App() {
                 <Route path="schooldashboard/*" element={<SchoolLayout />}>
                   <Route index element={<Main />}></Route>
                   <Route path="teacher" element={<Teachers />}></Route>
-                  <Route path="student/*">
+                  <Route path="students/*">
                     <Route index element={<Students />} />
+                    <Route path=":id" element={<StudentView />} />
                     <Route
                       path="profile/:studentId"
                       element={<StudentProfile />}

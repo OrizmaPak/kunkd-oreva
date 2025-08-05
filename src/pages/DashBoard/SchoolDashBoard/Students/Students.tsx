@@ -198,7 +198,7 @@ const Students: React.FC = () => {
               </td>
               <td className="py-3 text-right">
                 <ActionButtons
-                  onView={() => navigate(`/schooldashboard/students/${s.id}`)}
+                  onView={() => navigate(`/students/${s.id}`)}
                   onDisable={() => handleDisableClick(s)}
                 />
               </td>
