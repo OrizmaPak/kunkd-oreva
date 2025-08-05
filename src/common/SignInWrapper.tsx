@@ -1,4 +1,5 @@
-import SignInImage from "@/assets/signInImage (2).png";
+import BgImage from "@/assets/newBackground.svg";
+
 type Props = {
   children: React.ReactNode;
 };
@@ -6,7 +7,7 @@ const SignInWrapper = ({ children }: Props) => {
   return (
     <div className="w-full h-[100vh] relative ">
       <img
-        src={SignInImage}
+        src={BgImage}
         alt="signin image"
         className=" w-full h-full object-cover object-top "
       />

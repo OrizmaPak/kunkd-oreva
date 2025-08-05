@@ -17,6 +17,7 @@ const bgColors = {
   cream: "bg-cream-500",
   white: "bg-white",
   green: "bg-customGreen",
+  grey: "bg-[grey]",
 };
 const borderColors = {
   default: "border border-[#8530C1]",
@@ -43,17 +44,18 @@ type TClassName = Omit<
   "action" | "type" | "children" | "className"
 >;
 
-const getClassName = (options: TClassName) => {
-  const { varient, size, color, backgroundColor, borderColor } = options;
-  const btnVarientStyle =
-    varient === "filled"
-      ? bgColors[backgroundColor || "default"]
-      : borderColors[borderColor || "default"];
-  // varient  || backgroundColor - border -
+const getClassName = (options: TClassName & { disable?: boolean }) => {
+  const { varient, size, color, backgroundColor, borderColor, disable } = options;
+  const btnVarientStyle = disable
+    ? "bg-gray-400"
+    : varient === "filled"
+    ? bgColors[backgroundColor || "default"]
+    : borderColors[borderColor || "default"];
+  const disabledStyle = disable ? "cursor-not-allowed" : "";
 
-  return `rounded-[8px]  text-[16px]  ${sizes[size || "md"]} ${
+  return `rounded-[8px] text-[16px] ${sizes[size || "md"]} ${
     colors[color || "default"]
-  } ${btnVarientStyle}`;
+  } ${btnVarientStyle} ${disabledStyle}`;
 };
 
 const Button = ({

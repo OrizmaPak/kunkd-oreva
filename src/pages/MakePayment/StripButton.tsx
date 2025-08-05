@@ -62,7 +62,7 @@ const PayWitStripButton = ({
       onClick={() => {
         handleStripeInit();
       }}
-      className="flex justify-center items-center border border-[#F3DAFF]  px-16  py-3 gap-2 rounded-3xl"
+      className="flex justify-center items-center border border-customGreen  px-16  py-3 gap-2 rounded-3xl"
     >
       {isLoading ? (
         <Loader size={30} color="#8530C1" />

@@ -17,10 +17,18 @@ import { TUser } from "@/api/types";
 import { useState, useEffect } from "react";
 import { handleEventTracking } from "@/api/moengage";
 import moengage from "@moengage/web-sdk";
+import SignInWrapper from "@/common/SignInWrapper";
+import KundaLogo from "@/assets/KundaLogo.svg";
+import { useDisclosure } from "@mantine/hooks";
+import { Modal } from "@mantine/core";
+import ParentCongratulations from "./ParentCongratulations";
+
 
 // import { motion } from "framer-motion";
 
-const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
+const ParentVerification = () => {
+    const [opened, { open, close }] = useDisclosure(false);
+
   const { isLoading, mutate } = useVerifyOtp();
   const { mutate: resendOTPMutate } = useResendOTP();
   const [user, setUser] = useStore(getUserState);
@@ -41,7 +49,7 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
       .min(4, { message: " OTP can only be at least 4 characters long" }),
   });
 
-  const { handleSubmit, setValue, watch, trigger } = useForm<FormData>({
+  const { handleSubmit, setValue, watch, trigger, formState } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
 
@@ -68,11 +76,12 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
       {
         onSuccess(data) {
           const res = data?.data?.data as TUser;
-
+          
           notifications.show({
             title: `Notification`,
             message: data.data.message,
           });
+          open()
           moengage.add_unique_user_id(res?.user_id);
           moengage.add_first_name(res?.firstname);
           moengage.add_last_name(res?.lastname);
@@ -85,9 +94,7 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
             registration_method: "manual",
             registration_platform: "webapp",
           });
-
           setUser({ ...res });
-          onSubmit();
         },
         onError() {
           notifications.show({
@@ -123,30 +130,58 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
       }
     );
   };
+
   return (
-    <FormWrapper>
-      <div className=" w-full h-full flex justify-center items-center">
-        <div className="inner-form-w2 mx-auto relative">
-          <Link to="/">
-            <span className="absolute right-0 top-[-80px]">
-              <img loading="lazy" src={Cancel} alt="cancel" />
-            </span>
-          </Link>
+    <>
+    
+    <Modal 
+     opened={opened}
+        radius={34}
+        centered
+        size={"495px"}
+        onClose={close}
+        withCloseButton={false}
+        closeOnClickOutside={false}
+        transitionProps={{ duration: 500, timingFunction: "ease" }}>
+      <ParentCongratulations/>
+    </Modal>
+    <SignInWrapper>
+      <div className="flex justify-center  rounded-[50px] w-[550px]  py-[30px] bg-white">
+        <div className="inner-form-w mx-auto relative">
+          <div className="flex justify-center items-center mt-8 mb-12 ">
+            <img src={KundaLogo} alt="image" className="w-[160px]" />
+          </div>
           <div className="w-[100%]  my-auto ">
             <span></span>
-            <h1 className="font-bold text-[40px] font-Recoleta">Enter OTP</h1>
-            <p className="text-[15px] text-[#A7A7A7] font-Hanken">
+            <h1 className=" font-semibold header2 font-BalooSemiBold text-center">Enter OTP</h1>
+            <p className="text3 text-[#A7A7A7]  font-ArimoRegular text-center mb-8 mt-2">
               A code has been sent to your email, enter to verify your account.
             </p>
-            <form onSubmit={handleSubmit(submitData)}>
-              <div className="mt-8 flex justify-center items-center relative">
+            <form onSubmit={handleSubmit(()=> open())}>
+              <div className="mt-10 flex justify-center items-center gap-4 flex-col">
                 <Group position="center">
-                  <PinInput value={otp} onChange={handlePinChange} />
+                  <PinInput
+                    value={otp}
+                    onChange={handlePinChange}
+                    size="5"
+                    color="red"
+                    radius={10}
+                    placeholder=""
+                    autoFocus
+                  />
                 </Group>
+                <br />
+                {formState.errors.otp && (
+                  <p className="text-red-700 text3">
+                    PIN must be exactly 4 characters long
+                  </p>
+                )}
               </div>
 
-              <p className="mt-8">
-                <Button type="submit" size="full">
+              <p className="">
+                <Button type="submit" size="full" 
+                     backgroundColor="green"
+                >
                   {isLoading ? (
                     <p className="flex justify-center items-center">
                       <Loader color="white" size="sm" />
@@ -170,8 +205,10 @@ const ParentEnterOTP = ({ onSubmit }: { onSubmit: () => void }) => {
         </div>
       </div>
       {/* </motion.div> */}
-    </FormWrapper>
+    </SignInWrapper>
+    
+    </>
   );
 };
 
-export default ParentEnterOTP;
+export default ParentVerification;

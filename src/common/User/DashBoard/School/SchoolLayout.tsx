@@ -63,8 +63,8 @@ const links = [
   },
   {
     label: "Content Library",
-    // href: "content-library",
-    // route: routeBaseUrl + "/content-library/*",
+    href: "content",
+    route: routeBaseUrl + "/content/*",
     icon: ContentIcon,
     hasSub: true,
   },

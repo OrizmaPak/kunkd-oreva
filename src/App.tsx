@@ -7,6 +7,8 @@ import ShoolHeader from "./common/User/SchoolHeader";
 import HomeFooter from "./components/HomeFooter";
 import HomeHeader from "./components/HomeHeader";
 import Home from "./pages/Home/Home";
+import "react-loading-skeleton/dist/skeleton.css";
+
 // import "@type/moengage/web-sdk";
 
 import moengage from "@moengage/web-sdk";
@@ -27,6 +29,12 @@ import PreviewSummerChallengePage from "./pages/SummerQuiz/PreviewSummerChalleng
 import SummerQuizLayout from "./pages/SummerQuiz/SummerQuizLayout";
 import SchoolDashboardHeader from "./common/User/DashBoard/School/SchoolDashboardHeader";
 import Settings from "./pages/DashBoard/SchoolDashBoard/Settings/Settings";
+import ParentVerification from "./pages/ParentSignup/ParentVerificattion";
+import WelcomePage from "./pages/AfterParentSignIn/WelcomePage";
+import ProfileSetupPage from "./pages/AfterParentSignIn/profileSetupPage";
+import ProfileSuccessPage from "./pages/AfterParentSignIn/ProfileSuccessPage";
+import ConnectToSchool from "./pages/AfterParentSignIn/ConnectToSchool";
+import ContentLibrary from "./pages/DashBoard/SchoolDashBoard/ContentLibrary";
 const VideoV2 = lazy(() => import("./pages/AfricanLanguages/VideosV2/VideoV2"));
 const StoriesV2 = lazy(() => import("./pages/Stories/StoriesV2/StoriesV2"));
 const DefaultTab = lazy(() => import("./pages/AfterParentSignIn/DefaultTab"));
@@ -434,6 +442,7 @@ function App() {
                   <Route path="classes" element={<Classes />}></Route>
                   <Route path="request" element={<SchoolRquest />}></Route>
                   <Route path="settings" element={<Settings />}></Route>
+                  <Route path="content" element={<ContentLibrary />}></Route>
                   <Route
                     path="content-library/*"
                     element={<NewlyRegisteredUser />}
@@ -479,14 +488,25 @@ function App() {
 
               {/* Parent sign up routes */}
               <Route path="parentsignup" element={<ParentSignup />}></Route>
+              <Route path="parentverification" element={<ParentVerification />}></Route>
+
               <Route path="secureaccount" element={<SecureAccount />}></Route>
               <Route path="makepayment" element={<MakePayment />}></Route>
+
               <Route
                 path="congratulations"
                 element={<PaymentCongratulations />}
               ></Route>
 
               <Route path="packages" element={<ChoosePlan />}></Route>
+              <Route path="welcomepage" element={<WelcomePage />}></Route>
+              <Route path="profilesetup" element={<ProfileSetupPage setChildProfile={setChildProfile} />}></Route>
+              <Route path="profilesuccess" element={<ProfileSuccessPage />}></Route>
+              <Route path="connecttoschool" element={<ConnectToSchool />}></Route>
+
+
+
+              
               <Route
                 path="childprofilesetup"
                 element={

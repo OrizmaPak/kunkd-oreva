@@ -157,7 +157,9 @@ const MakePaymentContent = () => {
   const [showStripe, setShowStripe] = useState(false);
   const [showPatStack, setShowPatStack] = useState(false);
   return (
-    <div className="w-[100%] max-w-[800px] mx-auto relative  h-full pt-[10%] ">
+    <>
+    <div className="flex justify-center items-center rounded-[50px]py-4 w-full h-full">   
+    <div className=" bg-white w-[50%] h-full  relative  rounded-2xl   ">
       <button
         onClick={() => {
           navigate(-1);
@@ -170,12 +172,12 @@ const MakePaymentContent = () => {
         }}
       >
         <span className="absolute right-[-150px] top-[80px]">
-          <ImCancelCircle size={40} color={"#8530C1"} />
+          {/* <ImCancelCircle size={40} color={"#8530C1"} /> */}
         </span>
       </button>
       <div className="w-[100%]  my-auto ">
         <span></span>
-        <h1 className="font-bold text-[40px] font-Reloc  text-center font-Recoleta">
+        <h1 className="  font-semibold header2 font-BalooSemiBold text-center">
           Make payment
         </h1>
         <p className="text-[15px] text-center  text-[#A7A7A7] font-Hanken">
@@ -183,7 +185,7 @@ const MakePaymentContent = () => {
         </p>
 
         {planId && patmentType && (
-          <div className="flex gap-10 justify-center items-center mt-10">
+          <div className="flex gap-10 justify-center items-center mt-10 ">
             <PayWitStripButton
               currencyIso3={currencyIso3 as string}
               planId={planId}
@@ -197,7 +199,7 @@ const MakePaymentContent = () => {
                 setShowPatStack(true);
                 setPaymentType(false);
               }}
-              className="flex justify-center items-center border border-[#F3DAFF]  px-8  py-3 gap-2 rounded-3xl"
+              className="flex justify-center items-center border border-customGreen  px-8  py-3 gap-2 rounded-3xl"
             >
               <span className="text-[16px] font-semibold"> pay with </span>
               <img src={PayStackButton} alt="image" className="inline-block" />
@@ -233,6 +235,9 @@ const MakePaymentContent = () => {
         )}
       </div>
     </div>
+
+    </div>
+    </>
   );
 };
 
