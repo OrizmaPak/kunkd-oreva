@@ -37,6 +37,7 @@ import ConnectToSchool from "./pages/AfterParentSignIn/ConnectToSchool";
 import ContentLibrary from "./pages/DashBoard/SchoolDashBoard/ContentLibrary";
 import StudentView from "./pages/DashBoard/SchoolDashBoard/Students/StudentView";
 import StudentStoriesReport from "./pages/DashBoard/SchoolDashBoard/Students/StudentStoriesReport";
+import ConnectionRequests from "./pages/DashBoard/SchoolDashBoard/Students/ConnectionRequests";
 const VideoV2 = lazy(() => import("./pages/AfricanLanguages/VideosV2/VideoV2"));
 const StoriesV2 = lazy(() => import("./pages/Stories/StoriesV2/StoriesV2"));
 const DefaultTab = lazy(() => import("./pages/AfterParentSignIn/DefaultTab"));
@@ -438,14 +439,15 @@ function App() {
                   <Route path="students/*">
                     <Route index element={<Students />} />
                     <Route path=":id" element={<StudentView />} />
-                    <Route path=":id/stories-report" element={<StudentStoriesReport />} />
+                    <Route path=":id/:type" element={<StudentStoriesReport />} />
                     <Route
                       path="profile/:studentId"
                       element={<StudentProfile />}
                     ></Route>
                   </Route>
                   <Route path="classes" element={<Classes />}></Route>
-                  <Route path="request" element={<SchoolRquest />}></Route>
+                  {/* <Route path="request" element={<SchoolRquest />}></Route> */}
+                  <Route path="request" element={<ConnectionRequests />}></Route>
                   <Route path="settings" element={<Settings />}></Route>
                   <Route path="content" element={<ContentLibrary />}></Route>
                   <Route

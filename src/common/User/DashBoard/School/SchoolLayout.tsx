@@ -143,7 +143,7 @@ const SchoolLayout = () => {
             </div>
           </div>
 
-          <div className="w-[82%]  bg-[#F0F2F5] px-8 pt-10  overflow-hidden overflow-y-auto  ">
+          <div className="w-[82%]  bg-[#f5f6fb] px-8 pt-10  overflow-hidden overflow-y-auto  ">
             {<Outlet />}
           </div>
         </div>
