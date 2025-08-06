@@ -2,7 +2,7 @@
 // src/pages/StudentView.tsx
 // -------------------------------
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import ProgressGraph from "@/components/ProgressGraph";
 import StatCard from "@/components/StatCard";
 import ContentTable from "@/components/ContentTable";
@@ -13,6 +13,7 @@ import Teacers from "@/assets/Teachers.png";
 
 const StudentView: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // “id” comes from :id in the route
+  const navigate = useNavigate();
 
   // fetch student by id or use dummy data
   const student = {
@@ -74,7 +75,7 @@ const StudentView: React.FC = () => {
           <ProgressGraph />
         </div>
         <div className="flex flex-col gap-4">
-          <StatCard icon={storyy} label="Stories" value="200/300" onView={() => {}} />
+          <StatCard icon={storyy} label="Stories" value="200/300" onView={() => navigate(`/schooldashboard/students/${id}/stories-report`)} />
           <StatCard icon={langg} label="Languages" value="120/300" onView={() => {}} />
           <StatCard icon={Teacers} label="Literacy" value="100/300" onView={() => {}} />
         </div>
