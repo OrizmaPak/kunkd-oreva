@@ -56,8 +56,8 @@ const links = [
   },
   {
     label: "Students",
-    href: "student",
-    route: routeBaseUrl + "/student/*",
+    href: "students",
+    route: routeBaseUrl + "/students/*",
     icon: StudentsIcon,
     hasSub: true,
   },

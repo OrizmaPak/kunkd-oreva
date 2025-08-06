@@ -23,7 +23,6 @@ import WellDoneModal from "./WellDoneModal";
 import QuizComponent from "./QuizComponent"; // Assuming you have a QuizComponent
 import QuizResultModal from "./QuizResultModal"; // Assuming you have a QuizResultModal
 import AnswerReview from "./AnswerReview"; // Assuming you have an AnswerReview component
-import { GetQuiz } from "@/api/api";
 
 export interface Page {
   id: number;
@@ -200,7 +199,6 @@ const FlipBook = React.memo(
   ))
 );
 
-console.log('GetQuiz', GetQuiz('573'))
 
 const ReadingComponent = forwardRef<ReadingHandle, ReadingComponentProps>(
   ({ book, pages, onExit, onRetake, innerCoverUrl, withIntroPages = true, onViewAnswers, onAnswersUpdate }, ref) => {

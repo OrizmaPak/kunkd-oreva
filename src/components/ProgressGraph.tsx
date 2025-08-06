@@ -67,18 +67,38 @@ const options = {
   },
 };
 
-const ProgressGraph: React.FC = () => (
-  <div className="bg-white p-6 rounded-lg shadow">
-    <div className="flex justify-between items-center mb-4">
-      <h2 className="text-lg font-medium text-gray-800">Child’s Activity</h2>
-      <label className="inline-flex items-center text-sm text-gray-600">
-        <input type="checkbox" className="form-checkbox h-4 w-4 text-green-600" />
-        <span className="ml-2">Last 1 week</span>
-      </label>
+const periods = [
+  "Last 1 week",
+  "Last 2 weeks",
+  "Last 1 month",
+  "Last 2 months",
+  "Last 6 months",
+  "Last 1 year",
+];
+
+const ProgressGraph: React.FC = () => {
+  const [period, setPeriod] = React.useState(periods[0]);
+
+  return (
+    <div className="bg-white p-6 rounded-lg border border-gray-200">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-medium text-gray-800">Child’s Activity</h2>
+
+        {/* period selector */}
+        <select
+          value={period}
+          onChange={(e) => setPeriod(e.target.value)}
+          className="border border-gray-300 rounded-md px-3 py-1 text-sm bg-white"
+        >
+          {periods.map((p) => (
+            <option key={p}>{p}</option>
+          ))}
+        </select>
+      </div>
+
+      <Line data={data} options={options} />
     </div>
-    <Line data={data} options={options} />
-  </div>
-);
+  );
+};
 
 export default ProgressGraph;
-
