@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
 import { IoFilterOutline } from "react-icons/io5";
+import notfound from "@/assets/notfound.png";
 import placeholder from "@/assets/avatar-placeholder.png"; // use a default avatar
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
@@ -9,6 +10,7 @@ const ConnectionRequests: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"pending" | "denied">("pending");
   const [search, setSearch] = useState("");
   const [sortClass, setSortClass] = useState("");
+  const [sortOpen, setSortOpen] = useState(false);
   const [showModal, setShowModal] = useState<null | "accept" | "deny">(null);
 
   const requests = Array.from({ length: 10 }, (_, i) => ({
@@ -20,11 +22,15 @@ const ConnectionRequests: React.FC = () => {
     avatar: `https://i.pravatar.cc/150?img=${i + 1}`,
   }));
 
+  const filteredRequests = sortClass
+    ? requests.filter((r) => r.class === sortClass)
+    : requests;
+
   const renderTable = () => {
-    if (requests.length === 0) {
+    if (filteredRequests.length === 0) {
       return (
         <div className="text-center py-20">
-          <img src="/no-requests.png" alt="No Requests" className="mx-auto w-40 mb-4" />
+          <img src={notfound} alt="No Requests" className="mx-auto w-40 mb-4" />
           <h3 className="font-semibold text-lg text-gray-800">No connection requests</h3>
           <p className="text-sm text-gray-500">Connection requests would appear here.</p>
         </div>
@@ -45,7 +51,7 @@ const ConnectionRequests: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {requests.map((req, i) => (
+            {filteredRequests.map((req, i) => (
               <tr key={i} className="border-t border-gray-200">
                 <td className="px-4 py-3 flex items-center gap-3">
                   <img src={req.avatar} className="w-8 h-8 rounded-full" alt="avatar" />
@@ -159,12 +165,36 @@ const ConnectionRequests: React.FC = () => {
           <div className="flex items-center gap-3">
             <SearchBar placeholder="Search here…" onChange={setSearch} />
             <div className="relative">
-              <button className="border border-gray-300 rounded-md px-3 py-1.5 text-sm flex items-center gap-2">
-                <IoFilterOutline />
+              <button
+                className="flex items-center border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
+                onClick={() => setSortOpen((s) => !s)}
+              >
                 Sort by
+                <IoFilterOutline className="ml-1" />
               </button>
-              {/* dropdown would be here */}
+
+              {sortOpen && (
+                <ul className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md border border-gray-200 z-10">
+                  {["Primary 1", "Primary 2", "Class 1", "Class 2"].map((cls) => (
+                    <li
+                      key={cls}
+                      onClick={() => {
+                        setSortClass(cls);
+                        setSortOpen(false);
+                      }}
+                      className="px-4 py-2 hover:bg-gray-100 text-sm cursor-pointer"
+                    >
+                      {cls}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
+            {sortClass && (
+              <span className="text-gray-600 text-sm italic ml-2">
+                Filtering class: {sortClass}
+              </span>
+            )}
           </div>
         </div>
 
