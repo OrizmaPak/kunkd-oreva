@@ -9,6 +9,7 @@ const ConnectionRequests: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"pending" | "denied">("pending");
   const [search, setSearch] = useState("");
   const [sortClass, setSortClass] = useState("");
+  const [showModal, setShowModal] = useState<null | "accept" | "deny">(null);
 
   const requests = Array.from({ length: 10 }, (_, i) => ({
     name: "Jaydon Korsgaard",
@@ -56,8 +57,18 @@ const ConnectionRequests: React.FC = () => {
                 {activeTab === "denied" && <td className="px-4 py-3">{req.dateRejected}</td>}
                 {activeTab === "pending" && (
                   <td className="px-4 py-3 text-right space-x-4">
-                    <button className="text-black font-bold hover:underline">Deny</button>
-                    <button className="text-green-500 font-bold  hover:underline">Accept</button>
+                    <button
+                      className="text-grey-500 hover:underline cursor-pointer font-semibold "
+                      onClick={() => setShowModal("deny")}
+                    >
+                      Deny
+                    </button>
+                    <button
+                      className="text-green-500 hover:underline cursor-pointer font-semibold"
+                      onClick={() => setShowModal("accept")}
+                    >
+                      Accept
+                    </button>
                   </td>
                 )}
               </tr>
@@ -66,6 +77,56 @@ const ConnectionRequests: React.FC = () => {
         </table>
         <div className="mt-6">
           <Pagination currentPage={1} totalPages={30} onPageChange={() => {}} />
+        </div>
+      </div>
+    );
+  };
+
+  // 1. Modal Component
+  const ConfirmationModal = ({
+    type,
+    onConfirm,
+    onCancel,
+  }: {
+    type: "accept" | "deny";
+    onConfirm: () => void;
+    onCancel: () => void;
+  }) => {
+    const isAccept = type === "accept";
+    return (
+      <div className="fixed -top-6 inset-0 bg-black bg-opacity-20 flex items-center h-screen justify-center z-50">
+        <div className="bg-white rounded-3xl w-full max-w-[400px] text-center shadow-lg overflow-hidden">
+          {/* Header */}
+          <div className="bg-[#A7CD3A] py-3 px-3">
+            <h3 className="text-base font-semibold text-white text-left">
+              {isAccept ? "Accept Request" : "Deny Request"}
+            </h3>
+          </div>
+
+          {/* Message */}
+          <div className="p-5 space-y-6">
+            <p className="text-sm text-gray-700">
+              Are you sure you want to {isAccept ? "accept" : "deny"} this connection request?
+            </p>
+
+            {/* Buttons */}
+            <div className="flex justify-center gap-4 font-semibold">
+              <button
+                className="px-4 py-2 rounded-full border border-gray-300 text-gray-700 bg-white"
+                onClick={onCancel}
+              >
+                Cancel
+              </button>
+              <button
+                className={`px-4 py-2 rounded-full text-white ${
+                  isAccept ? "bg-[#A7CD3A]" : "bg-[#A7CD3A]"
+                }`}
+                onClick={onConfirm}
+              >
+                {isAccept ? "Yes, accept request" : "Yes, deny request"}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -112,6 +173,17 @@ const ConnectionRequests: React.FC = () => {
           {renderTable()}
         </div>
       </div>
+
+      {showModal && (
+        <ConfirmationModal
+          type={showModal}
+          onConfirm={() => {
+            console.log(`${showModal} request confirmed`);
+            setShowModal(null);
+          }}
+          onCancel={() => setShowModal(null)}
+        />
+      )}
     </div>
   );
 };
