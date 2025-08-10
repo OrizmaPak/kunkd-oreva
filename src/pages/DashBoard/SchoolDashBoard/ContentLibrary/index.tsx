@@ -754,7 +754,7 @@ const ContentLibrary: React.FC = () => {
 
       {/* Tabs */}
       <LayoutGroup>
-        <div className="sticky top-[-50px] flex gap-3 mb-6 flex-wrap mt-[52px] z-[1000]">
+        <div className="sticky top-[-30px] flex gap-3 mb-6 flex-wrap mt-[52px] z-[1000]">
           {tabsConfig.map((tab, idx) => (
             <motion.button
               key={tab.label}

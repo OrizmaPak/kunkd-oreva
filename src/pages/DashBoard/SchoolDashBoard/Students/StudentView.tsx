@@ -11,7 +11,7 @@ import storyy from "@/assets/storyy.png";
 import langg from "@/assets/langg.png";
 import Teacers from "@/assets/Teachers.png";
 
-const StudentView: React.FC = () => {
+const StudentView: React.FC<{ crumb?: boolean }> = ({ crumb = true }) => {
   const { id } = useParams<{ id: string }>(); // “id” comes from :id in the route
   const navigate = useNavigate();
 
@@ -31,9 +31,9 @@ const StudentView: React.FC = () => {
   return (
     <div className="space-y-8 pb-8 px-4 bg-transparent min-h-screen">
       {/* Breadcrumb */}
-      <nav className="text-sm text-gray-600">
+      {crumb && <nav className="text-sm text-gray-600">
         <span className="cursor-pointer hover:underline">Student</span> &gt; <span className="font-medium text-gray-900">View</span>
-      </nav>
+      </nav>}
 
       <h1 className="text-xl font-semibold relative -top-4 text-gray-900">
           Student info

@@ -445,6 +445,7 @@ function App() {
                       element={<StudentProfile />}
                     ></Route>
                   </Route>
+                  <Route path="progress" element={<StudentView crumb={false} />}></Route>
                   <Route path="classes" element={<Classes />}></Route>
                   {/* <Route path="request" element={<SchoolRquest />}></Route> */}
                   <Route path="request" element={<ConnectionRequests />}></Route>

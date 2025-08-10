@@ -12,6 +12,8 @@ const ConnectionRequests: React.FC = () => {
   const [sortClass, setSortClass] = useState("");
   const [sortOpen, setSortOpen] = useState(false);
   const [showModal, setShowModal] = useState<null | "accept" | "deny">(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 7;
 
   const requests = Array.from({ length: 10 }, (_, i) => ({
     name: "Jaydon Korsgaard",
@@ -22,12 +24,19 @@ const ConnectionRequests: React.FC = () => {
     avatar: `https://i.pravatar.cc/150?img=${i + 1}`,
   }));
 
-  const filteredRequests = sortClass
+  const filtered = sortClass
     ? requests.filter((r) => r.class === sortClass)
     : requests;
 
+  const totalPages = Math.ceil(filtered.length / pageSize);
+
+  const pagedRequests = filtered.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
   const renderTable = () => {
-    if (filteredRequests.length === 0) {
+    if (pagedRequests.length === 0) {
       return (
         <div className="text-center py-20">
           <img src={notfound} alt="No Requests" className="mx-auto w-40 mb-4" />
@@ -51,7 +60,7 @@ const ConnectionRequests: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredRequests.map((req, i) => (
+            {pagedRequests.map((req, i) => (
               <tr key={i} className="border-t border-gray-200">
                 <td className="px-4 py-3 flex items-center gap-3">
                   <img src={req.avatar} className="w-8 h-8 rounded-full" alt="avatar" />
@@ -82,7 +91,14 @@ const ConnectionRequests: React.FC = () => {
           </tbody>
         </table>
         <div className="mt-6">
-          <Pagination currentPage={1} totalPages={30} onPageChange={() => {}} />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          />
         </div>
       </div>
     );
@@ -141,7 +157,7 @@ const ConnectionRequests: React.FC = () => {
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-gray-900">Requests <span className="ml-2 bg-[#CDE6B5] text-xs text-[#4B6B10] px-2 py-1 rounded-full">7</span></h1>
+        <h1 className="text-lg font-semibold text-gray-900">Requests <span className="ml-2 bg-[#CDE6B5] text-xs text-[#4B6B10] px-2 py-1 rounded-full">{requests.length}</span></h1>
       </div>
 
       <div className="bg-white border border-gray-200 rounded-xl">
@@ -149,13 +165,19 @@ const ConnectionRequests: React.FC = () => {
         <div className="flex flex-wrap justify-between items-center px-4 py-3 border-b border-gray-200 gap-3">
           <div className="flex space-x-0">
             <button
-              onClick={() => setActiveTab("pending")}
+              onClick={() => {
+                setActiveTab("pending");
+                setCurrentPage(1);
+              }}
               className={`px-4 py-1.5 rounded-md text-sm rounded-r-none font-medium ${activeTab === "pending" ? "bg-[#A7CD3A] text-white" : "text-gray-600 bg-gray-100"}`}
             >
               Pending
             </button>
             <button
-              onClick={() => setActiveTab("denied")}
+              onClick={() => {
+                setActiveTab("denied");
+                setCurrentPage(1);
+              }}
               className={`px-4 py-1.5 rounded-md text-sm rounded-l-none font-medium ${activeTab === "denied" ? "bg-[#A7CD3A] text-white" : "text-gray-600 bg-gray-100"}`}
             >
               Denied
@@ -163,7 +185,7 @@ const ConnectionRequests: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <SearchBar placeholder="Search here…" onChange={setSearch} />
+            <SearchBar value="" placeholder="Search here…" onChange={setSearch} />
             <div className="relative">
               <button
                 className="flex items-center border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"

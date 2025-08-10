@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
-import { getUserState } from "@/store/authStore";
 
 import useStore from "@/store/index";
+import { getUserState } from "@/store/authStore";
 import { notifications } from "@mantine/notifications";
 import { useEffect, useState } from "react";
 import { FaRegCopy } from "react-icons/fa6";

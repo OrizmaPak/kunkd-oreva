@@ -159,24 +159,25 @@ const StudentStoriesReport: React.FC = () => {
           <h2 className="font-inter font-semibold text-[20px] leading-[24.48px] text-gray-900 mb-7">
             Stories Quiz Report
           </h2>
+          {/* @ts-ignore */}
           <Bar
             data={quizData}
             options={{
-              plugins: { legend: { display: false } },
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  suggestedMax: 90,
-                  ticks: {
-                    stepSize: 30, // Set step size to 30
-                  },
-                  grid: { color: "#A8C5DA", lineWidth: 0.14, borderDash: [8, 4] }, // Widely spaced and very thin lines
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        suggestedMax: 90,
+                        ticks: {
+                            stepSize: 30, // Set step size to 30
+                        },
+                        grid: { color: "#A8C5DA", lineWidth: 0.14, borderDash: [8, 4] }, // Widely spaced and very thin lines
+                    },
+                    x: { grid: { display: false } },
                 },
-                x: { grid: { display: false } },
-              },
-              barThickness: 24, // Adjusted bar thickness
+                barThickness: 24, // Adjusted bar thickness
             }}
-          />
+            />
         </div>
       </div>
 

@@ -8,7 +8,6 @@ import {
   useUserNameChecker,
 } from "@/api/queries";
 import AddAvatarIcon from "@/assets/AddAvatarIcon.svg";
-// import YaJump from "@/assets/yaa24.png";
 import LessDOwnIcon from "@/assets/backIcon.png";
 import YajSucces from "@/assets/yaacongrat24.png";
 import InputFormat from "@/common/InputFormat";
@@ -18,24 +17,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Chip, Loader, Skeleton, TextInput } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
-import { useEffect } from "react";
-// import { Combobox, TextInput, useCombobox } from "@mantine/core";
-// import GroupIcon from "@/assets/groupIcons.svg";
 import {
   STEP_1,
   STEP_2,
   STEP_3,
   STEP_4,
   STEP_5,
-  // STEP_6,
 } from "@/utils/constants";
 import { useNavigate } from "react-router-dom";
-
 import { MdClose } from "react-icons/md";
 import { selectAvatarType } from "./SelectProfile";
 import moengage from "@moengage/web-sdk";
@@ -46,10 +40,19 @@ import twitter from "@/assets/twitter.svg";
 import Ema from "@/assets/ema.png";
 import { useDebouncedValue } from "@mantine/hooks";
 
-export type avatarType = {
-  name: string;
-  image: string;
-};
+/** ───────────────────────────────────────────────────────────────────────
+ * Layout notes (NO SCROLL):
+ * - Header: 64px, Footer: 64px
+ * - Content wrapper uses min-h-[calc(100vh-128px)] and overflow-hidden
+ * - Step sections are grid/flex to keep everything inside the viewport
+ * - Avatar step uses pagination (no vertical scrolling)
+ * ─────────────────────────────────────────────────────────────────────── */
+
+export type avatarType = { name: string; image: string };
+
+const HEADER_H = 64;
+const FOOTER_H = 64;
+
 const ChildProfileSetUp = ({
   setChildProfile,
 }: {
@@ -63,167 +66,156 @@ const ChildProfileSetUp = ({
 
   const navigate = useNavigate();
   const openInNewTab = (url: string) => {
-    const newWindow: Window | null = window.open(url, "_blank");
-    if (newWindow) {
-      newWindow.opener = null; // Ensure no access to the current window
-    }
+    const win = window.open(url, "_blank");
+    if (win) win.opener = null;
   };
+
+  const progress = useMemo(() => {
+    const map = { [STEP_1]: 10, [STEP_2]: 40, [STEP_3]: 65, [STEP_4]: 85, [STEP_5]: 100 };
+    return map[currentStep as keyof typeof map] ?? 10;
+  }, [currentStep]);
+
   return (
-    <div
-      // style={{
-      //   backgroundImage: `url(${GroupIcon})`,
-      //   backgroundRepeat: "no-repeat",
-      //   backgroundSize: "contain",
-      //   backgroundPosition: "center",
-      // }}
-      className=" h-screen w-full max-w-[1440px]  mx-auto flex flex-col "
-    >
-      <div className="my-3 px-8">
-        <img src={Logo} alt="" />
-      </div>
-      <div className="flex flex-grow justify-center mt-10  ">
-        <div className=" w-full ">
-          {currentStep === STEP_1 && (
-            <WelcomeModal
-              onContinue={() => {
-                setCurrentStep(STEP_2);
-              }}
-            />
-          )}
-          {currentStep === STEP_2 && (
-            <ChildNameModal
-              onContinue={() => setCurrentStep(STEP_3)}
-              goBack={() => setCurrentStep(currentStep - 1)}
-              showGoBackIcon={true}
-              setName={setName}
-              userName={userName}
-              name={name}
-              setUserName={setUserName}
-            />
-          )}
-
-          {/* {currentStep === STEP_3 && (
-            <ChildSchoolNameModal
-              onContinue={() => setCurrentStep(STEP_4)}
-              goBack={() => setCurrentStep(currentStep - 1)}
-              showGoBackIcon={true}
-              setSchoolName={setSchoolName}
-              schoolName={schoolName}
-              name={name}
-              setUserName={setUserName}
-            />
-          )} */}
-          {currentStep === STEP_3 && (
-            <ChildAgeModal
-              onContinue={() => setCurrentStep(STEP_4)}
-              goBack={() => setCurrentStep(currentStep - 1)}
-              setAge={setAge}
-            />
-          )}
-          {currentStep === STEP_4 && (
-            <SelectAvatar
-              setChildProfile={setChildProfile}
-              onContinue={() => setCurrentStep(STEP_5)}
-              goBack={() => setCurrentStep(currentStep - 1)}
-              age={age}
-              schoolName={schoolName}
-              userName={userName}
-              name={name}
-              setAge={setAge}
-              setName={setName}
-              setSchoolName={setSchoolName}
-              setUserName={setUserName}
-            />
-          )}
-          {currentStep === STEP_5 && (
-            <WellDoneModal onContinue={() => navigate("/parent")} />
-          )}
+    <div className="min-h-screen w-full max-w-[1440px] mx-auto flex flex-col bg-gradient-to-b from-[#F7FBEF] via-white to-[#F7FBEF]">
+      {/* Header (fixed height) */}
+      <div
+        className="flex items-center justify-between px-6 sm:px-10"
+        style={{ height: HEADER_H }}
+      >
+        <img src={Logo} alt="Kunda Kids" className="h-8 sm:h-10" />
+        <div className="hidden sm:flex items-center gap-2 text-xs text-gray-500">
+          <span className="font-medium">Create Child Profile</span>
         </div>
       </div>
-      <div>
-        <div className="flex justify-between items-center gap- text3 font-semibold py-3 px-8">
-          <div>
-            <p className="text-[#98A2B3] text2">
-              {" "}
-              &copy; Copyright 2023 Kunda Kids, All rights reserved.
-            </p>
-          </div>
 
-          <div className="flex items-center justify-between w-[150px] cursor-pointer">
-            <button
-              onClick={() => {
-                openInNewTab("https://m.facebook.com/kundakids/");
-              }}
-            >
-              <img
-                loading="lazy"
-                src={facebook}
-                alt="facebooklogo"
-                className="facebookLogo cursor-pointer  w-[20px]"
-              />
-            </button>
-            <button
-              onClick={() => {
-                openInNewTab(
-                  " https://instagram.com/kundakids?igshid=NzZlODBkYWE4Ng=="
-                );
-              }}
-            >
-              <img
-                loading="lazy"
-                src={insta}
-                alt="instalogo"
-                className="instaLogo cursor-pointe  w-[24px]r"
-              />
-            </button>
-            <button
-              onClick={() => {
-                openInNewTab(" https://twitter.com/kundakids?lang=en");
-              }}
-            >
-              <img
-                loading="lazy"
-                src={twitter}
-                alt="twitterlogo"
-                className="twitterLogo cursor-pointer w-[24px]"
-              />
-            </button>
+      {/* Progress/Stepper */}
+      <div className="px-6 sm:px-10">
+        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-[#9FC43E] transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+        <div className="mt-2 flex justify-between text-[11px] sm:text-xs text-gray-500">
+          <span>Welcome</span>
+          <span>Name</span>
+          <span>Age</span>
+          <span>Avatar</span>
+          <span>Done</span>
+        </div>
+      </div>
+
+      {/* Content area (no scroll) */}
+      <div
+        className="px-4 sm:px-8 py-4 sm:py-6 overflow-hidden"
+        style={{ minHeight: `calc(100vh - ${HEADER_H + FOOTER_H + 40 + 32}px)` }} // header + footer + progress + margins
+      >
+        <div className="w-full h-full max-w-[1100px] mx-auto">
+          <div className="w-full h-full rounded-[28px] border border-white/60 bg-white/70 backdrop-blur-md shadow-xl p-4 sm:p-8 flex">
+            {/* Each step ensures content fits inside this box without scrolling */}
+            <div className="flex-1 h-full">
+              {currentStep === STEP_1 && (
+                <WelcomeModal onContinue={() => setCurrentStep(STEP_2)} />
+              )}
+
+              {currentStep === STEP_2 && (
+                <ChildNameModal
+                  onContinue={() => setCurrentStep(STEP_3)}
+                  goBack={() => setCurrentStep(currentStep - 1)}
+                  showGoBackIcon={true}
+                  setName={setName}
+                  userName={userName}
+                  name={name}
+                  setUserName={setUserName}
+                />
+              )}
+
+              {currentStep === STEP_3 && (
+                <ChildAgeModal
+                  onContinue={() => setCurrentStep(STEP_4)}
+                  goBack={() => setCurrentStep(currentStep - 1)}
+                  setAge={setAge}
+                />
+              )}
+
+              {currentStep === STEP_4 && (
+                <SelectAvatar
+                  setChildProfile={setChildProfile}
+                  onContinue={() => setCurrentStep(STEP_5)}
+                  goBack={() => setCurrentStep(currentStep - 1)}
+                  age={age}
+                  schoolName={schoolName}
+                  userName={userName}
+                  name={name}
+                  setAge={setAge}
+                  setName={setName}
+                  setSchoolName={setSchoolName}
+                  setUserName={setUserName}
+                />
+              )}
+
+              {currentStep === STEP_5 && (
+                <WellDoneModal onContinue={() => navigate("/parent")} />
+              )}
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Footer (fixed height) */}
+      <footer
+        className="mt-auto border-t bg-white/60 backdrop-blur-sm"
+        style={{ height: FOOTER_H }}
+      >
+        <div className="h-full flex justify-between items-center text-sm text-gray-500 px-6 sm:px-10">
+          <p>© {new Date().getFullYear()} Kunda Kids. All rights reserved.</p>
+          <div className="flex items-center gap-4">
+            <button onClick={() => openInNewTab("https://m.facebook.com/kundakids/")} aria-label="Facebook" className="hover:opacity-80">
+              <img src={facebook} alt="facebook" className="w-5 h-5" />
+            </button>
+            <button onClick={() => openInNewTab("https://instagram.com/kundakids?igshid=NzZlODBkYWE4Ng==")} aria-label="Instagram" className="hover:opacity-80">
+              <img src={insta} alt="instagram" className="w-6 h-6" />
+            </button>
+            <button onClick={() => openInNewTab("https://twitter.com/kundakids?lang=en")} aria-label="Twitter/X" className="hover:opacity-80">
+              <img src={twitter} alt="twitter" className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
 
 export default ChildProfileSetUp;
 
+/* ───────────────── STEP 1: Welcome (centered, no scroll) ─────────────── */
 export const WelcomeModal = ({ onContinue }: { onContinue: () => void }) => {
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className=""
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35 }}
+      className="w-full h-full flex flex-col items-center justify-center"
     >
-      <div className="mt-20">
-        <h1 className="text-center font-bold text-[35px] font-Recoleta ">
+      <div className="text-center">
+        <h1 className="font-bold text-[28px] sm:text-[34px] font-Recoleta text-gray-900">
           Welcome to Kunda Kids
         </h1>
-        <p className="text-center">
-          To begin, create a profile for your child.
-        </p>
+        <p className="text-gray-600 mt-2">To begin, create a profile for your child.</p>
       </div>
-      <div className="flex justify-center items-center py-10">
-        <button onClick={onContinue} className=" text-center">
-          <img loading="lazy" src={AddAvatarIcon} alt="avatar" />
-          <p className="py-5">Add Profile</p>
-        </button>
-      </div>
+
+      <button
+        onClick={onContinue}
+        className="mt-8 group rounded-2xl border-2 border-dashed border-[#B7D487] bg-[#F6FAEC] hover:bg-[#F2F8E3] px-6 py-5 transition"
+      >
+        <img src={AddAvatarIcon} alt="Add profile" className="mx-auto" />
+        <p className="pt-4 font-medium text-[#2F2F2F] group-hover:underline">Add Profile</p>
+      </button>
     </motion.div>
   );
 };
 
+/* ───────────── STEP 2: Name + Username (2-column, fits screen) ───────── */
 export const ChildNameModal = ({
   onContinue,
   goBack,
@@ -248,164 +240,115 @@ export const ChildNameModal = ({
   showCancelBtn?: boolean;
 }) => {
   const { mutate } = useGetSuggestUserName();
-  const [suggestions, setSuggestion] = useState<[]>();
-  const handleUsernameSuggestion = (name: string) => {
-    console.log("name", name);
-    mutate(
-      {
-        name,
-      },
+  const [suggestions, setSuggestion] = useState<string[] | undefined>();
+  const [debounced] = useDebouncedValue(userName, 250);
+  const { data, isError, isLoading, isInitialLoading } = useUserNameChecker(debounced);
+  const ref = useRef<HTMLInputElement | null>(null);
 
+  const handleUsernameSuggestion = (childName: string) => {
+    if (!childName?.trim()) return;
+    mutate(
+      { name: childName },
       {
         onSuccess(data) {
           setSuggestion(data?.data?.data?.suggestions);
         },
-
         onError(err) {
-          notifications.show({
-            title: `Notification`,
-            message: getApiErrorMessage(err),
-          });
+          notifications.show({ title: "Notification", message: getApiErrorMessage(err) });
         },
       }
     );
   };
-  // const suggestions = datta?.data?.data?.suggestions;
-  const ref = useRef(null);
-  const [debounced] = useDebouncedValue(userName, 200);
-  const { data, isError, isLoading, isInitialLoading } =
-    useUserNameChecker(debounced);
 
-  console.log(
-    {
-      isLoading,
-      isInitialLoading,
-      isError,
-      data,
-      isErrorCheck: data && !isLoading && isError,
-    },
-    "user name --- "
-  );
+  const usernameTaken = !isLoading && isError;
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className="  "
+    <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}
+      className="w-full h-full"
     >
-      <div className="px-8">
-        <span></span>
-        {showGoBackIcon && (
-          <p
-            onClick={() => {
-              goBack();
-              if (cancel) cancel();
-            }}
-            className=""
-          >
-            <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
-          </p>
-        )}
-
-        <span>
-          {showCancelBtn && (
-            <MdClose onClick={close} size={35} className=" cursor-pointer" />
-          )}
-        </span>
-      </div>
-
-      <div className="px-14">
-        <div className="flex justify-center items-center p-4">
-          <img loading="lazy" src={Ema} alt="jump" />
+      {/* 2-col layout that fits height */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+        {/* Left: Art + Back */}
+        <div className="flex flex-col h-full">
+          <div className="flex items-start justify-between">
+            {showGoBackIcon ? (
+              <button onClick={() => { goBack(); if (cancel) cancel(); }} aria-label="Go back">
+                <img src={LessDOwnIcon} alt="Back" />
+              </button>
+            ) : <span />}
+            {showCancelBtn && (
+              <MdClose onClick={close} size={28} className="cursor-pointer text-gray-500" />
+            )}
+          </div>
+          <div className="flex-1 flex items-center justify-center">
+            <img src={Ema} alt="illustration" className="max-h-[280px]" />
+          </div>
         </div>
-        <div>
-          <h1 className="text-center font-bold   font-Recoleta text30">
+
+        {/* Right: Form */}
+        <div className="flex flex-col justify-center">
+          <h1 className="font-bold font-Recoleta text-[24px] sm:text-[28px] text-gray-900 mb-1">
             What is your child’s name?
           </h1>
-          <p className="text-center text2 font-medium">
-            Enter the child’s name below
-          </p>
-        </div>
+          <p className="text-gray-600 mb-6">Enter the child’s name below</p>
 
-        <div>
-          <div className="max-w-[400px] mx-auto mt-10">
-            <p className="my-5">
-              <label htmlFor="name" className="text1 font-medium">
-                Name
-              </label>
-              <input
-                value={name}
-                className="border rounded-full py-3  px-4 items-center gap-2 mt-1  border-[#F3DAFF] block  w-full  h-full flex-1 text-black text-[14px]  focus:outline-none"
-                onBlur={() => handleUsernameSuggestion(name)}
-                type="text"
-                placeholder="Enter your child's name"
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
-              />
-            </p>
-            <p className="mb-8 suggestion-wrapper">
-              <label htmlFor="name" className="text1 font-medium">
+          <div className="max-w-[460px]">
+            <label htmlFor="child-name" className="block text-sm font-medium text-gray-700">
+              Name
+            </label>
+            <input
+              id="child-name"
+              value={name}
+              className="mt-1 border rounded-full py-3 px-4 w-full text-[14px] border-[#F3DAFF] focus:outline-none focus:ring-2 focus:ring-[#9FC43E]"
+              onBlur={() => handleUsernameSuggestion(name)}
+              type="text"
+              placeholder="Enter your child's name"
+              onChange={(e) => setName(e.target.value)}
+            />
+
+            <div className="mt-5">
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
                 Username
               </label>
+              <TextInput
+                id="username"
+                placeholder="Choose one or enter your desired username."
+                onChange={(e) => setUserName(e.target.value)}
+                value={userName}
+                ref={ref}
+                rightSection={(isInitialLoading || isLoading) ? <Loader size="xs" /> : null}
+                error={usernameTaken ? "Username already exists" : undefined}
+              />
 
-              {
-                <TextInput
-                  id="useNameSuggestion"
-                  placeholder="Choose one or enter your desired username."
-                  name="user name"
-                  onChange={(e) => setUserName(e.target.value)}
-                  value={userName}
-                  ref={ref}
-                  list="user-name-suggestion"
-                  // autoComplete="false"
-                  rightSection={
-                    isInitialLoading && isLoading ? <Loader size="xs" /> : null
-                  }
-                  error={!isLoading && isError && "user name already exist"}
-                />
-              }
-              {
-                <Chip.Group
-                  onChange={(value) => {
-                    setUserName(value as string);
-                  }}
-                  value={userName}
-                >
-                  <div className="flex my-2  flex-wrap gap-2 gap-y-3">
-                    {suggestions?.map((suggest: string) => (
-                      <Chip width={"auto"} key={suggest} value={suggest}>
-                        {suggest}
-                      </Chip>
-                    ))}
-                  </div>
-                </Chip.Group>
-              }
-
-              {suggestions && (
-                <datalist id="user-name-suggestion" className="w-full">
-                  {suggestions?.map((suggest: string) => (
-                    <option key={suggest} value={suggest} className="w-full">
-                      {suggest}
-                    </option>
-                  ))}
-                </datalist>
+              {suggestions && suggestions.length > 0 && (
+                <>
+                  <Chip.Group onChange={(value) => setUserName(value as string)} value={userName}>
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {suggestions.map((s) => (
+                        <Chip key={s} value={s}>{s}</Chip>
+                      ))}
+                    </div>
+                  </Chip.Group>
+                  <datalist id="user-name-suggestion">
+                    {suggestions.map((s) => <option key={s} value={s} />)}
+                  </datalist>
+                </>
               )}
-              <p className="text3 my-1">
-                Note: the username will be display on the leaderboard.
+
+              <p className="text-[12px] text-gray-500 mt-2">
+                Note: the username will be displayed on the leaderboard.
               </p>
-            </p>
-            <p className="mb-8">
+            </div>
+
+            <div className="mt-6">
               <Button
-                disable={isError || isLoading || name == ""}
-                type="reset"
+                disable={usernameTaken || isLoading || name.trim() === ""}
+                type="button"
                 onClick={onContinue}
               >
                 Continue
               </Button>
-            </p>
+            </div>
           </div>
         </div>
       </div>
@@ -413,106 +356,7 @@ export const ChildNameModal = ({
   );
 };
 
-export const ChildSchoolNameModal = ({
-  onContinue,
-  goBack,
-  showGoBackIcon,
-  close,
-  schoolName,
-  setSchoolName,
-  name,
-  showCancelBtn,
-}: {
-  onContinue: () => void;
-  goBack: () => void;
-  showGoBackIcon: boolean;
-  close?: () => void;
-  name: string;
-  setUserName: (val: string) => void;
-  showCancelBtn?: boolean;
-  schoolName: string;
-  setSchoolName: (val: string) => void;
-}) => {
-  const schema: ZodType<Pick<FormData, "school_name">> = z.object({
-    school_name: z.string().optional(),
-  });
-
-  const {
-    register,
-    handleSubmit,
-    // formState: { errors },
-  } = useForm<FormData>({ resolver: zodResolver(schema) });
-
-  const submitData = async (data: FormData) => {
-    setSchoolName(data.school_name as string);
-    onContinue();
-  };
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className="  rounded-3xl   "
-    >
-      <div className="flex px-8 gap-4 justify-between items-center">
-        {showGoBackIcon && (
-          <p onClick={goBack} className="">
-            <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
-          </p>
-        )}
-      </div>
-      <div>
-        <div className="flex justify-center items-center p-4">
-          <img loading="lazy" src={Ema} alt="jump" />
-        </div>
-        <h1 className="text-center font-bold   font-Hanken text30">
-          {`  What is ${name}’s school name?`}
-        </h1>
-        <span>
-          {showCancelBtn && (
-            <MdClose onClick={close} size={35} className=" cursor-pointer" />
-          )}
-        </span>
-      </div>
-      <div className="px-14">
-        <div>
-          <p className="text-center text2 font-medium">
-            {`Enter ${name}’s school name below.`}
-          </p>
-        </div>
-
-        <div className="max-w-[400px] mx-auto mt-20">
-          <form onSubmit={handleSubmit(submitData)}>
-            <p className="my-5">
-              <label htmlFor="name" className="text1 font-medium">
-                School Name (Optional)
-              </label>
-              <InputFormat
-                value={schoolName}
-                reg={register("school_name")}
-                type="text"
-                placeholder="Enter Your Name"
-              />
-              <p className="text2">
-                You can win a gift for your school if you provide this
-                information.
-              </p>
-            </p>
-
-            <p className="mb-8 flex gap-3">
-              <Button onClick={onContinue} varient="outlined">
-                <strong className="text-[#8530C1]"> Skip</strong>
-              </Button>
-              <Button type="submit">Continue</Button>
-            </p>
-          </form>
-        </div>
-      </div>
-    </motion.div>
-  );
-};
-
+/* ───────────── STEP 3: Age (2-column, fits screen) ───────────── */
 export const ChildAgeModal = ({
   onContinue,
   goBack,
@@ -527,71 +371,49 @@ export const ChildAgeModal = ({
   showCancelBtn?: boolean;
 }) => {
   const schema: ZodType<FormData> = z.object({
-    dob: z
-      .string()
-      .min(4, { message: "Invalid DOB" })
-      .max(20, { message: "Invalid DOB" }),
+    dob: z.string().min(4, { message: "Invalid DOB" }).max(20, { message: "Invalid DOB" }),
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({ resolver: zodResolver(schema) });
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({ resolver: zodResolver(schema) });
+  const submitData = async (data: FormData) => { setAge(data?.dob as string); onContinue(); };
+  const today = useMemo(() => new Date().toISOString().split("T")[0], []);
 
-  const submitData = async (data: FormData) => {
-    onContinue();
-    setAge(data?.dob as string);
-  };
-  // const [isKid, setIsKid] = useState(false)
-  const today = new Date().toISOString().split("T")[0];
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className="   "
+    <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}
+      className="w-full h-full"
     >
-      <div className="flex px-10 justify-between items-center">
-        <p onClick={goBack} className="">
-          <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
-        </p>
-
-        <span>
-          {showCancelBtn && (
-            <MdClose onClick={close} size={35} className=" cursor-pointer" />
-          )}
-        </span>
-      </div>
-      <div className="px-2">
-        <div>
-          <div className="flex justify-center items-center p-4">
-            <img loading="lazy" src={Ema} alt="jump" />
-            {/* {isKid? <Skeleton height={150} width={100}></Skeleton>:<img loading="lazy" src={YaJump} alt="jump" onLoad={()=>setIsKid(false)} />} */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+        {/* Left: Back + art */}
+        <div className="flex flex-col h-full">
+          <div className="flex items-start justify-between">
+            <button onClick={goBack} aria-label="Go back">
+              <img src={LessDOwnIcon} alt="Back" />
+            </button>
+            {showCancelBtn && <MdClose onClick={close} size={28} className="cursor-pointer text-gray-500" />}
           </div>
-          <h1 className="text-center font-bold text30 font-Hanken">
-            What is your child’s age?
-          </h1>
-          <p className="text-center text1">
-            We will try to customize the app for your child’s age.
-          </p>
+          <div className="flex-1 flex items-center justify-center">
+            <img src={Ema} alt="illustration" className="max-h-[280px]" />
+          </div>
         </div>
 
-        <div className="max-w-[400px] mx-auto mt-20">
-          <form onSubmit={handleSubmit(submitData)}>
-            <p className="mb-12">
-              <InputFormat
-                reg={register("dob")}
-                errorMsg={errors.dob?.message}
-                type="date"
-                placeholder="DOB"
-                dateMax={today}
-              />
-            </p>
-            <p className="mb-8">
+        {/* Right: Form */}
+        <div className="flex flex-col justify-center">
+          <h1 className="font-bold font-Recoleta text-[24px] sm:text-[28px] text-gray-900 mb-1">
+            What is your child’s age?
+          </h1>
+          <p className="text-gray-600 mb-6">We’ll customize the app for your child’s age.</p>
+
+          <form onSubmit={handleSubmit(submitData)} className="max-w-[460px]">
+            <InputFormat
+              reg={register("dob")}
+              errorMsg={errors.dob?.message}
+              type="date"
+              placeholder="DOB"
+              dateMax={today}
+            />
+            <div className="mt-6">
               <Button type="submit">Continue</Button>
-            </p>
+            </div>
           </form>
         </div>
       </div>
@@ -599,6 +421,7 @@ export const ChildAgeModal = ({
   );
 };
 
+/* ───────── STEP 4: Select Avatar (PAGINATED, no vertical scroll) ─────── */
 export const SelectAvatar = ({
   setChildProfile,
   onContinue,
@@ -609,7 +432,6 @@ export const SelectAvatar = ({
   setUserName,
   setAge,
   setSchoolName,
-  // arrayAvatar,
   name,
   age,
   close,
@@ -618,13 +440,11 @@ export const SelectAvatar = ({
   onContinue: () => void;
   goBack: () => void;
   setChildProfile?: (val: string) => void;
-  // arrayAvatar: avatarType[];
   userName: string;
   setName: (val: string) => void;
   setUserName: (val: string) => void;
   setAge: (val: string) => void;
   setSchoolName: (val: string) => void;
-
   schoolName: string;
   age: string;
   name: string;
@@ -632,32 +452,42 @@ export const SelectAvatar = ({
   showCancelBtn?: boolean;
 }) => {
   const [selected, setSelected] = useState(0);
+  const [page, setPage] = useState(0);
   const { isLoading: isLoadingAvatar, data, error } = useGetAvatars();
   const [user] = useStore(getUserState);
 
-  // const arrayAvatar = data?.data.data.avatars;
-  const selectedAv = data?.data?.data?.avatars.filter(
-    (avatar: selectAvatarType) => avatar?.id === selected
-  )[0];
+  // decide how many avatars per page so grid always fits the box
+  // 2 rows x N columns depending on breakpoint
+  // We'll assume 10 per page on md+ (5 cols x 2 rows), 6 per page on small (3 cols x 2 rows)
+  const [perPage, setPerPage] = useState(10);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const apply = () => setPerPage(mq.matches ? 10 : 6);
+    apply();
+    mq.addEventListener?.("change", apply);
+    return () => mq.removeEventListener?.("change", apply);
+  }, []);
+
+  const avatars: selectAvatarType[] = useMemo(() => {
+    const list = data?.data?.data?.avatars ?? [];
+    return list.slice().reverse();
+  }, [data]);
+
+  const totalPages = Math.max(1, Math.ceil(avatars.length / perPage));
+  const pageAvatars = avatars.slice(page * perPage, page * perPage + perPage);
+
+  const selectedAv = avatars.find((a) => a.id === selected);
 
   const { isLoading, mutate } = useProfle();
-  function formatTimeComponent(component: number) {
-    return component < 10 ? "0" + component : component;
-  }
-  const currentTime = new Date();
-  // Extract hours, minutes, and seconds
-  const hours = currentTime.getHours();
-  const minutes = currentTime.getMinutes();
-  const seconds = currentTime.getSeconds();
-  // Formatting the time components
-  const timeString =
-    formatTimeComponent(hours) +
-    ":" +
-    formatTimeComponent(minutes) +
-    ":" +
-    formatTimeComponent(seconds);
+
+  const timeString = useMemo(() => {
+    const n = new Date();
+    const pad = (x: number) => (x < 10 ? `0${x}` : `${x}`);
+    return `${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
+  }, []);
 
   const onSubmit = () => {
+    if (!selectedAv) return;
     mutate(
       {
         name,
@@ -667,21 +497,13 @@ export const SelectAvatar = ({
         username: userName,
         schoolname: schoolName,
       },
-
       {
-        onSuccess(data) {
-          if (setChildProfile) setChildProfile(data?.data.data.profile_id);
-
-          notifications.show({
-            title: `Notification`,
-            message: data.data.message,
-          });
+        onSuccess(resp) {
+          if (setChildProfile) setChildProfile(resp?.data?.data?.profile_id);
+          notifications.show({ title: "Notification", message: resp?.data?.message });
           sessionStorage.setItem("showJoinChallenge", "true");
-          setName("");
-          setSchoolName("");
-          setAge("");
-          setSchoolName("");
-          setUserName("");
+          setName(""); setSchoolName(""); setAge(""); setUserName("");
+
           moengage.track_event("web_add_child", {
             user_id: user?.user_id,
             child_name: name,
@@ -691,98 +513,144 @@ export const SelectAvatar = ({
 
           onContinue();
         },
-
         onError(err) {
-          notifications.show({
-            title: `Notification`,
-            message: getApiErrorMessage(err),
-          });
+          notifications.show({ title: "Notification", message: getApiErrorMessage(err) });
         },
       }
     );
   };
 
+  const next = () => setPage((p) => Math.min(p + 1, totalPages - 1));
+  const prev = () => setPage((p) => Math.max(p - 1, 0));
+
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className=" "
+    <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}
+      className="w-full h-full"
     >
       {error ? (
-        <h1>something went wrong</h1>
+        <div className="w-full h-full flex items-center justify-center">
+          <h1 className="text-red-600 font-medium">Something went wrong</h1>
+        </div>
       ) : (
-        <div>
-          <div className="flex px-10 justify-between items-center  ">
-            <p onClick={goBack} className=" ">
-              <img loading="lazy" src={LessDOwnIcon} alt="lessdownIcon" />
-            </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+          {/* Left: Title + grid (fixed rows) */}
+          <div className="flex flex-col h-full">
+            <div className="flex items-start justify-between">
+              <button onClick={goBack} aria-label="Go back">
+                <img src={LessDOwnIcon} alt="Back" />
+              </button>
+              {showCancelBtn && <MdClose onClick={close} size={28} className="cursor-pointer text-gray-500" />}
+            </div>
 
-            <span>
-              {showCancelBtn && (
-                <MdClose
-                  onClick={close}
-                  size={35}
-                  className=" cursor-pointer"
-                />
-              )}
-            </span>
-          </div>
-
-          <div className="px-14">
-            <div>
-              <h1 className="text-center font-bold  text30 font-Recoleta">
+            <div className="mt-2">
+              <h1 className="text-center font-bold font-Recoleta text-[24px] sm:text-[28px] text-gray-900">
                 Select Avatar
               </h1>
-              <p className="text-center mb-4 text2">
-                Pick an avatar you think your child might like
+              <p className="text-center text-gray-600">
+                Pick an avatar your child might like
               </p>
             </div>
-            <div className="flex justify-center items-center">
-              <div className="grid grid-cols-4 gap-x-4 gap-y-4 overflow-scroll overflow-x-hidden h-[400px]">
-                {isLoadingAvatar
-                  ? new Array(12).fill(1).map((el, index) => (
-                      <Skeleton
-                        key={index}
-                        height={80}
-                        width={80}
-                        radius={"xl"}
-                      >
-                        {el}
-                      </Skeleton>
-                    ))
-                  : data?.data?.data?.avatars
-                      ?.slice()
-                      .reverse()
-                      ?.map((avatar: selectAvatarType, index: number) => {
-                        return (
-                          <AvatarCard
-                            key={index}
-                            selected={selected}
-                            setSelected={setSelected}
-                            {...avatar}
-                          />
-                        );
-                      })}
+
+            {/* Grid: 2 rows only. No vertical scroll. */}
+            <div className="mt-4 flex-1 flex items-center justify-center">
+              <div className="w-full">
+                {isLoadingAvatar ? (
+                  <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
+                    {new Array(perPage).fill(0).map((_, i) => (
+                      <div key={i} className="rounded-2xl bg-white/70 border border-white/60 p-3 shadow">
+                        <Skeleton height={88} width={88} radius="xl" />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
+                    {pageAvatars.map((avatar) => (
+                      <AvatarTile
+                        key={avatar.id}
+                        avatar={avatar}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {/* Pager */}
+                {totalPages > 1 && (
+                  <div className="mt-4 flex items-center justify-center gap-3">
+                    <button
+                      onClick={prev}
+                      disabled={page === 0}
+                      className={`px-3 py-1 rounded-full text-sm ${
+                        page === 0 ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-[#EAF4D6] text-[#3F6212] hover:opacity-90"
+                      }`}
+                    >
+                      Prev
+                    </button>
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: totalPages }).map((_, i) => (
+                        <span
+                          key={i}
+                          className={`inline-block w-2.5 h-2.5 rounded-full ${
+                            i === page ? "bg-[#9FC43E]" : "bg-gray-300"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <button
+                      onClick={next}
+                      disabled={page === totalPages - 1}
+                      className={`px-3 py-1 rounded-full text-sm ${
+                        page === totalPages - 1 ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-[#EAF4D6] text-[#3F6212] hover:opacity-90"
+                      }`}
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
-            <div className="max-w-[400px] mx-auto">
-              <button
-                disabled={!selected}
-                onClick={onSubmit}
-                className={`p-3  ${
-                  selected ? "bg-[#782caf]" : "bg-[#d9beeb]"
-                }  rounded w-full my-4`}
-              >
-                {isLoading ? (
-                  <p className="flex justify-center items-center">
-                    <Loader color="white" size="sm" />
-                  </p>
-                ) : (
-                  <span className="text-white">Continue</span>
-                )}
-              </button>
+          </div>
+
+          {/* Right: Selection details + Continue (kept compact) */}
+          <div className="flex flex-col justify-center">
+            <div className="rounded-2xl border border-white/60 bg-white/70 p-6">
+              <h3 className="font-semibold text-gray-800 mb-2">Selected</h3>
+              {selected ? (
+                <div className="flex items-center gap-4">
+                  <img
+                    src={selectedAv?.image}
+                    alt="selected avatar"
+                    className="w-[72px] h-[72px] object-contain rounded-xl"
+                  />
+                  <div className="text-sm text-gray-600">
+                    <div><span className="font-medium">Name:</span> {name || "—"}</div>
+                    <div><span className="font-medium">Username:</span> {userName || "—"}</div>
+                    <div><span className="font-medium">Age:</span> {age || "—"}</div>
+                    <div><span className="font-medium">School:</span> {schoolName || "—"}</div>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500">Choose an avatar to continue.</p>
+              )}
+
+              <div className="mt-6">
+                <button
+                  disabled={!selected || isLoading}
+                  onClick={onSubmit}
+                  className={`w-full rounded-full py-3 text-white transition ${
+                    !selected || isLoading ? "bg-[#d9beeb] cursor-not-allowed" : "bg-[#782caf] hover:bg-[#6b27a0]"
+                  }`}
+                >
+                  {isLoading ? (
+                    <span className="flex justify-center items-center gap-2">
+                      <Loader color="white" size="sm" /> Saving…
+                    </span>
+                  ) : (
+                    "Continue"
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -791,80 +659,63 @@ export const SelectAvatar = ({
   );
 };
 
-const AvatarCard = ({
-  id,
-  image,
-
+const AvatarTile = ({
+  avatar,
   selected,
   setSelected,
 }: {
-  image?: string;
-  name?: string;
+  avatar: selectAvatarType;
   selected: number;
-  id?: number;
   setSelected: (val: number) => void;
 }) => {
-  const handleClick = () => {
-    setSelected(id as number);
-  };
+  const isActive = selected === avatar.id;
   return (
-    <div>
-      <button
-        onClick={handleClick}
-        className={`${
-          selected === id
-            ? "border-[2px] border-[#8530C1]"
-            : "border-[2px] border-white"
-        }  rounded-xl p-2 transition-all duration-200`}
-      >
-        <img
-          loading="lazy"
-          src={image}
-          alt="avatar"
-          className="w-[80px] h-[80px]"
-        />
-      </button>
-    </div>
+    <button
+      onClick={() => setSelected(avatar.id)}
+      aria-label={`Choose avatar ${avatar.name ?? ""}`}
+      className={`rounded-2xl p-2 transition-all duration-200 shadow hover:-translate-y-[2px] focus:outline-none focus:ring-4 ${
+        isActive
+          ? "border-2 border-[#8530C1] ring-[#CBA6F1]/40 bg-white"
+          : "border-2 border-white bg-white/80"
+      }`}
+    >
+      <img
+        src={avatar.image}
+        alt={avatar.name ?? "avatar"}
+        className="w-[88px] h-[88px] object-contain"
+        loading="lazy"
+      />
+    </button>
   );
 };
 
+/* ───────────── STEP 5: Success (centered, no scroll) ───────────── */
 export const WellDoneModal = ({ onContinue }: { onContinue: () => void }) => {
   const [enabled, setEnabled] = useState(false);
-  const { data } = useGetProfile(enabled, () => {
-    onContinue();
-    return data;
-  });
+  const { data } = useGetProfile(enabled, () => { onContinue(); return data; });
 
-  const handleSubmit = () => {
-    setEnabled(true);
-  };
+  const handleSubmit = () => setEnabled(true);
 
   const [useri, setUser] = useStore(getUserState);
   const { data: userData } = useGetUpdatedProfile();
   const currentUserProfile = userData?.data?.data;
+
   useEffect(() => {
-    setUser({ ...useri, ...currentUserProfile });
-    //  eslint-disable-next-line react-hooks/exhaustive-deps
+    if (currentUserProfile) setUser({ ...useri, ...currentUserProfile });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUserProfile]);
+
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1 }}
-      className="  rounded-3xl w-[100%] py-10"
+    <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
+      className="w-full h-full flex items-center justify-center"
     >
-      <div className="px-14 rounded-3xl">
-        <div className="flex justify-center items-center p-4">
-          <img loading="lazy" src={YajSucces} alt="success" />
+      <div className="px-6 sm:px-14 text-center">
+        <div className="flex justify-center items-center p-2">
+          <img src={YajSucces} alt="success" className="max-h-[220px]" />
         </div>
-        <p className="text-center text1 my-4">
-          You have successfully added a child
-        </p>
-        <div className="mb-12 max-w-[400px] mx-auto mt-2">
-          <Button onClick={handleSubmit}>
-            <span className="text-white">Continue</span>
-          </Button>
+        <p className="text-gray-700 mt-2">You have successfully added a child</p>
+        <div className="mt-4">
+          <Button onClick={handleSubmit}><span className="text-white">Continue</span></Button>
         </div>
       </div>
     </motion.div>
