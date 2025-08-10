@@ -68,6 +68,7 @@ const homeToCategories = (payload: any): Category[] => {
           title: item.name,
           coverUrl: item.thumbnail,
           progress: 0,
+          is_liked: item.is_liked,
         }));
 
       catArray.push({
@@ -159,13 +160,16 @@ const ContentLibrary: React.FC = () => {
     });
   }, []);
 
+  // Get profileId from sessionStorage
+  const profileId = sessionStorage.getItem("profileId");
+
   const urlState = React.useMemo(() => {
     const tab = Number(searchParams.get("tab")) || 0;
     const book = Number(searchParams.get("book")) || null;
-    const read = searchParams.get("read") === "4086";
-    const watch = searchParams.get("watch") === "4086";
+    const read = searchParams.get("read") === profileId;
+    const watch = searchParams.get("watch") === profileId;
     return { tab, book, read, watch };
-  }, [searchParams]);
+  }, [searchParams, profileId]);
 
   const setTab = (idx: number) => setSearchParams({ tab: String(idx) });
 
@@ -179,7 +183,7 @@ const ContentLibrary: React.FC = () => {
     setReadingLoading(true);
     try {
       const profileId = sessionStorage.getItem("profileId");
-      const res = await GetContentById(String(id), "4086");
+      const res = await GetContentById(String(id), profileId);
       if (!res.data.status) {
         // Assuming there's a notification system in place
         showNotification({
@@ -210,7 +214,7 @@ const ContentLibrary: React.FC = () => {
 
   const startRead = async (id: number) => {
     trace("startRead()", id);
-    setSearchParams({ tab: String(urlState.tab), book: String(id), read: "4086" });
+    setSearchParams({ tab: String(urlState.tab), book: String(id), read: profileId ?? "" });
     await fetchBookPages(id);
   };
 
@@ -226,11 +230,11 @@ const ContentLibrary: React.FC = () => {
     setVideoPoster("");
 
     // 2) flip into “watch” mode
-    setSearchParams({ tab: String(urlState.tab), book: String(id), watch: "4086" });
+    setSearchParams({ tab: String(urlState.tab), book: String(id), watch: profileId ?? "" });
 
     // 3) fetch this book’s media[0]
     try {
-      const res = await GetContentById(String(id), "4086");
+      const res = await GetContentById(String(id), profileId);
       if (!res.data.status) {
         // Assuming there's a notification system in place
         showNotification({
@@ -318,7 +322,7 @@ const ContentLibrary: React.FC = () => {
     }
 
     setOverviewChecking(true);
-    GetContentById(String(urlState.book), "4086")
+    GetContentById(String(urlState.book), profileId)
       .then((res) => {
         if (!res.data.status) {
           showNotification({
@@ -348,6 +352,7 @@ const ContentLibrary: React.FC = () => {
     selectedBook,
     urlState.tab,
     setSearchParams,
+    profileId
   ]);
 
   const readingBook = urlState.read ? selectedBook : null;
@@ -542,7 +547,7 @@ const ContentLibrary: React.FC = () => {
 
     (async () => {
       try {
-        const res = await GetContentById(String(urlState.book), "4086");
+        const res = await GetContentById(String(urlState.book), profileId);
         if (!res.data.status) {
           // Assuming there's a notification system in place
           showNotification({
@@ -563,23 +568,17 @@ const ContentLibrary: React.FC = () => {
 
         // if the URL’s tab param is out of sync, correct it
         if (idx >= 0 && urlState.tab !== idx) {
-          //  setSearchParams({
-          //   tab: String(idx),
-          //   book: String(urlState.book),
-          //   read: urlState.read ? "4086" : undefined,
-          //   watch: urlState.watch ? "4086" : undefined
-          // }, { replace: true });
           setSearchParams(prev => {
             const params = new URLSearchParams(prev);
             params.set('tab', String(idx));
             params.set('book', String(urlState.book));
             if (urlState.read) {
-              params.set('read', "4086");
+              params.set('read', profileId ?? "");
             } else {
               params.delete('read');
             }
             if (urlState.watch) {
-              params.set('watch', "4086");
+              params.set('watch', profileId ?? "");
             } else {
               params.delete('watch');
             }
@@ -613,7 +612,8 @@ const ContentLibrary: React.FC = () => {
     urlState.read,
     urlState.watch,
     tabsConfig,
-    crumb.length
+    crumb.length,
+    profileId
   ]);
 
   // 2) Main “See all” handler

@@ -14,11 +14,19 @@ import { handleEventTracking } from "@/api/moengage";
 import { logOut } from "@/auth/sdk";
 import { useNavigate } from "react-router-dom";
 import { useGetAttemptAllStudentConnect } from "@/api/queries";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getProfileState } from "@/store/profileStore";
 
-// tiny avatar helper for safe fallback
-const AvatarCircle = ({ src, label, size = 40 }: { src?: string; label?: string; size?: number }) => {
+/** Small avatar helper with safe fallback */
+const AvatarCircle = ({
+  src,
+  label,
+  size = 40,
+}: {
+  src?: string;
+  label?: string;
+  size?: number;
+}) => {
   const initials =
     (label || "")
       .trim()
@@ -28,29 +36,37 @@ const AvatarCircle = ({ src, label, size = 40 }: { src?: string; label?: string;
       .slice(0, 2)
       .toUpperCase() || "🙂";
 
-  return src ? (
-    <img
-      loading="lazy"
-      src={src}
-      alt={label || "avatar"}
-      className="rounded-full object-cover"
-      style={{ width: size, height: size }}
-      onError={(e) => {
-        // hide broken image, show initials style
-        const el = e.currentTarget as HTMLImageElement;
-        el.style.display = "none";
-        const sib = el.nextElementSibling as HTMLDivElement | null;
-        if (sib) sib.style.display = "grid";
-      }}
-    />
-  ) : (
-    <div
-      className="hidden place-items-center rounded-full bg-[#EEF2FF] text-[#475569] font-semibold"
-      style={{ width: size, height: size }}
-    >
-      {initials}
+  return (
+    <div className="relative" style={{ width: size, height: size }}>
+      {src ? (
+        <img
+          loading="lazy"
+          src={src}
+          alt={label || "avatar"}
+          className="rounded-full object-cover w-full h-full"
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).style.display = "none";
+            const sib = (e.currentTarget.nextSibling || null) as HTMLDivElement | null;
+            if (sib) sib.style.display = "grid";
+          }}
+        />
+      ) : null}
+      {/* fallback initials layer */}
+      <div
+        className="hidden place-items-center rounded-full bg-[#EEF2FF] text-[#475569] font-semibold"
+        style={{ width: size, height: size }}
+      >
+        {initials}
+      </div>
     </div>
   );
+};
+
+type Profile = {
+  id: number;
+  name: string;
+  image?: string;
+  emoji?: string;
 };
 
 const SchoolDashboardHeader = () => {
@@ -68,12 +84,80 @@ const SchoolDashboardHeader = () => {
     (day < 10 ? "0" + day : day);
 
   const [user] = useStore(getUserState);
-  const [profiles] = useStore(getProfileState);
-  const [activeProfileId, setActiveProfileId] = useState<string | null>(null);
-  const activeProfile = profiles?.find((p) => p.id === activeProfileId);
-  console.log("profile", profiles);
+  // console.log('user', user)
+  const [profiles] = useStore(getProfileState) as [Profile[]];
+
   const { data } = useGetAttemptAllStudentConnect(user?.role === "schoolAdmin");
   const totalSchoolConnectList = data?.data?.data?.totalRecord;
+
+  /** ---------------- Active child handling ---------------- */
+  const [activeProfileId, setActiveProfileId] = useState<number | null>(null);
+
+  // Initialize on mount (and whenever profiles change)
+  useEffect(() => {
+    if (!Array.isArray(profiles) || profiles.length === 0) return;
+
+    const fromSessionRaw = sessionStorage.getItem("profileId");
+    const fromSession = fromSessionRaw ? Number(fromSessionRaw) : null;
+
+    // If session id exists and still valid → use it, else fall back to first profile
+    const validSessionId = profiles.some((p) => p.id === fromSession) ? fromSession : profiles[0].id;
+
+    // Sync local header state
+    setActiveProfileId(validSessionId);
+
+    // Persist to sessionStorage if missing or invalid
+    if (fromSession !== validSessionId) {
+      sessionStorage.setItem("profileId", String(validSessionId));
+    }
+
+    // Push to store (try several common action names without breaking your store)
+    try {
+      const s: any = (useStore as any).getState?.();
+      const setActiveProfileIdAction =
+        s?.setActiveProfileId ||
+        s?.setProfileId ||
+        s?.setSelectedProfileId ||
+        s?.setCurrentProfileId;
+
+      if (typeof setActiveProfileIdAction === "function") {
+        setActiveProfileIdAction(validSessionId);
+      }
+    } catch (_) {
+      // ignore if store has no setter—UI will still show correct active child
+    }
+  }, [profiles]);
+
+  // Derived active profile object
+  const activeProfile = useMemo(
+    () => profiles?.find((p) => p.id === activeProfileId) || null,
+    [profiles, activeProfileId]
+  );
+
+  // When user picks a child in the dropdown
+  const handlePickProfile = (p: Profile) => {
+    setActiveProfileId(p.id);
+    sessionStorage.setItem("profileId", String(p.id));
+
+    // update store if an action is available
+    try {
+      const s: any = (useStore as any).getState?.();
+      const setActiveProfileIdAction =
+        s?.setActiveProfileId ||
+        s?.setProfileId ||
+        s?.setSelectedProfileId ||
+        s?.setCurrentProfileId;
+
+      if (typeof setActiveProfileIdAction === "function") {
+        setActiveProfileIdAction(p.id);
+      }
+    } catch (_) {}
+
+    // optional: inform rest of app
+    window.dispatchEvent(
+      new CustomEvent("profile:changed", { detail: { profileId: p.id, profile: p } })
+    );
+  };
 
   // Sync burger with sidebar docked state
   const [sidebarDocked, setSidebarDocked] = useState<boolean>(true);
@@ -114,24 +198,7 @@ const SchoolDashboardHeader = () => {
     navigate("/");
   };
 
-  const handlePickProfile = (p: any) => {
-    setActiveProfileId(p.id);
-    sessionStorage.setItem("profileId", String(p.id));
-
-    // if your zustand profile store exposes an action, call it here:
-    try {
-      const storeState: any = (useStore as any).getState?.();
-      const setActiveProfileId = storeState?.setActiveProfileId || storeState?.setProfileId;
-      if (typeof setActiveProfileId === "function") {
-        setActiveProfileId(p.id);
-      }
-    } catch (_) {}
-
-    window.dispatchEvent(
-      new CustomEvent("profile:changed", { detail: { profileId: p.id, profile: p } })
-    );
-  };
-
+  /** ---------------- UI ---------------- */
   return (
     <div className="relative flex font-[500] py-4 text-[16px] px-[30px] justify-between items-center z-50 gap-4 h-[8vh] shadow-md bg-white">
       {/* Left: Name + Burger (burger AFTER name) */}
@@ -172,11 +239,11 @@ const SchoolDashboardHeader = () => {
         >
           {(user?.role === "schoolAdmin" || user?.role === "teacher") && (
             <div>
-              <AiOutlineBell size={22} className="mx-auto" color="#667185" />
+              <AiOutlineBell size={22} className={" mx-auto"} color="#667185" />
               <p
-                className={`absolute -top-4 text-white right-[-14px] py-[1px] rounded-full px-[3px] ${
+                className={`absolute -top-4 text-white  right-[-14px] py-[1px] rounded-full px-[3px] ${
                   totalSchoolConnectList > 0 ? "bg-red-700" : "bg-white"
-                }`}
+                }  `}
               >
                 {totalSchoolConnectList || 0}
               </p>
@@ -185,7 +252,7 @@ const SchoolDashboardHeader = () => {
         </div>
 
         <Menu
-          width={250}
+          width={260}
           shadow="lg"
           radius={10}
           position="bottom-end"
@@ -193,13 +260,10 @@ const SchoolDashboardHeader = () => {
         >
           <Menu.Target>
             <div className="flex justify-center items-center gap-2 cursor-pointer rounded-3xl p-2 px-4">
-              {/* if role is parent → show active child’s photo; else fallback to SchoolAvatar */}
+              {/* Parent → show active child’s photo + name; Others → admin avatar + label */}
               {user?.role === "user" ? (
                 <div className="flex items-center gap-2">
-                  <div className="relative">
-                    <AvatarCircle src={activeProfile?.image} label={activeProfile?.name} size={40} />
-                    {/* fallback initials layer is handled inside AvatarCircle */}
-                  </div>
+                  <AvatarCircle src={activeProfile?.image} label={activeProfile?.name} size={40} />
                   <span className="flex items-center gap-2">
                     {activeProfile?.name || "Choose child"}
                     <IoChevronDown size={22} color="#667185" />
@@ -221,18 +285,17 @@ const SchoolDashboardHeader = () => {
               )}
             </div>
           </Menu.Target>
+
           <Menu.Dropdown>
             {/* Parent: list children ABOVE Settings */}
             {user?.role === "user" && Array.isArray(profiles) && profiles.length > 0 && (
               <>
                 <Menu.Label>Children</Menu.Label>
                 <div style={{ maxHeight: 240, overflowY: "auto" }}>
-                  {profiles.map((p: any) => (
+                  {profiles.map((p) => (
                     <Menu.Item key={p.id} onClick={() => handlePickProfile(p)}>
                       <div className="flex items-center gap-2 text-[14px] text-[#667185] font-Arimo">
-                        <div className="relative">
-                          <AvatarCircle src={p.image} label={p.name} size={28} />
-                        </div>
+                        <AvatarCircle src={p.image} label={p.name} size={28} />
                         <span className="truncate">{p.name}</span>
                         {activeProfileId === p.id && (
                           <span className="ml-auto text-xs px-2 py-[2px] rounded-full bg-[#E3F2D1] text-[#3F6212]">
@@ -247,7 +310,6 @@ const SchoolDashboardHeader = () => {
               </>
             )}
 
-            {/* Settings (unchanged) */}
             <Menu.Item onClick={() => navigate("schooldashboard/settings")}>
               <p className="flex items-center gap-2 text-[14px] text-[#667185] font-Arimo">
                 <FaRegUserCircle color="#667185" size={25} />
@@ -257,7 +319,6 @@ const SchoolDashboardHeader = () => {
 
             <Menu.Divider />
 
-            {/* Logout (unchanged) */}
             <Menu.Item>
               <p
                 onClick={handLogOut}

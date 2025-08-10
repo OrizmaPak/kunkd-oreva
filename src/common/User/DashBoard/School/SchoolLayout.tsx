@@ -6,6 +6,7 @@ import { Outlet, useMatch, useNavigate } from "react-router-dom";
 import DashboardIcon from "@/assets/components/DashboardIcon";
 import TeachersIcon from "@/assets/components/TeachersIcon";
 import ClasssesIcon from "@/assets/components/ClassesIcon";
+import FavouritesIcon from "@/assets/components/Favourites";
 import StudentsIcon from "@/assets/components/StudentsIcon";
 import ConnectionIcon from "@/assets/components/ConnectionIcon";
 import ContentIcon from "@/assets/components/ContentIcon";
@@ -64,6 +65,14 @@ const links = [
     role: ["schoolAdmin", "teacher", "user"],
   },
   {
+    label: "Favourites",
+    href: "favourites",
+    route: routeBaseUrl + "/favourites/*",
+    icon: FavouritesIcon,
+    hasSub: true,
+    role: ["user"],
+  },
+  {
     label: "Progress Report",
     href: "progress",
     route: routeBaseUrl + "/progress/",
@@ -104,7 +113,7 @@ const SchoolLayout = () => {
     window.dispatchEvent(new CustomEvent("sidebar:state", { detail: { docked } }));
   }, [docked]);
 
-  const userRole = (user?.user_type as string) || "user";
+  const userRole = (user?.role as string) || "user";
   const allowedLinks = useMemo(
     () => links.filter((l) => l.role.includes(userRole)),
     [userRole]

@@ -43,7 +43,9 @@ const BookOverview: React.FC<BookOverviewProps> = ({
     console.log('[BookOverview] mount for book-id:', book.id);
     let mounted = true;
 
-    GetContentById(String(book.id), '4086')
+    const profileId:any = sessionStorage.getItem("profileId");
+
+    GetContentById(String(book.id), profileId)
       .then(res => {
         if (!res.data.status) {
           // Assuming there's a notification system in place

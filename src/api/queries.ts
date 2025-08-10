@@ -96,16 +96,17 @@ import {
   SupportMessage,
 } from "./api";
 // import { TGetContentById } from "./types";
-import { useMutation, useQuery, useInfiniteQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 // import { TProfileData } from "./types";
 // import { AxiosResponse } from "axios";
 import { selectAvatarType } from "@/pages/AfterParentSignIn/SelectProfile";
 import { getUserState } from "@/store/authStore";
 import useStore from "@/store/index";
 import { getProfileState } from "@/store/profileStore";
-import { notifications } from "@mantine/notifications";
+import { notifications, showNotification } from "@mantine/notifications";
 import { useNavigate } from "react-router-dom";
 import { ApiResponse, Tprofile } from "./types";
+import type { TLikedContentData } from "./types";
 
 export const querykeys = {
   profiles: ["GetProfile"],
@@ -521,6 +522,126 @@ export const useGetLikedContent = (profileId: string) => {
     queryFn: () => GetLikedContent(profileId),
   });
 };
+
+// --- Toggle Favourite Content (Optimistic) ---
+type ToggleArgs = {
+  id: number;
+  isFavorite?: boolean;     // current state (so we choose like vs unlike)
+  contentType?: string;     // default "book"
+};
+
+export const useToggleFavouriteContent = () => {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, isFavorite }: ToggleArgs) => {
+      const payload: TLikedContentData = { content_id: id };
+      // choose endpoint based on current state
+      // Show notification when toggling favourite
+      try {
+        if (isFavorite) {
+          const result = await UnLikedContent(payload);
+          if (result?.status) {
+            showNotification({
+              title: "Removed from Favourites",
+              message: "Content has been removed from your favourites.",
+              color: "yellow",
+            });
+          } else {
+            showNotification({
+              title: "Error",
+              message: result?.message || "Failed to remove from favourites.",
+              color: "red",
+            });
+          }
+          return result;
+        } else {
+          const result = await LikedContent(payload);
+          if (result?.status) {
+            showNotification({
+              title: "Added to Favourites",
+              message: "Content has been added to your favourites.",
+              color: "green",
+            });
+          } else {
+            showNotification({
+              title: "Error",
+              message: result?.message || "Failed to add to favourites.",
+              color: "red",
+            });
+          }
+          return result;
+        }
+      } catch (error: any) {
+        console.log(error);
+        showNotification({
+          title: "Oops!",
+          message: error?.response.data.message || "An error occurred while toggling favourite.",
+          color: "red",
+        });
+        throw error;
+      }
+    },
+
+    // optimistic UI: flip is_liked across any cached lists
+    onMutate: async ({ id }) => {
+      await qc.cancelQueries();
+
+      const previous = new Map();
+
+      const patch = (data: any) => {
+        if (!data) return data;
+
+        const flip = (b: any) =>
+          b?.id === id ? { ...b, is_liked: !b?.is_liked } : b;
+
+        // flat array
+        if (Array.isArray(data)) return data.map(flip);
+
+        // common shapes
+        if (data?.data?.data && Array.isArray(data.data.data)) {
+          return {
+            ...data,
+            data: { ...data.data, data: data.data.data.map(flip) },
+          };
+        }
+        if (data?.items && Array.isArray(data.items)) {
+          return { ...data, items: data.items.map(flip) };
+        }
+        if (data?.results && Array.isArray(data.results)) {
+          return { ...data, results: data.results.map(flip) };
+        }
+        return data;
+      };
+
+      // update every cache entry (broad but reliable)
+      qc.getQueryCache()
+        .getAll()
+        .forEach((q) => {
+          const key = q.queryKey;
+          const cur = qc.getQueryData(key);
+          previous.set(key, cur);
+          qc.setQueryData(key, patch);
+        });
+
+      return { previous };
+    },
+
+    onError: (_e, _vars, ctx) => {
+      // rollback if anything failed
+      ctx?.previous?.forEach((data, key) => {
+        // @ts-ignore
+        qc.setQueryData(key, data);
+      });
+    },
+
+    onSettled: () => {
+      // revalidate to be 100% in sync with server
+      qc.invalidateQueries();
+    },
+  });
+};
+// --- End Toggle Favourite Content (Optimistic) ---
 
 export const useContentTracking = () => {
   return useMutation({

@@ -1,24 +1,24 @@
 import React from "react";
 import FrameImg from "@/assets/bookframe.png";
+import FavouriteHeart from "@/components/FavouriteHeart";
 
 export interface Book { 
   id: number | string;
   title: string;
   coverUrl: string;
   progress: number; // 0–100
+  is_liked?: boolean; // backend flag if available
 }
 
-// ➊ modify the props -----------------------------------------------
 export interface BookCardProps {
   book: Book;
-  onClick?: () => void;          // NEW (optional, so existing callers compile)
+  onClick?: () => void;
 }
 
 const BookCard: React.FC<BookCardProps> = ({ book, onClick }) => {
-  /* dev-trace */ console.log('[BookCard] render', book.id);
+  /* dev-trace */ console.log('[BookCard] render', book.id, book.is_liked);
 
   return (
-    /* ➋ make the whole card a click-target ------------------------- */
     <div
       role="button"
       tabIndex={0}
@@ -27,8 +27,18 @@ const BookCard: React.FC<BookCardProps> = ({ book, onClick }) => {
       className="
         relative flex-shrink-0 w-fit transition-transform duration-300 active:scale-95 mt-4 cursor-pointer
         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#9FC43E]
+        group
       "
     >
+      {/* Heart — top-left, only visible on hover */}
+      <div className="absolute left-2 top-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <FavouriteHeart
+          bookId={typeof book.id === "string" ? parseInt(book.id, 10) : book.id}
+          isFavorite={book.is_liked}
+          contentType="book"
+        />
+      </div>
+
       {/* Frame PNG */}
       <img src={FrameImg} alt="frame" className="block w-[134px] h-[152px]" />
 

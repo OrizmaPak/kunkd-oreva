@@ -45,6 +45,7 @@ const useSubCategoryLazy = (subId: number | null, expanded: boolean) => {
         id: r.id,
         title: r.name,
         coverUrl: r.thumbnail,
+        is_liked: r.is_liked,
         progress: 0,
       }));
 

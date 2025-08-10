@@ -52,18 +52,18 @@ const BookCategory: React.FC<BookCategoryProps> = ({
     sentryRef,
     loadMoreRef,
   } = useSubCategoryLazy(subId, expanded);
-
+  
   const usingLazy = subId != null;
   // Choose data source based on lazy vs. static
   const list = usingLazy ? lazyBooks : books;
   // First-page load vs. static loading
   const rowLoading = usingLazy ? loadingInit : loading;
-
+  
   // Layout classes
   const containerClass = expanded
-    ? "flex flex-wrap gap-4"
-    : "flex space-x-4 overflow-x-auto no-scrollbar";
-
+  ? "flex flex-wrap gap-4"
+  : "flex space-x-4 overflow-x-auto no-scrollbar";
+  
   return (
     <div className="mb-8">
       {/* HEADER */}
@@ -78,8 +78,8 @@ const BookCategory: React.FC<BookCategoryProps> = ({
         {/* {!rowLoading && onSeeAll && (hasSub || list.length > 3) && ( */}
         {!rowLoading && onSeeAll && (list.length > 3) && (
           <button
-            onClick={onSeeAll}
-            className="text-sm text-[#9FC43E] hover:underline"
+          onClick={onSeeAll}
+          className="text-sm text-[#9FC43E] hover:underline"
           >
             {expanded ? "Show less" : "See all"}
           </button>
@@ -116,7 +116,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
                       crumbs.push(categoryName);
                       onBookClick?.(book, crumbs);
                     }}
-                  />
+                    />
                 </div>
               ))
             )}
@@ -125,8 +125,8 @@ const BookCategory: React.FC<BookCategoryProps> = ({
             {((rowLoading || !hasFetched && tabLabel != "For you") || (rowLoading && tabLabel == "For you")) && (
               Array.from({ length: 8 }).map((_, i) => (
                 <Skeleton
-                  key={i}
-                  className="w-32 h-44 rounded"
+                key={i}
+                className="w-32 h-44 rounded"
                 />
               ))
             )}
@@ -140,8 +140,8 @@ const BookCategory: React.FC<BookCategoryProps> = ({
             {loadingMore &&
               Array.from({ length: 6 }).map((_, i) => (
                 <Skeleton
-                  key={i}
-                  className="w-32 h-44 rounded"
+                key={i}
+                className="w-32 h-44 rounded"
                 />
               ))}
           </>
