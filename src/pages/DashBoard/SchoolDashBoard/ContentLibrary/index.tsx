@@ -27,7 +27,16 @@ import KojoAndLolaImage2 from "@/assets/Kojo and Lola (2).png";
 import KojoAndLolaImage3 from "@/assets/Kojo and Lola (3).png";
 import KojoAndLolaImage4 from "@/assets/Kojo and Lola (4).png";
 import KojoAndLolaImage5 from "@/assets/Kojo and Lola (5).png";
-import { ContentForHome, GetAudioBooks, GetContebtBySubCategories, GetRecommendedVideo, GetSubCategories, GetContentById, GetCompletedContents } from "@/api/api";
+import {
+  ContentForHome,
+  GetAudioBooks,
+  GetContebtBySubCategories,
+  GetRecommendedVideo,
+  GetSubCategories,
+  GetContentById,
+  GetCompletedContents,   // (optional)
+  GetOngoingContents,     // ← add this
+} from "@/api/api";
 import { showNotification } from "@mantine/notifications";
 
 /* ---------------- helper: loud trace ---------------- */
@@ -143,6 +152,9 @@ const ContentLibrary: React.FC = () => {
 
   const readingRef = useRef<ReadingHandle>(null);
 
+  // 2) Track ongoing books state
+  const [ongoingBooks, setOngoingBooks] = useState<Book[] | null>(null);
+
   useEffect(() => {
     GetSubCategories().then((res) => {
       console.log("res", res);
@@ -160,6 +172,29 @@ const ContentLibrary: React.FC = () => {
         setTabsConfig(defaultTabs.map((tab) => ({ ...tab, id: null })));
       }
     });
+  }, []);
+
+  // 3) Fetch ongoing and map to Book[]
+  useEffect(() => {
+    const pid = sessionStorage.getItem("profileId") || "";
+    GetOngoingContents(pid)
+      .then((res) => {
+        const arr = res?.data?.data ?? res?.data ?? [];
+        const books: Book[] = Array.isArray(arr)
+          ? arr.map((it: any) => ({
+              id: it.content_id ?? it.id,
+              title: it.name ?? it.title ?? "",
+              coverUrl: it.thumbnail ?? it.cover ?? it.image ?? "",
+              progress: it.percentage ?? it.progress ?? 0,
+              is_liked: it.is_liked,
+            }))
+          : [];
+        setOngoingBooks(books);
+      })
+      .catch((err) => {
+        console.error("GetOngoingContents failed", err);
+        setOngoingBooks([]); // treat failure as “no ongoing” to hide section
+      });
   }, []);
 
   // Get profileId from sessionStorage
@@ -471,7 +506,13 @@ const ContentLibrary: React.FC = () => {
         try {
           const res = await ContentForHome({});
           if (res?.status && res.data) {
-            setCategories(homeToCategories(res.data.data));
+            // 4) Inject “Continue Reading” only if we have items
+            const cats = homeToCategories(res.data.data);
+            const withOngoing =
+              ongoingBooks && ongoingBooks.length > 0
+                ? [{ name: "Continue Reading", books: ongoingBooks, hasSub: false }, ...cats]
+                : cats;
+            setCategories(withOngoing);
             return;
           }
         } catch { /* ignore */ }
@@ -533,7 +574,7 @@ const ContentLibrary: React.FC = () => {
     // show skeletons for ~300ms
     const t = setTimeout(load, 1);
     return () => clearTimeout(t);
-  }, [activeIndex, tabsConfig, allCats]);
+  }, [activeIndex, tabsConfig, allCats, ongoingBooks]);
 
   // when you land with ?read=1&book=### in the URL, rehydrate the pages
   useEffect(() => {
@@ -788,6 +829,8 @@ const ContentLibrary: React.FC = () => {
         </div>
       </LayoutGroup>
 
+    
+
       {/* Unified Breadcrumb */}
       {displayCrumbs.length > 0 && (
         <nav aria-label="Breadcrumb" className="mb-4">
@@ -809,6 +852,19 @@ const ContentLibrary: React.FC = () => {
             ))}
           </ol>
         </nav>
+      )}
+
+        {/* Show the Literacy iframe if the tab is selected */}
+        {tabsConfig[activeIndex]?.label === "Literacy" && (
+        <div className="mt-6 w-full">
+          <iframe
+            src="https://interactive-app.kundakidsapi.com/"
+            className="w-full h-[80vh] rounded-xl border"
+            allow="fullscreen; autoplay; clipboard-read; clipboard-write"
+            loading="lazy"
+            title="Kunda Kids Interactive App"
+          />
+        </div>
       )}
 
       {/* 1) If we’re in “review answers” mode, only show the inline panel */}

@@ -1,4 +1,4 @@
-// src/components/VideoComponent.tsx
+ // src/components/VideoComponent.tsx
 import React, { useRef, useState, useEffect } from "react";
 import Hls from "hls.js";
 import screenfull from "screenfull";
@@ -58,6 +58,7 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);
+  const hlsRef = useRef<Hls | null>(null); // HLS instance ref
 
   // ─── overlay (play/skip UI) visibility ───
   const [overlayVisible, setOverlayVisible] = useState(true);
@@ -321,25 +322,71 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
     setMuted(volume === 0);
   }, [volume]);
 
+  // Robust HLS effect with cleanup, reload, and error recovery
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !videoSrc) return;
 
-    // if Safari or other native HLS support:
-    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    // Clean up any previous source/instance (important on reload)
+    try {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+    } catch {}
+
+    // Reset the element before attaching a new source
+    video.removeAttribute("src");
+    video.load();
+
+    // Native HLS (Safari)
+    if (video.canPlayType("application/vnd.apple.mpegurl")) {
       video.src = videoSrc;
+      // Force a fresh load after setting src so Safari doesn’t stall on reload
+      video.load();
+      return;
     }
-    // otherwise use hls.js
-    else if (Hls.isSupported()) {
-      const hls = new Hls();
+
+    // Hls.js path (Chrome/Firefox/Edge)
+    if (Hls.isSupported()) {
+      const hls = new Hls({
+        enableWorker: true,
+        lowLatencyMode: true,
+        backBufferLength: 90,
+      });
+      hlsRef.current = hls;
+
       hls.loadSource(videoSrc);
       hls.attachMedia(video);
-      return () => {
-        hls.destroy();
+
+      // Try to recover on fatal errors instead of dying after reloads
+      const onError = (_evt: any, data: any) => {
+        if (!data?.fatal) return;
+        switch (data.type) {
+          case Hls.ErrorTypes.NETWORK_ERROR:
+            console.warn("[HLS] network error — restarting load");
+            hls.startLoad();
+            break;
+          case Hls.ErrorTypes.MEDIA_ERROR:
+            console.warn("[HLS] media error — recovering");
+            hls.recoverMediaError();
+            break;
+          default:
+            console.warn("[HLS] fatal error — destroying instance");
+            try { hls.destroy(); } catch {}
+            hlsRef.current = null;
+        }
       };
-    } else {
-      console.error('This browser does not support HLS');
+      hls.on(Hls.Events.ERROR, onError);
+
+      return () => {
+        hls.off(Hls.Events.ERROR, onError);
+        try { hls.destroy(); } catch {}
+        hlsRef.current = null;
+      };
     }
+
+    console.error("This browser does not support HLS");
   }, [videoSrc]);
 
   const percent = duration ? (current / duration) * 100 : 0;
@@ -415,11 +462,14 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
         </div>
         {/* ───── actual video ───── */}
         <video
+          key={videoSrc}
           ref={videoRef}
           poster={poster} // Use the poster prop
-          className="w-[1000px] h-[400px] object-fill bg-black"
+          className="w-full h-[400px] md:h-[420px] lg:h-[440px] object-cover bg-black"
           controls={false}
           muted={muted}
+          playsInline
+          preload="metadata"
           onClick={togglePlay}
           onEnded={onComplete} // Use the onComplete prop
         />
