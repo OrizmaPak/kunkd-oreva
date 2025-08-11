@@ -31,10 +31,11 @@ import SchoolDashboardHeader from "./common/User/DashBoard/School/SchoolDashboar
 import Settings from "./pages/DashBoard/SchoolDashBoard/Settings/Settings";
 import ParentVerification from "./pages/ParentSignup/ParentVerificattion";
 import WelcomePage from "./pages/AfterParentSignIn/WelcomePage";
-import ProfileSetupPage from "./pages/AfterParentSignIn/profileSetupPage";
+
 import ProfileSuccessPage from "./pages/AfterParentSignIn/ProfileSuccessPage";
 import ConnectToSchool from "./pages/AfterParentSignIn/ConnectToSchool";
 import ContentLibrary from "./pages/DashBoard/SchoolDashBoard/ContentLibrary";
+import ProfileSetupPage from "./pages/AfterParentSignIn/ProfileSetupPage";
 import StudentView from "./pages/DashBoard/SchoolDashBoard/Students/StudentView";
 import StudentStoriesReport from "./pages/DashBoard/SchoolDashBoard/Students/StudentStoriesReport";
 import ConnectionRequests from "./pages/DashBoard/SchoolDashBoard/Students/ConnectionRequests";

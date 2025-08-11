@@ -1,5 +1,6 @@
 import screenfull from "screenfull";
 import React, {
+  
   useRef,
   useState,
   useEffect,
@@ -23,6 +24,17 @@ import WellDoneModal from "./WellDoneModal";
 import QuizComponent from "./QuizComponent"; // Assuming you have a QuizComponent
 import QuizResultModal from "./QuizResultModal"; // Assuming you have a QuizResultModal
 import AnswerReview from "./AnswerReview"; // Assuming you have an AnswerReview component
+
+// --- ADDED TRACKING IMPORTS ---
+import { notifications } from "@mantine/notifications";
+import { getApiErrorMessage } from "@/api/helper";
+import {
+  useContentTracking,
+  useContentSchoolTracking,
+  useLearningHour,
+} from "@/api/queries";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
 
 export interface Page {
   id: number;
@@ -204,7 +216,23 @@ const ReadingComponent = forwardRef<ReadingHandle, ReadingComponentProps>(
   ({ book, pages, onExit, onRetake, innerCoverUrl, withIntroPages = true, onViewAnswers, onAnswersUpdate }, ref) => {
     const shellRef = useRef<HTMLDivElement>(null);
     const flipRef = useRef<any>(null);
+
+    // --- TRACKING STATE ---
+    // tracking
+    const contentId = book.id;
+    const profileId = sessionStorage.getItem("profileId");
+    const { mutate } = useContentTracking();
+    const { mutate: mutateSchool } = useContentSchoolTracking();
+    const { mutate: mutateLearning } = useLearningHour();
+    const [user] = useStore(getUserState);
+
+    // current page & reading timer
     const [currentPage, setCurrentPage] = useState(0);
+    const [elapsed, setElapsed] = useState(0);   // seconds total
+    const [delay, setDelay] = useState(0);       // heartbeat ticks
+    const [lastTime, setLastTime] = useState(0); // last second flushed
+    const [isReading, setIsReading] = useState(true); // treat open as reading
+
     const [size, setSize] = useState({ width: 450, height: 400 });
     const [isFull, setIsFull] = useState(false);
     const [showAudio, setShowAudio] = useState(false);
@@ -284,10 +312,128 @@ const ReadingComponent = forwardRef<ReadingHandle, ReadingComponentProps>(
       return () => window.removeEventListener("resize", onResize);
     }, []);
 
+    // --- FLIPBOOK PAGE EVENT (TRACKING) ---
     const onFlip = React.useCallback(
-      (e: any) => setCurrentPage(e.data),
-      []                                     // stable reference
+      (e: any) => {
+        // many libs expose e.data for the page index; fall back safely
+        const page = typeof e?.data === "number" ? e.data : currentPage;
+        setCurrentPage(page);
+        setIsReading(true);
+      },
+      [currentPage]
     );
+
+    // --- HEARTBEAT TIMER (only while reading) ---
+    useEffect(() => {
+      let interval: number | undefined;
+      if (isReading) {
+        interval = window.setInterval(() => {
+          setDelay((d) => d + 1);
+          setElapsed((s) => s + 5);
+        }, 5000);
+      }
+      return () => {
+        if (interval) window.clearInterval(interval);
+      };
+    }, [isReading]);
+
+    // --- SEND "ONGOING" PROGRESS EVERY HEARTBEAT ---
+    useEffect(() => {
+      if (!delay) return;
+      if (!contentId) return;
+
+      const now = Math.ceil(elapsed);
+      if (now <= 0) return;
+
+      const payload = {
+        content_id: Number(contentId),
+        status: "ongoing",
+        pages_read: Math.max(1, currentPage), // backend expects a number
+        timespent: now,
+      };
+
+      const onErr = (err: any) =>
+        notifications.show({ title: "Notification", message: getApiErrorMessage(err) });
+
+      try {
+        if (user?.role === "user") {
+          mutate(
+            { profile_id: Number(profileId), ...payload },
+            {
+              onSuccess: () => {
+                console.log("[TRACK][read][user] ongoing ok", payload);
+                setLastTime(now);
+              },
+              onError: (err) => {
+                console.log("[TRACK][read][user] ongoing failed", payload, err);
+                onErr(err);
+              },
+            }
+          );
+        } else {
+          mutateSchool(
+            { ...payload },
+            {
+              onSuccess: () => {
+                console.log("[TRACK][read][school] ongoing ok", payload);
+                setLastTime(now);
+              },
+              onError: (err) => {
+                console.log("[TRACK][read][school] ongoing failed", payload, err);
+                onErr(err);
+              },
+            }
+          );
+        }
+
+        const delta = Math.max(0, now - lastTime);
+        mutateLearning(
+          {
+            content_id: Number(contentId),
+            profile_id: Number(profileId),
+            timespent: delta,
+          },
+          {
+            onSuccess: () => console.log("[TRACK][read] learning-hour ok", { delta }),
+            onError: (err) => console.log("[TRACK][read] learning-hour failed", err),
+          }
+        );
+      } catch (err) {
+        console.log("[TRACK][read] unexpected error", err);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [delay]);
+
+    // --- FLUSH COMPLETE (when user finishes or exits) ---
+    const flushComplete = () => {
+      if (!contentId) return;
+      const now = Math.ceil(elapsed);
+      const payload = {
+        content_id: Number(contentId),
+        status: "complete",
+        pages_read: Math.max(1, currentPage),
+        timespent: now,
+      };
+      if (user?.role === "user") {
+        mutate(
+          { profile_id: Number(profileId), ...payload },
+          {
+            onSuccess: () => console.log("[TRACK][read] complete ok", payload),
+            onError: (err) =>
+              console.log("[TRACK][read] complete failed", payload, err),
+          }
+        );
+      } else {
+        mutateSchool(
+          { ...payload },
+          {
+            onSuccess: () => console.log("[TRACK][read] complete ok (school)", payload),
+            onError: (err) =>
+              console.log("[TRACK][read] complete failed (school)", payload, err),
+          }
+        );
+      }
+    };
 
     // modal handlers
     const openModal = (view: "options" | "pages" | "font" = "options") => {
@@ -308,10 +454,17 @@ const ReadingComponent = forwardRef<ReadingHandle, ReadingComponentProps>(
     const isLastPage = currentPage === spread.length -2;
     const handleNext = () => {
       if (isLastPage) {
+        flushComplete(); // --- TRACKING: mark complete
         setShowDone(true);            // open “Well-done” modal
       } else {
         flipRef.current.pageFlip().flipNext();
       }
+    };
+
+    // --- WRAP onExit to flush complete before exit ---
+    const handleExit = () => {
+      flushComplete();
+      onExit();
     };
 
     // ─── UNIFIED RENDER ─────────────────────────────────────────
@@ -352,7 +505,7 @@ const ReadingComponent = forwardRef<ReadingHandle, ReadingComponentProps>(
             {/* Existing reading UI: Exit, Title, FlipBook, Toolbar, Prev/Next */}
             {/* Exit */}
             <button
-              onClick={onExit}
+              onClick={handleExit}
               className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 z-10"
             >
               ✕

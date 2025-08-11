@@ -3,7 +3,17 @@ import WaveSurfer from "wavesurfer.js";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { MdReplay10, MdForward10 } from "react-icons/md";
 import { motion } from "framer-motion";
+import { notifications } from "@mantine/notifications";
+
 import { Book } from "./BookCard";
+import { getApiErrorMessage } from "@/api/helper";
+import {
+  useContentTracking,
+  useContentSchoolTracking,
+  useLearningHour,
+} from "@/api/queries";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
 
 export interface AudioComponentProps {
   book: Book;
@@ -20,14 +30,150 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
   onRead,
   onComplete,
 }) => {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const waveRef = useRef<WaveSurfer | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
 
+  // ------- TRACKING HOOKS (mirrors old pages) -------
+  const contentId = sessionStorage.getItem("contentId");
+  const profileId = sessionStorage.getItem("profileId");
+  const { mutate } = useContentTracking();
+  const { mutate: mutateSchool } = useContentSchoolTracking();
+  const { mutate: mutateLearning } = useLearningHour();
+  const [user] = useStore(getUserState);
+
+  const [delay, setDelay] = useState(0);       // heartbeat counter (5s)
+  const [lastTime, setLastTime] = useState(0); // last second sent to learning hour
+
+  // heartbeat only while playing
+  useEffect(() => {
+    let interval: number | undefined;
+    if (isPlaying) {
+      interval = window.setInterval(() => setDelay((d) => d + 1), 5000);
+    }
+    return () => {
+      if (interval) window.clearInterval(interval);
+    };
+  }, [isPlaying]);
+
+  // push “ongoing” progress every heartbeat
+  useEffect(() => {
+    if (!delay) return;
+    if (!contentId) return;
+    if (!audioRef.current) return;
+
+    const now = Math.ceil(audioRef.current.currentTime || 0);
+    if (now <= 0) return;
+
+    const payload = {
+      content_id: Number(contentId),
+      status: now === Math.ceil(duration) ? "complete" : "ongoing",
+      pages_read: now,
+      timespent: now,
+    };
+
+    try {
+      if (user?.role === "user") {
+        mutate(
+          { profile_id: Number(profileId), ...payload },
+          {
+            onSuccess: () => {
+              console.log(
+                "[TRACK][audio][user] ongoing ok",
+                payload,
+              );
+              setLastTime(now);
+            },
+            onError: (err) => {
+              console.log("[TRACK][audio][user] ongoing failed", payload, err);
+              notifications.show({
+                title: "Notification",
+                message: getApiErrorMessage(err),
+              });
+            },
+          }
+        );
+      } else {
+        mutateSchool(
+          { ...payload },
+          {
+            onSuccess: () => {
+              console.log("[TRACK][audio][school] ongoing ok", payload);
+              setLastTime(now);
+            },
+            onError: (err) => {
+              console.log(
+                "[TRACK][audio][school] ongoing failed",
+                payload,
+                err
+              );
+              notifications.show({
+                title: "Notification",
+                message: getApiErrorMessage(err),
+              });
+            },
+          }
+        );
+      }
+
+      // Learning hour: send time delta (never negative)
+      const delta = Math.max(0, now - lastTime);
+      mutateLearning(
+        {
+          content_id: Number(contentId),
+          profile_id: Number(profileId),
+          timespent: delta,
+        },
+        {
+          onSuccess: () =>
+            console.log("[TRACK][audio] learning-hour ok", { delta }),
+          onError: (err) =>
+            console.log("[TRACK][audio] learning-hour failed", err),
+        }
+      );
+    } catch (err) {
+      console.log("[TRACK][audio] unexpected error", err);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [delay]);
+
+  // mark complete at the very end
+  const handleAudioComplete = () => {
+    if (!contentId) return;
+    const now = Math.ceil(audioRef.current?.currentTime || 0);
+    const payload = {
+      content_id: Number(contentId),
+      status: "complete",
+      pages_read: now,
+      timespent: now,
+    };
+    if (user?.role === "user") {
+      mutate(
+        { profile_id: Number(profileId), ...payload },
+        {
+          onSuccess: () => console.log("[TRACK][audio] complete ok", payload),
+          onError: (err) =>
+            console.log("[TRACK][audio] complete failed", payload, err),
+        }
+      );
+    } else {
+      mutateSchool(
+        { ...payload },
+        {
+          onSuccess: () => console.log("[TRACK][audio] complete ok (school)", payload),
+          onError: (err) =>
+            console.log("[TRACK][audio] complete failed (school)", payload, err),
+        }
+      );
+    }
+    onComplete && onComplete();
+  };
+
+  // ------- Wavesurfer wiring (unchanged) -------
   useEffect(() => {
     const initializeWaveSurfer = () => {
       const audioEl = audioRef.current!;
@@ -52,8 +198,8 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
         cursorWidth: 0,
         mediaControls: false,
       });
-      waveRef.current = ws;
 
+      waveRef.current = ws;
       ws.setMediaElement(audioEl);
       ws.load(audioSrc);
 
@@ -63,16 +209,12 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
       const onPause = () => setIsPlaying(false);
 
       ws.on("ready", onReady);
-      ws.on("finish", () => {
-        // onRead();
-        onComplete && onComplete();
-      });
+      ws.on("finish", handleAudioComplete); // finish => complete
+
       audioEl.addEventListener("timeupdate", onTimeUpdate);
       audioEl.addEventListener("play", onPlay);
       audioEl.addEventListener("pause", onPause);
-      audioEl.addEventListener("ended", () => {
-        onComplete && onComplete();
-      });
+      audioEl.addEventListener("ended", handleAudioComplete);
 
       container.addEventListener("contextmenu", (e) => e.preventDefault());
 
@@ -81,24 +223,16 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
         audioEl.removeEventListener("timeupdate", onTimeUpdate);
         audioEl.removeEventListener("play", onPlay);
         audioEl.removeEventListener("pause", onPause);
+        audioEl.removeEventListener("ended", handleAudioComplete);
       };
     };
 
-    const retryLoad = () => {
-      if (waveRef.current) {
-        waveRef.current.destroy();
-      }
-      initializeWaveSurfer();
-    };
-
+    // first mount
     initializeWaveSurfer();
-
     return () => {
-      if (waveRef.current) {
-        waveRef.current.destroy();
-      }
+      if (waveRef.current) waveRef.current.destroy();
     };
-  }, [audioSrc, onComplete]);
+  }, [audioSrc]); // eslint-disable-line
 
   const togglePlay = () => {
     const a = audioRef.current;
@@ -116,85 +250,56 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
     new Date(sec * 1000).toISOString().substring(14, 19);
 
   return (
-    <div
+    <section
       className="relative bg-transparent rounded-lg py-6 max-w-full mx-auto"
       onContextMenu={(e) => e.preventDefault()}
     >
+      {/* close */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 text-gray-400 hover:text-gray-700"
+        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+        aria-label="Close player"
       >
         ✕
       </button>
-      <div className="flex flex-col md:flex-row items-center gap-6">
-        <div className="relative flex justify-center items-center w-[300px] h-[300px] rounded-[8px] border-4 border-[#9FC43E] bg-[#9FC43E] opacity-100">
-          <img
-            src={book.coverUrl}
-            alt="cover"
-            className="w-[268px] h-[268px] object-cover rounded-[8px] border-4 border-[#9FC43E] opacity-100"
-            style={{ transform: "rotate(0deg)" }}
-          />
-        </div>
-        <div className="flex-1 flex flex-col w-full gap-24">
-          <div className="flex items-center bg-gjray-100 rounded-full px-4 py-2">
-            <span className="text-gray-400 relative top-8 text-xl mr-3">
-              {fmt(current)}
-            </span>
-            <div ref={containerRef} className="flex-1 h-20" /> {/* 80 px */}
-            <span className="text-gray-400 text-xl ml-3 relative top-8">
-              -{fmt(duration - current)}
-            </span>
-            <div className="flex flex-col items-center relative top-[100px]">
-              <button
-                onClick={onRead}
-                className="text-gray-500 hover:text-gray-700 bg-gray-200 rounded-full p-2"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-5 h-5"
-                >
-                  <path d="M5 4v16h2V4H5zm12 0v16h2V4h-2zM9 6v12h2V6H9zm4 0v12h2V6h-2z" />
-                </svg>
-              </button>
-              <span className="text-gray-500 text-center text-[12px] mt-0">
-                Read
-              </span>
-            </div>
-          </div>
-          <div className="flex items-center justify-center gap-8 bg-[#D7CFD2] rounded-full py-3 w-full">
-            <motion.button
-              onClick={() => skip(-10)}
-              className="text-[#9CA3AF] hover:text-[#6B7280]"
-              whileTap={{ scale: 1.5 }}
-              transition={{ type: "spring", stiffness: 300, damping: 10 }}
-            >
-              <MdReplay10 size={46} />
-            </motion.button>
 
-            <motion.button
-              onClick={togglePlay}
-              className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#9FC43E] flex items-center justify-center text-white shadow-lg"
-              whileTap={{ scale: 1.5 }}
-              transition={{ type: "spring", stiffness: 300, damping: 10 }}
-            >
-              {isPlaying ? <FaPause size={28} /> : <FaPlay size={28} />}
-            </motion.button>
-
-            <motion.button
-              onClick={() => skip(10)}
-              className="text-[#9CA3AF] hover:text-[#6B7280]"
-              whileTap={{ scale: 1.5 }}
-              transition={{ type: "spring", stiffness: 300, damping: 10 }}
-            >
-              <MdForward10 size={46} />
-            </motion.button>
-          </div>
-        </div>
+      {/* timeline + clocks */}
+      <div className="flex items-center justify-between mb-3 text-sm text-gray-700">
+        <span>{fmt(current)}</span>
+        <span>-{fmt(Math.max(0, duration - current))}</span>
       </div>
-      <audio ref={audioRef} hidden />
-    </div>
+
+      {/* waveform */}
+      <div ref={containerRef} className="select-none" />
+
+      {/* controls */}
+      <div className="mt-4 flex items-center justify-center gap-8 bg-[#D7CFD2] rounded-full py-3">
+        <button
+          onClick={() => skip(-10)}
+          className="flex items-center text-gray-500 hover:text-gray-700"
+        >
+          <MdReplay10 /> <span className="text-xs ml-1">10</span>
+        </button>
+
+        <motion.button
+          onClick={togglePlay}
+          className="w-14 h-14 rounded-full bg-[#9FC43E] flex items-center justify-center text-white shadow-lg"
+          whileTap={{ scale: 0.94 }}
+          transition={{ type: "spring", stiffness: 300, damping: 12 }}
+        >
+          {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} />}
+        </motion.button>
+
+        <button
+          onClick={() => skip(10)}
+          className="flex items-center text-gray-500 hover:text-gray-700"
+        >
+          <MdForward10 /> <span className="text-xs ml-1">10</span>
+        </button>
+      </div>
+
+      <audio ref={audioRef} />
+    </section>
   );
 };
 

@@ -57,12 +57,12 @@ export type TAddTeacherData = object;
 export type TSaveQuiz = object;
 
 export type TProfileData = {
-  name: string;
-  dob: string;
-  username: string;
-  schoolname: string;
-  image: string;
-  is_avatar: string;
+  name?: string;
+  dob?: string;
+  username?: string;
+  schoolname?: string;
+  image?: string;
+  is_avatar?: string;
 };
 export type TGetProfileData = object;
 export type TUpdatePassword = object;

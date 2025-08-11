@@ -154,7 +154,7 @@ const SchoolLayout = () => {
             onMouseLeave={() => !docked && setHoverOpen(false)}
           >
             {/* Nav items (icon rail still interactive) */}
-            <nav className="flex-1 overflow-y-auto overflow-x-hidden px-2 z-[8999]">
+            <nav className="flex-1 overflow-y-auto overflow-x-hidden px-2 ">
               {allowedLinks.map((link) => (
                 <NavButton
                   key={link.label}
@@ -191,12 +191,12 @@ const SchoolLayout = () => {
               className={`pointer-events-none absolute inset-y-0 left-0 z-30 ${hoverOpen ? "opacity-100 visible" : "opacity-0 invisible"} fade`}
             >
               <div
-                className="pointer-events-auto bg-white h-full pt-6 flex flex-col pb-4 border-r border-[#E4E7EC] shadow-2xl slide-x"
+                className="pointer-events-auto bg-white h-full pt-6 flex flex-col pb-4 border-r border-[#E4E7EC] shadow-2xl slide-x !z-[1000000] relative"
                 style={{ width: DOCK_W, transform: hoverOpen ? "translateX(0)" : "translateX(-20px)" }}
                 onMouseEnter={() => setHoverOpen(true)}
                 onMouseLeave={() => setHoverOpen(false)}
               >
-                <nav className="flex-1 overflow-y-auto px-3">
+                <nav className="flex-1 overflow-y-auto px-3 !z-[1000000] relative">
                   {allowedLinks.map((link) => (
                     <NavButton
                       key={link.label}
@@ -211,7 +211,7 @@ const SchoolLayout = () => {
            
                 </nav>
 
-                <div className="px-3">
+                <div className="px-3 relative z-100">
                   <DasboardButton
                     title="Contact Us"
                     icon={<TfiEmail size={20} />}

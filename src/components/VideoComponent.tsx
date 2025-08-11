@@ -16,6 +16,16 @@ import QuizComponent from "@/components/QuizComponent";
 import WellDoneModal from "@/components/WellDoneModal";
 import { Book } from "@/components/BookCard";
 
+// --- tracking imports ---
+import {
+  useContentTracking,
+  useContentSchoolTracking,
+  useLearningHour,
+} from "@/api/queries";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
+import { getApiErrorMessage } from "@/api/helper";
+
 interface VideoComponentProps {
   title: string;
   flagUrl: string;
@@ -31,7 +41,7 @@ interface VideoComponentProps {
 
 /* ────────────────────────────────────────────────────────── */
 const fmt = (sec: number) =>
-  new Date(sec * 1000).toISOString().substr(14, 5);
+  new Date((sec || 0) * 1000).toISOString().substr(14, 5);
 
 /* ────────────────────────────────────────────────────────── */
 const VideoComponent: React.FC<VideoComponentProps> = ({
@@ -67,12 +77,22 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
   const [showDone, setShowDone] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
 
+  // --- tracking state ---
+  const [user] = useStore(getUserState);
+  const { mutate: trackParent } = useContentTracking();
+  const { mutate: trackSchool } = useContentSchoolTracking();
+  const { mutate: trackLearning } = useLearningHour();
+  const contentIdNum = book?.id;
+  // console.log('contentIdNum', contentIdNum);
+  const profileIdNum = Number(sessionStorage.getItem("profileId") || 0);
+  const lastDeltaRef = useRef(0);
+
   /* ───────────  metadata & time  ─────────── */
   useEffect(() => {
     const v = videoRef.current!;
-    const meta = () => setDuration(v.duration);
+    const meta = () => setDuration(v.duration || 0);
     const tick = () => {
-      setCurrent(v.currentTime);
+      setCurrent(v.currentTime || 0);
     };
     v.addEventListener("loadedmetadata", meta);
     v.addEventListener("timeupdate", tick);
@@ -87,13 +107,153 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
     const v = videoRef.current!;
     const onPlay = () => setPlaying(true);
     const onPause = () => setPlaying(false);
+    const onEnded = () => handleVideoComplete();
     v.addEventListener("play", onPlay);
     v.addEventListener("pause", onPause);
+    v.addEventListener("ended", onEnded);
     return () => {
       v.removeEventListener("play", onPlay);
       v.removeEventListener("pause", onPause);
+      v.removeEventListener("ended", onEnded);
     };
+    // eslint-disable-next-line
   }, []);
+
+  // --- tracking: every 5s while playing ---
+  useEffect(() => {
+    if (!isPlaying) {
+      console.log("[tracking-debug] Not playing, skipping tracking interval");
+      return;
+    }
+    const timer = setInterval(() => {
+      console.log("[tracking-debug] Timer fired");
+      console.log("[tracking-debug] contentIdNum:", contentIdNum);
+      console.log("[tracking-debug] user:", user);
+      console.log("[tracking-debug] profileIdNum:", profileIdNum);
+      console.log("[tracking-debug] current:", current, "duration:", duration);
+
+      if (!contentIdNum) {
+        console.log("[tracking-debug] No contentIdNum, skipping tracking");
+        return;
+      }
+
+      const payloadBase = {
+        content_id: contentIdNum,
+        status: current >= Math.max(1, duration - 0.25) ? ("complete" as const) : ("ongoing" as const),
+        pages_read: Math.ceil(current),
+        timespent: Math.ceil(current),
+      };
+
+      console.log("[tracking-debug] payloadBase:", payloadBase);
+
+      if (user?.role === "user") {
+        console.log("[tracking-debug] Calling trackParent with:", { ...payloadBase, profile_id: profileIdNum });
+        trackParent(
+          { ...payloadBase, profile_id: profileIdNum },
+          {
+            onSuccess: () =>
+              console.log("[tracking] video progress (parent):", {
+                ...payloadBase,
+                profile_id: profileIdNum,
+              }),
+            onError: (err) =>
+              console.error(
+                "[tracking] video progress failed (parent):",
+                getApiErrorMessage(err)
+              ),
+          }
+        );
+      } else {
+        console.log("[tracking-debug] Calling trackSchool with:", payloadBase);
+        trackSchool(payloadBase, {
+          onSuccess: () =>
+            console.log("[tracking] video progress (school/teacher):", payloadBase),
+          onError: (err) =>
+            console.error(
+              "[tracking] video progress failed (school/teacher):",
+              getApiErrorMessage(err)
+            ),
+        });
+      }
+
+      // learning-hour delta (parents only)
+      const delta = Math.max(0, Math.ceil(current) - lastDeltaRef.current);
+      console.log("[tracking-debug] delta:", delta, "lastDeltaRef.current:", lastDeltaRef.current);
+      if (delta > 0 && user?.role === "user") {
+        console.log("[tracking-debug] Calling trackLearning with:", { content_id: contentIdNum, profile_id: profileIdNum, timespent: delta });
+        trackLearning(
+          { content_id: contentIdNum, profile_id: profileIdNum, timespent: delta },
+          {
+            onSuccess: () =>
+              console.log("[tracking] learning-hour (video):", {
+                content_id: contentIdNum,
+                profile_id: profileIdNum,
+                timespent: delta,
+              }),
+            onError: (err) =>
+              console.error(
+                "[tracking] learning-hour failed (video):",
+                getApiErrorMessage(err)
+              ),
+          }
+        );
+        lastDeltaRef.current = Math.ceil(current);
+      }
+    }, 5000);
+
+    return () => clearInterval(timer);
+    // eslint-disable-next-line
+  }, [isPlaying, current, duration]);
+
+  // --- handle video complete for tracking ---
+  const handleVideoComplete = () => {
+    if (!contentIdNum) {
+      console.log("[tracking-debug] handleVideoComplete: No contentIdNum, skipping");
+      return;
+    }
+
+    const payloadBase = {
+      content_id: contentIdNum,
+      status: "complete" as const,
+      pages_read: Math.ceil(current),
+      timespent: Math.ceil(current),
+    };
+
+    console.log("[tracking-debug] handleVideoComplete payloadBase:", payloadBase);
+
+    if (user?.role === "user") {
+      console.log("[tracking-debug] handleVideoComplete: Calling trackParent with:", { ...payloadBase, profile_id: profileIdNum });
+      trackParent(
+        { ...payloadBase, profile_id: profileIdNum },
+        {
+          onSuccess: () =>
+            console.log("[tracking] video complete (parent):", {
+              ...payloadBase,
+              profile_id: profileIdNum,
+            }),
+          onError: (err) =>
+            console.error(
+              "[tracking] video complete failed (parent):",
+              getApiErrorMessage(err)
+            ),
+        }
+      );
+    } else {
+      console.log("[tracking-debug] handleVideoComplete: Calling trackSchool with:", payloadBase);
+      trackSchool(payloadBase, {
+        onSuccess: () =>
+          console.log("[tracking] video complete (school/teacher):", payloadBase),
+        onError: (err) =>
+          console.error(
+            "[tracking] video complete failed (school/teacher):",
+            getApiErrorMessage(err)
+          ),
+      });
+    }
+
+    setShowDone(true);
+    onComplete?.();
+  };
 
   /* ───── helper ───── */
   const skip = (sec: number) => {

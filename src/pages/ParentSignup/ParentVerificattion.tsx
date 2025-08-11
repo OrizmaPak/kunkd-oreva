@@ -115,6 +115,7 @@ const ParentVerification = () => {
       { email: user?.email },
       {
         onSuccess(data) {
+          
           notifications.show({
             title: `Notification`,
             message: data.data.message,
@@ -157,7 +158,7 @@ const ParentVerification = () => {
             <p className="text3 text-[#A7A7A7]  font-ArimoRegular text-center mb-8 mt-2">
               A code has been sent to your email, enter to verify your account.
             </p>
-            <form onSubmit={handleSubmit(()=> open())}>
+            <form onSubmit={handleSubmit(submitData)}>
               <div className="mt-10 flex justify-center items-center gap-4 flex-col">
                 <Group position="center">
                   <PinInput

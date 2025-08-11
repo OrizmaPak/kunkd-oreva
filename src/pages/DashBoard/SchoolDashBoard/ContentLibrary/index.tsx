@@ -27,7 +27,7 @@ import KojoAndLolaImage2 from "@/assets/Kojo and Lola (2).png";
 import KojoAndLolaImage3 from "@/assets/Kojo and Lola (3).png";
 import KojoAndLolaImage4 from "@/assets/Kojo and Lola (4).png";
 import KojoAndLolaImage5 from "@/assets/Kojo and Lola (5).png";
-import { ContentForHome, GetAudioBooks, GetContebtBySubCategories, GetRecommendedVideo, GetSubCategories, GetContentById } from "@/api/api";
+import { ContentForHome, GetAudioBooks, GetContebtBySubCategories, GetRecommendedVideo, GetSubCategories, GetContentById, GetCompletedContents } from "@/api/api";
 import { showNotification } from "@mantine/notifications";
 
 /* ---------------- helper: loud trace ---------------- */
@@ -44,11 +44,11 @@ const toTitle = (s: string) =>
 const homeToCategories = (payload: any): Category[] => {
   if (!payload || typeof payload !== "object") return [];
   const catArray: Category[] = [
-    {
-      name: "Continue Reading",
-      books: [],
-      hasSub: false, // no sub-view for Continue Reading
-    },
+    // {
+    //   name: "Continue Reading",
+    //   books: [],
+    //   hasSub: false, // no sub-view for Continue Reading
+    // },
   ];
   console.log('payload', payload)
   const uniqueBooks = new Set<number | string>();
@@ -109,6 +109,8 @@ const defaultTabs: Omit<Tab, "id">[] = [
   { label: "Languages", icon: <FaGlobe /> },
   { label: "Literacy", icon: <FaKeyboard /> },
 ];
+
+console.log('GetCompletedContents', GetCompletedContents(sessionStorage.getItem("profileId")));
 
 const ContentLibrary: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -754,7 +756,7 @@ const ContentLibrary: React.FC = () => {
 
       {/* Tabs */}
       <LayoutGroup>
-        <div className="sticky top-[-30px] flex gap-3 mb-6 flex-wrap mt-[52px] z-[1000]">
+        <div className="sticky top-[-30px] flex gap-3 mb-6 flex-wrap mt-[52px] z-10">
           {tabsConfig.map((tab, idx) => (
             <motion.button
               key={tab.label}

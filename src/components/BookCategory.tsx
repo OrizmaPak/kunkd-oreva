@@ -123,7 +123,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
 
             {/* Skeletons for first-page loading/static loading */}
             {((rowLoading || !hasFetched && tabLabel != "For you") || (rowLoading && tabLabel == "For you")) && (
-              Array.from({ length: 8 }).map((_, i) => (
+              Array.from({ length: 7 }).map((_, i) => (
                 <Skeleton
                 key={i}
                 className="w-32 h-44 rounded"

@@ -31,7 +31,7 @@ axiosIntance.interceptors.response.use(
       console.log("axioError", error);
       sessionStorage.clear();
       sessionStorage.clear();
-      window.location.replace(`${window.location.origin}/login`);
+      // window.location.replace(`${window.location.origin}/login`);
     }
     return Promise.reject(error);
   }
