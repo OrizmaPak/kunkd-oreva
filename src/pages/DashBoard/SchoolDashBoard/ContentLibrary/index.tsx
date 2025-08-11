@@ -14,7 +14,6 @@ import { Book } from "@/components/BookCard";
 import ReadingComponent, { ReadingHandle } from "@/components/ReadingComponent";
 import { useSearchParams } from "react-router-dom";
 import VideoComponent from "@/components/VideoComponent";
-import NigeriaFlag from "@/assets/nigeria-flag.png";
 import WellDoneModal from "@/components/WellDoneModal";
 import QuizComponent, { QuizStats, UserAnswer } from "@/components/QuizComponent";
 import QuizResultModal from "@/components/QuizResultModal";
@@ -908,7 +907,6 @@ const ContentLibrary: React.FC = () => {
               videoSrc={videoSrc}
               poster={videoPoster}
               title={watchingBook.title}
-              flagUrl={NigeriaFlag}
               onRetake={handleRetake}
               onClose={closeWatch}
               onViewAnswers={handleViewAnswers}

@@ -11,7 +11,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { Outlet, useMatch, useNavigate } from "react-router-dom";
 // import Teacher01 from "@/assets/teacher01.svg";
 import SchoolIcon from "@/assets/schoolIcon.svg";
-import { Header } from "@/common/User/DashBoard/School/SchoolLayout";
+// import { Header } from "@/common/User/DashBoard/School/SchoolLayout";
 import useStore from "@/store";
 import { getUserState } from "@/store/authStore";
 import React from "react";
@@ -80,7 +80,7 @@ const TeacherLayout = () => {
         <div className="flex max-w-[1280px] w-full mx-auto  h-full gap-5  mt-[1vh]">
           <div className="basis-1/4 bg-white h-full rounded-[40px] px-4 flex  flex-col pb-4 ">
             <div className="flex-grow-1 flex-1">
-              <Header
+              {/* <Header
                 icon1={
                   <img
                     loading="lazy"
@@ -91,7 +91,7 @@ const TeacherLayout = () => {
                 }
                 title="Pampers Schools"
                 icon2={<img loading="lazy" src={Arrow} alt="icon" />}
-              />
+              /> */}
               {links.slice(0, 4).map((link) => (
                 <NavButton
                   key={link.label}

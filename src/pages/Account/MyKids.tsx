@@ -31,11 +31,11 @@ import { useGetProfile } from "@/api/queries";
 import useDebounce from "@/hooks/useDebounce";
 import "./Mykids.css";
 import {
-  ChildAgeModal,
-  ChildNameModal,
+  // ChildAgeModal,
+  // ChildNameModal,
   // ChildSchoolNameModal,
-  SelectAvatar,
-  WellDoneModal,
+  // SelectAvatar,
+  // WellDoneModal,
 } from "@/pages/AfterParentSignIn/ChildProfileSetUp";
 import {
   // STEP_1,
@@ -89,18 +89,18 @@ const MyKids = () => {
               }}
             />
           )} */}
-          {currentStep === STEP_2 && (
-            <ChildNameModal
-              onContinue={() => setCurrentStep(STEP_3)}
-              goBack={() => setCurrentStep(currentStep - 1)}
-              showGoBackIcon={true}
-              setName={setName}
-              userName={userName}
-              name={name}
-              setUserName={setUserName}
-              cancel={close}
-            />
-          )}
+          {/* {currentStep === STEP_2 && (
+            // <ChildNameModal
+            //   onContinue={() => setCurrentStep(STEP_3)}
+            //   goBack={() => setCurrentStep(currentStep - 1)}
+            //   showGoBackIcon={true}
+            //   setName={setName}
+            //   userName={userName}
+            //   name={name}
+            //   setUserName={setUserName}
+            //   cancel={close}
+            // />
+          )} */}
 
           {/* {currentStep === STEP_3 && (
             <ChildSchoolNameModal
@@ -134,7 +134,7 @@ const MyKids = () => {
               setUserName={setUserName}
             />
           )}
-          {currentStep === STEP_5 && <WellDoneModal onContinue={close} />}
+          {/* {currentStep === STEP_5 && <WellDoneModal onContinue={close} />} */}
         </Modal>
 
         <div className="px-4 ">

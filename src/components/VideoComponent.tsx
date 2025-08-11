@@ -83,8 +83,7 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
   const { mutate: trackParent } = useContentTracking();
   const { mutate: trackSchool } = useContentSchoolTracking();
   const { mutate: trackLearning } = useLearningHour();
-  const contentIdNum = book?.id;
-  // console.log('contentIdNum', contentIdNum);
+  // Use book.id directly for tracking
   const profileIdNum = Number(sessionStorage.getItem("profileId") || 0);
   const lastDeltaRef = useRef(0);
 
@@ -126,25 +125,26 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
       console.log("[tracking-debug] Not playing, skipping tracking interval");
       return;
     }
-    const timer = setInterval(() => {
-      console.log("[tracking-debug] Timer fired");
-      console.log("[tracking-debug] contentIdNum:", contentIdNum);
-      console.log("[tracking-debug] user:", user);
-      console.log("[tracking-debug] profileIdNum:", profileIdNum);
-      console.log("[tracking-debug] current:", current, "duration:", duration);
+    const timer = window.setInterval(() => {
+      const v = videoRef.current;
+      if (!v) return;
 
-      if (!contentIdNum) {
-        console.log("[tracking-debug] No contentIdNum, skipping tracking");
-        return;
-      }
+      const now = Math.ceil(v.currentTime || 0);
+      const dur = Math.ceil(v.duration || 0);
+      if (!book?.id || now <= 0) return;
 
       const payloadBase = {
-        content_id: contentIdNum,
-        status: current >= Math.max(1, duration - 0.25) ? ("complete" as const) : ("ongoing" as const),
-        pages_read: Math.ceil(current),
-        timespent: Math.ceil(current),
+        content_id: book.id,
+        status: now >= Math.max(1, dur - 1) ? ("complete" as const) : ("ongoing" as const),
+        pages_read: now,
+        timespent: now,
       };
 
+      console.log("[tracking-debug] Timer fired");
+      console.log("[tracking-debug] contentIdNum:", book.id);
+      console.log("[tracking-debug] user:", user);
+      console.log("[tracking-debug] profileIdNum:", profileIdNum);
+      console.log("[tracking-debug] now:", now, "dur:", dur);
       console.log("[tracking-debug] payloadBase:", payloadBase);
 
       if (user?.role === "user") {
@@ -178,16 +178,16 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
       }
 
       // learning-hour delta (parents only)
-      const delta = Math.max(0, Math.ceil(current) - lastDeltaRef.current);
+      const delta = Math.max(0, now - lastDeltaRef.current);
       console.log("[tracking-debug] delta:", delta, "lastDeltaRef.current:", lastDeltaRef.current);
       if (delta > 0 && user?.role === "user") {
-        console.log("[tracking-debug] Calling trackLearning with:", { content_id: contentIdNum, profile_id: profileIdNum, timespent: delta });
+        console.log("[tracking-debug] Calling trackLearning with:", { content_id: book.id, profile_id: profileIdNum, timespent: delta });
         trackLearning(
-          { content_id: contentIdNum, profile_id: profileIdNum, timespent: delta },
+          { content_id: book.id, profile_id: profileIdNum, timespent: delta },
           {
             onSuccess: () =>
               console.log("[tracking] learning-hour (video):", {
-                content_id: contentIdNum,
+                content_id: book.id,
                 profile_id: profileIdNum,
                 timespent: delta,
               }),
@@ -198,23 +198,23 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
               ),
           }
         );
-        lastDeltaRef.current = Math.ceil(current);
+        lastDeltaRef.current = now;
       }
     }, 5000);
 
-    return () => clearInterval(timer);
-    // eslint-disable-next-line
-  }, [isPlaying, current, duration]);
+    return () => window.clearInterval(timer);
+    // only `isPlaying` here – do NOT add `current` or `duration`
+  }, [isPlaying]);
 
   // --- handle video complete for tracking ---
   const handleVideoComplete = () => {
-    if (!contentIdNum) {
+    if (!book?.id) {
       console.log("[tracking-debug] handleVideoComplete: No contentIdNum, skipping");
       return;
     }
 
     const payloadBase = {
-      content_id: contentIdNum,
+      content_id: book.id,
       status: "complete" as const,
       pages_read: Math.ceil(current),
       timespent: Math.ceil(current),
@@ -327,52 +327,39 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
     const video = videoRef.current;
     if (!video || !videoSrc) return;
 
-    // Clean up any previous source/instance (important on reload)
-    try {
-      if (hlsRef.current) {
-        hlsRef.current.destroy();
-        hlsRef.current = null;
-      }
-    } catch {}
-
-    // Reset the element before attaching a new source
+    // Clean previous instance/state (critical on reload)
+    try { hlsRef.current?.destroy(); } catch {}
+    hlsRef.current = null;
     video.removeAttribute("src");
     video.load();
 
     // Native HLS (Safari)
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
       video.src = videoSrc;
-      // Force a fresh load after setting src so Safari doesn’t stall on reload
-      video.load();
+      video.load(); // force fresh load after reload
       return;
     }
 
-    // Hls.js path (Chrome/Firefox/Edge)
+    // hls.js path (Chrome/Firefox/Edge)
     if (Hls.isSupported()) {
-      const hls = new Hls({
-        enableWorker: true,
-        lowLatencyMode: true,
-        backBufferLength: 90,
-      });
+      const hls = new Hls({ enableWorker: true, lowLatencyMode: true, backBufferLength: 90 });
       hlsRef.current = hls;
-
       hls.loadSource(videoSrc);
       hls.attachMedia(video);
 
-      // Try to recover on fatal errors instead of dying after reloads
       const onError = (_evt: any, data: any) => {
         if (!data?.fatal) return;
         switch (data.type) {
           case Hls.ErrorTypes.NETWORK_ERROR:
-            console.warn("[HLS] network error — restarting load");
+            console.warn("[HLS] network fatal — restarting load");
             hls.startLoad();
             break;
           case Hls.ErrorTypes.MEDIA_ERROR:
-            console.warn("[HLS] media error — recovering");
+            console.warn("[HLS] media fatal — recovering");
             hls.recoverMediaError();
             break;
           default:
-            console.warn("[HLS] fatal error — destroying instance");
+            console.warn("[HLS] unrecoverable — destroying");
             try { hls.destroy(); } catch {}
             hlsRef.current = null;
         }
@@ -471,7 +458,7 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
           playsInline
           preload="metadata"
           onClick={togglePlay}
-          onEnded={onComplete} // Use the onComplete prop
+          onEnded={handleVideoComplete}
         />
         {/* overlay the poster when paused (only if poster‐on‐pause is enabled) */}
         { showPosterOnPause && !isPlaying && (

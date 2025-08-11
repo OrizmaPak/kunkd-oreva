@@ -74,11 +74,17 @@ export const GetAvatars = () => {
 // Profile
 export const Profile = (payload: TProfileData) => {
   const formData = new FormData();
+  // @ts-ignore
   formData.append("name", payload?.name);
+  // @ts-ignore
   formData.append("dob", payload?.dob);
+  // @ts-ignore
   formData.append("username", payload?.username);
+  // @ts-ignore
   formData.append("schoolname", payload?.schoolname);
+  // @ts-ignore
   formData.append("is_avatar", payload?.is_avatar);
+  // @ts-ignore
   formData.append("image", payload?.image);
   return axios.post("/profile", formData);
 };
