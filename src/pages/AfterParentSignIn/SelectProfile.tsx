@@ -17,6 +17,22 @@ export type selectAvatarType = {
   student?: { class_name: string };
 };
 
+const PAID_MAX_PROFILES = 4;
+const FREE_MAX_PROFILES = 1;
+
+function isPaidUser(user: any): boolean {
+  // user.subscription: {cancelled_subscription, expiry, status}
+  if (!user?.subscription) return false;
+  const { cancelled_subscription, expiry, status } = user.subscription;
+  if (cancelled_subscription) return false;
+  if (!status) return false;
+  if (!expiry) return false;
+  // expiry is a string date, e.g. "2025-08-14"
+  const expiryDate = new Date(expiry);
+  const now = new Date();
+  return expiryDate > now;
+}
+
 const SelectProfile = ({
   setChildProfile,
 }: {
@@ -30,6 +46,11 @@ const SelectProfile = ({
   useEffect(() => {
     if (user?.country_id === 0) open();
   }, [user?.country_id, open]);
+
+  // Determine user type and max profiles allowed
+  const paid = isPaidUser(user);
+  const maxProfiles = paid ? PAID_MAX_PROFILES : FREE_MAX_PROFILES;
+  const isAddProfileDisabled = (profiles?.length ?? 0) >= maxProfiles;
 
   return (
     <>
@@ -47,7 +68,7 @@ const SelectProfile = ({
       </Modal>
 
       <div
-        className="min-h-screen w-full flex items-center justify-end px-4"
+        className="min-h-screen w-full flex items-center justify-end px-20"
         style={{
           backgroundImage: `url(${BgImage})`,
           backgroundRepeat: "no-repeat",
@@ -64,7 +85,7 @@ const SelectProfile = ({
 
           {/* Title + subtext */}
           <div className="text-center mb-6">
-            <h1 className="text-[22px] sm:text-[24px] font-semibold text-[#333C48]">
+            <h1 className="text-[22px] sm:text-[24px] font-bold text-[#333C48]">
               Welcome to Kunda Kids
             </h1>
             <p className="text-[13px] sm:text-[14px] text-[#667185]">
@@ -98,7 +119,11 @@ const SelectProfile = ({
               profiles?.length ? "mt-3" : "mt-1"
             }`}
           >
-            <AddProfileBlock />
+            <AddProfileBlock
+              disabled={isAddProfileDisabled}
+              maxProfiles={maxProfiles}
+              isPaidUser={paid}
+            />
           </div>
         </div>
       </div>
@@ -141,7 +166,7 @@ const KidItem = ({
   const handle = () => {
     setChildProfile(String(kid.id));
     sessionStorage.setItem("profileId", String(kid.id));
-    navigate("/parent");
+    navigate("/schooldashboard/content");
   };
 
   return (
@@ -165,7 +190,47 @@ const KidItem = ({
 
 /* ───────────── Add Profile (plus) ───────────── */
 
-const AddProfileBlock = () => {
+const AddProfileBlock = ({
+  disabled = false,
+  maxProfiles,
+  isPaidUser,
+}: {
+  disabled?: boolean;
+  maxProfiles: number;
+  isPaidUser: boolean;
+}) => {
+  // If disabled, render a visually disabled block and prevent navigation
+  if (disabled) {
+    return (
+      <div
+        className="group flex flex-col items-center opacity-50 cursor-not-allowed select-none"
+        tabIndex={-1}
+        aria-disabled="true"
+      >
+        <span
+          className="inline-grid place-items-center w-[56px] h-[56px] rounded-[12px] bg-[#8CC63F] text-white shadow-[0_6px_18px_rgba(140,198,63,0.45)] transition"
+          aria-hidden
+        >
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12 5v14M5 12h14"
+              stroke="white"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+            />
+          </svg>
+        </span>
+        <span className="mt-2 text-[13px] font-semibold" style={{ color: "#79B626" }}>
+          Add Profile
+        </span>
+        <span className="text-xs text-[#EF4444] mt-1">
+          {isPaidUser
+            ? `Maximum ${maxProfiles} profiles allowed`
+            : "Upgrade to add more profiles"}
+        </span>
+      </div>
+    );
+  }
   return (
     <Link to="/childprofilesetup" className="group flex flex-col items-center">
       <span
