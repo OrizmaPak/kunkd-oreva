@@ -54,6 +54,7 @@ const toTitle = (s: string) =>
 
 /* helper: transform ContentForHome response → Category[] */
 const homeToCategories = (payload: any): Category[] => {
+  console.log('payload', payload)
   if (!payload || typeof payload !== "object") return [];
   const catArray: Category[] = [
     // {
@@ -69,8 +70,9 @@ const homeToCategories = (payload: any): Category[] => {
     if (Array.isArray(val)) {
       const books = val
         .filter((item) => {
-          if (!uniqueBooks.has(item.id)) {
-            uniqueBooks.add(item.id);
+          const uniqueKey = `${key}-${item.id}`;
+          if (!uniqueBooks.has(uniqueKey)) {
+            uniqueBooks.add(uniqueKey);
             return true;
           }
           return false;
