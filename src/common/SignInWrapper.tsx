@@ -9,7 +9,7 @@ const SignInWrapper = ({ children }: Props) => {
       <img
         src={BgImage}
         alt="signin image"
-        className=" w-full h-full object-cover object-top "
+        className=" w-full h-full object-cover object-center "
       />
 
       <div className=" top-0 h-full absolute flex w-full py-5 px-20  ">

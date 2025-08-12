@@ -3,10 +3,12 @@ import Doll from "@/assets/doll.svg";
 import { motion } from "framer-motion";
 import Button from "@/components/Button";
 import { useNavigate } from "react-router-dom";
+import { useGetProfile } from "@/api/queries";
 
 
 
 const ProfileSuccessPage = () => {
+              useGetProfile(true);
     const navigator = useNavigate();
   return (
     <div>
