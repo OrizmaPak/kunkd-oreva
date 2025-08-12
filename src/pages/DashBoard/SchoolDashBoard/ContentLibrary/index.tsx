@@ -109,7 +109,7 @@ interface Page {
 
 interface Tab {
   label: string;
-  icon: JSX.Element;
+  icon: String;
   id: number | null;
 }
 
@@ -122,7 +122,7 @@ const defaultTabs: Omit<Tab, "id">[] = [
   { label: "Literacy", icon: literacy },
 ];
 
-console.log('GetCompletedContents', GetCompletedContents(sessionStorage.getItem("profileId")));
+// console.log('GetCompletedContents', GetCompletedContents(sessionStorage.getItem("profileId")));
 
 const ContentLibrary: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -361,7 +361,7 @@ const ContentLibrary: React.FC = () => {
       return;
     }
 
-    setOverviewChecking(true);
+    setOverviewChecking(false);
     GetContentById(String(urlState.book), profileId)
       .then((res) => {
         if (!res.data.status) {
@@ -864,7 +864,7 @@ const ContentLibrary: React.FC = () => {
         <div className="mt-6 w-full">
           <iframe
             src="https://interactive-app.kundakidsapi.com/"
-            className="w-full h-[80vh] rounded-xl border"
+            className="w-full h-[100vh] rounded-xl border"
             allow="fullscreen; autoplay; clipboard-read; clipboard-write"
             loading="lazy"
             title="Kunda Kids Interactive App"
