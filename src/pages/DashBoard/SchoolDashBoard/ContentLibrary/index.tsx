@@ -37,6 +37,10 @@ import {
   GetOngoingContents,     // ← add this
 } from "@/api/api";
 import { showNotification } from "@mantine/notifications";
+import foryou from "@/assets/foryou.png";
+import story from "@/assets/story.png";
+import languages from "@/assets/languagev.png";
+import literacy from "@/assets/literacy.png";
 
 /* ---------------- helper: loud trace ---------------- */
 const trace = (...msg: any[]) =>
@@ -112,10 +116,10 @@ interface Tab {
 const generateAllSubcategories = (): Category[] => [{ name: "Advanced Reading", books: [{ id: 29, title: "Advanced Book One", coverUrl: KojoAndLolaImage, progress: 10 }, { id: 30, title: "Advanced Book Two", coverUrl: KojoAndLolaImage1, progress: 20 }, { id: 31, title: "Advanced Book Three", coverUrl: KojoAndLolaImage2, progress: 30 }, { id: 32, title: "Advanced Book Four", coverUrl: KojoAndLolaImage3, progress: 40 }, { id: 33, title: "Advanced Book Five", coverUrl: KojoAndLolaImage4, progress: 50 }, { id: 34, title: "Advanced Book Six", coverUrl: KojoAndLolaImage5, progress: 60 }, { id: 35, title: "Advanced Book Seven", coverUrl: KojoAndLolaImage, progress: 70 }, { id: 36, title: "Advanced Book Eight", coverUrl: KojoAndLolaImage1, progress: 80 }, { id: 37, title: "Advanced Book Nine", coverUrl: KojoAndLolaImage2, progress: 90 }, { id: 38, title: "Advanced Book Ten", coverUrl: KojoAndLolaImage3, progress: 100 }, { id: 49, title: "Advanced Book Eleven", coverUrl: KojoAndLolaImage4, progress: 15 }, { id: 50, title: "Advanced Book Twelve", coverUrl: KojoAndLolaImage5, progress: 25 },], }, { name: "Young Explorers", books: [{ id: 39, title: "Explorer One", coverUrl: KojoAndLolaImage4, progress: 15 }, { id: 40, title: "Explorer Two", coverUrl: KojoAndLolaImage5, progress: 25 }, { id: 41, title: "Explorer Three", coverUrl: KojoAndLolaImage, progress: 35 }, { id: 42, title: "Explorer Four", coverUrl: KojoAndLolaImage1, progress: 45 }, { id: 43, title: "Explorer Five", coverUrl: KojoAndLolaImage2, progress: 55 }, { id: 44, title: "Explorer Six", coverUrl: KojoAndLolaImage3, progress: 65 }, { id: 45, title: "Explorer Seven", coverUrl: KojoAndLolaImage4, progress: 75 }, { id: 46, title: "Explorer Eight", coverUrl: KojoAndLolaImage5, progress: 85 }, { id: 47, title: "Explorer Nine", coverUrl: KojoAndLolaImage, progress: 95 }, { id: 48, title: "Explorer Ten", coverUrl: KojoAndLolaImage1, progress: 100 }, { id: 51, title: "Explorer Eleven", coverUrl: KojoAndLolaImage2, progress: 20 }, { id: 52, title: "Explorer Twelve", coverUrl: KojoAndLolaImage3, progress: 30 },], }, { name: "New Discoveries", books: [{ id: 53, title: "Discovery One", coverUrl: KojoAndLolaImage4, progress: 5 }, { id: 54, title: "Discovery Two", coverUrl: KojoAndLolaImage5, progress: 15 }, { id: 55, title: "Discovery Three", coverUrl: KojoAndLolaImage, progress: 25 }, { id: 56, title: "Discovery Four", coverUrl: KojoAndLolaImage1, progress: 35 }, { id: 57, title: "Discovery Five", coverUrl: KojoAndLolaImage2, progress: 45 }, { id: 58, title: "Discovery Six", coverUrl: KojoAndLolaImage3, progress: 55 }, { id: 59, title: "Discovery Seven", coverUrl: KojoAndLolaImage4, progress: 65 }, { id: 60, title: "Discovery Eight", coverUrl: KojoAndLolaImage5, progress: 75 }, { id: 61, title: "Discovery Nine", coverUrl: KojoAndLolaImage, progress: 85 }, { id: 62, title: "Discovery Ten", coverUrl: KojoAndLolaImage1, progress: 95 },], },];
 
 const defaultTabs: Omit<Tab, "id">[] = [
-  { label: "For you", icon: <FaUser /> },
-  { label: "Stories", icon: <FaBookOpen /> },
-  { label: "Languages", icon: <FaGlobe /> },
-  { label: "Literacy", icon: <FaKeyboard /> },
+   { label: "For you", icon: foryou },
+  { label: "Stories", icon: story },
+  { label: "Languages", icon: languages },
+  { label: "Literacy", icon: literacy },
 ];
 
 console.log('GetCompletedContents', GetCompletedContents(sessionStorage.getItem("profileId")));
@@ -778,13 +782,13 @@ const ContentLibrary: React.FC = () => {
   return (
     <div className="mx-auto w-[clamp(550px,100%,1440px)]">
       {/* Banner */}
-      <div className="relative h-auto sm:h-[220px] z-10 rounded-lg bg-[#BCD678] px-4 py-6 sm:px-8 sm:py-10 overflow-visible">
+      <div className="relative h-auto sm:h-[220px] z-10 rounded-3xl bg-[#BCD678] px-4 py-6 sm:px-8 sm:py-10 overflow-visible mt-10">
         <div className="flex flex-col justify-center h-full">
-          <h1 className="font-inter font-semibold text-[24px] sm:text-[36px] text-gray-900">
+           <h1 className="font-Inter font-[600] text-[36px] leading-[120%] mb-[14px] tracking-[-0.02em] text-gray-900">
             Content Library
           </h1>
-          <p className="mt-1 font-inter font-medium text-[14px] sm:text-[16px] text-gray-700">
-            Curated selections just for you
+          <p className="mt-1 font-Inter font-[500] text-[16px] leading-[145%] tracking-[0%] text-gray-700">
+          Content Library
           </p>
         </div>
         <img
@@ -796,9 +800,9 @@ const ContentLibrary: React.FC = () => {
 
       {/* Tabs */}
       <LayoutGroup>
-        <div className="sticky top-[-30px] flex gap-3 mb-6 flex-wrap mt-[52px] z-10">
+        <div className="sticky top-[-22px] flex gap-3 mb-6 flex-wrap mt-[52px] z-10">
           {tabsConfig.map((tab, idx) => (
-            <motion.button
+             <motion.button
               key={tab.label}
               layout
               onClick={() => setTab(idx)}
@@ -812,17 +816,19 @@ const ContentLibrary: React.FC = () => {
               transition={{ duration: 0.3, ease: "easeOut" }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="relative flex items-center gap-[7px] px-3 py-3 rounded-lg border border-gray-200 text-sm font-medium outline-none"
+              className="relative flex items-center gap-[7px] p-[12px] w-fit h-[48px] rounded-[8px] border border-gray-200 text-sm font-medium outline-none"
             >
               {idx === activeIndex && (
                 <motion.div
                   layoutId="tabHighlight"
-                  className="absolute inset-0 rounded-lg bg-[#BCD678] z-0"
+                  className="absolute inset-0 rounded-[8px] bg-[#BCD678] z-0"
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
                 />
               )}
-              <span className="relative z-10">{tab.icon}</span>
-              <span className="relative z-10">{tab.label}</span>
+              <span className="relative z-10">
+                <img src={tab.icon} alt="Tab Icon" />
+              </span>
+              <span className="relative z-10 font-Inter font-[100] text-[16px] leading-[120%] tracking-[-0.02em] align-middle">{tab.label}</span>
             </motion.button>
           ))}
         </div>
@@ -835,14 +841,14 @@ const ContentLibrary: React.FC = () => {
         <nav aria-label="Breadcrumb" className="mb-4">
           <ol className="flex items-center text-sm text-gray-600 space-x-2">
             {displayCrumbs.map((label, idx) => (
-              <React.Fragment key={idx}>
+               <React.Fragment key={idx}>
                 {idx > 0 && <FaChevronRight className="text-gray-400" />}
                 <span
-                  className={
+                  className={`${
                     idx === displayCrumbs.length - 1
                       ? "font-bold text-gray-900"
                       : "hover:underline cursor-pointer"
-                  }
+                  } font-arimo text-[14px] leading-[21px] tracking-[0.1px] align-middle`}
                   onClick={() => handleBreadcrumbClick(label, idx)}
                 >
                   {label}

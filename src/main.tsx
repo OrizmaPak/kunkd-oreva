@@ -13,6 +13,9 @@ import { ErrorBoundary } from "react-error-boundary";
 import "aos/dist/aos.css";
 import NotFound from "./pages/NotFoundPage/NotFound.tsx";
 
+// FONTS IMPORT
+import "@fontsource-variable/inter";  
+
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

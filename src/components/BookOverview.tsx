@@ -48,6 +48,7 @@ const BookOverview: React.FC<BookOverviewProps> = ({
     GetContentById(String(book.id), profileId)
       .then(res => {
         if (!res.data.status) {
+          alert('Error');
           // Assuming there's a notification system in place
           // showNotification({
           //   message: res.data.message,

@@ -68,7 +68,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
     <div className="mb-8">
       {/* HEADER */}
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-lg font-semibold">
+         <h3 className="font-[600] font-BalooSemiBold text-[28px] leading-[120%] tracking-[-0.02em] text-center align-middle text-[#667185] mt-[15px]">
           {categoryName.trim().length > 0 ? (
             categoryName
           ) : (
