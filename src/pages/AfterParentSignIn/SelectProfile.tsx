@@ -68,7 +68,7 @@ const SelectProfile = ({
       </Modal>
 
       <div
-        className="min-h-screen w-full flex items-center justify-end px-20"
+        className="min-h-screen w-full flex items-center justify-center px-20"
         style={{
           backgroundImage: `url(${BgImage})`,
           backgroundRepeat: "no-repeat",
@@ -203,7 +203,7 @@ const AddProfileBlock = ({
   if (disabled) {
     return (
       <div
-        className="group flex flex-col items-center opacity-50 cursor-not-allowed select-none"
+        className="group flex hidden flex-col items-center opacity-50 cursor-not-allowed select-none"
         tabIndex={-1}
         aria-disabled="true"
       >
