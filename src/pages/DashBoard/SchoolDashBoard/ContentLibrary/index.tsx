@@ -41,6 +41,7 @@ import foryou from "@/assets/foryou.png";
 import story from "@/assets/story.png";
 import languages from "@/assets/languagev.png";
 import literacy from "@/assets/literacy.png";
+import useStore from "@/store";
 
 /* ---------------- helper: loud trace ---------------- */
 const trace = (...msg: any[]) =>
@@ -224,7 +225,7 @@ const ContentLibrary: React.FC = () => {
   const fetchBookPages = useCallback(async (id: number) => {
     setReadingLoading(true);
     try {
-      const profileId = sessionStorage.getItem("profileId");
+       const profileId = sessionStorage.getItem("profileId") || 0;
       const res = await GetContentById(String(id), profileId);
       if (!res.data.status) {
         // Assuming there's a notification system in place
