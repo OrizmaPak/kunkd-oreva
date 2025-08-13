@@ -68,7 +68,7 @@ const SelectProfile = ({
       </Modal>
 
       <div
-        className="min-h-screen w-full flex items-center justify-end px-20"
+        className="min-h-screen w-full flex items-center justify-center px-20"
         style={{
           backgroundImage: `url(${BgImage})`,
           backgroundRepeat: "no-repeat",
@@ -175,7 +175,7 @@ const KidItem = ({
       className="w-full rounded-2xl border border-[#F2F4F7] bg-white hover:bg-[#FAFAFA] p-4 flex flex-col items-center text-center transition"
     >
       <span
-        className="inline-grid place-items-center rounded-full text-white font-semibold w-12 h-12 mb-2"
+        className="inline-grid place-items-center rounded-full text-white font-semibold w-20 h-20 mb-2"
         style={{ background: pickColorFromName(kid.name) }}
       >
         {initials}
@@ -203,7 +203,7 @@ const AddProfileBlock = ({
   if (disabled) {
     return (
       <div
-        className="group flex flex-col items-center opacity-50 cursor-not-allowed select-none"
+        className="group flex hidden flex-col items-center opacity-50 cursor-not-allowed select-none"
         tabIndex={-1}
         aria-disabled="true"
       >
