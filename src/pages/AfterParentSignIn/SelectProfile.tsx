@@ -175,7 +175,7 @@ const KidItem = ({
       className="w-full rounded-2xl border border-[#F2F4F7] bg-white hover:bg-[#FAFAFA] p-4 flex flex-col items-center text-center transition"
     >
       <span
-        className="inline-grid place-items-center rounded-full text-white font-semibold w-12 h-12 mb-2"
+        className="inline-grid place-items-center rounded-full text-white font-semibold w-20 h-20 mb-2"
         style={{ background: pickColorFromName(kid.name) }}
       >
         {initials}
