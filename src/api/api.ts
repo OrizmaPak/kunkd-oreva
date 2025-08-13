@@ -116,6 +116,7 @@ export const ContentForHome = (payload: TContentForHome) => {
 
 export const GetContentById = (contentId: string, userId: string) => {
   console.log('GetContentById', contentId, userId)
+  if(userId == '0' || userId == null || !userId)return axios.get(`/content/school/${contentId}`);
   return axios.get(`/content/${contentId}/${userId}`);
 };
 
@@ -461,6 +462,7 @@ export const GetSummerQuizAnswers = (quizId: string, profileId: string) => {
 
 export const GetSchoolAndTeacherContent = (id: string) => {
   return axios.get(`/content/school/${id}`);
+  
 };
 // export const GetSchoolAndTeacherContent = (id: string) => {
 //   return axios.get(`/content/school/${id}`);

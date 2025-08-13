@@ -41,6 +41,7 @@ import foryou from "@/assets/foryou.png";
 import story from "@/assets/story.png";
 import languages from "@/assets/languagev.png";
 import literacy from "@/assets/literacy.png";
+import useStore from "@/store";
 
 /* ---------------- helper: loud trace ---------------- */
 const trace = (...msg: any[]) =>
@@ -54,6 +55,7 @@ const toTitle = (s: string) =>
 
 /* helper: transform ContentForHome response → Category[] */
 const homeToCategories = (payload: any): Category[] => {
+  console.log('payload', payload)
   if (!payload || typeof payload !== "object") return [];
   const catArray: Category[] = [
     // {
@@ -69,8 +71,9 @@ const homeToCategories = (payload: any): Category[] => {
     if (Array.isArray(val)) {
       const books = val
         .filter((item) => {
-          if (!uniqueBooks.has(item.id)) {
-            uniqueBooks.add(item.id);
+          const uniqueKey = `${key}-${item.id}`;
+          if (!uniqueBooks.has(uniqueKey)) {
+            uniqueBooks.add(uniqueKey);
             return true;
           }
           return false;
@@ -222,7 +225,7 @@ const ContentLibrary: React.FC = () => {
   const fetchBookPages = useCallback(async (id: number) => {
     setReadingLoading(true);
     try {
-      const profileId = sessionStorage.getItem("profileId");
+       const profileId = sessionStorage.getItem("profileId") || 0;
       const res = await GetContentById(String(id), profileId);
       if (!res.data.status) {
         // Assuming there's a notification system in place
