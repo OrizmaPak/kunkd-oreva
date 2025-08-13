@@ -1,4 +1,3 @@
- // src/components/VideoComponent.tsx
 import React, { useRef, useState, useEffect } from "react";
 import Hls from "hls.js";
 import screenfull from "screenfull";
@@ -388,7 +387,7 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
   return (
     <div
       ref={shellRef}
-      className="relative mx-auto max-w-[clamp(300px,100%,800px)] mb-4"
+      className={`relative mx-auto max-w-[clamp(300px,100%,800px)] mb-4 ${isFull ? 'w-screen h-screen' : ''}`}
       onMouseMove={showOverlay} // <── show on mouse move
     >
       {/* ======================  PLAYER  ====================== */}
@@ -452,7 +451,7 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
           key={videoSrc}
           ref={videoRef}
           poster={poster} // Use the poster prop
-          className="w-full h-[400px] md:h-[420px] lg:h-[440px] object-cover bg-black"
+          className={`w-full ${isFull ? 'h-[90vh]' : 'h-[400px] md:h-[420px] lg:h-[440px]'} object-cover bg-black`}
           controls={false}
           muted={muted}
           playsInline
