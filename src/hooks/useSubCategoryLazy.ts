@@ -1,235 +1,230 @@
 // src/hooks/useSubCategoryLazy.ts
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { GetContebtBySubCategories } from "@/api/api";
 import type { Book } from "@/components/BookCard";
 
-const TRACE = (...m: any[]) =>
-  console.log("%c[useSubCategoryLazy]", "color:#8CBA51;font-weight:bold", ...m);
+type UseLazyOptions = {
+  /** When THIS row starts its first load, also prefetch these subIds (e.g. the next two categories) */
+  prefetchIds?: number[];
+  /** How early we trigger before the row actually enters the viewport */
+  rootMargin?: string;
+};
 
-/**
- * Normalize API result into { number_pages, records[] }
- * NOTE: GetContebtBySubCategories returns response.data directly,
- * not the axios Response object.
- */
-function normalizePayload(raw: any): { number_pages: number; records: any[] } {
-  // try common shapes in priority order
-  const inner = raw?.data ?? raw;
+type CacheEntry = {
+  books: Book[];
+  pageLoaded: number; // max page loaded
+  done: boolean;
+};
 
-  const number_pages =
-    inner?.number_pages ??
-    inner?.meta?.pages ??
-    inner?.meta?.total_pages ??
-    0;
+const cache = new Map<number, CacheEntry>();
+const inflight = new Map<string, Promise<CacheEntry>>(); // `${id}:${page}`
 
-  // records may live in different keys depending on backend
-  const records =
-    inner?.records ??
-    inner?.data ??
-    inner?.items ??
-    inner?.list ??
+/** Normalize API response defensively to Book[] */
+function normalizeToBooks(payload: any): Book[] {
+  const arr =
+    payload?.data?.data ??
+    payload?.data ??
+    payload?.items ??
+    payload ??
     [];
-
-  return {
-    number_pages: Number(number_pages) || 0,
-    records: Array.isArray(records) ? records : [],
-  };
+  if (!Array.isArray(arr)) return [];
+  return arr.map((it: any) => ({
+    id: it?.content_id ?? it?.id,
+    title: it?.name ?? it?.title ?? "",
+    coverUrl: it?.thumbnail ?? it?.cover ?? it?.image ?? "",
+    progress: Number(it?.percentage ?? it?.progress ?? 0) || 0,
+    is_liked: it?.is_liked,
+  })) as Book[];
 }
 
-/** Map raw content → Book */
-function mapToBooks(records: any[]): Book[] {
-  return records.map((r: any) => ({
-    id: r?.content_id ?? r?.id,
-    title: r?.name ?? r?.title ?? "",
-    coverUrl: r?.thumbnail ?? r?.cover ?? r?.image ?? "",
-    is_liked: r?.is_liked,
-    progress: Number(r?.percentage ?? r?.progress ?? 0) || 0,
-  }));
+function fetchPage(id: number, page: number): Promise<CacheEntry> {
+  const key = `${id}:${page}`;
+  if (inflight.has(key)) return inflight.get(key)!;
+
+  const p = GetContebtBySubCategories(String(id), String(page))
+    .then((res: any) => {
+      const list = normalizeToBooks(res);
+      console.log("%c[useSubCategoryLazy] fetchPage done", "color:#8CBA51", {
+        id,
+        page,
+        listLen: list.length,
+      });
+      const prev = cache.get(id);
+      const books = page === 1 ? list : [...(prev?.books ?? []), ...list];
+      const done = list.length === 0;
+      const entry: CacheEntry = { books, pageLoaded: page, done };
+      cache.set(id, entry);
+      inflight.delete(key);
+      return entry;
+    })
+    .catch((e) => {
+      inflight.delete(key);
+      throw e;
+    });
+
+  console.log("%c[useSubCategoryLazy] fetchPage start", "color:#8CBA51", {
+    id,
+    page,
+  });
+  inflight.set(key, p);
+  return p;
 }
 
-const useSubCategoryLazy = (subId: number | null, expanded: boolean, options?: { prefetchIds?: number[] }) => {
+async function prefetchFirstPage(id?: number | null) {
+  if (!id && id !== 0) return;
+  if (cache.has(id)) {
+    console.log("%c[useSubCategoryLazy] PREFETCH skip (cached)", "color:#8CBA51", { id });
+    return;
+  }
+  console.log("%c[useSubCategoryLazy] PREFETCH start", "color:#8CBA51", { id });
+  await fetchPage(id, 1).catch((e) => {
+    console.warn("[useSubCategoryLazy] PREFETCH failed", { id }, e);
+  });
+}
+
+export default function useSubCategoryLazy(
+  subId: number | null,
+  expanded: boolean,
+  options?: UseLazyOptions
+) {
+  const rootMargin = options?.rootMargin ?? "1000px 0px 1000px 0px"; // earlier trigger
+
   const [books, setBooks] = useState<Book[]>([]);
-  const [page, setPage] = useState(0);
-  const [maxPage, setMax] = useState<number | null>(null);
-
-  const [loadingInit, setInit] = useState(false);
-  const [loadingMore, setMore] = useState(false);
+  const [loadingInit, setLoadingInit] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const sentryRef = useRef<HTMLDivElement | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
-  const cache = new Map<number, { books: Book[] }>();
+  const id = subId ?? undefined;
 
-  // Reset when subId changes
+  console.log("%c[useSubCategoryLazy] mount", "color:#8CBA51", {
+    id,
+    expanded,
+    rootMargin,
+  });
+
+  // Initialize from cache if present
   useEffect(() => {
-    TRACE("reset state for subId:", subId);
-    setBooks([]);
-    setPage(0);
-    setMax(null);
-    setInit(false);
-    setMore(false);
-    setHasFetched(false);
-  }, [subId]);
-
-  const fetchPage = async (id: number, next: number) => {
-    const first = next === 1;
-    const busy = first ? loadingInit : loadingMore;
-
-    if (busy) {
-      TRACE("skip fetch (busy)", { subId: id, next, first, loadingInit, loadingMore });
-      return;
-    }
-    if (id == null) {
-      TRACE("skip fetch (no subId)");
-      return;
-    }
-    if (maxPage !== null && next > maxPage) {
-      TRACE("skip fetch (beyond max)", { next, maxPage });
-      return;
-    }
-
-    first ? setInit(true) : setMore(true);
-    if (first) setHasFetched(true); // hide first-load skeleton once we start
-
-    try {
-      TRACE("→ fetch start", { subId: id, page: next });
-      const res = await GetContebtBySubCategories(String(id), String(next));
-      // res is already the payload (NOT axios response)
-      const norm = normalizePayload(res);
-      const mapped = mapToBooks(norm.records);
-
-      TRACE("← fetch done", {
-        subId: id,
-        next,
-        number_pages: norm.number_pages,
-        records: norm.records.length,
-        mapped: mapped.length,
+    if (!id && id !== 0) return;
+    const cached = cache.get(id);
+    if (cached) {
+      setBooks(cached.books);
+      setHasFetched(true);
+      console.log("%c[useSubCategoryLazy] hydrate from cache", "color:#8CBA51", {
+        id,
+        books: cached.books.length,
       });
-
-      setBooks((prev) => [
-        ...prev,
-        ...mapped.filter((m) => !prev.some((p) => p.id === m.id)),
-      ]);
-      setPage(next);
-      setMax(norm.number_pages ?? null);
-      setHasFetched(true);
-      cache.set(id, { books: mapped });
-    } catch (e) {
-      setHasFetched(true);
-      console.error("[useSubCategoryLazy] GetContebtBySubCategories failed", { subId: id, next }, e);
-    } finally {
-      first ? setInit(false) : setMore(false);
     }
-  };
+  }, [id]);
 
-  // keep this existing helper:
+  const loadFirstPage = useCallback(async () => {
+    if (!id && id !== 0) return;
+    const cached = cache.get(id);
+    if (cached) {
+      setBooks(cached.books);
+      setHasFetched(true);
+      return;
+    }
+
+    setLoadingInit(true);
+    try {
+      const entry = await fetchPage(id, 1);
+      setBooks(entry.books);
+      setHasFetched(true);
+    } finally {
+      setLoadingInit(false);
+    }
+  }, [id]);
+
+  const loadNextPage = useCallback(async () => {
+    if (!id && id !== 0) return;
+    const cached = cache.get(id);
+    if (!cached || cached.done) return;
+    const nextPage = (cached.pageLoaded ?? 1) + 1;
+
+    setLoadingMore(true);
+    try {
+      const entry = await fetchPage(id, nextPage);
+      setBooks(entry.books);
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [id]);
+
+  // Prefetch the “next two” neighbors
   const prewarmNeighbors = useCallback(async () => {
     const ids = options?.prefetchIds ?? [];
-    console.log(
-      "%c[useSubCategoryLazy] PREWARM neighbors",
-      "color:#8CBA51;font-weight:bold",
-      { subId, ids: ids.slice(0, 2) }
-    );
+    console.log("%c[useSubCategoryLazy] PREWARM neighbors", "color:#8CBA51", {
+      subId: id,
+      ids: ids.slice(0, 2),
+    });
     await Promise.all(ids.slice(0, 2).map((n) => prefetchFirstPage(n)));
-  }, [options?.prefetchIds]);
+  }, [options?.prefetchIds, id]);
 
-  // NEW: run prewarm once when the row obtains data (from cache or after first fetch)
+  // NEW: if we’re already hydrated (from cache) or once first fetch marks hasFetched,
+  // run prewarm once so neighbors get warmed even if this row never intersects again.
   const didPrewarmRef = useRef(false);
   useEffect(() => {
-    if (!subId && subId !== 0) return;
+    if (!id && id !== 0) return;
     if (didPrewarmRef.current) return;
-    // If we already have books (from cache) OR we finished initial fetch, prewarm
-    const cached = cache.get(subId);
+
+    const cached = cache.get(id);
     const haveBooks = (cached?.books?.length ?? 0) > 0 || hasFetched;
     if (haveBooks) {
       didPrewarmRef.current = true;
       prewarmNeighbors();
     }
-  }, [subId, hasFetched, prewarmNeighbors]);
+  }, [id, hasFetched, prewarmNeighbors]);
 
-  // Instrument the prefetch path
-  async function prefetchFirstPage(id?: number | null) {
-    if (!id && id !== 0) return;
-    if (cache.has(id)) {
-      console.log("%c[useSubCategoryLazy] PREFETCH skip (cached)", "color:#8CBA51", { id });
-      return;
-    }
-    console.log("%c[useSubCategoryLazy] PREFETCH start", "color:#8CBA51", { id });
-    await fetchPage(id, 1).catch((e) => {
-      console.warn("[useSubCategoryLazy] PREFETCH failed", { id }, e);
-    });
-  }
-
-  // First page: IntersectionObserver (collapsed rows)
+  // First-load observer
   useEffect(() => {
-    if (subId == null || !sentryRef.current) return;
+    if (!id && id !== 0) return;
 
-    const node = sentryRef.current;
-    const visible = () => {
-      const r = node.getBoundingClientRect();
-      return r.top < window.innerHeight && r.bottom > 0;
-    };
+    const el = sentryRef.current ?? containerRef.current;
+    if (!el) return;
 
-    if (visible()) {
-      TRACE("sentry visible immediately → fetchPage(1)", { subId });
-      fetchPage(subId, 1);
-      return;
-    }
+    if (hasFetched) return; // already loaded/hydrated
 
     const io = new IntersectionObserver(
-      ([entry]) => {
+      (entries) => {
+        const entry = entries[0];
         if (entry.isIntersecting) {
-          TRACE("sentry intersected → fetchPage(1)", { subId });
-          fetchPage(subId, 1);
+          console.log("%c[useSubCategoryLazy] first intersect → load + prewarm", "color:#8CBA51", { id });
+          loadFirstPage();
+          prewarmNeighbors();
           io.disconnect();
         }
       },
-      { root: null, threshold: 0, rootMargin: "0px 0px -25% 0px" }
+      { root: null, rootMargin, threshold: 0.01 }
     );
 
-    io.observe(node);
+    io.observe(el);
     return () => io.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subId]);
+  }, [id, hasFetched, loadFirstPage, prewarmNeighbors, rootMargin]);
 
-  // Collapsed horizontal scroll: load next page near end
+  // Load-more observer (only when expanded)
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el || expanded) return;
+    if (!id && id !== 0) return;
+    if (!expanded) return;
 
-    const onScroll = () => {
-      const nearEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 48;
-      if (nearEnd && !loadingMore && (maxPage === null || page < maxPage)) {
-        TRACE("collapsed scroll near end → fetch next", { page, maxPage });
-        fetchPage(subId, page + 1);
-      }
-    };
+    const more = loadMoreRef.current;
+    if (!more) return;
 
-    el.addEventListener("scroll", onScroll);
-    return () => el.removeEventListener("scroll", onScroll);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, maxPage, loadingMore, expanded]);
-
-  // Expanded rows: bottom sentinel for vertical infinite load
-  useEffect(() => {
-    if (!expanded || !loadMoreRef.current) return;
-
-    const node = loadMoreRef.current;
     const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && (maxPage === null || page < maxPage)) {
-          TRACE("expanded sentinel intersected → fetch next", { page, maxPage });
-          fetchPage(subId, page + 1);
-        }
+      (entries) => {
+        const entry = entries[0];
+        if (!entry.isIntersecting) return;
+        loadNextPage();
       },
-      { root: null, rootMargin: "200px" }
+      { root: null, rootMargin: "1200px 0px 1200px 0px", threshold: 0.01 }
     );
 
-    io.observe(node);
+    io.observe(more);
     return () => io.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [expanded, page, maxPage, loadingMore]);
+  }, [id, expanded, loadNextPage]);
 
   return {
     books,
@@ -239,8 +234,5 @@ const useSubCategoryLazy = (subId: number | null, expanded: boolean, options?: {
     containerRef,
     sentryRef,
     loadMoreRef,
-    page,
   };
-};
-
-export default useSubCategoryLazy;
+}
