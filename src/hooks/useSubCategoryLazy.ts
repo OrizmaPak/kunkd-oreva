@@ -4,7 +4,8 @@ import { GetContebtBySubCategories } from "@/api/api";
 import type { Book } from "@/components/BookCard";
 
 type UseLazyOptions = {
-  /** When THIS row starts its first load, also prefetch these subIds (e.g. the next two categories) */
+  /** When THIS row starts its first load (or hydrates from cache),
+   * also prefetch these subIds (e.g., the next two categories) */
   prefetchIds?: number[];
   /** How early we trigger before the row actually enters the viewport */
   rootMargin?: string;
@@ -41,6 +42,11 @@ function fetchPage(id: number, page: number): Promise<CacheEntry> {
   const key = `${id}:${page}`;
   if (inflight.has(key)) return inflight.get(key)!;
 
+  console.log("%c[useSubCategoryLazy] fetchPage start", "color:#8CBA51", {
+    id,
+    page,
+  });
+
   const p = GetContebtBySubCategories(String(id), String(page))
     .then((res: any) => {
       const list = normalizeToBooks(res);
@@ -62,10 +68,6 @@ function fetchPage(id: number, page: number): Promise<CacheEntry> {
       throw e;
     });
 
-  console.log("%c[useSubCategoryLazy] fetchPage start", "color:#8CBA51", {
-    id,
-    page,
-  });
   inflight.set(key, p);
   return p;
 }
@@ -87,7 +89,7 @@ export default function useSubCategoryLazy(
   expanded: boolean,
   options?: UseLazyOptions
 ) {
-  const rootMargin = options?.rootMargin ?? "1000px 0px 1000px 0px"; // earlier trigger
+  const rootMargin = options?.rootMargin ?? "1200px 0px 1200px 0px"; // earlier trigger
 
   const [books, setBooks] = useState<Book[]>([]);
   const [loadingInit, setLoadingInit] = useState(false);
@@ -97,7 +99,6 @@ export default function useSubCategoryLazy(
   const containerRef = useRef<HTMLDivElement | null>(null);
   const sentryRef = useRef<HTMLDivElement | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-
   const id = subId ?? undefined;
 
   console.log("%c[useSubCategoryLazy] mount", "color:#8CBA51", {
@@ -106,7 +107,7 @@ export default function useSubCategoryLazy(
     rootMargin,
   });
 
-  // Initialize from cache if present
+  // hydrate from cache if present (instant paint)
   useEffect(() => {
     if (!id && id !== 0) return;
     const cached = cache.get(id);
@@ -128,7 +129,6 @@ export default function useSubCategoryLazy(
       setHasFetched(true);
       return;
     }
-
     setLoadingInit(true);
     try {
       const entry = await fetchPage(id, 1);
@@ -154,23 +154,23 @@ export default function useSubCategoryLazy(
     }
   }, [id]);
 
-  // Prefetch the “next two” neighbors
+  // prewarm “next two” neighbors
   const prewarmNeighbors = useCallback(async () => {
     const ids = options?.prefetchIds ?? [];
+    const next = ids.slice(0, 2);
+    if (!next.length) return;
     console.log("%c[useSubCategoryLazy] PREWARM neighbors", "color:#8CBA51", {
       subId: id,
-      ids: ids.slice(0, 2),
+      ids: next,
     });
-    await Promise.all(ids.slice(0, 2).map((n) => prefetchFirstPage(n)));
+    await Promise.all(next.map((n) => prefetchFirstPage(n)));
   }, [options?.prefetchIds, id]);
 
-  // NEW: if we’re already hydrated (from cache) or once first fetch marks hasFetched,
-  // run prewarm once so neighbors get warmed even if this row never intersects again.
+  // NEW: if we already have data (cache or post-fetch), run prewarm ONCE.
   const didPrewarmRef = useRef(false);
   useEffect(() => {
     if (!id && id !== 0) return;
     if (didPrewarmRef.current) return;
-
     const cached = cache.get(id);
     const haveBooks = (cached?.books?.length ?? 0) > 0 || hasFetched;
     if (haveBooks) {
@@ -179,13 +179,12 @@ export default function useSubCategoryLazy(
     }
   }, [id, hasFetched, prewarmNeighbors]);
 
-  // First-load observer
+  // First-load observer (collapsed)
   useEffect(() => {
     if (!id && id !== 0) return;
 
     const el = sentryRef.current ?? containerRef.current;
     if (!el) return;
-
     if (hasFetched) return; // already loaded/hydrated
 
     const io = new IntersectionObserver(
@@ -205,7 +204,7 @@ export default function useSubCategoryLazy(
     return () => io.disconnect();
   }, [id, hasFetched, loadFirstPage, prewarmNeighbors, rootMargin]);
 
-  // Load-more observer (only when expanded)
+  // Load-more observer (expanded)
   useEffect(() => {
     if (!id && id !== 0) return;
     if (!expanded) return;

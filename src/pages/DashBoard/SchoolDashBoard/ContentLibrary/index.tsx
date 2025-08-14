@@ -949,20 +949,23 @@ const ContentLibrary: React.FC = () => {
             <>
               {/* ───── Stories tab ───── */}
               {/* ───── Stories tab ───── */}
+{/* ───── Stories tab ───── */}
 {isStoriesTab &&
   displayList
     .filter((cat) => !showAllStories || cat.name === storiesActiveSubSlug)
     .map((cat) => {
-      // derive next two from the full categories array for Stories
-      const allRows = categories; // full ordered list for the tab
+      // full ordered list for the Stories tab
+      const allRows = categories; // your existing ordered array for the tab
       const idx = allRows.findIndex((r: any) => r?.subId === cat?.subId);
+
+      // compute the next two unseen neighbors
       const nextTwo: number[] = [];
       for (let k = idx + 1; k <= idx + 2 && k < allRows.length; k++) {
         const nid = allRows[k]?.subId;
         if (typeof nid === "number") nextTwo.push(nid);
       }
-      console.log(
-        "%c[ContentLibrary] prefetchNext (Stories)",
+
+      console.log("%c[ContentLibrary] prefetchNext (Stories)",
         "color:#BCD678;font-weight:bold",
         { for: cat.name, subId: cat.subId, nextTwo }
       );
@@ -979,27 +982,31 @@ const ContentLibrary: React.FC = () => {
             openBook(book.id);
             setCrumb([...bc, book.title]);
           }}
+          // **this is the important part**
           prefetchNext={nextTwo}
         />
       );
     })}
 
 
+
               {/* ───── Languages tab ───── */}
              {/* ───── Languages tab ───── */}
+{/* ───── Languages tab ───── */}
 {isLangsTab &&
   displayList
     .filter((cat) => !showAllLanguages || cat.name === languagesActiveSubSlug)
     .map((cat) => {
-      const allRows = categories; // full ordered list for the tab
+      const allRows = categories; // full ordered list for Languages
       const idx = allRows.findIndex((r: any) => r?.subId === cat?.subId);
+
       const nextTwo: number[] = [];
       for (let k = idx + 1; k <= idx + 2 && k < allRows.length; k++) {
         const nid = allRows[k]?.subId;
         if (typeof nid === "number") nextTwo.push(nid);
       }
-      console.log(
-        "%c[ContentLibrary] prefetchNext (Languages)",
+
+      console.log("%c[ContentLibrary] prefetchNext (Languages)",
         "color:#BCD678;font-weight:bold",
         { for: cat.name, subId: cat.subId, nextTwo }
       );
@@ -1020,6 +1027,7 @@ const ContentLibrary: React.FC = () => {
         />
       );
     })}
+
 
 
               {/* ───── For-you tab ───── */}
