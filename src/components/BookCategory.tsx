@@ -61,6 +61,11 @@ const BookCategory: React.FC<BookCategoryProps> = ({
   const usingLazy = subId != null;
   // Choose data source based on lazy vs. static
   const list = usingLazy ? lazyBooks : books;
+  console.log(
+    "%c[BookCategory]",
+    "color:#9FC43E;font-weight:bold",
+    { categoryName, usingLazy, listLen: list.length, loadingInit, hasFetched }
+  );
   // First-page load vs. static loading
   const rowLoading = usingLazy ? loadingInit : loading;
   
