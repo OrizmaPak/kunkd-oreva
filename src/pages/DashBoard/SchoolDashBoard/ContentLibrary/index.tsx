@@ -116,7 +116,19 @@ interface Tab {
   id: number | null;
 }
 
-const generateAllSubcategories = (): Category[] => [{ name: "Advanced Reading", books: [{ id: 29, title: "Advanced Book One", coverUrl: KojoAndLolaImage, progress: 10 }, { id: 30, title: "Advanced Book Two", coverUrl: KojoAndLolaImage1, progress: 20 }, { id: 31, title: "Advanced Book Three", coverUrl: KojoAndLolaImage2, progress: 30 }, { id: 32, title: "Advanced Book Four", coverUrl: KojoAndLolaImage3, progress: 40 }, { id: 33, title: "Advanced Book Five", coverUrl: KojoAndLolaImage4, progress: 50 }, { id: 34, title: "Advanced Book Six", coverUrl: KojoAndLolaImage5, progress: 60 }, { id: 35, title: "Advanced Book Seven", coverUrl: KojoAndLolaImage, progress: 70 }, { id: 36, title: "Advanced Book Eight", coverUrl: KojoAndLolaImage1, progress: 80 }, { id: 37, title: "Advanced Book Nine", coverUrl: KojoAndLolaImage2, progress: 90 }, { id: 38, title: "Advanced Book Ten", coverUrl: KojoAndLolaImage3, progress: 100 }, { id: 49, title: "Advanced Book Eleven", coverUrl: KojoAndLolaImage4, progress: 15 }, { id: 50, title: "Advanced Book Twelve", coverUrl: KojoAndLolaImage5, progress: 25 },], }, { name: "Young Explorers", books: [{ id: 39, title: "Explorer One", coverUrl: KojoAndLolaImage4, progress: 15 }, { id: 40, title: "Explorer Two", coverUrl: KojoAndLolaImage5, progress: 25 }, { id: 41, title: "Explorer Three", coverUrl: KojoAndLolaImage, progress: 35 }, { id: 42, title: "Explorer Four", coverUrl: KojoAndLolaImage1, progress: 45 }, { id: 43, title: "Explorer Five", coverUrl: KojoAndLolaImage2, progress: 55 }, { id: 44, title: "Explorer Six", coverUrl: KojoAndLolaImage3, progress: 65 }, { id: 45, title: "Explorer Seven", coverUrl: KojoAndLolaImage4, progress: 75 }, { id: 46, title: "Explorer Eight", coverUrl: KojoAndLolaImage5, progress: 85 }, { id: 47, title: "Explorer Nine", coverUrl: KojoAndLolaImage, progress: 95 }, { id: 48, title: "Explorer Ten", coverUrl: KojoAndLolaImage1, progress: 100 }, { id: 51, title: "Explorer Eleven", coverUrl: KojoAndLolaImage2, progress: 20 }, { id: 52, title: "Explorer Twelve", coverUrl: KojoAndLolaImage3, progress: 30 },], }, { name: "New Discoveries", books: [{ id: 53, title: "Discovery One", coverUrl: KojoAndLolaImage4, progress: 5 }, { id: 54, title: "Discovery Two", coverUrl: KojoAndLolaImage5, progress: 15 }, { id: 55, title: "Discovery Three", coverUrl: KojoAndLolaImage, progress: 25 }, { id: 56, title: "Discovery Four", coverUrl: KojoAndLolaImage1, progress: 35 }, { id: 57, title: "Discovery Five", coverUrl: KojoAndLolaImage2, progress: 45 }, { id: 58, title: "Discovery Six", coverUrl: KojoAndLolaImage3, progress: 55 }, { id: 59, title: "Discovery Seven", coverUrl: KojoAndLolaImage4, progress: 65 }, { id: 60, title: "Discovery Eight", coverUrl: KojoAndLolaImage5, progress: 75 }, { id: 61, title: "Discovery Nine", coverUrl: KojoAndLolaImage, progress: 85 }, { id: 62, title: "Discovery Ten", coverUrl: KojoAndLolaImage1, progress: 95 },], },];
+const generateAllSubcategories = (): Category[] => [
+  {
+    name: "Advanced Reading",
+    books: [
+      {
+        id: 29,
+        title: "Advanced Book One",
+        coverUrl: KojoAndLolaImage,
+        progress: 10,
+      },
+    ],
+  },
+];
 
 const defaultTabs: Omit<Tab, "id">[] = [
    { label: "For you", icon: foryou },
