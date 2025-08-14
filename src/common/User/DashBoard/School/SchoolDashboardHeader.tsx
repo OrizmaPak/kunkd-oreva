@@ -1,14 +1,10 @@
-// import { Link } from "react-router-dom";
-// import Logo from "@/assets/KundaLogo.svg";
-// import BellIcon from "@/assets/bellicon.svg";
 import SchoolAvatar from "@/assets/SchoolAvatar.png";
-// import SearchIcon from "@/assets/searchicon.svg";
 import { AiOutlineBell } from "react-icons/ai";
 import useStore from "@/store";
 import { getUserState } from "@/store/authStore";
 import { IoChevronDown } from "react-icons/io5";
 import { Menu } from "@mantine/core";
-import { FaRegUserCircle } from "react-icons/fa";
+import { FaCog, FaRegUserCircle, FaWrench } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
 import { handleEventTracking } from "@/api/moengage";
 import { logOut } from "@/auth/sdk";
@@ -84,7 +80,6 @@ const SchoolDashboardHeader = () => {
     (day < 10 ? "0" + day : day);
 
   const [user] = useStore(getUserState);
-  // console.log('user', user)
   const [profiles] = useStore(getProfileState) as [Profile[]];
 
   const { data } = useGetAttemptAllStudentConnect(user?.role === "schoolAdmin");
@@ -93,25 +88,22 @@ const SchoolDashboardHeader = () => {
   /** ---------------- Active child handling ---------------- */
   const [activeProfileId, setActiveProfileId] = useState<number | null>(null);
 
-  // Initialize on mount (and whenever profiles change)
   useEffect(() => {
     if (!Array.isArray(profiles) || profiles.length === 0) return;
 
     const fromSessionRaw = sessionStorage.getItem("profileId");
     const fromSession = fromSessionRaw ? Number(fromSessionRaw) : null;
 
-    // If session id exists and still valid → use it, else fall back to first profile
-    const validSessionId = profiles.some((p) => p.id === fromSession) ? fromSession : profiles[0].id;
+    const validSessionId = profiles.some((p) => p.id === fromSession)
+      ? fromSession
+      : profiles[0].id;
 
-    // Sync local header state
     setActiveProfileId(validSessionId);
 
-    // Persist to sessionStorage if missing or invalid
     if (fromSession !== validSessionId) {
       sessionStorage.setItem("profileId", String(validSessionId));
     }
 
-    // Push to store (try several common action names without breaking your store)
     try {
       const s: any = (useStore as any).getState?.();
       const setActiveProfileIdAction =
@@ -123,23 +115,17 @@ const SchoolDashboardHeader = () => {
       if (typeof setActiveProfileIdAction === "function") {
         setActiveProfileIdAction(validSessionId);
       }
-    } catch (_) {
-      // ignore if store has no setter—UI will still show correct active child
-    }
+    } catch (_) {}
   }, [profiles]);
 
-  // Derived active profile object
   const activeProfile = useMemo(
     () => profiles?.find((p) => p.id === activeProfileId) || null,
     [profiles, activeProfileId]
   );
 
-  // When user picks a child in the dropdown
   const handlePickProfile = (p: Profile) => {
     setActiveProfileId(p.id);
     sessionStorage.setItem("profileId", String(p.id));
-
-    // update store if an action is available
     try {
       const s: any = (useStore as any).getState?.();
       const setActiveProfileIdAction =
@@ -152,14 +138,12 @@ const SchoolDashboardHeader = () => {
         setActiveProfileIdAction(p.id);
       }
     } catch (_) {}
-
-    // optional: inform rest of app
     window.dispatchEvent(
       new CustomEvent("profile:changed", { detail: { profileId: p.id, profile: p } })
     );
   };
 
-  // Sync burger with sidebar docked state
+  // Sidebar dock sync (unchanged if you’re moving the toggle elsewhere)
   const [sidebarDocked, setSidebarDocked] = useState<boolean>(true);
   useEffect(() => {
     const initial =
@@ -175,7 +159,6 @@ const SchoolDashboardHeader = () => {
   }, []);
 
   const toggleSidebarDock = () => {
-    // Layout listens and is source of truth
     window.dispatchEvent(new CustomEvent("sidebar:dockToggle"));
   };
 
@@ -198,20 +181,23 @@ const SchoolDashboardHeader = () => {
     navigate("/");
   };
 
+  /** NEW: control expand/collapse of children inside dropdown */
+  const [childrenOpen, setChildrenOpen] = useState(false);
+
   /** ---------------- UI ---------------- */
   return (
     <div className="relative flex font-[500] py-4 text-[16px] px-[30px] justify-between items-center z-50 gap-4 h-[8vh] shadow-md bg-white">
-      {/* Left: Name + Burger (burger AFTER name) */}
+      {/* Left: Name + (optional) Burger */}
       <div className="flex items-center gap-3">
         <p className="font-Inter text-[20px]">
           {user?.school?.name || "Greenfield Academy"}
         </p>
 
-        {/* Burger (morphs to X), placed after the name */}
+        {/* If you moved the burger to the sidebar, keep this hidden */}
         <button
           aria-label={sidebarDocked ? "Collapse sidebar" : "Expand sidebar"}
           onClick={toggleSidebarDock}
-          className="relative inline-flex items-center justify-center rounded-md border border-[#E4E7EC] bg-white h-10 w-10 hover:bg-gray-50 transition"
+          className="relative hidden inline-flex items-center justify-center rounded-md border border-[#E4E7EC] bg-white h-10 w-10 hover:bg-gray-50 transition"
         >
           <span
             className={`absolute h-[2px] w-5 bg-[#101928] transition
@@ -252,18 +238,25 @@ const SchoolDashboardHeader = () => {
         </div>
 
         <Menu
-          width={260}
+          width={280}
           shadow="lg"
           radius={10}
           position="bottom-end"
           styles={{ dropdown: { transform: "translateX(0px)" } }}
+          closeOnItemClick={false} // Prevent dropdown from closing on item click
         >
           <Menu.Target>
             <div className="flex justify-center items-center gap-2 cursor-pointer rounded-3xl p-2 px-4">
-              {/* Parent → show active child’s photo + name; Others → admin avatar + label */}
+              {/* Parent → show active child’s initials + name; Others → admin avatar + label */}
               {user?.role === "user" ? (
                 <div className="flex items-center gap-2">
-                  <AvatarCircle src={activeProfile?.image} label={activeProfile?.name} size={40} />
+                  <div className="flex items-center justify-center w-[40px] h-[40px] bg-gray-300 rounded-full">
+                    <span className="text-white font-bold">
+                      {activeProfile?.name
+                        ? activeProfile.name.slice(0, 2).toUpperCase()
+                        : "CC"}
+                    </span>
+                  </div>
                   <span className="flex items-center gap-2">
                     {activeProfile?.name || "Choose child"}
                     <IoChevronDown size={22} color="#667185" />
@@ -287,32 +280,58 @@ const SchoolDashboardHeader = () => {
           </Menu.Target>
 
           <Menu.Dropdown>
-            {/* Parent: list children ABOVE Settings */}
-            {user?.role === "user" && Array.isArray(profiles) && profiles.length > 0 && (
-              <>
-                <Menu.Label>Children</Menu.Label>
-                <div style={{ maxHeight: 240, overflowY: "auto" }}>
+            {/* Collapsible 'Profile' row (click to show children for parents) */}
+            <Menu.Item
+              onClick={() => setChildrenOpen((v) => !v)}
+              rightSection={
+                <IoChevronDown
+                  className={`transition-transform duration-200 ${childrenOpen ? "rotate-180" : ""}`}
+                  size={18}
+                  color="#667185"
+                />
+              }
+            >
+              <div className="flex items-center gap-2 text-[14px] text-[#667185] font-Arimo">
+                <FaRegUserCircle color="#667185" size={20} />
+                Profiles
+              </div>
+            </Menu.Item>
+
+            {/* Children list (hidden by default, only for parent role) */}
+            {user?.role === "user" && childrenOpen && Array.isArray(profiles) && profiles.length > 0 && (
+              <div className="px-2 pb-2">
+                <div className="px-2 py-1 text-xs text-[#98A2B3] uppercase">Children</div>
+                <div className="rounded-md border border-[#EEF2F6] max-h-[240px] overflow-y-auto">
                   {profiles.map((p) => (
-                    <Menu.Item key={p.id} onClick={() => handlePickProfile(p)}>
-                      <div className="flex items-center gap-2 text-[14px] text-[#667185] font-Arimo">
-                        <AvatarCircle src={p.image} label={p.name} size={28} />
-                        <span className="truncate">{p.name}</span>
-                        {activeProfileId === p.id && (
-                          <span className="ml-auto text-xs px-2 py-[2px] rounded-full bg-[#E3F2D1] text-[#3F6212]">
-                            Active
-                          </span>
-                        )}
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => handlePickProfile(p)}
+                      className="w-full text-left px-3 py-2 flex items-center gap-2 hover:bg-[#F9FAFB]"
+                    >
+                      <div className="flex items-center justify-center w-[28px] h-[28px] bg-gray-300 rounded-full">
+                        <span className="text-white text-xs font-bold">
+                          {p.name.slice(0, 2).toUpperCase()}
+                        </span>
                       </div>
-                    </Menu.Item>
+                      <span className="truncate text-[14px] text-[#344054]">{p.name}</span>
+                      {activeProfileId === p.id && (
+                        <span className="ml-auto text-[10px] px-2 py-[2px] rounded-full bg-[#E3F2D1] text-[#3F6212]">
+                          Active
+                        </span>
+                      )}
+                    </button>
                   ))}
                 </div>
-                <Menu.Divider />
-              </>
+              </div>
             )}
+
+            {/* Regular items */}
+            <Menu.Divider />
 
             <Menu.Item onClick={() => navigate("schooldashboard/settings")}>
               <p className="flex items-center gap-2 text-[14px] text-[#667185] font-Arimo">
-                <FaRegUserCircle color="#667185" size={25} />
+                <FaCog color="#667185" size={18} />
                 Settings
               </p>
             </Menu.Item>
@@ -324,7 +343,7 @@ const SchoolDashboardHeader = () => {
                 onClick={handLogOut}
                 className="flex items-center gap-2 text-[14px] text-[#667185] font-Arimo"
               >
-                <CiLogout size={25} />
+                <CiLogout size={20} />
                 Log out
               </p>
             </Menu.Item>

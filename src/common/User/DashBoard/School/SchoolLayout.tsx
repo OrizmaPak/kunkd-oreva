@@ -119,6 +119,26 @@ const SchoolLayout = () => {
     [userRole]
   );
 
+  // Sync burger with sidebar docked state
+  const [sidebarDocked, setSidebarDocked] = useState<boolean>(true);
+  useEffect(() => {
+    const initial =
+      localStorage.getItem("kk.sidebarDocked") === "false" ? false : true;
+    setSidebarDocked(initial);
+
+    const sync = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (typeof detail?.docked === "boolean") setSidebarDocked(detail.docked);
+    };
+    window.addEventListener("sidebar:state", sync);
+    return () => window.removeEventListener("sidebar:state", sync);
+  }, []);
+
+  const toggleSidebarDock = () => {
+    // Layout listens and is source of truth
+    window.dispatchEvent(new CustomEvent("sidebar:dockToggle"));
+  };
+
   return (
     <>
       <Modal
@@ -153,6 +173,27 @@ const SchoolLayout = () => {
             onMouseEnter={() => !docked && setHoverOpen(true)}
             onMouseLeave={() => !docked && setHoverOpen(false)}
           >
+            <button
+              aria-label={sidebarDocked ? "Collapse sidebar" : "Expand sidebar"}
+              onClick={toggleSidebarDock}
+              className="relative inline-flex items-center ml-4 justify-center rounded-md border border-[#E4E7EC] bg-white h-10 w-10 hover:bg-gray-50 transition"
+            >
+              <span
+                className={`absolute h-[2px] w-5 bg-[#101928] transition
+              ${sidebarDocked ? "translate-y-[6px] rotate-45" : "-translate-y-[6px]"}
+            `}
+              />
+              <span
+                className={`absolute h-[2px] w-5 bg-[#101928] transition
+              ${sidebarDocked ? "opacity-0" : "opacity-100"}
+            `}
+              />
+              <span
+                className={`absolute h-[2px] w-5 bg-[#101928] transition
+              ${sidebarDocked ? "-translate-y-[-6px] -rotate-45" : "translate-y-[6px]"}
+            `}
+              />
+            </button>
             {/* Nav items (icon rail still interactive) */}
             <nav className="flex-1 overflow-y-auto overflow-x-hidden px-2 ">
               {allowedLinks.map((link) => (
@@ -177,12 +218,12 @@ const SchoolLayout = () => {
               />
             </div>
             <div className={`flex ${hoverOpen ? "px-4" : "justify-center"} items-center mb-2 mt-4`}>
-                {hoverOpen ? (
-                  <img src={KundaLogo} alt="" className="h-6" />
-                ) : (
-                  <img src={KundaLogo} alt="" className="h-6" />
-                )}
-              </div>
+              {hoverOpen ? (
+                <img src={KundaLogo} alt="" className="h-6" />
+              ) : (
+                <img src={KundaLogo} alt="" className="h-6" />
+              )}
+            </div>
           </aside>
 
           {/* HOVER OVERLAY: appears when collapsed and hovered; DOES NOT shift frame */}
@@ -197,6 +238,27 @@ const SchoolLayout = () => {
                 onMouseLeave={() => setHoverOpen(false)}
               >
                 <nav className="flex-1 overflow-y-auto px-3 !z-[1000000] relative">
+                <button
+              aria-label={sidebarDocked ? "Collapse sidebar" : "Expand sidebar"}
+              onClick={toggleSidebarDock}
+              className="relative inline-flex items-center mx-auto justify-center rounded-md border border-[#E4E7EC] bg-white h-10 w-10 hover:bg-gray-50 transition"
+            >
+              <span
+                className={`absolute h-[2px] w-5 bg-[#101928] transition
+              ${sidebarDocked ? "translate-y-[6px] rotate-45" : "-translate-y-[6px]"}
+            `}
+              />
+              <span
+                className={`absolute h-[2px] w-5 bg-[#101928] transition
+              ${sidebarDocked ? "opacity-0" : "opacity-100"}
+            `}
+              />
+              <span
+                className={`absolute h-[2px] w-5 bg-[#101928] transition
+              ${sidebarDocked ? "-translate-y-[-6px] -rotate-45" : "translate-y-[6px]"}
+            `}
+              />
+            </button>
                   {allowedLinks.map((link) => (
                     <NavButton
                       key={link.label}
@@ -208,7 +270,7 @@ const SchoolLayout = () => {
                     />
                   ))}
 
-           
+
                 </nav>
 
                 <div className="px-3 relative z-100">
@@ -221,12 +283,12 @@ const SchoolLayout = () => {
                 </div>
 
                 <div className={`flex ${hoverOpen ? "px-4" : "justify-center"} items-center mb-2 mt-4`}>
-                {hoverOpen ? (
-                  <img src={KundaLogo} alt="" className="h-6" />
-                ) : (
-                  <img src={KundaLogo} alt="" className="h-6" />
-                )}
-              </div>
+                  {hoverOpen ? (
+                    <img src={KundaLogo} alt="" className="h-6" />
+                  ) : (
+                    <img src={KundaLogo} alt="" className="h-6" />
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -266,11 +328,17 @@ const DasboardButton = ({
   return (
     <button
       onClick={onClick}
-      className={`transition-all duration-200 px-2 py-3 text-[#101928] rounded-[8px] flex items-center ${
-        collapsed ? "justify-center" : "justify-start"
-      } gap-3 w-full text-[14px] ${
-        active ? "bg-customGreen" : "hover:bg-customGreen"
-      } my-2 relative group`}
+      className={`transition-all duration-200 px-2 py-3 text-[#101928] rounded-[8px] flex items-center ${collapsed ? "justify-center" : "justify-start"
+        } gap-3 w-full text-[14px] ${active ? "bg-customGreen" : "hover:bg-customGreen"
+        } my-2 relative group`}
+      style={{
+        fontFamily: "Inter",
+        fontWeight: 400,
+        fontStyle: "Regular",
+        fontSize: "14px",
+        lineHeight: "145%",
+        letterSpacing: "0%",
+      }}
     >
       <span className="flex-shrink-0"> {icon} </span>
 
@@ -305,7 +373,7 @@ const NavButton = (props: {
   };
 
   return (<>
-  <DasboardButton
+    <DasboardButton
       onClick={handleNavigate}
       {...{ title, collapsed }}
       icon={React.cloneElement(icon as React.ReactElement, {
@@ -314,6 +382,6 @@ const NavButton = (props: {
       active={!!match}
     />
   </>
-    
+
   );
 };

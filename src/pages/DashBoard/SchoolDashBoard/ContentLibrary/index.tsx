@@ -785,21 +785,23 @@ const ContentLibrary: React.FC = () => {
   return (
     <div className="mx-auto w-[clamp(550px,100%,1440px)]">
       {/* Banner */}
-      <div className="relative h-auto sm:h-[220px] z-10 rounded-3xl bg-[#BCD678] px-4 py-6 sm:px-8 sm:py-10 overflow-visible mt-10">
-        <div className="flex flex-col justify-center h-full">
-           <h1 className="font-Inter font-[600] text-[36px] leading-[120%] mb-[14px] tracking-[-0.02em] text-gray-900">
-            Content Library
-          </h1>
-          <p className="mt-1 font-Inter font-[500] text-[16px] leading-[145%] tracking-[0%] text-gray-700">
-          Content Library
-          </p>
+      {activeLabel === "For you" && (
+        <div className="relative h-auto sm:h-[220px] z-10 rounded-3xl bg-[#BCD678] px-4 py-6 sm:px-8 sm:py-10 overflow-visible mt-10">
+          <div className="flex flex-col justify-center h-full">
+            <h1 className="font-Inter font-[600] text-[36px] leading-[120%] mb-[14px] tracking-[-0.02em] text-gray-900">
+              Content Library
+            </h1>
+            <p className="mt-1 font-Inter font-[500] text-[16px] leading-[145%] tracking-[0%] text-gray-700">
+              Content Library
+            </p>
+          </div>
+          <img
+            src={TeacherIllustration}
+            alt="Illustration"
+            className="absolute bottom-[-20px] sm:bottom-[-38px] right-4 sm:right-6 w-20 sm:w-auto select-none pointer-events-none"
+          />
         </div>
-        <img
-          src={TeacherIllustration}
-          alt="Illustration"
-          className="absolute bottom-[-20px] sm:bottom-[-38px] right-4 sm:right-6 w-20 sm:w-auto select-none pointer-events-none"
-        />
-      </div>
+      )}
 
       {/* Tabs */}
       <LayoutGroup>
@@ -840,7 +842,7 @@ const ContentLibrary: React.FC = () => {
     
 
       {/* Unified Breadcrumb */}
-      {displayCrumbs.length > 0 && (
+      {displayCrumbs.length > 1 && (
         <nav aria-label="Breadcrumb" className="mb-4">
           <ol className="flex items-center text-sm text-gray-600 space-x-2">
             {displayCrumbs.map((label, idx) => (
