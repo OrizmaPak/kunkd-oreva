@@ -1,124 +1,207 @@
-import { useEffect, useRef, useState } from "react";
+// src/hooks/useSubCategoryLazy.ts
+import { useCallback, useEffect, useRef, useState } from "react";
 import { GetContebtBySubCategories } from "@/api/api";
-import { Book } from "@/components/BookCard";
+import type { Book } from "@/components/BookCard";
 
-const useSubCategoryLazy = (subId: number | null, expanded: boolean) => {
+/** Optional controls coming from the caller (BookCategory) */
+type UseLazyOptions = {
+  /** When THIS row starts its first load, also prefetch these subIds (e.g. the next two categories) */
+  prefetchIds?: number[];
+  /** How early we trigger (in px) before the row actually enters the viewport */
+  rootMargin?: string;
+};
+
+/** Cache per sub-category id so we never refetch first page twice */
+type CacheEntry = {
+  books: Book[];
+  pageLoaded: number; // max page loaded
+  done: boolean; // true when there's nothing else to load
+};
+const cache = new Map<number, CacheEntry>();
+const inflight = new Map<string, Promise<CacheEntry>>(); // `${id}:${page}` → promise
+
+/** Normalize API response defensively to Book[] */
+function normalizeToBooks(payload: any): Book[] {
+  const arr =
+    payload?.data?.data ??
+    payload?.data ??
+    payload?.items ??
+    payload ??
+    [];
+  if (!Array.isArray(arr)) return [];
+  return arr.map((it: any) => ({
+    id: it?.content_id ?? it?.id,
+    title: it?.name ?? it?.title ?? "",
+    coverUrl: it?.thumbnail ?? it?.cover ?? it?.image ?? "",
+    progress: Number(it?.percentage ?? it?.progress ?? 0) || 0,
+    is_liked: it?.is_liked,
+  })) as Book[];
+}
+
+/** Internal fetch that dedupes via `inflight` and writes to `cache` */
+function fetchPage(id: number, page: number): Promise<CacheEntry> {
+  const key = `${id}:${page}`;
+  if (inflight.has(key)) return inflight.get(key)!;
+
+  const p = GetContebtBySubCategories(String(id), String(page))
+    .then((res: any) => {
+      const list = normalizeToBooks(res);
+      console.log('fetchPage', id, page, list);
+      const prev = cache.get(id);
+      const books = page === 1 ? list : [...(prev?.books ?? []), ...list];
+      const done = list.length === 0; // defensive: if API gives meta, this still works
+      const entry: CacheEntry = {
+        books,
+        pageLoaded: page,
+        done,
+      };
+      cache.set(id, entry);
+      inflight.delete(key);
+      return entry;
+    })
+    .catch((e) => {
+      inflight.delete(key);
+      throw e;
+    });
+
+  inflight.set(key, p);
+  return p;
+}
+
+/** Public prefetch helper (first page) used by the hook */
+async function prefetchFirstPage(id?: number | null) {
+  if (!id && id !== 0) return;
+  if (cache.has(id)) return; // already cached
+  await fetchPage(id, 1).catch(() => {
+    /* ignore failure; it's just a prefetch */
+  });
+}
+
+export default function useSubCategoryLazy(
+  subId: number | null,
+  expanded: boolean,
+  options?: UseLazyOptions
+) {
+  const rootMargin = options?.rootMargin ?? "420px 0px 420px 0px";
+
+  // ── State exposed to the row component ───────────────────────
   const [books, setBooks] = useState<Book[]>([]);
-  const [page, setPage] = useState(0);
-  const [maxPage, setMax] = useState<number | null>(null);
-
-  const [loadingInit, setInit] = useState(false);
-  const [loadingMore, setMore] = useState(false);
+  const [loadingInit, setLoadingInit] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const sentryRef = useRef<HTMLDivElement>(null);
-  const loadMoreRef = useRef<HTMLDivElement>(null);
+  // ── Sentinels / anchors for intersection observers ───────────
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const sentryRef = useRef<HTMLDivElement | null>(null); // triggers first page
+  const loadMoreRef = useRef<HTMLDivElement | null>(null); // triggers next pages when expanded
 
+  const id = subId ?? undefined;
+
+console.log('useSubCategoryLazy', id, expanded, rootMargin);
+
+  // Initialize from cache if present (instant paint on reuse/prefetch)
   useEffect(() => {
-    setBooks([]);
-    setPage(0);
-    setMax(null);
-    setInit(false);
-    setMore(false);
-    setHasFetched(false);
-  }, [subId]);
-
-  const fetchPage = async (next: number) => {
-    const first = next === 1;
-    const busy = first ? loadingInit : loadingMore;
-    if (busy || subId == null || (maxPage !== null && next > maxPage)) return;
-
-    if (first) {
-      setInit(true);
+    if (!id && id !== 0) return;
+    const cached = cache.get(id);
+    if (cached) {
+      setBooks(cached.books);
       setHasFetched(true);
-    } else {
-      setMore(true);
     }
+  }, [id]);
 
-    try {
-      const res = await GetContebtBySubCategories(String(subId), String(next));
-      const payload = res?.data?.data ?? res?.data;
-      const number_pages = payload?.number_pages ?? 0;
-      const records = payload?.records ?? [];
-      const mapped: Book[] = records.map((r: any) => ({
-        id: r.id,
-        title: r.name,
-        coverUrl: r.thumbnail,
-        is_liked: r.is_liked,
-        progress: 0,
-      }));
-
-      setBooks((prev) => [
-        ...prev,
-        ...mapped.filter((m) => !prev.some((p) => p.id === m.id)),
-      ]);
-      setPage(next);
-      setMax(number_pages);
+  /** Actually load first page for THIS row */
+  const loadFirstPage = useCallback(async () => {
+    if (!id && id !== 0) return;
+    // If cached, don't hit network
+    const cached = cache.get(id);
+    if (cached) {
+      setBooks(cached.books);
       setHasFetched(true);
-    } catch (e) {
-        setHasFetched(true);
-        console.error("GetContebtBySubCategories failed", e);
-    } finally {
-      first ? setInit(false) : setMore(false);
-    }
-  };
-
-  useEffect(() => {
-    if (subId == null || !sentryRef.current) return;
-    const node = sentryRef.current;
-
-    const visible = () =>
-      node.getBoundingClientRect().top < window.innerHeight &&
-      node.getBoundingClientRect().bottom > 0;
-
-    if (visible()) {
-      fetchPage(1);
       return;
     }
+
+    setLoadingInit(true);
+    try {
+      const entry = await fetchPage(id, 1);
+      setBooks(entry.books);
+      setHasFetched(true);
+    } finally {
+      setLoadingInit(false);
+    }
+  }, [id]);
+
+  /** Load next page ONLY when in expanded mode */
+  const loadNextPage = useCallback(async () => {
+    if (!id && id !== 0) return;
+    const cached = cache.get(id);
+    if (!cached || cached.done) return; // nothing to do yet / or already finished
+    const nextPage = (cached.pageLoaded ?? 1) + 1;
+
+    setLoadingMore(true);
+    try {
+      const entry = await fetchPage(id, nextPage);
+      setBooks(entry.books);
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [id]);
+
+  // When this row starts fetching its first page (via intersection),
+  // also kick off prefetch for the "next two" rows provided by parent.
+  const prewarmNeighbors = useCallback(async () => {
+    const ids = options?.prefetchIds ?? [];
+    // Fire them in parallel; cache will dedupe naturally
+    await Promise.all(ids.slice(0, 2).map((n) => prefetchFirstPage(n)));
+  }, [options?.prefetchIds]);
+
+  // First-load observer
+  useEffect(() => {
+    if (!id && id !== 0) return;
+
+    const el = sentryRef.current ?? containerRef.current;
+    if (!el) return;
+
+    // If already fetched (from cache or a previous view), do nothing
+    if (hasFetched) return;
+
     const io = new IntersectionObserver(
-      ([entry]) => {
+      (entries) => {
+        const entry = entries[0];
         if (entry.isIntersecting) {
-          fetchPage(1);
+          // 1) Load THIS row
+          loadFirstPage();
+          // 2) Prefetch NEXT rows (best effort)
+          prewarmNeighbors();
           io.disconnect();
         }
       },
-      { root: null, threshold: 0, rootMargin: "0px 0px -25% 0px" }
+      { root: null, rootMargin, threshold: 0.01 }
     );
-    io.observe(node);
+
+    io.observe(el);
     return () => io.disconnect();
-  }, [subId]);
+  }, [id, hasFetched, loadFirstPage, prewarmNeighbors, rootMargin]);
 
+  // Load-more observer (only useful when expanded == true)
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el || expanded) return;
-    const onScroll = () => {
-      if (
-        el.scrollLeft + el.clientWidth >= el.scrollWidth - 48 &&
-        !loadingMore &&
-        (maxPage === null || page < maxPage)
-      ) {
-        fetchPage(page + 1);
-      }
-    };
-    el.addEventListener("scroll", onScroll);
-    return () => el.removeEventListener("scroll", onScroll);
-  }, [page, maxPage, loadingMore, expanded]);
+    if (!id && id !== 0) return;
+    if (!expanded) return; // do not paginate when collapsed
 
-  useEffect(() => {
-    if (!expanded || !loadMoreRef.current) return;
-    const node = loadMoreRef.current;
+    const more = loadMoreRef.current;
+    if (!more) return;
+
     const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && (maxPage === null || page < maxPage)) {
-          fetchPage(page + 1);
-        }
+      (entries) => {
+        const entry = entries[0];
+        if (!entry.isIntersecting) return;
+        loadNextPage();
       },
-      { root: null, rootMargin: "200px" }
+      { root: null, rootMargin: "1200px 0px 1200px 0px", threshold: 0.01 }
     );
-    io.observe(node);
+
+    io.observe(more);
     return () => io.disconnect();
-  }, [expanded, page, maxPage, loadingMore]);
+  }, [id, expanded, loadNextPage]);
 
   return {
     books,
@@ -128,8 +211,5 @@ const useSubCategoryLazy = (subId: number | null, expanded: boolean) => {
     containerRef,
     sentryRef,
     loadMoreRef,
-    page
   };
-};
-
-export default useSubCategoryLazy;
+}

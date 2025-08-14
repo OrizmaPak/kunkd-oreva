@@ -27,6 +27,8 @@ interface BookCategoryProps {
   hasSub?: boolean;
   /** Message to show when empty */
   emptyMsg?: string;
+  /** subIds of the next two rows to prefetch when this row starts loading */
+  prefetchNext?: number[];
 }
 
 const BookCategory: React.FC<BookCategoryProps> = ({
@@ -41,6 +43,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
   parentCategory,
   hasSub = true,
   emptyMsg,
+  prefetchNext,
 }) => {
   // Lazy-loading hook for sub-categories
   const {
@@ -51,7 +54,9 @@ const BookCategory: React.FC<BookCategoryProps> = ({
     containerRef,
     sentryRef,
     loadMoreRef,
-  } = useSubCategoryLazy(subId, expanded);
+  } = useSubCategoryLazy(subId, expanded, { prefetchIds: prefetchNext });
+
+  console.log('BookCategory', subId, expanded, prefetchNext, books);
   
   const usingLazy = subId != null;
   // Choose data source based on lazy vs. static
