@@ -937,27 +937,60 @@ const ContentLibrary: React.FC = () => {
             <>
               {/* ───── Stories tab ───── */}
               {isStoriesTab &&
-                displayList
-                  .filter(cat =>
-                    !showAllStories || cat.name === storiesActiveSubSlug
-                  )
-                  .map(cat => (
-                    <BookCategory
-                      key={cat.name}
-                      categoryName={cat.name}
-                      tabLabel="Stories"
-                      parentCategory={undefined}
-                      books={cat.books}
-                      subId={cat.subId}
-                      hasSub={!!cat.subId}
-                      onSeeAll={() => handleStoriesSeeAll(cat.name)}
-                      expanded={showAllStories && cat.name === storiesActiveSubSlug}
-                      onBookClick={(book: any, bc: any) => {
-                        openBook(book.id);
-                        setCrumb([...bc, book.title]);
-                      }}
+                (() => {
+                  // full ordered array of Stories subcats from `allCats`
+                  const storiesCat = allCats.find((c: any) => c.name === "Stories");
+                  const rows: Array<{ name: string; subId: number | null }> =
+                    (storiesCat?.sub_categories ?? []).map((s: any) => ({
+                      name: s?.name ?? "",
+                      subId: typeof s?.id === "number" ? s.id : null,
+                    }));
+
+                  // this is what actually gets shown (respecting Show all toggle)
+                  const visibleRows = rows.filter(r =>
+                    !showAllStories || r.name === (storiesActiveSubSlug ?? r.name)
+                  );
+
+                  return visibleRows.map((row, idx) => {
+                    // compute neighbors from the ORIGINAL `rows`, not `visibleRows`
+                    const originalIndex = rows.findIndex(r => r.subId === row.subId);
+                    const nextTwo: number[] = [];
+                    for (let k = originalIndex + 1; k <= originalIndex + 2 && k < rows.length; k++) {
+                      const nid = rows[k]?.subId;
+                      if (typeof nid === "number") nextTwo.push(nid);
+                    }
+
+                    console.log(
+                      "%c[ContentLibrary] prefetchNext (Stories)",
+                      "color:#BCD678;font-weight:bold",
+                      { for: row.name, subId: row.subId, nextTwo }
+                    );
+
+                    return (
+                      <BookCategory
+                        key={`${row.name}-${row.subId ?? "x"}`}
+                        subId={row.subId}
+                        categoryName={row.name}
+                        tabLabel="Stories"
+                        expanded={showAllStories && row.name === storiesActiveSubSlug}
+                        onSeeAll={() => {
+                          if (showAllStories && row.name === storiesActiveSubSlug) {
+                            setShowAllStories(false);
+                            setStoriesActiveSubSlug(null);
+                          } else {
+                            setShowAllStories(true);
+                            setStoriesActiveSubSlug(row.name);
+                          }
+                        }}
+                        onBookClick={(book, bc) => {
+                          openBook(book.id);
+                          setCrumb([...bc, book.title]);
+                        }}
+                        prefetchNext={nextTwo}
                       />
-                    ))}
+                    );
+                  });
+                })()}
 
               {/* ───── Languages tab ───── */}
               {isLangsTab &&
