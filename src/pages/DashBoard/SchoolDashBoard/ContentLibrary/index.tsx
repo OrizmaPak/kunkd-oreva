@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from "react";
 import TeacherIllustration from "@/assets/Teacher's_Library_.png";
 import {
   FaUser,
-  FaBookOpen,
+  FaBookOpen, 
   FaGlobe,
   FaKeyboard,
   FaChevronRight,
@@ -42,6 +42,7 @@ import story from "@/assets/story.png";
 import languages from "@/assets/languagev.png";
 import literacy from "@/assets/literacy.png";
 import useStore from "@/store";
+import { on } from "rsuite/esm/DOMHelper";
 
 /* ---------------- helper: loud trace ---------------- */
 const trace = (...msg: any[]) =>
@@ -55,46 +56,41 @@ const toTitle = (s: string) =>
 
 /* helper: transform ContentForHome response → Category[] */
 const homeToCategories = (payload: any): Category[] => {
-  console.log('payload', payload)
+  trace("homeToCategories() payload:", payload);
+
   if (!payload || typeof payload !== "object") return [];
-  console.log('GetOngoingContents', GetOngoingContents("4391"));
-  const catArray: Category[] = [
-    {
-      name: "Continue Reading",
-      books: [],
-      hasSub: false, // no sub-view for Continue Reading
-    },
-  ];
-  console.log('payload', payload)
-  const uniqueBooks = new Set<number | string>();
+
+  const uniqueBooks = new Set<string>();
+  const catArray: Category[] = [];
 
   Object.entries(payload).forEach(([key, val]: [string, any]) => {
-    if (Array.isArray(val)) {
-      const books = val
-        .filter((item) => {
-          const uniqueKey = `${key}-${item.id}`;
-          if (!uniqueBooks.has(uniqueKey)) {
-            uniqueBooks.add(uniqueKey);
-            return true;
-          }
-          return false;
-        })
-        .map((item) => ({
-          id: item.id,
-          title: item.name,
-          coverUrl: item.thumbnail,
-          progress: 0,
-          is_liked: item.is_liked,
-        }));
+    if (!Array.isArray(val)) return;
 
-      catArray.push({
-        name: toTitle(key),
-        books,
-        hasSub: false, // all For-you categories expand locally
-      });
-    }
+    const books: Book[] = val
+      .filter((item) => {
+        const uniqueKey = `${key}-${item.id}`;
+        if (!uniqueBooks.has(uniqueKey)) {
+          uniqueBooks.add(uniqueKey);
+          return true;
+        }
+        return false;
+      })
+      .map((item) => ({
+        id: item.id,
+        title: item.name,
+        coverUrl: item.thumbnail,
+        progress: 0, // default for "for you" rows
+        is_liked: item.is_liked,
+      }));
+
+    catArray.push({
+      name: toTitle(key),
+      books,
+      hasSub: false, // all For-you categories expand locally
+    });
   });
-  console.log('catArray', catArray)
+
+  trace("homeToCategories() →", catArray);
   return catArray;
 };
 
@@ -113,7 +109,7 @@ interface Page {
 
 interface Tab {
   label: string;
-  icon: String;
+  icon: string; // ✅
   id: number | null;
 }
 
@@ -147,6 +143,52 @@ const ContentLibrary: React.FC = () => {
     defaultTabs.map((tab) => ({ ...tab, id: null }))
   );
 
+  // ---- ongoing “Continue Reading” state (must be inside the component) ----
+  const [ongoingBooks, setOngoingBooks] = useState<Book[]>([]);
+
+  const refreshOngoing = useCallback(() => {
+    const pid = sessionStorage.getItem("profileId") || "";
+    trace("GetOngoingContents → profileId:", pid);
+
+    GetOngoingContents(pid)
+      .then((res) => {
+        const raw = res?.data?.data?.ongoing_contents;
+        if (!Array.isArray(raw)) {
+          trace("GetOngoingContents: no ongoing contents found");
+          setOngoingBooks([]);
+          return;
+        }
+
+        const books: Book[] = raw.map((it: any) => {
+          const totalPages = Array.isArray(it.pages) ? it.pages.length : 0;
+          const pagesRead = Number(it.pages_read) || 0;
+          const progress =
+            totalPages > 0 ? Math.max(0, Math.min(100, Math.round((pagesRead * 100) / totalPages))) : 0;
+
+          return {
+            id: it.id,
+            title: it.name ?? "",
+            coverUrl: it.thumbnail ?? "",
+            progress,
+            is_liked: it.is_liked,
+          };
+        });
+
+        trace("GetOngoingContents → mapped books:", books);
+        setOngoingBooks(books);
+      })
+      .catch((err) => {
+        console.error("GetOngoingContents failed", err);
+        setOngoingBooks([]);
+      });
+      console.log('GetOngoingContents → mapped books:', ongoingBooks);
+  }, []);
+
+  // fetch once on mount
+  useEffect(() => {
+    refreshOngoing();
+  }, [refreshOngoing]);
+
   // a) Keep the entire cats array so we can reuse sub-categories
   const [allCats, setAllCats] = useState<any[]>([]);
 
@@ -171,9 +213,6 @@ const ContentLibrary: React.FC = () => {
 
   const readingRef = useRef<ReadingHandle>(null);
 
-  // 2) Track ongoing books state
-  const [ongoingBooks, setOngoingBooks] = useState<Book[] | null>(null);
-
   useEffect(() => {
     GetSubCategories().then((res) => {
       console.log("res", res);
@@ -191,29 +230,6 @@ const ContentLibrary: React.FC = () => {
         setTabsConfig(defaultTabs.map((tab) => ({ ...tab, id: null })));
       }
     });
-  }, []);
-
-  // 3) Fetch ongoing and map to Book[]
-  useEffect(() => {
-    const pid = sessionStorage.getItem("profileId") || "";
-    GetOngoingContents(pid)
-      .then((res) => {
-        const arr = res?.data?.data ?? res?.data ?? [];
-        const books: Book[] = Array.isArray(arr)
-          ? arr.map((it: any) => ({
-              id: it.content_id ?? it.id,
-              title: it.name ?? it.title ?? "",
-              coverUrl: it.thumbnail ?? it.cover ?? it.image ?? "",
-              progress: it.percentage ?? it.progress ?? 0,
-              is_liked: it.is_liked,
-            }))
-          : [];
-        setOngoingBooks(books);
-      })
-      .catch((err) => {
-        console.error("GetOngoingContents failed", err);
-        setOngoingBooks([]); // treat failure as “no ongoing” to hide section
-      });
   }, []);
 
   // Get profileId from sessionStorage
@@ -417,6 +433,7 @@ const ContentLibrary: React.FC = () => {
   // ---------- quiz flow state ----------
   const [quizTarget, setQuizTarget] = useState<Book | null>(null);
   const [showWell, setShowWell] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
 
   const [quizKey, setQuizKey] = useState(0);
   const [quizStats, setQuizStats] = useState<QuizStats | null>(null);
@@ -430,14 +447,20 @@ const ContentLibrary: React.FC = () => {
   const handleMediaComplete = (book: Book) => {
     setQuizTarget(book);
     setShowWell(true);
+    setShowQuiz(false);   // don’t show quiz yet
   };
 
-  const handleTakeQuiz = () => { setShowWell(false); };
+  const handleTakeQuiz = () => {
+    setShowWell(false);
+    setShowQuiz(true);    // now show quiz
+  };
 
-  const handleDoLater = () => setShowWell(false);
+  const handleDoLater = () => {
+    setShowWell(false);
+    setShowQuiz(false);
+  };
 
   const handleQuizComplete = (stats: QuizStats, answers: UserAnswer[]) => {
-    alert('handleQuizComplete');
     setQuizStats(stats);
     setQuizAnswers(answers);
     setShowResult(true);
@@ -468,6 +491,7 @@ const ContentLibrary: React.FC = () => {
 
   // ─── Retake quiz ──────────────────────────────────────────────
   const handleRetake = () => {
+    setShowQuiz(true);          // keep quiz visible on retake
     readingRef.current?.showQuiz();   // 👈 flips internal state
     setQuizReset((s) => s + 1);       // clears answers
   };
@@ -522,21 +546,40 @@ const ContentLibrary: React.FC = () => {
     const load = async () => {
       // 1) For-you -------------------------------
       if (isForYouTab) {
+        // ensure profile id is read fresh on each entry to For You
+        // refreshOngoing();
         try {
           const res = await ContentForHome({});
-          if (res?.status && res.data) {
-            // 4) Inject “Continue Reading” only if we have items
+          if (res?.data?.status && res.data?.data) {
             const cats = homeToCategories(res.data.data);
-            const withOngoing =
-              ongoingBooks && ongoingBooks.length > 0
-                ? [{ name: "Continue Reading", books: ongoingBooks, hasSub: false }, ...cats]
-                : cats;
+
+            // prepend Continue Reading if we have anything
+            const withOngoing = 
+              Array.isArray(ongoingBooks) && ongoingBooks.length > 0
+                ? [
+                    {
+                      name: "Continue Reading", 
+                      books: ongoingBooks,
+                      hasSub: false,
+                    },
+                    ...cats,
+                  ]
+                : [
+                    // still show the row (empty) so users know the section exists
+                    { name: "Continue Reading", books: [], hasSub: false },
+                    ...cats,
+                  ];
+
             setCategories(withOngoing);
             return;
           }
-        } catch { /* ignore */ }
-        // even if it fails we still want the Continue-Reading row
-        setCategories([{ name: "Continue Reading", books: [] }]);
+        } catch (e) {
+          console.warn("ContentForHome failed, still showing Continue Reading stub", e);
+        }
+
+
+        // Even if ContentForHome fails, render at least the Continue Reading row.
+        setCategories([{ name: "Continue Reading", books: [], hasSub: false }]);
         return;
       }
 
@@ -924,7 +967,7 @@ const ContentLibrary: React.FC = () => {
               book={{
                 id: watchingBook.id,
                 title: watchingBook.title,
-                coverUrl: watchingBook.title,
+                coverUrl: watchingBook.coverUrl,
                 progress: 0,
               }}
               key={videoSrc || watchingBook.id}
@@ -1031,23 +1074,20 @@ const ContentLibrary: React.FC = () => {
 
               {/* ───── For-you tab ───── */}
               {isForYouTab &&
-                displayList.map(cat => (
+                displayList.map((cat) => (
                   <BookCategory
                     key={cat.name}
-                    categoryName={cat.name}
                     tabLabel="For you"
-                    parentCategory={mainSelected ?? undefined}
+                    categoryName={cat.name}
                     books={cat.books}
-                    hasSub={cat.hasSub}
-                    onSeeAll={() => toggleForYouRow(cat.name)}
+                    hasSub={false}
                     expanded={!!expandedSimple[cat.name]}
-                    // emptyMsg={
-                    //   cat.name === "Continue Reading" ? "No content available" : undefined
-                    // }
+                    onSeeAll={() => toggleForYouRow(cat.name)}
                     onBookClick={(book: any, bc: any) => {
                       openBook(book.id);
                       setCrumb([...bc, book.title]);
                     }}
+                    emptyMsg={cat.name === "Continue Reading" ? "No ongoing content yet" : undefined}
                   />
                 ))}
             </>
@@ -1066,7 +1106,7 @@ const ContentLibrary: React.FC = () => {
               onRetake={handleRetake}
             />
           )}
-          {quizTarget && (
+          {quizTarget && showQuiz && (
             <QuizComponent
               onRetake={handleRetake}
               key={quizTarget.id}    
