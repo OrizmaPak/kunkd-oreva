@@ -23,7 +23,7 @@ const links = [
   {
     label: "Dashboard",
     route: routeBaseUrl,
-    href: "",
+    href: "dashboard",
     index: true,
     icon: DashboardIcon,
     role: ["schoolAdmin", "teacher"],
