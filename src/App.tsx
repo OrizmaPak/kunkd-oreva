@@ -39,6 +39,7 @@ import ProfileSetupPage from "./pages/AfterParentSignIn/ProfileSetupPage";
 import StudentView from "./pages/DashBoard/SchoolDashBoard/Students/StudentView";
 import StudentStoriesReport from "./pages/DashBoard/SchoolDashBoard/Students/StudentStoriesReport";
 import ConnectionRequests from "./pages/DashBoard/SchoolDashBoard/Students/ConnectionRequests";
+import Favourite from "./pages/DashBoard/SchoolDashBoard/ContentLibrary/favourite";
 const VideoV2 = lazy(() => import("./pages/AfricanLanguages/VideosV2/VideoV2"));
 const StoriesV2 = lazy(() => import("./pages/Stories/StoriesV2/StoriesV2"));
 const DefaultTab = lazy(() => import("./pages/AfterParentSignIn/DefaultTab"));
@@ -447,7 +448,7 @@ function App() {
                     ></Route>
                   </Route>
                   <Route path="progress" element={<StudentView crumb={false} />}></Route>
-                  <Route path="favourites" element={<ContentLibrary />}></Route>
+                  <Route path="favourites" element={<Favourite />}></Route>
                   <Route path="classes" element={<Classes />}></Route>
                   {/* <Route path="request" element={<SchoolRquest />}></Route> */}
                   <Route path="request" element={<ConnectionRequests />}></Route>
