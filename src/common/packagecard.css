@@ -1,7 +1,0 @@
-.packageCard-w {
-  width: clamp(7rem, 4.9931rem + 11.1743vw, 13.25rem) !important;
-  /* height: clamp(9.375rem, 4.3578rem + 22.9358vw, 30rem) !important; */
-  /* display: flex; */
-  /* flex-direction: column; */
-  padding-bottom: 20px !important;
-}

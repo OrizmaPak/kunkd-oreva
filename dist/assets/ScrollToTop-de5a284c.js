@@ -1,0 +1,1 @@
+import{bD as n,r}from"./index-9cc31945.js";const l=["/parent","/school"],e=["stories","languages","audiobooks"],c=e==null?void 0:e.reduce((o,s)=>[...l.map(t=>t+"/"+s),...o],[]);function u(){const{pathname:o}=n();return r.useEffect(()=>{c.includes(o)?window.scrollTo({top:460,left:0,behavior:"smooth"}):window.scrollTo({top:0,left:0})},[o]),null}export{u as default};
