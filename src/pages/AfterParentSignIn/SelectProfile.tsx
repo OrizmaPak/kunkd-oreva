@@ -15,6 +15,8 @@ export type selectAvatarType = {
   name: string;
   accepted_summer_challenge: boolean;
   student?: { class_name: string };
+  interactive_app_url?: string; // Add this line
+
 };
 
 const PAID_MAX_PROFILES = 4;

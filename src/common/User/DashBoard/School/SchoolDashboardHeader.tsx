@@ -190,7 +190,7 @@ const SchoolDashboardHeader = () => {
       {/* Left: Name + (optional) Burger */}
       <div className="flex items-center gap-3">
         <p className="font-Inter text-[20px]">
-          {user?.school?.name || "Greenfield Academy"}
+          {user?.school?.name || ""}
         </p>
 
         {/* If you moved the burger to the sidebar, keep this hidden */}
@@ -250,7 +250,7 @@ const SchoolDashboardHeader = () => {
               {/* Parent → show active child’s initials + name; Others → admin avatar + label */}
               {user?.role === "user" ? (
                 <div className="flex items-center gap-2">
-                  <div className="flex items-center justify-center w-[40px] h-[40px] bg-gray-300 rounded-full">
+                  <div className="flex items-center justify-center w-[35px] h-[35px] bg-[#bcd678] rounded-full">
                     <span className="text-white font-bold">
                       {activeProfile?.name
                         ? activeProfile.name.slice(0, 2).toUpperCase()
@@ -258,7 +258,7 @@ const SchoolDashboardHeader = () => {
                     </span>
                   </div>
                   <span className="flex items-center gap-2">
-                    {activeProfile?.name || "Choose child"}
+                    <span className="hidden">{activeProfile?.name || "Choose child"}</span>
                     <IoChevronDown size={22} color="#667185" />
                   </span>
                 </div>

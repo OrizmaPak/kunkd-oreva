@@ -43,6 +43,7 @@ import languages from "@/assets/languagev.png";
 import literacy from "@/assets/literacy.png";
 import useStore from "@/store";
 import { on } from "rsuite/esm/DOMHelper";
+import { getProfileState } from "@/store/profileStore";
 
 /* ---------------- helper: loud trace ---------------- */
 const trace = (...msg: any[]) =>
@@ -142,6 +143,16 @@ const ContentLibrary: React.FC = () => {
   const [tabsConfig, setTabsConfig] = useState<Tab[]>(
     defaultTabs.map((tab) => ({ ...tab, id: null }))
   );
+
+  const [profiles] = useStore(getProfileState);
+
+  function getIframeLink() {
+    const profileId = sessionStorage.getItem("profileId");
+    if (!profileId) return null;
+
+    const profile = profiles?.find((p) => p.id === Number(profileId));
+    return profile ? profile?.interactive_app_url : null;
+  }
 
   // ---- ongoing “Continue Reading” state (must be inside the component) ----
   const [ongoingBooks, setOngoingBooks] = useState<Book[]>([]);
@@ -839,7 +850,7 @@ const ContentLibrary: React.FC = () => {
   ]);
 
   return (
-    <div className="mx-auto w-[clamp(550px,100%,1440px)]">
+     <div className={`mx-auto w-[clamp(550px,100%,1440px)] relative ${activeLabel !== "For you" ? "top-[-70px]" : ""}`}>
       {/* Banner */}
       {activeLabel === "For you" && (
         <div className="relative h-auto sm:h-[220px] z-10 rounded-3xl bg-[#BCD678] px-4 py-6 sm:px-8 sm:py-10 overflow-visible mt-10">
@@ -921,10 +932,10 @@ const ContentLibrary: React.FC = () => {
       )}
 
         {/* Show the Literacy iframe if the tab is selected */}
-        {tabsConfig[activeIndex]?.label === "Literacy" && (
+         {tabsConfig[activeIndex]?.label === "Literacy" && (
         <div className="mt-6 w-full">
           <iframe
-            src="https://interactive-app.kundakidsapi.com/"
+            src={getIframeLink()}
             className="w-full h-[100vh] rounded-xl border"
             allow="fullscreen; autoplay; clipboard-read; clipboard-write"
             loading="lazy"
