@@ -68,7 +68,7 @@ const links = [
   },
   {
     label: "Favourites",
-    href: "favourites",
+    href: "favourites?tab=1",
     route: routeBaseUrl + "/favourites/*",
     icon: FavouritesIcon,
     hasSub: true,

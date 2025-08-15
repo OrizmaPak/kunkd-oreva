@@ -281,21 +281,23 @@ const SchoolDashboardHeader = () => {
 
           <Menu.Dropdown>
             {/* Collapsible 'Profile' row (click to show children for parents) */}
-            <Menu.Item
-              onClick={() => setChildrenOpen((v) => !v)}
-              rightSection={
-                <IoChevronDown
-                  className={`transition-transform duration-200 ${childrenOpen ? "rotate-180" : ""}`}
-                  size={18}
-                  color="#667185"
-                />
-              }
-            >
-              <div className="flex items-center gap-2 text-[14px] text-[#667185] font-Arimo">
-                <FaRegUserCircle color="#667185" size={20} />
-                Profiles
-              </div>
-            </Menu.Item>
+            {user?.role == "user" && (
+              <Menu.Item
+                onClick={() => setChildrenOpen((v) => !v)}
+                rightSection={
+                  <IoChevronDown
+                    className={`transition-transform duration-200 ${childrenOpen ? "rotate-180" : ""}`}
+                    size={18}
+                    color="#667185"
+                  />
+                }
+              >
+                <div className="flex items-center gap-2 text-[14px] text-[#667185] font-Arimo">
+                  <FaRegUserCircle color="#667185" size={20} />
+                  Profiles
+                </div>
+              </Menu.Item>
+            )}
 
             {/* Children list (hidden by default, only for parent role) */}
             {user?.role === "user" && childrenOpen && Array.isArray(profiles) && profiles.length > 0 && (

@@ -16,7 +16,7 @@ import { useSearchParams } from "react-router-dom";
 import VideoComponent from "@/components/VideoComponent";
 import WellDoneModal from "@/components/WellDoneModal";
 import QuizComponent, { QuizStats, UserAnswer } from "@/components/QuizComponent";
-import QuizResultModal from "@/components/QuizResultModal";
+import QuizResultModal from "@/components/QuizResultModal"
 import QueenMoremi from "@/audiobooks/QueenMoremi.mp3";
 import AnswerReviewModal from "@/components/AnswerReviewModal";
 
@@ -136,8 +136,7 @@ const defaultTabs: Omit<Tab, "id">[] = [
 ];
 
 // console.log('GetCompletedContents', GetCompletedContents(sessionStorage.getItem("profileId")));
-
-const ContentLibrary: React.FC = () => {
+const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   // ensure we can always do tabsConfig[activeIndex].label without crashing
   const [tabsConfig, setTabsConfig] = useState<Tab[]>(
@@ -223,6 +222,7 @@ const ContentLibrary: React.FC = () => {
   const [overviewChecking, setOverviewChecking] = useState(false);
 
   const readingRef = useRef<ReadingHandle>(null);
+
 
   useEffect(() => {
     GetSubCategories().then((res) => {
@@ -541,7 +541,7 @@ const ContentLibrary: React.FC = () => {
 
   // Helper to detect active tab
   const activeLabel = tabsConfig[activeIndex]?.label;
-  const isForYouTab = activeLabel === "For you";
+  const isForYouTab = activeLabel === "For you" && state !== 'fav';
   const isStoriesTab = activeLabel === "Stories";
   const isLangsTab = activeLabel === "Languages";
   const isLiteracyTab = activeLabel === "Literacy";
@@ -556,7 +556,7 @@ const ContentLibrary: React.FC = () => {
 
     const load = async () => {
       // 1) For-you -------------------------------
-      if (isForYouTab) {
+      if (isForYouTab && state !== 'fav') {
         // ensure profile id is read fresh on each entry to For You
         // refreshOngoing();
         try {
@@ -852,7 +852,7 @@ const ContentLibrary: React.FC = () => {
   return (
      <div className={`mx-auto w-[clamp(550px,100%,1440px)] relative ${activeLabel !== "For you" ? "top-[-70px]" : ""}`}>
       {/* Banner */}
-      {activeLabel === "For you" && (
+      {activeLabel === "For you" && state !== 'fav' && (
         <div className="relative h-auto sm:h-[220px] z-10 rounded-3xl bg-[#BCD678] px-4 py-6 sm:px-8 sm:py-10 overflow-visible mt-10">
           <div className="flex flex-col justify-center h-full">
             <h1 className="font-Inter font-[600] text-[36px] leading-[120%] mb-[14px] tracking-[-0.02em] text-gray-900">
@@ -874,34 +874,36 @@ const ContentLibrary: React.FC = () => {
       <LayoutGroup>
         <div className="sticky top-[-22px] flex gap-3 mb-6 flex-wrap mt-[52px] z-10">
           {tabsConfig.map((tab, idx) => (
-             <motion.button
-              key={tab.label}
-              layout
-              onClick={() => setTab(idx)}
-              animate={{
-                backgroundColor: idx === activeIndex ? "#BCD678" : "#FFF",
-                color: idx === activeIndex ? "#1F2937" : "#4B5563",
-                boxShadow: idx === activeIndex
-                  ? "0 10px 20px rgba(188,214,120,0.3)"
-                  : "0 2px 4px rgba(0,0,0,0.05)",
-              }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative flex items-center gap-[7px] p-[12px] w-fit h-[48px] rounded-[8px] border border-gray-200 text-sm font-medium outline-none"
-            >
-              {idx === activeIndex && (
-                <motion.div
-                  layoutId="tabHighlight"
-                  className="absolute inset-0 rounded-[8px] bg-[#BCD678] z-0"
-                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                />
-              )}
-              <span className="relative z-10">
-                <img src={tab.icon} alt="Tab Icon" />
-              </span>
-              <span className="relative z-10 font-Inter font-[100] text-[16px] leading-[120%] tracking-[-0.02em] align-middle">{tab.label}</span>
-            </motion.button>
+            (state !== 'fav' || tab.label !== "For you") && (
+              <motion.button
+                key={tab.label}
+                layout
+                onClick={() => setTab(idx)}
+                animate={{
+                  backgroundColor: idx === activeIndex ? "#BCD678" : "#FFF",
+                  color: idx === activeIndex ? "#1F2937" : "#4B5563",
+                  boxShadow: idx === activeIndex
+                    ? "0 10px 20px rgba(188,214,120,0.3)"
+                    : "0 2px 4px rgba(0,0,0,0.05)",
+                }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative flex items-center gap-[7px] p-[12px] w-fit h-[48px] rounded-[8px] border border-gray-200 text-sm font-medium outline-none"
+              >
+                {idx === activeIndex && (
+                  <motion.div
+                    layoutId="tabHighlight"
+                    className="absolute inset-0 rounded-[8px] bg-[#BCD678] z-0"
+                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">
+                  <img src={tab.icon} alt="Tab Icon" />
+                </span>
+                <span className="relative z-10 font-Inter font-[100] text-[16px] leading-[120%] tracking-[-0.02em] align-middle">{tab.label}</span>
+              </motion.button>
+            )
           ))}
         </div>
       </LayoutGroup>
