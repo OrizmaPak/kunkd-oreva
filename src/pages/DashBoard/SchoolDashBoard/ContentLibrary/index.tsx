@@ -57,7 +57,7 @@ const toTitle = (s: string) =>
 const homeToCategories = (payload: any): Category[] => {
   console.log('payload', payload)
   if (!payload || typeof payload !== "object") return [];
-  
+  console.log('GetOngoingContents', GetOngoingContents("4391"));
   const catArray: Category[] = [
     {
       name: "Continue Reading",
