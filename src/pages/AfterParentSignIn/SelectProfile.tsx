@@ -77,7 +77,7 @@ const SelectProfile = ({
         }}
       >
         {/* Card — rounded, soft shadow, centered like your mock */}
-        <div className="w-full max-w-[560px] bg-white rounded-[30px] shadow-[0_14px_40px_rgba(0,0,0,0.12)] p-6 sm:p-8">
+        <div className="w-full max-w-[660px] bg-white rounded-[30px] shadow-[0_14px_40px_rgba(0,0,0,0.12)] p-6 sm:p-8 bg-white opacity-[90%]">
           {/* Logo */}
           <div className="flex justify-center mb-2">
             <img src={KundaLogo} alt="Kunda Kids" className="h-7 sm:h-8" />
@@ -85,11 +85,11 @@ const SelectProfile = ({
 
           {/* Title + subtext */}
           <div className="text-center mb-6">
-            <h1 className="text-[22px] sm:text-[24px] font-bold text-[#333C48]">
-              Welcome to Kunda Kids
+            <h1 className="text-[22px] sm:text-[59px] font-bold text-[#333C48] font-BalooSemiBold">
+              Who's Learning?
             </h1>
-            <p className="text-[13px] sm:text-[14px] text-[#667185]">
-              To begin, create a profile for your child.
+            <p className="text-[13px] sm:text-[17px] text-[#667185] font-BalooSemiBold">
+              Select which kid is learning now
             </p>
           </div>
 
@@ -143,9 +143,11 @@ const KidsGrid = ({
   setChildProfile: (val: string) => void;
 }) => {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+    <div className="flex flex-wrap justify-center gap-4 mb-6">
       {profiles.map((kid) => (
-        <KidItem key={kid.id} kid={kid} setChildProfile={setChildProfile} />
+        <div className="flex justify-center w-1/3">
+          <KidItem key={kid.id} kid={kid} setChildProfile={setChildProfile} />
+        </div>
       ))}
     </div>
   );
@@ -172,18 +174,18 @@ const KidItem = ({
   return (
     <button
       onClick={handle}
-      className="w-full rounded-2xl border border-[#F2F4F7] bg-white hover:bg-[#FAFAFA] p-4 flex flex-col items-center text-center transition"
+      className="w-full rounded-2x bg-white hover:bg-[#FAFAFA] hover:scale-105 p-4 flex flex-col items-center text-center transition-transform"
     >
       <span
-        className="inline-grid place-items-center rounded-full text-white font-semibold w-20 h-20 mb-2"
+        className="inline-grid place-items-center rounded-full text-white font-arimo font-semibold text-[8vw] sm:text-[35px] w-[20vw] h-[20vw] sm:w-[100px] sm:h-[100px] mb-2"
         style={{ background: pickColorFromName(kid.name) }}
       >
         {initials}
       </span>
-      <p className="truncate w-full text-[14px] sm:text-[15px] font-medium text-[#111827]">
+      <p className="truncate w-full text-[3.5vw] sm:text-[15px] font-semibold text-[#111827]">
         {capitalize(kid.name)}
       </p>
-      <p className="truncate w-full text-[12px] text-[#6B7280]">{sub}</p>
+      <p className="truncate w-full text-[3vw] sm:text-[12px] hidden text-[#6B7280]">{sub}</p>
     </button>
   );
 };

@@ -122,35 +122,46 @@ const useSubCategoryLazy = (subId: number | null, expanded: boolean) => {
 
   // First page: IntersectionObserver (collapsed rows)
   useEffect(() => {
+    // If subId is null or sentryRef is not set, exit early
     if (subId == null || !sentryRef.current) return;
 
+    // Get the current DOM node from the sentryRef
     const node = sentryRef.current;
+
+    // Function to check if the node is visible in the viewport
     const visible = () => {
       const r = node.getBoundingClientRect();
+      // Check if the node's top is above the bottom of the viewport and its bottom is below the top of the viewport
       return r.top < window.innerHeight && r.bottom > 0;
     };
 
+    // If the node is already visible, fetch the first page immediately
     if (visible()) {
       TRACE("sentry visible immediately → fetchPage(1)", { subId });
       fetchPage(1);
       return;
     }
 
+    // Create an IntersectionObserver to watch the node
     const io = new IntersectionObserver(
       ([entry]) => {
+        // If the node is about to become visible (20% into the viewport), fetch the first page and disconnect the observer
         if (entry.isIntersecting) {
           TRACE("sentry intersected → fetchPage(1)", { subId });
           fetchPage(1);
           io.disconnect();
         }
       },
-      { root: null, threshold: 0, rootMargin: "0px 0px -25% 0px" }
+      { root: null, threshold: 0, rootMargin: "0px" } // Observer options with -40% threshold
     );
 
+    // Start observing the node
     io.observe(node);
+
+    // Cleanup function to disconnect the observer when the component unmounts or dependencies change
     return () => io.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subId]);
+  }, [subId]); // Dependency array to re-run the effect when subId changes
 
   // Collapsed horizontal scroll: load next page near end
   useEffect(() => {

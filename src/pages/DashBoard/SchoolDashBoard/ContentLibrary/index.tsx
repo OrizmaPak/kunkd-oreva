@@ -57,12 +57,13 @@ const toTitle = (s: string) =>
 const homeToCategories = (payload: any): Category[] => {
   console.log('payload', payload)
   if (!payload || typeof payload !== "object") return [];
+  
   const catArray: Category[] = [
-    // {
-    //   name: "Continue Reading",
-    //   books: [],
-    //   hasSub: false, // no sub-view for Continue Reading
-    // },
+    {
+      name: "Continue Reading",
+      books: [],
+      hasSub: false, // no sub-view for Continue Reading
+    },
   ];
   console.log('payload', payload)
   const uniqueBooks = new Set<number | string>();
@@ -1040,9 +1041,9 @@ const ContentLibrary: React.FC = () => {
                     hasSub={cat.hasSub}
                     onSeeAll={() => toggleForYouRow(cat.name)}
                     expanded={!!expandedSimple[cat.name]}
-                    emptyMsg={
-                      cat.name === "Continue Reading" ? "No content available" : undefined
-                    }
+                    // emptyMsg={
+                    //   cat.name === "Continue Reading" ? "No content available" : undefined
+                    // }
                     onBookClick={(book: any, bc: any) => {
                       openBook(book.id);
                       setCrumb([...bc, book.title]);
