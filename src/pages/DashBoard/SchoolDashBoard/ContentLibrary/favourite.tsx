@@ -43,11 +43,13 @@ const Favourite: React.FC = () => {
     let result = books;
 
     if (activeCategory !== "All") {
-      result = result.filter(
+      console.log("activeCategory", result);
+      if(result > 0)result = result.records.filter(
         (b) =>
-          b.category?.toLowerCase() === activeCategory.toLowerCase() ||
-          b.subCategory?.toLowerCase() === activeCategory.toLowerCase()
+          b.category?.toLowerCase() == activeCategory.toLowerCase() ||
+          b.subCategory?.toLowerCase() == activeCategory.toLowerCase()
       );
+      console.log("result", result);
     }
 
     if (searchTerm.trim()) {

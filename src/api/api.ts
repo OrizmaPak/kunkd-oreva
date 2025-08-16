@@ -162,8 +162,12 @@ export const UnLikedContent = (payload: TLikedContentData) => {
 // export const GetLikedContent = (payload: TLikedContentData) => {
 //   return axios.get("/user/content/favourites/:id", payload);
 // };
+// export const GetLikedContent = (profileId: string) => {
+//   return axios.get(`/user/content/favourites?id= ${profileId}`);
+// };
+
 export const GetLikedContent = (profileId: string) => {
-  return axios.get(`/user/content/favourites?id= ${profileId}`);
+  return axios.get("/user/content/favourites", { params: { id: profileId } });
 };
 
 // export const GetLikedContent = (profileId: string) => {
