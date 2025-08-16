@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate, useMatch } from "react-router-dom";
 import SchoolDashboardHeader from "./SchoolDashboardHeader";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useMatch, useNavigate } from "react-router-dom";
 
 import DashboardIcon from "@/assets/components/DashboardIcon";
 import TeachersIcon from "@/assets/components/TeachersIcon";
@@ -89,6 +88,7 @@ const RAIL_W = 72;      // collapsed icon rail width (frame does NOT shift on ho
 
 const SchoolLayout: React.FC = () => {
   const [user] = useStore(getUserState);
+  const navigate = useNavigate();
   const [openedContactUs, { open: openContactUs, close: closeContactUs }] =
     useDisclosure(false);
 
@@ -145,6 +145,12 @@ const SchoolLayout: React.FC = () => {
     window.dispatchEvent(new CustomEvent("sidebar:dockToggle"));
   };
 
+  const handleContactUsClick = () => {
+    navigate("/schooldashboard/contact-us");
+  };
+
+  const contactUsMatch = useMatch("/schooldashboard/contact-us");
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* <SchoolDashboardHeader /> */}
@@ -169,7 +175,7 @@ const SchoolLayout: React.FC = () => {
         }
       `}</style>
 
-      <div key={`profile-scope-${profileKey}`} className="flex-1">
+      <div key={`profile-scope-${profileKey}`} className="flex-1 overflow-hidden">
         <div className="w-full h-[92vh] overflow-hidden bg-[#F6F7FB]">
           <div className="relative w-full h-full flex">
             <aside
@@ -216,7 +222,8 @@ const SchoolLayout: React.FC = () => {
                 <DasboardButton
                   title="Contact Us"
                   icon={<TfiEmail size={20} />}
-                  onClick={openContactUs}
+                  onClick={handleContactUsClick}
+                  active={!!contactUsMatch}
                   collapsed={!docked}
                 />
               </div>
@@ -273,7 +280,8 @@ const SchoolLayout: React.FC = () => {
                     <DasboardButton
                       title="Contact Us"
                       icon={<TfiEmail size={20} />}
-                      onClick={openContactUs}
+                      onClick={handleContactUsClick}
+                      active={!!contactUsMatch}
                       collapsed={false}
                     />
                   </div>
@@ -296,6 +304,7 @@ const SchoolLayout: React.FC = () => {
           </div>
         </div>
       </div>
+
     </div>
   );
 };

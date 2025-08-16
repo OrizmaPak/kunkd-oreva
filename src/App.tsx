@@ -40,6 +40,8 @@ import StudentView from "./pages/DashBoard/SchoolDashBoard/Students/StudentView"
 import StudentStoriesReport from "./pages/DashBoard/SchoolDashBoard/Students/StudentStoriesReport";
 import ConnectionRequests from "./pages/DashBoard/SchoolDashBoard/Students/ConnectionRequests";
 import Favourite from "./pages/DashBoard/SchoolDashBoard/ContentLibrary/favourite";
+import Dashboard from "./pages/DashBoard/SchoolDashBoard/Dashboard";
+import ContactUs from "./pages/DashBoard/SchoolDashBoard/ContactUs";
 const VideoV2 = lazy(() => import("./pages/AfricanLanguages/VideosV2/VideoV2"));
 const StoriesV2 = lazy(() => import("./pages/Stories/StoriesV2/StoriesV2"));
 const DefaultTab = lazy(() => import("./pages/AfterParentSignIn/DefaultTab"));
@@ -238,7 +240,7 @@ function App() {
       >
         <LandScapeModal />
       </Modal>
-      <div className="App ">
+      <div className="App h-screen overflow-hidden">
         <ScrollToTop />
         {/* <Button onClick={log}></Button> */}
         <Suspense
@@ -436,7 +438,7 @@ function App() {
               <Route element={<SchoolAppLayout />}>
               {/* THIS IS NO LONGER FOR SCHOOL DASHBOARD ONLY OTHER ROLES WILL BE IMPLEMENTED IN HERE IGNORE ALL OTHER DASHBOARD ROUTES */}
                 <Route path="schooldashboard/*" element={<SchoolLayout />}>
-                  <Route index element={<Main />}></Route>
+                  <Route index element={<Dashboard />}></Route>
                   <Route path="teacher" element={<Teachers />}></Route>
                   <Route path="students/*">
                     <Route index element={<Students />} />
@@ -454,6 +456,7 @@ function App() {
                   <Route path="request" element={<ConnectionRequests />}></Route>
                   <Route path="settings" element={<Settings />}></Route>
                   <Route path="content" element={<ContentLibrary />}></Route>
+                  <Route path="contact-us" element={<ContactUs />}></Route>
                   <Route
                     path="content-library/*"
                     element={<NewlyRegisteredUser />}

@@ -2,7 +2,7 @@ import SchoolAvatar from "@/assets/SchoolAvatar.png";
 import { AiOutlineBell } from "react-icons/ai";
 import useStore from "@/store";
 import { getUserState } from "@/store/authStore";
-import { IoChevronDown } from "react-icons/io5";
+import { IoChevronDown, IoNotificationsOutline } from "react-icons/io5";
 import { Menu } from "@mantine/core";
 import { FaCog, FaRegUserCircle, FaWrench } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useGetAttemptAllStudentConnect } from "@/api/queries";
 import { useEffect, useMemo, useState } from "react";
 import { getProfileState } from "@/store/profileStore";
+import NotificationDrawer from "@/components/NotificationDrawer"; // adjust alias if needed
 
 /** Small avatar helper with safe fallback */
 const AvatarCircle = ({
@@ -115,7 +116,7 @@ const SchoolDashboardHeader = () => {
       if (typeof setActiveProfileIdAction === "function") {
         setActiveProfileIdAction(validSessionId);
       }
-    } catch (_) {}
+    } catch (_) { }
   }, [profiles]);
 
   const activeProfile = useMemo(
@@ -137,7 +138,7 @@ const SchoolDashboardHeader = () => {
       if (typeof setActiveProfileIdAction === "function") {
         setActiveProfileIdAction(p.id);
       }
-    } catch (_) {}
+    } catch (_) { }
     window.dispatchEvent(
       new CustomEvent("profile:changed", { detail: { profileId: p.id, profile: p } })
     );
@@ -164,10 +165,9 @@ const SchoolDashboardHeader = () => {
 
   const handLogOut = () => {
     handleEventTracking(
-      `web_${
-        user?.role == "teacher"
-          ? "teacher"
-          : user?.role == "user"
+      `web_${user?.role == "teacher"
+        ? "teacher"
+        : user?.role == "user"
           ? "parent"
           : "school"
       }_logout`,
@@ -183,6 +183,9 @@ const SchoolDashboardHeader = () => {
 
   /** NEW: control expand/collapse of children inside dropdown */
   const [childrenOpen, setChildrenOpen] = useState(false);
+
+  /** NEW: Notification drawer state */
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
 
   /** ---------------- UI ---------------- */
   return (
@@ -202,7 +205,7 @@ const SchoolDashboardHeader = () => {
           <span
             className={`absolute h-[2px] w-5 bg-[#101928] transition
               ${sidebarDocked ? "translate-y-[6px] rotate-45" : "-translate-y-[6px]"}
-            `}
+              `}
           />
           <span
             className={`absolute h-[2px] w-5 bg-[#101928] transition
@@ -218,24 +221,36 @@ const SchoolDashboardHeader = () => {
       </div>
 
       {/* Right cluster */}
-      <div className="flex items-center justify-end pl-2 gap-5">
+      <div className="flex items-center justify-end pl-2 gap-1">
         <div
-          onClick={() => navigate("schooldashboard/request")}
+          // onClick={() => navigate("schooldashboard/request")}
+          onClick={() => setIsNotifOpen(true)}
           className="relative cursor-pointer"
         >
           {(user?.role === "schoolAdmin" || user?.role === "teacher") && (
             <div>
-              <AiOutlineBell size={22} className={" mx-auto"} color="#667185" />
+              {/* Notification bell */}
+              <svg width="31" height="32" viewBox="0 0 31 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M16.577 6.31223C16.577 5.71776 16.0951 5.23584 15.5006 5.23584C14.9062 5.23584 14.4242 5.71776 14.4242 6.31223V6.9267C10.773 7.44882 7.96591 10.5879 7.96591 14.384L7.96591 18.69C7.96591 18.69 7.96592 18.6898 7.96591 18.69C7.96581 18.692 7.96508 18.7064 7.96041 18.7347C7.95481 18.7686 7.94486 18.8147 7.92844 18.874C7.89515 18.9942 7.84217 19.1439 7.76815 19.3209C7.61975 19.6757 7.41055 20.0843 7.17917 20.4964C6.74415 21.2714 6.52488 22.1948 6.6895 23.0729C6.8631 23.999 7.45919 24.8066 8.47726 25.1943C9.38671 25.5405 10.5973 25.8572 12.196 26.0457C12.234 26.0787 12.279 26.1164 12.3307 26.1577C12.4924 26.2872 12.7236 26.4549 13.0156 26.6218C13.5954 26.9531 14.4525 27.3018 15.5006 27.3018C16.5488 27.3018 17.4059 26.9531 17.9856 26.6218C18.2777 26.4549 18.5088 26.2872 18.6706 26.1577C18.7223 26.1164 18.7673 26.0787 18.8053 26.0457C20.404 25.8572 21.6146 25.5405 22.524 25.1943C23.5421 24.8066 24.1382 23.999 24.3118 23.0729C24.4764 22.1948 24.2571 21.2714 23.8221 20.4964C23.5907 20.0843 23.3815 19.6757 23.2331 19.3209C23.1591 19.1439 23.1061 18.9942 23.0728 18.874C23.0564 18.8147 23.0465 18.7686 23.0409 18.7347C23.0362 18.7064 23.0355 18.6923 23.0354 18.6902C23.0354 18.69 23.0354 18.6902 23.0354 18.6902L23.0354 18.6811V14.3845C23.0354 10.5885 20.2283 7.44891 16.577 6.92671V6.31223ZM10.1187 14.384C10.1187 11.4119 12.528 9.0032 15.5006 9.0032C18.4731 9.0032 20.8826 11.4123 20.8826 14.3845V18.6907C20.8826 19.189 21.0693 19.7265 21.247 20.1515C21.4401 20.6132 21.6932 21.1018 21.9449 21.5502C22.1896 21.9862 22.248 22.3982 22.1959 22.6763C22.1527 22.9064 22.0377 23.0759 21.758 23.1824C20.601 23.6229 18.6479 24.0726 15.5006 24.0726C12.3534 24.0726 10.4003 23.6229 9.24331 23.1824C8.9636 23.0759 8.84856 22.9064 8.80542 22.6763C8.75329 22.3982 8.81165 21.9862 9.05639 21.5502C9.3081 21.1018 9.56115 20.6132 9.75425 20.1515C9.93199 19.7265 10.1187 19.189 10.1187 18.6907V14.384Z" fill="#667185" />
+              </svg>
+
               <p
-                className={`absolute -top-4 text-white  right-[-14px] py-[1px] rounded-full px-[3px] ${
-                  totalSchoolConnectList > 0 ? "bg-red-700" : "bg-white"
-                }  `}
+                className={`absolute -top-4 text-white  right-[-4px] py-[1px] rounded-full px-[3px] ${totalSchoolConnectList > 0 ? "bg-red-700" : "bg-white"
+                  }  `}
               >
                 {totalSchoolConnectList || 0}
               </p>
             </div>
           )}
         </div>
+        {/* 
+        <button
+          className="relative rounded-full p-2 text-[#475467] hover:bg-gray-100"
+          aria-label="Open notifications"
+        >
+          <IoNotificationsOutline className="h-6 w-6" />
+          <span className="absolute right-2 top-2 inline-block h-2 w-2 rounded-full bg-[#84C127]" />
+        </button> */}
 
         <Menu
           width={280}
@@ -352,6 +367,8 @@ const SchoolDashboardHeader = () => {
           </Menu.Dropdown>
         </Menu>
       </div>
+
+      <NotificationDrawer open={isNotifOpen} onClose={() => setIsNotifOpen(false)} />
     </div>
   );
 };
