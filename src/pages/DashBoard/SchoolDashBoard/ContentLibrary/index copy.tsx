@@ -17,7 +17,16 @@ import WellDoneModal from "@/components/WellDoneModal";
 import QuizComponent, { QuizStats, UserAnswer } from "@/components/QuizComponent";
 import QuizResultModal from "@/components/QuizResultModal"
 import QueenMoremi from "@/audiobooks/QueenMoremi.mp3";
+import ContentLibraryHeader from "./ContentLibraryHeader";
 import AnswerReviewModal from "@/components/AnswerReviewModal";
+import ContentLibraryModals from "./ContentLibraryModals";
+import ContentLibraryBreadcrumb from "./ContentLibraryBreadcrumb";
+import CategorySections from "./CategorySections";
+import ContentLibraryBody from "./ContentLibraryBody";
+import { useContentLibraryData } from "./hooks/useContentLibraryData";
+import { useBookActions } from "./hooks/useBookActions";
+
+
 
 import KojoAndLolaImage from "@/assets/Kojo and Lola.png";
 import KojoAndLolaImage1 from "@/assets/Kojo and Lola (1).png";
@@ -44,11 +53,76 @@ import literacy from "@/assets/literacy.png";
 import useStore from "@/store";
 import { on } from "rsuite/esm/DOMHelper";
 import { getProfileState } from "@/store/profileStore";
-import type { Category, Page, Tab } from "./types";
-import { trace, toTitle, homeToCategories } from "./helpers";
 
 
+/* ---------------- helper: loud trace ---------------- */
+const trace = (...msg: any[]) =>
+  console.log('%c[ContentLibrary]', 'color:#BCD678;font-weight:bold', ...msg);
 
+/* helper: snake_case → Title Case */
+const toTitle = (s: string) =>
+  s
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+
+/* helper: transform ContentForHome response → Category[] */
+const homeToCategories = (payload: any): Category[] => {
+  trace("homeToCategories() payload:", payload);
+
+  if (!payload || typeof payload !== "object") return [];
+
+  const uniqueBooks = new Set<string>();
+  const catArray: Category[] = [];
+
+  Object.entries(payload).forEach(([key, val]: [string, any]) => {
+    if (!Array.isArray(val)) return;
+
+    const books: Book[] = val
+      .filter((item) => {
+        const uniqueKey = `${key}-${item.id}`;
+        if (!uniqueBooks.has(uniqueKey)) {
+          uniqueBooks.add(uniqueKey);
+          return true;
+        }
+        return false;
+      })
+      .map((item) => ({
+        id: item.id,
+        title: item.name,
+        coverUrl: item.thumbnail,
+        progress: 0, // default for "for you" rows
+        is_liked: item.is_liked,
+      }));
+
+    catArray.push({
+      name: toTitle(key),
+      books,
+      hasSub: false, // all For-you categories expand locally
+    });
+  });
+
+  trace("homeToCategories() →", catArray);
+  return catArray;
+};
+
+interface Category {
+  name: string;
+  books: Book[];
+  hasSub?: boolean; // 🔹 new flag
+  subId?: number | null;   // <-- for lazy subcategory rows
+}
+
+interface Page {
+  id: number;
+  imageUrl: string;
+  text: string;
+}
+
+interface Tab {
+  label: string;
+  icon: string; // ✅
+  id: number | null;
+}
 
 const generateAllSubcategories = (): Category[] => [
   {
@@ -73,77 +147,82 @@ const defaultTabs: Omit<Tab, "id">[] = [
 
 // console.log('GetCompletedContents', GetCompletedContents(sessionStorage.getItem("profileId")));
 const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
+
+  const profileId = sessionStorage.getItem("profileId");
+  
+  
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation() as { state?: any };
   const favMode =
-    state === "fav" ||
-    searchParams.get("state") === "fav" ||
-    location?.state === "fav" ||
-    location?.state?.fav === true;
+  state === "fav" ||
+  searchParams.get("state") === "fav" ||
+  location?.state === "fav" ||
+  location?.state?.fav === true;
   // ensure we can always do tabsConfig[activeIndex].label without crashing
   const [tabsConfig, setTabsConfig] = useState<Tab[]>(
     defaultTabs.map((tab) => ({ ...tab, id: null }))
   );
 
+
+  const urlState = React.useMemo(() => {
+    const tab = Number(searchParams.get("tab")) || 0;
+    const book = Number(searchParams.get("book")) || null;
+    const read = searchParams.get("read") === profileId;
+    const watch = searchParams.get("watch") === profileId;
+    return { tab, book, read, watch };
+  }, [searchParams, profileId]);
+
+  const {
+    allCats,
+    setAllCats,        // ✅ now available
+    categories,
+    setCategories,
+    subcategories,
+    setSubcategories,
+    crumb,
+    setCrumb,
+    ongoingBooks,
+    refreshOngoing,
+    loadFavourites,
+  } = useContentLibraryData(favMode);
+
+  const {
+    bookPages,
+    setBookPages,
+    readingLoading,
+    setReadingLoading,
+    videoSrc,
+    setVideoSrc,
+    videoPoster,
+    setVideoPoster,
+    overviewChecking,
+    setOverviewChecking,
+    startRead,
+    closeRead,
+    startWatch,
+    closeWatch,
+    closeBook,
+    fetchBookPages,
+  } = useBookActions(profileId, setSearchParams, urlState);
+  
+  
+
   const [profiles] = useStore(getProfileState);
 
   function getIframeLink() {
-    const profileId = sessionStorage.getItem("profileId");
-    if (!profileId) return null;
+    const profileIdchild = sessionStorage.getItem("profileId");
+    if (!profileIdchild) return null;
 
-    const profile = profiles?.find((p) => p.id === Number(profileId));
+    const profile = profiles?.find((p) => p.id === Number(profileIdchild));
     console.log("profile", profile, profile?.interactive_app_url);
     return profile ? profile?.interactive_app_url : 'https://interactive-app.kundakidsapi.com/';
   }
 
   // ---- ongoing “Continue Reading” state (must be inside the component) ----
-  const [ongoingBooks, setOngoingBooks] = useState<Book[]>([]);
 
-  const refreshOngoing = useCallback(() => {
-    const pid = sessionStorage.getItem("profileId") || "";
-    trace("GetOngoingContents → profileId:", pid);
-
-    GetOngoingContents(pid)
-      .then((res) => {
-        const raw = res?.data?.data?.ongoing_contents;
-        if (!Array.isArray(raw)) {
-          trace("GetOngoingContents: no ongoing contents found");
-          setOngoingBooks([]);
-          return;
-        }
-
-        const books: Book[] = raw.map((it: any) => {
-          const totalPages = Array.isArray(it.pages) ? it.pages.length : 0;
-          const pagesRead = Number(it.pages_read) || 0;
-          const progress =
-            totalPages > 0 ? Math.max(0, Math.min(100, Math.round((pagesRead * 100) / totalPages))) : 0;
-
-          return {
-            id: it.id,
-            title: it.name ?? "",
-            coverUrl: it.thumbnail ?? "",
-            progress,
-            is_liked: it.is_liked,
-          };
-        });
-
-        trace("GetOngoingContents → mapped books:", books);
-        setOngoingBooks(books);
-      })
-      .catch((err) => {
-        console.error("GetOngoingContents failed", err);
-        setOngoingBooks([]);
-      });
-      console.log('GetOngoingContents → mapped books:', ongoingBooks);
-  }, []);
-
-  // fetch once on mount
-  useEffect(() => {
-    refreshOngoing();
-  }, [refreshOngoing]);
+ 
 
   // a) Keep the entire cats array so we can reuse sub-categories
-  const [allCats, setAllCats] = useState<any[]>([]);
 
   // Stories expansion state
   const [showAllStories, setShowAllStories] = useState(false);
@@ -153,64 +232,9 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
   const [showAllLanguages, setShowAllLanguages] = useState(false);
   const [languagesActiveSubSlug, setLanguagesActiveSubSlug] = useState<string | null>(null);
 
-  // ─── 1) state for pages + loading ───
-  const [bookPages, setBookPages] = useState<Page[]>([]);
-  const [readingLoading, setReadingLoading] = useState(false);
-
-  // ─── 2) state for real video URL + poster ───
-  const [videoSrc, setVideoSrc] = useState<string>("");
-  const [videoPoster, setVideoPoster] = useState<string>("");
-
-  // ─── overview guard state ───
-  const [overviewChecking, setOverviewChecking] = useState(false);
-
   const readingRef = useRef<ReadingHandle>(null);
 
-  const loadFavourites = React.useCallback(async () => {
-    trace("loadFavourites() → start");
-    const pid = sessionStorage.getItem("profileId") || "";
-
-    if (!pid) {
-      trace("loadFavourites() → missing profileId, clearing categories");
-      setCategories([]);
-      setSubcategories([]);
-      setCrumb(["Favourites"]);
-      return;
-    }
-
-    try {
-      const res = await GetLikedContent(pid);
-      console.log("GetLikedContent → resppppppppp:", res);
-      const payload = res?.data ?? {};
-      const records = payload.data.records
-
-      console.log("GetLikedContent → records:", records);
-
-      const favBooks: Book[] = records.map((it: any) => ({
-        id: it.id ?? it.content_id ?? 0,
-        title: it.name ?? it.title ?? "",
-        coverUrl: it.thumbnail ?? it.cover ?? it.image ?? "",
-        progress: it.percentage ?? it.progress ?? 0,
-        is_liked: true,
-      }));
-
-      trace("loadFavourites() → mapped", favBooks.length, "items");
-      setCategories([{ name: "Favourites", books: favBooks, hasSub: false }]);
-      setSubcategories([]);
-      setCrumb(["Favourites"]);
-    } catch (err) {
-      console.error("[ContentLibrary] GetLikedContent failed", err);
-      setCategories([]);
-      setSubcategories([]);
-      setCrumb(["Favourites"]);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (favMode) {
-      loadFavourites();
-    }
-  }, [favMode, loadFavourites]);
+ 
 
   useEffect(() => {
     if (favMode) return; // do not overwrite favourites view
@@ -232,16 +256,8 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
     });
   }, [favMode]);
 
-  // Get profileId from sessionStorage
-  const profileId = sessionStorage.getItem("profileId");
+ 
 
-  const urlState = React.useMemo(() => {
-    const tab = Number(searchParams.get("tab")) || 0;
-    const book = Number(searchParams.get("book")) || null;
-    const read = searchParams.get("read") === profileId;
-    const watch = searchParams.get("watch") === profileId;
-    return { tab, book, read, watch };
-  }, [searchParams, profileId]);
 
   const setTab = (idx: number) => setSearchParams({ tab: String(idx) });
 
@@ -250,98 +266,10 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
     setSearchParams({ tab: String(urlState.tab), book: String(id) });
   };
 
-  /** fetch + normalize pages for a given book id */
-  const fetchBookPages = useCallback(async (id: number) => {
-    setReadingLoading(true);
-    try {
-       const profileId = sessionStorage.getItem("profileId") || 0;
-      const res = await GetContentById(String(id), profileId);
-      if (!res.data.status) {
-        // Assuming there's a notification system in place
-        showNotification({
-          message: res.data.message,
-          title: "Notification"
-        });
-        return;
-      }
-      const data = res?.data?.data ?? res?.data;
-      const rawPages: any[] = data.pages || [];
-      const pages: Page[] = rawPages.map((p) => {
-        // 2) pull image either from p.image or from an <img> in the HTML
-        const html = p.web_body || p.body || "";
-        const match = html.match(/<img[^>]+src="([^">]+)"/i);
-        const imgSrc = p.image || (match && match[1]) || "";
-        // 3) strip out any <img> tags so only text remains
-        const text = html.replace(/<img[^>]*>/gi, "").trim();
-        return { id: p.page_number, imageUrl: imgSrc, text };
-      });
-      setBookPages(pages);
-    } catch (err) {
-      console.error("🔴 failed to load pages", err);
-      setBookPages([]);
-    } finally {
-      setReadingLoading(false);
-    }
-  }, []);
-
-  const startRead = async (id: number) => {
-    trace("startRead()", id);
-    setSearchParams({ tab: String(urlState.tab), book: String(id), read: profileId ?? "" });
-    await fetchBookPages(id);
-  };
-
-  const closeRead = () => {
-    setBookPages([]);
-    setSearchParams({ tab: String(urlState.tab), book: String(urlState.book!) });
-  };
-
-  const startWatch = async (id: number) => {
-    trace("startWatch()", id);
-    // 1) clear any previous video
-    setVideoSrc("");
-    setVideoPoster("");
-
-    // 2) flip into “watch” mode
-    setSearchParams({ tab: String(urlState.tab), book: String(id), watch: profileId ?? "" });
-
-    // 3) fetch this book’s media[0]
-    try {
-      const res = await GetContentById(String(id), profileId);
-      if (!res.data.status) {
-        // Assuming there's a notification system in place
-        showNotification({
-          message: res.data.message,
-          title: "Notification"
-        });
-        return;
-      }
-      const data = res?.data?.data ?? res?.data;
-      const mediaItem = data.media?.[0] || {};
-      setVideoSrc(mediaItem.file || "");
-      setVideoPoster(mediaItem.thumbnail || "");
-    } catch (err) {
-      console.error("❌ failed to load video data", err);
-      setVideoSrc("");
-      setVideoPoster("");
-    }
-  };
-
-  const closeWatch = () => {
-    // clear out before we go
-    setVideoSrc("");
-    setVideoPoster("");
-    setSearchParams({ tab: String(urlState.tab), book: String(urlState.book!) });
-  };
-
-  const closeBook = () => setSearchParams({ tab: String(urlState.tab) });
-
   const activeIndex = urlState.tab;
 
   const [mainSelected, setMainSelected] = useState<string | null>(null);
   const [subRequested, setSubRequested] = useState(false);
-  const [subcategories, setSubcategories] = useState<Category[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [crumb, setCrumb] = useState<string[]>([]);
   const [expandedSimple, setExpandedSimple] = useState<Record<string, boolean>>(
     {}
   );
@@ -354,81 +282,9 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
     []
   );
 
-  const selectedBook = React.useMemo<Book | null>(() => {
-    if (urlState.book == null) return null;
+  
 
-    // 1️⃣ look in the demo list
-    let found =
-      allBooks.find((b) => b.id === urlState.book) ?? null;
-    if (found) return found;
-
-    // 2️⃣ look in the currently displayed categories / sub-categories
-    const searchPools = [categories, subcategories];
-    for (const pool of searchPools) {
-      for (const cat of pool) {
-        const hit = cat.books?.find((b) => b.id === urlState.book);
-        if (hit) return hit;
-      }
-    }
-
-    // 3️⃣ still nothing? return a stub so BookOverview
-    //    can fetch real data via GetContentById
-    return {
-      id: urlState.book,
-      title: "",
-      coverUrl: "",
-      progress: 0,
-    };
-  }, [urlState.book, allBooks, categories, subcategories]);
-
-  // ─── guard: when you land on ?book=### (but not reading or watching),
-  //      verify that GetContentById returns status=true before showing overview.
-  useEffect(() => {
-    if (
-      urlState.book == null ||
-      urlState.read ||
-      urlState.watch ||
-      !selectedBook
-    ) {
-      return;
-    }
-
-    setOverviewChecking(false);
-    GetContentById(String(urlState.book), profileId)
-      .then((res) => {
-        if (!res.data.status) {
-          showNotification({
-            title: "Oops!",
-            message: res.data.message,
-            color: "red",
-          });
-          // clear the book query param, stay on tab
-          setSearchParams({ tab: String(urlState.tab) }, { replace: true });
-        }
-      })
-      .catch((err) => {
-        console.error("Overview guard error", err);
-        showNotification({
-          title: "Error",
-          message: "Failed to verify book overview.",
-          color: "red",
-        });
-      })
-      .finally(() => {
-        setOverviewChecking(false);
-      });
-  }, [
-    urlState.book,
-    urlState.read,
-    urlState.watch,
-    selectedBook,
-    urlState.tab,
-    setSearchParams,
-    profileId
-  ]);
-
-  const readingBook = urlState.read ? selectedBook : null;
-  const watchingBook = urlState.watch ? selectedBook : null;
+  
 
   // ---------- quiz flow state ----------
   const [quizTarget, setQuizTarget] = useState<Book | null>(null);
@@ -724,6 +580,95 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
     favMode
   ]);
 
+
+
+  const selectedBook = React.useMemo<Book | null>(() => {
+    if (urlState.book == null) return null;
+
+    // 1️⃣ look in the demo list
+    let found =
+      allBooks.find((b) => b.id === urlState.book) ?? null;
+    if (found) return found;
+
+    // 2️⃣ look in the currently displayed categories / sub-categories
+    const searchPools = [categories, subcategories];
+    for (const pool of searchPools) {
+      for (const cat of pool) {
+        const hit = cat.books?.find((b) => b.id === urlState.book);
+        if (hit) return hit;
+      }
+    }
+
+    // 3️⃣ still nothing? return a stub so BookOverview
+    //    can fetch real data via GetContentById
+    return {
+      id: urlState.book,
+      title: "",
+      coverUrl: "",
+      progress: 0,
+    };
+  }, [urlState.book, allBooks, categories, subcategories]);
+
+  // ─── guard: when you land on ?book=### (but not reading or watching),
+  //      verify that GetContentById returns status=true before showing overview.
+  useEffect(() => {
+    if (
+      urlState.book == null ||
+      urlState.read ||
+      urlState.watch ||
+      !selectedBook
+    ) {
+      return;
+    }
+
+    setOverviewChecking(false);
+    GetContentById(String(urlState.book), profileId)
+      .then((res) => {
+        if (!res.data.status) {
+          showNotification({
+            title: "Oops!",
+            message: res.data.message,
+            color: "red",
+          });
+          // clear the book query param, stay on tab
+          setSearchParams({ tab: String(urlState.tab) }, { replace: true });
+        }
+      })
+      .catch((err) => {
+        console.error("Overview guard error", err);
+        showNotification({
+          title: "Error",
+          message: "Failed to verify book overview.",
+          color: "red",
+        });
+      })
+      .finally(() => {
+        setOverviewChecking(false);
+      });
+  }, [
+    urlState.book,
+    urlState.read,
+    urlState.watch,
+    selectedBook,
+    urlState.tab,
+    setSearchParams,
+    profileId
+  ]);
+
+  const readingBook = urlState.read ? selectedBook : null;
+  const watchingBook = urlState.watch ? selectedBook : null;
+
+  useEffect(() => {
+    if (favMode) {
+      loadFavourites();
+    }
+  }, [favMode, loadFavourites]);
+
+   // fetch once on mount
+   useEffect(() => {
+    refreshOngoing();
+  }, [refreshOngoing]);
+
   // 2) Main “See all” handler
   const handleMainSeeAll = (name: string) => {
     setMainSelected(name);
@@ -843,87 +788,21 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
 
   return (
      <div className={`mx-auto w-[clamp(550px,100%,1440px)] relative ${activeLabel !== "For you" ? "top-[-70px]" : ""}`}>
-      {/* Banner */}
-      {activeLabel === "For you" && state !== 'fav' && (
-        <div className="relative h-auto sm:h-[220px] z-10 rounded-3xl bg-[#BCD678] px-4 py-6 sm:px-8 sm:py-10 overflow-visible mt-10">
-          <div className="flex flex-col justify-center h-full">
-            <h1 className="font-Inter font-[600] text-[36px] leading-[120%] mb-[14px] tracking-[-0.02em] text-gray-900">
-              Content Library
-            </h1>
-            <p className="mt-1 font-Inter font-[500] text-[16px] leading-[145%] tracking-[0%] text-gray-700">
-              Content Library
-            </p>
-          </div>
-          <img
-            src={TeacherIllustration}
-            alt="Illustration"
-            className="absolute bottom-[-20px] sm:bottom-[-38px] right-4 sm:right-6 w-20 sm:w-auto select-none pointer-events-none"
-          />
-        </div>
-      )}
-
-      {/* Tabs */}
-      <LayoutGroup>
-        <div className="sticky top-[-22px] flex gap-3 mb-6 flex-wrap mt-[52px] z-10">
-          {tabsConfig.map((tab, idx) => (
-            (state !== 'fav' || tab.label !== "For you") && (
-              <motion.button
-                key={tab.label}
-                layout
-                onClick={() => setTab(idx)}
-                animate={{
-                  backgroundColor: idx === activeIndex ? "#BCD678" : "#FFF",
-                  color: idx === activeIndex ? "#1F2937" : "#4B5563",
-                  boxShadow: idx === activeIndex
-                    ? "0 10px 20px rgba(188,214,120,0.3)"
-                    : "0 2px 4px rgba(0,0,0,0.05)",
-                }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative flex items-center gap-[7px] p-[12px] w-fit h-[48px] rounded-[8px] border border-gray-200 text-sm font-medium outline-none"
-              >
-                {idx === activeIndex && (
-                  <motion.div
-                    layoutId="tabHighlight"
-                    className="absolute inset-0 rounded-[8px] bg-[#BCD678] z-0"
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  />
-                )}
-                <span className="relative z-10">
-                  <img src={tab.icon} alt="Tab Icon" />
-                </span>
-                <span className="relative z-10 font-Inter font-[100] text-[16px] leading-[120%] tracking-[-0.02em] align-middle">{tab.label}</span>
-              </motion.button>
-            )
-          ))}
-        </div>
-      </LayoutGroup>
-
+       {/* Header (Banner + Tabs) */}
+    <ContentLibraryHeader
+      activeIndex={activeIndex}
+      tabsConfig={tabsConfig}
+      state={state}
+      onTabSelect={setTab}
+    />
     
 
       {/* Unified Breadcrumb */}
-      {displayCrumbs.length > 1 && (
-        <nav aria-label="Breadcrumb" className="mb-4">
-          <ol className="flex items-center text-sm text-gray-600 space-x-2">
-            {displayCrumbs.map((label, idx) => (
-               <React.Fragment key={idx}>
-                {idx > 0 && <FaChevronRight className="text-gray-400" />}
-                <span
-                  className={`${
-                    idx === displayCrumbs.length - 1
-                      ? "font-bold text-gray-900"
-                      : "hover:underline cursor-pointer"
-                  } font-arimo text-[14px] leading-[21px] tracking-[0.1px] align-middle`}
-                  onClick={() => handleBreadcrumbClick(label, idx)}
-                >
-                  {label}
-                </span>
-              </React.Fragment>
-            ))}
-          </ol>
-        </nav>
-      )}
+      <ContentLibraryBreadcrumb
+        crumbs={displayCrumbs}
+        onCrumbClick={handleBreadcrumbClick}
+      />
+
 
         {/* Show the Literacy iframe if the tab is selected */}
          {tabsConfig[activeIndex]?.label === "Literacy" && (
@@ -938,207 +817,79 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
         </div>
       )}
 
-      {/* 1) If we’re in “review answers” mode, only show the inline panel */}
-      {showAnswerReview ? (
-        <AnswerReviewModal
-          answers={quizAnswers ?? []}
-          onDone={handleReviewDone}
-        />
-      ) : (
-        /* 2) Otherwise show the normal content area (reader / video / overview / categories) */
-        <div className="mt-8 space-y-8">
-          {readingBook ? (
-            readingLoading ? (
-              <div className="flex justify-center py-20">
-                <span>Loading book…</span>
-              </div>
-            ) : (
-              <ReadingComponent
-                ref={readingRef}
-                book={readingBook}
-                onExit={closeRead}
-                pages={bookPages}
-                withIntroPages={false}
-                onRetake={handleRetake}
-                onViewAnswers={handleViewAnswers}
-                onAnswersUpdate={(ans) => {
-                  console.log("Parent got answers from ReadingComponent:", ans);
-                  setQuizAnswers(ans);
-                }}
-              />
-            )
-          ) : watchingBook ? (
-            <VideoComponent
-              book={{
-                id: watchingBook.id,
-                title: watchingBook.title,
-                coverUrl: watchingBook.coverUrl,
-                progress: 0,
-              }}
-              key={videoSrc || watchingBook.id}
-              videoSrc={videoSrc}
-              poster={videoPoster}
-              title={watchingBook.title}
-              onRetake={handleRetake}
-              onClose={closeWatch}
-              onViewAnswers={handleViewAnswers}
-              onComplete={() => handleMediaComplete(watchingBook)}
-            />
-          ) : /* don't mount overview while checking or if guard failed */ 
-            (selectedBook && !overviewChecking) ? (
-            <BookOverview
-              book={selectedBook}
-              crumb={crumbsBeforeBook}
-              onBack={closeBook}
-              onRead={(b: any) => startRead(b.id)}
-              onWatch={(b: any) => startWatch(b.id)}
-              audioSrc={QueenMoremi}
-            />
-          ) : (
-            <>
-              {/* ───── Stories tab ───── */}
-              {isStoriesTab &&
-                (() => {
-                  // full ordered array of Stories subcats from `allCats`
-                  const storiesCat = allCats.find((c: any) => c.name === "Stories");
-                  const rows: Array<{ name: string; subId: number | null }> =
-                    (storiesCat?.sub_categories ?? []).map((s: any) => ({
-                      name: s?.name ?? "",
-                      subId: typeof s?.id === "number" ? s.id : null,
-                    }));
+     {/* Unified content body (handles review, reading, watching, overview, categories) */}
+<div className="mt-8 space-y-8">
+  <ContentLibraryBody
+    // ---- Review props ----
+    showAnswerReview={showAnswerReview}
+    quizAnswers={quizAnswers ?? []}
+    onReviewDone={handleReviewDone}
 
-                  // this is what actually gets shown (respecting Show all toggle)
-                  const visibleRows = rows.filter(r =>
-                    !showAllStories || r.name === (storiesActiveSubSlug ?? r.name)
-                  );
+    // ---- Reading props ----
+    readingBook={readingBook}
+    readingRef={readingRef}
+    readingLoading={readingLoading}
+    bookPages={bookPages}
+    onCloseRead={closeRead}
+    onRetake={handleRetake}
+    onViewAnswers={handleViewAnswers}
+    onAnswersUpdate={(ans) => setQuizAnswers(ans)}
 
-                  return visibleRows.map((row, idx) => {
-                    // compute neighbors from the ORIGINAL `rows`, not `visibleRows`
-                    const originalIndex = rows.findIndex(r => r.subId === row.subId);
-                    const nextTwo: number[] = [];
-                    for (let k = originalIndex + 1; k <= originalIndex + 2 && k < rows.length; k++) {
-                      const nid = rows[k]?.subId;
-                      if (typeof nid === "number") nextTwo.push(nid);
-                    }
+    // ---- Watching props ----
+    watchingBook={watchingBook}
+    videoSrc={videoSrc}
+    videoPoster={videoPoster}
+    onCloseWatch={closeWatch}
+    onCompleteWatch={() => handleMediaComplete(watchingBook!)}
 
-                    console.log(
-                      "%c[ContentLibrary] prefetchNext (Stories)",
-                      "color:#BCD678;font-weight:bold",
-                      { for: row.name, subId: row.subId, nextTwo }
-                    );
+    // ---- Overview props ----
+    selectedBook={selectedBook}
+    overviewChecking={overviewChecking}
+    crumbsBeforeBook={crumbsBeforeBook}
+    onBackFromOverview={closeBook}
+    onStartRead={(b) => startRead(b.id)}
+    onStartWatch={(b) => startWatch(b.id)}
 
-                    return (
-                      <BookCategory
-                        key={`${row.name}-${row.subId ?? "x"}`}
-                        subId={row.subId}
-                        categoryName={row.name}
-                        tabLabel="Stories"
-                        expanded={showAllStories && row.name === storiesActiveSubSlug}
-                        onSeeAll={() => {
-                          if (showAllStories && row.name === storiesActiveSubSlug) {
-                            setShowAllStories(false);
-                            setStoriesActiveSubSlug(null);
-                          } else {
-                            setShowAllStories(true);
-                            setStoriesActiveSubSlug(row.name);
-                          }
-                        }}
-                        onBookClick={(book, bc) => {
-                          openBook(book.id);
-                          setCrumb([...bc, book.title]);
-                        }}
-                        prefetchNext={nextTwo}
-                      />
-                    );
-                  });
-                })()}
+    // ---- Category rendering props ----
+    isStoriesTab={isStoriesTab}
+    isLangsTab={isLangsTab}
+    isForYouTab={isForYouTab}
+    displayList={displayList}
+    allCats={allCats}
+    showAllStories={showAllStories}
+    storiesActiveSubSlug={storiesActiveSubSlug}
+    setShowAllStories={setShowAllStories}
+    setStoriesActiveSubSlug={setStoriesActiveSubSlug}
+    showAllLanguages={showAllLanguages}
+    languagesActiveSubSlug={languagesActiveSubSlug}
+    setShowAllLanguages={setShowAllLanguages}
+    setLanguagesActiveSubSlug={setLanguagesActiveSubSlug}
+    expandedSimple={expandedSimple}
+    toggleForYouRow={toggleForYouRow}
+    openBook={openBook}
+    setCrumb={setCrumb}
+  />
+</div>
 
-              {/* ───── Languages tab ───── */}
-              {isLangsTab &&
-                displayList
-                  .filter(cat =>
-                    !showAllLanguages || cat.name === languagesActiveSubSlug
-                  )
-                  .map(cat => (
-                    <BookCategory
-                    subId={cat.subId}
-                      key={cat.name}
-                      categoryName={cat.name}
-                      tabLabel="Languages"
-                      parentCategory={undefined}
-                      books={cat.books}
-                      hasSub={!!cat.subId}
-                      onSeeAll={() => handleLanguagesSeeAll(cat.name)}
-                      expanded={showAllLanguages && cat.name === languagesActiveSubSlug}
-                      onBookClick={(book: any, bc: any) => {
-                        openBook(book.id);
-                        setCrumb([...bc, book.title]);
-                      }}
-                    />
-                  ))}
-
-              {/* ───── For-you tab ───── */}
-              {isForYouTab &&
-                displayList.map((cat) => (
-                  <BookCategory
-                    key={cat.name}
-                    tabLabel="For you"
-                    categoryName={cat.name}
-                    books={cat.books}
-                    hasSub={false}
-                    expanded={!!expandedSimple[cat.name]}
-                    onSeeAll={() => toggleForYouRow(cat.name)}
-                    onBookClick={(book: any, bc: any) => {
-                      openBook(book.id);
-                      setCrumb([...bc, book.title]);
-                    }}
-                    emptyMsg={cat.name === "Continue Reading" ? "No ongoing content yet" : undefined}
-                  />
-                ))}
-            </>
-          )}
-        </div>
-      )}
 
       {/* --------- MODALS & QUIZ (only when NOT reviewing) --------- */}
-      {!showAnswerReview && (
-        <>
-          {showWell && quizTarget && (
-            <WellDoneModal
-              message="You've just finished!"
-              onTakeQuiz={handleTakeQuiz}
-              onLater={handleDoLater}
-              onRetake={handleRetake}
-            />
-          )}
-          {quizTarget && showQuiz && (
-            <QuizComponent
-              onRetake={handleRetake}
-              key={quizTarget.id}    
-              book={quizTarget}
-              onComplete={handleQuizComplete}
-              resetSignal={quizReset}
-              onAnswersChange={(ans) => {
-                console.log("sync parent answers:", ans);
-                setQuizAnswers(ans);
-              }}
-            />
-          )}
-          {showResult && quizStats && (
-             <QuizResultModal
-              stats={{
-                correct: quizStats.correct,
-                 incorrect: quizStats.total - quizStats.correct,
-                skipped: quizStats.skipped,
-                total: quizStats.total
-              }}
-              onClose={() => setShowResult(false)}
-              onRetake={handleRetake}
-              onViewAnswers={handleViewAnswers}
-            />
-          )}
-        </>
-      )}
+{!showAnswerReview && (
+  <ContentLibraryModals
+    showWell={showWell}
+    showQuiz={showQuiz}
+    showResult={showResult}
+    quizTarget={quizTarget}
+    quizStats={quizStats}
+    quizReset={quizReset}
+    setQuizAnswers={(ans) => setQuizAnswers(ans)}
+    onTakeQuiz={handleTakeQuiz}
+    onLater={handleDoLater}
+    onRetake={handleRetake}
+    onViewAnswers={handleViewAnswers}
+    onCloseResult={() => setShowResult(false)}
+  />
+)}
+
     </div>
   );
 };

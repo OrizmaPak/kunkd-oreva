@@ -23,7 +23,7 @@ const SchoolNotificationModal = ({ onCancel, label }: { onCancel: () => void, la
         Please click on continue to contact admin for your account upgrade.
       </p> */}
 
-      <div className="flex justify-end gap-4 mb-5 px-5">
+      <div className="flex justify-end gap-4  mb-5 px-5">
         <button
           onClick={handleCancel}
           className="p-3 pad-x-10 bg-red-200 text-red-600 rounded flex-grow"
