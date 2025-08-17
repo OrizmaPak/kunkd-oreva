@@ -8,6 +8,7 @@ export interface Book {
   coverUrl: string;
   progress: number; // 0–100
   is_liked?: boolean; // backend flag if available
+  category?: string;
 }
 
 export interface BookCardProps {
@@ -16,7 +17,8 @@ export interface BookCardProps {
 }
 
 const BookCard: React.FC<BookCardProps> = ({ book, onClick }) => {
-  /* dev-trace */ console.log('[BookCard] render', book.id, book.is_liked);
+  // /* dev-trace */ console.log('[BookCard] render', book.id, book.is_liked);
+  console.log('BookCard → book', book);
 
   return (
     <div
@@ -48,6 +50,8 @@ const BookCard: React.FC<BookCardProps> = ({ book, onClick }) => {
         alt={book.title}
         className="absolute top-[4.5%] left-[4.85%] w-[120px] h-[120px] object-cover transition-transform duration-1000 hover:scale-105"
       />
+
+    
 
       {/* Progress bar aligned with the width of the book cover */}
       {book.progress > 0 && (

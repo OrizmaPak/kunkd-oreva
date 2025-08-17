@@ -41,6 +41,7 @@ export const homeToCategories = (payload: any): Category[] => {
         coverUrl: item?.thumbnail ?? item?.cover ?? item?.image ?? "",
         progress: Number(item?.percentage ?? item?.progress ?? 0) || 0,
         is_liked: item?.is_liked,
+        category: item?.category,
       }));
 
     out.push({
