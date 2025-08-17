@@ -16,7 +16,7 @@ const seed = [
   },
   {
     id: 2,
-    title: "New Teacher Accepted",
+    title: "New Teacher Accepted", 
     body: "Adams Babajide has accepted your Teacher Invite.",
     read: false,
     date: new Date("2025-08-01T09:10:00"),
