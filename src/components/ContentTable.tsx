@@ -3,37 +3,26 @@ import SearchBar from "@/components/SearchBar";
 import SortDropdown from "@/components/SortDropdown";
 import Pagination from "@/components/Pagination";
 
-interface ContentItem {
+export interface ContentItem {
   id: number;
   title: string;
   category: string;
   readType: "School Assigned" | "Self Read";
-  dateAssigned: string;
-  dateStarted: string;
+  dateAssigned: string; // use "—" if unknown
+  dateStarted: string;  // use "—" if unknown
   status: "Ongoing" | "Completed";
   thumb: string;
 }
 
-const sampleTitles = [
-  "Ananse's Not-So-Yummy Surprise",
-  "Nigeria-Cameroon Chimpanzee",
-  "The Brave Little Lion",
-];
+type Props = {
+  /** REAL data from parent (StudentView). Do not pass dummy. */
+  data: ContentItem[];
+};
 
-const generateContent = (total: number): ContentItem[] =>
-  Array.from({ length: total }, (_, i) => ({
-    id: i + 1,
-    title: sampleTitles[i % sampleTitles.length],
-    category: ["Stories", "Literacy", "Languages"][i % 3],
-    readType: i % 2 ? "Self Read" : "School Assigned",
-    dateAssigned: "Apr 12, 2023",
-    dateStarted: i % 3 ? "Apr 12, 2023" : i % 2 ? "Not started" : "--",
-    status: i % 4 === 0 ? "Completed" : "Ongoing",
-    thumb: `https://placehold.co/48x48?text=${i + 1}`,
-  }));
+const ContentTable: React.FC<Props> = ({ data }) => {
+  // NOTE: no dummy generation here — we only use the provided data
+  const allContent = useMemo(() => data ?? [], [data]);
 
-const ContentTable: React.FC = () => {
-  const allContent = useMemo(() => generateContent(200), []);
   const [tab, setTab] = useState<ContentItem["status"]>("Ongoing");
   const [query, setQuery] = useState("");
   const [sortKey, setSortKey] = useState<"title" | "category" | "dateAssigned">(
@@ -59,47 +48,48 @@ const ContentTable: React.FC = () => {
   }, [filtered, sortKey]);
 
   /* ---- pagination ---- */
-  const totalPages = Math.ceil(sorted.length / pageSize);
+  const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize));
   const paged = sorted.slice((page - 1) * pageSize, page * pageSize);
 
   return (
     <div className="space-y-4 bg-white rounded-3xl border border-gray-200 px-8 py-6">
       {/* Tabs + search */}
       <div className="flex justify-between items-center">
-            {/* Tabs */}
-            <div className="flex gap-0">
-                {(["Ongoing", "Completed"] as const).map((t) => (
-                <button
-                    key={t}
-                    onClick={() => {
-                    setTab(t);
-                    setPage(1);
-                    }}
-                    className={`px-6 py-1.5 rounded-xs border ${
-                    tab === t
-                        ? "bg-green-600 text-white border-green-600"
-                        : "bg-white text-gray-600 border-gray-300"
-                    }`}
-                >
-                    {t}
-                </button>
-                ))}
-            </div>
+        {/* Tabs */}
+        <div className="flex items-center gap-1 rounded-full bg-gray-100 p-1">
+          {(["Ongoing", "Completed"] as const).map((t) => (
+            <button
+              key={t}
+              onClick={() => {
+                setTab(t);
+                setPage(1);
+              }}
+              className={`rounded-full px-3 py-1 text-sm transition ${
+                tab === t
+                  ? "bg-green-600 text-white"
+                  : "text-gray-700 hover:bg-white"
+              }`}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
 
-            {/* Controls */}
-            <div className="flex justify-end gap-5 items-center">
-                <SearchBar value={query} onChange={setQuery} placeholder="Search here…" />
-                <SortDropdown
-                value={sortKey}
-                onChange={(v) => setSortKey(v as any)}
-                options={[
-                    { label: "Title", value: "title" },
-                    { label: "Category", value: "category" },
-                    { label: "Date Assigned", value: "dateAssigned" },
-                ]}
-                />
-            </div>
+        {/* Controls */}
+        <div className="flex justify-end gap-5 items-center">
+          <SearchBar value={query} onChange={setQuery} placeholder="Search here…" />
+          <SortDropdown
+            value={sortKey}
+            onChange={(v) => setSortKey(v as any)}
+            options={[
+              { label: "Title", value: "title" },
+              { label: "Category", value: "category" },
+              { label: "Date Assigned", value: "dateAssigned" },
+            ]}
+          />
+        </div>
       </div>
+
       {/* Table */}
       <div className="border border-gray-200 rounded-lg overflow-hidden">
         <table className="w-full table-auto">
@@ -114,6 +104,15 @@ const ContentTable: React.FC = () => {
             </tr>
           </thead>
           <tbody>
+            {/* Empty state */}
+            {paged.length === 0 && (
+              <tr>
+                <td colSpan={6} className="p-6 text-center text-gray-500">
+                  No content found.
+                </td>
+              </tr>
+            )}
+
             {paged.map((c) => (
               <tr key={c.id} className="border-t text-sm">
                 <td className="p-3 flex items-center gap-3">
@@ -136,8 +135,8 @@ const ContentTable: React.FC = () => {
                     {c.readType}
                   </span>
                 </td>
-                <td className="p-3 text-gray-600">{c.dateAssigned}</td>
-                <td className="p-3 text-gray-600">{c.dateStarted}</td>
+                <td className="p-3 text-gray-600">{c.dateAssigned || "—"}</td>
+                <td className="p-3 text-gray-600">{c.dateStarted || "—"}</td>
                 <td className="p-3 text-blue-500 hover:underline cursor-pointer">
                   View
                 </td>
