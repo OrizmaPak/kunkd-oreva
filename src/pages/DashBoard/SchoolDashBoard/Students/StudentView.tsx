@@ -187,74 +187,132 @@ const StudentView: React.FC<{ crumb?: boolean }> = ({ crumb = true }) => {
         Student info
       </h1>
 
-      {/* Info cards (UI unchanged) */}
+      {/* Info cards (UI unchanged; skeletons while loading) */}
       <div className="grid gap-6 md:grid-cols-2 relative -top-4">
         <div className="bg-white border border-gray-200 rounded-3xl px-6 lg:px-8 py-8 lg:py-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div className="flex items-center space-x-4">
-            <img
-              src={student.avatarUrl || child}
-              alt="Student Avatar"
-              className="w-20 rounded-full object-cover"
-            />
-            <div>
-              <p className="font-inter font-semibold text-gray-800 text-2xl leading-tight tracking-tight">
-                {student.name}
-              </p>
-              <p className="text-sm text-gray-500">{student.email}</p>
-            </div>
+            {loading ? (
+              <>
+                <div className="w-20 h-20 rounded-full bg-gray-100 animate-pulse" />
+                <div className="space-y-2">
+                  <div className="h-5 w-40 bg-gray-100 rounded animate-pulse" />
+                  <div className="h-4 w-56 bg-gray-100 rounded animate-pulse" />
+                </div>
+              </>
+            ) : (
+              <>
+                <img
+                  src={student.avatarUrl || child}
+                  alt="Student Avatar"
+                  className="w-20 rounded-full object-cover"
+                />
+                <div>
+                  <p className="font-inter font-semibold text-gray-800 text-2xl leading-tight tracking-tight">
+                    {student.name}
+                  </p>
+                  <p className="text-sm text-gray-500">{student.email}</p>
+                </div>
+              </>
+            )}
           </div>
           <div className="border-t lg:border-l lg:border-t-0 pt-4 lg:pt-0 lg:pl-6">
-            <p className="text-sm text-gray-500">Class</p>
-            <p className="text-lg font-semibold text-gray-800">{student.class}</p>
+            {loading ? (
+              <>
+                <div className="h-4 w-14 bg-gray-100 rounded animate-pulse mb-2" />
+                <div className="h-5 w-24 bg-gray-100 rounded animate-pulse" />
+              </>
+            ) : (
+              <>
+                <p className="text-sm text-gray-500">Class</p>
+                <p className="text-lg font-semibold text-gray-800">{student.class}</p>
+              </>
+            )}
           </div>
         </div>
 
         <div className="bg-white border border-gray-200 rounded-3xl px-6 lg:px-8 py-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div>
-            <p className="text-sm text-gray-500">Time spent</p>
-            <p className="text-2xl font-bold text-gray-900">
-              {student.timeHMM} <span className="text-gray-500 text-sm font-medium">Minutes</span>
-            </p>
+            {loading ? (
+              <>
+                <div className="h-4 w-20 bg-gray-100 rounded animate-pulse mb-2" />
+                <div className="h-7 w-36 bg-gray-100 rounded animate-pulse" />
+              </>
+            ) : (
+              <>
+                <p className="text-sm text-gray-500">Time spent</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {student.timeHMM} <span className="text-gray-500 text-sm font-medium">Minutes</span>
+                </p>
+              </>
+            )}
           </div>
           <div className="border-t lg:border-l lg:border-t-0 pt-4 lg:pt-0 lg:pl-6 flex flex-col">
-            <p className="text-sm text-gray-500 relative top-1">Teacher</p>
-            <p className="text-ms font-semibold text-gray-800">{teacher.name}</p>
-            <p className="text-sm text-gray-500 relative -top-1">{teacher.email}</p>
+            {loading ? (
+              <>
+                <div className="h-4 w-14 bg-gray-100 rounded animate-pulse mb-2" />
+                <div className="h-5 w-28 bg-gray-100 rounded animate-pulse mb-1" />
+                <div className="h-4 w-40 bg-gray-100 rounded animate-pulse" />
+              </>
+            ) : (
+              <>
+                <p className="text-sm text-gray-500 relative top-1">Teacher</p>
+                <p className="text-ms font-semibold text-gray-800">{teacher.name}</p>
+                <p className="text-sm text-gray-500 relative -top-1">{teacher.email}</p>
+              </>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Progress report (graph fed with API values; UI unchanged) */}
+      {/* Progress report (graph fed with API values; skeleton while loading) */}
       <h2 className="text-xl font-semibold text-gray-900 mt-10">Progress report</h2>
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <ProgressGraph labels={graphLabels} values={graphValues} />
+          {loading ? (
+            <div className="w-full h-[220px] rounded-2xl border border-gray-100 bg-gray-100 animate-pulse" />
+          ) : (
+            <ProgressGraph labels={graphLabels} values={graphValues} />
+          )}
         </div>
         <div className="flex flex-col gap-4 w-full lg:max-w-xs mx-auto">
-          {/* If 0 → show 0/0. Literacy is always 0/0 per instruction */}
-          <StatCard
-            icon={storyy}
-            label="Stories"
-            value={counts.stories === 0 ? "0/0" : String(counts.stories)}
-            onView={() => navigate(`/schooldashboard/students/${id}/stories-report`)}
-          />
-          <StatCard
-            icon={langg}
-            label="Languages"
-            value={counts.languages === 0 ? "0/0" : String(counts.languages)}
-            onView={() => navigate(`/schooldashboard/students/${id}/languages-report`)}
-          />
-          <StatCard
-            icon={Teacers}
-            label="Literacy"
-            value="0/0"
-            onView={() => navigate(`/schooldashboard/students/${id}/literacy-report`)}
-          />
+          {loading ? (
+            <>
+              <div className="h-20 rounded-xl border border-gray-100 bg-gray-100 animate-pulse" />
+              <div className="h-20 rounded-xl border border-gray-100 bg-gray-100 animate-pulse" />
+              <div className="h-20 rounded-xl border border-gray-100 bg-gray-100 animate-pulse" />
+            </>
+          ) : (
+            <>
+              <StatCard
+                icon={storyy}
+                label="Stories"
+                value={counts.stories === 0 ? "0/0" : String(counts.stories)}
+                onView={() => navigate(`/schooldashboard/students/${id}/stories-report?category=stories`)}
+              />
+              <StatCard
+                icon={langg}
+                label="Languages"
+                value={counts.languages === 0 ? "0/0" : String(counts.languages)}
+                onView={() => navigate(`/schooldashboard/students/${id}/languages-report?category=languages`)}
+              />
+              <StatCard
+                icon={Teacers}
+                label="Literacy"
+                value="0/0"
+                onView={() => navigate(`/schooldashboard/students/${id}/literacy-report?category=literacy`)}
+              />
+            </>
+          )}
         </div>
       </div>
 
-      {/* Content table — now fed with ONLY API data */}
-      <ContentTable data={tableData} />
+      {/* Content table — pass loading so it shows skeleton rows */}
+      <ContentTable data={tableData} loading={loading} />
+
+      {/* Optional: error text under table */}
+      {errorMsg && (
+        <p className="text-sm text-red-600">{errorMsg}</p>
+      )}
     </div>
   );
 };
