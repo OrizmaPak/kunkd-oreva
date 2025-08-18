@@ -67,6 +67,11 @@ type Profile = {
 };
 
 const SchoolDashboardHeader = () => {
+
+  // Add these
+const [menuOpened, setMenuOpened] = useState(false);
+const closeMenu = () => setMenuOpened(false);
+
   const navigate = useNavigate();
 
   const currentDate = new Date();
@@ -127,21 +132,23 @@ const SchoolDashboardHeader = () => {
   const handlePickProfile = (p: Profile) => {
     setActiveProfileId(p.id);
     sessionStorage.setItem("profileId", String(p.id));
+
     try {
       const s: any = (useStore as any).getState?.();
       const setActiveProfileIdAction =
-        s?.setActiveProfileId ||
-        s?.setProfileId ||
-        s?.setSelectedProfileId ||
-        s?.setCurrentProfileId;
-
+        s?.setActiveProfileId || s?.setProfileId || s?.setSelectedProfileId || s?.setCurrentProfileId;
       if (typeof setActiveProfileIdAction === "function") {
         setActiveProfileIdAction(p.id);
       }
-    } catch (_) { }
+    } catch (_) {}
+
     window.dispatchEvent(
       new CustomEvent("profile:changed", { detail: { profileId: p.id, profile: p } })
     );
+
+    // NEW: collapse children + close dropdown
+    setChildrenOpen(false);
+    closeMenu();
   };
 
   // Sidebar dock sync (unchanged if you’re moving the toggle elsewhere)
@@ -253,12 +260,15 @@ const SchoolDashboardHeader = () => {
         </button> */}
 
         <Menu
+          opened={menuOpened}
+          onChange={setMenuOpened}
+          closeOnItemClick={false}
+          withinPortal
           width={280}
           shadow="lg"
           radius={10}
           position="bottom-end"
           styles={{ dropdown: { transform: "translateX(0px)" } }}
-          closeOnItemClick={false} // Prevent dropdown from closing on item click
         >
           <Menu.Target>
             <div className="flex justify-center items-center gap-2 cursor-pointer rounded-3xl p-2 px-4">
@@ -331,7 +341,10 @@ const SchoolDashboardHeader = () => {
                     <button
                       key={p.id}
                       type="button"
-                      onClick={() => handlePickProfile(p)}
+                      onClick={() => {
+                        handlePickProfile(p);
+                        setChildrenOpen(false); // Close the children dropdown
+                      }}
                       className="w-full text-left px-3 py-2 flex items-center gap-2 hover:bg-[#F9FAFB]"
                     >
                       <div className="flex items-center justify-center w-[28px] h-[28px] bg-gray-300 rounded-full">

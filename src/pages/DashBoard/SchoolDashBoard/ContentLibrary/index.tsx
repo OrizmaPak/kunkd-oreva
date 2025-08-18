@@ -130,10 +130,10 @@ const generateAllSubcategories = (): Category[] => [
 ];
 
 const defaultTabs: Omit<Tab, "id">[] = [
-   { label: "For you", icon: foryou },
+  //  { label: "For you", icon: foryou },
+  { label: "Literacy", icon: literacy },
   { label: "Stories", icon: story },
   { label: "Languages", icon: languages },
-  { label: "Literacy", icon: literacy },
 ];
 
 // console.log('GetCompletedContents', GetCompletedContents(sessionStorage.getItem("profileId")));
