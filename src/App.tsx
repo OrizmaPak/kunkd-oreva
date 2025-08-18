@@ -439,6 +439,7 @@ function App() {
               {/* THIS IS NO LONGER FOR SCHOOL DASHBOARD ONLY OTHER ROLES WILL BE IMPLEMENTED IN HERE IGNORE ALL OTHER DASHBOARD ROUTES */}
                 <Route path="schooldashboard/*" element={<SchoolLayout />}>
                   <Route index element={<Dashboard />}></Route>
+                  <Route path="dashboard" element={<Dashboard />}></Route>
                   <Route path="teacher" element={<Teachers />}></Route>
                   <Route path="students/*">
                     <Route index element={<Students />} />

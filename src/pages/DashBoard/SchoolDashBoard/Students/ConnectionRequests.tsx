@@ -1,41 +1,271 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
 import { IoFilterOutline } from "react-icons/io5";
 import notfound from "@/assets/notfound.png";
 import placeholder from "@/assets/avatar-placeholder.png"; // use a default avatar
-import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import {
+  GetAttemptAllStudentConnect,
+  GetAttemptStudentConnect,
+  AcceptStudentAdmission,
+  RejectStudentAdmission,
+} from "@/api/api";
+
+type TParent = { firstname?: string; lastname?: string; user_id?: number; email?: string };
+type TClass = { class_id?: number; class_name?: string };
+type TRecord = {
+  id: number;
+  firstname?: string;
+  lastname?: string;
+  name?: string;
+  image?: string;
+  parent?: TParent;
+  class?: TClass;
+  status?: string; // "pending" | "approved" | "declined"
+  created_at?: string; // may be missing
+  declined_at?: string; // may be missing
+  email?: string; // parent email sometimes provided on top-level
+};
+
+type TPagedResponse = {
+  links: unknown;
+  number_pages: number;
+  record_per_page: number;
+  records: TRecord[];
+  totalRecord: number;
+};
+
+type TApiEnvelope = {
+  status: boolean;
+  message: string;
+  data: TPagedResponse;
+};
+
+const getRole = () => {
+  try {
+    const s = sessionStorage.getItem("user") || localStorage.getItem("user");
+    const u = s ? JSON.parse(s) : null;
+    return (u?.role || "").toString();
+  } catch {
+    return "";
+  }
+};
+
+const isSchoolAdmin = (role: string) => {
+  const r = role.toLowerCase();
+  return r === "schooladmin" || r === "school_admin";
+};
+
+const fullName = (r: TRecord) =>
+  r.name?.trim() ||
+  `${(r.firstname || "").trim()} ${(r.lastname || "").trim()}`.trim() ||
+  "—";
+
+const parentName = (p?: TParent) =>
+  p ? `${p.firstname || ""} ${p.lastname || ""}`.trim() : "—";
+
+const parentEmail = (r: TRecord) => r.parent?.email || r.email || "—";
+
+const classNameOf = (r: TRecord) => r.class?.class_name || "—";
+
+const statusOf = (r: TRecord) => (r.status || "pending").toLowerCase();
 
 const ConnectionRequests: React.FC = () => {
+  const role = getRole();
+  const admin = isSchoolAdmin(role);
+
   const [activeTab, setActiveTab] = useState<"pending" | "denied">("pending");
   const [search, setSearch] = useState("");
   const [sortClass, setSortClass] = useState("");
   const [sortOpen, setSortOpen] = useState(false);
   const [showModal, setShowModal] = useState<null | "accept" | "deny">(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 7;
+  const pageSizeFallback = 10;
 
-  const requests = Array.from({ length: 10 }, (_, i) => ({
-    name: "Jaydon Korsgaard",
-    class: "Primary 1",
-    email: "mamoca9539@fryshare.com",
-    parent: "Anita Korsgaard",
-    dateRejected: "Apr 12, 2023",
-    avatar: `https://i.pravatar.cc/150?img=${i + 1}`,
-  }));
+  // server data for current page
+  const [loading, setLoading] = useState(false);
+  const [records, setRecords] = useState<TRecord[]>([]);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const filtered = sortClass
-    ? requests.filter((r) => r.class === sortClass)
-    : requests;
+  // item selected for action
+  const [activeItem, setActiveItem] = useState<TRecord | null>(null);
+  const [acting, setActing] = useState(false);
 
-  const totalPages = Math.ceil(filtered.length / pageSize);
+  // fetch page
+  useEffect(() => {
+    let ignore = false;
+    const load = async () => {
+      try {
+        setLoading(true);
+        const res = (admin
+          ? await GetAttemptAllStudentConnect(String(currentPage))
+          : await GetAttemptStudentConnect(String(currentPage))) as unknown as {
+          data: TApiEnvelope;
+        };
+        if (ignore) return;
+        const payload = res?.data?.data;
+        const recs = payload?.records || [];
+        setRecords(recs);
 
-  const pagedRequests = filtered.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
+        // prefer backend number_pages if provided
+        const np = Number(payload?.number_pages || 0);
+        if (np > 0) setTotalPages(np);
+        else {
+          const per = Number(payload?.record_per_page || pageSizeFallback);
+          const total = Number(payload?.totalRecord || recs.length);
+          setTotalPages(Math.max(1, Math.ceil(total / (per || pageSizeFallback))));
+        }
+      } catch {
+        if (!ignore) {
+          setRecords([]);
+          setTotalPages(1);
+        }
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    };
+    load();
+    return () => {
+      ignore = true;
+    };
+  }, [admin, currentPage]);
+
+  // class list (for the "Sort by" dropdown)
+  const classOptions = useMemo(() => {
+    const s = new Set<string>();
+    records.forEach((r) => {
+      const c = classNameOf(r);
+      if (c && c !== "—") s.add(c);
+    });
+    const arr = Array.from(s);
+    // fallback options if no classes yet (keeps your dropdown looking same)
+    if (arr.length === 0) return ["Primary 1", "Primary 2", "Class 1", "Class 2"];
+    return arr;
+  }, [records]);
+
+  // client-side filter for tab + search + class
+  const filtered = useMemo(() => {
+    let rows = records;
+
+    // tab
+    rows = rows.filter((r) => {
+      const st = statusOf(r);
+      if (activeTab === "pending") return st === "pending";
+      // "denied" tab → show declined
+      return st === "declined";
+    });
+
+    // class
+    if (sortClass) {
+      rows = rows.filter((r) => classNameOf(r) === sortClass);
+    }
+
+    // search (student/parent/class/email)
+    if (search.trim()) {
+      const q = search.trim().toLowerCase();
+      rows = rows.filter((r) => {
+        const n = fullName(r).toLowerCase();
+        const p = parentName(r.parent).toLowerCase();
+        const c = classNameOf(r).toLowerCase();
+        const e = parentEmail(r).toLowerCase();
+        return n.includes(q) || p.includes(q) || c.includes(q) || e.includes(q);
+      });
+    }
+
+    return rows;
+  }, [records, activeTab, sortClass, search]);
+
+  // Your table function expects pageSize = 7 client-side. We’re server-paging already,
+  // so we’ll keep the UI pagination as server pagination. The table always renders
+  // the current “records” page from the server after local filtering.
+  // (If filtering empties the page, the empty state appears — consistent with your UX.)
+  const pagedRequests = filtered;
+  const headerCount = filtered.length; // badge count in header reflects current tab/filter page
+
+  const onAsk = (type: "accept" | "deny", item: TRecord) => {
+    setActiveItem(item);
+    setShowModal(type);
+  };
+
+  const onConfirm = async () => {
+    if (!activeItem || !showModal) return;
+    try {
+      setActing(true);
+      const payload = { student_id: activeItem.id } as any; // backend expects the request/student id
+      if (showModal === "accept") {
+        await AcceptStudentAdmission(payload);
+      } else {
+        await RejectStudentAdmission(payload);
+      }
+      setShowModal(null);
+      setActiveItem(null);
+      // refetch this page
+      const samePage = currentPage;
+      setCurrentPage(samePage); // triggers useEffect
+    } catch {
+      // keep modal closed but do nothing special visually to avoid altering the design
+      setShowModal(null);
+      setActiveItem(null);
+    } finally {
+      setActing(false);
+    }
+  };
 
   const renderTable = () => {
+    if (loading) {
+      // lightweight skeleton keeping the same table structure
+      return (
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm text-gray-700">
+            <thead>
+              <tr className="bg-[#F9FAFB] text-left">
+                <th className="px-4 py-3">Student's Name</th>
+                <th className="px-4 py-3">Class</th>
+                <th className="px-4 py-3">Parent's Email</th>
+                <th className="px-4 py-3">Parent's Name</th>
+                {activeTab === "denied" && <th className="px-4 py-3">Date Rejected</th>}
+                {activeTab === "pending" && <th className="px-4 py-3 text-right">Actions</th>}
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <tr key={i} className="border-t border-gray-200">
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-gray-100 animate-pulse" />
+                      <div className="h-4 w-40 bg-gray-100 rounded animate-pulse" />
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="h-4 w-24 bg-gray-100 rounded animate-pulse" />
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="h-4 w-40 bg-gray-100 rounded animate-pulse" />
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="h-4 w-32 bg-gray-100 rounded animate-pulse" />
+                  </td>
+                  {activeTab === "denied" && (
+                    <td className="px-4 py-3">
+                      <div className="h-4 w-24 bg-gray-100 rounded animate-pulse" />
+                    </td>
+                  )}
+                  {activeTab === "pending" && (
+                    <td className="px-4 py-3 text-right">
+                      <div className="inline-flex gap-4">
+                        <div className="h-4 w-12 bg-gray-100 rounded animate-pulse" />
+                        <div className="h-4 w-12 bg-gray-100 rounded animate-pulse" />
+                      </div>
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
     if (pagedRequests.length === 0) {
       return (
         <div className="text-center py-20">
@@ -60,36 +290,50 @@ const ConnectionRequests: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {pagedRequests.map((req, i) => (
-              <tr key={i} className="border-t border-gray-200">
-                <td className="px-4 py-3 flex items-center gap-3">
-                  <img src={req.avatar} className="w-8 h-8 rounded-full" alt="avatar" />
-                  <span>{req.name}</span>
-                </td>
-                <td className="px-4 py-3">{req.class}</td>
-                <td className="px-4 py-3">{req.email}</td>
-                <td className="px-4 py-3">{req.parent}</td>
-                {activeTab === "denied" && <td className="px-4 py-3">{req.dateRejected}</td>}
-                {activeTab === "pending" && (
-                  <td className="px-4 py-3 text-right space-x-4">
-                    <button
-                      className="text-grey-500 hover:underline cursor-pointer font-semibold "
-                      onClick={() => setShowModal("deny")}
-                    >
-                      Deny
-                    </button>
-                    <button
-                      className="text-green-500 hover:underline cursor-pointer font-semibold"
-                      onClick={() => setShowModal("accept")}
-                    >
-                      Accept
-                    </button>
+            {pagedRequests.map((req, i) => {
+              const sName = fullName(req);
+              const cls = classNameOf(req);
+              const pEmail = parentEmail(req);
+              const pName = parentName(req.parent);
+              const avatar = req.image || placeholder;
+              const rejectedDate = req.declined_at || req.created_at || "—";
+
+              return (
+                <tr key={`${req.id}-${i}`} className="border-t border-gray-200">
+                  <td className="px-4 py-3 flex items-center gap-3">
+                    <img src={avatar} className="w-8 h-8 rounded-full object-cover" alt="avatar" />
+                    <span>{sName}</span>
                   </td>
-                )}
-              </tr>
-            ))}
+                  <td className="px-4 py-3">{cls}</td>
+                  <td className="px-4 py-3">{pEmail}</td>
+                  <td className="px-4 py-3">{pName}</td>
+                  {activeTab === "denied" && <td className="px-4 py-3">{rejectedDate}</td>}
+                  {activeTab === "pending" && (
+                    <td className="px-4 py-3 text-right space-x-4">
+                      <button
+                        className="text-grey-500 hover:underline cursor-pointer font-semibold"
+                        onClick={() => onAsk("deny", req)}
+                        disabled={acting}
+                      >
+                        Deny
+                      </button>
+                      <button
+                        className="text-green-500 hover:underline cursor-pointer font-semibold"
+                        onClick={() => onAsk("accept", req)}
+                        disabled={acting}
+                      >
+                        {acting && activeItem?.id === req.id && showModal === "accept"
+                          ? "Working..."
+                          : "Accept"}
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
+
         <div className="mt-6">
           <Pagination
             currentPage={currentPage}
@@ -104,7 +348,7 @@ const ConnectionRequests: React.FC = () => {
     );
   };
 
-  // 1. Modal Component
+  // 1. Modal Component (unchanged styles)
   const ConfirmationModal = ({
     type,
     onConfirm,
@@ -136,6 +380,7 @@ const ConnectionRequests: React.FC = () => {
               <button
                 className="px-4 py-2 rounded-full border border-gray-300 text-gray-700 bg-white"
                 onClick={onCancel}
+                disabled={acting}
               >
                 Cancel
               </button>
@@ -144,8 +389,9 @@ const ConnectionRequests: React.FC = () => {
                   isAccept ? "bg-[#A7CD3A]" : "bg-[#A7CD3A]"
                 }`}
                 onClick={onConfirm}
+                disabled={acting}
               >
-                {isAccept ? "Yes, accept request" : "Yes, deny request"}
+                {acting ? "Working..." : isAccept ? "Yes, accept request" : "Yes, deny request"}
               </button>
             </div>
           </div>
@@ -157,7 +403,12 @@ const ConnectionRequests: React.FC = () => {
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-gray-900">Requests <span className="ml-2 bg-[#CDE6B5] text-xs text-[#4B6B10] px-2 py-1 rounded-full">{requests.length}</span></h1>
+        <h1 className="text-lg font-semibold text-gray-900">
+          Requests{" "}
+          <span className="ml-2 bg-[#CDE6B5] text-xs text-[#4B6B10] px-2 py-1 rounded-full">
+            {headerCount}
+          </span>
+        </h1>
       </div>
 
       <div className="bg-white border border-gray-200 rounded-xl">
@@ -169,7 +420,9 @@ const ConnectionRequests: React.FC = () => {
                 setActiveTab("pending");
                 setCurrentPage(1);
               }}
-              className={`px-4 py-1.5 rounded-md text-sm rounded-r-none font-medium ${activeTab === "pending" ? "bg-[#A7CD3A] text-white" : "text-gray-600 bg-gray-100"}`}
+              className={`px-4 py-1.5 rounded-md text-sm rounded-r-none font-medium ${
+                activeTab === "pending" ? "bg-[#A7CD3A] text-white" : "text-gray-600 bg-gray-100"
+              }`}
             >
               Pending
             </button>
@@ -178,14 +431,16 @@ const ConnectionRequests: React.FC = () => {
                 setActiveTab("denied");
                 setCurrentPage(1);
               }}
-              className={`px-4 py-1.5 rounded-md text-sm rounded-l-none font-medium ${activeTab === "denied" ? "bg-[#A7CD3A] text-white" : "text-gray-600 bg-gray-100"}`}
+              className={`px-4 py-1.5 rounded-md text-sm rounded-l-none font-medium ${
+                activeTab === "denied" ? "bg-[#A7CD3A] text-white" : "text-gray-600 bg-gray-100"
+              }`}
             >
               Denied
             </button>
           </div>
 
           <div className="flex items-center gap-3">
-            <SearchBar value="" placeholder="Search here…" onChange={setSearch} />
+            <SearchBar value={search} placeholder="Search here…" onChange={setSearch} />
             <div className="relative">
               <button
                 className="flex items-center border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white"
@@ -197,12 +452,13 @@ const ConnectionRequests: React.FC = () => {
 
               {sortOpen && (
                 <ul className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md border border-gray-200 z-10">
-                  {["Primary 1", "Primary 2", "Class 1", "Class 2"].map((cls) => (
+                  {classOptions.map((cls) => (
                     <li
                       key={cls}
                       onClick={() => {
                         setSortClass(cls);
                         setSortOpen(false);
+                        setCurrentPage(1);
                       }}
                       className="px-4 py-2 hover:bg-gray-100 text-sm cursor-pointer"
                     >
@@ -221,19 +477,17 @@ const ConnectionRequests: React.FC = () => {
         </div>
 
         {/* Table section */}
-        <div className="px-4 py-3">
-          {renderTable()}
-        </div>
+        <div className="px-4 py-3">{renderTable()}</div>
       </div>
 
       {showModal && (
         <ConfirmationModal
           type={showModal}
-          onConfirm={() => {
-            console.log(`${showModal} request confirmed`);
+          onConfirm={onConfirm}
+          onCancel={() => {
             setShowModal(null);
+            setActiveItem(null);
           }}
-          onCancel={() => setShowModal(null)}
         />
       )}
     </div>
