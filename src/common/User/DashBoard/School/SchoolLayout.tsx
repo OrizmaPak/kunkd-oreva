@@ -84,7 +84,7 @@ const links = [
 ];
 
 const DOCK_W = 264;     // docked width (shifts frame)
-const RAIL_W = 72;      // collapsed icon rail width (frame does NOT shift on hover)
+const RAIL_W = 100;      // collapsed icon rail width (frame does NOT shift on hover)
 
 const SchoolLayout: React.FC = () => {
   const [user] = useStore(getUserState);
@@ -187,7 +187,7 @@ const SchoolLayout: React.FC = () => {
               <button
                 aria-label={sidebarDocked ? "Collapse sidebar" : "Expand sidebar"}
                 onClick={toggleSidebarDock}
-                className="relative inline-flex items-center ml-4 justify-center rounded-md border border-[#E4E7EC] bg-white h-10 w-10 hover:bg-gray-50 transition"
+                className="relative inline-flex items-center ml-8 justify-center rounded-md border border-[#E4E7EC] bg-white h-10 w-10 hover:bg-gray-50 transition"
               >
                 <span
                   className={`absolute h-[2px] w-5 bg-[#101928] transition
@@ -227,7 +227,7 @@ const SchoolLayout: React.FC = () => {
                   collapsed={!docked}
                 />
               </div>
-              <div className={`flex ${hoverOpen ? "px-4" : "justify-center"} items-center mb-2 mt-4`}>
+              <div className={`flex ${hoverOpen ? "px-4" : "justify-center"} items-center mb-2 mt-4 px-1`}>
                 <img src={KundaLogo} alt="" className="h-6" />
               </div>
             </aside>
@@ -286,7 +286,7 @@ const SchoolLayout: React.FC = () => {
                     />
                   </div>
 
-                  <div className={`flex ${hoverOpen ? "px-4" : "justify-center"} items-center mb-2 mt-4`}>
+                  <div className={`flex ${hoverOpen ? "px-4" : "justify-center"} items-center mb-2 mt-4 px-2`}>
                     <img src={KundaLogo} alt="" className="h-6" />
                   </div>
                 </div>

@@ -281,8 +281,8 @@ const SignContent = () => {
     }
   };
   return (
-       <div className="flex justify-center relative bg-white rounded-[50px] w-[550px] overflow-hidden">
-        <div className="inner-form-w mx-auto relative overflow-y-auto scrollbar-hide" style={{ maxHeight: '100vh', scrollbarWidth: 'none' }}>
+       <div className="flex justify-center relative bg-white rounded-[50px] w-[550px] overflow-auto">
+        <div className="inner-form-w mx-auto relative overflow-auto " style={{ maxHeight: '100vh', scrollbarWidth: 'none' }}>
           <style>
             {`
               .inner-form-w::-webkit-scrollbar {
@@ -290,7 +290,7 @@ const SignContent = () => {
               }
             `}
           </style>
-          <div className="flex justify-center items-center mt-8 mb-12">
+          <div className="flex justify-center items-center mt-4 mb-8">
             <img src={KundaLogo} alt="image" className="w-[160px]" />
           </div>
           <div className="w-[100%]">
