@@ -3,7 +3,7 @@ import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
 import { IoFilterOutline } from "react-icons/io5";
 import notfound from "@/assets/notfound.png";
-import placeholder from "@/assets/avatar-placeholder.png"; // use a default avatar
+// import placeholder from "@/assets/avatar-placeholder.png"; // use a default avatar
 import {
   GetAttemptAllStudentConnect,
   GetAttemptStudentConnect,
@@ -295,7 +295,7 @@ const ConnectionRequests: React.FC = () => {
               const cls = classNameOf(req);
               const pEmail = parentEmail(req);
               const pName = parentName(req.parent);
-              const avatar = req.image || placeholder;
+              const avatar = req.image || '';
               const rejectedDate = req.declined_at || req.created_at || "—";
 
               return (
