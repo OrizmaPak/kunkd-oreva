@@ -995,7 +995,7 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
         <div className="mt-6 w-full">
           <iframe
             src={getIframeLink()}
-            className="w-full h-[100vh] rounded-xl border"
+            className="w-full h-[80vh] rounded-xl border"
             allow="fullscreen; autoplay; clipboard-read; clipboard-write"
             loading="lazy"
             title="Kunda Kids Interactive App"
