@@ -265,13 +265,21 @@ const SchoolDashboardHeader = () => {
               {/* Parent → show active child’s initials + name; Others → admin avatar + label */}
               {user?.role === "user" ? (
                 <div className="flex items-center gap-2">
-                  <div className="flex items-center justify-center w-[35px] h-[35px] bg-[#bcd678] rounded-full">
-                    <span className="text-white font-bold">
-                      {activeProfile?.name
-                        ? activeProfile.name.slice(0, 2).toUpperCase()
-                        : "CC"}
-                    </span>
-                  </div>
+                  {activeProfile?.image ? (
+                    <img
+                      src={activeProfile.image}
+                      alt={activeProfile.name || "Child Avatar"}
+                      className="w-[35px] h-[35px] rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center w-[35px] h-[35px] bg-[#bcd678] rounded-full">
+                      <span className="text-white font-bold">
+                        {activeProfile?.name
+                          ? activeProfile.name.slice(0, 2).toUpperCase()
+                          : "CC"}
+                      </span>
+                    </div>
+                  )}
                   <span className="flex items-center gap-2">
                     <span className="hidden">{activeProfile?.name || "Choose child"}</span>
                     <IoChevronDown size={22} color="#667185" />

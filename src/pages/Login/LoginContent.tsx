@@ -363,9 +363,9 @@ _login`,
   };
 
   return (
-    <div className="flex justify-center   py-[30px] bg-white rounded-[50px] min-w-[550px] ">
-      <div className="inner-form-w relative  ">
-        <div className="flex justify-center items-center mt-8 mb-12 ">
+    <div className="flex justify-center  max-h-[90vh] overflow-auto py-[30px] bg-white rounded-[50px] min-w-[550px] ">
+      <div className="inner-form-w relative">
+        <div className="flex justify-center items-center mt-0 mb-12 ">
           <img src={KundaLogo} alt="image" className="w-[160px]" />
         </div>
         <div className="w-[100%] ">
