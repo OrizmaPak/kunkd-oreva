@@ -21,7 +21,7 @@ const PaymentCompletedContent = () => {
     if (sessionStorage.getItem("gotToHome") === "true") {
       navigate("/parent");
     } else {
-      navigate("/childprofilesetup");
+      navigate("/profilesetup");
     }
     // mutate({ subscription_plan_id:Number(sessionStorage.getItem("planId")),
     // currency_iso3:"GBP",
