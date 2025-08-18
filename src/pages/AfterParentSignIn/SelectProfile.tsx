@@ -87,7 +87,7 @@ const SelectProfile = ({
 
           {/* Title + subtext */}
           <div className="text-center mb-6">
-            <h1 className="text-[22px] sm:text-[59px] font-bold text-[#333C48] font-BalooSemiBold">
+            <h1 className="text-[22px] sm:text-[60px] font-bold text-[#333C48] font-BalooSemiBold">
               Who's Learning?
             </h1>
             <p className="text-[13px] sm:text-[17px] text-[#667185] font-BalooSemiBold">
