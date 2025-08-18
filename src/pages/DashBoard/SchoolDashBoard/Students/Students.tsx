@@ -6,7 +6,13 @@ import SortDropdown from '@/components/SortDropdown';
 import Pagination from '@/components/Pagination';
 import AvatarName from '@/components/AvatarName';
 import ActionButtons from '@/components/ActionButtons';
-import { GetAdmittedStudentsInSchool } from "@/api/api";
+import {
+  GetAdmittedStudentsInSchool,
+  GetAdmittedStudentsInClass,
+} from "@/api/api";
+
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
 
 /* ------------------------------------------------------------------
 Types (kept minimal and aligned with your existing table)
@@ -22,7 +28,7 @@ interface Student {
   };
 }
 
-// API response shapes based on your sample payload
+// API response shapes based on your sample payloads
 type TApiParent = {
   firstname?: string;
   lastname?: string;
@@ -73,15 +79,14 @@ const mapApiToStudent = (r: TApiStudent): Student => {
     name: displayName,
     class: r.class?.class_name || "—",
     avatarUrl: r.image || "",
-    // Your column is labeled "Teacher's Name" — we’ll populate it with Parent’s name
+    // Your column is labeled "Teacher's Name" — populate with Parent’s name
     teacher: { name: parentName, avatarUrl: "" },
   };
 };
 
 /* ------------------------------------------------------------------
-Local modal components (unchanged)
+Confirm / Success Modals (Confirm styled like the screenshot)
 -------------------------------------------------------------------*/
-// --- Replace your current ConfirmModal with this version ---
 const ConfirmModal: React.FC<{
   open: boolean;
   message: string;
@@ -99,30 +104,30 @@ const ConfirmModal: React.FC<{
     >
       <div className="w-full max-w-md rounded-2xl bg-white shadow-2xl overflow-hidden">
         {/* Header (lime bar) */}
-        <div className="bg-lime-500 w-[449px] h-[51px] flex justify-between items-center opacity-100 pt-[12px] pr-[20px] pb-[12px] pl-[20px] rounded-tl-[12px] rounded-tr-[12px]">
+        <div className="bg-lime-500 px-5 py-3">
           <h3
             id="disable-student-title"
-            className="text-white font-medium text-[18px] leading-[27px] font-inter"
+            className="text-white text-base font-semibold"
           >
             Disable Student
           </h3>
         </div>
 
         {/* Body */}
-        <div className="w-[450px] h-[157px] opacity-100 pt-[32px] pr-[24px] pb-[32px] pl-[24px]">
-          <p className="text-center text-gray-700 font-inter font-normal text-[16px] leading-[21px] tracking-[0.1px]">{message}</p>
+        <div className="px-6 py-5">
+          <p className="text-center text-gray-700 text-sm">{message}</p>
 
           {/* Actions */}
           <div className="mt-6 flex items-center justify-center gap-3">
             <button
               onClick={onCancel}
-              className="w-[97px] h-[40px] rounded-[100px] border border-gray-300 text-sm text-gray-700 hover:bg-gray-50 opacity-100 px-[16px] py-[6px] gap-[6px]"
+              className="rounded-full border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
             >
               Cancel
             </button>
             <button
               onClick={onConfirm}
-              className="w-[189px] h-[40px] rounded-[100px] bg-lime-500 text-sm text-white hover:bg-lime-600 opacity-100 px-[16px] py-[6px]"
+              className="rounded-full bg-lime-500 px-4 py-2 text-sm text-white hover:bg-lime-600"
             >
               Yes, disable student
             </button>
@@ -132,7 +137,6 @@ const ConfirmModal: React.FC<{
     </div>
   );
 };
-
 
 const SuccessModal: React.FC<{
   open: boolean;
@@ -161,10 +165,22 @@ Main component (table layout preserved exactly)
 const Students: React.FC = () => {
   const navigate = useNavigate();
 
+  // Read role from auth store (robustly)
+  const authState = useStore(getUserState) as any;
+  const roleRaw: string =
+    (authState?.user?.role ||
+      authState?.role ||
+      authState?.user_type ||
+      "") ?? "";
+  const role = roleRaw.toString().toLowerCase();
+
   // Controls
   const [query, setQuery] = useState('');
   const [sortKey, setSortKey] = useState<'name' | 'class' | 'teacher'>('name');
   const [currentPage, setCurrentPage] = useState(1);
+
+  // NEW: Status filter (Active / Disabled)
+  const [statusFilter, setStatusFilter] = useState<'active' | 'disabled'>('active');
 
   // Server-backed pagination counts
   const [serverTotalPages, setServerTotalPages] = useState(1);
@@ -180,10 +196,12 @@ const Students: React.FC = () => {
   const [successOpen, setSuccessOpen] = useState(false);
   const [targetStudent, setTargetStudent] = useState<Student | null>(null);
 
-  // Backend status filter, sample payload shows "approved"
-  const STATUS = "approved"; // change to "admitted" if your backend expects that
+  // Reset to page 1 when status filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [statusFilter]);
 
-  // Fetch one page from the backend whenever currentPage changes
+  // Fetch one page from the backend whenever currentPage, role, or statusFilter changes
   useEffect(() => {
     let ignore = false;
 
@@ -192,10 +210,29 @@ const Students: React.FC = () => {
         setLoading(true);
         setErrorMsg(null);
 
-        const res = (await GetAdmittedStudentsInSchool(
-          STATUS,
-          String(currentPage)
-        )) as unknown as { data: TListResponse };
+        // Choose endpoint by role
+        const isSchoolAdmin = role === "schooladmin";
+        const isTeacher = role === "teacher";
+
+        let res: { data: TListResponse } | undefined;
+
+        if (isSchoolAdmin) {
+          res = (await GetAdmittedStudentsInSchool(
+            statusFilter,
+            String(currentPage)
+          )) as unknown as { data: TListResponse };
+        } else if (isTeacher) {
+          res = (await GetAdmittedStudentsInClass(
+            statusFilter,
+            String(currentPage)
+          )) as unknown as { data: TListResponse };
+        } else {
+          // default to school-level list if role is unknown
+          res = (await GetAdmittedStudentsInSchool(
+            statusFilter,
+            String(currentPage)
+          )) as unknown as { data: TListResponse };
+        }
 
         if (ignore) return;
 
@@ -233,7 +270,7 @@ const Students: React.FC = () => {
     return () => {
       ignore = true;
     };
-  }, [currentPage]);
+  }, [currentPage, role, statusFilter]);
 
   /* ---------------- Search & Sort (on the current server page) ----------------- */
   const filtered = useMemo(
@@ -267,7 +304,7 @@ const Students: React.FC = () => {
 
   return (
     <div className="p-6 bg-white rounded-lg shadow space-y-6">
-      {/* Header (badge now uses server total) */}
+      {/* Header (badge uses server total) */}
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-semibold">
           Students{' '}
@@ -275,8 +312,36 @@ const Students: React.FC = () => {
             {serverTotalRecords}
           </span>
         </h1>
+
         <div className="flex items-center gap-4">
+          {/* Status filter: Active / Disabled */}
+          <div className="flex items-center gap-1 rounded-full bg-gray-100 p-1">
+            <button
+              type="button"
+              onClick={() => setStatusFilter('active')}
+              className={`rounded-full px-3 py-1 text-sm transition ${
+                statusFilter === 'active'
+                  ? 'bg-green-600 text-white'
+                  : 'text-gray-700 hover:bg-white'
+              }`}
+            >
+              Active
+            </button>
+            <button
+              type="button"
+              onClick={() => setStatusFilter('disabled')}
+              className={`rounded-full px-3 py-1 text-sm transition ${
+                statusFilter === 'disabled'
+                  ? 'bg-green-600 text-white'
+                  : 'text-gray-700 hover:bg-white'
+              }`}
+            >
+              Disabled
+            </button>
+          </div>
+
           <SearchBar value={query} onChange={setQuery} placeholder="Search here…" />
+
           <SortDropdown
             options={[
               { label: 'Name', value: 'name' },
@@ -339,10 +404,11 @@ const Students: React.FC = () => {
                 </td>
                 <td className="py-3 text-sm text-gray-600">{s.class}</td>
                 <td className="py-3">
-                  <AvatarName name={s.teacher.name} avatarUrl={s.teacher.avatarUrl} teacher={true}/>
+                  <AvatarName name={s.teacher.name} avatarUrl={s.teacher.avatarUrl} teacher={true} />
                 </td>
                 <td className="py-3 text-right">
                   <ActionButtons
+                    status={statusFilter}
                     onView={() => navigate(`/schooldashboard/students/${s.id}`)}
                     onDisable={() => handleDisableClick(s)}
                   />
@@ -359,10 +425,10 @@ const Students: React.FC = () => {
         onPageChange={setCurrentPage}
       />
 
-      {/* Modals (unchanged) */}
+      {/* Modals */}
       <ConfirmModal
         open={confirmOpen}
-        message={`Are you sure you want to disable ${targetStudent?.name}?`}
+        message={`Are you sure you want to disable ${targetStudent?.name ?? "this student"}?`}
         onCancel={() => setConfirmOpen(false)}
         onConfirm={confirmDisable}
       />
