@@ -6,7 +6,7 @@ const AddStudentForm = ({ handleContinue }: { handleContinue: () => void }) => {
   return (
     <div className="p-4">
       <div>
-        <h1 className="font-bold  font-Recoleta text-center mb-7">
+        <h1 className="font-bold  font-Recoleta text-center mb-8">
           Add New Student
         </h1>
       </div>
