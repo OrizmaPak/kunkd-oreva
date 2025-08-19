@@ -66,7 +66,7 @@ const SelectProfile = ({
                 Welcome to Kunda Kids
               </h1>
               <p className="mt-1 text-sm font-Arimo text-gray-500">
-                To begin, create a profile for your child.
+               Select which kid is learning now
               </p>
             </div>
 
