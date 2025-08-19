@@ -66,7 +66,8 @@ const minutesToHMM = (mins?: number) => {
 };
 
 const StudentView: React.FC<{ crumb?: boolean }> = ({ crumb = true }) => {
-  const { id } = useParams<{ id: string }>();
+  const { id: paramId } = useParams<{ id: string }>();
+  const id = paramId || sessionStorage.getItem("profileId");
   const navigate = useNavigate();
 
   /** ===== Data fetch ===== */

@@ -510,7 +510,7 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
 
   // ---------- handlers ----------
   const handleMediaComplete = (book: Book) => {
-    setQuizTarget(book);
+    // setQuizTarget(book);
     setShowWell(true);
     setShowQuiz(false);   // don’t show quiz yet
   };
@@ -1011,7 +1011,7 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
         />
       ) : (
         /* 2) Otherwise show the normal content area (reader / video / overview / categories) */
-        <div className="mt-8 space-y-8">
+        <div className="-mt-0 space-y-8">
           {readingBook ? (
             readingLoading ? (
               <div className="flex justify-center py-20">

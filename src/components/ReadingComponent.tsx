@@ -231,7 +231,7 @@ const ReadingComponent = forwardRef<ReadingHandle, ReadingComponentProps>(
     const [lastTime, setLastTime] = useState(0); // last second flushed
     const [isReading, setIsReading] = useState(true); // treat open as reading
 
-    const [size, setSize] = useState({ width: 450, height: 100 });
+    const [size, setSize] = useState({ width: 450, height: 10 });
     const [isFull, setIsFull] = useState(false);
     const [showAudio, setShowAudio] = useState(false);
     const [showDone, setShowDone] = useState(false);
