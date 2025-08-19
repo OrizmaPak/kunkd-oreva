@@ -142,6 +142,8 @@ const closeMenu = () => setMenuOpened(false);
       }
     } catch (_) {}
 
+    // This code triggers a custom event named "profile:changed" on the window object. 
+    // It includes a detail object containing the ID and the profile object of the newly selected profile.
     window.dispatchEvent(
       new CustomEvent("profile:changed", { detail: { profileId: p.id, profile: p } })
     );

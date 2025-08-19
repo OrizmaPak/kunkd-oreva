@@ -147,7 +147,9 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
     location?.state?.fav === true;
   // ensure we can always do tabsConfig[activeIndex].label without crashing
   const [tabsConfig, setTabsConfig] = useState<Tab[]>(
-    defaultTabs.map((tab) => ({ ...tab, id: null }))
+    defaultTabs
+      .filter((tab) => !(favMode && tab.label === "Literacy"))
+      .map((tab) => ({ ...tab, id: null }))
   );
 
   const [profiles] = useStore(getProfileState);
