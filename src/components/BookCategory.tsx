@@ -4,7 +4,7 @@ import Skeleton from "react-loading-skeleton";
 import BookCard, { Book } from "./BookCard";
 import useSubCategoryLazy from "@/hooks/useSubCategoryLazy";
 
-interface BookCategoryProps {
+export interface BookCategoryProps {
   /** Static list of books (used when subId is null) */
   books?: Book[];
   /** Sub-category ID for lazy loading (null for For You tab) */
@@ -27,6 +27,8 @@ interface BookCategoryProps {
   hasSub?: boolean;
   /** Message to show when empty */
   emptyMsg?: string;
+  /** Disable lazy loading */
+  lazyDisabled?: boolean; // 👈 NEW
 }
 
 const BookCategory: React.FC<BookCategoryProps> = ({
@@ -41,8 +43,10 @@ const BookCategory: React.FC<BookCategoryProps> = ({
   parentCategory,
   hasSub = true,
   emptyMsg,
+  lazyDisabled = false, // 👈 NEW
 }) => {
-  // Lazy-loading hook for sub-categories
+  const usingLazy = subId != null && !lazyDisabled; // 👈 only lazy when enabled
+
   const {
     books: lazyBooks,
     loadingInit,
@@ -51,35 +55,31 @@ const BookCategory: React.FC<BookCategoryProps> = ({
     containerRef,
     sentryRef,
     loadMoreRef,
-  } = useSubCategoryLazy(subId, expanded);
-  
-  const usingLazy = subId != null;
-  // Choose data source based on lazy vs. static
-  const list = usingLazy ? lazyBooks : books;
-  // First-page load vs. static loading
-  const rowLoading = usingLazy ? loadingInit : loading;
-  
+  } = useSubCategoryLazy(subId, expanded, lazyDisabled); // 👈 pass flag
+
+  const list = usingLazy ? lazyBooks : books; // 👈 in fav mode we’ll feed `books`
+  const rowLoading = usingLazy ? loadingInit : false;
+
   // Layout classes
   const containerClass = expanded
-  ? "flex flex-wrap gap-4"
-  : "flex space-x-4 overflow-x-auto no-scrollbar";
-  
+    ? "flex flex-wrap gap-4"
+    : "flex space-x-4 overflow-x-auto no-scrollbar";
+
   return (
     <div className="mb-8">
       {/* HEADER */}
       <div className="flex items-center justify-between mb-2">
-         <h3 className="font-[600] font-BalooSemiBold text-[28px] leading-[120%] tracking-[-0.02em] text-center align-middle text-[#667185] mt-[15px]">
+        <h3 className="font-[600] font-BalooSemiBold text-[28px] leading-[120%] tracking-[-0.02em] text-center align-middle text-[#667185] mt-[15px]">
           {categoryName.trim().length > 0 ? (
             categoryName
           ) : (
             <Skeleton width={100} />
           )}
         </h3>
-        {/* {!rowLoading && onSeeAll && (hasSub || list.length > 3) && ( */}
         {!rowLoading && onSeeAll && (list.length > 3) && (
           <button
-          onClick={onSeeAll}
-          className="text-sm text-[#9FC43E] hover:underline"
+            onClick={onSeeAll}
+            className="text-sm text-[#9FC43E] hover:underline"
           >
             {expanded ? "Show less" : "See all"}
           </button>
@@ -96,7 +96,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
         {/* Special case for "Continue Reading" category */}
         <>
           {/* Empty state after load */}
-          {((!rowLoading && hasFetched && list.length === 0 && tabLabel != "For you") || (!rowLoading && list.length === 0 && tabLabel == "For you") ) ? (
+          {((!rowLoading && hasFetched && list.length === 0 && tabLabel != "For you") || (!rowLoading && list.length === 0 && tabLabel == "For you")) ? (
             <div className="text-gray-400 h-[50px] flex items-center justify-center w-full text-sm italic">
               {emptyMsg ?? "No content available"}
             </div>
@@ -111,7 +111,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
                     crumbs.push(categoryName);
                     onBookClick?.(book, crumbs);
                   }}
-                  />
+                />
               </div>
             ))
           )}
@@ -120,8 +120,8 @@ const BookCategory: React.FC<BookCategoryProps> = ({
           {((rowLoading || !hasFetched && tabLabel != "For you") || (rowLoading && tabLabel == "For you")) && (
             Array.from({ length: 7 }).map((_, i) => (
               <Skeleton
-              key={i}
-              className="w-32 h-44 rounded"
+                key={i}
+                className="w-32 h-44 rounded"
               />
             ))
           )}
@@ -135,8 +135,8 @@ const BookCategory: React.FC<BookCategoryProps> = ({
           {loadingMore &&
             Array.from({ length: 6 }).map((_, i) => (
               <Skeleton
-              key={i}
-              className="w-32 h-44 rounded"
+                key={i}
+                className="w-32 h-44 rounded"
               />
             ))}
         </>

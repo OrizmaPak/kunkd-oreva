@@ -139,6 +139,11 @@ const defaultTabs: Omit<Tab, "id">[] = [
 // console.log('GetCompletedContents', GetCompletedContents(sessionStorage.getItem("profileId")));
 const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  // group favourites by top category AND subcategory name
+const [favBuckets, setFavBuckets] = useState<{ stories: Book[]; languages: Book[] }>({ stories: [], languages: [] });
+const [favStoriesBySub, setFavStoriesBySub] = useState<Record<string, Book[]>>({});
+const [favLangsBySub, setFavLangsBySub] = useState<Record<string, Book[]>>({});
+
   // const location = useLocation() as { state?: any };
   const [favMode, setFavMode] = useState(state === "fav");
   useEffect(() => {
@@ -242,48 +247,51 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
 
   const readingRef = useRef<ReadingHandle>(null);
 
-  const [favBuckets, setFavBuckets] = useState<{ stories: Book[]; languages: Book[] }>({
-    stories: [],
-    languages: [],
-  });
 
   // Partition favourites into Stories vs Languages
-const partitionFavouriteRecords = React.useCallback((records: any[]) => {
-  const stories: Book[] = [];
-  const languages: Book[] = [];
-
-  records.forEach((it: any) => {
-    // Try multiple fields that can identify the category
-    const catLabel = String(
-      it.category ||
-      it.category_name ||
-      it.content_type ||
-      it.category_slug ||
-      it.categoryTitle ||
-      ""
-    ).toLowerCase();
-
-    // Heuristic: treat anything with "lang" as Languages; otherwise Stories.
-    // (If your API gives solid ids, you can refine this e.g. content_type_id/category_id)
-    const isLanguage =
-      /lang/.test(catLabel) ||
-      it.category_id === 4 ||
-      it.content_type_id === 4;
-
-    const book: Book = {
-      id: it.id ?? it.content_id ?? 0,
-      title: it.name ?? it.title ?? "",
-      coverUrl: it.thumbnail ?? it.cover ?? it.image ?? "",
-      progress: it.percentage ?? it.progress ?? 0,
-      is_liked: true,
-    };
-
-    if (isLanguage) languages.push(book);
-    else stories.push(book);
-  });
-
-  return { stories, languages };
-}, []);
+  const partitionFavouriteRecords = React.useCallback((records: any[]) => {
+    const stories: Book[] = [];
+    const languages: Book[] = [];
+    const storiesBySub: Record<string, Book[]> = {};
+    const langsBySub: Record<string, Book[]> = {};
+  
+    records.forEach((it: any) => {
+      const catLabel = String(
+        it.category || it.category_name || it.content_type || it.category_slug || it.categoryTitle || ""
+      ).toLowerCase();
+  
+      // try to pick a subcategory label if present; fallback to a stable bucket
+      const subLabelRaw =
+        it.sub_category_name ||
+        it.sub_category ||
+        it.sub_category_title ||
+        it.sub_category_slug ||
+        it.subCategory ||
+        "";
+      const subLabel = String(subLabelRaw).trim() || (/(lang)/.test(catLabel) ? "All Languages" : "All Stories");
+  
+      const book: Book = {
+        id: it.id ?? it.content_id ?? 0,
+        title: it.name ?? it.title ?? "",
+        coverUrl: it.thumbnail ?? it.cover ?? it.image ?? "",
+        progress: Number(it.percentage ?? it.progress ?? 0) || 0,
+        is_liked: true,
+      };
+  
+      const isLanguage = /lang/.test(catLabel) || it.category_id === 4 || it.content_type_id === 4;
+  
+      if (isLanguage) {
+        languages.push(book);
+        (langsBySub[subLabel] ||= []).push(book);
+      } else {
+        stories.push(book);
+        (storiesBySub[subLabel] ||= []).push(book);
+      }
+    });
+  
+    return { stories, languages, storiesBySub, langsBySub };
+  }, []);
+  
 
 
   useEffect(() => {
@@ -421,43 +429,33 @@ const partitionFavouriteRecords = React.useCallback((records: any[]) => {
   );
 
   const loadFavourites = React.useCallback(async () => {
-    trace("loadFavourites() → start");
     const pid = sessionStorage.getItem("profileId") || "";
-  
     if (!pid) {
-      trace("loadFavourites() → missing profileId, clearing categories");
-      setCategories([]);
-      setSubcategories([]);
-      setCrumb(["Favourites"]);
+      setCategories([]); setSubcategories([]); setCrumb(["Favourites"]);
       setFavBuckets({ stories: [], languages: [] });
+      setFavStoriesBySub({}); setFavLangsBySub({});
       return;
     }
-  
     try {
       const res = await GetLikedContent(pid);
-      const payload = res?.data ?? {};
-      const records = payload?.data?.records ?? [];
+      const records = res?.data?.data?.records ?? [];
+      const { stories, languages, storiesBySub, langsBySub } = partitionFavouriteRecords(records);
   
-      trace("GetLikedContent → records:", records);
+      setFavBuckets({ stories, languages });
+      setFavStoriesBySub(storiesBySub);
+      setFavLangsBySub(langsBySub);
   
-      // NEW: split into buckets
-      const buckets = partitionFavouriteRecords(records);
-      setFavBuckets(buckets);
-  
-      // Show something immediately (default to Stories tab if present)
+      // Seed initial list (default to Stories)
       const defaultLabel = tabsConfig[activeIndex]?.label ?? "Stories";
-      const selected =
-        defaultLabel === "Languages" ? buckets.languages : buckets.stories;
-  
-      setCategories([{ name: defaultLabel, books: selected, hasSub: false }]);
+      const sel = defaultLabel === "Languages" ? languages : stories;
+      setCategories([{ name: defaultLabel, books: sel, hasSub: false }]);
       setSubcategories([]);
       setCrumb(["Favourites", defaultLabel]);
     } catch (err) {
       console.error("[ContentLibrary] GetLikedContent failed", err);
-      setCategories([]);
-      setSubcategories([]);
-      setCrumb(["Favourites"]);
+      setCategories([]); setSubcategories([]); setCrumb(["Favourites"]);
       setFavBuckets({ stories: [], languages: [] });
+      setFavStoriesBySub({}); setFavLangsBySub({});
     }
   }, [activeIndex, tabsConfig, partitionFavouriteRecords]);
   
@@ -1134,85 +1132,157 @@ useEffect(() => {
           ) : (
             <>
               {/* ───── Stories tab ───── */}
-              {isStoriesTab &&
-                (() => {
-                  // full ordered array of Stories subcats from `allCats`
-                  const storiesCat = allCats.find((c: any) => c.name === "Stories");
-                  const rows: Array<{ name: string; subId: number | null }> =
-                    (storiesCat?.sub_categories ?? []).map((s: any) => ({
-                      name: s?.name ?? "",
-                      subId: typeof s?.id === "number" ? s.id : null,
-                    }));
+              {isStoriesTab && (
+                favMode
+                  ? (() => {
+                      // build rows from favourite subcategory keys
+                      const rows = Object.keys(favStoriesBySub).map(name => ({ name, subId: null as number | null }));
+                      const visibleRows = rows.filter(r =>
+                        !showAllStories || r.name === (storiesActiveSubSlug ?? r.name)
+                      );
 
-                  // this is what actually gets shown (respecting Show all toggle)
-                  const visibleRows = rows.filter(r =>
-                    !showAllStories || r.name === (storiesActiveSubSlug ?? r.name)
-                  );
+                      // compute nextTwo indices for your prefetch prop (no-op while disabled)
+                      return visibleRows.map((row) => {
+                        const originalIndex = rows.findIndex(r => r.name === row.name);
+                        const nextTwo: number[] = [];
+                        for (let k = originalIndex + 1; k <= originalIndex + 2 && k < rows.length; k++) nextTwo.push(k);
 
-                  return visibleRows.map((row, idx) => {
-                    // compute neighbors from the ORIGINAL `rows`, not `visibleRows`
-                    const originalIndex = rows.findIndex(r => r.subId === row.subId);
-                    const nextTwo: number[] = [];
-                    for (let k = originalIndex + 1; k <= originalIndex + 2 && k < rows.length; k++) {
-                      const nid = rows[k]?.subId;
-                      if (typeof nid === "number") nextTwo.push(nid);
-                    }
+                        return (
+                          <BookCategory
+                            key={`${row.name}-${row.subId ?? "x"}`}
+                            subId={row.subId}                 // stays present so your signature is unchanged
+                            categoryName={row.name}
+                            tabLabel="Stories"
+                            lazyDisabled={true}               // 👈 turn off lazy hook
+                            books={favStoriesBySub[row.name]} // 👈 inject favourites for this sub
+                            expanded={showAllStories && row.name === storiesActiveSubSlug}
+                            onSeeAll={() => {
+                              if (showAllStories && row.name === storiesActiveSubSlug) {
+                                setShowAllStories(false); setStoriesActiveSubSlug(null);
+                              } else {
+                                setShowAllStories(true); setStoriesActiveSubSlug(row.name);
+                              }
+                            }}
+                            onBookClick={(book, bc) => { openBook(book.id); setCrumb([...bc, book.title]); }}
+                            prefetchNext={nextTwo}
+                          />
+                        );
+                      });
+                    })()
+                  : (() => {
+                      // full ordered array of Stories subcats from `allCats`
+                      const storiesCat = allCats.find((c: any) => c.name === "Stories");
+                      const rows: Array<{ name: string; subId: number | null }> =
+                        (storiesCat?.sub_categories ?? []).map((s: any) => ({
+                          name: s?.name ?? "",
+                          subId: typeof s?.id === "number" ? s.id : null,
+                        }));
 
-                    console.log(
-                      "%c[ContentLibrary] prefetchNext (Stories)",
-                      "color:#BCD678;font-weight:bold",
-                      { for: row.name, subId: row.subId, nextTwo }
-                    );
+                      // this is what actually gets shown (respecting Show all toggle)
+                      const visibleRows = rows.filter(r =>
+                        !showAllStories || r.name === (storiesActiveSubSlug ?? r.name)
+                      );
 
-                    return (
-                      <BookCategory
-                        key={`${row.name}-${row.subId ?? "x"}`}
-                        subId={row.subId}
-                        categoryName={row.name}
-                        tabLabel="Stories"
-                        expanded={showAllStories && row.name === storiesActiveSubSlug}
-                        onSeeAll={() => {
-                          if (showAllStories && row.name === storiesActiveSubSlug) {
-                            setShowAllStories(false);
-                            setStoriesActiveSubSlug(null);
-                          } else {
-                            setShowAllStories(true);
-                            setStoriesActiveSubSlug(row.name);
-                          }
-                        }}
-                        onBookClick={(book, bc) => {
-                          openBook(book.id);
-                          setCrumb([...bc, book.title]);
-                        }}
-                        prefetchNext={nextTwo}
-                      />
-                    );
-                  });
-                })()}
+                      return visibleRows.map((row, idx) => {
+                        // compute neighbors from the ORIGINAL `rows`, not `visibleRows`
+                        const originalIndex = rows.findIndex(r => r.subId === row.subId);
+                        const nextTwo: number[] = [];
+                        for (let k = originalIndex + 1; k <= originalIndex + 2 && k < rows.length; k++) {
+                          const nid = rows[k]?.subId;
+                          if (typeof nid === "number") nextTwo.push(nid);
+                        }
+
+                        console.log(
+                          "%c[ContentLibrary] prefetchNext (Stories)",
+                          "color:#BCD678;font-weight:bold",
+                          { for: row.name, subId: row.subId, nextTwo }
+                        );
+
+                        return (
+                          <BookCategory
+                            key={`${row.name}-${row.subId ?? "x"}`}
+                            subId={row.subId}
+                            categoryName={row.name}
+                            tabLabel="Stories"
+                            expanded={showAllStories && row.name === storiesActiveSubSlug}
+                            onSeeAll={() => {
+                              if (showAllStories && row.name === storiesActiveSubSlug) {
+                                setShowAllStories(false);
+                                setStoriesActiveSubSlug(null);
+                              } else {
+                                setShowAllStories(true);
+                                setStoriesActiveSubSlug(row.name);
+                              }
+                            }}
+                            onBookClick={(book, bc) => {
+                              openBook(book.id);
+                              setCrumb([...bc, book.title]);
+                            }}
+                            prefetchNext={nextTwo}
+                          />
+                        );
+                      });
+                    })()
+              )}
 
               {/* ───── Languages tab ───── */}
-              {isLangsTab &&
-                displayList
-                  .filter(cat =>
-                    !showAllLanguages || cat.name === languagesActiveSubSlug
-                  )
-                  .map(cat => (
-                    <BookCategory
-                    subId={cat.subId}
-                      key={cat.name}
-                      categoryName={cat.name}
-                      tabLabel="Languages"
-                      parentCategory={undefined}
-                      books={cat.books}
-                      hasSub={!!cat.subId}
-                      onSeeAll={() => handleLanguagesSeeAll(cat.name)}
-                      expanded={showAllLanguages && cat.name === languagesActiveSubSlug}
-                      onBookClick={(book: any, bc: any) => {
-                        openBook(book.id);
-                        setCrumb([...bc, book.title]);
-                      }}
-                    />
-                  ))}
+              {isLangsTab && (
+                favMode
+                  ? (() => {
+                      const rows = Object.keys(favLangsBySub).map(name => ({ name, subId: null as number | null }));
+                      const visibleRows = rows.filter(r =>
+                        !showAllLanguages || r.name === (languagesActiveSubSlug ?? r.name)
+                      );
+
+                      return visibleRows.map((row) => {
+                        const originalIndex = rows.findIndex(r => r.name === row.name);
+                        const nextTwo: number[] = [];
+                        for (let k = originalIndex + 1; k <= originalIndex + 2 && k < rows.length; k++) nextTwo.push(k);
+
+                        return (
+                          <BookCategory
+                            key={`${row.name}-${row.subId ?? "x"}`}
+                            subId={row.subId}
+                            categoryName={row.name}
+                            tabLabel="Languages"
+                            lazyDisabled={true}                 // 👈 off
+                            books={favLangsBySub[row.name]}     // 👈 inject favourites
+                            expanded={showAllLanguages && row.name === languagesActiveSubSlug}
+                            onSeeAll={() => {
+                              if (showAllLanguages && row.name === languagesActiveSubSlug) {
+                                setShowAllLanguages(false); setLanguagesActiveSubSlug(null);
+                              } else {
+                                setShowAllLanguages(true); setLanguagesActiveSubSlug(row.name);
+                              }
+                            }}
+                            onBookClick={(book, bc) => { openBook(book.id); setCrumb([...bc, book.title]); }}
+                            prefetchNext={nextTwo}
+                          />
+                        );
+                      });
+                    })()
+                  : displayList
+                      .filter(cat =>
+                        !showAllLanguages || cat.name === languagesActiveSubSlug
+                      )
+                      .map(cat => (
+                        <BookCategory
+                          subId={cat.subId}
+                          key={cat.name}
+                          categoryName={cat.name}
+                          tabLabel="Languages"
+                          parentCategory={undefined}
+                          books={cat.books}
+                          hasSub={!!cat.subId}
+                          onSeeAll={() => handleLanguagesSeeAll(cat.name)}
+                          expanded={showAllLanguages && cat.name === languagesActiveSubSlug}
+                          onBookClick={(book: any, bc: any) => {
+                            openBook(book.id);
+                            setCrumb([...bc, book.title]);
+                          }}
+                        />
+                      ))
+              )}
 
               {/* ───── For-you tab ───── */}
               {isForYouTab &&
