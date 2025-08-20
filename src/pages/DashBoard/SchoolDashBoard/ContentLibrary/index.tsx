@@ -141,12 +141,20 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   // const location = useLocation() as { state?: any };
   const favMode = state === "fav"
+  console.log('state', state)
   // ensure we can always do tabsConfig[activeIndex].label without crashing
   const [tabsConfig, setTabsConfig] = useState<Tab[]>(
     defaultTabs
       .filter((tab) => !(favMode && tab.label === "Literacy"))
       .map((tab) => ({ ...tab, id: null }))
   );
+
+  useEffect(() => {
+    const updatedTabsConfig = defaultTabs
+      .filter((tab) => !(favMode && tab.label === "Literacy"))
+      .map((tab) => ({ ...tab, id: null }));
+    setTabsConfig(updatedTabsConfig);
+  }, [state]);
 
   const [profiles] = useStore(getProfileState);
 
@@ -408,6 +416,10 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
   const [expandedSimple, setExpandedSimple] = useState<Record<string, boolean>>(
     {}
   );
+
+  useEffect(() => {
+    console.log('state', state)
+  }, [state])
 
   const allBooks = React.useMemo(
     () =>
