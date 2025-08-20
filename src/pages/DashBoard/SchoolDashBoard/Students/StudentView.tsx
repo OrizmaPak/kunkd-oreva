@@ -426,7 +426,7 @@ const StudentView: React.FC<{ crumb?: boolean }> = ({ crumb = true }) => {
               </>
             ) : (
               <>
-                {!student.avatarUrl ? (
+                {student.avatarUrl ? (
                   <img
                     src={student.avatarUrl}
                     alt="Student Avatar"
