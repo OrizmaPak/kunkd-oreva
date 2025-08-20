@@ -288,7 +288,7 @@ const partitionFavouriteRecords = React.useCallback((records: any[]) => {
 
   useEffect(() => {
     if (favMode) return; // do not overwrite favourites view
-       GetSubCategories().then((res) => {
+    GetSubCategories().then((res) => {
       console.log("res", res);
       if (res.data.status && Array.isArray(res.data.data)) {
         const cats = res.data.data;
@@ -1169,7 +1169,6 @@ useEffect(() => {
                         key={`${row.name}-${row.subId ?? "x"}`}
                         subId={row.subId}
                         categoryName={row.name}
-                        lazyDisabled={true}
                         tabLabel="Stories"
                         expanded={showAllStories && row.name === storiesActiveSubSlug}
                         onSeeAll={() => {
@@ -1205,7 +1204,6 @@ useEffect(() => {
                       tabLabel="Languages"
                       parentCategory={undefined}
                       books={cat.books}
-                      lazyDisabled={true} 
                       hasSub={!!cat.subId}
                       onSeeAll={() => handleLanguagesSeeAll(cat.name)}
                       expanded={showAllLanguages && cat.name === languagesActiveSubSlug}
