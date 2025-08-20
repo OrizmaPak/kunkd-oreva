@@ -139,12 +139,8 @@ const defaultTabs: Omit<Tab, "id">[] = [
 // console.log('GetCompletedContents', GetCompletedContents(sessionStorage.getItem("profileId")));
 const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const location = useLocation() as { state?: any };
-  const favMode =
-    state === "fav" ||
-    searchParams.get("state") === "fav" ||
-    location?.state === "fav" ||
-    location?.state?.fav === true;
+  // const location = useLocation() as { state?: any };
+  const favMode = state === "fav"
   // ensure we can always do tabsConfig[activeIndex].label without crashing
   const [tabsConfig, setTabsConfig] = useState<Tab[]>(
     defaultTabs

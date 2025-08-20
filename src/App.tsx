@@ -451,7 +451,7 @@ function App() {
                     ></Route>
                   </Route>
                   <Route path="progress" element={<StudentView crumb={false} />}></Route>
-                  <Route path="favourites" element={<ContentLibrary state='fav' />}></Route>
+                  <Route path="favourites" element={<ContentLibrary  state='fav' />}></Route>
                   <Route path="classes" element={<Classes />}></Route>
                   {/* <Route path="request" element={<SchoolRquest />}></Route> */}
                   <Route path="request" element={<ConnectionRequests />}></Route>
