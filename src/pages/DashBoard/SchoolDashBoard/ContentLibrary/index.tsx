@@ -295,8 +295,10 @@ const [favLangsBySub, setFavLangsBySub] = useState<Record<string, Book[]>>({});
 
 
   useEffect(() => {
-    if (favMode) return; // do not overwrite favourites view
-    GetSubCategories().then((res) => {
+    // if (favMode) return; // do not overwrite favourites view
+    const fetchData = favMode ? GetLikedContent : GetSubCategories;
+
+    fetchData().then((res) => {
       console.log("res", res);
       if (res.data.status && Array.isArray(res.data.data)) {
         const cats = res.data.data;
@@ -1132,157 +1134,85 @@ useEffect(() => {
           ) : (
             <>
               {/* ───── Stories tab ───── */}
-              {isStoriesTab && (
-                favMode
-                  ? (() => {
-                      // build rows from favourite subcategory keys
-                      const rows = Object.keys(favStoriesBySub).map(name => ({ name, subId: null as number | null }));
-                      const visibleRows = rows.filter(r =>
-                        !showAllStories || r.name === (storiesActiveSubSlug ?? r.name)
-                      );
+              {isStoriesTab &&
+                (() => {
+                  // full ordered array of Stories subcats from `allCats`
+                  const storiesCat = allCats.find((c: any) => c.name === "Stories");
+                  const rows: Array<{ name: string; subId: number | null }> =
+                    (storiesCat?.sub_categories ?? []).map((s: any) => ({
+                      name: s?.name ?? "",
+                      subId: typeof s?.id === "number" ? s.id : null,
+                    }));
 
-                      // compute nextTwo indices for your prefetch prop (no-op while disabled)
-                      return visibleRows.map((row) => {
-                        const originalIndex = rows.findIndex(r => r.name === row.name);
-                        const nextTwo: number[] = [];
-                        for (let k = originalIndex + 1; k <= originalIndex + 2 && k < rows.length; k++) nextTwo.push(k);
+                  // this is what actually gets shown (respecting Show all toggle)
+                  const visibleRows = rows.filter(r =>
+                    !showAllStories || r.name === (storiesActiveSubSlug ?? r.name)
+                  );
 
-                        return (
-                          <BookCategory
-                            key={`${row.name}-${row.subId ?? "x"}`}
-                            subId={row.subId}                 // stays present so your signature is unchanged
-                            categoryName={row.name}
-                            tabLabel="Stories"
-                            lazyDisabled={true}               // 👈 turn off lazy hook
-                            books={favStoriesBySub[row.name]} // 👈 inject favourites for this sub
-                            expanded={showAllStories && row.name === storiesActiveSubSlug}
-                            onSeeAll={() => {
-                              if (showAllStories && row.name === storiesActiveSubSlug) {
-                                setShowAllStories(false); setStoriesActiveSubSlug(null);
-                              } else {
-                                setShowAllStories(true); setStoriesActiveSubSlug(row.name);
-                              }
-                            }}
-                            onBookClick={(book, bc) => { openBook(book.id); setCrumb([...bc, book.title]); }}
-                            prefetchNext={nextTwo}
-                          />
-                        );
-                      });
-                    })()
-                  : (() => {
-                      // full ordered array of Stories subcats from `allCats`
-                      const storiesCat = allCats.find((c: any) => c.name === "Stories");
-                      const rows: Array<{ name: string; subId: number | null }> =
-                        (storiesCat?.sub_categories ?? []).map((s: any) => ({
-                          name: s?.name ?? "",
-                          subId: typeof s?.id === "number" ? s.id : null,
-                        }));
+                  return visibleRows.map((row, idx) => {
+                    // compute neighbors from the ORIGINAL `rows`, not `visibleRows`
+                    const originalIndex = rows.findIndex(r => r.subId === row.subId);
+                    const nextTwo: number[] = [];
+                    for (let k = originalIndex + 1; k <= originalIndex + 2 && k < rows.length; k++) {
+                      const nid = rows[k]?.subId;
+                      if (typeof nid === "number") nextTwo.push(nid);
+                    }
 
-                      // this is what actually gets shown (respecting Show all toggle)
-                      const visibleRows = rows.filter(r =>
-                        !showAllStories || r.name === (storiesActiveSubSlug ?? r.name)
-                      );
+                    console.log(
+                      "%c[ContentLibrary] prefetchNext (Stories)",
+                      "color:#BCD678;font-weight:bold",
+                      { for: row.name, subId: row.subId, nextTwo }
+                    );
 
-                      return visibleRows.map((row, idx) => {
-                        // compute neighbors from the ORIGINAL `rows`, not `visibleRows`
-                        const originalIndex = rows.findIndex(r => r.subId === row.subId);
-                        const nextTwo: number[] = [];
-                        for (let k = originalIndex + 1; k <= originalIndex + 2 && k < rows.length; k++) {
-                          const nid = rows[k]?.subId;
-                          if (typeof nid === "number") nextTwo.push(nid);
-                        }
-
-                        console.log(
-                          "%c[ContentLibrary] prefetchNext (Stories)",
-                          "color:#BCD678;font-weight:bold",
-                          { for: row.name, subId: row.subId, nextTwo }
-                        );
-
-                        return (
-                          <BookCategory
-                            key={`${row.name}-${row.subId ?? "x"}`}
-                            subId={row.subId}
-                            categoryName={row.name}
-                            tabLabel="Stories"
-                            expanded={showAllStories && row.name === storiesActiveSubSlug}
-                            onSeeAll={() => {
-                              if (showAllStories && row.name === storiesActiveSubSlug) {
-                                setShowAllStories(false);
-                                setStoriesActiveSubSlug(null);
-                              } else {
-                                setShowAllStories(true);
-                                setStoriesActiveSubSlug(row.name);
-                              }
-                            }}
-                            onBookClick={(book, bc) => {
-                              openBook(book.id);
-                              setCrumb([...bc, book.title]);
-                            }}
-                            prefetchNext={nextTwo}
-                          />
-                        );
-                      });
-                    })()
-              )}
+                    return (
+                      <BookCategory
+                        key={`${row.name}-${row.subId ?? "x"}`}
+                        subId={row.subId}
+                        categoryName={row.name}
+                        tabLabel="Stories"
+                        expanded={showAllStories && row.name === storiesActiveSubSlug}
+                        onSeeAll={() => {
+                          if (showAllStories && row.name === storiesActiveSubSlug) {
+                            setShowAllStories(false);
+                            setStoriesActiveSubSlug(null);
+                          } else {
+                            setShowAllStories(true);
+                            setStoriesActiveSubSlug(row.name);
+                          }
+                        }}
+                        onBookClick={(book, bc) => {
+                          openBook(book.id);
+                          setCrumb([...bc, book.title]);
+                        }}
+                        prefetchNext={nextTwo}
+                      />
+                    );
+                  });
+                })()}
 
               {/* ───── Languages tab ───── */}
-              {isLangsTab && (
-                favMode
-                  ? (() => {
-                      const rows = Object.keys(favLangsBySub).map(name => ({ name, subId: null as number | null }));
-                      const visibleRows = rows.filter(r =>
-                        !showAllLanguages || r.name === (languagesActiveSubSlug ?? r.name)
-                      );
-
-                      return visibleRows.map((row) => {
-                        const originalIndex = rows.findIndex(r => r.name === row.name);
-                        const nextTwo: number[] = [];
-                        for (let k = originalIndex + 1; k <= originalIndex + 2 && k < rows.length; k++) nextTwo.push(k);
-
-                        return (
-                          <BookCategory
-                            key={`${row.name}-${row.subId ?? "x"}`}
-                            subId={row.subId}
-                            categoryName={row.name}
-                            tabLabel="Languages"
-                            lazyDisabled={true}                 // 👈 off
-                            books={favLangsBySub[row.name]}     // 👈 inject favourites
-                            expanded={showAllLanguages && row.name === languagesActiveSubSlug}
-                            onSeeAll={() => {
-                              if (showAllLanguages && row.name === languagesActiveSubSlug) {
-                                setShowAllLanguages(false); setLanguagesActiveSubSlug(null);
-                              } else {
-                                setShowAllLanguages(true); setLanguagesActiveSubSlug(row.name);
-                              }
-                            }}
-                            onBookClick={(book, bc) => { openBook(book.id); setCrumb([...bc, book.title]); }}
-                            prefetchNext={nextTwo}
-                          />
-                        );
-                      });
-                    })()
-                  : displayList
-                      .filter(cat =>
-                        !showAllLanguages || cat.name === languagesActiveSubSlug
-                      )
-                      .map(cat => (
-                        <BookCategory
-                          subId={cat.subId}
-                          key={cat.name}
-                          categoryName={cat.name}
-                          tabLabel="Languages"
-                          parentCategory={undefined}
-                          books={cat.books}
-                          hasSub={!!cat.subId}
-                          onSeeAll={() => handleLanguagesSeeAll(cat.name)}
-                          expanded={showAllLanguages && cat.name === languagesActiveSubSlug}
-                          onBookClick={(book: any, bc: any) => {
-                            openBook(book.id);
-                            setCrumb([...bc, book.title]);
-                          }}
-                        />
-                      ))
-              )}
+              {isLangsTab &&
+                displayList
+                  .filter(cat =>
+                    !showAllLanguages || cat.name === languagesActiveSubSlug
+                  )
+                  .map(cat => (
+                    <BookCategory
+                    subId={cat.subId}
+                      key={cat.name}
+                      categoryName={cat.name}
+                      tabLabel="Languages"
+                      parentCategory={undefined}
+                      books={cat.books}
+                      hasSub={!!cat.subId}
+                      onSeeAll={() => handleLanguagesSeeAll(cat.name)}
+                      expanded={showAllLanguages && cat.name === languagesActiveSubSlug}
+                      onBookClick={(book: any, bc: any) => {
+                        openBook(book.id);
+                        setCrumb([...bc, book.title]);
+                      }}
+                    />
+                  ))}
 
               {/* ───── For-you tab ───── */}
               {isForYouTab &&

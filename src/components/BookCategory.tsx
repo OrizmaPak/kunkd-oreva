@@ -4,7 +4,7 @@ import Skeleton from "react-loading-skeleton";
 import BookCard, { Book } from "./BookCard";
 import useSubCategoryLazy from "@/hooks/useSubCategoryLazy";
 
-export interface BookCategoryProps {
+interface BookCategoryProps {
   /** Static list of books (used when subId is null) */
   books?: Book[];
   /** Sub-category ID for lazy loading (null for For You tab) */
@@ -27,8 +27,6 @@ export interface BookCategoryProps {
   hasSub?: boolean;
   /** Message to show when empty */
   emptyMsg?: string;
-  /** Disable lazy loading */
-  lazyDisabled?: boolean; // 👈 NEW
 }
 
 const BookCategory: React.FC<BookCategoryProps> = ({
@@ -43,10 +41,8 @@ const BookCategory: React.FC<BookCategoryProps> = ({
   parentCategory,
   hasSub = true,
   emptyMsg,
-  lazyDisabled = false, // 👈 NEW
 }) => {
-  const usingLazy = subId != null && !lazyDisabled; // 👈 only lazy when enabled
-
+  // Lazy-loading hook for sub-categories
   const {
     books: lazyBooks,
     loadingInit,
@@ -55,21 +51,29 @@ const BookCategory: React.FC<BookCategoryProps> = ({
     containerRef,
     sentryRef,
     loadMoreRef,
-  } = useSubCategoryLazy(subId, expanded, lazyDisabled); // 👈 pass flag
-
-  const list = usingLazy ? lazyBooks : books; // 👈 in fav mode we’ll feed `books`
-  const rowLoading = usingLazy ? loadingInit : false;
-
+  } = useSubCategoryLazy(subId, expanded);
+  
+  const usingLazy = subId != null;
+  // Choose data source based on lazy vs. static
+  const list = usingLazy ? lazyBooks : books;
+  // First-page load vs. static loading
+  const rowLoading = usingLazy ? loadingInit : loading;
+  
   // Layout classes
   const containerClass = expanded
-    ? "flex flex-wrap gap-4"
-    : "flex space-x-4 overflow-x-auto no-scrollbar";
+  ? "flex flex-wrap gap-4"
+  : "flex space-x-4 overflow-x-auto no-scrollbar";
+  
+  // Hide category if no content is available
+  if (!rowLoading && hasFetched && list.length === 0) {
+    return null;
+  }
 
   return (
     <div className="mb-8">
       {/* HEADER */}
       <div className="flex items-center justify-between mb-2">
-        <h3 className="font-[600] font-BalooSemiBold text-[28px] leading-[120%] tracking-[-0.02em] text-center align-middle text-[#667185] mt-[15px]">
+         <h3 className="font-[600] font-BalooSemiBold text-[28px] leading-[120%] tracking-[-0.02em] text-center align-middle text-[#667185] mt-[15px]">
           {categoryName.trim().length > 0 ? (
             categoryName
           ) : (
@@ -78,8 +82,8 @@ const BookCategory: React.FC<BookCategoryProps> = ({
         </h3>
         {!rowLoading && onSeeAll && (list.length > 3) && (
           <button
-            onClick={onSeeAll}
-            className="text-sm text-[#9FC43E] hover:underline"
+          onClick={onSeeAll}
+          className="text-sm text-[#9FC43E] hover:underline"
           >
             {expanded ? "Show less" : "See all"}
           </button>
@@ -95,33 +99,26 @@ const BookCategory: React.FC<BookCategoryProps> = ({
       <div ref={containerRef} className={containerClass}>
         {/* Special case for "Continue Reading" category */}
         <>
-          {/* Empty state after load */}
-          {((!rowLoading && hasFetched && list.length === 0 && tabLabel != "For you") || (!rowLoading && list.length === 0 && tabLabel == "For you")) ? (
-            <div className="text-gray-400 h-[50px] flex items-center justify-center w-full text-sm italic">
-              {emptyMsg ?? "No content available"}
-            </div>
-          ) : (
-            list.map((book, idx) => (
-              <div key={book.id} className="flex-shrink-0">
-                <BookCard
-                  book={book}
-                  onClick={() => {
-                    const crumbs = [tabLabel];
-                    if (parentCategory) crumbs.push(parentCategory);
-                    crumbs.push(categoryName);
-                    onBookClick?.(book, crumbs);
-                  }}
+          {list.map((book, idx) => (
+            <div key={book.id} className="flex-shrink-0">
+              <BookCard
+                book={book}
+                onClick={() => {
+                  const crumbs = [tabLabel];
+                  if (parentCategory) crumbs.push(parentCategory);
+                  crumbs.push(categoryName);
+                  onBookClick?.(book, crumbs);
+                }}
                 />
-              </div>
-            ))
-          )}
+            </div>
+          ))}
 
           {/* Skeletons for first-page loading/static loading */}
           {((rowLoading || !hasFetched && tabLabel != "For you") || (rowLoading && tabLabel == "For you")) && (
             Array.from({ length: 7 }).map((_, i) => (
               <Skeleton
-                key={i}
-                className="w-32 h-44 rounded"
+              key={i}
+              className="w-32 h-44 rounded"
               />
             ))
           )}
@@ -135,8 +132,8 @@ const BookCategory: React.FC<BookCategoryProps> = ({
           {loadingMore &&
             Array.from({ length: 6 }).map((_, i) => (
               <Skeleton
-                key={i}
-                className="w-32 h-44 rounded"
+              key={i}
+              className="w-32 h-44 rounded"
               />
             ))}
         </>
