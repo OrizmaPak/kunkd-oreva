@@ -140,7 +140,12 @@ const defaultTabs: Omit<Tab, "id">[] = [
 const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   // const location = useLocation() as { state?: any };
-  const favMode = state === "fav"
+  const [favMode, setFavMode] = useState(state === "fav");
+  useEffect(() => {
+    console.log('State has changed:', state);
+    // alert('State has changed:' + state);
+    setFavMode(state === "fav");  
+  }, [state]);
   console.log('state', state)
   // ensure we can always do tabsConfig[activeIndex].label without crashing
   const [tabsConfig, setTabsConfig] = useState<Tab[]>(
@@ -154,7 +159,7 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
       .filter((tab) => !(favMode && tab.label === "Literacy"))
       .map((tab) => ({ ...tab, id: null }));
     setTabsConfig(updatedTabsConfig);
-  }, [state]);
+  }, [favMode, state]);
 
   const [profiles] = useStore(getProfileState);
 
@@ -237,55 +242,53 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
 
   const readingRef = useRef<ReadingHandle>(null);
 
-  const loadFavourites = React.useCallback(async () => {
-    trace("loadFavourites() → start");
-    const pid = sessionStorage.getItem("profileId") || "";
+  const [favBuckets, setFavBuckets] = useState<{ stories: Book[]; languages: Book[] }>({
+    stories: [],
+    languages: [],
+  });
 
-    if (!pid) {
-      trace("loadFavourites() → missing profileId, clearing categories");
-      setCategories([]);
-      setSubcategories([]);
-      setCrumb(["Favourites"]);
-      return;
-    }
+  // Partition favourites into Stories vs Languages
+const partitionFavouriteRecords = React.useCallback((records: any[]) => {
+  const stories: Book[] = [];
+  const languages: Book[] = [];
 
-    try {
-      const res = await GetLikedContent(pid);
-      console.log("GetLikedContent → resppppppppp:", res);
-      const payload = res?.data ?? {};
-      const records = payload.data.records
+  records.forEach((it: any) => {
+    // Try multiple fields that can identify the category
+    const catLabel = String(
+      it.category ||
+      it.category_name ||
+      it.content_type ||
+      it.category_slug ||
+      it.categoryTitle ||
+      ""
+    ).toLowerCase();
 
-      console.log("GetLikedContent → records:", records);
+    // Heuristic: treat anything with "lang" as Languages; otherwise Stories.
+    // (If your API gives solid ids, you can refine this e.g. content_type_id/category_id)
+    const isLanguage =
+      /lang/.test(catLabel) ||
+      it.category_id === 4 ||
+      it.content_type_id === 4;
 
-      const favBooks: Book[] = records.map((it: any) => ({
-        id: it.id ?? it.content_id ?? 0,
-        title: it.name ?? it.title ?? "",
-        coverUrl: it.thumbnail ?? it.cover ?? it.image ?? "",
-        progress: it.percentage ?? it.progress ?? 0,
-        is_liked: true,
-      }));
+    const book: Book = {
+      id: it.id ?? it.content_id ?? 0,
+      title: it.name ?? it.title ?? "",
+      coverUrl: it.thumbnail ?? it.cover ?? it.image ?? "",
+      progress: it.percentage ?? it.progress ?? 0,
+      is_liked: true,
+    };
 
-      trace("loadFavourites() → mapped", favBooks.length, "items");
-      setCategories([{ name: "Favourites", books: favBooks, hasSub: false }]);
-      setSubcategories([]);
-      setCrumb(["Favourites"]);
-    } catch (err) {
-      console.error("[ContentLibrary] GetLikedContent failed", err);
-      setCategories([]);
-      setSubcategories([]);
-      setCrumb(["Favourites"]);
-    }
-  }, []);
+    if (isLanguage) languages.push(book);
+    else stories.push(book);
+  });
 
-  useEffect(() => {
-    if (favMode) {
-      loadFavourites();
-    }
-  }, [favMode, loadFavourites]);
+  return { stories, languages };
+}, []);
+
 
   useEffect(() => {
     if (favMode) return; // do not overwrite favourites view
-    GetSubCategories().then((res) => {
+       GetSubCategories().then((res) => {
       console.log("res", res);
       if (res.data.status && Array.isArray(res.data.data)) {
         const cats = res.data.data;
@@ -417,9 +420,68 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
     {}
   );
 
-  useEffect(() => {
-    console.log('state', state)
-  }, [state])
+  const loadFavourites = React.useCallback(async () => {
+    trace("loadFavourites() → start");
+    const pid = sessionStorage.getItem("profileId") || "";
+  
+    if (!pid) {
+      trace("loadFavourites() → missing profileId, clearing categories");
+      setCategories([]);
+      setSubcategories([]);
+      setCrumb(["Favourites"]);
+      setFavBuckets({ stories: [], languages: [] });
+      return;
+    }
+  
+    try {
+      const res = await GetLikedContent(pid);
+      const payload = res?.data ?? {};
+      const records = payload?.data?.records ?? [];
+  
+      trace("GetLikedContent → records:", records);
+  
+      // NEW: split into buckets
+      const buckets = partitionFavouriteRecords(records);
+      setFavBuckets(buckets);
+  
+      // Show something immediately (default to Stories tab if present)
+      const defaultLabel = tabsConfig[activeIndex]?.label ?? "Stories";
+      const selected =
+        defaultLabel === "Languages" ? buckets.languages : buckets.stories;
+  
+      setCategories([{ name: defaultLabel, books: selected, hasSub: false }]);
+      setSubcategories([]);
+      setCrumb(["Favourites", defaultLabel]);
+    } catch (err) {
+      console.error("[ContentLibrary] GetLikedContent failed", err);
+      setCategories([]);
+      setSubcategories([]);
+      setCrumb(["Favourites"]);
+      setFavBuckets({ stories: [], languages: [] });
+    }
+  }, [activeIndex, tabsConfig, partitionFavouriteRecords]);
+  
+  
+    useEffect(() => {
+      if (favMode) {
+        loadFavourites();
+      }
+    }, [favMode, loadFavourites]);
+
+    // Whenever we switch tabs inside Favourites, show the right bucket
+useEffect(() => {
+  if (!favMode) return;
+
+  const activeLabel = tabsConfig[activeIndex]?.label ?? "Stories";
+  const selected =
+    activeLabel === "Languages" ? favBuckets.languages : favBuckets.stories;
+
+  setCategories([{ name: activeLabel, books: selected, hasSub: false }]);
+  setSubcategories([]);
+  setCrumb(["Favourites", activeLabel]);
+}, [favMode, activeIndex, tabsConfig, favBuckets]);
+
+
 
   const allBooks = React.useMemo(
     () =>
@@ -1107,6 +1169,7 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
                         key={`${row.name}-${row.subId ?? "x"}`}
                         subId={row.subId}
                         categoryName={row.name}
+                        lazyDisabled={true}
                         tabLabel="Stories"
                         expanded={showAllStories && row.name === storiesActiveSubSlug}
                         onSeeAll={() => {
@@ -1142,6 +1205,7 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
                       tabLabel="Languages"
                       parentCategory={undefined}
                       books={cat.books}
+                      lazyDisabled={true} 
                       hasSub={!!cat.subId}
                       onSeeAll={() => handleLanguagesSeeAll(cat.name)}
                       expanded={showAllLanguages && cat.name === languagesActiveSubSlug}
