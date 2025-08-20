@@ -268,7 +268,7 @@ const [favLangsBySub, setFavLangsBySub] = useState<Record<string, Book[]>>({});
         it.sub_category_slug ||
         it.subCategory ||
         "";
-      const subLabel = String(subLabelRaw).trim() || (/(lang)/.test(catLabel) ? "All Languages" : "All Stories");
+      const subLabel = String(subLabelRaw).trim() || (/(lang)/.test(catLabel) ? "" : "");
   
       const book: Book = {
         id: it.id ?? it.content_id ?? 0,

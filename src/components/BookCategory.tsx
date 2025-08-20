@@ -70,7 +70,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
       {/* HEADER */}
       <div className="flex items-center justify-between mb-2">
         <h3 className="font-[600] font-BalooSemiBold text-[28px] leading-[120%] tracking-[-0.02em] text-center align-middle text-[#667185] mt-[15px]">
-          {categoryName.trim().length > 0 ? (
+          {categoryName.trim().length > 0 || window.location.href.includes('favourites') ? (
             categoryName
           ) : (
             <Skeleton width={100} />
@@ -117,7 +117,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
           )}
 
           {/* Skeletons for first-page loading/static loading */}
-          {((rowLoading || !hasFetched && tabLabel != "For you") || (rowLoading && tabLabel == "For you")) && (
+          {(!window.location.href.includes('favourites') && ((rowLoading || !hasFetched && tabLabel != "For you") || (rowLoading && tabLabel == "For you"))) && (
             Array.from({ length: 7 }).map((_, i) => (
               <Skeleton
                 key={i}

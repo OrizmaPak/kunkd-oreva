@@ -7,10 +7,13 @@ import ProgressGraph from "@/components/ProgressGraph";
 import StatCard from "@/components/StatCard";
 import ContentTable, { ContentItem } from "@/components/ContentTable";
 import child from "@/assets/child.png";
+import useStore from "@/store/index";
 import storyy from "@/assets/storyy.png";
 import langg from "@/assets/langg.png";
 import Teacers from "@/assets/Teachers.png";
-import { GetSchoolStudentStat } from "@/api/api";
+import { AllProgressContent, GetSchoolStudentStat } from "@/api/api";
+import { getUserState } from "@/store/authStore";
+import { getProfileState } from "@/store/profileStore"; // ← NEW: read profiles
 
 /** ===== Types from GetSchoolStudentStat payload ===== */
 type TQuizResult = { status: boolean; id: number; result: number };
@@ -46,7 +49,7 @@ type TStats = {
     quiz: number;
     stories: number;
   };
-  learning_hours: Record<string, number>; // minutes keyed by YYYY-MM-DD
+  learning_hours: Record<string, number>;
   name: string;
   ongoing_contents: TRow[];
   parent_email: string;
@@ -54,10 +57,47 @@ type TStats = {
   teacher_email: string;
   teacher_name: string;
   teacher_picture: string;
-  top_interest_contents: { id: number; name: string; slug: string; category: string; theme: string; thumbnail: string }[];
-  total_time_spent: number; // minutes
+  top_interest_contents: {
+    id: number; name: string; slug: string; category: string; theme: string; thumbnail: string
+  }[];
+  total_time_spent: number;
 };
 
+/** ===== `user` endpoint types ===== */
+type TUserRecord = {
+  id: number;
+  category_id: number;
+  category: string;
+  name: string;
+  slug: string;
+  synopsis?: string;
+  theme?: string;
+  tags?: string;
+  has_quiz: boolean;
+  media_type: string;
+  thumbnail: string;
+  publish_status: boolean;
+  status: string;
+  media?: {
+    name: string; slug: string; order: number; file: string; thumbnail: string;
+  }[];
+  quiz_result: { status: boolean; id: number; result: number };
+  is_liked: boolean;
+  short_link: string;
+  pages_read: number;
+  timespent: number;
+};
+
+type TUserPayload = {
+  category_count: {
+    audiobook_count: number;
+    language_count: number;
+    story_count: number;
+  };
+  records: TUserRecord[];
+};
+
+/** ===== Utilities ===== */
 const minutesToHMM = (mins?: number) => {
   const m = Math.max(0, Number(mins || 0));
   const h = Math.floor(m / 60);
@@ -65,10 +105,172 @@ const minutesToHMM = (mins?: number) => {
   return `${h}:${mm < 10 ? `0${mm}` : mm}`;
 };
 
+const lastNDays = (n: number) => {
+  const days: string[] = [];
+  const today = new Date();
+  for (let i = n - 1; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    days.push(d.toISOString().slice(0, 10));
+  }
+  return days;
+};
+
+/** ===== Normalize `user` payload into TStats (so children components keep same props) ===== */
+const normalizeUserToStats = (p?: TUserPayload): TStats => {
+  const records = p?.records ?? [];
+  const toTRow = (r: TUserRecord): TRow => ({
+    id: r.id,
+    category_id: r.category_id,
+    category: r.category || "",
+    content_type_id: 0,
+    content_type: r.media_type || "",
+    name: r.name || "",
+    slug: r.slug || "",
+    synopsis: r.synopsis || "",
+    theme: r.theme || "",
+    tags: r.tags || "",
+    has_quiz: !!r.has_quiz,
+    media_type: r.media_type || "",
+    thumbnail: r.thumbnail || "",
+    publish_status: !!r.publish_status,
+    quiz_result: r.quiz_result || { status: false, id: 0, result: 0 },
+    pages: [],
+    is_liked: !!r.is_liked,
+    short_link: r.short_link || "",
+    pages_read: Number(r.pages_read || 0),
+    timespent: Number(r.timespent || 0),
+  });
+
+  const ongoing = records.filter(r => (r.status || "").toLowerCase() === "ongoing").map(toTRow);
+  const completed = records.filter(r => (r.status || "").toLowerCase() === "completed").map(toTRow);
+  const total_time_spent = records.reduce((acc, r) => acc + (Number(r.timespent) || 0), 0);
+
+  // ProgressGraph safety: always provide a 7-day series
+  const days = lastNDays(7);
+  const learning_hours: Record<string, number> = {};
+  days.forEach(d => (learning_hours[d] = 0));
+
+  return {
+    // header values will be filled from profile store as fallback
+    avatar: "",
+    class: "",
+    name: "",
+    parent_email: "",
+    teacher_email: "",
+    teacher_name: "",
+    teacher_picture: "",
+    top_interest_contents: [],
+
+    content_progress_log: {
+      stories: p?.category_count?.story_count ?? 0,
+      languages: p?.category_count?.language_count ?? 0,
+      audio_books: p?.category_count?.audiobook_count ?? 0,
+      quiz: 0,
+    },
+    learning_hours,
+    ongoing_contents: ongoing,
+    recently_completed_content: completed,
+    total_time_spent,
+  };
+};
+
+/** ===== Extract profile details from the profile store (robust to shape differences) ===== */
+type ProfileLike = {
+  id?: number | string;
+  profile_id?: number | string;
+  name?: string;
+  first_name?: string;
+  last_name?: string;
+  avatar?: string;
+  image?: string;
+  photo?: string;
+  class?: string;
+  class_name?: string;
+  classroom?: { name?: string } | null;
+  teacher?: {
+    name?: string;
+    email?: string;
+    picture?: string;
+    avatar?: string;
+    photo?: string;
+  } | null;
+  teacher_name?: string;
+  teacher_email?: string;
+  teacher_picture?: string;
+};
+
+const getAllProfilesFromState = (state: any): ProfileLike[] => {
+  // tolerate various possible keys in your store
+  if (!state) return [];
+  if (Array.isArray(state)) return state as ProfileLike[];
+  if (Array.isArray(state?.profiles)) return state.profiles as ProfileLike[];
+  if (Array.isArray(state?.children)) return state.children as ProfileLike[];
+  if (Array.isArray(state?.list)) return state.list as ProfileLike[];
+  return [];
+};
+
+const findProfileById = (list: ProfileLike[], id: string | number | null) => {
+  if (!id) return undefined;
+  return list.find(
+    (p) =>
+      String(p?.id ?? "") === String(id) ||
+      String(p?.profile_id ?? "") === String(id)
+  );
+};
+
+const pickProfileHeader = (p?: ProfileLike) => {
+  const fullName =
+    p?.name ||
+    [p?.first_name, p?.last_name].filter(Boolean).join(" ") ||
+    "";
+
+  const avatar =
+    p?.avatar || p?.image || p?.photo || "";
+
+  const className =
+    p?.class || p?.class_name || p?.classroom?.name || "";
+
+  // teacher can be nested or flattened
+  const tName =
+    p?.teacher?.name || p?.teacher_name || "";
+
+  const tEmail =
+    p?.teacher?.email || p?.teacher_email || "";
+
+  const tPic =
+    p?.teacher?.picture || p?.teacher?.avatar || p?.teacher?.photo || p?.teacher_picture || "";
+
+  return {
+    name: fullName,
+    avatar,
+    className,
+    teacherName: tName,
+    teacherEmail: tEmail,
+    teacherPicture: tPic,
+  };
+};
+
 const StudentView: React.FC<{ crumb?: boolean }> = ({ crumb = true }) => {
   const { id: paramId } = useParams<{ id: string }>();
-  const id = paramId || sessionStorage.getItem("profileId");
+  const id = paramId || (typeof window !== "undefined" ? sessionStorage.getItem("profileId") : null);
   const navigate = useNavigate();
+
+  /** ===== Store selectors ===== */
+  const [user] = useStore(getUserState);
+  const role = (user?.role || "").toLowerCase();
+
+  // All profiles from profile store
+  const [profileState] = useStore(getProfileState);
+  const profiles = React.useMemo(() => getAllProfilesFromState(profileState), [profileState]);
+  const selectedProfile = React.useMemo(
+    () => findProfileById(profiles, id),
+    [profiles, id]
+  );
+  const profileHeader = React.useMemo(
+    () => pickProfileHeader(selectedProfile),
+    [selectedProfile]
+  );
 
   /** ===== Data fetch ===== */
   const [loading, setLoading] = React.useState(false);
@@ -89,11 +291,35 @@ const StudentView: React.FC<{ crumb?: boolean }> = ({ crumb = true }) => {
       try {
         setLoading(true);
         setErrorMsg(null);
-        const res = await GetSchoolStudentStat(String(id), start, end);
-        if (ignore) return;
-        const data = (res as any)?.data?.data as TStats;
-        setStats(data || null);
-      } catch (e) {
+
+        if (role === "user") {
+          // USER ROLE: call AllProgressContent and normalize to TStats
+          const res = await AllProgressContent(Number(id));
+          if (ignore) return;
+          const payload = (res as any)?.data?.data as TUserPayload | undefined;
+          setStats(normalizeUserToStats(payload));
+        } else {
+          // NON-USER ROLES: original endpoint, no change
+          const res = await GetSchoolStudentStat(String(id), start, end);
+          if (ignore) return;
+          const data = (res as any)?.data?.data as TStats | undefined;
+          setStats({
+            avatar: data?.avatar || "",
+            class: data?.class || "",
+            content_progress_log: data?.content_progress_log || { audio_books: 0, languages: 0, quiz: 0, stories: 0 },
+            learning_hours: data?.learning_hours || {},
+            name: data?.name || "",
+            ongoing_contents: data?.ongoing_contents || [],
+            parent_email: data?.parent_email || "",
+            recently_completed_content: data?.recently_completed_content || [],
+            teacher_email: data?.teacher_email || "",
+            teacher_name: data?.teacher_name || "",
+            teacher_picture: data?.teacher_picture || "",
+            top_interest_contents: data?.top_interest_contents || [],
+            total_time_spent: Number(data?.total_time_spent || 0),
+          });
+        }
+      } catch {
         if (!ignore) {
           setStats(null);
           setErrorMsg("Failed to load student stats.");
@@ -106,21 +332,21 @@ const StudentView: React.FC<{ crumb?: boolean }> = ({ crumb = true }) => {
     return () => {
       ignore = true;
     };
-  }, [id, start, end]);
+  }, [id, start, end, role]);
 
-  /** ===== Header values ===== */
+  /** ===== Header values (prefer API; fallback to profile store) ===== */
   const student = {
-    name: stats?.name || "—",
-    email: stats?.parent_email || "—",
-    avatarUrl: stats?.avatar || "",
-    class: stats?.class || "—",
+    name: (stats?.name || profileHeader.name || "—"),
+    email: (stats?.parent_email || "—"),
+    avatarUrl: (stats?.avatar || profileHeader.avatar || ""),
+    class: (stats?.class || profileHeader.className || "—"),
     timeHMM: minutesToHMM(stats?.total_time_spent),
   };
 
   const teacher = {
-    name: stats?.teacher_name || "—",
-    email: stats?.teacher_email || "—",
-    avatarUrl: stats?.teacher_picture || "",
+    name: (stats?.teacher_name || profileHeader.teacherName || "—"),
+    email: (stats?.teacher_email || profileHeader.teacherEmail || "—"),
+    avatarUrl: (stats?.teacher_picture || profileHeader.teacherPicture || ""),
   };
 
   const counts = stats?.content_progress_log || {
@@ -130,31 +356,29 @@ const StudentView: React.FC<{ crumb?: boolean }> = ({ crumb = true }) => {
     quiz: 0,
   };
 
-  /** ===== Graph data from learning_hours (convert minutes → hours) ===== */
+  /** ===== Graph data from learning_hours (minutes → hours) ===== */
   const graphLabels = React.useMemo(() => {
     const lh = stats?.learning_hours || {};
-    const dates = Object.keys(lh).sort(); // YYYY-MM-DD asc
-    return dates.map((d) =>
-      new Date(d).toLocaleDateString(undefined, { weekday: "long" })
-    );
+    const dates = Object.keys(lh).length ? Object.keys(lh).sort() : lastNDays(7);
+    return dates.map((d) => new Date(d).toLocaleDateString(undefined, { weekday: "long" }));
   }, [stats]);
 
   const graphValues = React.useMemo(() => {
     const lh = stats?.learning_hours || {};
-    const dates = Object.keys(lh).sort();
-    return dates.map((d) => Math.round((lh[d] || 0) / 60)); // hours
+    const dates = Object.keys(lh).length ? Object.keys(lh).sort() : lastNDays(7);
+    return dates.map((d) => Math.round((lh[d] || 0) / 60));
   }, [stats]);
 
-  /** ===== Map API rows -> ContentItem (NO dummies) ===== */
+  /** ===== Map API rows -> ContentItem ===== */
   const toContent = React.useCallback(
     (rows: TRow[], status: "Ongoing" | "Completed"): ContentItem[] =>
       (rows || []).map((r) => ({
         id: r.id,
-        title: r.name,
-        category: r.category,
-        readType: "Self Read",     // backend doesn't provide; neutral default
-        dateAssigned: "—",         // not in payload
-        dateStarted: "—",          // not in payload
+        title: r.name || "",
+        category: r.category || "",
+        readType: "Self Read",
+        dateAssigned: "—",
+        dateStarted: "—",
         status,
         thumb: r.thumbnail || "",
       })),
@@ -163,8 +387,8 @@ const StudentView: React.FC<{ crumb?: boolean }> = ({ crumb = true }) => {
 
   const tableData = React.useMemo<ContentItem[]>(
     () => [
-      ...toContent(stats?.ongoing_contents || [], "Ongoing"),
-      ...toContent(stats?.recently_completed_content || [], "Completed"),
+      ...toContent(stats?.ongoing_contents ?? [], "Ongoing"),
+      ...toContent(stats?.recently_completed_content ?? [], "Completed"),
     ],
     [stats, toContent]
   );
@@ -202,11 +426,17 @@ const StudentView: React.FC<{ crumb?: boolean }> = ({ crumb = true }) => {
               </>
             ) : (
               <>
-                <img
-                  src={student.avatarUrl || child}
-                  alt="Student Avatar"
-                  className="w-20 rounded-full object-cover"
-                />
+                {!student.avatarUrl ? (
+                  <img
+                    src={student.avatarUrl}
+                    alt="Student Avatar"
+                    className="w-20 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-3xl font-bold text-gray-700">
+                    {student.name.slice(0, 2).toUpperCase()}
+                  </div>
+                )}
                 <div>
                   <p className="font-inter font-semibold text-gray-800 text-2xl leading-tight tracking-tight">
                     {student.name}
@@ -265,7 +495,7 @@ const StudentView: React.FC<{ crumb?: boolean }> = ({ crumb = true }) => {
         </div>
       </div>
 
-      {/* Progress report (graph fed with API values; skeleton while loading) */}
+      {/* Progress report */}
       <h2 className="text-xl font-semibold text-gray-900 mt-10">Progress report</h2>
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
@@ -307,13 +537,10 @@ const StudentView: React.FC<{ crumb?: boolean }> = ({ crumb = true }) => {
         </div>
       </div>
 
-      {/* Content table — pass loading so it shows skeleton rows */}
+      {/* Content table */}
       <ContentTable data={tableData} loading={loading} />
 
-      {/* Optional: error text under table */}
-      {errorMsg && (
-        <p className="text-sm text-red-600">{errorMsg}</p>
-      )}
+      {errorMsg && <p className="text-sm text-red-600">{errorMsg}</p>}
     </div>
   );
 };
