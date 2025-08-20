@@ -65,14 +65,14 @@ const links = [
     hasSub: true,
     role: ["schoolAdmin", "teacher", "user"],
   },
-  {
-    label: "Favourites",
-    href: "favourites?tab=0",
-    route: routeBaseUrl + "/favourites/*",
-    icon: FavouritesIcon,
-    hasSub: true,
-    role: ["user"],
-  },
+  // {
+  //   label: "Favourites",
+  //   href: "favourites?tab=0",
+  //   route: routeBaseUrl + "/favourites/*",
+  //   icon: FavouritesIcon,
+  //   hasSub: true,
+  //   role: ["user"],
+  // },
   {
     label: "Progress Report",
     href: "progress",

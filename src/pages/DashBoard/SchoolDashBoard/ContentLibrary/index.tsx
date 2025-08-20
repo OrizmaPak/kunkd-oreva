@@ -44,6 +44,7 @@ import literacy from "@/assets/literacy.png";
 import useStore from "@/store";
 import { on } from "rsuite/esm/DOMHelper";
 import { getProfileState } from "@/store/profileStore";
+import { getUserState } from "@/store/authStore";
 
 
 /* ---------------- helper: loud trace ---------------- */
@@ -129,15 +130,18 @@ const generateAllSubcategories = (): Category[] => [
   },
 ];
 
-const defaultTabs: Omit<Tab, "id">[] = [
-  //  { label: "For you", icon: foryou },
-  { label: "Literacy", icon: literacy },
-  { label: "Stories", icon: story },
-  { label: "Languages", icon: languages },
-];
+
 
 // console.log('GetCompletedContents', GetCompletedContents(sessionStorage.getItem("profileId")));
 const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
+  const [user] = useStore(getUserState);
+  const defaultTabs: Omit<Tab, "id">[] = [
+    { label: "Literacy", icon: literacy },
+    ...(user.role !== 'user' ? [
+      { label: "Stories", icon: story },
+      { label: "Languages", icon: languages }
+    ] : [])
+  ];
   const [searchParams, setSearchParams] = useSearchParams();
   // group favourites by top category AND subcategory name
 const [favBuckets, setFavBuckets] = useState<{ stories: Book[]; languages: Book[] }>({ stories: [], languages: [] });
