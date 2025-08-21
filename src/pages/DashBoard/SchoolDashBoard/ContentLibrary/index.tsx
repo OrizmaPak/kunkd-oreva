@@ -45,6 +45,7 @@ import useStore from "@/store";
 import { on } from "rsuite/esm/DOMHelper";
 import { getProfileState } from "@/store/profileStore";
 import { getUserState } from "@/store/authStore";
+import { AlertDialogOverlay } from "@chakra-ui/react";
 
 
 /* ---------------- helper: loud trace ---------------- */
@@ -174,10 +175,11 @@ const [favLangsBySub, setFavLangsBySub] = useState<Record<string, Book[]>>({});
 
   function getIframeLink() {
     const profileId = sessionStorage.getItem("profileId");
+    if(user.role !== 'user') return 'https://interactive-app.kundakidsapi.com/';
     if (!profileId) return null;
 
     const profile = profiles?.find((p) => p.id === Number(profileId));
-    console.log("profile", profile, profile?.interactive_app_url);
+    console.log("profile", profile?.interactive_app_url);
     return profile ? profile?.interactive_app_url : 'https://interactive-app.kundakidsapi.com/';
   }
 
