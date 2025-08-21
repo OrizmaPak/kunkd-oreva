@@ -52,7 +52,7 @@ const Request = () => {
           <div>
             <h1 className="text-[24px] font-semibold">
               Request{" "}
-              <span className="text-[#8530C1] bg-[#FFF7FD] rounded-3xl py-2 px-4">
+              <span className="text-[#8530C1] bg-[#FFF7FD] rounded-3xl py-3 px-5">
                 {attemptConnectStudents?.length || 0}
               </span>
             </h1>
