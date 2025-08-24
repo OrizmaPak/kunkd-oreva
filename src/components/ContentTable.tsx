@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import SearchBar from "@/components/SearchBar";
 import SortDropdown from "@/components/SortDropdown";
 import Pagination from "@/components/Pagination";
+import { useNavigate } from "react-router-dom";
 
 export interface ContentItem {
   id: number;
@@ -22,6 +23,7 @@ type Props = {
 };
 
 const ContentTable: React.FC<Props> = ({ data, loading = false }) => {
+  const navigate = useNavigate();
   const allContent = useMemo(() => (loading ? [] : data ?? []), [data, loading]);
 
   const [tab, setTab] = useState<ContentItem["status"]>("Ongoing");
@@ -100,7 +102,7 @@ const ContentTable: React.FC<Props> = ({ data, loading = false }) => {
               }}
               className={`rounded-full px-3 py-1 text-sm transition ${
                 tab === t
-                  ? "bg-green-600 text-white"
+                  ? "bg-[#bcd678] text-white"
                   : "text-gray-700 hover:bg-white"
               }`}
             >
@@ -184,7 +186,10 @@ const ContentTable: React.FC<Props> = ({ data, loading = false }) => {
                   </td>
                   <td className="p-3 text-gray-600">{c.dateAssigned || "—"}</td>
                   <td className="p-3 text-gray-600">{c.dateStarted || "—"}</td>
-                  <td className="p-3 text-blue-500 hover:underline cursor-pointer">
+                  <td
+                    className="p-3 text-blue-500 hover:underline cursor-pointer"
+                    onClick={() => navigate(`/schooldashboard/content?book=${c.id}`)}
+                  >
                     View
                   </td>
                 </tr>
