@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     BarChart,
     Bar,
@@ -23,8 +23,18 @@ import {
 } from "react-icons/io5";
 import EmptyClassPerformance from "@/components/EmptyStates/EmptyClassPerformance";
 import EmptyTopConsumed from "@/components/EmptyStates/EmptyTopConsumed";
+import StatCard from "@/components/StatCard";
+import { GetLicense } from "@/api/api";
 
-/* ---------- mock data (replace with API later) ---------- */
+type Licence = {
+    added_class_count: number;
+    license_class_count: number;
+    added_teacher_count: number;
+    license_teacher_count: number;
+    added_student_count: number;
+    license_student_count: number;
+};
+
 const classPerformance = [
     { name: "Class A", Stories: 650, Literacy: 380, Languages: 300, Quiz: 720 },
     { name: "Class B", Stories: 760, Literacy: 420, Languages: 330, Quiz: 760 },
@@ -48,17 +58,6 @@ const requests = Array.from({ length: 10 }, () => ({
     name: "Jaydon Korsgaard",
 }));
 
-/* ---------- small helpers ---------- */
-const StatCard = ({ icon, label, value }) => (
-    <div className="relative rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="absolute top-2 right-1 rounded-full p-3 text-sky-600 ">
-            {icon}
-        </div>
-        <p className="text-slate-500" style={{ fontFamily: 'Inter', fontWeight: 400, fontStyle: 'Regular', fontSize: '14px', lineHeight: '145%', letterSpacing: '0%' }}>{label}</p>
-        <p className="mt-1 text-[24px] font-[Inter] font-[600] text-gray-900" style={{ fontStyle: 'Semi Bold', lineHeight: '145%', letterSpacing: '0%' }}>{value}</p>
-    </div>
-);
-
 const LegendDot = ({ color }) => (
     <span
         className="mr-2 inline-block h-2.5 w-2.5 rounded-full"
@@ -79,26 +78,54 @@ const Avatar = ({ name }) => {
     );
 };
 
-/* ---------- main component ---------- */
 export default function Dashboard() {
-    const [hasClassData, setHasClassData] = React.useState(false);
-    const [hasStudentData, setHasStudentData] = React.useState(false);
+    const [hasClassData, setHasClassData] = useState(false);
+    const [hasStudentData, setHasStudentData] = useState(false);
+    const [licence, setLicence] = useState<Licence | null>(null);
+    const [name, setName] = useState<string | null>(null);
 
-    // (Temporary) dev switches you can delete later:
-    // setHasClassData(false);   // show Class Performance empty state
-    // setHasStudentData(false); // show Top Consumed empty state
+    useEffect(() => {
+        let mounted = true;
+        (async () => {
+            try {
+                const res = await GetLicense();
+                const lic = res?.data?.data?.school?.licence;
+                setName(res?.data?.data?.school.contact_name);
+                if (mounted && lic) setLicence(lic);
+            } catch (e) {
+                console.error("GetLicense failed", e);
+            }
+        })();
+        return () => { mounted = false; };
+    }, []);
+
+    const classesValue = `${licence?.added_class_count ?? 0}/${licence?.license_class_count ?? 0}`;
+    const teachersValue = `${licence?.added_teacher_count ?? 0}/${licence?.license_teacher_count ?? 0}`;
+    const studentsValue = `${licence?.added_student_count ?? 0}/${licence?.license_student_count ?? 0}`;
 
     return (
         <div className="mx-auto w-[clamp(320px,100%,1200px)] p-4 md:p-6">
-            {/* top: welcome + date */}
             <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-[1fr,310px]">
                 <div className="rounded-2xl p-5 ">
                     <h1 className="font-[Inter] font-semibold text-[24px] leading-[120%] tracking-[-0.02em] text-slate-900">
-                        Welcome David
+                        Welcome {name}
                     </h1>
-                    <p className="mt-1 text-slate-500" style={{ fontFamily: 'Inter', fontWeight: 400, fontStyle: 'normal', fontSize: '16px', lineHeight: '145%', letterSpacing: '0%' }}>
-                        It’s a sunny day today, let’s give our students the best{" "}
-                        <span className="align-middle">😊</span>
+                    <p className="mt-3 text-slate-500" style={{ fontFamily: 'Inter', fontWeight: 400, fontStyle: 'normal', fontSize: '16px', lineHeight: '145%', letterSpacing: '0%' }}>
+                        {(() => {
+                            const currentHour = new Date().getHours();
+                            const greetings = [
+                                { time: "morning", message: "Rise and shine! It's a beautiful morning to inspire young minds 🌞" },
+                                { time: "afternoon", message: "Good afternoon! Keep the momentum going and make learning fun 🌻" },
+                                { time: "evening", message: "Good evening! Reflect on the day's achievements and plan for tomorrow 🌜" }
+                            ];
+                            if (currentHour < 12) {
+                                return greetings[0].message;
+                            } else if (currentHour < 18) {
+                                return greetings[1].message;
+                            } else {
+                                return greetings[2].message;
+                            }
+                        })()}
                     </p>
                 </div>
 
@@ -121,11 +148,8 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            {/* stats + request log */}
             <div className="grid grid-cols-1 gap-5 md:grid-cols-[1fr,310px]">
-                {/* left column */}
                 <div className="space-y-5">
-                    {/* stat cards */}
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                         <StatCard
                             icon={<svg width="50" height="51" viewBox="0 0 50 51" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -135,7 +159,8 @@ export default function Dashboard() {
                             </svg>
                             }
                             label="Classes"
-                            value="0/3"
+                            value={classesValue}
+                            onView={() => {/* existing behavior */}}
                         />
                         <StatCard
                             icon={<svg width="50" height="51" viewBox="0 0 50 51" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -146,7 +171,8 @@ export default function Dashboard() {
                             </svg>
                             }
                             label="Teachers"
-                            value="0/5"
+                            value={teachersValue}
+                            onView={() => {/* existing behavior */}}
                         />
                         <StatCard
                             icon={<svg width="50" height="51" viewBox="0 0 50 51" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -157,11 +183,11 @@ export default function Dashboard() {
                             </svg>
                             }
                             label="Students"
-                            value="0/5"
+                            value={studentsValue}
+                            onView={() => {/* existing behavior */}}
                         />
                     </div>
 
-                    {/* Class Performance */}
                     {hasClassData ? (
                         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                             <div className="mb-4 flex items-center justify-between">
@@ -207,11 +233,9 @@ export default function Dashboard() {
                         <EmptyClassPerformance onAddClass={() => console.log("Add class")} />
                     )}
 
-                    {/* Top Consumed Content + Devices + Pie */}
                     {hasStudentData ? (
                         <div className="rounded-2xl border border-[#E4E7EC] bg-white p-5 md:p-6 shadow-sm">
                             <div className="grid items-center gap-6 md:grid-cols-3">
-                                {/* LEFT: Title, total views, growth pill, devices used */}
                                 <div>
                                     <p className="text-[13px] leading-[145%] text-start text-[#667185]">Top Consumed Content</p>
 
@@ -243,7 +267,6 @@ export default function Dashboard() {
                                     </div>
                                 </div>
 
-                                {/* MIDDLE: Donut chart */}
                                 <div className="mx-auto h-40 w-full md:h-48">
                                     <ResponsiveContainer width={256} height={257} className="relative -top-7 right-14">
                                         <PieChart>
@@ -251,7 +274,7 @@ export default function Dashboard() {
                                                 data={pieData}
                                                 dataKey="value"
                                                 nameKey="name"
-                                                innerRadius={0} // Set innerRadius to 0 to make it filled
+                                                innerRadius={0}
                                                 outerRadius={116}
                                                 startAngle={90}
                                                 endAngle={450}
@@ -272,7 +295,6 @@ export default function Dashboard() {
                                     </ResponsiveContainer>
                                 </div>
 
-                                {/* RIGHT: Legend list with blue circular icons + values */}
                                 <ul className="space-y-4">
                                     {pieData.map((item) => (
                                         <li key={item.name} className="flex items-center justify-between text-sm">
@@ -324,7 +346,6 @@ export default function Dashboard() {
                     )}
                 </div>
 
-                {/* right column: Request Log */}
                 <aside className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                     <div className="mb-4 flex items-center justify-between">
                         <h3 className="font-[Inter] font-semibold text-slate-800 text-[18px] leading-[145%]">Request Log</h3>

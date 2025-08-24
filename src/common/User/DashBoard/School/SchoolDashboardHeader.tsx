@@ -369,7 +369,7 @@ const closeMenu = () => setMenuOpened(false);
             {/* Regular items */}
             <Menu.Divider />
 
-            {user?.role !== "user" && (
+            {user?.role !== "usern" && (
               <Menu.Item onClick={() => navigate("schooldashboard/settings")}>
                 <p className="flex items-center gap-2 text-[14px] text-[#667185] font-Arimo">
                   <FaCog color="#667185" size={18} />

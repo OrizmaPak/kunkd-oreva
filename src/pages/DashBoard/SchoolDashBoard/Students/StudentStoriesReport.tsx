@@ -10,8 +10,10 @@ import {
   BarElement,
 } from "chart.js";
 import { Doughnut, Bar } from "react-chartjs-2";
-import { GetSchoolStudentStat } from "@/api/api";
+import { GetSchoolStudentStat, AllProgressContent } from "@/api/api";
 import storyy from "@/assets/storyy.png";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
 
@@ -35,7 +37,49 @@ type TStats = {
   top_interest_contents: TTop[];
 };
 
+/** ===== User endpoint payload types (for normalization & interest) ===== */
+type TUserRecord = {
+  id: number;
+  category_id: number;
+  category: string;
+  name: string;
+  slug: string;
+  synopsis?: string;
+  theme: string;
+  tags?: string;
+  has_quiz: boolean;
+  media_type: string;
+  thumbnail: string;
+  publish_status: boolean;
+  status: string; // "ongoing" | "completed" | "complete" | ...
+  quiz_result: { status: boolean; id: number; result: number };
+  is_liked: boolean;
+  short_link: string;
+  pages_read: number;     // <- used to rank
+  timespent: number;
+  pages?: Array<{
+    content_media_id: number;
+    name: string;
+    body?: string;
+    image?: string;
+    subtitle?: string | null;
+    page_number: number;
+    audio?: string;
+  }>;
+};
+type TAllProgressPayload = {
+  category_count: {
+    audiobook_count: number;
+    language_count: number;
+    story_count: number;
+  };
+  records: TUserRecord[];
+};
+
+/** ===== Helpers ===== */
+// NOTE: includes "All" per your request.
 const PERIODS = [
+  "All",
   "Last 1 week",
   "Last 2 weeks",
   "Last 1 month",
@@ -45,14 +89,9 @@ const PERIODS = [
 ] as const;
 type PeriodLabel = typeof PERIODS[number];
 
-const pillQuickRanges = [
-  { label: "Last 7 days", days: 7 },
-  { label: "Last 14 days", days: 14 },
-  { label: "Last 30 days", days: 30 },
-];
-
 const periodToDays = (p: PeriodLabel): number => {
   switch (p) {
+    case "All": return 0;
     case "Last 1 week": return 7;
     case "Last 2 weeks": return 14;
     case "Last 1 month": return 30;
@@ -84,7 +123,7 @@ const normalizeCategory = (raw?: string) => {
   return "Stories";
 };
 
-// deterministic pseudo-random from string (so values don't jump every render)
+// deterministic pseudo-random from string (used only for non-user interest bars)
 const hashToRange = (s: string, min = 10, max = 100) => {
   let h = 0;
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
@@ -92,10 +131,62 @@ const hashToRange = (s: string, min = 10, max = 100) => {
   return x;
 };
 
+/** Resolve effective child ID:
+ *  When role === "user", prioritize sessionStorage.profileId over URL id.
+ */
+const resolveEffectiveId = (role: string, routeId?: string | null) => {
+  const ssProfileId =
+    typeof window !== "undefined" ? window.sessionStorage.getItem("profileId") : null;
+  if (role === "user") {
+    if (ssProfileId && ssProfileId !== routeId) return ssProfileId;
+    return routeId || ssProfileId || "";
+  }
+  return routeId || "";
+};
+
+/** Normalize AllProgressContent payload → minimal TStats this page needs */
+const normalizeUserPayloadToStats = (payload?: TAllProgressPayload): TStats => {
+  const records = payload?.records || [];
+
+  const toTRow = (r: TUserRecord): TRow => ({
+    id: r.id,
+    category: r.category || "",
+    name: r.name || "",
+    media_type: r.media_type || "",
+    thumbnail: r.thumbnail || "",
+    theme: r.theme || "",
+    quiz_result: r.quiz_result || { status: false, id: 0, result: 0 },
+  });
+
+  const ongoing = records
+    .filter((r) => (r.status || "").toLowerCase() === "ongoing")
+    .map(toTRow);
+
+  const completed = records
+    .filter((r) => {
+      const s = (r.status || "").toLowerCase();
+      return s === "completed" || s === "complete";
+    })
+    .map(toTRow);
+
+  return {
+    name: "", // not in this payload
+    learning_hours: {}, // not provided → blank
+    recently_completed_content: completed,
+    ongoing_contents: ongoing,
+    top_interest_contents: [], // not provided → blank
+  };
+};
+
 const StudentStoriesReport: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  // role
+  const [user] = useStore(getUserState);
+  const role = (user?.role || "").toLowerCase();
+  const effectiveId = resolveEffectiveId(role, id);
 
   // category from query param (default to Stories)
   const selectedCategory = normalizeCategory(searchParams.get("category") || undefined);
@@ -103,26 +194,44 @@ const StudentStoriesReport: React.FC = () => {
   // heading stays route-based; interest title adapts to chosen category
   const heading = `${selectedCategory} Report`;
 
+  // Single period state drives both sections, with "All" available.
   const [period, setPeriod] = React.useState<PeriodLabel>("Last 1 week");
   const [loading, setLoading] = React.useState(false);
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
   const [stats, setStats] = React.useState<TStats | null>(null);
 
+  // NEW: keep raw user records so we can compute interest for user role
+  const [userRecords, setUserRecords] = React.useState<TUserRecord[]>([]);
+
   const days = periodToDays(period);
-  const end = todayISO();
-  const start = isoNDaysAgoInclusive(days);
+  const isAll = period === "All";
+  // For school/teacher flow, pass empty strings on "All" to fetch everything.
+  const end = isAll ? "" : todayISO();
+  const start = isAll ? "" : isoNDaysAgoInclusive(days);
 
   React.useEffect(() => {
     let ignore = false;
     const run = async () => {
-      if (!id) return;
+      if (!effectiveId) return;
       try {
         setLoading(true);
         setErrorMsg(null);
-        const res = await GetSchoolStudentStat(String(id), start, end);
-        if (ignore) return;
-        const data = (res as any)?.data?.data as TStats;
-        setStats(data || null);
+
+        if (role === "user") {
+          // user flow: AllProgressContent(effectiveId) (no date range on this endpoint)
+          const res = await AllProgressContent(Number(effectiveId));
+          if (ignore) return;
+          const payload = (res as any)?.data?.data as TAllProgressPayload | undefined;
+          setStats(normalizeUserPayloadToStats(payload));
+          setUserRecords(payload?.records || []); // keep raw records for interest calc
+        } else {
+          // school/teacher flow: keep existing controller with date range (or all)
+          const res = await GetSchoolStudentStat(String(effectiveId), start, end);
+          if (ignore) return;
+          const data = (res as any)?.data?.data as TStats;
+          setStats(data || null);
+          setUserRecords([]); // ensure we don't accidentally use user branch
+        }
       } catch {
         if (!ignore) setErrorMsg("Failed to load report.");
       } finally {
@@ -131,7 +240,7 @@ const StudentStoriesReport: React.FC = () => {
     };
     run();
     return () => { ignore = true; };
-  }, [id, start, end]);
+  }, [effectiveId, role, start, end]);
 
   /* ---------- rows filtered by chosen category ---------- */
   const filteredRows = React.useMemo<TRow[]>(() => {
@@ -191,16 +300,45 @@ const StudentStoriesReport: React.FC = () => {
     [quizLabels, quizScores]
   );
 
-  /* ---------- Top Interest (list books by selected category; random values) ---------- */
+  /* ---------- Top Interest (books list for selected category) ----------
+     USER ROLE: compute from records → top 50 by pages_read; value = (pages_read / total_pages) * 100
+     NON-USER: keep existing behavior (use top_interest_contents) */
   const interest = React.useMemo(() => {
+    if (role === "user") {
+      // use raw records; filter by category
+      const inCategory = (userRecords || []).filter(
+        (r) => (r.category || "").toLowerCase() === selectedCategory.toLowerCase()
+      );
+
+      // sort by pages_read desc, take top 50
+      const top = [...inCategory]
+        .sort((a, b) => (b.pages_read || 0) - (a.pages_read || 0))
+        .slice(0, 20);
+
+      // compute percent = pages_read / total_pages * 100
+      const labels = top.map((r) => r.name || "");
+      const values = top.map((r) => {
+        const totalPages = Array.isArray(r.pages) ? r.pages.length : 0;
+        const read = Number(r.pages_read || 0);
+        if (!totalPages || totalPages <= 0) return 0;
+        const pct = (read / totalPages) * 100;
+        // clamp 0..100 and round to whole numbers to keep bars tidy
+        const clamped = Math.max(0, Math.min(100, pct));
+        return Math.round(clamped);
+      });
+
+      return { labels, values };
+    }
+
+    // non-user: derive from top_interest_contents as before
     const items = (stats?.top_interest_contents || []).filter(
       (t) => (t.category || "").toLowerCase() === selectedCategory.toLowerCase()
     );
-    // Use book names as labels; values are deterministic pseudo-randoms
     const labels = items.map((t) => t.name);
+    // non-user had no scalar; keep deterministic pseudo-random to avoid design changes
     const values = items.map((t) => hashToRange(`${t.slug || t.name}-${selectedCategory}`, 10, 100));
     return { labels, values };
-  }, [stats, selectedCategory]);
+  }, [role, userRecords, stats, selectedCategory]);
 
   const interestData = React.useMemo(
     () => ({
@@ -221,10 +359,15 @@ const StudentStoriesReport: React.FC = () => {
     <div className="space-y-6 px-4 pb-10">
       {/* breadcrumb */}
       <nav className="text-sm text-gray-600">
-        <span className="cursor-pointer hover:underline" onClick={() => navigate("/schooldashboard/students")}>
-          Student
-        </span>{" "}
-        &gt;{" "}
+        {role !== "user" && (
+          <>
+              <span className="cursor-pointer hover:underline" onClick={() => navigate("/schooldashboard/students")}>
+                Student
+              </span>
+            {" "}
+            &gt;{" "}
+          </>
+          )}
         <span className="cursor-pointer hover:underline" onClick={() => navigate(-1)}>
           View
         </span>{" "}
@@ -334,34 +477,23 @@ const StudentStoriesReport: React.FC = () => {
         </div>
       </div>
 
-      {/* Interest horizontal bar (books list for selected category; random values) */}
+      {/* Interest horizontal bar (books list for selected category) */}
       <div className="bg-white rounded-3xl border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-medium text-gray-800">
             Top {selectedCategory} Interest
           </h2>
-          <div className="flex items-center gap-2">
-            {pillQuickRanges.map(({ label, days }) => (
-              <button
-                key={label}
-                onClick={() =>
-                  setPeriod(
-                    days === 7 ? "Last 1 week" :
-                    days === 14 ? "Last 2 weeks" : "Last 1 month"
-                  )
-                }
-                className={`px-3 py-1 rounded-full text-xs border ${
-                  (days === 7 && period === "Last 1 week") ||
-                  (days === 14 && period === "Last 2 weeks") ||
-                  (days === 30 && period === "Last 1 month")
-                    ? "bg-green-600 text-white border-green-600"
-                    : "bg-white text-gray-600 border-gray-300"
-                }`}
-              >
-                {label}
-              </button>
+
+        {/* Dropdown (same style as Mode of Consumption) */}
+          <select
+            value={period}
+            onChange={(e) => setPeriod(e.target.value as PeriodLabel)}
+            className={selectStyle}
+          >
+            {PERIODS.map((p) => (
+              <option key={p} value={p}>{p}</option>
             ))}
-          </div>
+          </select>
         </div>
 
         {loading ? (
@@ -371,7 +503,7 @@ const StudentStoriesReport: React.FC = () => {
             No interest data in this period.
           </div>
         ) : (
-          <div className="h-[280px]">
+          <div className="h-[980px]">
             <Bar
               data={interestData}
               options={{
@@ -384,6 +516,8 @@ const StudentStoriesReport: React.FC = () => {
                   y: {
                     grid: { display: false },
                     ticks: { autoSkip: true, maxTicksLimit: 10 },
+                    barPercentage: 0.8, // Adjust bar percentage to add spacing
+                    categoryPercentage: 0.8, // Adjust category percentage to add spacing
                   },
                 },
               }}
