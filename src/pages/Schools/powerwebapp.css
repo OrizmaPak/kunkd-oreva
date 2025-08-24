@@ -1,7 +1,0 @@
-.dad-kid-w {
-  width: clamp(9.375rem, 2.5516rem + 31.1927vw, 30.625rem) !important;
-}
-
-.text-padding {
-  line-height: clamp(0.625rem, 0.2236rem + 1.8349vw, 1.875rem);
-}

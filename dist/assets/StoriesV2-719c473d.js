@@ -1,0 +1,1 @@
+import{u as i,j as a,C as r}from"./index-7fa67d35.js";const o=()=>{const{data:t}=i(),e=t==null?void 0:t.data.data[0].sub_categories;return a.jsx("div",{className:" ",children:a.jsx("div",{className:" mt-14",children:e==null?void 0:e.map(s=>a.jsx(r,{id:s.id.toString(),title:s.name},s.id))})})};export{o as default};
