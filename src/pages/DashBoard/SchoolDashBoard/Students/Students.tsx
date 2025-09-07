@@ -152,7 +152,7 @@ const SuccessModal: React.FC<{
         <p className="text-gray-700 text-base">{message}</p>
         <button
           onClick={onClose}
-          className="mx-auto px-4 py-2 text-sm bg-green-600 text-white rounded-md hover:bg-green-700"
+          className="mx-auto px-4 py-2 text-sm bg-[#BCD678] text-white rounded-md hover:bg-green-700"
         >
           OK
         </button>
@@ -312,7 +312,7 @@ const Students: React.FC = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-semibold">
           Students{' '}
-          <span className="ml-2 inline-block bg-green-100 text-green-600 text-sm px-2 py-0.5 rounded-full">
+          <span className="ml-2 inline-block bg-green-100 text-[#BCD678] text-sm px-2 py-0.5 rounded-full">
             {serverTotalRecords}
           </span>
         </h1>
@@ -325,7 +325,7 @@ const Students: React.FC = () => {
               onClick={() => setStatusFilter('active')}
               className={`rounded-full px-3 py-1 text-sm transition ${
                 statusFilter === 'active'
-                  ? 'bg-green-600 text-white'
+                  ? 'bg-[#BCD678] text-white'
                   : 'text-gray-700 hover:bg-white'
               }`}
             >
@@ -336,7 +336,7 @@ const Students: React.FC = () => {
               onClick={() => setStatusFilter('disabled')}
               className={`rounded-full px-3 py-1 text-sm transition ${
                 statusFilter === 'disabled'
-                  ? 'bg-green-600 text-white'
+                  ? 'bg-[#BCD678] text-white'
                   : 'text-gray-700 hover:bg-white'
               }`}
             >

@@ -51,13 +51,28 @@ const Profile = () => {
   }, [selectedCountry]);
   const [opened, { close, open }] = useDisclosure(false);
 
-  // ——— TEACHER-ONLY BRANCH (early return) ———
+  // Teacher-only modal controls
+  const [teacherOpened, { open: openTeacher, close: closeTeacher }] = useDisclosure(false);
   const isTeacher = user?.role === "teacher";
-  const [isEditing, setIsEditing] = useState(false);
+
+  // Teacher profile values (displayed on the page)
   const [firstName, setFirstName] = useState(user?.firstname || "");
   const [lastName, setLastName] = useState(user?.lastname || "");
   const email = user?.email || "";
 
+  // Draft values edited inside the modal
+  const [draftFirstName, setDraftFirstName] = useState(firstName);
+  const [draftLastName, setDraftLastName] = useState(lastName);
+
+  const saveTeacherEdits = async () => {
+    // TODO: Wire this to your API when ready (no teacher endpoint in repo yet).
+    setFirstName(draftFirstName.trim());
+    setLastName(draftLastName.trim());
+    notifications.show({ title: "Saved", message: "Your details have been updated." });
+    closeTeacher();
+  };
+
+  // ——— TEACHER VIEW ———
   if (isTeacher) {
     return (
       <div className="bg-white rounded-xl border border-x-none border-b-none border-gray-200 shadow-sm p-6 md:p-8">
@@ -69,15 +84,20 @@ const Profile = () => {
 
             <button
               type="button"
-              onClick={() => setIsEditing((v) => !v)}
-              className="mt-5 inline-flex items-center gap-2 rounded-full border-2  border-[#BCD678] px-4 py-2 text-sm font-semibold text-[#BCD678] hover:bg[#BCD678] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#BCD678]"
+              onClick={() => {
+                // seed modal drafts with current values
+                setDraftFirstName(firstName);
+                setDraftLastName(lastName);
+                openTeacher();
+              }}
+              className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#BCD678] px-4 py-2 text-sm font-semibold text-[#BCD678] hover:bg-[#BCD678] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#BCD678]"
             >
               <MdModeEdit className="text-lg" />
-              {isEditing ? "Cancel edit" : "Edit Profile"}
+              Edit Profile
             </button>
           </aside>
 
-          {/* Form area */}
+          {/* Read-only form area (matches screenshot) */}
           <section className="md:col-span-8">
             <div className="space-y-6">
               <div>
@@ -85,12 +105,9 @@ const Profile = () => {
                 <input
                   type="text"
                   value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  disabled={!isEditing}
+                  disabled
                   placeholder="Jadesola"
-                  className="w-full h-12 rounded-full border border-[#E4E7EC] px-5 text-[#1D2739] placeholder-gray-400
-                             focus:outline-none focus:ring-2 focus:ring-[#8BCD50] focus:border-[#8BCD50]
-                             disabled:bg-[#F2F4F7] disabled:text-[#98A2B3] disabled:cursor-not-allowed"
+                  className="w-full h-12 rounded-full border border-[#E4E7EC] px-5 bg-[#F2F4F7] text-[#1D2739]"
                 />
               </div>
 
@@ -99,12 +116,9 @@ const Profile = () => {
                 <input
                   type="text"
                   value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  disabled={!isEditing}
+                  disabled
                   placeholder="Badmus"
-                  className="w-full h-12 rounded-full border border-[#E4E7EC] px-5 text-[#1D2739] placeholder-gray-400
-                             focus:outline-none focus:ring-2 focus:ring-[#8BCD50] focus:border-[#8BCD50]
-                             disabled:bg-[#F2F4F7] disabled:text-[#98A2B3] disabled:cursor-not-allowed"
+                  className="w-full h-12 rounded-full border border-[#E4E7EC] px-5 bg-[#F2F4F7] text-[#1D2739]"
                 />
               </div>
 
@@ -118,44 +132,66 @@ const Profile = () => {
                   className="w-full h-12 rounded-full border border-[#E4E7EC] px-5 bg-[#F2F4F7] text-[#98A2B3] cursor-not-allowed"
                 />
               </div>
-
-              {isEditing && (
-                <div className="flex gap-3 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsEditing(false);
-                      notifications.show({
-                        title: "Saved",
-                        message: "Your details have been updated locally.",
-                      });
-                    }}
-                    className="inline-flex items-center rounded-full bg-[#1D741B] px-6 py-3 text-white text-sm font-medium
-                               focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8BCD50]"
-                  >
-                    Save changes
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setFirstName(user?.firstname || "");
-                      setLastName(user?.lastname || "");
-                      setIsEditing(false);
-                    }}
-                    className="inline-flex items-center rounded-full border border-[#E4E7EC] px-6 py-3 text-sm font-medium text-[#1D2739]"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              )}
             </div>
           </section>
         </div>
+
+        {/* Edit modal */}
+        <Modal
+          opened={teacherOpened}
+          onClose={closeTeacher}
+          centered
+          withCloseButton
+          title="Edit Profile Info"
+          size="md"
+          radius="lg"
+          classNames={{
+            content: "overflow-hidden rounded-xl",
+            header:
+              "bg-[#BCD678] px-6 py-3 rounded-t-xl border-0",           // lime header
+            title: "text-white font-semibold",                            // white title
+            close: "text-white hover:bg-white/10",                        // white close icon
+            body: "p-6 bg-white",                                         // clean body
+          }}
+        >
+          <div className="space-y-5 mt-7">
+            <div>
+              <label className="block font-semibold text-sm text-[#1D2739] mb-2">First Name</label>
+              <input
+                type="text"
+                value={draftFirstName}
+                onChange={(e) => setDraftFirstName(e.target.value)}
+                placeholder="Jadesola"
+                className="w-full h-12 rounded-full border border-[#E4E7EC] px-5 focus:outline-none focus:ring-2 focus:ring-[#8BCD50] focus:border-[#8BCD50]"
+              />
+            </div>
+
+            <div>
+              <label className="block font-semibold text-sm text-[#1D2739] mb-2">Last Name</label>
+              <input
+                type="text"
+                value={draftLastName}
+                onChange={(e) => setDraftLastName(e.target.value)}
+                placeholder="Badmus"
+                className="w-full h-12 rounded-full border border-[#E4E7EC] px-5 focus:outline-none focus:ring-2 focus:ring-[#8BCD50] focus:border-[#8BCD50]"
+              />
+            </div>
+
+            <div className="flex justify-end pt-1">
+              <button
+                type="button"
+                onClick={saveTeacherEdits}
+                className="inline-flex items-center rounded-full bg-[#BCD678] px-3 py-2 text-white text-sm font-medium hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8BCD50]"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </Modal>
       </div>
     );
   }
-  // ——— END TEACHER-ONLY BRANCH ———
+  // ——— END TEACHER VIEW ———
 
   const schoolInfo = user?.school;
 
