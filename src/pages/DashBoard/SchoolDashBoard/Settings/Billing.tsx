@@ -19,7 +19,7 @@ const Billing = () => {
     status: "Completed" | "Pending" | "Failed";
   };
 
-  const [activeTab, setActiveTab] = useState<"Assigned" | "Ongoing" | "Completed">("Assigned");
+  const [activeTab, setActiveTab] = useState<"All" | "Assigned" | "Ongoing" | "Completed">("Assigned");
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "amount_desc" | "amount_asc">("newest");
   const [page, setPage] = useState(1);
