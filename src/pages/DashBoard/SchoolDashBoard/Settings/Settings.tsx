@@ -18,7 +18,7 @@ const Settings = () => {
           Take a look at your policies and the new policy to see what is covered
         </p>
 
-        <div className={`grid ${isTeacher ? "w-[170px] grid-cols-2" : "w-[250px] grid-cols-3"} h-[40px] rounded-xl items-center`}>
+        <div className={`grid ${isTeacher ? "w-[170px] grid-cols-2" : user?.role?.toLowerCase() === "user" ? "w-[330px] grid-cols-4" : "w-[250px] grid-cols-3"} h-[40px] rounded-xl items-center`}>
           <button
             onClick={() => setActive("1")}
             className={`h-full w-full ${isTeacher ? "rounded-l-xl" : ""} border-t-[2px] border-b-[2px] text-[14px] font-Inter border-[#E4E7EC] text-center py-[10px] px-[16px] border-l-[2px] ${
@@ -51,12 +51,25 @@ const Settings = () => {
           >
             Password
           </button>
+          {user?.role?.toLowerCase() === "user" && (
+            <button
+              onClick={() => setActive("4")}
+              className={`h-full w-full rounded-r-xl text-center py-[10px] text-[14px] font-Inter border-t-[2px] border-b-[2px] border-r-[2px] ${
+                active == "4"
+                  ? "bg-#E4E7EC border-[#E4E7EC] text-[#1D2739]"
+                  : "bg-white border-[#E4E7EC] text-[#667185]"
+              }`}
+            >
+              My Kids
+            </button>
+          )}
         </div>
       </div>
       <div className="mt-4 bg-white rounded-2xl p-5">
         {active == "1" && <Profile />}
         {!isTeacher && active == "2" && <Billing />}
         {active == "3" && <Password />}
+        {user?.role?.toLowerCase() === "user" && active == "4" && <div>My Kids Content</div>}
       </div>
     </>
   );
