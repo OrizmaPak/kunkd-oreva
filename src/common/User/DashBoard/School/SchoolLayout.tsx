@@ -21,7 +21,7 @@ const routeBaseUrl = "/schooldashboard";
 const links = [
   {
     label: "Dashboard",
-    route: routeBaseUrl,
+    route: routeBaseUrl+"/dashboard",
     href: "dashboard",
     index: true,
     icon: DashboardIcon,

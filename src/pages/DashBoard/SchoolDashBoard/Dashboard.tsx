@@ -24,7 +24,11 @@ import {
 import EmptyClassPerformance from "@/components/EmptyStates/EmptyClassPerformance";
 import EmptyTopConsumed from "@/components/EmptyStates/EmptyTopConsumed";
 import StatCard from "@/components/StatCard";
-import { GetLicense } from "@/api/api";
+import { GetLicense, GetAdmittedStudentsInSchool, GetAdmittedStudentsInClass } from "@/api/api";
+import AvatarName from "@/components/AvatarName";
+import { useNavigate } from "react-router-dom";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
 
 type Licence = {
     added_class_count: number;
@@ -33,6 +37,17 @@ type Licence = {
     license_teacher_count: number;
     added_student_count: number;
     license_student_count: number;
+};
+
+type AdmittedRow = {
+    id: number;
+    name: string;
+    firstname: string;
+    lastname: string;
+    image?: string;
+    status: string;
+    class?: { class_id: number; class_name: string };
+    parent?: { firstname: string; lastname: string; user_id: number };
 };
 
 const classPerformance = [
@@ -54,35 +69,21 @@ const pieData = [
 
 const COLORS = ["#5B8DEF", "#A3DAFF", "#B7E0FF", "#8BC1F7", "#CFE8FF"];
 
-const requests = Array.from({ length: 10 }, () => ({
-    name: "Jaydon Korsgaard",
-}));
-
-const LegendDot = ({ color }) => (
-    <span
-        className="mr-2 inline-block h-2.5 w-2.5 rounded-full"
-        style={{ backgroundColor: color }}
-    />
-);
-
-const Avatar = ({ name }) => {
-    const initials = name
-        .split(" ")
-        .map((n) => n[0]?.toUpperCase())
-        .slice(0, 2)
-        .join("");
-    return (
-        <div className="flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-slate-200 text-[11px] font-semibold text-slate-700" style={{ transform: 'rotate(0deg)', opacity: 1, borderWidth: '1.5px' }}>
-            {initials}
-        </div>
-    );
-};
-
 export default function Dashboard() {
+    const navigate = useNavigate();
+    const [user] = useStore(getUserState);
     const [hasClassData, setHasClassData] = useState(false);
     const [hasStudentData, setHasStudentData] = useState(false);
     const [licence, setLicence] = useState<Licence | null>(null);
     const [name, setName] = useState<string | null>(null);
+    const [requestLog, setRequestLog] = useState<AdmittedRow[]>([]);
+    const [loadingRequestLog, setLoadingRequestLog] = useState(false);
+    const [requestLogError, setRequestLogError] = useState<string | null>(null);
+    const [showViewButtonId, setShowViewButtonId] = useState<number | null>(null);
+
+    const toggleViewButton = (id: number) => {
+        setShowViewButtonId(prevId => (prevId === id ? null : id));
+    };
 
     useEffect(() => {
         let mounted = true;
@@ -97,6 +98,42 @@ export default function Dashboard() {
             }
         })();
         return () => { mounted = false; };
+    }, []);
+
+    useEffect(() => {
+        let mounted = true;
+        (async () => {
+            try {
+                setLoadingRequestLog(true);
+                setRequestLogError(null);
+
+                // Determine the user role and choose the appropriate function
+                const userRole = user?.role?.toLowerCase();
+                const isTeacher = userRole === "teacher";
+
+                console.log('userRole', userRole);
+
+                const res = isTeacher
+                    ? await GetAdmittedStudentsInClass("active")
+                    : await GetAdmittedStudentsInSchool("active");
+
+                const rows: AdmittedRow[] = res?.data?.data?.records ?? [];
+
+                console.log('res', res);
+
+                if (mounted) {
+                    setRequestLog(rows.slice(0, 10));
+                }
+            } catch (e: any) {
+                if (mounted) setRequestLogError("Could not load request log.");
+                console.error("GetAdmittedStudentsInSchool failed", e);
+            } finally {
+                if (mounted) setLoadingRequestLog(false);
+            }
+        })();
+        return () => {
+            mounted = false;
+        };
     }, []);
 
     const classesValue = `${licence?.added_class_count ?? 0}/${licence?.license_class_count ?? 0}`;
@@ -161,6 +198,7 @@ export default function Dashboard() {
                             label="Classes"
                             value={classesValue}
                             onView={() => {/* existing behavior */}}
+                            isDashboard={true}
                         />
                         <StatCard
                             icon={<svg width="50" height="51" viewBox="0 0 50 51" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -173,6 +211,7 @@ export default function Dashboard() {
                             label="Teachers"
                             value={teachersValue}
                             onView={() => {/* existing behavior */}}
+                            isDashboard={true}
                         />
                         <StatCard
                             icon={<svg width="50" height="51" viewBox="0 0 50 51" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -185,6 +224,7 @@ export default function Dashboard() {
                             label="Students"
                             value={studentsValue}
                             onView={() => {/* existing behavior */}}
+                                isDashboard={true}
                         />
                     </div>
 
@@ -230,7 +270,13 @@ export default function Dashboard() {
                             </div>
                         </div>
                     ) : (
-                        <EmptyClassPerformance onAddClass={() => console.log("Add class")} />
+                        <EmptyClassPerformance onAddClass={() => {
+                            if (user.role === 'teacher') {
+                                alert("Contact your school admin to assign you to a class or classes");
+                            } else {
+                                navigate("/schooldashboard/classes");
+                            }
+                        }} />
                     )}
 
                     {hasStudentData ? (
@@ -342,49 +388,81 @@ export default function Dashboard() {
                             </div>
                         </div>
                     ) : (
-                        <EmptyTopConsumed onAddStudent={() => console.log("Add student")} />
+                        <EmptyTopConsumed onAddStudent={() => navigate('/schooldashboard/students')} />
                     )}
                 </div>
 
                 <aside className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                     <div className="mb-4 flex items-center justify-between">
                         <h3 className="font-[Inter] font-semibold text-slate-800 text-[18px] leading-[145%]">Request Log</h3>
-                        <button className="text-xs font-medium text-sky-600 hover:underline flex gap-1">
+                        <button 
+                            className="text-xs font-medium text-sky-600 hover:underline flex gap-1"
+                            onClick={() => navigate('/schooldashboard/students')}
+                        >
                             <span className="font-inter font-semibold text-[#667185] text-[16px] leading-[145%] text-center align-middle">
                                 See all
                             </span>
                             <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M13.4027 11.6423C14.0067 11.0005 14.0067 9.99947 13.4027 9.35772L7.27354 2.84553C6.95811 2.51038 6.43072 2.4944 6.09557 2.80983C5.76043 3.12526 5.74445 3.65266 6.05988 3.9878L12.189 10.5L6.05988 17.0122C5.74445 17.3473 5.76043 17.8747 6.09557 18.1902C6.43072 18.5056 6.95811 18.4896 7.27354 18.1545L13.4027 11.6423Z" fill="#667185" />
                             </svg>
-
                         </button>
 
                     </div>
 
-                    <ul className="space-y-3">
-                        {requests.map((r, idx) => (
-                            <li
-                                key={`${r.name}-${idx}`}
-                                className="flex items-center justify-between rounded-xl px-3 py-2"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <Avatar name={r.name} />
-                                    <div className="text-sm ">
-                                        <p className="text-slate-800 font-[Inter] font-medium text-[14px] leading-[145%]">{r.name}</p>
-                                        <p className="text-xs text-slate-500 hidden">2m ago</p>
+                    {loadingRequestLog && (
+                        <ul className="space-y-3">
+                            {[...Array(10)].map((_, index) => (
+                                <li key={index} className="flex items-center justify-between rounded-xl px-3 py-2 animate-pulse">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
+                                        <div className="text-sm space-y-1">
+                                            <div className="h-4 bg-gray-200 rounded w-24"></div>
+                                            <div className="h-3 bg-gray-200 rounded w-16"></div>
+                                            <div className="h-3 bg-gray-200 rounded w-20"></div>
+                                        </div>
                                     </div>
-                                </div>
-                                <button className="relative left-4">
-                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="0.5" y="0.5" width="31" height="31" rx="7.5" fill="white" />
-                                        <rect x="0.5" y="0.5" width="31" height="31" rx="7.5" stroke="#E4E7EC" />
-                                        <path d="M17 10.6667C17 11.2189 16.5523 11.6667 16 11.6667C15.4477 11.6667 15 11.2189 15 10.6667C15 10.1144 15.4477 9.66666 16 9.66666C16.5523 9.66666 17 10.1144 17 10.6667Z" fill="black" />
-                                        <path d="M17 16C17 16.5523 16.5523 17 16 17C15.4477 17 15 16.5523 15 16C15 15.4477 15.4477 15 16 15C16.5523 15 17 15.4477 17 16Z" fill="black" />
-                                        <path d="M16 22.3333C16.5523 22.3333 17 21.8856 17 21.3333C17 20.781 16.5523 20.3333 16 20.3333C15.4477 20.3333 15 20.781 15 21.3333C15 21.8856 15.4477 22.3333 16 22.3333Z" fill="black" />
-                                    </svg>
-                                </button>
-                            </li>
-                        ))}
+                                    <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                    {requestLogError && <div>{requestLogError}</div>}
+
+                    <ul className="space-y-3">
+                        {requestLog.map((row) => {
+                            const displayName = row.name || "Unknown";
+                            const avatar = row.image;
+
+                            return (
+                                 <li key={row.id} className="flex items-center justify-between rounded-xl px-3 py-2 relative right-2">
+                                    <div className="flex items-center gap-3">
+                                        <AvatarName name={displayName} avatarUrl={avatar || ''} />
+                                    </div>
+                                    <div className="relative">
+                                        <button 
+                                            className="relative left-4 focus:outline-none"
+                                            onClick={() => toggleViewButton(row.id)}
+                                        >
+                                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <rect x="0.5" y="0.5" width="31" height="31" rx="7.5" fill="white" />
+                                                <rect x="0.5" y="0.5" width="31" height="31" rx="7.5" stroke="#E4E7EC" />
+                                                <path d="M17 10.6667C17 11.2189 16.5523 11.6667 16 11.6667C15.4477 11.6667 15 11.2189 15 10.6667C15 10.1144 15.4477 9.66666 16 9.66666C16.5523 9.66666 17 10.1144 17 10.6667Z" fill="black" />
+                                                <path d="M17 16C17 16.5523 16.5523 17 16 17C15.4477 17 15 16.5523 15 16C15 15.4477 15.4477 15 16 15C16.5523 15 17 15.4477 17 16Z" fill="black" />
+                                                <path d="M16 22.3333C16.5523 22.3333 17 21.8856 17 21.3333C17 20.781 16.5523 20.3333 16 20.3333C15.4477 20.3333 15 20.781 15 21.3333C15 21.8856 15.4477 22.3333 16 22.3333Z" fill="black" />
+                                            </svg>
+                                        </button>
+                                        {showViewButtonId === row.id && (
+                                            <div className="absolute -left-10 font-Inter -mt-2 w-20 bg-white border border-gray-200 rounded-xl shadow-lg">
+                                                <button 
+                                                    className="w-full text-center py-1 text-sm text-gray-700 hover:bg-gray-100"
+                                                    onClick={() => navigate(`/schooldashboard/students/${row.id}`)}
+                                                >
+                                                    View
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </li>)})}
                     </ul>
                 </aside>
             </div>

@@ -11,13 +11,14 @@ const AvatarName: React.FC<AvatarNameProps> = ({ name, avatarUrl, teacher = fals
   const displayAvatar = avatarUrl || `data:image/svg+xml;base64,${btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><rect width="100%" height="100%" fill="#ddd"/><text x="50%" y="50%" font-size="14" fill="#555" text-anchor="middle" alignment-baseline="central">${name.slice(0, 2).toUpperCase()}</text></svg>`)}`;
 
   return (
-    <div className="flex items-center gap-3">
+     <div className="flex items-center gap-3">
       {!teacher && <img
         src={displayAvatar}
         alt={name}
-        className="w-8 h-8 rounded-full object-cover border border-gray-200"
+        className="w-10 h-10 rounded-full object-cover border border-gray-200"
+        style={{ transform: 'rotate(0deg)', opacity: 1 }}
       />}
-      <span className="text-sm font-medium text-gray-700">{name}</span>
+       <span className="font-Inter font-medium text-[14px] leading-[145%] tracking-[0%] text-gray-700">{name}</span>
     </div>
   );
 };

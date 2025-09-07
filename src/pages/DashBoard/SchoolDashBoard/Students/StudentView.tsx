@@ -223,7 +223,7 @@ const StudentView: React.FC<{ crumb?: boolean }> = ({ crumb = true }) => {
           setStats(normalizeUserToStats(payload));
         } else {
           // NON-USER ROLES: original endpoint
-          const res = await GetSchoolStudentStat(String(id), start, end);
+          const res = await GetSchoolStudentStat(String(id));
           if (ignore) return;
           const data = (res as any)?.data?.data as TStats | undefined;
           setStats({

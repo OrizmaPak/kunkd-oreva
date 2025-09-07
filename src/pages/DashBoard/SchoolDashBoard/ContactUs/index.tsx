@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ContactUsModal from "@/components/ContactUsModal";
 import {
   IoCopyOutline,
   IoChevronDownOutline,
@@ -23,22 +24,24 @@ const CopyPill: React.FC<{ label: string; value: string }> = ({
 
   return (
     <div>
-      <p className="mb-2 font-[Inter] font-medium text-[14px] leading-[145%] text-[#101928]">{label}</p>
+      <p className="mb-2 font-[Inter] font-medium text-[14px] leading-[145%] text-[#101928]">
+        {label}
+      </p>
       <div className="relative flex items-center justify-between rounded-[30px] bg-[#EEF2F6] px-[16px] py-[11px] w-[546px] h-[44px] border border-[#E4E7EC]">
         <input
           type="text"
           placeholder={value}
           className="block truncate text-[13px] text-[#98A2B3] bg-transparent border-none outline-none w-full"
           style={{
-            width: '546px',
-            height: '44px',
-            borderWidth: '1px',
-            justifyContent: 'space-between',
-            transform: 'rotate(0deg)',
+            width: "546px",
+            height: "44px",
+            borderWidth: "1px",
+            justifyContent: "space-between",
+            transform: "rotate(0deg)",
             opacity: 1,
-            borderRadius: '30px',
-            paddingRight: '16px',
-            paddingLeft: '16px',
+            borderRadius: "30px",
+            paddingRight: "16px",
+            paddingLeft: "16px",
           }}
         />
         <button
@@ -75,19 +78,21 @@ const FaqItem: React.FC<{
         open ? "border-[#E3EDBE]" : "border-[#E4E7EC]"
       } bg-white transition-all duration-300`}
       style={{
-        width: '561px',
-        borderWidth: '1px',
-        transform: 'rotate(0deg)',
+        width: "561px",
+        borderWidth: "1px",
+        transform: "rotate(0deg)",
         opacity: 1,
-        borderRadius: '30px',
-        overflow: 'hidden',
+        borderRadius: "30px",
+        overflow: "hidden",
       }}
     >
       <button
         onClick={onToggle}
         className="flex w-full items-center justify-between text-left p-4"
       >
-        <p className="font-Inter font-bold text-[18px] leading-[120%] text-[#101928]">{item.q}</p>
+        <p className="font-Inter font-bold text-[18px] leading-[120%] text-[#101928]">
+          {item.q}
+        </p>
         <span className="flex h-6 w-6 items-center justify-center rounded-full border border-[#E4E7EC] bg-[#F7FBE8] text-[#84C127]">
           {open ? (
             <IoChevronUpOutline className="text-[14px]" />
@@ -116,8 +121,9 @@ const FaqItem: React.FC<{
 
 /* --------------------------------- page ---------------------------------- */
 
-const ContactUs: React.FC = () => {
+export default function ContatosIndex() {
   const [openIdx, setOpenIdx] = useState(-1);
+  const [contactOpen, setContactOpen] = useState(false);
 
   const faqs: Faq[] = [
     {
@@ -183,6 +189,7 @@ const ContactUs: React.FC = () => {
               <button
                 type="button"
                 className="hover:scale-[1.1] transition-all duration-500"
+                 onClick={() => setContactOpen(true)}
               >
                 {/* REPORT PROBLEM BUTTON */}
                 <svg
@@ -211,7 +218,7 @@ const ContactUs: React.FC = () => {
           </section>
 
           {/* ============================ SECTION 3: FAQs ============================ */}
-          <section className="grid grid-cols-1 gap-[128px]  lg:grid-cols-[280px,1fr]">
+          <section className="grid hidden grid-cols-1 gap-[128px]  lg:grid-cols-[280px,1fr]">
             {/* left helper text */}
             <div>
               <h3 className="font-Inter font-semibold text-[16px] leading-[145%] text-[#101928]">
@@ -237,8 +244,19 @@ const ContactUs: React.FC = () => {
           </section>
         </div>
       </div>
+
+      {/* Modal */}
+      <ContactUsModal
+        open={contactOpen}
+        onClose={() => setContactOpen(false)}
+        onSend={(category, message) => {
+          // Placeholder until controller is ready
+          // console.log({ category, message });
+
+          // when ready, call your controller here
+          // await api.support.createTicket({ category, message })
+        }}
+      />
     </div>
   );
-};
-
-export default ContactUs;
+}

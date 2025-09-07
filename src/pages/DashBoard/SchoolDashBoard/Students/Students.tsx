@@ -13,6 +13,8 @@ import {
 
 import useStore from "@/store";
 import { getUserState } from "@/store/authStore";
+import { auth } from '@/firebase';
+import { getProfileState } from '@/store/profileStore';
 
 /* ------------------------------------------------------------------
 Types (kept minimal and aligned with your existing table)
@@ -165,21 +167,22 @@ Main component (table layout preserved exactly)
 const Students: React.FC = () => {
   const navigate = useNavigate();
 
-  // Read role from auth store (robustly)
-  const authState = useStore(getUserState) as any;
-  const roleRaw: string =
-    (authState?.user?.role ||
-      authState?.role ||
-      authState?.user_type ||
-      "") ?? "";
+  const [user] = useStore(getUserState);
+  let roleRaw: string = user?.role ?? "";
+  console.log('roleRaw', roleRaw);
+  if (!roleRaw) {
+    roleRaw = sessionStorage.getItem("role") ?? "";
+  }
   const role = roleRaw.toString().toLowerCase();
+
+  console.log('role', role);
 
   // Controls
   const [query, setQuery] = useState('');
   const [sortKey, setSortKey] = useState<'name' | 'class' | 'teacher'>('name');
   const [currentPage, setCurrentPage] = useState(1);
 
-  // NEW: Status filter (Active / Disabled)
+  // NEW: Status filter (Active / Disab led)
   const [statusFilter, setStatusFilter] = useState<'active' | 'disabled'>('active');
 
   // Server-backed pagination counts
@@ -211,8 +214,9 @@ const Students: React.FC = () => {
         setErrorMsg(null);
 
         // Choose endpoint by role
-        const isSchoolAdmin = role === "schooladmin";
+        const isSchoolAdmin = role === "schoolAdmin";
         const isTeacher = role === "teacher";
+
 
         let res: { data: TListResponse } | undefined;
 

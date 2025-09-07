@@ -388,10 +388,9 @@ export const AllProgressContent = (id: number) => {
   return axios.get(`/content/tracking/all`, { params: { id } });
 };
 
-export const 
- = () => {
+export const GetLicense = () => {
   return axios.get(`license`);
-};
+}; 
 
 export const GetSchoolStudentStat = (
   id: string,

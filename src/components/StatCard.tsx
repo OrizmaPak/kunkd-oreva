@@ -10,14 +10,15 @@ interface StatCardProps {
   /** e.g. "200/300" */
   value: string;
   onView: () => void;
+  isDashboard?: boolean;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ icon, label, value, onView }) => (
+const StatCard: React.FC<StatCardProps> = ({ icon, label, value, onView, isDashboard=false }) => (
   <div className="bg-white rounded-3xl border border-gray-200 px-6 py-8 flex items-center justify-between">
     {/* icon */}
-    <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-50">
+     {!isDashboard && <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-50">
       {icon ? (
-        typeof icon === 'string' && icon.endsWith('.svg') ? (
+        typeof icon === 'string' ? (
           <img src={icon} alt="icon" className="w-full h-full object-cover" />
         ) : (
           <>{icon}</>
@@ -25,7 +26,7 @@ const StatCard: React.FC<StatCardProps> = ({ icon, label, value, onView }) => (
       ) : (
         <span className="text-gray-300 text-xl">—</span>
       )}
-    </div>
+    </div>}
 
     {/* label + value */}
     <div className="flex-1 ml-4">
@@ -43,9 +44,19 @@ const StatCard: React.FC<StatCardProps> = ({ icon, label, value, onView }) => (
     </div>
 
     {/* view link */}
-    <button onClick={onView} className="text-sm text-blue-500 hover:underline">
+    {isDashboard ? <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-50">
+      {icon ? (
+        typeof icon === 'string' ? (
+          <img src={icon} alt="icon" className="w-full h-full object-cover" />
+        ) : (
+          <>{icon}</>
+        )
+      ) : (
+        <span className="text-gray-300 text-xl">—</span>
+      )}
+    </div> : <button onClick={onView} className="text-sm text-blue-500 hover:underline">
       View
-    </button>
+    </button>}
   </div>
 );
 
