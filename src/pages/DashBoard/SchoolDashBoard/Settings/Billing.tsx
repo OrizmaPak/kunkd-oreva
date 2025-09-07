@@ -6,8 +6,14 @@ import Button from "@/components/Button";
 import ClassesIcon from "@/assets/components/ClassesIcon";
 import TeachersIcon from "@/assets/components/TeachersIcon";
 import StudentsIcon from "@/assets/components/StudentsIcon";
+import { useNavigate } from "react-router-dom";
+import Pagination from "@/components/Pagination";
+import { GetPlans } from "@/api/api";
 
 const Billing = () => {
+  const navigate = useNavigate();
+  const plans = GetPlans()
+  console.log('plans', plans)
   const { data: dataLicense } = useGetLicense();
   const license: TLicense = dataLicense?.data.data.school.licence;
 
@@ -19,7 +25,7 @@ const Billing = () => {
     status: "Completed" | "Pending" | "Failed";
   };
 
-  const [activeTab, setActiveTab] = useState<"All" | "Assigned" | "Ongoing" | "Completed">("Assigned");
+  const [activeTab, setActiveTab] = useState<"All" | "Pending" | "Failed" | "Completed">("All");
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "amount_desc" | "amount_asc">("newest");
   const [page, setPage] = useState(1);
@@ -43,7 +49,8 @@ const Billing = () => {
     const list = history.filter((h) => {
       const hay = `${h.date} ${h.plan} ${h.status}`.toLowerCase();
       const q = query.trim().toLowerCase();
-      if (activeTab === "Ongoing" && h.status !== "Pending") return false;
+      if (activeTab === "Pending" && h.status !== "Pending") return false;
+      if (activeTab === "Failed" && h.status !== "Failed") return false;
       if (activeTab === "Completed" && h.status !== "Completed") return false;
       return hay.includes(q);
     });
@@ -71,7 +78,11 @@ const Billing = () => {
         : status === "Pending"
         ? "bg-gray-100 text-gray-700 border-gray-200"
         : "bg-red-100 text-red-700 border-red-200";
-    return <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${styles}`}>{status}</span>;
+    return (
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full border text-xs font-medium ${styles}`}>
+        {status}
+      </span>
+    );
   };
 
   return (
@@ -159,6 +170,10 @@ const Billing = () => {
               size="sm"
               backgroundColor="green"
               className="px-[14px] rounded-full"
+              onClick={() => {
+                localStorage.setItem('from', '/schooldashboard/settings');
+                navigate('/packages');
+              }}
             >
               Upgrade plan
             </Button>
@@ -171,10 +186,13 @@ const Billing = () => {
         <div className="flex items-center justify-between">
           {/* Tabs */}
           <div className="inline-flex rounded-lg border border-gray-200 bg-white p-1">
-            {(["Assigned", "Ongoing", "Completed"] as const).map((tab) => (
+            {(["All", "Pending", "Failed", "Completed"] as const).map((tab) => (
               <button
                 key={tab}
-                onClick={() => { setActiveTab(tab); setPage(1); }}
+                onClick={() => {
+                  setActiveTab(tab);
+                  setPage(1);
+                }}
                 className={`px-3 py-1.5 text-sm rounded-md transition ${
                   activeTab === tab ? "bg-[#ebf5e9] text-[#2d7a34]" : "text-gray-600 hover:bg-gray-50"
                 }`}
@@ -253,44 +271,13 @@ const Billing = () => {
           </table>
         </div>
 
-        {/* Pagination */}
-        <div className="mt-3 flex items-center justify-between text-sm text-gray-600">
-          <span>Page {page} of {totalPages}</span>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              className="inline-flex items-center rounded-lg border border-gray-200 bg-white px-3 py-1.5 hover:bg-gray-50"
-            >
-              ← Previous
-            </button>
-
-            {/* simple page numbers */}
-            <div className="hidden md:flex items-center gap-1">
-              {Array.from({ length: totalPages }).slice(0, Math.min(totalPages, 12)).map((_, i) => {
-                const n = i + 1;
-                return (
-                  <button
-                    key={n}
-                    onClick={() => setPage(n)}
-                    className={`h-8 w-8 rounded-md text-sm ${
-                      page === n ? "bg-emerald-600 text-white" : "border border-gray-200 bg-white hover:bg-gray-50"
-                    }`}
-                  >
-                    {n}
-                  </button>
-                );
-              })}
-              {totalPages > 12 && <span className="px-2">…</span>}
-            </div>
-
-            <button
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              className="inline-flex items-center rounded-lg border border-gray-200 bg-white px-3 py-1.5 hover:bg-gray-50"
-            >
-              Next →
-            </button>
-          </div>
+        {/* Pagination (shared component for consistency) */}
+        <div className="mt-3 flex items-center justify-end">
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(p) => setPage(Math.max(1, Math.min(totalPages, p)))}
+          />
         </div>
       </section>
     </div>

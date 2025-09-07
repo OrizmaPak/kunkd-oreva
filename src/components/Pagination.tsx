@@ -39,7 +39,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
   const pages = buildPages();
 
   return (
-    <div className="flex items-center justify-between mt-6 select-none">
+    <div className="flex w-full items-center justify-between mt-6 select-none">
       {/* Page indicator */}
       <span className="text-sm text-gray-500">
         Page {currentPage} of {totalPages}

@@ -342,6 +342,10 @@ export const CancelSubscription = (payload: string) => {
   return axios.post(`/subscribe/cancel`, payload);
 };
 
+export const CancelSubscriptionUser = (payload: string) => {
+  return axios.post(`/subscribe/cancel/user?sub=${payload}`);
+};
+
 export const GetSchoolProfileForStudent = (payload: string) => {
   return axios.get(`/school/profile/${payload}`);
 };

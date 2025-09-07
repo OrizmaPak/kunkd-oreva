@@ -181,11 +181,13 @@ function App() {
   //   };
   //   // eslint-disable-next-line
   // }, []);
+
   const [childProfile, setChildProfile] = useState<string>(
     (sessionStorage.getItem("profileId")
       ? sessionStorage.getItem("profileId")
       : "") as string
   );
+  
   useEffect(() => {
     sessionStorage.setItem("profileId", childProfile as string);
   }, [childProfile]);

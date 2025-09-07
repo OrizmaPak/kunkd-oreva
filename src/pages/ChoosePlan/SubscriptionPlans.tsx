@@ -68,7 +68,12 @@ const SubscriptionPlans = () => {
     const currencyIso =
       countryCode === "NG" ? "NGN" : countryCode === "UK" ? "GBP" : "USD";
     if (!planData?.plans) {
-      if (sessionStorage.getItem("gotToHome") === "true") {
+      const fromValue = localStorage.getItem("from");
+      if (fromValue) {
+        localStorage.removeItem("from");
+        navigate(fromValue);
+        return;
+      } else if (sessionStorage.getItem("gotToHome") === "true") {
         navigate("/parent");
       } else {
         navigate("/childprofilesetup");
@@ -165,8 +170,16 @@ const SubscriptionPlans = () => {
                 <td style={tdStyle} className="text-center">
                   <Button
                     varient="outlined"
-                    className="rounded-full border-customGreen px-[30px]  "
-                    onClick={() => navigate("/welcomepage")}
+                    className="rounded-full border-customGreen px-[30px]"
+                    onClick={() => {
+                      const fromValue = localStorage.getItem("from");
+                      if (fromValue) {
+                        localStorage.removeItem("from");
+                        navigate(fromValue);
+                      } else {
+                        navigate("/welcomepage");
+                      }
+                    }}
                   >
                     <span className="text-[#AEB7BF]">Choose</span>
                   </Button>
