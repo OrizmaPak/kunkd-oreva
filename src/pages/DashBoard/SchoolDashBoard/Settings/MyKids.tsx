@@ -1,15 +1,16 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createPortal } from "react-dom";
 
 // ⬇️ If your project has a profile store, import it.
 // We guard all usages so this file won’t break if the store path/name differs.
 let useProfileStore: any = null;
-try {
+// try {
   // Adjust this import path if your store lives elsewhere.
   // If it throws (path mismatch), we will gracefully fall back to sessionStorage.
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  useProfileStore = require("../../../../store/profileStore").default;
-} catch { /* no-op */ }
+//   useProfileStore = require("../../../../store/profileStore").default;
+// } catch { /* no-op */ }
 
 // ---------- Types ----------
 type StudentInfo = {
@@ -78,7 +79,7 @@ function Modal({
   isOpen,
   onClose,
   children,
-  headerTint = "bg-[#8FA01F]", // lime/green brand bar per Figma
+  headerTint = "bg-[#9FC43E]", // lime/green brand bar per Figma
   wide = false,
 }: {
   title: string;
@@ -89,14 +90,16 @@ function Modal({
   wide?: boolean;
 }) {
   if (!isOpen) return null;
-  return (
-    <div className="fixed inset-0 z-50">
+  return createPortal(
+    <div className="fixed inset-0 z-[2000]">
       <div className="absolute inset-0 bg-black/30" onClick={onClose} />
       <div
         className={classNames(
           "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white shadow-xl",
           wide ? "w-[560px] max-w-[92vw]" : "w-[460px] max-w-[92vw]"
         )}
+        role="dialog"
+        aria-modal="true"
       >
         <div className={classNames("flex items-center justify-between rounded-t-2xl px-5 py-3 text-white", headerTint)}>
           <h3 className="text-base font-semibold">{title}</h3>
@@ -110,7 +113,8 @@ function Modal({
         </div>
         <div className="px-6 py-5">{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -179,7 +183,7 @@ function EditProfileForm({
         </button>
         <button
           type="submit"
-          className="rounded-full bg-[#8FA01F] px-5 py-2.5 text-sm font-semibold text-white shadow hover:brightness-95"
+          className="rounded-full bg-[#9FC43E] px-5 py-2.5 text-sm font-semibold text-white shadow hover:brightness-95"
         >
           Save
         </button>
@@ -223,16 +227,19 @@ const MyKids: React.FC = () => {
 
   // menu/open states
   const [openMenuFor, setOpenMenuFor] = useState<number | null>(null);
-  const menuRef = useRef<HTMLDivElement | null>(null);
+  const menuRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+
   useEffect(() => {
-    const onClickAway = (e: MouseEvent) => {
-      if (!menuRef.current) return;
-      if (!(e.target instanceof Node)) return;
-      if (!menuRef.current.contains(e.target)) setOpenMenuFor(null);
+    const onDocClick = (e: MouseEvent) => {
+      if (openMenuFor == null) return;
+      const node = menuRefs.current.get(openMenuFor);
+      if (!node) { setOpenMenuFor(null); return; }
+      if (e.target instanceof Node && node.contains(e.target)) return; // clicked inside
+      setOpenMenuFor(null); // clicked outside
     };
-    document.addEventListener("mousedown", onClickAway);
-    return () => document.removeEventListener("mousedown", onClickAway);
-  }, []);
+    document.addEventListener("click", onDocClick);
+    return () => document.removeEventListener("click", onDocClick);
+  }, [openMenuFor]);
 
   // modals
   const [schoolFor, setSchoolFor] = useState<KidProfile | null>(null);
@@ -335,7 +342,13 @@ const MyKids: React.FC = () => {
                   </div>
 
                   {/* 3-dots menu */}
-                  <div className="relative" ref={menuRef}>
+                  <div
+                    className="relative"
+                    ref={(el) => {
+                      if (el) menuRefs.current.set(kid.id, el);
+                      else menuRefs.current.delete(kid.id);
+                    }}
+                  >
                     <button
                       aria-label="More options"
                       onClick={() => setOpenMenuFor((v) => (v === kid.id ? null : kid.id))}
@@ -410,7 +423,7 @@ const MyKids: React.FC = () => {
         title="Edit Profile Info"
         isOpen={!!editFor}
         onClose={() => setEditFor(null)}
-        headerTint="bg-[#8FA01F]"
+        headerTint="bg-[#9FC43E]"
         wide
       >
         {editFor ? (
@@ -430,7 +443,7 @@ const MyKids: React.FC = () => {
         title="Remove Child Profile"
         isOpen={!!removeFor}
         onClose={() => setRemoveFor(null)}
-        headerTint="bg-[#8FA01F]"
+        headerTint="bg-[#9FC43E]"
       >
         <div className="space-y-6">
           <p className="text-sm text-gray-600">
@@ -448,7 +461,7 @@ const MyKids: React.FC = () => {
                 if (removeFor) performRemove(removeFor.id);
                 setRemoveFor(null);
               }}
-              className="rounded-full bg-[#8FA01F] px-5 py-2.5 text-sm font-semibold text-white shadow hover:brightness-95"
+              className="rounded-full bg-[#9FC43E] px-5 py-2.5 text-sm font-semibold text-white shadow hover:brightness-95"
             >
               Yes, remove profile
             </button>

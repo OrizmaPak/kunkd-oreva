@@ -8,7 +8,7 @@ import MyKids from "./MyKids";
 import { useNavigate } from "react-router-dom";
 
 const Settings = () => {
-  const navigation = useNavigate();
+  const navigate = useNavigate();
   const [active, setActive] = useState("1");
   const [user] = useStore(getUserState);
   const isTeacher = user?.role?.toLowerCase() === "teacher";
@@ -18,7 +18,7 @@ const Settings = () => {
     // If you already have a route, update this path:
     // e.g. navigate("/after-parent-sign-in/create-child")
     // For now we just navigate to the profile setup page if present.
-    navigate("/afterparentsignin/profilesetuppage", { replace: false });
+    navigate("/profilesetup", { replace: false });
   };
 
   return (
