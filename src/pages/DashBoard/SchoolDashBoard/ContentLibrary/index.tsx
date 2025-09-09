@@ -48,6 +48,28 @@ import { getUserState } from "@/store/authStore";
 import { AlertDialogOverlay } from "@chakra-ui/react";
 
 
+// --- Empty state for Favourites (Stories/Languages) ---
+const EmptyFavourites: React.FC<{ label: "Stories" | "Languages" }> = ({ label }) => (
+  <div
+    className="w-full rounded-2xl border border-gray-200/70 bg-white dark:bg-slate-900/40 p-10 flex flex-col items-center justify-center text-center shadow-sm"
+    data-testid={`empty-${label.toLowerCase()}`}
+  >
+    {/* envelope/image-ish icon */}
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+         fill="currentColor" className="h-10 w-10 text-gray-300 dark:text-slate-600">
+      <path d="M3 6.75A2.25 2.25 0 0 1 5.25 4.5h13.5A2.25 2.25 0 0 1 21 6.75v10.5A2.25 2.25 0 0 1 18.75 19.5H5.25A2.25 2.25 0 0 1 3 17.25V6.75Zm2.25-.75a.75.75 0 0 0-.75.75V8.7l3.098-2.066a1.5 1.5 0 0 1 1.704.01l4.593 3.062a.75.75 0 0 0 .84-.001l2.517-1.696A1.5 1.5 0 0 1 19.5 8.7v-1.2a.75.75 0 0 0-.75-.75H5.25Z"/>
+    </svg>
+
+    <h3 className="mt-4 text-base font-semibold text-gray-700 dark:text-gray-200">
+      No favourites for {label}
+    </h3>
+    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 max-w-md">
+      When you add {label.toLowerCase()} to favourites, they’ll appear here.
+    </p>
+  </div>
+);
+
+
 /* ---------------- helper: loud trace ---------------- */
 const trace = (...msg: any[]) =>
   console.log('%c[ContentLibrary]', 'color:#BCD678;font-weight:bold', ...msg);
@@ -138,6 +160,7 @@ const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
   const [user] = useStore(getUserState);
   const defaultTabs: Omit<Tab, "id">[] = [
     // { label: "Literacy", icon: literacy },
+    { label: "For you", icon: foryou },
     ...(user?.role !== 'usern' ? [
       { label: "Stories", icon: story },
       { label: "Languages", icon: languages }
@@ -151,6 +174,7 @@ const [favLangsBySub, setFavLangsBySub] = useState<Record<string, Book[]>>({});
 
   // const location = useLocation() as { state?: any };
   const [favMode, setFavMode] = useState(state === "fav");
+  const [favLoading, setFavLoading] = useState(false);
   useEffect(() => {
     console.log('State has changed:', state);
     // alert('State has changed:' + state);
@@ -301,26 +325,34 @@ const [favLangsBySub, setFavLangsBySub] = useState<Record<string, Book[]>>({});
 
 
   useEffect(() => {
-    // if (favMode) return; // do not overwrite favourites view
-    const fetchData = favMode ? GetLikedContent : GetSubCategories;
-
-    fetchData().then((res) => {
-      console.log("res", res);
-      if (res.data.status && Array.isArray(res.data.data)) {
+    // For favourites view, we don't need to fetch subcategories or mutate tabsConfig from API.
+    if (favMode) {
+      // keep default tabs (Stories/Languages), no IDs needed in fav view
+      setAllCats([]); // ensure non-favourites logic won't run accidentally
+      setTabsConfig(defaultTabs.map((tab) => ({ ...tab, id: null })));
+      return;
+    }
+  
+    // Non-favourites: fetch subcategories once and set ids for Stories/Languages
+    GetSubCategories().then((res) => {
+      if (res?.data?.status && Array.isArray(res.data.data)) {
         const cats = res.data.data;
-        console.log("cats", cats);
-        setAllCats(cats);            // <-- NEW
+        setAllCats(cats);
         const populated: Tab[] = defaultTabs.map((tab) => {
-          const match = cats.find((c:any) => c.name === tab.label);
+          const match = cats.find((c: any) => c.name === tab.label);
           return { ...tab, id: match?.id ?? null };
         });
         setTabsConfig(populated);
       } else {
-        // fallback: assign null IDs
+        setAllCats([]);
         setTabsConfig(defaultTabs.map((tab) => ({ ...tab, id: null })));
       }
+    }).catch(() => {
+      setAllCats([]);
+      setTabsConfig(defaultTabs.map((tab) => ({ ...tab, id: null })));
     });
   }, [favMode]);
+  
 
   // Get profileId from sessionStorage
   const profileId = sessionStorage.getItem("profileId");
@@ -438,10 +470,12 @@ const [favLangsBySub, setFavLangsBySub] = useState<Record<string, Book[]>>({});
 
   const loadFavourites = React.useCallback(async () => {
     const pid = sessionStorage.getItem("profileId") || "";
+    setFavLoading(true);
     if (!pid) {
       setCategories([]); setSubcategories([]); setCrumb(["Favourites"]);
       setFavBuckets({ stories: [], languages: [] });
       setFavStoriesBySub({}); setFavLangsBySub({});
+      setFavLoading(false);
       return;
     }
     try {
@@ -464,6 +498,8 @@ const [favLangsBySub, setFavLangsBySub] = useState<Record<string, Book[]>>({});
       setCategories([]); setSubcategories([]); setCrumb(["Favourites"]);
       setFavBuckets({ stories: [], languages: [] });
       setFavStoriesBySub({}); setFavLangsBySub({});
+    } finally {
+      setFavLoading(false);
     }
   }, [activeIndex, tabsConfig, partitionFavouriteRecords]);
   
@@ -677,6 +713,18 @@ useEffect(() => {
   const isStoriesTab = activeLabel === "Stories";
   const isLangsTab = activeLabel === "Languages";
   const isLiteracyTab = activeLabel === "Literacy";
+
+  // ── Favourites render helpers (avoid relying on allCats)
+  const favTabLabel: "Stories" | "Languages" =
+    tabsConfig[activeIndex]?.label === "Languages" ? "Languages" : "Stories";
+
+  const favSelected: Book[] =
+    favTabLabel === "Languages" ? (favBuckets.languages ?? []) : (favBuckets.stories ?? []);
+
+  // Is the active favourites tab empty?
+  const showFavEmpty = favMode && !favLoading && favSelected.length === 0;
+
+
 
   // 1) Fetch categories whenever the active **tab** changes
   React.useEffect(() => {
@@ -1089,158 +1137,169 @@ useEffect(() => {
         />
       ) : (
         /* 2) Otherwise show the normal content area (reader / video / overview / categories) */
-        <div className="-mt-0 space-y-8">
-          {readingBook ? (
-            readingLoading ? (
-              <div className="flex justify-center py-20">
-                <span>Loading book…</span>
-              </div>
-            ) : (
-              <ReadingComponent
-                ref={readingRef}
-                book={readingBook}
-                onExit={closeRead}
-                pages={bookPages}
-                withIntroPages={false}
-                onRetake={handleRetake}
-                onViewAnswers={handleViewAnswers}
-                onAnswersUpdate={(ans) => {
-                  console.log("Parent got answers from ReadingComponent:", ans);
-                  setQuizAnswers(ans);
+<>
+  {readingBook ? (
+    readingLoading ? (
+      <div className="py-14 text-center text-sm text-gray-500">Loading…</div>
+    ) : (
+      <ReadingComponent
+        ref={readingRef}
+        book={readingBook}
+        onExit={closeRead}
+        pages={bookPages}
+        withIntroPages={false}
+        onRetake={handleRetake}
+        onViewAnswers={handleViewAnswers}
+        onAnswersUpdate={(ans) => {
+          console.log("Parent got answers from ReadingComponent:", ans);
+          setQuizAnswers(ans);
+        }}
+      />
+    )
+  ) : watchingBook ? (
+    <VideoComponent
+      book={{
+        id: watchingBook.id,
+        title: watchingBook.title,
+        coverUrl: watchingBook.coverUrl,
+        progress: 0,
+      }}
+      key={videoSrc || watchingBook.id}
+      videoSrc={videoSrc}
+      poster={videoPoster}
+      title={watchingBook.title}
+      onRetake={handleRetake}
+      onClose={closeWatch}
+      onViewAnswers={handleViewAnswers}
+      onComplete={() => handleMediaComplete(watchingBook)}
+    />
+  ) : overviewChecking ? (
+    <div className="py-14 text-center text-sm text-gray-500">Loading…</div>
+  ) : (selectedBook && !readingBook && !watchingBook) ? (
+    <BookOverview
+      book={selectedBook}
+      crumb={displayCrumbs}
+      onBack={closeBook}
+      onRead={() => startRead(selectedBook.id)}
+      onWatch={() => startWatch(selectedBook.id)}
+      audioSrc={QueenMoremi}
+    />
+  ) : favMode ? (
+    // ─────────────── FAVOURITES-ONLY RENDER (no allCats/subcats) ───────────────
+    favLoading ? (
+      <div className="py-14 text-center text-sm text-gray-500">Loading favourites…</div>
+    ) : showFavEmpty ? (
+      <div className="px-4 sm:px-6 lg:px-8 mt-6">
+        <EmptyFavourites label={favTabLabel} />
+      </div>
+    ) : (
+      <div className="mt-6 space-y-8">
+        <BookCategory
+          key={`fav-${favTabLabel}`}
+          tabLabel={favTabLabel}
+          categoryName={favTabLabel}
+          books={favSelected}
+          hasSub={false}
+          expanded={true}
+          onSeeAll={undefined}
+          onBookClick={(book: any, bc: any) => {
+            openBook(book.id);
+            setCrumb(["Favourites", favTabLabel, book.title]);
+          }}
+        />
+      </div>
+    )
+  ) : (
+    // ─────────────── NON-FAVOURITES RENDER (existing logic) ───────────────
+    <div className="mt-6 space-y-8">
+      {isStoriesTab &&
+        (() => {
+          const storiesCat = allCats.find((c: any) => c.name === "Stories");
+          const rows: Array<{ name: string; subId: number | null }> =
+            (storiesCat?.sub_categories ?? []).map((s: any) => ({
+              name: s?.name ?? "",
+              subId: typeof s?.id === "number" ? s.id : null,
+            }));
+
+          const visibleRows = rows.filter(r =>
+            !showAllStories || r.name === (storiesActiveSubSlug ?? r.name)
+          );
+
+          return visibleRows.map((row) => {
+            const originalIndex = rows.findIndex(r => r.subId === row.subId);
+            const nextTwo: number[] = [];
+            for (let k = originalIndex + 1; k <= originalIndex + 2 && k < rows.length; k++) {
+              const nid = rows[k]?.subId;
+              if (typeof nid === "number") nextTwo.push(nid);
+            }
+
+            return (
+              <BookCategory
+                key={`${row.name}-${row.subId ?? "x"}`}
+                subId={row.subId}
+                categoryName={row.name}
+                tabLabel="Stories"
+                expanded={showAllStories && row.name === storiesActiveSubSlug}
+                onSeeAll={() => {
+                  if (showAllStories && row.name === storiesActiveSubSlug) {
+                    setShowAllStories(false);
+                    setStoriesActiveSubSlug(null);
+                  } else {
+                    setShowAllStories(true);
+                    setStoriesActiveSubSlug(row.name);
+                  }
                 }}
+                onBookClick={(book, bc) => {
+                  openBook(book.id);
+                  setCrumb([...bc, book.title]);
+                }}
+                prefetchNext={nextTwo}
               />
-            )
-          ) : watchingBook ? (
-            <VideoComponent
-              book={{
-                id: watchingBook.id,
-                title: watchingBook.title,
-                coverUrl: watchingBook.coverUrl,
-                progress: 0,
+            );
+          });
+        })()}
+
+      {isLangsTab &&
+        displayList
+          .filter(cat => !showAllLanguages || cat.name === languagesActiveSubSlug)
+          .map(cat => (
+            <BookCategory
+              subId={cat.subId}
+              key={cat.name}
+              categoryName={cat.name}
+              tabLabel="Languages"
+              parentCategory={undefined}
+              books={cat.books}
+              hasSub={!!cat.subId}
+              onSeeAll={() => handleLanguagesSeeAll(cat.name)}
+              expanded={showAllLanguages && cat.name === languagesActiveSubSlug}
+              onBookClick={(book: any, bc: any) => {
+                openBook(book.id);
+                setCrumb([...bc, book.title]);
               }}
-              key={videoSrc || watchingBook.id}
-              videoSrc={videoSrc}
-              poster={videoPoster}
-              title={watchingBook.title}
-              onRetake={handleRetake}
-              onClose={closeWatch}
-              onViewAnswers={handleViewAnswers}
-              onComplete={() => handleMediaComplete(watchingBook)}
             />
-          ) : /* don't mount overview while checking or if guard failed */ 
-            (selectedBook && !overviewChecking) ? (
-            <BookOverview
-              book={selectedBook}
-              crumb={crumbsBeforeBook}
-              onBack={closeBook}
-              onRead={(b: any) => startRead(b.id)}
-              onWatch={(b: any) => startWatch(b.id)}
-              audioSrc={QueenMoremi}
-            />
-          ) : (
-            <>
-              {/* ───── Stories tab ───── */}
-              {isStoriesTab &&
-                (() => {
-                  // full ordered array of Stories subcats from `allCats`
-                  const storiesCat = allCats.find((c: any) => c.name === "Stories");
-                  const rows: Array<{ name: string; subId: number | null }> =
-                    (storiesCat?.sub_categories ?? []).map((s: any) => ({
-                      name: s?.name ?? "",
-                      subId: typeof s?.id === "number" ? s.id : null,
-                    }));
+          ))}
 
-                  // this is what actually gets shown (respecting Show all toggle)
-                  const visibleRows = rows.filter(r =>
-                    !showAllStories || r.name === (storiesActiveSubSlug ?? r.name)
-                  );
-
-                  return visibleRows.map((row, idx) => {
-                    // compute neighbors from the ORIGINAL `rows`, not `visibleRows`
-                    const originalIndex = rows.findIndex(r => r.subId === row.subId);
-                    const nextTwo: number[] = [];
-                    for (let k = originalIndex + 1; k <= originalIndex + 2 && k < rows.length; k++) {
-                      const nid = rows[k]?.subId;
-                      if (typeof nid === "number") nextTwo.push(nid);
-                    }
-
-                    console.log(
-                      "%c[ContentLibrary] prefetchNext (Stories)",
-                      "color:#BCD678;font-weight:bold",
-                      { for: row.name, subId: row.subId, nextTwo }
-                    );
-
-                    return (
-                      <BookCategory
-                        key={`${row.name}-${row.subId ?? "x"}`}
-                        subId={row.subId}
-                        categoryName={row.name}
-                        tabLabel="Stories"
-                        expanded={showAllStories && row.name === storiesActiveSubSlug}
-                        onSeeAll={() => {
-                          if (showAllStories && row.name === storiesActiveSubSlug) {
-                            setShowAllStories(false);
-                            setStoriesActiveSubSlug(null);
-                          } else {
-                            setShowAllStories(true);
-                            setStoriesActiveSubSlug(row.name);
-                          }
-                        }}
-                        onBookClick={(book, bc) => {
-                          openBook(book.id);
-                          setCrumb([...bc, book.title]);
-                        }}
-                        prefetchNext={nextTwo}
-                      />
-                    );
-                  });
-                })()}
-
-              {/* ───── Languages tab ───── */}
-              {isLangsTab &&
-                displayList
-                  .filter(cat =>
-                    !showAllLanguages || cat.name === languagesActiveSubSlug
-                  )
-                  .map(cat => (
-                    <BookCategory
-                    subId={cat.subId}
-                      key={cat.name}
-                      categoryName={cat.name}
-                      tabLabel="Languages"
-                      parentCategory={undefined}
-                      books={cat.books}
-                      hasSub={!!cat.subId}
-                      onSeeAll={() => handleLanguagesSeeAll(cat.name)}
-                      expanded={showAllLanguages && cat.name === languagesActiveSubSlug}
-                      onBookClick={(book: any, bc: any) => {
-                        openBook(book.id);
-                        setCrumb([...bc, book.title]);
-                      }}
-                    />
-                  ))}
-
-              {/* ───── For-you tab ───── */}
-              {isForYouTab &&
-                displayList.map((cat) => (
-                  <BookCategory
-                    key={cat.name}
-                    tabLabel="For you"
-                    categoryName={cat.name}
-                    books={cat.books}
-                    hasSub={false}
-                    expanded={!!expandedSimple[cat.name]}
-                    onSeeAll={() => toggleForYouRow(cat.name)}
-                    onBookClick={(book: any, bc: any) => {
-                      openBook(book.id);
-                      setCrumb([...bc, book.title]);
-                    }}
-                    emptyMsg={cat.name === "Continue Reading" ? "No ongoing content yet" : undefined}
-                  />
-                ))}
-            </>
-          )}
-        </div>
+      {isForYouTab &&
+        displayList.map((cat) => (
+          <BookCategory
+            key={cat.name}
+            tabLabel="For you"
+            categoryName={cat.name}
+            books={cat.books}
+            hasSub={false}
+            expanded={!!expandedSimple[cat.name]}
+            onSeeAll={() => toggleForYouRow(cat.name)}
+            onBookClick={(book: any, bc: any) => {
+              openBook(book.id);
+              setCrumb([...bc, book.title]);
+            }}
+            emptyMsg={cat.name === "Continue Reading" ? "No ongoing content yet" : undefined}
+          />
+        ))}
+    </div>
+  )}
+</>
       )}
 
       {/* --------- MODALS & QUIZ (only when NOT reviewing) --------- */}
