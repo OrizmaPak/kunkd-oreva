@@ -340,16 +340,22 @@ const KidCard = ({
                     onClick={openEditModal}
                     className="p-2 px-4   flex gap-2  justify-start items-center"
                   >
-                    <img loading="lazy" src={PencilIcon} alt="pencil icon" />
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.33333 10.6667H2.28333L8.8 4.15L7.85 3.2L1.33333 9.71667V10.6667ZM0 12V9.16667L8.8 0.383333C8.93333 0.261111 9.08056 0.166667 9.24167 0.0999999C9.40278 0.0333332 9.57222 -1.19209e-07 9.75 -1.19209e-07C9.92778 -1.19209e-07 10.1 0.0333332 10.2667 0.0999999C10.4333 0.166667 10.5778 0.266667 10.7 0.4L11.6167 1.33333C11.75 1.45556 11.8472 1.6 11.9083 1.76667C11.9694 1.93333 12 2.1 12 2.26667C12 2.44444 11.9694 2.61389 11.9083 2.775C11.8472 2.93611 11.75 3.08333 11.6167 3.21667L2.83333 12H0ZM8.31667 3.68333L7.85 3.2L8.8 4.15L8.31667 3.68333Z" fill="#757D87"/>
+</svg>
+
                     <span className="text3">Edit profile</span>
                   </button>
                 </Menu.Item>
 
                 <Menu.Item>
                   <button className="p-2 px-4  flex gap-2  justify-start items-center">
-                    <img loading="lazy" src={DeleteIcon} alt="delete icon" />
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.6665 12C2.29984 12 1.98595 11.8694 1.72484 11.6083C1.46373 11.3472 1.33317 11.0333 1.33317 10.6667V2H0.666504V0.666667H3.99984V0H7.99984V0.666667H11.3332V2H10.6665V10.6667C10.6665 11.0333 10.5359 11.3472 10.2748 11.6083C10.0137 11.8694 9.69984 12 9.33317 12H2.6665ZM9.33317 2H2.6665V10.6667H9.33317V2ZM3.99984 9.33333H5.33317V3.33333H3.99984V9.33333ZM6.6665 9.33333H7.99984V3.33333H6.6665V9.33333Z" fill="#757D87"/>
+</svg>
+
                     <span className="text3"> Remove profile</span>
-                  </button>
+                  </button> 
                 </Menu.Item>
               </div>
             </Menu.Dropdown>

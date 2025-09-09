@@ -117,11 +117,11 @@
         countries?.find((c) => c.id === (parentDisplayCountryId ?? user?.country_id))?.name || "";
 
       return (
-        <div className="bg-white rounded-xl border border-x-none border-b-none border-gray-200 shadow-sm p-6 md:p-8">
+        <div className="bg-white rounded-xl  border-x-none border-b-none border-gray-200 shadow-sm p-6 md:p-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
             {/* Left rail */}
             <aside className="md:col-span-4">
-              <h2 className="text-[#1D2739] text-lg font-semibold">Parent Details</h2>
+              <h2 className="text-[#1D2739] font-Inter font-semibold" style={{ fontWeight: 600, fontSize: '16px', lineHeight: '145%', letterSpacing: '0%' }}>Parent Details</h2>
               <p className="text-sm text-[#667185] mt-1">Update your details here.</p>
 
               <button

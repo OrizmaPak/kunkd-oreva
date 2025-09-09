@@ -137,8 +137,8 @@ const generateAllSubcategories = (): Category[] => [
 const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
   const [user] = useStore(getUserState);
   const defaultTabs: Omit<Tab, "id">[] = [
-    { label: "Literacy", icon: literacy },
-    ...(user.role !== 'usern' ? [
+    // { label: "Literacy", icon: literacy },
+    ...(user?.role !== 'usern' ? [
       { label: "Stories", icon: story },
       { label: "Languages", icon: languages }
     ] : [])
