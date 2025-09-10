@@ -12,12 +12,15 @@ import BookCategory from "@/components/BookCategory";
 import BookOverview from "@/components/BookOverview";
 import { Book } from "@/components/BookCard";
 import ReadingComponent, { ReadingHandle } from "@/components/ReadingComponent";
-import { useSearchParams, useLocation } from "react-router-dom";import VideoComponent from "@/components/VideoComponent";
+import { useSearchParams, useLocation } from "react-router-dom";
+import VideoComponent from "@/components/VideoComponent";
 import WellDoneModal from "@/components/WellDoneModal";
 import QuizComponent, { QuizStats, UserAnswer } from "@/components/QuizComponent";
 import QuizResultModal from "@/components/QuizResultModal"
 import QueenMoremi from "@/audiobooks/QueenMoremi.mp3";
 import AnswerReviewModal from "@/components/AnswerReviewModal";
+import AudioComponent from "@/components/AudioComponent";
+
 
 import KojoAndLolaImage from "@/assets/Kojo and Lola.png";
 import KojoAndLolaImage1 from "@/assets/Kojo and Lola (1).png";
@@ -68,6 +71,26 @@ const EmptyFavourites: React.FC<{ label: "Stories" | "Languages" }> = ({ label }
     </p>
   </div>
 );
+
+/* helper: map ongoing payload → Book[] */
+const mapOngoingToBooks = (raw: any[]): Book[] => {
+  if (!Array.isArray(raw)) return [];
+  return raw.map((it: any) => {
+    const totalPages = Array.isArray(it.pages) ? it.pages.length : 0;
+    const pagesRead = Number(it.pages_read) || 0;
+    const progress =
+      totalPages > 0 ? Math.max(0, Math.min(100, Math.round((pagesRead * 100) / totalPages))) : 0;
+
+    return {
+      id: it.id,
+      title: it.name ?? "",
+      coverUrl: it.thumbnail ?? "",
+      progress,
+      is_liked: it.is_liked,
+    };
+  });
+};
+
 
 
 /* ---------------- helper: loud trace ---------------- */
@@ -272,6 +295,10 @@ const [favLangsBySub, setFavLangsBySub] = useState<Record<string, Book[]>>({});
   const [videoSrc, setVideoSrc] = useState<string>("");
   const [videoPoster, setVideoPoster] = useState<string>("");
 
+  // audio
+const [audioSrc, setAudioSrc] = useState<string>("");
+
+
   // ─── overview guard state ───
   const [overviewChecking, setOverviewChecking] = useState(false);
 
@@ -362,9 +389,10 @@ const [favLangsBySub, setFavLangsBySub] = useState<Record<string, Book[]>>({});
     const book = Number(searchParams.get("book")) || null;
     const read = searchParams.get("read") === profileId;
     const watch = searchParams.get("watch") === profileId;
-    return { tab, book, read, watch };
+    const listen = searchParams.get("listen") === profileId; // NEW
+    return { tab, book, read, watch, listen };
   }, [searchParams, profileId]);
-
+  
   const setTab = (idx: number) => setSearchParams({ tab: String(idx) });
 
   const openBook = (id: number) => {
@@ -454,6 +482,38 @@ const [favLangsBySub, setFavLangsBySub] = useState<Record<string, Book[]>>({});
     setVideoPoster("");
     setSearchParams({ tab: String(urlState.tab), book: String(urlState.book!) });
   };
+
+  const startListen = async (id: number) => {
+    trace("startListen()", id);
+    setAudioSrc("");
+    setSearchParams({ tab: String(urlState.tab), book: String(id), listen: profileId ?? "" });
+  
+    try {
+      const res = await GetContentById(String(id), profileId);
+      if (!res?.data?.status) {
+        showNotification({ title: "Notification", message: res?.data?.message || "Failed to load audio" });
+        return;
+      }
+      const data = res?.data?.data ?? res?.data;
+      // try to pick an audio media; fallback to first media if mp3
+      const audioItem = Array.isArray(data?.media)
+        ? data.media.find((m: any) =>
+            String(m?.type || m?.media_type || "").toLowerCase().includes("audio")
+          ) || data.media.find((m: any) => String(m?.file || "").toLowerCase().endsWith(".mp3"))
+        : null;
+  
+      setAudioSrc(audioItem?.file || "");
+    } catch (err) {
+      console.error("❌ failed to load audio data", err);
+      setAudioSrc("");
+    }
+  };
+  
+  const closeListen = () => {
+    setAudioSrc("");
+    setSearchParams({ tab: String(urlState.tab), book: String(urlState.book!) });
+  };
+  
 
   const closeBook = () => setSearchParams({ tab: String(urlState.tab) });
 
@@ -608,6 +668,8 @@ useEffect(() => {
 
   const readingBook = urlState.read ? selectedBook : null;
   const watchingBook = urlState.watch ? selectedBook : null;
+  const listeningBook = urlState.listen ? selectedBook : null;
+
 
   // ---------- quiz flow state ----------
   const [quizTarget, setQuizTarget] = useState<Book | null>(null);
@@ -727,108 +789,117 @@ useEffect(() => {
 
 
   // 1) Fetch categories whenever the active **tab** changes
-  React.useEffect(() => {
-    if (favMode) return; // do not overwrite favourites view
-    setMainSelected(null);
-    setSubRequested(false);
-    setSubcategories([]);
-    setCrumb([]);
-    setCategories([]);
+ // 1) Fetch categories whenever the active **tab** changes
+React.useEffect(() => {
+  if (favMode) return; // do not overwrite favourites view
+  let cancelled = false;
 
-    const load = async () => {
-      // 1) For-you -------------------------------
-      if (isForYouTab && state !== 'fav') {
-        // ensure profile id is read fresh on each entry to For You
-        // refreshOngoing();
-        try {
-          const res = await ContentForHome({});
-          if (res?.data?.status && res.data?.data) {
-            const cats = homeToCategories(res.data.data);
+  // always reset these small flags
+  setMainSelected(null);
+  setSubRequested(false);
+  setSubcategories([]);
+  setCrumb([]);
 
-            // prepend Continue Reading if we have anything
-            const withOngoing = 
-              Array.isArray(ongoingBooks) && ongoingBooks.length > 0
-                ? [
-                    {
-                      name: "Continue Reading", 
-                      books: ongoingBooks,
-                      hasSub: false,
-                    },
-                    ...cats,
-                  ]
-                : [
-                    // still show the row (empty) so users know the section exists
-                    { name: "Continue Reading", books: [], hasSub: false },
-                    ...cats,
-                  ];
+  // ⚠️ Keep current categories on screen for For you to avoid a blink
+  const shouldClearList = !(isForYouTab);
+  if (shouldClearList) setCategories([]);
 
-            setCategories(withOngoing);
-            return;
-          }
-        } catch (e) {
-          console.warn("ContentForHome failed, still showing Continue Reading stub", e);
-        }
+  const load = async () => {
+    // ------- For you (no flicker) -------
+    if (isForYouTab && state !== 'fav') {
+      try {
+        const pid = sessionStorage.getItem("profileId") || "";
 
+        // Fetch both payloads at once and set UI ONCE.
+        const [homeRes, ongoingRes] = await Promise.allSettled([
+          ContentForHome({}),
+          pid ? GetOngoingContents(pid) : Promise.resolve({ data: { data: { ongoing_contents: [] } } }),
+        ]);
 
-        // Even if ContentForHome fails, render at least the Continue Reading row.
-        setCategories([{ name: "Continue Reading", books: [], hasSub: false }]);
+        // Home cats
+        const homeCats =
+          homeRes.status === "fulfilled" && homeRes.value?.data?.status && homeRes.value?.data?.data
+            ? homeToCategories(homeRes.value.data.data)
+            : [];
+
+        // Ongoing → Book[]
+        const ongoingRaw =
+          ongoingRes.status === "fulfilled"
+            ? ongoingRes.value?.data?.data?.ongoing_contents
+            : [];
+        const ongoingLocal = mapOngoingToBooks(ongoingRaw || []);
+
+        // Build once, then set
+        const withOngoing =
+          ongoingLocal.length > 0
+            ? [{ name: "Continue Reading", books: ongoingLocal, hasSub: false }, ...homeCats]
+            : [{ name: "Continue Reading", books: [], hasSub: false }, ...homeCats];
+
+        if (!cancelled) setCategories(withOngoing);
+        return;
+      } catch (e) {
+        console.warn("For you load failed, show Continue Reading row only", e);
+        if (!cancelled) setCategories([{ name: "Continue Reading", books: [], hasSub: false }]);
         return;
       }
+    }
 
-      // 2) Stories ------------------------------
-      if (isStoriesTab) {
-        // (a) still waiting on GetSubCategories()
-        if (allCats.length === 0) {
-          console.log("allCats.length === 0", allCats.length, allCats);
-          // show one placeholder row so BookCategory shows header skeleton + book skeletons
-          setCategories([{ name: "", books: [], hasSub: false, subId: null }]);
-          return;
-        }
-
-        // (b) now we have the real “Stories” category
-        const storiesCat = allCats.find((c) => c.name === "Stories");
+    // ------- Stories -------
+    if (isStoriesTab) {
+      if (allCats.length === 0) {
+        if (!cancelled) setCategories([{ name: "", books: [], hasSub: false, subId: null }]);
+        return;
+      }
+      const storiesCat = allCats.find((c) => c.name === "Stories");
+      if (!cancelled) {
         setCategories(
           (storiesCat?.sub_categories || []).map((sub: any) => ({
             name: sub.name,
-            books: [], // BookCategory will render its skeletons
+            books: [],
             hasSub: false,
             subId: sub.id,
           }))
         );
+      }
+      return;
+    }
+
+    // ------- Languages -------
+    if (isLangsTab) {
+      if (allCats.length === 0) {
+        if (!cancelled) setCategories([{ name: "", books: [], subId: null }]);
         return;
       }
-
-      // 3) Languages ----------------------------
-      if (isLangsTab) {
-        if (allCats.length === 0) {
-          // show a single placeholder row until GetSubCategories() resolves
-          setCategories([{ name: "", books: [], subId: null }]);
-          return;
-        }
-
-        const langsCat = allCats.find((c) => c.name === "Languages");
+      const langsCat = allCats.find((c) => c.name === "Languages");
+      if (!cancelled) {
         setCategories(
           (langsCat?.sub_categories || []).map((sub: any) => ({
             name: sub.name,
-            books: [], // BookCategory shows skeleton cards
+            books: [],
             hasSub: false,
             subId: sub.id,
           }))
         );
-        return;
       }
+      return;
+    }
 
-      // 4) Literacy ----------------------------
-      if (isLiteracyTab) {
-        setCategories([]); // nothing to map; we’ll render “Coming soon”
-        return;
-      }
-    };
+    // ------- Literacy -------
+    if (isLiteracyTab) {
+      if (!cancelled) setCategories([]);
+      return;
+    }
+  };
 
-    // show skeletons for ~300ms
-    const t = setTimeout(load, 1);
-    return () => clearTimeout(t);
-  }, [activeIndex, tabsConfig, allCats, ongoingBooks, favMode]);
+  // Call immediately (no artificial timeout). We keep old UI for For you.
+  load();
+
+  return () => {
+    cancelled = true;
+  };
+  // ⬇️ Notice: ongoingBooks removed from deps to prevent re-run/flicker
+}, [activeIndex, tabsConfig, allCats, favMode, isForYouTab, isStoriesTab, isLangsTab, isLiteracyTab, state]);
+
 
   // when you land with ?read=1&book=### in the URL, rehydrate the pages
   useEffect(() => {
@@ -1140,7 +1211,7 @@ useEffect(() => {
 <>
   {readingBook ? (
     readingLoading ? (
-      <div className="py-14 text-center text-sm text-gray-500">Loading…</div>
+      <div className="py-14 text-center text-sm text-gray-500"></div>
     ) : (
       <ReadingComponent
         ref={readingRef}
@@ -1173,6 +1244,22 @@ useEffect(() => {
       onViewAnswers={handleViewAnswers}
       onComplete={() => handleMediaComplete(watchingBook)}
     />
+  ) : listeningBook ? (
+    <AudioComponent
+      book={{
+        id: listeningBook.id,
+        title: listeningBook.title,
+        coverUrl: listeningBook.coverUrl,
+        progress: 0,
+      }}
+      audioSrc={audioSrc}
+      onClose={closeListen}
+      onRead={() => {
+        closeListen();
+        startRead(listeningBook.id);
+      }}
+      onComplete={() => handleMediaComplete(listeningBook)}
+    />
   ) : overviewChecking ? (
     <div className="py-14 text-center text-sm text-gray-500">Loading…</div>
   ) : (selectedBook && !readingBook && !watchingBook) ? (
@@ -1183,6 +1270,7 @@ useEffect(() => {
       onRead={() => startRead(selectedBook.id)}
       onWatch={() => startWatch(selectedBook.id)}
       audioSrc={QueenMoremi}
+      onListen={() => startListen(selectedBook.id)}   
     />
   ) : favMode ? (
     // ─────────────── FAVOURITES-ONLY RENDER (no allCats/subcats) ───────────────

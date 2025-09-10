@@ -7,6 +7,7 @@ interface WellDoneModalProps {
   onTakeQuiz: () => void;
   onLater: () => void;
   onRetake: () => void;
+  ongoback: () => void;
 }
 
 const WellDoneModal: React.FC<WellDoneModalProps> = ({
@@ -14,6 +15,7 @@ const WellDoneModal: React.FC<WellDoneModalProps> = ({
   onTakeQuiz,
   onLater,
   onRetake,
+  ongoback,
 }) => {
   const urlParams = new URLSearchParams(window.location.search);
   const isWatchMode = urlParams.has('watch');
@@ -63,12 +65,28 @@ const WellDoneModal: React.FC<WellDoneModalProps> = ({
         </p>
 
         {isWatchMode ? (
-          <button
-            onClick={onLater}
-            className="block bg-[#9FC43E] text-white font-bold w-[300px] mb-[10px] h-[54px] gap-[10px] transform rotate-0 opacity-100 mx-auto rounded-[30px] p-[10px]"
+          <>
+            <button
+              onClick={onLater}
+              className="block bg-[#9FC43E] text-white font-bold w-[300px] mb-[10px] h-[54px] gap-[10px] transform rotate-0 opacity-100 mx-auto rounded-[30px] p-[10px]"
+            >
+              Go watch again
+            </button>
+            <button
+            onClick={ongoback}
+            style={{
+              fontWeight: 400,
+              fontStyle: 'Regular',
+              fontSize: '16px',
+              lineHeight: '24px',
+              letterSpacing: '0%',
+              textAlign: 'center',
+              color: '#7E7E89',
+            }}
           >
-            Go watch again
-          </button>
+            Go Back
+          </button>          
+          </>
         ) : (
           <>
             <button

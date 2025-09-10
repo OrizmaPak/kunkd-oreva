@@ -68,7 +68,7 @@ const BookCard: React.FC<BookCardProps> = ({
       {/* Progress bar aligned with the width of the book cover */}
       {showBar && (
         <div
-          className="relative -bottom-1 left-1/2 -translate-x-1/2 w-[92%] h-2 rounded-full bg-black/10 overflow-visible "
+          className="relative -bottom-1 left-1/2 -translate-x-1/2 w-[95%] h-[7px] rounded-full bg-black/10 overflow-visible"
           role="progressbar"
           aria-valuemin={0}
           aria-valuemax={100}
@@ -76,7 +76,7 @@ const BookCard: React.FC<BookCardProps> = ({
           aria-label="Reading progress"
           title={`${effectiveProgress}% complete`}
         >
-          <div className="h-full bg-[#9FC43E]" style={{ width: `${effectiveProgress}%` }} />
+          <div className="h-full bg-[#9FC43E] rounded-full" style={{ width: `${effectiveProgress}%` }} />
         </div>
       )}
     </button>

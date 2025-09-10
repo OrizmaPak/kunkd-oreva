@@ -10,7 +10,7 @@ import { showNotification } from "@mantine/notifications";
 
 /* ---------- ① extend the Book shape locally ---------- */
 interface FullBook extends Book {
-  mediaType?: string;        // "text" | "video" | …  (mind the snake-case in API)
+  mediaType?: string;        // "text" | "video" | "audio" | …  (mind the snake-case in API)
   description?: string;      // web_synopsis / synopsis
 }
 
@@ -112,6 +112,7 @@ const BookOverview: React.FC<BookOverviewProps> = ({
 
   const isText   = mediaType === 'text';
   const isVideo  = mediaType === 'video';
+  const isAudio  = mediaType === 'audio';
 
   return (
     <div className="mx-auto w-[clamp(550px,100%,1440px)] py-8 px-4">
@@ -183,6 +184,15 @@ const BookOverview: React.FC<BookOverviewProps> = ({
                 onClick={() => onWatch?.(displayBook)}
               >
                 Watch
+              </button>
+            )}
+
+            {isAudio && (
+              <button
+                className="bg-[#9FC43E] text-white w-[205px] h-[49px] rounded-full shadow-sm"
+                onClick={() => setShowAudio(true)}
+              >
+                Listen
               </button>
             )}
           </div>

@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
-import { FaPlay, FaPause } from "react-icons/fa";
+import { FaPlay, FaPause, FaBookOpen } from "react-icons/fa";
 import { MdReplay10, MdForward10 } from "react-icons/md";
 import { motion } from "framer-motion";
 import { notifications } from "@mantine/notifications";
 
 import { Book } from "./BookCard";
+import FrameImg from "@/assets/bigbook.png";           // 👈 same frame as BookOverview
 import { getApiErrorMessage } from "@/api/helper";
 import {
   useContentTracking,
@@ -18,8 +19,8 @@ import { getUserState } from "@/store/authStore";
 export interface AudioComponentProps {
   book: Book;
   audioSrc: string;
-  onClose: () => void;
-  onRead: () => void;
+  onClose: () => void;   // kept for compatibility
+  onRead: () => void;    // “Read” pill at the right
   onComplete?: () => void;
 }
 
@@ -38,7 +39,7 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  // ------- TRACKING HOOKS (mirrors old pages) -------
+  // ------- TRACKING (same behavior as your original) -------
   const contentId = sessionStorage.getItem("contentId");
   const profileId = sessionStorage.getItem("profileId");
   const { mutate } = useContentTracking();
@@ -46,25 +47,17 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
   const { mutate: mutateLearning } = useLearningHour();
   const [user] = useStore(getUserState);
 
-  const [delay, setDelay] = useState(0);       // heartbeat counter (5s)
-  const [lastTime, setLastTime] = useState(0); // last second sent to learning hour
+  const [delay, setDelay] = useState(0);       // heartbeat every 5s
+  const [lastTime, setLastTime] = useState(0); // last recorded second
 
-  // heartbeat only while playing
   useEffect(() => {
     let interval: number | undefined;
-    if (isPlaying) {
-      interval = window.setInterval(() => setDelay((d) => d + 1), 5000);
-    }
-    return () => {
-      if (interval) window.clearInterval(interval);
-    };
+    if (isPlaying) interval = window.setInterval(() => setDelay(d => d + 1), 5000);
+    return () => interval && window.clearInterval(interval);
   }, [isPlaying]);
 
-  // push “ongoing” progress every heartbeat
   useEffect(() => {
-    if (!delay) return;
-    if (!contentId) return;
-    if (!audioRef.current) return;
+    if (!delay || !contentId || !audioRef.current) return;
 
     const now = Math.ceil(audioRef.current.currentTime || 0);
     if (now <= 0) return;
@@ -81,67 +74,35 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
         mutate(
           { profile_id: Number(profileId), ...payload },
           {
-            onSuccess: () => {
-              console.log(
-                "[TRACK][audio][user] ongoing ok",
-                payload,
-              );
-              setLastTime(now);
-            },
-            onError: (err) => {
-              console.log("[TRACK][audio][user] ongoing failed", payload, err);
-              notifications.show({
-                title: "Notification",
-                message: getApiErrorMessage(err),
-              });
-            },
+            onSuccess: () => setLastTime(now),
+            onError: (err) => notifications.show({
+              title: "Notification",
+              message: getApiErrorMessage(err),
+            }),
           }
         );
       } else {
         mutateSchool(
           { ...payload },
           {
-            onSuccess: () => {
-              console.log("[TRACK][audio][school] ongoing ok", payload);
-              setLastTime(now);
-            },
-            onError: (err) => {
-              console.log(
-                "[TRACK][audio][school] ongoing failed",
-                payload,
-                err
-              );
-              notifications.show({
-                title: "Notification",
-                message: getApiErrorMessage(err),
-              });
-            },
+            onSuccess: () => setLastTime(now),
+            onError: (err) => notifications.show({
+              title: "Notification",
+              message: getApiErrorMessage(err),
+            }),
           }
         );
       }
 
-      // Learning hour: send time delta (never negative)
       const delta = Math.max(0, now - lastTime);
       mutateLearning(
-        {
-          content_id: Number(contentId),
-          profile_id: Number(profileId),
-          timespent: delta,
-        },
-        {
-          onSuccess: () =>
-            console.log("[TRACK][audio] learning-hour ok", { delta }),
-          onError: (err) =>
-            console.log("[TRACK][audio] learning-hour failed", err),
-        }
+        { content_id: Number(contentId), profile_id: Number(profileId), timespent: delta },
+        { onSuccess: () => {}, onError: () => {} }
       );
-    } catch (err) {
-      console.log("[TRACK][audio] unexpected error", err);
-    }
+    } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [delay]);
 
-  // mark complete at the very end
   const handleAudioComplete = () => {
     if (!contentId) return;
     const now = Math.ceil(audioRef.current?.currentTime || 0);
@@ -151,155 +112,178 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
       pages_read: now,
       timespent: now,
     };
-    if (user?.role === "user") {
-      mutate(
-        { profile_id: Number(profileId), ...payload },
-        {
-          onSuccess: () => console.log("[TRACK][audio] complete ok", payload),
-          onError: (err) =>
-            console.log("[TRACK][audio] complete failed", payload, err),
-        }
-      );
-    } else {
-      mutateSchool(
-        { ...payload },
-        {
-          onSuccess: () => console.log("[TRACK][audio] complete ok (school)", payload),
-          onError: (err) =>
-            console.log("[TRACK][audio] complete failed (school)", payload, err),
-        }
-      );
-    }
+    if (user?.role === "user") mutate({ profile_id: Number(profileId), ...payload });
+    else mutateSchool({ ...payload });
     onComplete && onComplete();
   };
 
-  // ------- Wavesurfer wiring (unchanged) -------
+  // ------- Wavesurfer lifecycle (reliable init/cleanup) -------
   useEffect(() => {
-    const initializeWaveSurfer = () => {
-      const audioEl = audioRef.current!;
-      const container = containerRef.current!;
-      if (!audioEl || !container) return;
+    const audioEl = audioRef.current;
+    const container = containerRef.current;
+    if (!audioEl || !container || !audioSrc) return;
 
-      audioEl.src = audioSrc;
-      audioEl.preload = "metadata";
-      audioEl.controls = false;
-      audioEl.setAttribute("controlsList", "nodownload");
+    // destroy any previous instance before creating a new one
+    if (waveRef.current) {
+      try { waveRef.current.destroy(); } catch {}
+      waveRef.current = null;
+    }
 
-      const ws = WaveSurfer.create({
-        container,
-        backend: "MediaElement",
-        barHeight: 3,
-        height: 150,
-        barWidth: 5,
-        barGap: 6,
-        barRadius: 10,
-        waveColor: "#cfe4a5",
-        progressColor: "#9FC43E",
-        cursorWidth: 0,
-        mediaControls: false,
-      });
+    let disposed = false;
 
-      waveRef.current = ws;
-      ws.setMediaElement(audioEl);
-      ws.load(audioSrc);
+    audioEl.src = audioSrc;
+    audioEl.preload = "metadata";
+    audioEl.controls = false;
+    audioEl.setAttribute("controlsList", "nodownload");
+    audioEl.crossOrigin = "anonymous";
 
-      const onReady = () => setDuration(audioEl.duration);
-      const onTimeUpdate = () => setCurrent(audioEl.currentTime);
-      const onPlay = () => setIsPlaying(true);
-      const onPause = () => setIsPlaying(false);
+    const ws = WaveSurfer.create({
+      container,
+      backend: "MediaElement",
+      height: 90,            // slimmer waveform (matches your screenshot)
+      barWidth: 5,
+      barGap: 6,
+      barRadius: 10,
+      waveColor: "#CFE4A5",        // uniform light-green bars
+      progressColor: "#CFE4A5",    // same color so it’s not two-tone
+      cursorWidth: 0,
+      mediaControls: false,
+    });
 
-      ws.on("ready", onReady);
-      ws.on("finish", handleAudioComplete); // finish => complete
+    waveRef.current = ws;
+    ws.setMediaElement(audioEl);
+    ws.load(audioSrc);
 
-      audioEl.addEventListener("timeupdate", onTimeUpdate);
-      audioEl.addEventListener("play", onPlay);
-      audioEl.addEventListener("pause", onPause);
-      audioEl.addEventListener("ended", handleAudioComplete);
+    const onReady = () => !disposed && setDuration(audioEl.duration || 0);
+    const onTimeUpdate = () => !disposed && setCurrent(audioEl.currentTime || 0);
+    const onPlay = () => !disposed && setIsPlaying(true);
+    const onPause = () => !disposed && setIsPlaying(false);
+    const onEnd = () => { if (!disposed) handleAudioComplete(); };
 
-      container.addEventListener("contextmenu", (e) => e.preventDefault());
+    ws.on("ready", onReady);
+    ws.on("finish", onEnd);
 
-      return () => {
-        ws.destroy();
-        audioEl.removeEventListener("timeupdate", onTimeUpdate);
-        audioEl.removeEventListener("play", onPlay);
-        audioEl.removeEventListener("pause", onPause);
-        audioEl.removeEventListener("ended", handleAudioComplete);
-      };
-    };
+    audioEl.addEventListener("loadedmetadata", onReady);
+    audioEl.addEventListener("timeupdate", onTimeUpdate);
+    audioEl.addEventListener("play", onPlay);
+    audioEl.addEventListener("pause", onPause);
+    audioEl.addEventListener("ended", onEnd);
 
-    // first mount
-    initializeWaveSurfer();
+    const preventCtx = (e: Event) => e.preventDefault();
+    container.addEventListener("contextmenu", preventCtx);
+
+    const ro = new ResizeObserver(() => {
+      try { ws.drawBuffer(); } catch {}
+    });
+    ro.observe(container);
+
     return () => {
-      if (waveRef.current) waveRef.current.destroy();
+      disposed = true;
+      try { ro.disconnect(); } catch {}
+      try { ws.destroy(); } catch {}
+      waveRef.current = null;
+      audioEl.removeEventListener("loadedmetadata", onReady);
+      audioEl.removeEventListener("timeupdate", onTimeUpdate);
+      audioEl.removeEventListener("play", onPlay);
+      audioEl.removeEventListener("pause", onPause);
+      audioEl.removeEventListener("ended", onEnd);
+      container.removeEventListener("contextmenu", preventCtx);
     };
-  }, [audioSrc]); // eslint-disable-line
+  }, [audioSrc]);
 
   const togglePlay = () => {
     const a = audioRef.current;
     if (!a) return;
-    isPlaying ? a.pause() : a.play();
+    isPlaying ? a.pause() : a.play().catch(() => {});
   };
 
   const skip = (s: number) => {
     const a = audioRef.current;
     if (!a) return;
-    a.currentTime = Math.max(0, Math.min(a.currentTime + s, duration));
+    a.currentTime = Math.max(0, Math.min((a.currentTime || 0) + s, duration));
   };
 
   const fmt = (sec: number) =>
-    new Date(sec * 1000).toISOString().substring(14, 19);
+    new Date((sec || 0) * 1000).toISOString().substring(14, 19);
 
+  /* ----------------- EXACT SIZES FROM BookOverview -----------------
+     • left cover block: w-[250px] h-[300px] with FrameImg + inner cover positioned
+     • right content block: width ~534.8px, height ~308.24px (as in your code)
+     • layout container: flex row with gap-[72px]
+  ------------------------------------------------------------------ */
   return (
-    <section
-      className="relative bg-transparent rounded-lg py-6 max-w-full mx-auto"
-      onContextMenu={(e) => e.preventDefault()}
-    >
-      {/* close */}
-      <button
-        onClick={onClose}
-        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-        aria-label="Close player"
-      >
-        ✕
-      </button>
+    <div className="mx-auto w-[clamp(550px,100%,1440px)] py-8 px-4">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-[72px]">
+        {/* LEFT: framed cover (1:1 from BookOverview) */}
+        <div className="flex-shrink-0 mt-[-10px] cursor-default w-[250px] h-[300px]">
+          <div className="relative flex-shrink-0">
+            <img src={FrameImg} alt="frame" className="w-[250px] h-[300px]" />
+            <img
+              src={book?.coverUrl || ""}
+              alt={book?.title || "Cover"}
+              className="absolute top-[13.47px] left-[13.06px] w-[223.88px] h-[236.84px] object-cover rounded"
+              draggable={false}
+            />
+          </div>
+        </div>
 
-      {/* timeline + clocks */}
-      <div className="flex items-center justify-between mb-3 text-sm text-gray-700">
-        <span>{fmt(current)}</span>
-        <span>-{fmt(Math.max(0, duration - current))}</span>
+        {/* RIGHT: player content container with Overview’s sizing */}
+        <div className="relative flex flex-col w-[534.8px] h-[308.24px]">
+          {/* timeline (0:00 / -mm:ss) */}
+          <div className="flex items-center justify-between mb-2 text-sm text-gray-400">
+            <span>{fmt(current)}</span>
+            <span>-{fmt(Math.max(0, (duration || 0) - (current || 0)))}</span>
+          </div>
+
+          {/* waveform */}
+          <div ref={containerRef} className="select-none" />
+
+          {/* control bar */}
+          <div className="mt-4 flex items-center justify-center gap-8 rounded-full bg-[#EEEEEE] py-3">
+            <button
+              onClick={() => skip(-10)}
+              className="flex items-center text-gray-500 hover:text-gray-700"
+            >
+              <MdReplay10 /> <span className="text-xs ml-1">10</span>
+            </button>
+
+            <motion.button
+              onClick={togglePlay}
+              className="w-14 h-14 rounded-full bg-[#9FC43E] flex items-center justify-center text-white shadow-lg"
+              whileTap={{ scale: 0.94 }}
+              transition={{ type: "spring", stiffness: 300, damping: 12 }}
+              aria-label={isPlaying ? "Pause" : "Play"}
+            >
+              {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} />}
+            </motion.button>
+
+            <button
+              onClick={() => skip(10)}
+              className="flex items-center text-gray-500 hover:text-gray-700"
+            >
+              <MdForward10 /> <span className="text-xs ml-1">10</span>
+            </button>
+          </div>
+
+          {/* Floating READ pill (right middle) */}
+          <button
+            onClick={onRead}
+            className="hidden sm:flex flex-col items-center justify-center gap-1
+                       absolute right-[-36px] top-1/2 -translate-y-1/2"
+            aria-label="Read"
+          >
+            <span className="h-9 w-9 rounded-full bg-white shadow ring-1 ring-gray-200
+                             flex items-center justify-center text-gray-600 hover:text-gray-800">
+              <FaBookOpen size={16} />
+            </span>
+            <span className="text-[10px] text-gray-500">Read</span>
+          </button>
+        </div>
       </div>
 
-      {/* waveform */}
-      <div ref={containerRef} className="select-none" />
-
-      {/* controls */}
-      <div className="mt-4 flex items-center justify-center gap-8 bg-[#D7CFD2] rounded-full py-3">
-        <button
-          onClick={() => skip(-10)}
-          className="flex items-center text-gray-500 hover:text-gray-700"
-        >
-          <MdReplay10 /> <span className="text-xs ml-1">10</span>
-        </button>
-
-        <motion.button
-          onClick={togglePlay}
-          className="w-14 h-14 rounded-full bg-[#9FC43E] flex items-center justify-center text-white shadow-lg"
-          whileTap={{ scale: 0.94 }}
-          transition={{ type: "spring", stiffness: 300, damping: 12 }}
-        >
-          {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} />}
-        </motion.button>
-
-        <button
-          onClick={() => skip(10)}
-          className="flex items-center text-gray-500 hover:text-gray-700"
-        >
-          <MdForward10 /> <span className="text-xs ml-1">10</span>
-        </button>
-      </div>
-
+      {/* hidden audio element powering WaveSurfer */}
       <audio ref={audioRef} />
-    </section>
+    </div>
   );
 };
 
