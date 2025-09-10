@@ -93,7 +93,7 @@ const Password: React.FC = () => {
             <button
               type="button"
               onClick={() => setEditing(true)}
-              className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#BCD678] px-4 py-2 text-sm font-semibold text-[#BCD678] hover:bg-[#BCD678] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#BCD678]"
+              className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#BCD678] px-4 py-2 text-sm font-semibold text-[#BCD678] hover:bg-[#BCD678] hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#BCD678]"
             >
               {/* pencil glyph is optional; keeping button text only per mock */}
               Change Password

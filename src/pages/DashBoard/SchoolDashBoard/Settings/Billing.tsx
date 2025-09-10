@@ -243,67 +243,69 @@ const Billing = () => {
       </div>
 
       {/* ------------------- Current License Summary (LEFT AS-IS) ------------------- */}
-      <div className="border-[2px] border-[#ECEFF1] p-8 rounded-md mt-6">
-        <p className="text-[14px] font-InterReg">Current Plan Summary</p>
-        <hr className="mb-5 mt-2" />
-        <div className="flex justify-between items-center">
-          <div className="w-[165px] h-[94px] text-[14px] font-InterReg">
-            <p className="text-[14px] font-Inter flex gap-2 justify-center">
-              <ClassesIcon /> Class
-            </p>
-            <p className="font-Inter text-[20px] text-center">
-              {license?.license_class_count || "0"}
-            </p>
-            <p className="text-[#98A2B3] font-InterReg text-center text-[12px]">
-              <span className="text-[14px] px-1 font-Inter text-customGreen">
-                {license?.added_class_count || "0 "}
-              </span>
-              slots available of
-              <span className="text-[14px] font-Inter px-1">
+      {user?.role?.toLowerCase() !== "user" && user?.role?.toLowerCase() !== "teacher" && (
+        <div className="border-[2px] border-[#ECEFF1] p-8 rounded-md mt-6">
+          <p className="text-[14px] font-InterReg">Current Plan Summary</p>
+          <hr className="mb-5 mt-2" />
+          <div className="flex justify-between items-center">
+            <div className="w-[165px] h-[94px] text-[14px] font-InterReg">
+              <p className="text-[14px] font-Inter flex gap-2 justify-center">
+                <ClassesIcon /> Class
+              </p>
+              <p className="font-Inter text-[20px] text-center">
                 {license?.license_class_count || "0"}
-              </span>
-            </p>
-          </div>
+              </p>
+              <p className="text-[#98A2B3] font-InterReg text-center text-[12px]">
+                <span className="text-[14px] px-1 font-Inter text-customGreen">
+                  {license?.added_class_count || "0 "}
+                </span>
+                slots available of
+                <span className="text-[14px] font-Inter px-1">
+                  {license?.license_class_count || "0"}
+                </span>
+              </p>
+            </div>
 
-          <div className="w-[165px] h-[94px]">
-            <p className="text-[14px] font-Inter flex gap-2 justify-center">
-              <TeachersIcon />
-              Teachers
-            </p>
-            <p className="font-Inter text-[20px] text-center">
-              {license?.license_teacher_count || "0"}
-            </p>
-            <p className="text-[#98A2B3] font-InterReg text-center text-[12px]">
-              <span className="text-[14px] px-1 font-Inter text-customGreen">
-                {license?.added_teacher_count || "0"}
-              </span>
-              slots available of
-              <span className="text-[14px] font-Inter px-1">
+            <div className="w-[165px] h-[94px]">
+              <p className="text-[14px] font-Inter flex gap-2 justify-center">
+                <TeachersIcon />
+                Teachers
+              </p>
+              <p className="font-Inter text-[20px] text-center">
                 {license?.license_teacher_count || "0"}
-              </span>
-            </p>
-          </div>
+              </p>
+              <p className="text-[#98A2B3] font-InterReg text-center text-[12px]">
+                <span className="text-[14px] px-1 font-Inter text-customGreen">
+                  {license?.added_teacher_count || "0"}
+                </span>
+                slots available of
+                <span className="text-[14px] font-Inter px-1">
+                  {license?.license_teacher_count || "0"}
+                </span>
+              </p>
+            </div>
 
-          <div className="w-[165px] h-[94px]">
-            <p className="text-[14px] font-Inter flex gap-2 justify-center">
-              <StudentsIcon />
-              Students
-            </p>
-            <p className="font-Inter text-[20px] text-center">
-              {license?.license_student_count || "0"}
-            </p>
-            <p className="text-[#98A2B3] font-InterReg text-center text-[12px]">
-              <span className="text-[16px] font-Inter px-1 text-customGreen">
-                {license?.added_student_count || "0"}
-              </span>
-              slots available of
-              <span className="text-[14px] font-Inter px-1">
+            <div className="w-[165px] h-[94px]">
+              <p className="text-[14px] font-Inter flex gap-2 justify-center">
+                <StudentsIcon />
+                Students
+              </p>
+              <p className="font-Inter text-[20px] text-center">
                 {license?.license_student_count || "0"}
-              </span>
-            </p>
+              </p>
+              <p className="text-[#98A2B3] font-InterReg text-center text-[12px]">
+                <span className="text-[16px] font-Inter px-1 text-customGreen">
+                  {license?.added_student_count || "0"}
+                </span>
+                slots available of
+                <span className="text-[14px] font-Inter px-1">
+                  {license?.license_student_count || "0"}
+                </span>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* ------------------- Payment History (HIDE WHEN FREE) ------------------- */}
       {hasActiveSub && (

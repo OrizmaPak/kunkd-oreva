@@ -119,78 +119,171 @@ function Modal({
 }
 
 // ---------- Edit Form ----------
+// ---------- Edit Form ----------
 function EditProfileForm({
-  initial,
-  onSave,
-  onCancel,
-}: {
-  initial: KidProfile;
-  onSave: (updated: KidProfile) => void;
-  onCancel: () => void;
-}) {
-  const [fullName, setFullName] = useState(initial.name ?? "");
-  const [nickname, setNickname] = useState(initial.username ?? "");
-  const [dob, setDob] = useState(
-    initial.dob ? new Date(initial.dob).toISOString().slice(0, 10) : ""
-  );
-
-  return (
-    <form
-      className="space-y-4"
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSave({ ...initial, name: fullName, username: nickname, dob: dob ? new Date(dob).toISOString() : initial.dob });
-      }}
-    >
-      <div className="space-y-1">
-        <label className="text-sm font-medium text-gray-900">Full name</label>
-        <input
-          type="text"
-          className="w-full rounded-xl border border-gray-200 px-4 py-2.5 outline-none transition focus:border-gray-400"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          required
-        />
-      </div>
-
-      <div className="space-y-1">
-        <label className="text-sm font-medium text-gray-900">Nickname</label>
-        <input
-          type="text"
-          className="w-full rounded-xl border border-gray-200 px-4 py-2.5 outline-none transition focus:border-gray-400"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-        />
-      </div>
-
-      <div className="space-y-1">
-        <label className="text-sm font-medium text-gray-900">Date of birth</label>
-        <input
-          type="date"
-          className="w-full rounded-xl border border-gray-200 px-4 py-2.5 outline-none transition focus:border-gray-400"
-          value={dob}
-          onChange={(e) => setDob(e.target.value)}
-        />
-      </div>
-
-      <div className="mt-4 flex justify-end gap-3 pt-2">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="rounded-full border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="rounded-full bg-[#9FC43E] px-5 py-2.5 text-sm font-semibold text-white shadow hover:brightness-95"
-        >
-          Save
-        </button>
-      </div>
-    </form>
-  );
-}
+    initial,
+    onSave,
+    onCancel,
+  }: {
+    initial: KidProfile;
+    onSave: (updated: KidProfile) => void;
+    onCancel: () => void;
+  }) {
+    const [fullName, setFullName] = useState(initial.name ?? "");
+    const [nickname, setNickname] = useState(initial.username ?? "");
+    const [dob, setDob] = useState(
+      initial.dob ? new Date(initial.dob).toISOString().slice(0, 10) : ""
+    );
+  
+    // ⬇️ NEW: local image state (data URL for persistence + preview)
+    const [imageDataUrl, setImageDataUrl] = useState<string>(initial.image || "");
+    const inputId = `kid-photo-${initial.id}`;
+  
+    const readFileAsDataURL = (file: File): Promise<string> =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result));
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+  
+    const onPickFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const f = e.target.files?.[0];
+      if (!f) return;
+  
+      // Optional size guard (3MB)
+      if (f.size > 3 * 1024 * 1024) {
+        alert("Image too large. Please select an image ≤ 3MB.");
+        e.currentTarget.value = "";
+        return;
+      }
+  
+      try {
+        const dataUrl = await readFileAsDataURL(f);
+        setImageDataUrl(dataUrl);
+      } catch {
+        alert("Could not read image file. Please try another image.");
+      }
+    };
+  
+    const onRemovePhoto = () => {
+      setImageDataUrl("");
+      const inputEl = document.getElementById(inputId) as HTMLInputElement | null;
+      if (inputEl) inputEl.value = "";
+    };
+  
+    return (
+      <form
+        className="space-y-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSave({
+            ...initial,
+            name: fullName,
+            username: nickname,
+            dob: dob ? new Date(dob).toISOString() : initial.dob,
+            // ⬇️ ensure we pass the edited image (or blank if removed)
+            image: imageDataUrl,
+          });
+        }}
+      >
+        {/* Avatar upload + preview */}
+        <div className="flex items-center gap-4">
+          <label
+            htmlFor={inputId}
+            className="relative w-20 h-20 rounded-full overflow-hidden bg-gray-100 shrink-0 cursor-pointer ring-8 ring-[#E6EAD8] hover:brightness-95 transition"
+            title="Change photo"
+          >
+            {imageDataUrl ? (
+              <img
+                src={imageDataUrl}
+                alt="Preview"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-xs text-gray-500">
+                Add Photo
+              </div>
+            )}
+            <div className="absolute inset-0 bg-black/10 opacity-0 hover:opacity-100 flex items-center justify-center text-white text-xs">
+              Change
+            </div>
+          </label>
+  
+          <input
+            id={inputId}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={onPickFile}
+          />
+  
+          <div className="grow">
+            <div className="text-sm text-gray-600">
+              Profile picture <span className="text-gray-400">(PNG/JPG, ≤ 3MB)</span>
+            </div>
+            {imageDataUrl ? (
+              <button
+                type="button"
+                onClick={onRemovePhoto}
+                className="mt-1 text-xs text-red-600 hover:underline"
+              >
+                Remove photo
+              </button>
+            ) : null}
+          </div>
+        </div>
+  
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-900">Full name</label>
+          <input
+            type="text"
+            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 outline-none transition focus:border-gray-400"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            required
+          />
+        </div>
+  
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-900">Nickname</label>
+          <input
+            type="text"
+            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 outline-none transition focus:border-gray-400"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
+          />
+        </div>
+  
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-900">Date of birth</label>
+          <input
+            type="date"
+            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 outline-none transition focus:border-gray-400"
+            value={dob}
+            onChange={(e) => setDob(e.target.value)}
+          />
+        </div>
+  
+        <div className="mt-4 flex justify-end gap-3 pt-2">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="rounded-full border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="rounded-full bg-[#9FC43E] px-5 py-2.5 text-sm font-semibold text-white shadow hover:brightness-95"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    );
+  }
+  
 
 // ---------- Main ----------
 const MyKids: React.FC = () => {
@@ -294,14 +387,14 @@ const MyKids: React.FC = () => {
             No kids data available. Please add your kids to see them here.
           </div>
         ) : (
-          <div className="flex justify-between gap-10 flex-wrap">
+          <div className="flex justify-between gap-1 flex-wrap">
             {profiles.map((kid) => {
               const age = yearsOld(kid.dob, kid.age);
               const img = kid.image && kid.image.trim().length > 0 ? kid.image : null;
               return (
                 <div
                   key={kid.id}
-                  className="relative flex items-center justify-between rounded-[20px] border border-gray-200 bg-white px-[25px] py-[45px] shadow-sm"
+                  className="relative my-4 flex items-center justify-between rounded-[20px] border border-gray-200 bg-white px-[25px] py-[45px] shadow-sm"
                   style={{ width: '473px', height: '170px', gap: '10px', opacity: 1 }}
                 >
                   <div className="flex items-center gap-4">
@@ -366,7 +459,10 @@ const MyKids: React.FC = () => {
                             setOpenMenuFor(null);
                           }}
                         >
-                          ✏️ <span>Edit Profile</span>
+                          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.33333 10.6667H2.28333L8.8 4.15L7.85 3.2L1.33333 9.71667V10.6667ZM0 12V9.16667L8.8 0.383333C8.93333 0.261111 9.08056 0.166667 9.24167 0.1C9.40278 0.0333333 9.57222 0 9.75 0C9.92778 0 10.1 0.0333333 10.2667 0.1C10.4333 0.166667 10.5778 0.266667 10.7 0.4L11.6167 1.33333C11.75 1.45556 11.8472 1.6 11.9083 1.76667C11.9694 1.93333 12 2.1 12 2.26667C12 2.44444 11.9694 2.61389 11.9083 2.775C11.8472 2.93611 11.75 3.08333 11.6167 3.21667L2.83333 12H0ZM8.31667 3.68333L7.85 3.2L8.8 4.15L8.31667 3.68333Z" fill="#757D87"/>
+</svg>
+                     <span className="font-arimo font-normal text-[14px] leading-[21px] tracking-[0.1px]">Edit Profile</span>
                         </button>
                         <button
                           className="flex w-full items-center gap-2 px-4 py-2 text-left text-red-600 hover:bg-red-50"
@@ -375,7 +471,10 @@ const MyKids: React.FC = () => {
                             setOpenMenuFor(null);
                           }}
                         >
-                          🗑️ <span>Remove profile</span>
+                          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.6665 12C2.29984 12 1.98595 11.8694 1.72484 11.6083C1.46373 11.3472 1.33317 11.0333 1.33317 10.6667V2H0.666504V0.666667H3.99984V0H7.99984V0.666667H11.3332V2H10.6665V10.6667C10.6665 11.0333 10.5359 11.3472 10.2748 11.6083C10.0137 11.8694 9.69984 12 9.33317 12H2.6665ZM9.33317 2H2.6665V10.6667H9.33317V2ZM3.99984 9.33333H5.33317V3.33333H3.99984V9.33333ZM6.6665 9.33333H7.99984V3.33333H6.6665V9.33333Z" fill="#757D87"/>
+</svg>
+ <span className="font-arimo font-normal text-[14px] leading-[21px] tracking-[0.1px]">Remove profile</span>
                         </button>
                       </div>
                     )}

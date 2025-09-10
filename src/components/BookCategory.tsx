@@ -54,15 +54,16 @@ const BookCategory: React.FC<BookCategoryProps> = ({
   } = useSubCategoryLazy(subId, expanded);
   
   const usingLazy = subId != null;
-  // Choose data source based on lazy vs. static
   const list = usingLazy ? lazyBooks : books;
-  // First-page load vs. static loading
   const rowLoading = usingLazy ? loadingInit : loading;
   
-  // Layout classes
+  // Detect Continue Reading (case-insensitive)
+  const isContinueReading = /continue\s*reading/i.test(categoryName);
+
+  // Prevent vertical overflow on the horizontal scroller
   const containerClass = expanded
-  ? "flex flex-wrap gap-4"
-  : "flex space-x-4 overflow-x-auto no-scrollbar";
+    ? "flex flex-wrap gap-4"
+    : "flex space-x-4 overflow-x-auto overflow-y-hidden no-scrollbar";
   
   // Hide category if no content is available
   if (!rowLoading && hasFetched && list.length === 0) {
@@ -72,7 +73,7 @@ const BookCategory: React.FC<BookCategoryProps> = ({
   return (
     <div className="mb-8">
       {/* HEADER */}
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between mb-2 ">
         <h3 className="font-[600] font-BalooSemiBold text-[28px] leading-[120%] tracking-[-0.02em] text-center align-middle text-[#667185] mt-[15px]">
           {categoryName.trim().length > 0 || window.location.href.includes('favourites') ? (
             categoryName
@@ -96,21 +97,23 @@ const BookCategory: React.FC<BookCategoryProps> = ({
       )}
 
       {/* BOOK LIST */}
-      <div ref={containerRef} className={containerClass}>
+      <div ref={containerRef} className={containerClass + "  h-[190px]"}>
         {/* Special case for "Continue Reading" category */}
         <>
           {list.map((book, idx) => (
-            <div key={book.id} className="flex-shrink-0">
-              <BookCard
-                book={book}
-                onClick={() => {
-                  const crumbs = [tabLabel];
-                  if (parentCategory) crumbs.push(parentCategory);
-                  crumbs.push(categoryName);
-                  onBookClick?.(book, crumbs);
-                }}
-                />
-            </div>
+            <BookCard
+              key={book.id ?? idx}
+              book={book}
+              onClick={() => {
+                const crumbs = [tabLabel];
+                if (parentCategory) crumbs.push(parentCategory);
+                crumbs.push(categoryName);
+                onBookClick?.(book, crumbs);
+              }}
+              // Force the bar to show for Continue Reading, even when progress is 0/missing
+              forceProgress={isContinueReading}
+              fallbackProgress={50}
+            />
           ))}
 
           {/* Skeletons for first-page loading/static loading */}
