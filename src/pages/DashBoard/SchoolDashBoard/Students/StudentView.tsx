@@ -388,7 +388,7 @@ const StudentView: React.FC<{ crumb?: boolean }> = ({ crumb = true }) => {
                 <img
                   src={student.avatarUrl || child}
                   alt="Student Avatar"
-                  className="w-20 rounded-full object-cover"
+                  className="w-20 h-20 rounded-full object-cover"
                 />
                 <div>
                   <p className="font-inter font-semibold text-gray-800 text-2xl leading-tight tracking-tight">

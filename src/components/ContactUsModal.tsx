@@ -145,6 +145,7 @@ import { IoChevronDown } from "react-icons/io5";
 import { GetSupportCategories, SupportMessage } from "@/api/api";
 import type { TSupportCategory } from "@/api/types";
 import { getApiErrorMessage } from "@/api/helper";
+import { notifications } from "@mantine/notifications"; // Import notifications
 
 type Props = {
   open: boolean;
@@ -222,6 +223,11 @@ export default function ContactUsModal({ open, onClose, onSent }: Props) {
     setSending(true);
     try {
       await SupportMessage({ category_id: selectedId, content: message.trim() });
+      notifications.show({
+        title: "Success",
+        message: "Your message has been sent successfully.",
+        color: "green",
+      });
       onSent?.();
       onClose();
       // reset after close

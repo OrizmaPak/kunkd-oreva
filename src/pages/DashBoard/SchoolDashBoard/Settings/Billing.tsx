@@ -11,6 +11,11 @@ import Pagination from "@/components/Pagination";
 import useStore from "@/store";
 import { getUserState } from "@/store/authStore";
 import { notifications } from "@mantine/notifications";
+// ✨ NEW imports
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import SchoolNotificationModal from "@/components/SchoolNotificationModal";
+import ContactUsModal from "@/components/ContactUsModal";
 
 const Billing = () => {
   const navigate = useNavigate();
@@ -19,6 +24,22 @@ const Billing = () => {
   const { data: dataLicense } = useGetLicense();
   const license: TLicense = dataLicense?.data?.data?.school?.licence;
   const [user] = useStore(getUserState) as any[];
+
+  // normalize role detection (covers variations you’ve used)
+  const role = String(
+    user?.role || user?.user_type || user?.user?.user_type || ""
+  ).toLowerCase();
+
+  const isSchoolAdmin = [
+    "schooladmin",
+    "school_admin",
+    "school admin",
+    "schooladministrator",
+    "school_administrator",
+  ].includes(role);
+
+  // modal state
+  const [contactOpen, setContactOpen] = useState(false);
 
   // ---- subscription helpers ----
   const subscription = user?.subscription || null;
@@ -231,8 +252,12 @@ const Billing = () => {
                 backgroundColor="green"
                 className="px-[14px] rounded-full"
                 onClick={() => {
-                  localStorage.setItem('from', '/schooldashboard/settings');
-                  navigate("/packages");
+                  if (isSchoolAdmin) {
+                    setContactOpen(true); // 👈 show Contact modal instead
+                  } else {
+                    localStorage.setItem("from", "/schooldashboard/settings");
+                    navigate("/packages");
+                  }
                 }}
               >
                 Buy Subscription
@@ -496,6 +521,13 @@ const Billing = () => {
           </div>
         </div>
       )}
+
+      {/* ------------------- Contact Us Modal ------------------- */}
+      <ContactUsModal
+        open={contactOpen}
+        onClose={() => setContactOpen(false)}
+        onSent={() => setContactOpen(false)} // optional: close after successful send
+      />
     </div>
   );
 };

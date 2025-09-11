@@ -76,7 +76,7 @@ const links = [
   {
     label: "Progress Report",
     href: "progress",
-    // route: routeBaseUrl + "/progress/",
+    route: routeBaseUrl + "/progress/",
     icon: StudentsIcon,
     hasSub: true,
     role: ["user"],

@@ -265,22 +265,35 @@ const Students: React.FC = () => {
   }, [currentPage, role, statusFilter]);
 
   /* ---------------- Search & Sort (on the current server page) ----------------- */
-  const filtered = useMemo(
-    () => rows.filter((s) => s.name.toLowerCase().includes(query.toLowerCase())),
-    [rows, query]
-  );
+  /* ---------------- Search & Sort (on the current server page) ----------------- */
+const filtered = useMemo(() => {
+  const q = query.trim().toLowerCase();
+  if (!q) return rows;
 
-  const paged = useMemo(() => {
-    const copy = [...filtered];
-    copy.sort((a, b) => {
-      const ax =
-        sortKey === 'teacher' ? a.teacher.name : (a as any)[sortKey] || '';
-      const bx =
-        sortKey === 'teacher' ? b.teacher.name : (b as any)[sortKey] || '';
-      return String(ax).localeCompare(String(bx));
-    });
-    return copy;
-  }, [filtered, sortKey]);
+  return rows.filter((s: any) => {
+    const name = (s?.name ?? "").toLowerCase();
+    const klass = (s?.class ?? "").toLowerCase();
+    const teacher = (s?.teacher?.name ?? "").toLowerCase();
+    return (
+      name.includes(q) ||
+      klass.includes(q) ||
+      teacher.includes(q)
+    );
+  });
+}, [rows, query]);
+
+const paged = useMemo(() => {
+  const copy = [...filtered];
+  copy.sort((a: any, b: any) => {
+    const ax = sortKey === "teacher" ? a.teacher.name : (a as any)[sortKey] || "";
+    const bx = sortKey === "teacher" ? b.teacher.name : (b as any)[sortKey] || "";
+    return String(ax).localeCompare(String(bx));
+  });
+  return copy;
+}, [filtered, sortKey]);
+
+
+
 
   /* ---------------- Disable logic ----------------- */
   const handleDisableClick = (student: Student) => {
@@ -355,7 +368,7 @@ const Students: React.FC = () => {
             </button>
           </div>
 
-          <SearchBar value={query} onChange={setQuery} placeholder="Search here…" />
+          <SearchBar value={query} onChange={setQuery} placeholder="Search by student, class, or teacher…" />
 
           <SortDropdown
             options={[
