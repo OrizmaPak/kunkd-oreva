@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { IoCloseOutline, IoFilterOutline, IoEllipsisVertical } from "react-icons/io5";
 import { GetAttemptAllStudentConnect, GetAttemptStudentConnect } from "@/api/api";
 // If you want clicking a notification to navigate, uncomment the next line and the onClick handler below.
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 /** Demo items (fallback if API returns nothing or fails) */
 const seed = [
@@ -60,7 +60,7 @@ const mapRecordToNotification = (r) => {
 };
 
 export default function NotificationDrawer({ open, onClose, items = seed }) {
-  // const navigate = useNavigate(); // uncomment if you want navigation on click
+  const navigate = useNavigate(); // uncomment if you want navigation on click
 
   const [local, setLocal] = useState(items);
   const [sortOpen, setSortOpen] = useState(false);
@@ -236,11 +236,10 @@ export default function NotificationDrawer({ open, onClose, items = seed }) {
                 <div
                   key={n.id}
                   className="cursor-pointer relative border-[0.1px] border-b-[0px] border-[#D7DAE0] bg-[#f5f7f8] px-4 py-3"
-                  // If you want navigation to the requests page on click, uncomment:
-                  // onClick={() => {
-                  //   navigate("/schooldashboard/students/connection-requests");
-                  //   onClose?.();
-                  // }}
+                  onClick={() => {
+                    navigate("/schooldashboard/request");
+                    onClose?.();
+                  }}
                 >
                   <div className="pr-8">
                     <p
@@ -258,9 +257,10 @@ export default function NotificationDrawer({ open, onClose, items = seed }) {
                   {/* item menu trigger */}
                   <button
                     className="absolute right-1 top-3 rounded p-1 text-[#98A2B3] hover:bg-gray-50"
-                    onClick={() =>
-                      setItemMenu((cur) => (cur === n.id ? null : n.id))
-                    }
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setItemMenu((cur) => (cur === n.id ? null : n.id));
+                    }}
                   >
                     <IoEllipsisVertical className="text-lg" />
                   </button>

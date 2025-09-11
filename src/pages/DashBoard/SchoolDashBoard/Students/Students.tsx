@@ -11,6 +11,9 @@ import {
   GetAdmittedStudentsInClass,
 } from "@/api/api";
 
+import { DisableSchoolStudent } from "@/api/api";
+
+
 import useStore from "@/store";
 import EmptyState from "@/components/EmptyState";
 import { getUserState } from "@/store/authStore";
@@ -100,7 +103,7 @@ const ConfirmModal: React.FC<{
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      className="fixed absolute -top-[100px] inset-0 z-[5000] flex items-center justify-center bg-black/50 p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="disable-student-title"
@@ -200,6 +203,53 @@ const Students: React.FC = () => {
   const [successOpen, setSuccessOpen] = useState(false);
   const [targetStudent, setTargetStudent] = useState<Student | null>(null);
 
+  // Fetch function to be reused
+  const fetchStudentsPage = async () => {
+    try {
+      setLoading(true);
+      setErrorMsg(null);
+
+      const isSchoolAdmin = role === "schooladmin" || role === "school_admin" || role === "school admin";
+      const isTeacher = role === "teacher";
+
+      let res: { data: TListResponse } | undefined;
+
+      if (isSchoolAdmin) {
+        res = (await GetAdmittedStudentsInSchool(statusFilter, String(currentPage))) as any;
+      } else if (isTeacher) {
+        res = (await GetAdmittedStudentsInClass(statusFilter, String(currentPage))) as any;
+      } else {
+        res = (await GetAdmittedStudentsInSchool(statusFilter, String(currentPage))) as any;
+      }
+
+      const pageData = res?.data?.data;
+      const records = pageData?.records ?? [];
+
+      setRows(records.map(mapApiToStudent));
+      setServerTotalRecords(pageData?.totalRecord ?? 0);
+
+      const totalPages =
+        pageData?.number_pages && pageData.number_pages > 0
+          ? pageData.number_pages
+          : Math.max(
+              1,
+              Math.ceil(
+                (pageData?.totalRecord ?? 0) / (pageData?.record_per_page ?? 10)
+              )
+            );
+
+      setServerTotalPages(totalPages);
+    } catch (err) {
+      console.error("[Students] fetch error", err);
+      setRows([]);
+      setServerTotalRecords(0);
+      setServerTotalPages(1);
+      setErrorMsg("Failed to load students.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Reset to page 1 when status filter changes
   useEffect(() => {
     setCurrentPage(1);
@@ -207,74 +257,11 @@ const Students: React.FC = () => {
 
   // Fetch one page from the backend whenever currentPage, role, or statusFilter changes
   useEffect(() => {
-    let ignore = false;
-
-    const fetchPage = async () => {
-      try {
-        setLoading(true);
-        setErrorMsg(null);
-
-        // Choose endpoint by role
-        const isSchoolAdmin = role === "schoolAdmin";
-        const isTeacher = role === "teacher";
-
-
-        let res: { data: TListResponse } | undefined;
-
-        if (isSchoolAdmin) {
-          res = (await GetAdmittedStudentsInSchool(
-            statusFilter,
-            String(currentPage)
-          )) as unknown as { data: TListResponse };
-        } else if (isTeacher) {
-          res = (await GetAdmittedStudentsInClass(
-            statusFilter,
-            String(currentPage)
-          )) as unknown as { data: TListResponse };
-        } else {
-          // default to school-level list if role is unknown
-          res = (await GetAdmittedStudentsInSchool(
-            statusFilter,
-            String(currentPage)
-          )) as unknown as { data: TListResponse };
-        }
-
-        if (ignore) return;
-
-        const pageData = res?.data?.data;
-        const records = pageData?.records ?? [];
-
-        setRows(records.map(mapApiToStudent));
-        setServerTotalRecords(pageData?.totalRecord ?? 0);
-
-        // Prefer backend-provided number_pages; if 0, compute fallback
-        const totalPages =
-          pageData?.number_pages && pageData.number_pages > 0
-            ? pageData.number_pages
-            : Math.max(
-                1,
-                Math.ceil(
-                  (pageData?.totalRecord ?? 0) / (pageData?.record_per_page ?? 10)
-                )
-              );
-        setServerTotalPages(totalPages);
-      } catch (err) {
-        console.error("[Students] fetch error", err);
-        if (!ignore) {
-          setRows([]);
-          setServerTotalRecords(0);
-          setServerTotalPages(1);
-          setErrorMsg("Failed to load students.");
-        }
-      } finally {
-        if (!ignore) setLoading(false);
-      }
-    };
-
-    fetchPage();
-    return () => {
-      ignore = true;
-    };
+    let cancelled = false;
+    (async () => {
+      if (!cancelled) await fetchStudentsPage();
+    })();
+    return () => { cancelled = true; };
   }, [currentPage, role, statusFilter]);
 
   /* ---------------- Search & Sort (on the current server page) ----------------- */
@@ -301,11 +288,34 @@ const Students: React.FC = () => {
     setConfirmOpen(true);
   };
 
-  const confirmDisable = () => {
-    // TODO: Call backend to disable the student when endpoint/payload is ready
-    setConfirmOpen(false);
-    setSuccessOpen(true);
+  // const confirmDisable = () => {
+  //   // TODO: Call backend to disable the student when endpoint/payload is ready
+  //   setConfirmOpen(false);
+  //   setSuccessOpen(true);
+  // };
+
+  const confirmDisable = async () => {
+    if (!targetStudent) return;
+  
+    try {
+      // 1) Call backend
+      await DisableSchoolStudent({ student_id: targetStudent.id });
+  
+      // 2) Close confirm
+      setConfirmOpen(false);
+  
+      // 3) Refresh table immediately
+      await fetchStudentsPage();
+  
+      // 4) (Optional) show success modal you already have
+      setSuccessOpen(true);
+    } catch (err) {
+      console.error("[Students] disable failed", err);
+      setConfirmOpen(false);
+      // Optional: setErrorMsg("Failed to disable student.");
+    }
   };
+  
 
   return (
     <div className="p-6 bg-white rounded-lg shadow space-y-6">
@@ -417,7 +427,12 @@ const Students: React.FC = () => {
                   <ActionButtons
                     status={statusFilter}
                     onView={() => navigate(`/schooldashboard/students/${s.id}`)}
-                    onDisable={() => handleDisableClick(s)}
+                    onDisable={async () => {
+                      handleDisableClick(s);
+                      // Call DisableSchoolStudent({ student_id: s.id }) when ready
+                      // When successful, just return (resolve)
+                    }}
+                    onRefresh={fetchStudentsPage}
                   />
                 </td>
               </tr>
@@ -439,7 +454,7 @@ const Students: React.FC = () => {
         onCancel={() => setConfirmOpen(false)}
         onConfirm={confirmDisable}
       />
-      <SuccessModal
+      {/* <SuccessModal
         open={successOpen}
         message={
           targetStudent
@@ -447,7 +462,7 @@ const Students: React.FC = () => {
             : 'Disabled'
         }
         onClose={() => setSuccessOpen(false)}
-      />
+      /> */}
     </div>
   );
 };

@@ -40,7 +40,10 @@ const EditClassName = ({
   const { mutate, isLoading } = useEditClassName();
 
   const { data } = useGetTeacherList();
-  const teacherList = data?.data.data.records;
+  const teacherList = data?.data.data.records.filter((teacher: TTeacherList) => 
+    teacher?.user?.id === currentTeacherData?.user?.id || !teacher.user.class_name
+  );
+  console.log('teacherList', teacherList)
   const { mutate: mutateAssignTeacher, isLoading: isLoadingAssignTeacher } =
     useReAssignTeacher();
 

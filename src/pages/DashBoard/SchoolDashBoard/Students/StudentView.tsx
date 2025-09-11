@@ -479,12 +479,12 @@ const StudentView: React.FC<{ crumb?: boolean }> = ({ crumb = true }) => {
                 value={counts.languages === 0 ? "0/0" : String(counts.languages)}
                 onView={() => navigate(`/schooldashboard/students/${id}/languages-report?category=languages`)}
               />
-              <StatCard
+              {/* <StatCard
                 icon={Teacers}
                 label="Literacy"
                 value="0/0"
                 onView={() => navigate(`/schooldashboard/students/${id}/literacy-report?category=literacy`)}
-              />
+              /> */}
             </>
           )}
         </div>

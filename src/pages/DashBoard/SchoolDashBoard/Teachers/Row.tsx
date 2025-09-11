@@ -126,7 +126,7 @@ const Row = ({
           </div> */}
             <div
               onClick={onClick}
-              className="flex items-center justify-start gap-[20px] "
+              className="flex items-center justify-start gap-[10px] "
             >
               <span>
                 <FaUserCircle size={30} color="#BCD678" />
@@ -135,8 +135,18 @@ const Row = ({
                 {data.user.firstname} {data.user.lastname}
               </span>
             </div>
-            <div className="flex justify-start items-center ">
-              {data.user.email}
+            <div
+              className="flex justify-start items-center text-blue-500 cursor-pointer"
+              onClick={() => {
+                navigator.clipboard.writeText(data.user.email);
+                notifications.show({
+                  title: "Copied",
+                  message: "Email copied to clipboard",
+                  color: "blue",
+                });
+              }}
+            >
+              {data.user.email.length > 10 ? data.user.email.slice(0, 10) + '...' : data.user.email}
             </div>
             <div>{data?.user?.class_name || "No class has been assigned"}</div>
             <div>Apr 12, 2023 | 09:32AM</div>

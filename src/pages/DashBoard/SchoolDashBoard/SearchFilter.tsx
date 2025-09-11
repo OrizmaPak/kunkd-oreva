@@ -21,12 +21,12 @@ const SearchFilter = ({
           <CiSearch size={30} color="#667185" />
         </p>
         <input
-          onChange={(e) => setSearchValue && setSearchValue(e.target.value)} // Check if setSearchValue exists
-          type="text"
-          name=""
-          id=""
-          className="w-[400px] h-full  p-3 px-5 pl-14 rounded-lg outline-none"
-        />
+  placeholder="Search by teacher name or class"
+  onChange={(e) => setSearchValue && setSearchValue(e.target.value)}
+  type="text"
+  className="w-[400px] h-full p-3 px-5 pl-14 rounded-lg outline-none"
+/>
+
       </div>
       <Menu width={200} shadow="md">
         <Menu.Target>

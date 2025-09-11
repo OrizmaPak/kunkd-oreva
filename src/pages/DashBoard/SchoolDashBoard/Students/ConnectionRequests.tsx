@@ -91,6 +91,9 @@ const ConnectionRequests: React.FC = () => {
   // item selected for action
   const [activeItem, setActiveItem] = useState<TRecord | null>(null);
   const [acting, setActing] = useState(false);
+  // add this next to currentPage, etc.
+const [reloadKey, setReloadKey] = useState(0);
+
 
   // fetch page
   useEffect(() => {
@@ -129,7 +132,7 @@ const ConnectionRequests: React.FC = () => {
     return () => {
       ignore = true;
     };
-  }, [admin, currentPage]);
+  }, [admin, currentPage, reloadKey]);
 
   // class list (for the "Sort by" dropdown)
   const classOptions = useMemo(() => {
@@ -192,25 +195,30 @@ const ConnectionRequests: React.FC = () => {
     if (!activeItem || !showModal) return;
     try {
       setActing(true);
-      const payload = { student_id: activeItem.id } as any; // backend expects the request/student id
+      const payload = { student_id: activeItem.id } as any;
       if (showModal === "accept") {
         await AcceptStudentAdmission(payload);
       } else {
         await RejectStudentAdmission(payload);
       }
+  
+      // close modal + clear selection
       setShowModal(null);
       setActiveItem(null);
-      // refetch this page
-      const samePage = currentPage;
-      setCurrentPage(samePage); // triggers useEffect
+  
+      // 🔁 force a refetch of the current page
+      setReloadKey((k) => k + 1);
+  
+      // OPTIONAL (nice UX): if the current page ends up empty after refetch,
+      // you can move to the previous page. To do that, add a check after fetch.
     } catch {
-      // keep modal closed but do nothing special visually to avoid altering the design
       setShowModal(null);
       setActiveItem(null);
     } finally {
       setActing(false);
     }
   };
+  
 
   const renderTable = () => {
     if (loading) {
@@ -302,7 +310,16 @@ const ConnectionRequests: React.FC = () => {
               return (
                 <tr key={`${req.id}-${i}`} className="border-t border-gray-200">
                   <td className="px-4 py-3 flex items-center gap-3">
-                    <img src={avatar} className="w-8 h-8 rounded-full object-cover" alt="avatar" />
+                    {avatar ? (
+                      <img src={avatar} className="w-8 h-8 rounded-full object-cover" alt="avatar" />
+                    ) : (
+                      <div
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold"
+                        style={{ backgroundColor: `#${Math.floor(Math.random()*16777215).toString(16)}` }}
+                      >
+                        {sName.slice(0, 2).toUpperCase()}
+                      </div>
+                    )}
                     <span>{sName}</span>
                   </td>
                   <td className="px-4 py-3">{cls}</td>
