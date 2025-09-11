@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { GetQuiz } from "@/api/api";
+import { GetQuiz, SaveQuiz, SaveSchoolQuiz } from "@/api/api";
 import { Book } from "./BookCard";
+import QuizResultModal from "@/components/QuizResultModal";
+import useStore from "@/store";
+import { getUserState } from "@/store/authStore";
 
 export interface QuizStats {
   correct: number;
@@ -36,34 +39,66 @@ interface QuizQuestion {
   answer: "a" | "b" | "c" | "d";
 }
 
-const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSignal, onRetake, onAnswersChange }) => {
+const QuizComponent: React.FC<QuizComponentProps> = ({
+  book,
+  onComplete,
+  resetSignal,
+  onRetake,
+  onAnswersChange,
+}) => {
+  const [user] = useStore(getUserState);
 
   const [loading, setLoading] = useState(true);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
-  const [step, setStep] = useState(0); // current question/page
+  const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<UserAnswer[]>([]);
   const [finished, setFinished] = useState(false);
   const [showMustAnswerWarning, setShowMustAnswerWarning] = useState(false);
 
-  /* NEW: whenever resetSignal ticks, clear everything */
+  // NEW: result-first modal state
+  const [showResult, setShowResult] = useState(false);
+  const [quiz_id, setQuiz_id] = useState(0);
+  const [resultStats, setResultStats] = useState<{
+    correct: number;
+    incorrect: number;
+    skipped: number;
+    total: number;
+  } | null>(null);
+
+  // 🔹 NEW: trigger re-fetch on retake
+  const [reloadKey, setReloadKey] = useState(0);
+
+  // 🔹 NEW: central reset used by Retake and external resetSignal
+  const resetQuiz = () => {
+    setShowResult(false);
+    setResultStats(null);
+    setFinished(false);
+    setShowMustAnswerWarning(false);
+    setStep(0);
+    setAnswers([]);
+    setLoading(true);       // show loading while we re-fetch
+    setReloadKey((k) => k + 1); // bump to re-run fetch effect
+  };
+
+  /* respect external resetSignal as before */
   useEffect(() => {
     if (resetSignal === undefined) return;
-
-    setStep(0);          // back to the first question
-    setAnswers([]);      // wipe old answers
-    setFinished(false);  // reopen submit button etc.
+    resetQuiz();
   }, [resetSignal]);
 
+  // ⬇️ fetch questions; now runs on book change AND retake (reloadKey)
   useEffect(() => {
     (async () => {
       try {
+        setLoading(true); // 🔹 ensure loading shows on retake
         const res = await GetQuiz(String(book.id));
-        setQuestions(res.data.data.questions);
+        setQuestions(res.data?.data?.questions ?? []);
+        setQuiz_id(res.data?.data?.quiz_id ?? 0);
       } finally {
         setLoading(false);
       }
     })();
-  }, [book.id]);
+  }, [book.id, reloadKey]); // 🔹 include reloadKey
 
   // Notify parent component whenever answers change
   useEffect(() => {
@@ -92,18 +127,65 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
   const select = (letter: "a" | "b" | "c" | "d") => {
     setAnswers(prev => {
       const filtered = prev.filter(a => a.questionId !== q.question_id);
-      const updated = [...filtered, {
-        questionId: q.question_id,
-        questionText: q.question,
-        selectedOption: letter,
-        correctOption: q.answer,
-        selectedOptionValue: q[`option_${letter}`], // ← new
-        correctOptionValue: q[`option_${q.answer}`], // ← new
-        isCorrect: letter === q.answer
-      }];
+      const updated = [
+        ...filtered,
+        {
+          questionId: q.question_id,
+          questionText: q.question,
+          selectedOption: letter,
+          correctOption: q.answer,
+          selectedOptionValue: (q as any)[`option_${letter}`],
+          correctOptionValue: (q as any)[`option_${q.answer}`],
+          isCorrect: letter === q.answer,
+        },
+      ];
       if (onAnswersChange) onAnswersChange(updated); // notify parent on every change
       return updated;
     });
+  };
+
+  // submit answers (fire-and-forget) based on role
+  const submitAnswers = async () => {
+    const payload: any = {
+      quiz_id: Number(quiz_id),
+      profile_id: Number(sessionStorage.getItem("profileId") || 0),
+      questions: answers.map(a => ({
+        question_id: a.questionId,
+        question: a.questionText,
+        actual_answer: a.correctOptionValue,
+        selected_option: a.selectedOption,
+        selected_option_value: a.selectedOptionValue,
+      })),
+    };
+
+    if (user?.role === "user") {
+      const profileId = Number(sessionStorage.getItem("profileId") || 0);
+      payload.profile_id = profileId;
+      try { await SaveQuiz(payload); } catch { /* silent */ }
+    } else {
+      try { await SaveSchoolQuiz(payload); } catch { /* silent */ }
+    }
+  };
+
+  const finishFlow = () => {
+    const correctCount = answers.filter(a => a.isCorrect).length;
+    const skippedCount = total - answers.length;
+    const incorrectCount = Math.max(answers.length - correctCount, 0);
+
+    // 1) show result modal FIRST
+    setResultStats({
+      correct: correctCount,
+      incorrect: incorrectCount,
+      skipped: skippedCount,
+      total,
+    });
+    setShowResult(true);
+
+    // 2) mark finished to disable controls
+    setFinished(true);
+
+    // 3) submit in the background (role-based)
+    void submitAnswers();
   };
 
   const next = () => {
@@ -115,10 +197,7 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
     if (!isLast) {
       setStep(step + 1);
     } else {
-      const correctCount = answers.filter(a => a.isCorrect).length;
-      const skippedCount = total - answers.length;
-      onComplete({ correct: correctCount, total, skipped: skippedCount }, answers);
-      setFinished(true);
+      finishFlow();
     }
   };
 
@@ -131,10 +210,7 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
     if (!isLast) {
       setStep(step + 1);
     } else {
-      const correctCount = answers.filter(a => a.isCorrect).length;
-      const skippedCount = total - answers.length;
-      onComplete({ correct: correctCount, total, skipped: skippedCount }, answers);
-      setFinished(true);
+      finishFlow();
     }
   };
 
@@ -170,12 +246,12 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
         <div className="flex flex-col space-y-4">
           {(["a", "b", "c", "d"] as const).map(opt => {
             const isPicked = picked === opt;
-            const optionValue = q[`option_${opt}`];
+            const optionValue = (q as any)[`option_${opt}`];
             return optionValue ? (
               <button
                 key={opt}
                 onClick={() => select(opt)}
-                className={`border rounded-lg px-4 py-3 text-left transition ${
+                className={`border rounded-lg px-4 py-3 text-left transition font-bold text-black font-Inter ${
                   isPicked
                     ? "bg-[#BCD678]/40 border-[#BCD678] text-gray-900"
                     : "bg-white border-[#BCD678] hover:border-[#BCD678] hover:bg-[#F0F9E8]"
@@ -185,12 +261,11 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
             ) : null;
           })}
           <p
-          onClick={skip}
-          disabled={finished || (step + 1 === total && !canFinish)}
-          className="text-black underline text-sm px-4 text-[] disabled:opacity-50 transition cursor-pointer"
-        >
-          Skip
-        </p>
+            onClick={skip}
+            className="text-black underline text-sm px-4 cursor-pointer"
+          >
+            Skip
+          </p>
         </div>
       </div>
 
@@ -198,7 +273,7 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
       <div className="flex justify-end items-center gap-10">
         {/* Previous */}
         {step > 0 ? (
-           <button
+          <button
             onClick={() => setStep(step - 1)}
             className="w-[150px] h-[48px] opacity-100 gap-[6.16px] pr-[18.49px] pl-[18.49px] rounded-[154.12px] font-bold border  text-gray-400 border-[#BCD678] hover:text-[#BCD678] transition"
           >
@@ -207,9 +282,6 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
         ) : (
           <div /> /* placeholder to keep spacing */
         )}
-
-        {/* Skip */}
-        
 
         {/* Next / Finish */}
         <button
@@ -223,6 +295,26 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ book, onComplete, resetSi
           {step + 1 === total ? "Finish" : "Next"}
         </button>
       </div>
+
+      {/* Result-first: show this BEFORE your usual onComplete flow */}
+      {showResult && resultStats && (
+        <QuizResultModal
+          stats={resultStats}
+          onViewAnswers={() => {
+            setShowResult(false);
+            onComplete(
+              { correct: resultStats.correct, total: resultStats.total, skipped: resultStats.skipped },
+              answers
+            );
+          }}
+          onRetake={() => {
+            // 🔹 reset internally, then bubble to parent (if it does extra UI work)
+            resetQuiz();
+            onRetake?.();
+          }}
+          onClose={() => setShowResult(false)}
+        />
+      )}
     </div>
   );
 };

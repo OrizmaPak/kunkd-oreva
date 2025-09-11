@@ -144,8 +144,8 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
       barWidth: 5,
       barGap: 6,
       barRadius: 10,
-      waveColor: "#CFE4A5",        // uniform light-green bars
-      progressColor: "#CFE4A5",    // same color so it’s not two-tone
+      waveColor: "#CFE4A5",   // pale background bars
+      progressColor: "#9FC43E",// vivid green overlay as it plays
       cursorWidth: 0,
       mediaControls: false,
     });
@@ -212,7 +212,15 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
      • layout container: flex row with gap-[72px]
   ------------------------------------------------------------------ */
   return (
-    <div className="mx-auto w-[clamp(550px,100%,1440px)] py-8 px-4">
+    <div className="relative mx-auto w-[clamp(550px,100%,1440px)] py-8 px-4">
+      {/* Close button */}
+      <button
+        onClick={onClose}
+        aria-label="Close audio"
+        className="absolute right-2 top-2 h-8 w-8 rounded-full bg-white shadow ring-1 ring-gray-200 text-gray-600 hover:text-gray-800 flex items-center justify-center"
+      >
+        ✕
+      </button>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-[72px]">
         {/* LEFT: framed cover (1:1 from BookOverview) */}
         <div className="flex-shrink-0 mt-[-10px] cursor-default w-[250px] h-[300px]">

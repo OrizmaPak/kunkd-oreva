@@ -1,16 +1,21 @@
 // src/components/BookOverview.tsx
-import React, { useEffect, useState } from "react";
-import { FaBookmark } from "react-icons/fa";
+import React, { useEffect, useMemo, useState } from "react";
+import { FaHeart } from "react-icons/fa";
 import BookCard, { Book } from "./BookCard";
 import AudioComponent from "./AudioComponent";
 import FrameImg from "@/assets/bigbook.png";
-import { GetContentById } from "@/api/api";          // ← new
-import Skeleton from "react-loading-skeleton";      // ← new
+import {
+  GetContentById,
+  GetLikedContent,
+  LikedContent,
+  UnLikedContent,
+} from "@/api/api"; // ← added GetLikedContent, LikedContent, UnLikedContent
+import Skeleton from "react-loading-skeleton";
 import { showNotification } from "@mantine/notifications";
 
 /* ---------- ① extend the Book shape locally ---------- */
 interface FullBook extends Book {
-  mediaType?: string;        // "text" | "video" | "audio" | …  (mind the snake-case in API)
+  mediaType?: string;        // "text" | "video" | "audio" | …
   description?: string;      // web_synopsis / synopsis
 }
 
@@ -33,55 +38,139 @@ const BookOverview: React.FC<BookOverviewProps> = ({
   // track whether we’re showing the AudioComponent
   const [showAudio, setShowAudio] = useState(false);
 
-  /* ─── new: fetch full book details ─── */
+  /* ─── fetch full book details ─── */
   const [fullBook, setFullBook] = useState<FullBook | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [shouldMount, setShouldMount] = useState<boolean>(true);
 
+  /* ─── local like state ─── */
+  const [isLiked, setIsLiked] = useState<boolean>(!!book.is_liked);
+  const [likeBusy, setLikeBusy] = useState<boolean>(false);
+
+  const profileId = useMemo(() => {
+    // try profile store first if you have it; falls back to sessionStorage
+    return `${sessionStorage.getItem("profileId") || ""}`.trim();
+  }, []);
+
   /* ---------- ② fetch mapping ---------- */
   useEffect(() => {
-    console.log('[BookOverview] mount for book-id:', book.id);
     let mounted = true;
-
-    const profileId:any = sessionStorage.getItem("profileId");
+    setLoading(true);
 
     GetContentById(String(book.id), profileId)
-      .then(res => {
-        if (!res.data.status) {
-          // alert('Error');
-          // Assuming there's a notification system in place
-          // showNotification({
-          //   message: res.data.message,
-          //   title: "Notification"
-          // });
+      .then((res) => {
+        if (!res.data?.status) {
           setShouldMount(false);
           return;
         }
         const data = res?.data?.data ?? res?.data;
-        console.log('[BookOverview] API payload', data);
-
         if (mounted && data) {
           setFullBook({
             id: data.id,
             title: data.name,
             coverUrl: data.thumbnail,
             progress: 0,
-            mediaType: data.media_type,                 // ⬅︎ snake-case key
-            description: data.web_synopsis || data.synopsis || '',
+            mediaType: data.media_type, // snake-case key from API
+            description: data.web_synopsis || data.synopsis || "",
+            is_liked: !!data.is_liked, // ← pick server flag if available
           });
+          // Prefer the server’s flag when present
+          if (typeof data.is_liked !== "undefined") {
+            setIsLiked(!!data.is_liked);
+          }
         }
       })
-      .catch(() => {/* fall back to the stub */})
+      .catch(() => {
+        // optional: keep a silent fallback
+      })
       .finally(() => mounted && setLoading(false));
 
     return () => {
       mounted = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [book.id]);
+
+  /* ---------- ③ fallback check against favourites list (only if unknown) ---------- */
+  useEffect(() => {
+    // If we still don't know the like state (e.g., list pages didn’t include it and /content/:id didn’t return it),
+    // we cheaply verify once from the favourites endpoint.
+    const shouldProbe =
+      fullBook &&
+      typeof fullBook.is_liked === "undefined" &&
+      !!profileId;
+
+    if (!shouldProbe) return;
+
+    let active = true;
+    GetLikedContent(profileId)
+      .then((res) => {
+        const items: any[] = res?.data?.data || [];
+        if (!active) return;
+        const exists = items.some((it) => `${it?.id}` === `${book.id}`);
+        setIsLiked(exists);
+        // persist it on the fullBook object so re-renders remain consistent
+        setFullBook((prev) => (prev ? { ...prev, is_liked: exists } : prev));
+      })
+      .catch(() => {
+        /* ignore — non-blocking */
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [fullBook, profileId, book.id]);
+
+  /* ---------- ④ like/unlike toggle ---------- */
+  const toggleLike = async () => {
+    if (!profileId) {
+      showNotification({
+        title: "Select a profile",
+        message: "Please select a child profile to use favourites.",
+        color: "yellow",
+      });
+      return;
+    }
+    if (likeBusy) return;
+
+    const contentId = Number(book.id);
+    const payload = { profile_id: Number(profileId), content_id: contentId };
+
+    try {
+      setLikeBusy(true);
+      if (!isLiked) {
+        await LikedContent(payload);
+        setIsLiked(true);
+        setFullBook((prev) => (prev ? { ...prev, is_liked: true } : prev));
+        showNotification({
+          title: "Added to Favourites",
+          message: "This item is now in your favourites.",
+          color: "green",
+        });
+      } else {
+        await UnLikedContent(payload);
+        setIsLiked(false);
+        setFullBook((prev) => (prev ? { ...prev, is_liked: false } : prev));
+        showNotification({
+          title: "Removed from Favourites",
+          message: "This item has been removed from your favourites.",
+          color: "gray",
+        });
+      }
+    } catch (err: any) {
+      showNotification({
+        title: "Action failed",
+        message: err?.response?.data?.message || "Could not update favourite.",
+        color: "red",
+      });
+    } finally {
+      setLikeBusy(false);
+    }
+  };
 
   if (!shouldMount) {
     return null;
-  }
+    }
 
   if (showAudio) {
     return (
@@ -106,13 +195,13 @@ const BookOverview: React.FC<BookOverviewProps> = ({
     );
   }
 
-  /* ---------- ③ decide which buttons to render ---------- */
+  /* ---------- decide which buttons to render ---------- */
   const displayBook = fullBook ?? book;
-  const mediaType   = fullBook?.mediaType ?? 'text';   // default to text
+  const mediaType = fullBook?.mediaType ?? "text"; // default to text
 
-  const isText   = mediaType === 'text';
-  const isVideo  = mediaType === 'video';
-  const isAudio  = mediaType === 'audio';
+  const isText = mediaType === "text";
+  const isVideo = mediaType === "video";
+  const isAudio = mediaType === "audio";
 
   return (
     <div className="mx-auto w-[clamp(550px,100%,1440px)] py-8 px-4">
@@ -135,13 +224,23 @@ const BookOverview: React.FC<BookOverviewProps> = ({
             <h1 className="font-BalooSemiBold font-bold text-[36px] leading-[100%] tracking-[0px] text-[#667185]">
               {displayBook.title}
             </h1>
-             <button className="p-2 text-white hover:text-gray-600 bg-[#ECEFF1] p-2 rounded-full">
-             <svg width="51" height="50" viewBox="0 0 51 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0.742065 24.8783C0.742065 11.2592 11.7825 0.21875 25.4016 0.21875C39.0207 0.21875 50.0612 11.2592 50.0612 24.8783C50.0612 38.4974 39.0207 49.5379 25.4016 49.5379C11.7825 49.5379 0.742065 38.4974 0.742065 24.8783Z" fill="#ECEFF1"/>
-                <path d="M32.3778 33.6503L25.8639 28.9975L19.3501 33.6503V18.7615C19.3501 18.2679 19.5462 17.7945 19.8952 17.4455C20.2442 17.0965 20.7176 16.9004 21.2112 16.9004H30.5167C31.0103 16.9004 31.4837 17.0965 31.8327 17.4455C32.1817 17.7945 32.3778 18.2679 32.3778 18.7615V33.6503Z" stroke="#AEB7BF" stroke-width="3.08245" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
 
-              
+            {/* ♥ Favourite toggle */}
+            <button
+              type="button"
+              onClick={toggleLike}
+              disabled={likeBusy}
+              aria-pressed={isLiked}
+              title={isLiked ? "Remove from favourites" : "Add to favourites"}
+              className={[
+                "p-2 rounded-full transition-colors",
+                isLiked
+                  ? "bg-[#F3FAE6] text-[#9FC43E]" // green tint when liked
+                  : "bg-[#ECEFF1] text-white hover:text-gray-600",
+                likeBusy ? "opacity-70 cursor-not-allowed" : "cursor-pointer",
+              ].join(" ")}
+            >
+              <FaHeart className={isLiked ? "scale-110" : ""} />
             </button>
           </div>
 
@@ -149,7 +248,10 @@ const BookOverview: React.FC<BookOverviewProps> = ({
             Created by Kunda Kids
           </p>
 
-          <h2 className="font-arimo font-bold text-[18px] leading-[145%] mb-[6px]">Overview</h2>
+          <h2 className="font-arimo font-bold text-[18px] leading-[145%] mb-[6px]">
+            Overview
+          </h2>
+
           {displayBook.description && (
             <p
               className="font-arimo font-[400] text-[18px] leading-[145%] text-gray-700 mb-6"
@@ -168,10 +270,10 @@ const BookOverview: React.FC<BookOverviewProps> = ({
                 </button>
 
                 <button
-                  className="border hidden border-[#9FC43E] text-[#667185] w-[205px] h-[49px] rounded-full "
+                  className="border hidden border-[#9FC43E] text-[#667185] w-[205px] h-[49px] rounded-full"
                   onClick={() => setShowAudio(true)}
                   disabled
-                  >
+                >
                   Read to me
                 </button>
               </>
@@ -179,7 +281,6 @@ const BookOverview: React.FC<BookOverviewProps> = ({
 
             {isVideo && (
               <button
-                /* ④ same green style used for “Read by myself” */
                 className="bg-[#9FC43E] text-white w-[205px] h-[49px] rounded-full shadow-sm"
                 onClick={() => onWatch?.(displayBook)}
               >
