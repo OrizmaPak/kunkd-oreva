@@ -12,6 +12,7 @@ import {
 } from "@/api/api";
 
 import useStore from "@/store";
+import EmptyState from "@/components/EmptyState";
 import { getUserState } from "@/store/authStore";
 import { auth } from '@/firebase';
 import { getProfileState } from '@/store/profileStore';
@@ -390,12 +391,14 @@ const Students: React.FC = () => {
 
           {/* Empty row */}
           {!loading && !errorMsg && paged.length === 0 && (
-            <tr>
-              <td colSpan={4} className="py-10 text-center text-gray-500">
-                No students found.
-              </td>
-            </tr>
-          )}
+  <EmptyState
+    title="No students found"
+    message="Try changing the status filter or your search."
+    insideTable={true}
+    // showImage stays true (matches Connection Requests vibe)
+  />
+)}
+
 
           {/* Data rows */}
           {!loading &&

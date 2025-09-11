@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import EmptyState from "@/components/EmptyState";
 import SearchBar from "@/components/SearchBar";
 import SortDropdown from "@/components/SortDropdown";
 import Pagination from "@/components/Pagination";
@@ -156,12 +157,12 @@ const ContentTable: React.FC<Props> = ({ data, loading = false }) => {
                 ))}
               </>
             ) : paged.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="p-6 text-center text-gray-500">
-                  No content found.
-                </td>
-              </tr>
+              <EmptyState
+                title="No content found"
+                message="Content will appear here once assigned or added."
+              />
             ) : (
+            
               paged.map((c) => (
                 <tr key={c.id} className="border-t text-sm">
                   <td className="p-3 flex items-center gap-3">

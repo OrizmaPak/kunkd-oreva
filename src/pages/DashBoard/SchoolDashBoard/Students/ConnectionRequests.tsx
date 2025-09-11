@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Pagination from "@/components/Pagination";
+import EmptyState from "@/components/EmptyState";
 import SearchBar from "@/components/SearchBar";
 import { IoFilterOutline } from "react-icons/io5";
 import notfound from "@/assets/notfound.png";
@@ -268,13 +269,13 @@ const ConnectionRequests: React.FC = () => {
 
     if (pagedRequests.length === 0) {
       return (
-        <div className="text-center py-20">
-          <img src={notfound} alt="No Requests" className="mx-auto w-40 mb-4" />
-          <h3 className="font-semibold text-lg text-gray-800">No connection requests</h3>
-          <p className="text-sm text-gray-500">Connection requests would appear here.</p>
-        </div>
+        <EmptyState
+          title="No connection requests"
+          message="Connection requests will appear here."
+        />
       );
     }
+    
 
     return (
       <div className="overflow-x-auto">

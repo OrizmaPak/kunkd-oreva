@@ -835,11 +835,16 @@ React.useEffect(() => {
             ? [{ name: "Continue Reading", books: ongoingLocal, hasSub: false }, ...homeCats]
             : [{ name: "Continue Reading", books: [], hasSub: false }, ...homeCats];
 
-        if (!cancelled) setCategories(withOngoing);
+        // keep only categories that actually have books
+if (!cancelled) {
+  const pruned = withOngoing.filter((c) => Array.isArray(c.books) && c.books.length > 0);
+  setCategories(pruned);
+}
+
         return;
       } catch (e) {
         console.warn("For you load failed, show Continue Reading row only", e);
-        if (!cancelled) setCategories([{ name: "Continue Reading", books: [], hasSub: false }]);
+        if (!cancelled) setCategories([]); // no empty rows on For you
         return;
       }
     }
@@ -1020,6 +1025,10 @@ React.useEffect(() => {
     isForYouTab && expandedNames.length === 1
       ? list.filter((cat) => cat.name === expandedNames[0])
       : list;
+
+      const displayListPruned = isForYouTab
+  ? displayList.filter((cat) => Array.isArray(cat.books) && cat.books.length > 0)
+  : displayList;
 
   // 5) Build breadcrumb levels (before book) - REWRITTEN
   /* ---------- breadcrumb construction ---------- */
@@ -1369,7 +1378,7 @@ React.useEffect(() => {
           ))}
 
       {isForYouTab &&
-        displayList.map((cat) => (
+        displayListPruned.map((cat) => (
           <BookCategory
             key={cat.name}
             tabLabel="For you"
