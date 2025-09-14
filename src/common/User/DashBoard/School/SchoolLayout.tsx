@@ -191,7 +191,7 @@ const SchoolLayout: React.FC = () => {
               >
                 <span
                   className={`absolute h-[2px] w-5 bg-[#101928] transition
-                ${sidebarDocked ? "translate-y-[6px] rotate-45" : "-translate-y-[6px]"}
+                ${sidebarDocked ? "translate-y-[1px] rotate-45" : "-translate-y-[6px]"}
               `}
                 />
                 <span
@@ -201,7 +201,7 @@ const SchoolLayout: React.FC = () => {
                 />
                 <span
                   className={`absolute h-[2px] w-5 bg-[#101928] transition
-                ${sidebarDocked ? "-translate-y-[-6px] -rotate-45" : "translate-y-[6px]"}
+                ${sidebarDocked ? "-translate-y-[-1px] -rotate-45" : "translate-y-[6px]"}
               `}
                 />
               </button>

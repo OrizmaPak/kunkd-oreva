@@ -187,7 +187,7 @@ export default function Dashboard() {
 
             <div className="grid grid-cols-1 gap-5 md:grid-cols-[1fr,310px]">
                 <div className="space-y-5">
-                    {user.role === 'SchoolAdmin' && <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    {user.role == 'schoolAdmin' && <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                         <StatCard
                             icon={<svg width="50" height="51" viewBox="0 0 50 51" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect x="0.5" y="1" width="49" height="49" rx="24.5" fill="#ECF2FB" />
