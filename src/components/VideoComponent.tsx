@@ -26,6 +26,7 @@ import {
 import useStore from "@/store";
 import { getUserState } from "@/store/authStore";
 import { getApiErrorMessage } from "@/api/helper";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface VideoComponentProps {
   title: string;
@@ -54,6 +55,10 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
   onRetake,
   showPosterOnPause = true,
 }) => {
+
+  const navigate = useNavigate();
+const location = useLocation();
+  
   const videoRef = useRef<HTMLVideoElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);
   const hlsRef = useRef<Hls | null>(null);
@@ -214,6 +219,7 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
       await screenfull.exit();
     }
     onClose?.();
+    navigate("/schooldashboard/content?tab=2");
   };
 
   /* overlay visibility on play/pause */
@@ -532,7 +538,7 @@ const VideoComponent: React.FC<VideoComponentProps> = ({
             setShowQuiz(true);
           }}
           onLater={() => setShowDone(false)}
-          ongoback={() => handleBack()}
+          ongoback={() => {handleBack()}}
         />
       )}
     </div>

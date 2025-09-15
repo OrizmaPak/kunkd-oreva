@@ -327,6 +327,18 @@ export const RejectStudentAdmission = (payload: TAddTeacherData) => {
   return axios.post(`/school/student/decline`, payload);
 };
 
+// Progress report (new)
+export const GetLanguageProgressReport = (profileId: string | number) => {
+  return axios.get(`/contents/language-report/${profileId}`);
+};
+
+// If backend exposes stories similarly, this will work as-is.
+// If the path differs, just adjust the URL below.
+export const GetStoryProgressReport = (profileId: string | number) => {
+  return axios.get(`/contents/story-report/${profileId}`);
+};
+
+
 export const SaveQuiz = (payload: TSaveQuiz) => {
   return axios.post(`/quiz/question/save`, payload);
 };

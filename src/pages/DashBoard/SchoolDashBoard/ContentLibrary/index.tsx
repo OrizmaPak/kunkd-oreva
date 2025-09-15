@@ -180,6 +180,22 @@ const generateAllSubcategories = (): Category[] => [
 
 // console.log('GetCompletedContents', GetCompletedContents(sessionStorage.getItem("profileId")));
 const ContentLibrary: React.FC<{ state?: string }> = ({ state = 'home' }) => {
+  // -- DEAD-SIMPLE GRID SKELETON (Tailwind) --
+const SkeletonGrid: React.FC<{ count?: number }> = ({ count = 8 }) => (
+  <div className="grid grid-cols-2 gap-4 p-2 sm:grid-cols-3 md:grid-cols-4">
+    {Array.from({ length: count }).map((_, i) => (
+      <div
+        key={i}
+        className="animate-pulse rounded-xl border border-gray-100 p-3 shadow-sm"
+      >
+        <div className="h-36 w-full rounded-lg bg-gray-200" />
+        <div className="mt-3 h-4 w-3/4 rounded bg-gray-200" />
+        <div className="mt-2 h-3 w-1/2 rounded bg-gray-200" />
+      </div>
+    ))}
+  </div>
+);
+
   const [user] = useStore(getUserState);
   const defaultTabs: Omit<Tab, "id">[] = [
     // { label: "Literacy", icon: literacy },

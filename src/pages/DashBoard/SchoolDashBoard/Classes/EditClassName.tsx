@@ -198,17 +198,19 @@ const EditClassName = ({
                 {...register("teacher_id")}
                 name="teacher_id"
                 id="teacher_id"
-                value={currentTeacherData?.user?.id}
+                defaultValue={currentTeacherData?.user?.id}
                 className="w-full  h-full flex-1  focus:outline-none bg-inherit"
               >
-                <option>Select Teacher</option>
+                <option value="">Select Teacher</option>
                 {teacherList?.map((data: TTeacherList) => (
-                  <option value={data?.user?.id}>
+                  <option
+                    key={data?.user?.id}
+                    value={data?.user?.id}
+                    selected={data?.user?.id === currentTeacherData?.user?.id}
+                  >
                     {data?.user.firstname} {data?.user?.lastname}
                   </option>
                 ))}
-                {/* <option value="classA">Class A</option>
-                            <option value="classB">Class B</option> */}
               </select>
             </p>
             <span className="text-red-600 mb-10">

@@ -213,7 +213,7 @@ const closeMenu = () => setMenuOpened(false);
         >
           <span
             className={`absolute h-[2px] w-5 bg-[#101928] transition
-              ${sidebarDocked ? "translate-y-[6px] rotate-45" : "-translate-y-[6px]"}
+              ${sidebarDocked ? "translate-y-[1px] rotate-45" : "-translate-y-[1px]"}
               `}
           />
           <span
@@ -223,7 +223,7 @@ const closeMenu = () => setMenuOpened(false);
           />
           <span
             className={`absolute h-[2px] w-5 bg-[#101928] transition
-              ${sidebarDocked ? "-translate-y-[-6px] -rotate-45" : "translate-y-[6px]"}
+              ${sidebarDocked ? "-translate-y-[-1px] -rotate-45" : "translate-y-[1px]"}
             `}
           />
         </button>
@@ -244,7 +244,7 @@ const closeMenu = () => setMenuOpened(false);
               </svg>
 
               <p
-                className={`absolute -top-4 text-white  right-[-4px] py-[1px] rounded-full px-[3px] ${totalSchoolConnectList > 0 ? "bg-red-700" : "bg-white"
+                className={`absolute -top-1 text-white text-xs  right-[-4px] py-[1px] rounded-full px-[5px] ${totalSchoolConnectList > 0 ? "bg-red-700" : "bg-white"
                   }  `}
               >
                 {totalSchoolConnectList || 0}
