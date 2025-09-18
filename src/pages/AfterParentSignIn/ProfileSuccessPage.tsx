@@ -9,7 +9,7 @@ import { useGetProfile } from "@/api/queries";
 
 const ProfileSuccessPage = () => {
               useGetProfile(true);
-    const navigator = useNavigate();
+    const navigate = useNavigate();
   return (
     <div>
 
@@ -34,8 +34,8 @@ const ProfileSuccessPage = () => {
             </div>
 
             <div className="flex justify-center items-center py-10 flex-col gap-5 px-28">
-                                <Button backgroundColor="green" onClick={()=>navigator('/schooldashboard/content')} className=" rounded-full">Continue to homepage</Button>
-                                <Button onClick={()=>navigator("/connecttoschool")} borderColor="green"  varient="outlined" className="rounded-full "><span className="text-[#9FC43E]">Join a class</span></Button>
+                                <Button backgroundColor="green" onClick={()=>navigate('/schooldashboard/content')} className=" rounded-full">Continue to homepage</Button>
+                                <Button onClick={()=>navigate("/connecttoschool")} borderColor="green"  varient="outlined" className="rounded-full "><span className="text-[#9FC43E]">Join a class</span></Button>
             </div>
             </motion.div>
         </SignInWrapper>
