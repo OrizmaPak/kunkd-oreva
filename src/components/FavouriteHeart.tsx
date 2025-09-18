@@ -35,9 +35,9 @@ const FavouriteHeart: React.FC<Props> = ({
       className={`group inline-flex items-center justify-center rounded-full bg-white/50 hover:bg-white p-1 shadow-sm transition ${className}`}
     >
       {isFavorite ? (
-          <AiFillHeart size={size} className="text-rose-500 transition-transform group-active:scale-95" />
+        <AiFillHeart size={size} className="text-[#bcd678] transition-transform group-active:scale-95" />
         ) : (
-            <AiOutlineHeart size={size} className="text-rose-500 transition-transform group-active:scale-95" />
+          <AiOutlineHeart size={size} className="text-[#bcd678] transition-transform group-active:scale-95" />
       )}
     </button>
   );

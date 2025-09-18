@@ -404,6 +404,12 @@ export const AllProgressContent = (id: number) => {
   return axios.get(`/content/tracking/all`, { params: { id } });
 };
 
+
+export const GetProgressReport = (profileId: string | number) => {
+  // Example: /contents/progress-report/4086
+  return axios.get(`/contents/progress-report/${profileId}`);
+};
+
 export const GetLicense = () => {
   return axios.get(`license`);
 }; 
