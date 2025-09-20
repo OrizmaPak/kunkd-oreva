@@ -404,6 +404,22 @@ export const AllProgressContent = (id: number) => {
   return axios.get(`/content/tracking/all`, { params: { id } });
 };
 
+// ✅ NEW — Languages report (for /languages-report?category=languages)
+export const GetLanguageReport = (profileId: string | number) => {
+  return axios.get(`/contents/language-report/${profileId}`);
+};
+
+// ✅ NEW — Stories report (for /stories-report?category=stories)
+export const GetStoryReport = (profileId: string | number) => {
+  return axios.get(`/contents/story-report/${profileId}`);
+};
+
+
+export const GetProgressReport = (profileId: string | number) => {
+  // Example: /contents/progress-report/4086
+  return axios.get(`/contents/progress-report/${profileId}`);
+};
+
 export const GetLicense = () => {
   return axios.get(`license`);
 }; 

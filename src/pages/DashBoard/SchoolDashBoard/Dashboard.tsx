@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     BarChart,
     Bar,
@@ -50,24 +50,13 @@ type AdmittedRow = {
     parent?: { firstname: string; lastname: string; user_id: number };
 };
 
-const classPerformance = [
-    { name: "Class A", Stories: 650, Literacy: 380, Languages: 300, Quiz: 720 },
-    { name: "Class B", Stories: 760, Literacy: 420, Languages: 330, Quiz: 760 },
-    { name: "Class C", Stories: 760, Literacy: 410, Languages: 310, Quiz: 760 },
-    { name: "Class D", Stories: 760, Literacy: 450, Languages: 350, Quiz: 780 },
-    { name: "Class E", Stories: 820, Literacy: 470, Languages: 360, Quiz: 900 },
-    { name: "Class F", Stories: 760, Literacy: 400, Languages: 300, Quiz: 940 },
-];
-
-const pieData = [
-    { name: "Stories", value: 121799 },
-    { name: "Audiobook", value: 66734 },
-    { name: "Literacy Content", value: 21567 },
-    { name: "Languages", value: 11387 },
-    { name: "Quiz", value: 7806 },
-];
+// Deprecated static demo data replaced by dynamic data from API
 
 const COLORS = ["#5B8DEF", "#A3DAFF", "#B7E0FF", "#8BC1F7", "#CFE8FF"];
+
+// Dynamic colors for charts
+const BAR_COLORS = ["#5B8DEF", "#A3DAFF", "#8BC1F7", "#CFE8FF", "#B7E0FF"]; // reused palette
+const PIE_COLORS = ["#E9F6FF", "#D6EEFF", "#C3E7FF", "#AFDFFF", "#98D4FF"]; // existing palette used below
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -76,6 +65,10 @@ export default function Dashboard() {
     const [hasStudentData, setHasStudentData] = useState(false);
     const [licence, setLicence] = useState<Licence | null>(null);
     const [name, setName] = useState<string | null>(null);
+    // Dynamic data from license endpoint
+    const [classPerformanceData, setClassPerformanceData] = useState<Array<Record<string, number | string>>>([]);
+    const [classCategories, setClassCategories] = useState<string[]>([]);
+    const [consumedData, setConsumedData] = useState<{ name: string; value: number }[]>([]);
     const [requestLog, setRequestLog] = useState<AdmittedRow[]>([]);
     const [loadingRequestLog, setLoadingRequestLog] = useState(false);
     const [requestLogError, setRequestLogError] = useState<string | null>(null);
@@ -90,9 +83,44 @@ export default function Dashboard() {
         (async () => {
             try {
                 const res = await GetLicense();
-                const lic = res?.data?.data?.school?.licence;
-                setName(res?.data?.data?.school.contact_name);
+                const school = res?.data?.data?.school;
+                const lic = school?.licence;
+                setName(school?.contact_name ?? null);
                 if (mounted && lic) setLicence(lic);
+
+                // Map class performances to bar chart data
+                const rawPerformances: Array<{ class_name: string; counts: Array<{ category_name: string; content_count: number }> | null }> = school?.class_performances ?? [];
+                const categoriesSet = new Set<string>();
+                const mappedBarData: Array<Record<string, number | string>> = (rawPerformances || []).map((entry) => {
+                    const row: Record<string, number | string> = { name: entry.class_name };
+                    if (Array.isArray(entry.counts)) {
+                        entry.counts.forEach((c) => {
+                            if (c && typeof c.category_name === 'string') {
+                                categoriesSet.add(c.category_name);
+                                row[c.category_name] = c.content_count ?? 0;
+                            }
+                        });
+                    }
+                    return row;
+                });
+                const hasAnyClass = (rawPerformances || []).some((p) => Array.isArray(p.counts) && p.counts.length > 0 && p.counts.some((c) => (c?.content_count ?? 0) > 0));
+                if (mounted) {
+                    setClassPerformanceData(mappedBarData);
+                    setClassCategories(Array.from(categoriesSet));
+                    setHasClassData(hasAnyClass);
+                }
+
+                // Map consumed contents to pie chart data
+                const rawConsumed: Array<{ category_name: string; content_count: number }> = school?.consumed_contents ?? [];
+                const normalized = (rawConsumed || []).map((c) => ({
+                    name: c.category_name === 'Audiobooks' ? 'Audiobook' : c.category_name,
+                    value: c.content_count ?? 0,
+                }));
+                const hasAnyConsumed = normalized.some((n) => (n.value ?? 0) > 0);
+                if (mounted) {
+                    setConsumedData(normalized);
+                    setHasStudentData(hasAnyConsumed);
+                }
             } catch (e) {
                 console.error("GetLicense failed", e);
             }
@@ -139,6 +167,7 @@ export default function Dashboard() {
     const classesValue = `${licence?.added_class_count ?? 0}/${licence?.license_class_count ?? 0}`;
     const teachersValue = `${licence?.added_teacher_count ?? 0}/${licence?.license_teacher_count ?? 0}`;
     const studentsValue = `${licence?.added_student_count ?? 0}/${licence?.license_student_count ?? 0}`;
+    const consumedTotal = useMemo(() => consumedData.reduce((sum, d) => sum + (d.value || 0), 0), [consumedData]);
 
     return (
         <div className="mx-auto w-[clamp(320px,100%,1200px)] p-4 md:p-6">
@@ -241,7 +270,7 @@ export default function Dashboard() {
                             </div>
                             <div className="h-64 w-full">
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart data={classPerformance} barGap={6} barSize={18}>
+                                    <BarChart data={classPerformanceData} barGap={6} barSize={18}>
                                         <CartesianGrid stroke="#EEF2F7" vertical={false} />
                                         <XAxis
                                             dataKey="name"
@@ -261,10 +290,9 @@ export default function Dashboard() {
                                                 border: "1px solid #E5E7EB",
                                             }}
                                         />
-                                        <Bar dataKey="Stories" fill="#5B8DEF" radius={[6, 6, 0, 0]} />
-                                        <Bar dataKey="Literacy" fill="#A3DAFF" radius={[6, 6, 0, 0]} />
-                                        <Bar dataKey="Languages" fill="#8BC1F7" radius={[6, 6, 0, 0]} />
-                                        <Bar dataKey="Quiz" fill="#CFE8FF" radius={[6, 6, 0, 0]} />
+                                        {classCategories.map((cat, idx) => (
+                                            <Bar key={cat} dataKey={cat} fill={BAR_COLORS[idx % BAR_COLORS.length]} radius={[6, 6, 0, 0]} />
+                                        ))}
                                     </BarChart>
                                 </ResponsiveContainer>
                             </div>
@@ -286,7 +314,7 @@ export default function Dashboard() {
                                     <p className="text-[13px] leading-[145%] text-start text-[#667185]">Top Consumed Content</p>
 
                                     <div className="mt-1 flex items-baseline gap-2">
-                                        <span className="font-bold text-[28px] leading-[33.6px] tracking-[-0.02em] text-center text-[#101928]">123,456</span>
+                                        <span className="font-bold text-[28px] leading-[33.6px] tracking-[-0.02em] text-center text-[#101928]">{consumedTotal.toLocaleString()}</span>
                                         <span className="font-medium text-[16px] leading-[33.6px] tracking-[-0.02em] text-center text-[#667185]">views</span>
                                     </div>
 
@@ -317,7 +345,7 @@ export default function Dashboard() {
                                     <ResponsiveContainer width={256} height={257} className="relative -top-7 right-14">
                                         <PieChart>
                                             <Pie
-                                                data={pieData}
+                                                data={consumedData}
                                                 dataKey="value"
                                                 nameKey="name"
                                                 innerRadius={0}
@@ -328,12 +356,10 @@ export default function Dashboard() {
                                                 stroke="none"
                                                 opacity={1}
                                             >
-                                                {pieData.map((_, i) => (
+                                                {consumedData.map((_, i) => (
                                                     <Cell
                                                         key={i}
-                                                        fill={
-                                                            ["#E9F6FF", "#D6EEFF", "#C3E7FF", "#AFDFFF", "#98D4FF"][i % 5]
-                                                        }
+                                                        fill={PIE_COLORS[i % PIE_COLORS.length]}
                                                     />
                                                 ))}
                                             </Pie>
@@ -342,7 +368,7 @@ export default function Dashboard() {
                                 </div>
 
                                 <ul className="space-y-4">
-                                    {pieData.map((item) => (
+                                    {consumedData.map((item) => (
                                         <li key={item.name} className="flex items-center justify-between text-sm">
                                             <div className="flex items-center gap-3">
                                                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-b from-[#E6F3FF] to-[#CDE7FF] text-[#4B9CE2]">
