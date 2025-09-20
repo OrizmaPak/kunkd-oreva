@@ -102,7 +102,7 @@ const [reloadKey, setReloadKey] = useState(0);
       try {
         setLoading(true);
         const res = (admin
-          ? await GetAttemptAllStudentConnect(String(currentPage))
+          ? await GetAttemptAllStudentConnect(String(currentPage),activeTab)
           : await GetAttemptStudentConnect(String(currentPage))) as unknown as {
           data: TApiEnvelope;
         };
@@ -132,7 +132,7 @@ const [reloadKey, setReloadKey] = useState(0);
     return () => {
       ignore = true;
     };
-  }, [admin, currentPage, reloadKey]);
+  }, [admin, currentPage, reloadKey, activeTab]);
 
   // class list (for the "Sort by" dropdown)
   const classOptions = useMemo(() => {
@@ -152,12 +152,12 @@ const [reloadKey, setReloadKey] = useState(0);
     let rows = records;
 
     // tab
-    rows = rows.filter((r) => {
-      const st = statusOf(r);
-      if (activeTab === "pending") return st === "pending";
-      // "denied" tab → show declined
-      return st === "declined";
-    });
+//    rows = rows.filter((r) => {
+//   const st = statusOf(r);
+//   if (activeTab === "pending") return st === "pending";
+//   if (activeTab === "denied") return st === "denied";
+//   return true; // fallback: don't filter out anything else
+// });
 
     // class
     if (sortClass) {

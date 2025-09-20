@@ -293,8 +293,8 @@ export const GetAttemptStudentConnect = (page: string) => {
   return axios.get("/school/student/connect/list", { params: { page } });
 };
 
-export const GetAttemptAllStudentConnect = (page: string) => {
-  return axios.get("/school/student/all/connect/list", { params: { page } });
+export const GetAttemptAllStudentConnect = (page: string, status?: string,) => {
+  return axios.get("/school/student/all/connect/list", { params: { page ,status} });
 };
 
 export const ReAssignTeacher = (payload: TAddTeacherData) => {
