@@ -35,4 +35,5 @@ export type FormData = {
   ageGroup?: string;
   subjectId?: string;
   body?: string;
+  city?: string;
 };

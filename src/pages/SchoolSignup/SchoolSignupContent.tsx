@@ -46,7 +46,7 @@ const SchoolSignupContent = () => {
       .string()
       .min(2, { message: "Contact name must be at least 4 characters long" })
       .max(20, { message: "Contact name must not exceed 20 characters" }),
-    state: z
+    city: z
       .string()
       .min(2, { message: " The state name must be at least 2 characters long" })
       .max(20, { message: "The state name must not exceed 20 characters" }),
@@ -140,9 +140,9 @@ const SchoolSignupContent = () => {
               <p className="w-full h-full mb-[10px]">
                 <InputFormat
                   type="text"
-                  placeholder="Enter State"
-                  reg={register("state")}
-                  errorMsg={errors.state?.message}
+                  placeholder="Enter City"
+                  reg={register("city")}
+                  errorMsg={errors.city?.message}
                 />
               </p>
             </div>
