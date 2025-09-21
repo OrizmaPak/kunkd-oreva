@@ -61,6 +61,7 @@ const PIE_COLORS = ["#E9F6FF", "#D6EEFF", "#C3E7FF", "#AFDFFF", "#98D4FF"]; // e
 export default function Dashboard() {
     const navigate = useNavigate();
     const [user] = useStore(getUserState);
+    const isTeacher = (user?.role ?? "").toLowerCase() === "teacher";
     const [hasClassData, setHasClassData] = useState(false);
     const [hasStudentData, setHasStudentData] = useState(false);
     const [licence, setLicence] = useState<Licence | null>(null);
@@ -170,13 +171,13 @@ export default function Dashboard() {
     const consumedTotal = useMemo(() => consumedData.reduce((sum, d) => sum + (d.value || 0), 0), [consumedData]);
 
     return (
-        <div className="mx-auto w-[clamp(320px,100%,1200px)] p-4 md:p-6">
-            <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-[1fr,310px]">
-                <div className="rounded-2xl p-5 ">
+        <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+            <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr),minmax(260px,320px)]">
+                <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                     <h1 className="font-[Inter] font-semibold text-[24px] leading-[120%] tracking-[-0.02em] text-slate-900">
                         Welcome {name}
                     </h1>
-                    <p className="mt-3 text-slate-500" style={{ fontFamily: 'Inter', fontWeight: 400, fontStyle: 'normal', fontSize: '16px', lineHeight: '145%', letterSpacing: '0%' }}>
+                    <p className="mt-3 font-[Inter] text-base font-normal leading-[145%] text-slate-500">
                         {(() => {
                             const currentHour = new Date().getHours();
                             const greetings = [
@@ -195,8 +196,8 @@ export default function Dashboard() {
                     </p>
                 </div>
 
-                <div className="flex items-center justify-start h-[80%] top-5 relative rounded-2xl border border-slate-200 bg-white px-10 shadow-sm">
-                    <div className="flex items-center gap-3">
+                <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white px-5 py-6 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+                    <div className="flex w-full flex-col items-start gap-3 sm:flex-row sm:items-center">
                         <div className="rounded-full bg-slate-100 p-2 text-slate-700">
                             <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect width="40" height="40" rx="20" fill="#F0F2F5" />
@@ -214,9 +215,9 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-[1fr,310px]">
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr),minmax(260px,320px)] xl:gap-8">
                 <div className="space-y-5">
-                    {user.role == 'schoolAdmin' && <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    {user.role == 'schoolAdmin' && <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         <StatCard
                             icon={<svg width="50" height="51" viewBox="0 0 50 51" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect x="0.5" y="1" width="49" height="49" rx="24.5" fill="#ECF2FB" />
@@ -297,6 +298,15 @@ export default function Dashboard() {
                                 </ResponsiveContainer>
                             </div>
                         </div>
+                    ) : isTeacher ? (
+                        <div className="rounded-2xl border border-[#E4E7EC] bg-white p-5 shadow-sm sm:p-6">
+                            <h2 className="text-sm font-semibold text-[#101928]">Class Performance</h2>
+
+                            <div className="flex flex-col items-center justify-center py-10 text-center">
+                                <p className="text-[16px] font-semibold text-[#101928]">No data available yet</p>
+                                <p className="mt-1 text-sm text-[#667185]">Once your school assigns you to classes and students engage with content, you'll see performance analytics here.</p>
+                            </div>
+                        </div>
                     ) : (
                         <EmptyClassPerformance onAddClass={() => {
                             if (user.role === 'teacher') {
@@ -308,8 +318,8 @@ export default function Dashboard() {
                     )}
 
                     {hasStudentData ? (
-                        <div className="rounded-2xl border border-[#E4E7EC] bg-white p-5 md:p-6 shadow-sm">
-                            <div className="grid items-center gap-6 md:grid-cols-3">
+                        <div className="rounded-2xl border border-[#E4E7EC] bg-white p-5 shadow-sm sm:p-6">
+                            <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-2 lg:grid-cols-3">
                                 <div>
                                     <p className="text-[13px] leading-[145%] text-start text-[#667185]">Top Consumed Content</p>
 
@@ -341,21 +351,22 @@ export default function Dashboard() {
                                     </div>
                                 </div>
 
-                                <div className="mx-auto h-40 w-full md:h-48">
-                                    <ResponsiveContainer width={256} height={257} className="relative -top-7 right-14">
-                                        <PieChart>
-                                            <Pie
-                                                data={consumedData}
-                                                dataKey="value"
-                                                nameKey="name"
-                                                innerRadius={0}
-                                                outerRadius={116}
-                                                startAngle={90}
-                                                endAngle={450}
-                                                paddingAngle={1.5}
-                                                stroke="none"
-                                                opacity={1}
-                                            >
+                                <div className="mx-auto w-full max-w-[260px] sm:max-w-[300px] md:max-w-[340px] lg:mx-0 lg:max-w-[360px]">
+                                    <div className="aspect-square">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <PieChart>
+                                                <Pie
+                                                    data={consumedData}
+                                                    dataKey="value"
+                                                    nameKey="name"
+                                                    innerRadius={0}
+                                                    outerRadius="80%"
+                                                    startAngle={90}
+                                                    endAngle={450}
+                                                    paddingAngle={1.5}
+                                                    stroke="none"
+                                                    opacity={1}
+                                                >
                                                 {consumedData.map((_, i) => (
                                                     <Cell
                                                         key={i}
@@ -366,10 +377,11 @@ export default function Dashboard() {
                                         </PieChart>
                                     </ResponsiveContainer>
                                 </div>
+                                </div>
 
                                 <ul className="space-y-4">
                                     {consumedData.map((item) => (
-                                        <li key={item.name} className="flex items-center justify-between text-sm">
+                                        <li key={item.name} className="flex flex-wrap items-start justify-between gap-3 text-sm sm:flex-nowrap sm:items-center">
                                             <div className="flex items-center gap-3">
                                                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-b from-[#E6F3FF] to-[#CDE7FF] text-[#4B9CE2]">
                                                     {{
@@ -413,12 +425,20 @@ export default function Dashboard() {
                                 </ul>
                             </div>
                         </div>
+                    ) : isTeacher ? (
+                        <div className="rounded-2xl border border-[#E4E7EC] bg-white p-5 shadow-sm sm:p-6">
+                            <p className="text-[13px] font-semibold text-[#101928]">Top Consumed Content</p>
+                            <div className="flex flex-col items-center justify-center py-10 text-center">
+                                <p className="text-[16px] font-semibold text-[#101928]">No data available yet</p>
+                                <p className="mt-1 text-sm text-[#667185]">As students start consuming content, you'll find usage insights here.</p>
+                            </div>
+                        </div>
                     ) : (
                         <EmptyTopConsumed onAddStudent={() => navigate('/schooldashboard/students')} />
                     )}
                 </div>
 
-                <aside className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <aside className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                     <div className="mb-4 flex items-center justify-between">
                         <h3 className="font-[Inter] font-semibold text-slate-800 text-[18px] leading-[145%]">Request Log</h3>
                         <button 
@@ -460,13 +480,13 @@ export default function Dashboard() {
                             const avatar = row.image;
 
                             return (
-                                 <li key={row.id} className="flex items-center justify-between rounded-xl px-3 py-2 relative right-2">
+                                 <li key={row.id} className="flex flex-col gap-3 rounded-xl px-3 py-3 sm:flex-row sm:items-center sm:justify-between">
                                     <div className="flex items-center gap-3">
                                         <AvatarName name={displayName} avatarUrl={avatar || ''} />
                                     </div>
                                     <div className="relative">
                                         <button 
-                                            className="relative left-4 focus:outline-none"
+                                            className="ml-2 p-1 focus:outline-none"
                                             onClick={() => toggleViewButton(row.id)}
                                         >
                                             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -478,7 +498,7 @@ export default function Dashboard() {
                                             </svg>
                                         </button>
                                         {showViewButtonId === row.id && (
-                                            <div className="absolute -left-10 font-Inter -mt-2 w-20 bg-white border border-gray-200 rounded-xl shadow-lg">
+                                            <div className="absolute right-0 z-10 mt-2 w-24 rounded-xl border border-gray-200 bg-white font-Inter shadow-lg">
                                                 <button 
                                                     className="w-full text-center py-1 text-sm text-gray-700 hover:bg-gray-100"
                                                     onClick={() => navigate(`/schooldashboard/students/${row.id}`)}

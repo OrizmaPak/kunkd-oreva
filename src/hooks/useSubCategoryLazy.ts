@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { GetContebtBySubCategories, GetLikedContent } from "@/api/api";
 import type { Book } from "@/components/BookCard";
+import { deriveMediaAttributes } from "@/utils/media";
 
 const TRACE = (...m: any[]) =>
   console.log("%c[useSubCategoryLazy]", "color:#8CBA51;font-weight:bold", ...m);
@@ -37,13 +38,20 @@ function normalizePayload(raw: any): { number_pages: number; records: any[] } {
 
 /** Map raw content → Book */
 function mapToBooks(records: any[]): Book[] {
-  return records.map((r: any) => ({
-    id: r?.content_id ?? r?.id,
-    title: r?.name ?? r?.title ?? "",
-    coverUrl: r?.thumbnail ?? r?.cover ?? r?.image ?? "",
-    is_liked: r?.is_liked,
-    progress: Number(r?.percentage ?? r?.progress ?? 0) || 0,
-  }));
+  return records.map((r: any) => {
+    const mediaAttributes = deriveMediaAttributes(r);
+
+    return {
+      id: r?.content_id ?? r?.id,
+      title: r?.name ?? r?.title ?? "",
+      coverUrl: r?.thumbnail ?? r?.cover ?? r?.image ?? "",
+      is_liked: r?.is_liked,
+      progress: Number(r?.percentage ?? r?.progress ?? 0) || 0,
+      hasAudio: mediaAttributes.hasAudio,
+      hasText: mediaAttributes.hasText,
+      audioSources: mediaAttributes.audioSources,
+    };
+  });
 }
 
 const useSubCategoryLazy = (subId: number | null, expanded: boolean) => {

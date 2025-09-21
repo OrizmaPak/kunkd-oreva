@@ -1,14 +1,18 @@
 import React from "react";
 import FrameImg from "@/assets/bookframe.png";
 import FavouriteHeart from "@/components/FavouriteHeart";
+import { IoHeadsetOutline } from "react-icons/io5";
 
-export interface Book { 
+export interface Book {
   id: number | string;
   title: string;
   coverUrl: string;
-  progress: number; // 0–100
+  progress: number; // 0-100
   is_liked?: boolean; // backend flag if available
   category?: string;
+  hasAudio?: boolean;
+  hasText?: boolean;
+  audioSources?: string[];
 }
 
 export interface BookCardProps {
@@ -54,6 +58,15 @@ const BookCard: React.FC<BookCardProps> = ({
           contentType="book"
         />
       </div>
+
+      {book.hasAudio && (
+        <span
+          className="absolute top-2 right-2 z-10 flex items-center gap-1 rounded-full bg-white/90 px-2 py-1 text-[11px] font-medium text-[#667185] shadow-sm"
+        >
+          <IoHeadsetOutline className="h-4 w-4 text-[#9FC43E]" />
+          Audio
+        </span>
+      )}
 
       {/* Frame PNG */}
       <img src={FrameImg} alt="frame" className="block w-[134px] h-[152px]" />

@@ -222,6 +222,16 @@ const location = useLocation();
     navigate("/schooldashboard/content?tab=2");
   };
 
+  const handleReplay = () => {
+    setShowDone(false);
+    setShowQuiz(false);
+    const vid = videoRef.current;
+    if (vid) {
+      vid.currentTime = 0;
+      void vid.play();
+    }
+  };
+
   /* overlay visibility on play/pause */
   useEffect(() => {
     if (isPlaying) showOverlay();
@@ -533,12 +543,16 @@ const location = useLocation();
         <WellDoneModal
           className="absolute inset-0 z-30"
           message="Great job! You’ve finished the video."
+          variant="watch"
           onTakeQuiz={() => {
             setShowDone(false);
             setShowQuiz(true);
           }}
-          onLater={() => setShowDone(false)}
-          ongoback={() => {handleBack()}}
+          onReplay={handleReplay}
+          onGoBack={() => {
+            setShowDone(false);
+            void handleBack();
+          }}
         />
       )}
     </div>

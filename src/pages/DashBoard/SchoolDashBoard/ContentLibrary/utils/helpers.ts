@@ -1,6 +1,7 @@
 import { Book } from "@/components/BookCard";
 import { Category } from "../types/contentLibrary";
 import KojoAndLolaImage from "@/assets/Kojo and Lola.png";
+import { deriveMediaAttributes } from "@/utils/media";
 
 /* ---------------- Logger ---------------- */
 export const trace = (...msg: any[]) =>
@@ -33,13 +34,19 @@ export const homeToCategories = (payload: any): Category[] => {
         }
         return false;
       })
-      .map((item) => ({
-        id: item.id,
-        title: item.name,
-        coverUrl: item.thumbnail,
-        progress: 0, // default for "for you" rows
-        is_liked: item.is_liked,
-      }));
+      .map((item) => {
+        const mediaAttributes = deriveMediaAttributes(item);
+        return {
+          id: item.id,
+          title: item.name,
+          coverUrl: item.thumbnail,
+          progress: 0, // default for "for you" rows
+          is_liked: item.is_liked,
+          hasAudio: mediaAttributes.hasAudio,
+          hasText: mediaAttributes.hasText,
+          audioSources: mediaAttributes.audioSources,
+        };
+      });
 
     catArray.push({
       name: toTitle(key),
@@ -62,6 +69,8 @@ export const generateAllSubcategories = (): Category[] => [
         title: "Advanced Book One",
         coverUrl: KojoAndLolaImage,
         progress: 10,
+        hasText: true,
+        hasAudio: false,
       },
     ],
   },

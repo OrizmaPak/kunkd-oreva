@@ -1,5 +1,5 @@
 // src/components/BookOverview.tsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import BookCard, { Book } from "./BookCard";
 import AudioComponent from "./AudioComponent";
@@ -12,6 +12,7 @@ import {
 } from "@/api/api"; // ← added GetLikedContent, LikedContent, UnLikedContent
 import Skeleton from "react-loading-skeleton";
 import { showNotification } from "@mantine/notifications";
+import { deriveMediaAttributes } from "@/utils/media";
 
 /* ---------- ① extend the Book shape locally ---------- */
 interface FullBook extends Book {
@@ -25,7 +26,8 @@ export interface BookOverviewProps {
   onBack?: () => void;
   onRead?: (book: Book) => void;
   onWatch?: (book: Book) => void;
-  /** URL or import path to the book’s audio file */
+  onListen?: (book: Book) => void;
+  /** URL or import path to the book's audio file */
   audioSrc: string;
 }
 
@@ -33,64 +35,116 @@ const BookOverview: React.FC<BookOverviewProps> = ({
   book,
   onRead,
   onWatch,
+  onListen,
   audioSrc,
 }) => {
   // track whether we’re showing the AudioComponent
   const [showAudio, setShowAudio] = useState(false);
 
-  /* ─── fetch full book details ─── */
   const [fullBook, setFullBook] = useState<FullBook | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [shouldMount, setShouldMount] = useState<boolean>(true);
+  const fetchRef = useRef<{ key: string; promise: ReturnType<typeof GetContentById> } | null>(null);
+
+  const profileId = useMemo(() => {
+    return `${sessionStorage.getItem("profileId") || ""}`.trim();
+  }, []);
 
   /* ─── local like state ─── */
   const [isLiked, setIsLiked] = useState<boolean>(!!book.is_liked);
   const [likeBusy, setLikeBusy] = useState<boolean>(false);
 
-  const profileId = useMemo(() => {
-    // try profile store first if you have it; falls back to sessionStorage
-    return `${sessionStorage.getItem("profileId") || ""}`.trim();
-  }, []);
-
-  /* ---------- ② fetch mapping ---------- */
+  /* ─── fetch full book details ─── */
   useEffect(() => {
-    let mounted = true;
-    setLoading(true);
+    if (!book?.id) {
+      return;
+    }
 
-    GetContentById(String(book.id), profileId)
-      .then((res) => {
-        if (!res.data?.status) {
-          setShouldMount(false);
-          return;
-        }
-        const data = res?.data?.data ?? res?.data;
-        if (mounted && data) {
+    const userKey = profileId || "";
+    const requestKey = `${book.id}-${userKey}`;
+
+    const runRequest = (promise: ReturnType<typeof GetContentById>, key: string) => {
+      promise
+        .then((res) => {
+          if (fetchRef.current?.key !== key) {
+            return;
+          }
+
+          if (!res?.data?.status) {
+            setShouldMount(false);
+            showNotification({
+              title: "Unavailable",
+              message: res?.data?.message || "This book is currently unavailable.",
+              color: "red",
+            });
+            onBack?.();
+            fetchRef.current = null;
+            setLoading(false);
+            return;
+          }
+
+          const data = res?.data?.data ?? res?.data;
+          if (!data) {
+            setShouldMount(false);
+            fetchRef.current = null;
+            setLoading(false);
+            return;
+          }
+
+          const mediaAttributes = deriveMediaAttributes(data);
+
           setFullBook({
             id: data.id,
             title: data.name,
             coverUrl: data.thumbnail,
             progress: 0,
-            mediaType: data.media_type, // snake-case key from API
+            mediaType: data.media_type,
             description: data.web_synopsis || data.synopsis || "",
-            is_liked: !!data.is_liked, // ← pick server flag if available
+            is_liked: typeof data.is_liked !== "undefined" ? !!data.is_liked : undefined,
+            hasAudio: mediaAttributes.hasAudio,
+            hasText: mediaAttributes.hasText,
+            audioSources: mediaAttributes.audioSources,
           });
-          // Prefer the server’s flag when present
+
           if (typeof data.is_liked !== "undefined") {
             setIsLiked(!!data.is_liked);
           }
-        }
-      })
-      .catch(() => {
-        // optional: keep a silent fallback
-      })
-      .finally(() => mounted && setLoading(false));
-
-    return () => {
-      mounted = false;
+        })
+        .catch(() => {
+          if (fetchRef.current?.key !== key) {
+            return;
+          }
+          setShouldMount(false);
+          showNotification({
+            title: "Error",
+            message: "Could not load book details.",
+            color: "red",
+          });
+          onBack?.();
+          fetchRef.current = null;
+          setLoading(false);
+        })
+        .finally(() => {
+          if (fetchRef.current?.key === key) {
+            setLoading(false);
+          }
+        });
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [book.id]);
 
+    if (fetchRef.current?.key === requestKey) {
+      runRequest(fetchRef.current.promise, requestKey);
+      return;
+    }
+
+    setShouldMount(true);
+    setFullBook(null);
+    setLoading(true);
+    setIsLiked(!!book.is_liked);
+
+    const promise = GetContentById(String(book.id), profileId);
+    fetchRef.current = { key: requestKey, promise };
+    runRequest(promise, requestKey);
+  }, [book.id, profileId, book.is_liked]);
   /* ---------- ③ fallback check against favourites list (only if unknown) ---------- */
   useEffect(() => {
     // If we still don't know the like state (e.g., list pages didn’t include it and /content/:id didn’t return it),
@@ -170,16 +224,20 @@ const BookOverview: React.FC<BookOverviewProps> = ({
 
   if (!shouldMount) {
     return null;
-    }
+  }
 
   if (showAudio) {
     return (
       <AudioComponent
-        book={book}
-        audioSrc={audioSrc}
+        book={displayBook}
+        audioSrc={effectiveAudioSrc}
         onClose={() => setShowAudio(false)}
-        onRead={() => setShowAudio(false)}
+        onRead={() => {
+          setShowAudio(false);
+          onRead?.(displayBook);
+        }}
         onComplete={() => setShowAudio(false)}
+        showReadButton={canRead}
       />
     );
   }
@@ -196,12 +254,49 @@ const BookOverview: React.FC<BookOverviewProps> = ({
   }
 
   /* ---------- decide which buttons to render ---------- */
-  const displayBook = fullBook ?? book;
-  const mediaType = fullBook?.mediaType ?? "text"; // default to text
+  const displayBook = fullBook ? { ...book, ...fullBook } : book;
+  const audioCandidates =
+    fullBook?.audioSources && fullBook.audioSources.length > 0
+      ? fullBook.audioSources
+      : Array.isArray(book.audioSources)
+      ? book.audioSources
+      : [];
+  const effectiveAudioSrc =
+    audioCandidates.find(
+      (src) => typeof src === "string" && src.trim().length > 0
+    ) || audioSrc;
 
-  const isText = mediaType === "text";
-  const isVideo = mediaType === "video";
-  const isAudio = mediaType === "audio";
+  const rawMediaType = String(fullBook?.mediaType ?? "").toLowerCase();
+  const canRead =
+    (fullBook?.hasText ?? book.hasText) ??
+    (rawMediaType === "text" || rawMediaType === "");
+  const canListen =
+    (fullBook?.hasAudio ?? book.hasAudio ?? false) ||
+    rawMediaType === "audio";
+  const canWatch = rawMediaType === "video";
+  const listenLabel = canRead ? "Read to me" : "Listen";
+
+  const handleListen = () => {
+    if (!canListen) {
+      return;
+    }
+
+    if (onListen) {
+      onListen(displayBook);
+      return;
+    }
+
+    if (!effectiveAudioSrc) {
+      showNotification({
+        title: "Unavailable",
+        message: "Audio for this book is currently unavailable.",
+        color: "red",
+      });
+      return;
+    }
+
+    setShowAudio(true);
+  };
 
   return (
     <div className="mx-auto w-[clamp(550px,100%,1440px)] py-8 px-4">
@@ -259,41 +354,32 @@ const BookOverview: React.FC<BookOverviewProps> = ({
             />
           )}
 
-          <div className="flex gap-4 mt-auto mb-3">
-            {isText && (
-              <>
-                <button
-                  className="bg-[#9FC43E] text-white w-[205px] h-[49px] rounded-full shadow-sm"
-                  onClick={() => onRead?.(displayBook)}
-                >
-                  Read by myself
-                </button>
-
-                <button
-                  className="border hidden border-[#9FC43E] text-[#667185] w-[205px] h-[49px] rounded-full"
-                  onClick={() => setShowAudio(true)}
-                  disabled
-                >
-                  Read to me
-                </button>
-              </>
+          <div className="flex flex-wrap gap-4 mt-auto mb-3">
+            {canRead && (
+              <button
+                className="bg-[#9FC43E] text-white w-[205px] h-[49px] rounded-full shadow-sm"
+                onClick={() => onRead?.(displayBook)}
+              >
+                Read by myself
+              </button>
             )}
 
-            {isVideo && (
+            {canListen && (
+              <button
+                className="bg-[#9FC43E] text-white w-[205px] h-[49px] rounded-full shadow-sm"
+                onClick={handleListen}
+                disabled={!effectiveAudioSrc && !onListen}
+              >
+                {listenLabel}
+              </button>
+            )}
+
+            {canWatch && (
               <button
                 className="bg-[#9FC43E] text-white w-[205px] h-[49px] rounded-full shadow-sm"
                 onClick={() => onWatch?.(displayBook)}
               >
                 Watch
-              </button>
-            )}
-
-            {isAudio && (
-              <button
-                className="bg-[#9FC43E] text-white w-[205px] h-[49px] rounded-full shadow-sm"
-                onClick={() => setShowAudio(true)}
-              >
-                Listen
               </button>
             )}
           </div>

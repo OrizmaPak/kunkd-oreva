@@ -20,6 +20,7 @@ import QuizResultModal from "@/components/QuizResultModal"
 import QueenMoremi from "@/audiobooks/QueenMoremi.mp3";
 import AnswerReviewModal from "@/components/AnswerReviewModal";
 import AudioComponent from "@/components/AudioComponent";
+import { deriveMediaAttributes } from "@/utils/media";
 
 
 import KojoAndLolaImage from "@/assets/Kojo and Lola.png";
@@ -81,12 +82,17 @@ const mapOngoingToBooks = (raw: any[]): Book[] => {
     const progress =
       totalPages > 0 ? Math.max(0, Math.min(100, Math.round((pagesRead * 100) / totalPages))) : 0;
 
+    const mediaAttributes = deriveMediaAttributes(it);
+
     return {
       id: it.id,
       title: it.name ?? "",
       coverUrl: it.thumbnail ?? "",
       progress,
       is_liked: it.is_liked,
+      hasAudio: mediaAttributes.hasAudio,
+      hasText: mediaAttributes.hasText,
+      audioSources: mediaAttributes.audioSources,
     };
   });
 };
@@ -124,13 +130,19 @@ const homeToCategories = (payload: any): Category[] => {
         }
         return false;
       })
-      .map((item) => ({
-        id: item.id,
-        title: item.name,
-        coverUrl: item.thumbnail,
-        progress: 0, // default for "for you" rows
-        is_liked: item.is_liked,
-      }));
+      .map((item) => {
+        const mediaAttributes = deriveMediaAttributes(item);
+        return {
+          id: item.id,
+          title: item.name,
+          coverUrl: item.thumbnail,
+          progress: 0, // default for "for you" rows
+          is_liked: item.is_liked,
+          hasAudio: mediaAttributes.hasAudio,
+          hasText: mediaAttributes.hasText,
+          audioSources: mediaAttributes.audioSources,
+        };
+      });
 
     catArray.push({
       name: toTitle(key),
@@ -171,6 +183,8 @@ const generateAllSubcategories = (): Category[] => [
         title: "Advanced Book One",
         coverUrl: KojoAndLolaImage,
         progress: 10,
+        hasText: true,
+        hasAudio: false,
       },
     ],
   },
@@ -313,11 +327,10 @@ const [favLangsBySub, setFavLangsBySub] = useState<Record<string, Book[]>>({});
 
   // audio
 const [audioSrc, setAudioSrc] = useState<string>("");
+  const [listeningHasText, setListeningHasText] = useState(false);
 
 
   // ─── overview guard state ───
-  const [overviewChecking, setOverviewChecking] = useState(false);
-
   const readingRef = useRef<ReadingHandle>(null);
 
 
@@ -343,12 +356,17 @@ const [audioSrc, setAudioSrc] = useState<string>("");
         "";
       const subLabel = String(subLabelRaw).trim() || (/(lang)/.test(catLabel) ? "" : "");
   
+      const mediaAttributes = deriveMediaAttributes(it);
+
       const book: Book = {
         id: it.id ?? it.content_id ?? 0,
         title: it.name ?? it.title ?? "",
         coverUrl: it.thumbnail ?? it.cover ?? it.image ?? "",
         progress: Number(it.percentage ?? it.progress ?? 0) || 0,
         is_liked: true,
+        hasAudio: mediaAttributes.hasAudio,
+        hasText: mediaAttributes.hasText,
+        audioSources: mediaAttributes.audioSources,
       };
   
       const isLanguage = /lang/.test(catLabel) || it.category_id === 4 || it.content_type_id === 4;
@@ -502,6 +520,7 @@ const [audioSrc, setAudioSrc] = useState<string>("");
   const startListen = async (id: number) => {
     trace("startListen()", id);
     setAudioSrc("");
+    setListeningHasText(false);
     setSearchParams({ tab: String(urlState.tab), book: String(id), listen: profileId ?? "" });
   
     try {
@@ -511,6 +530,7 @@ const [audioSrc, setAudioSrc] = useState<string>("");
         return;
       }
       const data = res?.data?.data ?? res?.data;
+      const mediaAttributes = deriveMediaAttributes(data);
       // try to pick an audio media; fallback to first media if mp3
       const audioItem = Array.isArray(data?.media)
         ? data.media.find((m: any) =>
@@ -518,15 +538,25 @@ const [audioSrc, setAudioSrc] = useState<string>("");
           ) || data.media.find((m: any) => String(m?.file || "").toLowerCase().endsWith(".mp3"))
         : null;
   
-      setAudioSrc(audioItem?.file || "");
+      const resolvedAudio = audioItem?.file || mediaAttributes.audioSources.find((src) => src) || "";
+      setAudioSrc(resolvedAudio);
+      setListeningHasText(mediaAttributes.hasText);
+
+      if (selectedBook && String(selectedBook.id) === String(id)) {
+        selectedBook.hasAudio = mediaAttributes.hasAudio || Boolean(resolvedAudio);
+        selectedBook.hasText = mediaAttributes.hasText;
+        selectedBook.audioSources = mediaAttributes.audioSources.length ? mediaAttributes.audioSources : (resolvedAudio ? [resolvedAudio] : []);
+      }
     } catch (err) {
       console.error("❌ failed to load audio data", err);
       setAudioSrc("");
+      setListeningHasText(false);
     }
   };
   
   const closeListen = () => {
     setAudioSrc("");
+    setListeningHasText(false);
     setSearchParams({ tab: String(urlState.tab), book: String(urlState.book!) });
   };
   
@@ -633,54 +663,10 @@ useEffect(() => {
       title: "",
       coverUrl: "",
       progress: 0,
+      hasText: false,
+      hasAudio: false,
     };
   }, [urlState.book, allBooks, categories, subcategories]);
-
-  // ─── guard: when you land on ?book=### (but not reading or watching),
-  //      verify that GetContentById returns status=true before showing overview.
-  useEffect(() => {
-    if (
-      urlState.book == null ||
-      urlState.read ||
-      urlState.watch ||
-      !selectedBook
-    ) {
-      return;
-    }
-
-    setOverviewChecking(false);
-    GetContentById(String(urlState.book), profileId)
-      .then((res) => {
-        if (!res.data.status) {
-          showNotification({
-            title: "Oops!",
-            message: res.data.message,
-            color: "red",
-          });
-          // clear the book query param, stay on tab
-          setSearchParams({ tab: String(urlState.tab) }, { replace: true });
-        }
-      })
-      .catch((err) => {
-        console.error("Overview guard error", err);
-        showNotification({
-          title: "Error",
-          message: "Failed to verify book overview.",
-          color: "red",
-        });
-      })
-      .finally(() => {
-        setOverviewChecking(false);
-      });
-  }, [
-    urlState.book,
-    urlState.read,
-    urlState.watch,
-    selectedBook,
-    urlState.tab,
-    setSearchParams,
-    profileId
-  ]);
 
   const readingBook = urlState.read ? selectedBook : null;
   const watchingBook = urlState.watch ? selectedBook : null;
@@ -690,6 +676,7 @@ useEffect(() => {
   // ---------- quiz flow state ----------
   const [quizTarget, setQuizTarget] = useState<Book | null>(null);
   const [showWell, setShowWell] = useState(false);
+  const [completionMode, setCompletionMode] = useState<'read' | 'watch' | 'listen'>('read');
   const [showQuiz, setShowQuiz] = useState(false);
 
   const [quizKey, setQuizKey] = useState(0);
@@ -701,10 +688,15 @@ useEffect(() => {
   const [showAnswerReview, setShowAnswerReview] = useState(false);
 
   // ---------- handlers ----------
-  const handleMediaComplete = (book: Book) => {
-    // setQuizTarget(book);
+  const handleMediaComplete = (book: Book | null, mode: 'read' | 'watch' | 'listen' = 'read') => {
+    const target = book ?? selectedBook ?? quizTarget;
+    if (!target) {
+      return;
+    }
+    setQuizTarget(target);
+    setCompletionMode(mode);
     setShowWell(true);
-    setShowQuiz(false);   // don’t show quiz yet
+    setShowQuiz(false);   // don't show quiz yet
   };
 
   const handleTakeQuiz = () => {
@@ -715,6 +707,25 @@ useEffect(() => {
   const handleDoLater = () => {
     setShowWell(false);
     setShowQuiz(false);
+    setCompletionMode('read');
+  };
+
+  const handleListenAgain = () => {
+    if (!quizTarget) return;
+    const rawId = quizTarget.id;
+    const numericId = typeof rawId === "number" ? rawId : Number(rawId);
+    if (Number.isNaN(numericId)) {
+      setShowWell(false);
+      return;
+    }
+    setShowWell(false);
+    void startListen(numericId);
+  };
+
+  const handleListenGoBack = () => {
+    setShowWell(false);
+    setCompletionMode('read');
+    closeListen();
   };
 
   const handleQuizComplete = (stats: QuizStats, answers: UserAnswer[]) => {
@@ -742,7 +753,7 @@ useEffect(() => {
     setShowWell(true);  
     console.log("quizTarget", quizTarget);          // show the *Well-done* modal
     if (quizTarget) {
-      handleMediaComplete(quizTarget);
+      handleMediaComplete(quizTarget, 'read');
     }
   };
 
@@ -1267,26 +1278,20 @@ if (!cancelled) {
       onRetake={handleRetake}
       onClose={closeWatch}
       onViewAnswers={handleViewAnswers}
-      onComplete={() => handleMediaComplete(watchingBook)}
+      onComplete={() => handleMediaComplete(watchingBook, 'watch')}
     />
   ) : listeningBook ? (
     <AudioComponent
-      book={{
-        id: listeningBook.id,
-        title: listeningBook.title,
-        coverUrl: listeningBook.coverUrl,
-        progress: 0,
-      }}
+      book={listeningBook}
       audioSrc={audioSrc}
       onClose={closeListen}
+      showReadButton={listeningHasText}
       onRead={() => {
         closeListen();
         startRead(listeningBook.id);
       }}
-      onComplete={() => handleMediaComplete(listeningBook)}
+      onComplete={() => handleMediaComplete(listeningBook, 'listen')}
     />
-  ) : overviewChecking ? (
-    <div className="py-14 text-center text-sm text-gray-500">Loading…</div>
   ) : (selectedBook && !readingBook && !watchingBook) ? (
     <BookOverview
       book={selectedBook}
@@ -1421,9 +1426,12 @@ if (!cancelled) {
           {showWell && quizTarget && (
             <WellDoneModal
               message="You've just finished!"
-              onTakeQuiz={handleTakeQuiz}
-              onLater={handleDoLater}
-              onRetake={handleRetake}
+              variant={completionMode === 'listen' ? 'listen' : 'read'}
+              onTakeQuiz={completionMode === 'listen' ? undefined : handleTakeQuiz}
+              onLater={completionMode === 'listen' ? undefined : handleDoLater}
+              onRetake={completionMode === 'listen' ? undefined : handleRetake}
+              onReplay={completionMode === 'listen' ? handleListenAgain : undefined}
+              onGoBack={completionMode === 'listen' ? handleListenGoBack : undefined}
             />
           )}
           {quizTarget && showQuiz && (

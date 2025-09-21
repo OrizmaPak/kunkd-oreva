@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { GetSubCategories, GetOngoingContents, GetLikedContent } from "@/api/api";
 import { Book } from "@/components/BookCard";
+import { deriveMediaAttributes } from "@/utils/media";
 
 export interface Category {
   name: string;
@@ -30,12 +31,17 @@ export const useContentLibraryData = (favMode: boolean) => {
           const read = Number(it.pages_read) || 0;
           const progress = total > 0 ? Math.round((read * 100) / total) : 0;
 
+          const mediaAttributes = deriveMediaAttributes(it);
+
           return {
             id: it.id,
             title: it.name ?? "",
             coverUrl: it.thumbnail ?? "",
             progress,
             is_liked: it.is_liked,
+            hasAudio: mediaAttributes.hasAudio,
+            hasText: mediaAttributes.hasText,
+            audioSources: mediaAttributes.audioSources,
           };
         });
         setOngoingBooks(mapped);
@@ -56,13 +62,19 @@ export const useContentLibraryData = (favMode: boolean) => {
     try {
       const res = await GetLikedContent(pid);
       const records = res?.data?.data?.records ?? [];
-      const favBooks: Book[] = records.map((it: any) => ({
-        id: it.id ?? it.content_id ?? 0,
-        title: it.name ?? it.title ?? "",
-        coverUrl: it.thumbnail ?? it.cover ?? it.image ?? "",
-        progress: it.percentage ?? it.progress ?? 0,
-        is_liked: true,
-      }));
+      const favBooks: Book[] = records.map((it: any) => {
+        const mediaAttributes = deriveMediaAttributes(it);
+        return {
+          id: it.id ?? it.content_id ?? 0,
+          title: it.name ?? it.title ?? "",
+          coverUrl: it.thumbnail ?? it.cover ?? it.image ?? "",
+          progress: it.percentage ?? it.progress ?? 0,
+          is_liked: true,
+          hasAudio: mediaAttributes.hasAudio,
+          hasText: mediaAttributes.hasText,
+          audioSources: mediaAttributes.audioSources,
+        };
+      });
       setCategories([{ name: "Favourites", books: favBooks, hasSub: false }]);
       setSubcategories([]);
       setCrumb(["Favourites"]);
