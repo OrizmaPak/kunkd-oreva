@@ -66,10 +66,12 @@ const useSubCategoryLazy = (subId: number | null, expanded: boolean) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const sentryRef = useRef<HTMLDivElement | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const firstPageRequestedRef = useRef(false);
 
   // Reset when subId changes
   useEffect(() => {
     TRACE("reset state for subId:", subId);
+    firstPageRequestedRef.current = false;
     setBooks([]);
     setPage(0);
     setMax(null);
@@ -82,12 +84,21 @@ const useSubCategoryLazy = (subId: number | null, expanded: boolean) => {
     const first = next === 1;
     const busy = first ? loadingInit : loadingMore;
 
-    if (busy) {
-      TRACE("skip fetch (busy)", { subId, next, first, loadingInit, loadingMore });
-      return;
-    }
     if (subId == null) {
       TRACE("skip fetch (no subId)");
+      return;
+    }
+
+    if (first) {
+      if (firstPageRequestedRef.current) {
+        TRACE("skip fetch (first page already requested)", { subId });
+        return;
+      }
+      firstPageRequestedRef.current = true;
+    }
+
+    if (busy) {
+      TRACE("skip fetch (busy)", { subId, next, first, loadingInit, loadingMore });
       return;
     }
     if (maxPage !== null && next > maxPage) {
@@ -226,3 +237,6 @@ const useSubCategoryLazy = (subId: number | null, expanded: boolean) => {
 };
 
 export default useSubCategoryLazy;
+
+
+

@@ -1,139 +1,108 @@
-// src/pages/DashBoard/SchoolDashBoard/ContentLibrary/CategorySections.tsx
-
 import React from "react";
 import BookCategory from "@/components/BookCategory";
-import { Book } from "@/components/BookCard";
-
-interface Category {
-  name: string;
-  books: Book[];
-  subId?: number | null;
-}
+import type { CategoryState } from "./hooks/useContentLibraryController";
 
 interface Props {
-  // Which tab are we on?
-  isStoriesTab: boolean;
-  isLangsTab: boolean;
-  isForYouTab: boolean;
-
-  // Categories to render
-  displayList: Category[];
-  allCats: any[];
-
-  // ---- Stories tab state ----
-  showAllStories: boolean;
-  storiesActiveSubSlug: string | null;
-  setShowAllStories: (v: boolean) => void;
-  setStoriesActiveSubSlug: (s: string | null) => void;
-
-  // ---- Languages tab state ----
-  showAllLanguages: boolean;
-  languagesActiveSubSlug: string | null;
-  setShowAllLanguages: (v: boolean) => void;
-  setLanguagesActiveSubSlug: (s: string | null) => void;
-
-  // ---- For You tab state ----
-  expandedSimple: Record<string, boolean>;
-  toggleForYouRow: (name: string) => void;
-
-  // ---- Book actions ----
-  openBook: (id: number) => void;
-  setCrumb: (crumbs: string[]) => void;
+  categories: CategoryState;
 }
 
-/**
- * CategorySections
- * ----------------
- * Renders the Stories, Languages, or For You categories
- * depending on which tab is active.
- */
-const CategorySections: React.FC<Props> = ({
-  isStoriesTab,
-  isLangsTab,
-  isForYouTab,
-  displayList,
-  allCats,
-  showAllStories,
-  storiesActiveSubSlug,
-  setShowAllStories,
-  setStoriesActiveSubSlug,
-  showAllLanguages,
-  languagesActiveSubSlug,
-  setShowAllLanguages,
-  setLanguagesActiveSubSlug,
-  expandedSimple,
-  toggleForYouRow,
-  openBook,
-  setCrumb,
-}) => {
-  return (
-    <>
-      {/* ───── Stories Tab ───── */}
-      {isStoriesTab &&
-        (() => {
-          // Grab all subcategories for Stories
-          const storiesCat = allCats.find((c: any) => c.name === "Stories");
-          const rows: Array<{ name: string; subId: number | null }> =
-            (storiesCat?.sub_categories ?? []).map((s: any) => ({
-              name: s?.name ?? "",
-              subId: typeof s?.id === "number" ? s.id : null,
-            }));
+const CategorySections: React.FC<Props> = ({ categories }) => {
+  const {
+    isStories,
+    isLanguages,
+    isForYou,
+    list,
+    prunedForYou,
+    showAllStories,
+    storiesActiveSubSlug,
+    setShowAllStories,
+    setStoriesActiveSubSlug,
+    showAllLanguages,
+    languagesActiveSubSlug,
+    setShowAllLanguages,
+    setLanguagesActiveSubSlug,
+    expandedSimple,
+    toggleForYouRow,
+    openBook,
+    setCrumb,
+  } = categories;
 
-          // Show all, or just the expanded one
-          const visibleRows = rows.filter(
-            (r) => !showAllStories || r.name === (storiesActiveSubSlug ?? r.name)
-          );
+  if (isStories) {
+    const rows = list.map((cat) => ({
+      name: cat.name,
+      subId: typeof cat.subId === "number" ? cat.subId : null,
+    }));
 
-          return visibleRows.map((row) => (
-            <BookCategory
-              key={`${row.name}-${row.subId ?? "x"}`}
-              subId={row.subId}
-              categoryName={row.name}
-              tabLabel="Stories"
-              expanded={showAllStories && row.name === storiesActiveSubSlug}
-              onSeeAll={() => {
-                if (showAllStories && row.name === storiesActiveSubSlug) {
-                  setShowAllStories(false);
-                  setStoriesActiveSubSlug(null);
-                } else {
-                  setShowAllStories(true);
-                  setStoriesActiveSubSlug(row.name);
-                }
-              }}
-              onBookClick={(book, bc) => {
-                openBook(book.id);
-                setCrumb([...bc, book.title]);
-              }}
-            />
-          ));
-        })()}
+    const visibleRows = rows.filter((row) => !showAllStories || row.name === storiesActiveSubSlug);
 
-      {/* ───── Languages Tab ───── */}
-      {isLangsTab &&
-        displayList
-          .filter(
-            (cat) => !showAllLanguages || cat.name === languagesActiveSubSlug
-          )
+    return (
+      <>
+        {visibleRows.map((row) => (
+          <BookCategory
+            key={`${row.name}-${row.subId ?? "x"}`}
+            subId={row.subId}
+            categoryName={row.name}
+            tabLabel="Stories"
+            expanded={showAllStories && row.name === storiesActiveSubSlug}
+            onSeeAll={() => {
+              if (showAllStories && row.name === storiesActiveSubSlug) {
+                setShowAllStories(false);
+                setStoriesActiveSubSlug(null);
+              } else {
+                setShowAllStories(true);
+                setStoriesActiveSubSlug(row.name);
+                setShowAllLanguages(false);
+              }
+            }}
+            onBookClick={(book, crumbs) => {
+              openBook(Number(book.id));
+              setCrumb([...crumbs, book.title]);
+            }}
+          />
+        ))}
+      </>
+    );
+  }
+
+  if (isLanguages) {
+    return (
+      <>
+        {list
+          .filter((cat) => !showAllLanguages || cat.name === languagesActiveSubSlug)
           .map((cat) => (
             <BookCategory
-              subId={cat.subId}
               key={cat.name}
+              subId={typeof cat.subId === "number" ? cat.subId : undefined}
               categoryName={cat.name}
               tabLabel="Languages"
               books={cat.books}
               hasSub={!!cat.subId}
-              onSeeAll={() => setShowAllLanguages(!showAllLanguages)}
               expanded={showAllLanguages && cat.name === languagesActiveSubSlug}
-              onBookClick={(book: any, bc: any) => {
-                openBook(book.id);
-                setCrumb([...bc, book.title]);
+              onSeeAll={() => {
+                if (showAllLanguages && cat.name === languagesActiveSubSlug) {
+                  setShowAllLanguages(false);
+                  setLanguagesActiveSubSlug(null);
+                } else {
+                  setShowAllLanguages(true);
+                  setLanguagesActiveSubSlug(cat.name);
+                  setShowAllStories(false);
+                }
+              }}
+              onBookClick={(book, crumbs) => {
+                openBook(Number(book.id));
+                setCrumb([...crumbs, book.title]);
               }}
             />
           ))}
+      </>
+    );
+  }
 
-      {/* ───── For You Tab ───── */}
-      {isForYouTab &&
-        displayList.map((cat) => (
+  if (isForYou) {
+    const source = prunedForYou.length > 0 ? prunedForYou : list;
+    return (
+      <>
+        {source.map((cat) => (
           <BookCategory
             key={cat.name}
             tabLabel="For you"
@@ -142,19 +111,20 @@ const CategorySections: React.FC<Props> = ({
             hasSub={false}
             expanded={!!expandedSimple[cat.name]}
             onSeeAll={() => toggleForYouRow(cat.name)}
-            onBookClick={(book: any, bc: any) => {
-              openBook(book.id);
-              setCrumb([...bc, book.title]);
+            onBookClick={(book, crumbs) => {
+              openBook(Number(book.id));
+              setCrumb([...crumbs, book.title]);
             }}
             emptyMsg={
-              cat.name === "Continue Reading"
-                ? "No ongoing content yet"
-                : undefined
+              cat.name === "Continue Reading" ? "No ongoing content yet" : undefined
             }
           />
         ))}
-    </>
-  );
+      </>
+    );
+  }
+
+  return null;
 };
 
 export default CategorySections;

@@ -11,7 +11,6 @@ const ContentLibraryBreadcrumb: React.FC<Props> = ({
   crumbs,
   onCrumbClick,
 }) => {
-    console.log('crumbs', crumbs);    
   if (crumbs.length <= 1 || !crumbs) return null;
 
 
@@ -39,3 +38,4 @@ const ContentLibraryBreadcrumb: React.FC<Props> = ({
 };
 
 export default ContentLibraryBreadcrumb;
+

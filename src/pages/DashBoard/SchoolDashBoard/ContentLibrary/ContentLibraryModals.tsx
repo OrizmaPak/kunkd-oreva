@@ -1,76 +1,58 @@
-// src/pages/DashBoard/SchoolDashBoard/ContentLibrary/ContentLibraryModals.tsx
-
 import React from "react";
 import WellDoneModal from "@/components/WellDoneModal";
-import QuizComponent, { QuizStats, UserAnswer } from "@/components/QuizComponent";
+import QuizComponent from "@/components/QuizComponent";
 import QuizResultModal from "@/components/QuizResultModal";
-import { Book } from "@/components/BookCard";
+import type { ModalsController } from "./hooks/useContentLibraryController";
 
 interface Props {
-  // ---- Quiz/Modal state ----
-  showWell: boolean;
-  showQuiz: boolean;
-  showResult: boolean;
-  quizTarget: Book | null;
-  quizStats: QuizStats | null;
-  quizReset: number;
-
-  // ---- Quiz answers ----
-  setQuizAnswers: (ans: UserAnswer[]) => void;
-
-  // ---- Handlers ----
-  onTakeQuiz: () => void;
-  onLater: () => void;
-  onRetake: () => void;
-  onViewAnswers: () => void;
-  onCloseResult: () => void;
+  controller: ModalsController;
 }
 
-const ContentLibraryModals: React.FC<Props> = ({
-  showWell,
-  showQuiz,
-  showResult,
-  quizTarget,
-  quizStats,
-  quizReset,
-  setQuizAnswers,
-  onTakeQuiz,
-  onLater,
-  onRetake,
-  onViewAnswers,
-  onCloseResult,
-}) => {
+const ContentLibraryModals: React.FC<Props> = ({ controller }) => {
+  const {
+    showWell,
+    showQuiz,
+    showResult,
+    quizTarget,
+    quizStats,
+    quizReset,
+    completionMode,
+    onTakeQuiz,
+    onLater,
+    onRetake,
+    onViewAnswers,
+    onCloseResult,
+    onQuizComplete,
+    onAnswersChange,
+    onReplayListen,
+    onListenGoBack,
+  } = controller;
+
   return (
     <>
-      {/* 1) Well Done Modal — appears when media is completed */}
       {showWell && quizTarget && (
         <WellDoneModal
           message="You've just finished!"
-          onTakeQuiz={onTakeQuiz}
-          onLater={onLater}
-          onRetake={onRetake}
+          variant={completionMode}
+          onTakeQuiz={completionMode === "listen" ? undefined : onTakeQuiz}
+          onLater={completionMode === "listen" ? onListenGoBack : onLater}
+          onRetake={completionMode === "listen" ? undefined : onRetake}
+          onReplay={completionMode === "listen" ? onReplayListen : undefined}
+          onGoBack={completionMode === "listen" ? onListenGoBack : undefined}
         />
       )}
 
-      {/* 2) Quiz Component — appears when user chooses to take quiz */}
       {quizTarget && showQuiz && (
         <QuizComponent
-          onRetake={onRetake}
           key={quizTarget.id}
           book={quizTarget}
-          onComplete={(stats, answers) => {
-            setQuizAnswers(answers);
-            console.log("Quiz complete in modals:", stats, answers);
-          }}
+          onRetake={onRetake}
+          onComplete={onQuizComplete}
           resetSignal={quizReset}
-          onAnswersChange={(ans) => {
-            console.log("sync parent answers:", ans);
-            setQuizAnswers(ans);
-          }}
+          onAnswersChange={onAnswersChange}
         />
       )}
 
-      {/* 3) Quiz Result Modal — shows stats after quiz is completed */}
       {showResult && quizStats && (
         <QuizResultModal
           stats={{

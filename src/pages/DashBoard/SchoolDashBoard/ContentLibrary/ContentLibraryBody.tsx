@@ -1,222 +1,162 @@
-// src/pages/DashBoard/SchoolDashBoard/ContentLibrary/ContentLibraryBody.tsx
-
-import React, { RefObject } from "react";
+import React from "react";
 import AnswerReviewModal from "@/components/AnswerReviewModal";
-import ReadingComponent, { ReadingHandle } from "@/components/ReadingComponent";
+import ReadingComponent from "@/components/ReadingComponent";
 import VideoComponent from "@/components/VideoComponent";
 import BookOverview from "@/components/BookOverview";
-import { Book } from "@/components/BookCard";
+import AudioComponent from "@/components/AudioComponent";
+import BookCategory from "@/components/BookCategory";
+import EmptyFavourites from "./components/EmptyFavourites";
 import CategorySections from "./CategorySections";
-
-interface Category {
-  name: string;
-  books: Book[];
-  subId?: number | null;
-}
+import type { BodyController } from "./hooks/useContentLibraryController";
 
 interface Props {
-  // ---- Review state ----
-  showAnswerReview: boolean;
-  quizAnswers: any[];
-  onReviewDone: () => void;
-
-  // ---- Reading state ----
-  readingBook: Book | null;
-  readingRef: RefObject<ReadingHandle>;
-  readingLoading: boolean;
-  bookPages: any[];
-  onCloseRead: () => void;
-  onRetake: () => void;
-  onViewAnswers: () => void;
-  onAnswersUpdate: (ans: any) => void;
-
-  // ---- Watching state ----
-  watchingBook: Book | null;
-  videoSrc: string;
-  videoPoster: string;
-  onCloseWatch: () => void;
-  onCompleteWatch: () => void;
-
-  // ---- Overview state ----
-  selectedBook: Book | null;
-  overviewChecking: boolean;
-  crumbsBeforeBook: string[];
-  onBackFromOverview: () => void;
-  onStartRead: (book: Book) => void;
-  onStartWatch: (book: Book) => void;
-
-  // ---- Categories (Stories / Langs / For You) ----
-  isStoriesTab: boolean;
-  isLangsTab: boolean;
-  isForYouTab: boolean;
-  displayList: Category[];
-  allCats: any[];
-  showAllStories: boolean;
-  storiesActiveSubSlug: string | null;
-  setShowAllStories: (v: boolean) => void;
-  setStoriesActiveSubSlug: (s: string | null) => void;
-  showAllLanguages: boolean;
-  languagesActiveSubSlug: string | null;
-  setShowAllLanguages: (v: boolean) => void;
-  setLanguagesActiveSubSlug: (s: string | null) => void;
-  expandedSimple: Record<string, boolean>;
-  toggleForYouRow: (name: string) => void;
-  openBook: (id: number) => void;
-  setCrumb: (crumbs: string[]) => void;
+  controller: BodyController;
 }
 
-const ContentLibraryBody: React.FC<Props> = ({
-  // ---- Review state ----
-  showAnswerReview,
-  quizAnswers,
-  onReviewDone,
+const ContentLibraryBody: React.FC<Props> = ({ controller }) => {
+  const {
+    favMode,
+    favourites,
+    categories,
+    media,
+    quiz,
+    showFavEmpty,
+    showForYouSkeleton,
+  } = controller;
 
-  // ---- Reading state ----
-  readingBook,
-  readingRef,
-  readingLoading,
-  bookPages,
-  onCloseRead,
-  onRetake,
-  onViewAnswers,
-  onAnswersUpdate,
-
-  // ---- Watching state ----
-  watchingBook,
-  videoSrc,
-  videoPoster,
-  onCloseWatch,
-  onCompleteWatch,
-
-  // ---- Overview state ----
-  selectedBook,
-  overviewChecking,
-  crumbsBeforeBook,
-  onBackFromOverview,
-  onStartRead,
-  onStartWatch,
-
-  // ---- Categories (Stories / Langs / For You) ----
-  isStoriesTab,
-  isLangsTab,
-  isForYouTab,
-  displayList,
-  allCats,
-  showAllStories,
-  storiesActiveSubSlug,
-  setShowAllStories,
-  setStoriesActiveSubSlug,
-  showAllLanguages,
-  languagesActiveSubSlug,
-  setShowAllLanguages,
-  setLanguagesActiveSubSlug,
-  expandedSimple,
-  toggleForYouRow,
-  openBook,
-  setCrumb,
-}) => {
-  /**
-   * ---- PRIORITY 1: Show Answer Review ----
-   * If user has finished quiz and is reviewing answers,
-   * take over the entire body with AnswerReviewModal.
-   */
-  if (showAnswerReview) {
+  if (quiz.showAnswerReview) {
     return (
       <AnswerReviewModal
-        answers={quizAnswers ?? []}
-        onDone={onReviewDone}
+        answers={quiz.quizAnswers ?? []}
+        onDone={quiz.handleReviewDone}
       />
     );
   }
 
-  /**
-   * ---- PRIORITY 2: Reading Mode ----
-   * If a book is being read, show ReadingComponent.
-   * Otherwise, show a loading spinner until pages arrive.
-   */
-  if (readingBook) {
-    return readingLoading ? (
-      <div className="flex justify-center py-20">
-        <span>Loading book…</span>
-      </div>
-    ) : (
+  if (media.readingBook) {
+    if (media.readingLoading) {
+      return (
+        <div className="flex justify-center py-20 text-sm text-gray-500" role="status">
+          Loading book...
+        </div>
+      );
+    }
+
+    return (
       <ReadingComponent
-        ref={readingRef}
-        book={readingBook}
-        onExit={onCloseRead}
-        pages={bookPages}
+        ref={media.readingRef as any}
+        book={media.readingBook}
+        pages={media.bookPages}
         withIntroPages={false}
-        onRetake={onRetake}
-        onViewAnswers={onViewAnswers}
-        onAnswersUpdate={onAnswersUpdate}
+        onExit={media.closeRead}
+        onRetake={quiz.handleRetake}
+        onViewAnswers={quiz.handleViewAnswers}
+        onAnswersUpdate={(answers) => quiz.setAnswers(Array.isArray(answers) ? answers : [])}
       />
     );
   }
 
-  /**
-   * ---- PRIORITY 3: Watching Mode ----
-   * If a book is being watched, show the video player.
-   */
-  if (watchingBook) {
+  if (media.watchingBook) {
     return (
       <VideoComponent
-        book={watchingBook}
-        key={videoSrc || watchingBook.id}
-        videoSrc={videoSrc}
-        poster={videoPoster}
-        title={watchingBook.title}
-        onRetake={onRetake}
-        onClose={onCloseWatch}
-        onViewAnswers={onViewAnswers}
-        onComplete={() => onCompleteWatch()}
+        key={media.videoSrc || media.watchingBook.id}
+        book={media.watchingBook}
+        videoSrc={media.videoSrc}
+        poster={media.videoPoster}
+        title={media.watchingBook.title}
+        onRetake={quiz.handleRetake}
+        onClose={media.closeWatch}
+        onViewAnswers={quiz.handleViewAnswers}
+        onComplete={() => quiz.handleMediaComplete(media.watchingBook, "watch")}
       />
     );
   }
 
-  /**
-   * ---- PRIORITY 4: Overview Mode ----
-   * If a book is selected (but not reading/watching),
-   * show BookOverview with read/watch buttons.
-   */
-  if (selectedBook && !overviewChecking) {
+  if (media.listeningBook) {
+    return (
+      <AudioComponent
+        book={media.listeningBook}
+        audioSrc={media.audioSrc}
+        onClose={media.closeListen}
+        showReadButton={media.listeningHasText}
+        onRead={() => {
+          media.closeListen();
+          media.startRead(Number(media.listeningBook?.id));
+        }}
+        onComplete={() => quiz.handleMediaComplete(media.listeningBook, "listen")}
+      />
+    );
+  }
+
+  if (media.selectedBook) {
     return (
       <BookOverview
-        book={selectedBook}
-        crumb={crumbsBeforeBook}
-        onBack={onBackFromOverview}
-        onRead={(b: any) => onStartRead(b)}
-        onWatch={(b: any) => onStartWatch(b)}
-        audioSrc="" // TODO: pass real audio if available
+        book={media.selectedBook}
+        crumb={media.crumbsBeforeBook}
+        onBack={media.closeBook}
+        onRead={(book) => media.startRead(Number(book.id))}
+        onWatch={(book) => media.startWatch(Number(book.id))}
+        onListen={() => media.startListen(Number(media.selectedBook?.id), media.selectedBook)}
+        audioSrc={media.audioSrc}
       />
     );
   }
 
-  /**
-   * ---- PRIORITY 5: Default Category Lists ----
-   * If nothing else is active, fall back to category listings
-   * depending on the active tab (Stories, Languages, For You).
-   */
+  if (favMode) {
+    if (favourites.loading) {
+      return (
+        <div className="flex justify-center py-20 text-sm text-gray-500" role="status">
+          Loading favourites...
+        </div>
+      );
+    }
+
+    if (showFavEmpty) {
+      return (
+        <div className="mt-6">
+          <EmptyFavourites label={favourites.activeLabel} />
+        </div>
+      );
+    }
+
+    return (
+      <div className="mt-6 space-y-8">
+        <BookCategory
+          key={`fav-${favourites.activeLabel}`}
+          tabLabel={favourites.activeLabel}
+          categoryName={favourites.activeLabel}
+          books={favourites.selected}
+          hasSub={false}
+          expanded
+          onBookClick={(book, crumbTrail) => {
+            categories.openBook(Number(book.id));
+            categories.setCrumb([...crumbTrail, book.title]);
+          }}
+        />
+      </div>
+    );
+  }
+
+  const renderForYouSkeleton = categories.isForYou && showForYouSkeleton;
+
   return (
-    <CategorySections
-      isStoriesTab={isStoriesTab}
-      isLangsTab={isLangsTab}
-      isForYouTab={isForYouTab}
-      displayList={displayList}
-      allCats={allCats}
-      showAllStories={showAllStories}
-      storiesActiveSubSlug={storiesActiveSubSlug}
-      setShowAllStories={setShowAllStories}
-      setStoriesActiveSubSlug={setStoriesActiveSubSlug}
-      showAllLanguages={showAllLanguages}
-      languagesActiveSubSlug={languagesActiveSubSlug}
-      setShowAllLanguages={setShowAllLanguages}
-      setLanguagesActiveSubSlug={setLanguagesActiveSubSlug}
-      expandedSimple={expandedSimple}
-      toggleForYouRow={toggleForYouRow}
-      openBook={openBook}
-      setCrumb={setCrumb}
-    />
+    <div className="mt-6 space-y-8">
+      {renderForYouSkeleton
+        ? Array.from({ length: 3 }).map((_, index) => (
+            <BookCategory
+              key={`for-you-skeleton-${index}`}
+              tabLabel="For you"
+              categoryName=""
+              loading
+              hasSub={false}
+            />
+          ))
+        : <CategorySections categories={categories} />}
+    </div>
   );
 };
 
 export default ContentLibraryBody;
+
+
+
