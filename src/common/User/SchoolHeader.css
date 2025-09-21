@@ -1,9 +1,0 @@
-.nav-link {
-  /* Normal link styles */
-  text-decoration: none !important;
-}
-
-.nav-link:hover {
-  /* Override the default hover color */
-  color: #8530c1 !important; /* Set the color you prefer on hover */
-}

@@ -1,7 +1,0 @@
-.star-w {
-  width: clamp(2.625rem, 1.8743rem + 3.0564vw, 4.625rem) !important;
-}
-
-.card-w-forth {
-  width: clamp(18.75rem, 16.1694rem + 10.5062vw, 25.625rem) !important;
-}

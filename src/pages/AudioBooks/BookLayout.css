@@ -1,4 +1,0 @@
-.about-img {
-  width: clamp(9.375rem, 0.5068rem + 20.2703vw, 18.75rem) !important;
-  height: clamp(9.375rem, 0.5068rem + 20.2703vw, 18.75rem) !important;
-}
